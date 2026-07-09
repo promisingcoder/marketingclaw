@@ -10,44 +10,13 @@ const SETUP_GO_V6 = "actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c";
 const UPLOAD_ARTIFACT_V7 = "actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a";
 const DOWNLOAD_ARTIFACT_V8 = "actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c";
 const OPENGREP_PR_DIFF_WORKFLOW = ".github/workflows/opengrep-precise.yml";
-const OPENGREP_FULL_WORKFLOW = ".github/workflows/opengrep-precise-full.yml";
-const CONTROL_UI_LOCALE_REFRESH_WORKFLOW = ".github/workflows/control-ui-locale-refresh.yml";
-const NATIVE_APP_LOCALE_REFRESH_WORKFLOW = ".github/workflows/native-app-locale-refresh.yml";
 
 function readCiWorkflow() {
   return parse(readFileSync(".github/workflows/ci.yml", "utf8"));
 }
 
-function readAndroidReleaseWorkflow() {
-  return parse(readFileSync(".github/workflows/android-release.yml", "utf8"));
-}
-
-function readBuildArtifactsTestboxWorkflow() {
-  return parse(readFileSync(".github/workflows/ci-build-artifacts-testbox.yml", "utf8"));
-}
-
-function readTestboxWorkflow() {
-  return parse(readFileSync(".github/workflows/ci-check-testbox.yml", "utf8"));
-}
-
 function readWorkflowSanityWorkflow() {
   return parse(readFileSync(".github/workflows/workflow-sanity.yml", "utf8"));
-}
-
-function readRealBehaviorProofWorkflow() {
-  return parse(readFileSync(".github/workflows/real-behavior-proof.yml", "utf8"));
-}
-
-function readMaturityScorecardWorkflow() {
-  return parse(readFileSync(".github/workflows/maturity-scorecard.yml", "utf8"));
-}
-
-function readQaProfileEvidenceWorkflow() {
-  return parse(readFileSync(".github/workflows/qa-profile-evidence.yml", "utf8"));
-}
-
-function readReleaseChecksWorkflow() {
-  return parse(readFileSync(".github/workflows/openclaw-release-checks.yml", "utf8"));
 }
 
 function readCriticalQualityWorkflow() {
@@ -146,153 +115,23 @@ describe("ci workflow guards", () => {
     }
   });
 
-  it("keeps Testbox pull request validation off leased runner capacity", () => {
-    const workflow = readTestboxWorkflow();
-
-    expect(workflow.jobs.check["runs-on"]).toBe(
-      "${{ github.event_name == 'pull_request' && 'ubuntu-24.04' || 'blacksmith-32vcpu-ubuntu-2404' }}",
-    );
-    const beginStep = workflow.jobs.check.steps.find(
-      (step: { name?: string }) => step.name === "Begin Testbox",
-    );
-    const runStep = workflow.jobs.check.steps.find(
-      (step: { name?: string }) => step.name === "Run Testbox",
-    );
-    expect(beginStep).toMatchObject({
-      if: "github.event_name == 'workflow_dispatch'",
-      with: { testbox_id: "${{ inputs.testbox_id }}" },
-    });
-    expect(runStep).toMatchObject({
-      if: "github.event_name == 'workflow_dispatch' && always()",
-    });
-  });
-
   it("pins every external GitHub Action reference to a full commit SHA", () => {
     expect(findUnpinnedExternalActions()).toEqual([]);
   });
 
-  it("keeps locale refresh matrices alive and commits each aggregate once", () => {
-    const controlUiWorkflow = parse(readFileSync(CONTROL_UI_LOCALE_REFRESH_WORKFLOW, "utf8"));
-    const workflow = parse(readFileSync(NATIVE_APP_LOCALE_REFRESH_WORKFLOW, "utf8"));
-    const refresh = workflow.jobs.refresh;
-    const nativeFinalize = workflow.jobs.finalize;
-    const controlUiFinalize = controlUiWorkflow.jobs.finalize;
-    const refreshStep = refresh.steps.find(
-      (step: { name?: string }) => step.name === "Refresh native locale artifact",
-    );
-    const nativeArtifactStep = refresh.steps.find(
-      (step: { name?: string }) => step.name === "Prepare locale artifact",
-    );
-    const nativeInventoryStep = nativeFinalize.steps.find(
-      (step: { name?: string }) => step.name === "Refresh shared native inventory",
-    );
-    const controlUiRefreshStep = controlUiWorkflow.jobs.refresh.steps.find(
-      (step: { name?: string }) => step.name === "Refresh control UI locale files",
-    );
-
-    expect(refresh.if).toContain("github.ref == 'refs/heads/main'");
-    expect(refresh.strategy.matrix.locale).toContain("sv");
-    expect(controlUiWorkflow.concurrency["cancel-in-progress"]).toContain(
-      "github.actor != 'github-actions[bot]'",
-    );
-    expect(workflow.concurrency["cancel-in-progress"]).toContain(
-      "github.actor != 'github-actions[bot]'",
-    );
-    expect(workflow.on.push.paths).toContain("ui/src/i18n/.i18n/glossary.*.json");
-    expect(refreshStep.run).toContain("run_refresh anthropic");
-    expect(refreshStep.run).toContain("retrying with OpenAI");
-    expect(refreshStep.run).toContain("run_openai_refresh");
-    expect(refreshStep.run).toContain("repository OpenAI key");
-    expect(refreshStep.env.OPENCLAW_DOCS_I18N_OPENAI_API_KEY).toBe(
-      "${{ secrets.OPENCLAW_DOCS_I18N_OPENAI_API_KEY }}",
-    );
-    expect(refreshStep.env.OPENAI_API_KEY).toBe("${{ secrets.OPENAI_API_KEY }}");
-    expect(nativeArtifactStep.run).toContain("git add -A apps/.i18n/native");
-    expect(nativeArtifactStep.run).not.toContain("native-source.json");
-    expect(nativeInventoryStep.run).toBe(
-      "node --import tsx scripts/native-app-i18n.ts sync --write",
-    );
-    expect(controlUiRefreshStep.run).toContain("run_refresh anthropic");
-    expect(controlUiRefreshStep.run).toContain("retrying with OpenAI");
-    expect(controlUiRefreshStep.run).toContain("run_openai_refresh");
-    expect(controlUiRefreshStep.run).toContain("repository OpenAI key");
-    expect(controlUiRefreshStep.env.OPENCLAW_DOCS_I18N_OPENAI_API_KEY).toBe(
-      "${{ secrets.OPENCLAW_DOCS_I18N_OPENAI_API_KEY }}",
-    );
-    expect(controlUiRefreshStep.env.OPENAI_API_KEY).toBe("${{ secrets.OPENAI_API_KEY }}");
-    expect(controlUiRefreshStep.env.OPENCLAW_CONTROL_UI_I18N_AUTH_OPTIONAL).toBe("0");
-
-    for (const [refreshJob, finalizeJob, artifactPattern, commitMessage] of [
-      [refresh, nativeFinalize, "native-locale-*", "chore(i18n): refresh native locales"],
-      [
-        controlUiWorkflow.jobs.refresh,
-        controlUiFinalize,
-        "control-ui-locale-*",
-        "chore(ui): refresh control ui locales",
-      ],
-    ] as const) {
-      const uploadStep = refreshJob.steps.find(
-        (step: { name?: string }) => step.name === "Upload locale artifact",
-      );
-      const downloadStep = finalizeJob.steps.find(
-        (step: { name?: string }) => step.name === "Download locale artifacts",
-      );
-      const commitStep = finalizeJob.steps.find(
-        (step: { name?: string }) => step.name === "Commit and push aggregate locale refresh",
-      );
-
-      expect(finalizeJob.needs).toBe("refresh");
-      expect(finalizeJob.if).toBe("needs.refresh.result == 'success'");
-      expect(uploadStep.uses).toBe(UPLOAD_ARTIFACT_V7);
-      expect(downloadStep.uses).toBe(DOWNLOAD_ARTIFACT_V8);
-      expect(downloadStep.with.pattern).toBe(artifactPattern);
-      expect(downloadStep.with["merge-multiple"]).toBe(true);
-      expect(commitStep.run).toContain(`git commit --no-verify -m "${commitMessage}"`);
-      expect(commitStep.run).toContain("for attempt in 1 2 3 4 5");
-      expect(commitStep.run).toContain('git fetch origin "${TARGET_BRANCH}"');
-      expect(commitStep.run).toContain('git rebase "origin/${TARGET_BRANCH}"');
-      expect(commitStep.run).toContain('git push origin HEAD:"${TARGET_BRANCH}"');
-    }
-  });
-
   it("fails OpenGrep SARIF artifact uploads when reports are missing", () => {
-    const cases = [
-      {
-        workflowPath: OPENGREP_PR_DIFF_WORKFLOW,
-        artifactName: "opengrep-pr-diff-sarif",
-      },
-      {
-        workflowPath: OPENGREP_FULL_WORKFLOW,
-        artifactName: "opengrep-full-sarif",
-      },
-    ];
-
-    for (const item of cases) {
-      const workflow = parse(readFileSync(item.workflowPath, "utf8"));
-      const uploadStep = workflow.jobs.scan.steps.find(
-        (step) => step.name === "Upload SARIF as workflow artifact",
-      );
-
-      expect(uploadStep.if, item.workflowPath).toBe("always()");
-      expect(uploadStep.uses, item.workflowPath).toBe(UPLOAD_ARTIFACT_V7);
-      expect(uploadStep.with, item.workflowPath).toMatchObject({
-        name: item.artifactName,
-        path: ".opengrep-out/precise.sarif",
-        "if-no-files-found": "error",
-      });
-    }
-  });
-
-  it("runs real behavior proof from the trusted workflow revision", () => {
-    const workflow = readRealBehaviorProofWorkflow();
-    const source = readFileSync(".github/workflows/real-behavior-proof.yml", "utf8");
-    const checkout = workflow.jobs["real-behavior-proof"].steps.find(
-      (step) => step.uses === CHECKOUT_V6,
+    const workflow = parse(readFileSync(OPENGREP_PR_DIFF_WORKFLOW, "utf8"));
+    const uploadStep = workflow.jobs.scan.steps.find(
+      (step) => step.name === "Upload SARIF as workflow artifact",
     );
 
-    expect(checkout.with.ref).toBe("${{ github.workflow_sha }}");
-    expect(checkout.with.ref).not.toBe("${{ github.event.pull_request.base.sha }}");
-    expect(source).toContain("Old PR events can carry a stale base SHA");
+    expect(uploadStep.if).toBe("always()");
+    expect(uploadStep.uses).toBe(UPLOAD_ARTIFACT_V7);
+    expect(uploadStep.with).toMatchObject({
+      name: "opengrep-pr-diff-sarif",
+      path: ".opengrep-out/precise.sarif",
+      "if-no-files-found": "error",
+    });
   });
 
   it("keeps docs-change detection fail-safe and fixture-aware", () => {
@@ -331,20 +170,17 @@ describe("ci workflow guards", () => {
 
   it("installs the Android SDK platform used by Gradle", () => {
     const workflow = readCiWorkflow();
-    const releaseWorkflow = readAndroidReleaseWorkflow();
     const appCompileSdk = readAndroidCompileSdk("apps/android/app/build.gradle.kts");
     const benchmarkCompileSdk = readAndroidCompileSdk("apps/android/benchmark/build.gradle.kts");
-    const sdkJobs = [workflow.jobs.android, releaseWorkflow.jobs.publish_signed_android_apk];
     const packageId = `platforms;android-${appCompileSdk}.0`;
 
     expect(appCompileSdk).toBe(benchmarkCompileSdk);
-    for (const job of sdkJobs) {
-      const cacheStep = job.steps.find((step) => step.name === "Cache Android SDK");
-      const installStep = job.steps.find((step) => step.name === "Install Android SDK packages");
+    const job = workflow.jobs.android;
+    const cacheStep = job.steps.find((step) => step.name === "Cache Android SDK");
+    const installStep = job.steps.find((step) => step.name === "Install Android SDK packages");
 
-      expect(cacheStep.with.key).toContain(`platform-${appCompileSdk}.0-`);
-      expect(installStep.run).toContain(`"${packageId}"`);
-    }
+    expect(cacheStep.with.key).toContain(`platform-${appCompileSdk}.0-`);
+    expect(installStep.run).toContain(`"${packageId}"`);
   });
 
   it("covers Android app variants, lint, and benchmark compilation", () => {
@@ -398,19 +234,10 @@ describe("ci workflow guards", () => {
 
   it("uses bundled Node shards and telemetry-backed runner sizes", () => {
     const workflow = readCiWorkflow();
-    const buildArtifactsTestbox = readBuildArtifactsTestboxWorkflow();
     const source = readFileSync(".github/workflows/ci.yml", "utf8");
 
     expect(source).toContain("createNodeTestShardBundles");
     expect(workflow.jobs["build-artifacts"]["runs-on"]).toContain("blacksmith-16vcpu-ubuntu-2404");
-    expect(buildArtifactsTestbox.jobs["build-artifacts"]["runs-on"]).toBe(
-      "blacksmith-16vcpu-ubuntu-2404",
-    );
-    expect(
-      buildArtifactsTestbox.jobs["build-artifacts"].steps.find(
-        (step: { name?: string }) => step.name === "Build dist on cache miss",
-      ).env.NODE_OPTIONS,
-    ).toBe("--max-old-space-size=16384");
     expect(workflow.jobs["checks-node-core-test-nondist-shard"]["runs-on"]).toContain(
       "blacksmith-4vcpu-ubuntu-2404",
     );
@@ -467,10 +294,6 @@ describe("ci workflow guards", () => {
     const workflowPaths = [
       [".github/workflows/ci.yml", "120s"],
       [".github/workflows/workflow-sanity.yml", "30s"],
-      [".github/workflows/ci-check-testbox.yml", "120s"],
-      [".github/workflows/ci-check-arm-testbox.yml", "120s"],
-      [".github/workflows/ci-build-artifacts-testbox.yml", "120s"],
-      [".github/workflows/crabbox-hydrate.yml", "30s"],
     ];
 
     for (const [workflowPath, timeoutSeconds] of workflowPaths) {
@@ -612,69 +435,6 @@ describe("ci workflow guards", () => {
     );
   });
 
-  it("bounds the Windows Crabbox hydrate main fetch", () => {
-    const workflow = readFileSync(".github/workflows/crabbox-hydrate.yml", "utf8");
-
-    expect(workflow).toContain("$fetchInfo = New-Object System.Diagnostics.ProcessStartInfo");
-    expect(workflow).toContain('$fetchInfo.FileName = "git"');
-    expect(workflow).toContain("$fetchInfo.WorkingDirectory = $repo");
-    expect(workflow).toContain("$fetchInfo.UseShellExecute = $false");
-    expect(workflow).not.toContain("$fetchInfo.RedirectStandardOutput = $true");
-    expect(workflow).not.toContain("$fetchInfo.RedirectStandardError = $true");
-    expect(workflow).toContain(
-      "--no-tags --no-progress --prune --no-recurse-submodules --depth=50",
-    );
-    expect(workflow).toContain("$fetch = New-Object System.Diagnostics.Process");
-    expect(workflow).toContain("$fetch.StartInfo = $fetchInfo");
-    expect(workflow).toContain("$fetch.WaitForExit(30000)");
-    expect(workflow).toContain("$fetch.Kill()");
-    expect(workflow).not.toContain("StandardOutput.ReadToEnd()");
-    expect(workflow).not.toContain("StandardError.ReadToEnd()");
-    expect(workflow).toContain('throw "git fetch failed with exit code $($fetch.ExitCode)"');
-    expect(workflow).toContain('throw "git fetch timed out after 30 seconds"');
-    expect(workflow).not.toContain(
-      'git fetch --no-tags --depth=50 origin "+refs/heads/main:refs/remotes/origin/main"',
-    );
-  });
-
-  it("fails Windows Testbox setup when Blacksmith phone-home is not accepted", () => {
-    const workflow = readFileSync(".github/workflows/windows-blacksmith-testbox.yml", "utf8");
-
-    expect(workflow).toContain('echo "phone_home_hydrating_http=${hydrating_http_code}"');
-    expect(workflow).toContain('echo "phone_home_ready_http=${http_code}"');
-    expect(workflow).toContain('jq -e \'type == "number"\' <<<"$installation_model_id"');
-    expect(workflow).toContain('--arg testbox_id "$TESTBOX_ID"');
-    expect(workflow).toContain('--arg testbox_id "$testbox_id"');
-    expect(workflow).toContain('--argjson installation_model_id "$installation_model_id"');
-    expect(workflow).toContain('--data-binary @"$hydrating_body"');
-    expect(workflow).toContain('--data-binary @"$ready_body"');
-    const hydratingFailureBlock = workflow.slice(
-      workflow.indexOf('if [[ ! "$hydrating_http_code" =~ ^2 ]]; then'),
-      workflow.indexOf('response="$(cat "$hydrating_response")"'),
-    );
-    const missingSshKeyFailureBlock = workflow.slice(
-      workflow.indexOf('if [ -z "$ssh_public_key" ]; then'),
-      workflow.indexOf("mkdir -p ~/.ssh"),
-    );
-    const readyFailureBlock = workflow.slice(
-      workflow.indexOf('if [[ ! "$http_code" =~ ^2 ]]; then'),
-      workflow.indexOf('echo "============================================"'),
-    );
-
-    expect(hydratingFailureBlock).toContain("exit 1");
-    expect(missingSshKeyFailureBlock).toContain("exit 1");
-    expect(readyFailureBlock).toContain("exit 1");
-    expect(workflow).toContain(
-      "Blacksmith phone-home did not return an SSH public key; testbox cannot accept CLI connections.",
-    );
-    expect(workflow).not.toContain(
-      'phone_home_ready_http=${http_code}"\n\n          echo "============================================"',
-    );
-    expect(workflow).not.toContain('\\"testbox_id\\": \\"${TESTBOX_ID}\\"');
-    expect(workflow).not.toContain('cat > "$ready_body" <<JSON');
-    expect(workflow).not.toContain('"testbox_id": "${testbox_id}"');
-  });
-
   it("runs dependency policy guards in PR CI preflight", () => {
     const workflow = readFileSync(".github/workflows/ci.yml", "utf8");
     const preflightGuards = workflow.slice(
@@ -751,22 +511,6 @@ describe("ci workflow guards", () => {
     expect(restoreStep.with.path).toContain("extensions/*/src/host/**/.bundle.hash");
     expect(restoreStep.with.path).toContain("extensions/*/src/host/**/*.bundle.js");
     expect(buildArtifactSteps.map((step) => step.name)).not.toContain("Cache dist build");
-  });
-
-  it("keeps the AI runtime in Testbox build artifact caches", () => {
-    const workflow = readBuildArtifactsTestboxWorkflow();
-    const steps = workflow.jobs["build-artifacts"].steps;
-    const resolveSeedsStep = steps.find((step) => step.name === "Resolve release dist cache seeds");
-    const restoreStep = steps.find((step) => step.name === "Restore dist build cache");
-    const verifyStep = steps.find((step) => step.name === "Verify build artifacts");
-    const saveStep = steps.find((step) => step.name === "Save dist build cache");
-
-    expect(resolveSeedsStep.run).toContain('cache_prefix="${RUNNER_OS}-dist-build-v2-"');
-    expect(restoreStep.with.path).toContain("packages/*/dist/");
-    expect(restoreStep.with.key).toContain("dist-build-v2-");
-    expect(verifyStep.run).toContain("test -f packages/ai/dist/internal/runtime.mjs");
-    expect(saveStep.with.path).toContain("packages/*/dist/");
-    expect(saveStep.with.key).toContain("dist-build-v2-");
   });
 
   it("runs gateway watch after parallel built artifact checks", () => {
@@ -876,176 +620,6 @@ describe("ci workflow guards", () => {
     });
   });
 
-  it("keeps maturity scorecard generated QA evidence handoff strict", () => {
-    const maturityWorkflow = readMaturityScorecardWorkflow();
-    const qaEvidenceWorkflow = readQaProfileEvidenceWorkflow();
-    const generateJob = maturityWorkflow.jobs.generate_qa_evidence;
-    const publishJob = maturityWorkflow.jobs.publish;
-    const qaRunJob = qaEvidenceWorkflow.jobs.run_qa_profile;
-
-    expect(maturityWorkflow.on.workflow_call.inputs).toMatchObject({
-      qa_evidence_run_id: {
-        description: "Optional workflow run id containing qa-evidence.json",
-        required: false,
-        default: "",
-        type: "string",
-      },
-      ref: {
-        description: "OpenClaw branch, tag, or SHA containing the maturity score source",
-        required: true,
-        type: "string",
-      },
-      expected_sha: {
-        description: "Optional full SHA that ref must resolve to",
-        required: false,
-        default: "",
-        type: "string",
-      },
-    });
-    expect(maturityWorkflow.on.workflow_call.secrets.OPENAI_API_KEY.required).toBe(true);
-    expect(
-      maturityWorkflow.on.workflow_call.secrets.OPENCLAW_MATURITY_SCORECARD_AGENT_OPENAI_API_KEY
-        .required,
-    ).toBe(false);
-    expect(maturityWorkflow.on.workflow_call.secrets.GH_APP_PRIVATE_KEY.required).toBe(false);
-    expect(maturityWorkflow.on.workflow_call.secrets.GH_APP_PRIVATE_KEY_FALLBACK.required).toBe(
-      false,
-    );
-    expect(qaEvidenceWorkflow.on.workflow_dispatch.inputs).not.toHaveProperty("fail_on_qa_failure");
-    expect(qaEvidenceWorkflow.on.workflow_call.inputs).not.toHaveProperty("fail_on_qa_failure");
-    expect(qaEvidenceWorkflow.on.workflow_dispatch.inputs.qa_profile).not.toHaveProperty("options");
-    expect(qaEvidenceWorkflow.on.workflow_dispatch.inputs.qa_profile.default).toBe("all");
-    expect(qaEvidenceWorkflow.on.workflow_call.inputs.qa_profile.type).toBe("string");
-    const validateProfileStep = qaRunJob.steps.find(
-      (step) => step.name === "Validate QA profile input",
-    );
-    expect(validateProfileStep.run).toContain(
-      "taxonomy.profiles.find((entry) => entry.id === requested)",
-    );
-    expect(validateProfileStep.run).toContain("profile=${profile.id}");
-    const ensurePlaywrightStep = qaRunJob.steps.find(
-      (step) => step.name === "Ensure Playwright Chromium",
-    );
-    expect(ensurePlaywrightStep.run).toBe("node scripts/ensure-playwright-chromium.mjs");
-    expect(generateJob.if).toBe("${{ inputs.qa_evidence_run_id == '' }}");
-    expect(generateJob.uses).toBe("./.github/workflows/qa-profile-evidence.yml");
-    expect(generateJob.with).toMatchObject({
-      // Keep the caller's ref while the callee verifies it against expected_sha.
-      ref: "${{ inputs.ref }}",
-      expected_sha: "${{ needs.validate_selected_ref.outputs.selected_revision }}",
-      qa_profile: "all",
-    });
-    expect(generateJob.with).not.toHaveProperty("fail_on_qa_failure");
-
-    const validateRefStep = maturityWorkflow.jobs.validate_selected_ref.steps.find(
-      (step) => step.name === "Validate selected ref",
-    );
-    expect(validateRefStep.env.EXPECTED_SHA).toBe("${{ inputs.expected_sha }}");
-    expect(validateRefStep.run).toContain("expected_sha must be a full 40-character SHA");
-    expect(validateRefStep.run).toContain('"${selected_revision,,}" != "$expected_sha"');
-
-    const generatedDownloadStep = publishJob.steps.find(
-      (step) => step.name === "Download generated QA evidence artifact",
-    );
-    expect(generatedDownloadStep.if).toBe("${{ inputs.qa_evidence_run_id == '' }}");
-    expect(generatedDownloadStep.env.GENERATED_ARTIFACT_NAME).toBe(
-      "${{ needs.generate_qa_evidence.outputs.artifact_name }}",
-    );
-    expect(generatedDownloadStep.run).toContain('gh run download "$GITHUB_RUN_ID"');
-    expect(generatedDownloadStep.run).toContain('--name "$GENERATED_ARTIFACT_NAME"');
-    expect(generatedDownloadStep.run).not.toContain("--pattern");
-
-    const requireEvidenceStep = publishJob.steps.find(
-      (step) => step.name === "Require one QA evidence file",
-    );
-    expect(requireEvidenceStep.run).toContain("Expected exactly one qa-evidence.json file");
-
-    const validateManifestStep = publishJob.steps.find(
-      (step) => step.name === "Validate QA evidence manifest",
-    );
-    expect(validateManifestStep.run).toContain("qa-profile-evidence-manifest.json");
-    expect(validateManifestStep.run).toContain("qa-evidence.json profile must be all");
-    expect(validateManifestStep.run).toContain("QA evidence manifest profile must be all");
-    expect(validateManifestStep.run).toContain("manifest.targetSha !== targetSha");
-
-    expect(qaRunJob.outputs.artifact_name).toBe("${{ steps.evidence.outputs.artifact_name }}");
-    const qaEvidenceStep = qaRunJob.steps.find(
-      (step) => step.name === "Validate QA profile evidence",
-    );
-    expect(qaEvidenceStep.env.ARTIFACT_NAME).toBe(
-      "qa-profile-evidence-${{ steps.profile.outputs.profile }}-${{ needs.validate_selected_ref.outputs.selected_revision }}",
-    );
-    expect(qaEvidenceStep.run).toContain("qa-profile-evidence-manifest.json");
-
-    const qaUploadStep = qaRunJob.steps.find((step) => step.name === "Upload QA profile evidence");
-    expect(qaUploadStep.with).toMatchObject({
-      name: "qa-profile-evidence-${{ steps.profile.outputs.profile }}-${{ needs.validate_selected_ref.outputs.selected_revision }}",
-      path: "${{ steps.run_profile.outputs.output_dir }}",
-      "if-no-files-found": "error",
-    });
-
-    const qaFailStep = qaRunJob.steps.find((step) => step.name === "Fail if QA profile failed");
-    expect(qaFailStep.if).toBe("always()");
-
-    const createTokenStep = publishJob.steps.find(
-      (step) => step.name === "Create generated docs PR app token",
-    );
-    const createFallbackTokenStep = publishJob.steps.find(
-      (step) => step.name === "Create generated docs PR fallback app token",
-    );
-    const openDocsPrStep = publishJob.steps.find((step) => step.name === "Open generated docs PR");
-    expect(createTokenStep.if).toBe("${{ github.event_name == 'workflow_dispatch' }}");
-    expect(createFallbackTokenStep.if).toBe(
-      "${{ github.event_name == 'workflow_dispatch' && steps.app-token.outcome == 'failure' }}",
-    );
-    expect(openDocsPrStep.if).toBe("${{ github.event_name == 'workflow_dispatch' }}");
-  });
-
-  it("keeps maturity scorecard release docs opt-in from release checks", () => {
-    const releaseWorkflow = readReleaseChecksWorkflow();
-    const job = releaseWorkflow.jobs.maturity_scorecard_release_checks;
-    const summaryJob = releaseWorkflow.jobs.summary;
-    const verifyStep = summaryJob.steps.find(
-      (step) => step.name === "Verify release check results",
-    );
-    const inputs = releaseWorkflow.on.workflow_dispatch.inputs;
-    const resolveJob = releaseWorkflow.jobs.resolve_target;
-    const summarizeStep = resolveJob.steps.find((step) => step.name === "Summarize validated ref");
-
-    expect(releaseWorkflow.jobs).not.toHaveProperty("qa_profile_release_evidence_release_checks");
-    expect(inputs.run_maturity_scorecard).toMatchObject({
-      required: false,
-      default: false,
-      type: "boolean",
-    });
-    expect(resolveJob.outputs.run_maturity_scorecard).toBe(
-      "${{ steps.inputs.outputs.run_maturity_scorecard }}",
-    );
-    expect(summarizeStep.env.RUN_MATURITY_SCORECARD).toBe(
-      "${{ steps.inputs.outputs.run_maturity_scorecard }}",
-    );
-    expect(summarizeStep.run).toContain("- Maturity scorecard docs:");
-    expect(job.name).toBe("Render maturity scorecard release docs");
-    expect(job.if).toBe(
-      "contains(fromJSON('[\"all\",\"qa\"]'), needs.resolve_target.outputs.rerun_group) && needs.resolve_target.outputs.run_maturity_scorecard == 'true'",
-    );
-    expect(job.permissions).toMatchObject({
-      actions: "read",
-      contents: "read",
-    });
-    expect(job.uses).toBe("./.github/workflows/maturity-scorecard.yml");
-    expect(job.with).toMatchObject({
-      ref: "${{ needs.resolve_target.outputs.ref }}",
-      expected_sha: "${{ needs.resolve_target.outputs.revision }}",
-    });
-    expect(job.with).not.toHaveProperty("qa_profile");
-    expect(summaryJob.needs).toContain("maturity_scorecard_release_checks");
-    expect(verifyStep.run).toContain(
-      '"maturity_scorecard_release_checks=${{ needs.maturity_scorecard_release_checks.result }}"',
-    );
-    expect(verifyStep.run).not.toContain("qa_profile_release_evidence_release_checks");
-  });
-
   it("keeps workflow guards in fast CI-routing checks", () => {
     const workflow = readCiWorkflow();
     const preflightStep = workflow.jobs.preflight.steps.find(
@@ -1114,16 +688,6 @@ describe("ci workflow guards", () => {
     expect(smokeAggregateJob.needs).toEqual(["preflight", "qa-smoke-ci-shard"]);
     expect(smokeAggregateJob["runs-on"]).toBe("ubuntu-24.04");
     expect(runStep.run.match(/test\/scripts\/ci-workflow-guards\.test\.ts/g)?.length).toBe(2);
-  });
-
-  it("keeps push docs validation ClawHub-backed", () => {
-    const workflow = readFileSync(".github/workflows/docs.yml", "utf8");
-
-    expect(workflow).toContain("repository: openclaw/clawhub");
-    expect(workflow).toContain("path: clawhub-source");
-    expect(workflow).toContain(
-      "OPENCLAW_DOCS_SYNC_CLAWHUB_REPO: ${{ github.workspace }}/clawhub-source",
-    );
   });
 
   it("keeps network CodeQL off unrelated source-only refactors", () => {

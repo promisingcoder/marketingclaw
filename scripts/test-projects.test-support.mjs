@@ -446,235 +446,37 @@ const INSTALL_DOCKERFILE_TEST_TARGETS = [
   ...DOCKERFILE_CACHE_AND_DIGEST_TEST_TARGETS,
   "test/scripts/test-install-sh-docker.test.ts",
 ];
-const LIVE_MEDIA_RUNNER_IMAGE_TEST_TARGETS = ["test/scripts/package-acceptance-workflow.test.ts"];
 const GITHUB_YAML_PINNING_GUARD_TEST_TARGETS = ["test/scripts/ci-workflow-guards.test.ts"];
 const GITHUB_WORKFLOW_OWNER_TEST_TARGETS = new Map([
-  [
-    ".github/workflows/ci-build-artifacts-testbox.yml",
-    ["test/scripts/package-acceptance-workflow.test.ts"],
-  ],
-  [
-    ".github/workflows/ci-check-arm-testbox.yml",
-    ["test/scripts/package-acceptance-workflow.test.ts"],
-  ],
-  [
-    ".github/workflows/ci-check-testbox.yml",
-    ["test/scripts/changed-lanes.test.ts", "test/scripts/package-acceptance-workflow.test.ts"],
-  ],
   [
     ".github/workflows/ci.yml",
     [
       "test/scripts/changed-lanes.test.ts",
       "test/scripts/check-workflows.test.ts",
       "test/scripts/plugin-contract-test-plan.test.ts",
-      "test/scripts/plugin-prerelease-test-plan.test.ts",
       "test/scripts/verify-pr-hosted-gates.test.ts",
     ],
-  ],
-  [".github/workflows/crabbox-hydrate.yml", ["test/scripts/package-acceptance-workflow.test.ts"]],
-  [".github/workflows/dependency-guard.yml", ["test/scripts/dependency-guard-workflow.test.ts"]],
-  [".github/workflows/docker-release.yml", ["src/dockerfile.test.ts"]],
-  [
-    ".github/workflows/full-release-validation.yml",
-    [
-      "src/dockerfile.test.ts",
-      "test/scripts/package-acceptance-workflow.test.ts",
-      "test/scripts/plugin-prerelease-test-plan.test.ts",
-    ],
-  ],
-  [".github/workflows/install-smoke.yml", ["test/scripts/test-install-sh-docker.test.ts"]],
-  [
-    ".github/workflows/ios-periphery-comment.yml",
-    ["test/scripts/ios-periphery-comment-workflow.test.ts"],
-  ],
-  [".github/workflows/ios-periphery.yml", ["test/scripts/ios-periphery-comment-workflow.test.ts"]],
-  [
-    ".github/workflows/live-media-runner-image.yml",
-    ["test/scripts/package-acceptance-workflow.test.ts"],
-  ],
-  [".github/workflows/macos-release.yml", ["test/scripts/package-acceptance-workflow.test.ts"]],
-  [
-    ".github/workflows/mantis-telegram-desktop-proof.yml",
-    [
-      "test/scripts/mantis-telegram-desktop-proof-workflow.test.ts",
-      "test/scripts/package-acceptance-workflow.test.ts",
-    ],
-  ],
-  [
-    ".github/workflows/mantis-web-ui-chat-proof.yml",
-    [
-      "test/scripts/mantis-web-ui-chat-proof-workflow.test.ts",
-      "test/scripts/package-acceptance-workflow.test.ts",
-    ],
-  ],
-  [
-    ".github/workflows/mantis-discord-smoke.yml",
-    ["test/scripts/package-acceptance-workflow.test.ts"],
-  ],
-  [
-    ".github/workflows/mantis-discord-status-reactions.yml",
-    ["test/scripts/package-acceptance-workflow.test.ts"],
-  ],
-  [
-    ".github/workflows/mantis-discord-thread-attachment.yml",
-    ["test/scripts/package-acceptance-workflow.test.ts"],
-  ],
-  [
-    ".github/workflows/mantis-slack-desktop-smoke.yml",
-    ["test/scripts/package-acceptance-workflow.test.ts"],
-  ],
-  [
-    ".github/workflows/mantis-telegram-live.yml",
-    [
-      "test/scripts/mantis-telegram-desktop-proof-workflow.test.ts",
-      "test/scripts/package-acceptance-workflow.test.ts",
-    ],
-  ],
-  [
-    ".github/workflows/npm-telegram-beta-e2e.yml",
-    ["test/scripts/package-acceptance-workflow.test.ts"],
-  ],
-  [".github/workflows/android-release.yml", ["test/scripts/package-acceptance-workflow.test.ts"]],
-  [
-    ".github/workflows/openclaw-cross-os-release-checks-reusable.yml",
-    [
-      "test/scripts/openclaw-cross-os-release-checks.test.ts",
-      "test/scripts/openclaw-cross-os-release-workflow.test.ts",
-      "test/scripts/package-acceptance-workflow.test.ts",
-    ],
-  ],
-  [
-    ".github/workflows/openclaw-live-and-e2e-checks-reusable.yml",
-    [
-      "test/scripts/package-acceptance-workflow.test.ts",
-      "test/scripts/release-workflow-matrix-plan.test.ts",
-      "test/scripts/test-install-sh-docker.test.ts",
-    ],
-  ],
-  [
-    ".github/workflows/openclaw-npm-release.yml",
-    [
-      "test/openclaw-npm-postpublish-verify.test.ts",
-      "test/scripts/package-acceptance-workflow.test.ts",
-    ],
-  ],
-  [
-    ".github/workflows/openclaw-performance.yml",
-    ["test/scripts/openclaw-performance-workflow.test.ts"],
-  ],
-  [
-    ".github/workflows/openclaw-release-checks.yml",
-    [
-      "test/scripts/openclaw-cross-os-release-checks.test.ts",
-      "test/scripts/package-acceptance-workflow.test.ts",
-      "test/scripts/plugin-prerelease-test-plan.test.ts",
-      "test/scripts/test-install-sh-docker.test.ts",
-    ],
-  ],
-  [
-    ".github/workflows/openclaw-release-publish.yml",
-    ["test/scripts/package-acceptance-workflow.test.ts"],
-  ],
-  [
-    ".github/workflows/openclaw-scheduled-live-checks.yml",
-    ["test/scripts/package-acceptance-workflow.test.ts"],
-  ],
-  [
-    ".github/workflows/openclaw-stable-main-closeout.yml",
-    ["test/scripts/package-acceptance-workflow.test.ts"],
-  ],
-  [
-    ".github/workflows/package-acceptance.yml",
-    ["test/scripts/package-acceptance-workflow.test.ts"],
-  ],
-  [
-    ".github/workflows/plugin-clawhub-new.yml",
-    ["test/scripts/package-acceptance-workflow.test.ts"],
-  ],
-  [
-    ".github/workflows/plugin-clawhub-release.yml",
-    ["test/scripts/package-acceptance-workflow.test.ts"],
-  ],
-  [
-    ".github/workflows/plugin-npm-release.yml",
-    ["test/scripts/package-acceptance-workflow.test.ts"],
-  ],
-  [".github/workflows/plugin-prerelease.yml", ["test/scripts/plugin-prerelease-test-plan.test.ts"]],
-  [
-    ".github/workflows/qa-live-transports-convex.yml",
-    ["test/scripts/package-acceptance-workflow.test.ts"],
   ],
   [
     ".github/workflows/sandbox-common-smoke.yml",
     ["test/scripts/sandbox-common-smoke-workflow.test.ts"],
   ],
-  [
-    ".github/workflows/security-sensitive-guard.yml",
-    ["test/scripts/security-sensitive-guard-workflow.test.ts"],
-  ],
-  [".github/workflows/tui-pty.yml", ["test/scripts/package-acceptance-workflow.test.ts"]],
-  [".github/workflows/update-migration.yml", ["test/scripts/package-acceptance-workflow.test.ts"]],
-  [
-    ".github/workflows/website-installer-sync.yml",
-    ["test/scripts/website-installer-sync-workflow.test.ts"],
-  ],
-  [
-    ".github/workflows/windows-node-release.yml",
-    ["test/scripts/package-acceptance-workflow.test.ts"],
-  ],
-  [".github/workflows/windows-testbox-probe.yml", ["test/scripts/check-workflows.test.ts"]],
 ]);
 const TOOLING_SOURCE_TEST_TARGETS = new Map([
   ["Dockerfile", ROOT_DOCKERFILE_TEST_TARGETS],
-  [".crabbox.yaml", ["test/scripts/package-acceptance-workflow.test.ts"]],
   [".github/actions/detect-docs-changes/action.yml", ["test/scripts/ci-workflow-guards.test.ts"]],
-  [
-    ".github/actions/docker-e2e-plan/action.yml",
-    ["test/scripts/package-acceptance-workflow.test.ts", "test/scripts/ci-workflow-guards.test.ts"],
-  ],
+  [".github/actions/docker-e2e-plan/action.yml", ["test/scripts/ci-workflow-guards.test.ts"]],
   [".github/actions/ensure-base-commit/action.yml", ["test/scripts/ci-workflow-guards.test.ts"]],
-  [
-    ".github/actions/setup-node-env/action.yml",
-    ["test/scripts/package-acceptance-workflow.test.ts", "test/scripts/ci-workflow-guards.test.ts"],
-  ],
+  [".github/actions/setup-node-env/action.yml", ["test/scripts/ci-workflow-guards.test.ts"]],
   [
     ".github/actions/setup-pnpm-store-cache/action.yml",
-    ["test/scripts/package-acceptance-workflow.test.ts", "test/scripts/ci-workflow-guards.test.ts"],
+    ["test/scripts/ci-workflow-guards.test.ts"],
   ],
   [
     ".github/actions/setup-pnpm-store-cache/ensure-node.sh",
     ["test/scripts/setup-pnpm-store-cache-ensure-node.test.ts"],
   ],
-  [".github/images/live-media-runner/Dockerfile", LIVE_MEDIA_RUNNER_IMAGE_TEST_TARGETS],
   [".github/workflows/ci.yml", ["test/scripts/ci-workflow-guards.test.ts"]],
-  [
-    ".github/workflows/security-sensitive-guard.yml",
-    ["test/scripts/security-sensitive-guard-workflow.test.ts"],
-  ],
-  [
-    ".github/workflows/ci-check-testbox.yml",
-    ["test/scripts/ci-workflow-guards.test.ts", "test/scripts/package-acceptance-workflow.test.ts"],
-  ],
-  [
-    ".github/workflows/ci-check-arm-testbox.yml",
-    ["test/scripts/ci-workflow-guards.test.ts", "test/scripts/package-acceptance-workflow.test.ts"],
-  ],
-  [
-    ".github/workflows/crabbox-hydrate.yml",
-    ["test/scripts/ci-workflow-guards.test.ts", "test/scripts/package-acceptance-workflow.test.ts"],
-  ],
-  [
-    ".github/workflows/live-media-runner-image.yml",
-    [...LIVE_MEDIA_RUNNER_IMAGE_TEST_TARGETS, "test/scripts/ci-workflow-guards.test.ts"],
-  ],
-  [
-    ".github/workflows/openclaw-live-and-e2e-checks-reusable.yml",
-    ["test/scripts/package-acceptance-workflow.test.ts", "test/scripts/ci-workflow-guards.test.ts"],
-  ],
-  [
-    ".github/workflows/openclaw-release-checks.yml",
-    ["test/scripts/package-acceptance-workflow.test.ts"],
-  ],
   ["scripts/clawtributors-map.json", ["test/scripts/update-clawtributors.test.ts"]],
   ["scripts/tsconfig.json", ["test/scripts/oxlint-config.test.ts"]],
   ["scripts/build-all.mjs", ["test/scripts/build-all.test.ts"]],
@@ -766,7 +568,6 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
     [
       "test/scripts/docker-build-helper.test.ts",
       "test/scripts/docker-e2e-plan.test.ts",
-      "test/scripts/plugin-prerelease-test-plan.test.ts",
       "src/agents/agent-bundle-mcp-runtime.test.ts",
       "src/agents/agent-bundle-mcp-tools.materialize.test.ts",
     ],
@@ -788,11 +589,7 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
   ],
   [
     "scripts/e2e/codex-npm-plugin-live-docker.sh",
-    [
-      "test/scripts/docker-build-helper.test.ts",
-      "test/scripts/docker-e2e-plan.test.ts",
-      "test/scripts/package-acceptance-workflow.test.ts",
-    ],
+    ["test/scripts/docker-build-helper.test.ts", "test/scripts/docker-e2e-plan.test.ts"],
   ],
   [
     "scripts/e2e/codex-on-demand-docker.sh",
@@ -902,12 +699,11 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
       "test/scripts/docker-build-helper.test.ts",
       "test/scripts/docker-e2e-observability.test.ts",
       "test/scripts/docker-e2e-plan.test.ts",
-      "test/scripts/plugin-prerelease-test-plan.test.ts",
     ],
   ],
   [
     "test/e2e/qa-lab/runtime/mcp-channels-docker-client.ts",
-    ["test/scripts/docker-e2e-plan.test.ts", "test/scripts/plugin-prerelease-test-plan.test.ts"],
+    ["test/scripts/docker-e2e-plan.test.ts"],
   ],
   [
     "test/e2e/qa-lab/runtime/mcp-channels.fixture.ts",
@@ -927,7 +723,6 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
     [
       "test/scripts/docker-build-helper.test.ts",
       "test/scripts/docker-e2e-plan.test.ts",
-      "test/scripts/plugin-prerelease-test-plan.test.ts",
       "test/scripts/mcp-code-mode-gateway-client.test.ts",
       "test/scripts/session-log-mentions.test.ts",
     ],
@@ -937,7 +732,6 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
     [
       "test/scripts/docker-build-helper.test.ts",
       "test/scripts/docker-e2e-plan.test.ts",
-      "test/scripts/plugin-prerelease-test-plan.test.ts",
       "test/scripts/mcp-code-mode-gateway-client.test.ts",
       "test/scripts/session-log-mentions.test.ts",
     ],
@@ -957,7 +751,6 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
       "test/scripts/docker-build-helper.test.ts",
       "test/scripts/docker-e2e-observability.test.ts",
       "test/scripts/docker-e2e-plan.test.ts",
-      "test/scripts/plugin-prerelease-test-plan.test.ts",
       "test/scripts/cron-mcp-cleanup-docker-client.test.ts",
       "test/scripts/docker-e2e-seeds.test.ts",
     ],
@@ -980,28 +773,16 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
     ],
   ],
   ["scripts/dependency-changes-report.mjs", ["test/scripts/dependency-changes-report.test.ts"]],
-  [
-    "scripts/github/dependency-guard.mjs",
-    [
-      "test/scripts/dependency-guard-script.test.ts",
-      "test/scripts/dependency-guard-workflow.test.ts",
-    ],
-  ],
+  ["scripts/github/dependency-guard.mjs", ["test/scripts/dependency-guard-script.test.ts"]],
   [
     "scripts/github/guard-shared.mjs",
     [
       "test/scripts/dependency-guard-script.test.ts",
-      "test/scripts/dependency-guard-workflow.test.ts",
       "test/scripts/security-sensitive-guard-script.test.ts",
-      "test/scripts/security-sensitive-guard-workflow.test.ts",
     ],
   ],
   ["scripts/github/resolve-openclaw-ref.sh", ["test/scripts/resolve-openclaw-ref.test.ts"]],
   ["scripts/ci-hydrate-testbox-env.sh", ["test/scripts/ci-hydrate-testbox-env.test.ts"]],
-  [
-    "scripts/github/run-openclaw-cross-os-release-checks.sh",
-    ["test/scripts/openclaw-cross-os-release-workflow.test.ts"],
-  ],
   ["scripts/mobile-release-ref.ts", ["test/scripts/mobile-release-ref.test.ts"]],
   ["scripts/android-release.sh", ["test/scripts/android-release-wrapper-args.test.ts"]],
   ["scripts/android-release-signing.mjs", ["test/scripts/android-release-signing.test.ts"]],
@@ -1029,11 +810,6 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
     ["test/scripts/openclaw-release-clawhub-runtime-state.test.ts"],
   ],
   ["scripts/openclaw-release-clawhub-plan.ts", ["test/scripts/release-wrapper-scripts.test.ts"]],
-  [
-    "scripts/plan-release-workflow-matrix.mjs",
-    ["test/scripts/release-workflow-matrix-plan.test.ts"],
-  ],
-  ["scripts/release-fast-pretag-check.sh", ["test/scripts/package-acceptance-workflow.test.ts"]],
   ["scripts/plugin-clawhub-release-check.ts", ["test/scripts/release-wrapper-scripts.test.ts"]],
   ["scripts/plugin-clawhub-release-plan.ts", ["test/scripts/release-wrapper-scripts.test.ts"]],
   ["scripts/plugin-npm-release-check.ts", ["test/scripts/release-wrapper-scripts.test.ts"]],
@@ -1049,10 +825,7 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
   ],
   [
     "scripts/github/security-sensitive-guard.mjs",
-    [
-      "test/scripts/security-sensitive-guard-script.test.ts",
-      "test/scripts/security-sensitive-guard-workflow.test.ts",
-    ],
+    ["test/scripts/security-sensitive-guard-script.test.ts"],
   ],
   [
     "scripts/dependency-ownership-surface-report.mjs",
@@ -1174,11 +947,7 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
   ["scripts/lib/docker-e2e-package.sh", ["test/scripts/docker-build-helper.test.ts"]],
   [
     "scripts/lib/docker-e2e-plan.mjs",
-    [
-      "test/scripts/docker-e2e-plan.test.ts",
-      "test/scripts/docker-all-scheduler.test.ts",
-      "test/scripts/plugin-prerelease-test-plan.test.ts",
-    ],
+    ["test/scripts/docker-e2e-plan.test.ts", "test/scripts/docker-all-scheduler.test.ts"],
   ],
   ["scripts/lib/format-generated-module.mjs", ["test/scripts/format-generated-module.test.ts"]],
   ["scripts/lib/ios-version.ts", ["test/scripts/ios-version.test.ts"]],
@@ -1205,7 +974,6 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
       "test/openclaw-npm-release-check.test.ts",
       "test/scripts/check-gateway-watch-regression.test.ts",
       "test/scripts/check-openclaw-package-tarball.test.ts",
-      "test/scripts/openclaw-cross-os-release-checks.test.ts",
     ],
   ],
   [
@@ -1219,7 +987,6 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
       "test/openclaw-npm-release-check.test.ts",
       "test/scripts/check-gateway-watch-regression.test.ts",
       "test/scripts/check-openclaw-package-tarball.test.ts",
-      "test/scripts/openclaw-cross-os-release-checks.test.ts",
     ],
   ],
   ["scripts/lib/npm-verify-exec.ts", ["test/scripts/npm-verify-exec.test.ts"]],
@@ -1399,25 +1166,17 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
     [
       "test/scripts/install-sh.test.ts",
       "test/scripts/test-install-sh-docker.test.ts",
-      "test/scripts/website-installer-sync-workflow.test.ts",
-      "test/scripts/openclaw-cross-os-release-checks.test.ts",
       "src/scripts/ci-changed-scope.test.ts",
     ],
   ],
   [
     "scripts/install.ps1",
-    [
-      "test/scripts/install-ps1.test.ts",
-      "test/scripts/website-installer-sync-workflow.test.ts",
-      "test/scripts/openclaw-cross-os-release-checks.test.ts",
-      "src/scripts/ci-changed-scope.test.ts",
-    ],
+    ["test/scripts/install-ps1.test.ts", "src/scripts/ci-changed-scope.test.ts"],
   ],
   ["scripts/podman/openclaw.container.in", ["test/scripts/test-install-sh-docker.test.ts"]],
   ["scripts/ios-run.sh", ["test/scripts/ios-run.test.ts"]],
   ["scripts/create-dmg.sh", ["test/scripts/create-dmg.test.ts"]],
   ["scripts/kova-ci-summary.mjs", ["test/scripts/kova-ci-summary.test.ts"]],
-  ["scripts/make_appcast.sh", ["test/scripts/make-appcast.test.ts"]],
   ["scripts/ocm-npm-workspace-deps.mjs", ["test/scripts/ocm-npm-workspace-deps.test.ts"]],
   ["scripts/openclaw-npm-prepublish-verify.ts", ["test/openclaw-npm-prepublish-verify.test.ts"]],
   ["scripts/openclaw-npm-postpublish-verify.ts", ["test/openclaw-npm-postpublish-verify.test.ts"]],
@@ -1435,15 +1194,6 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
   ["scripts/package-changelog.mjs", ["test/scripts/package-changelog.test.ts"]],
   ["scripts/package-mac-app.sh", ["test/scripts/package-mac-app.test.ts"]],
   ["scripts/package-mac-dist.sh", ["test/scripts/package-mac-dist.test.ts"]],
-  [
-    "scripts/sparkle-build.ts",
-    [
-      "test/appcast.test.ts",
-      "test/release-check.test.ts",
-      "test/scripts/package-mac-app.test.ts",
-      "test/scripts/package-mac-dist.test.ts",
-    ],
-  ],
   [
     "scripts/package-openclaw-for-docker.mjs",
     ["test/e2e/qa-lab/runtime/package-openclaw-for-docker.e2e.test.ts"],
@@ -1482,35 +1232,10 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
   ["scripts/lib/extension-vitest-paths.mjs", ["test/scripts/test-extension.test.ts"]],
   ["scripts/lib/vitest-batch-runner.mjs", ["test/scripts/test-extension.test.ts"]],
   ["scripts/lib/ci-node-test-plan.mjs", ["test/scripts/ci-node-test-plan.test.ts"]],
-  [
-    "scripts/lib/docker-e2e-scenarios.mjs",
-    ["test/scripts/docker-e2e-plan.test.ts", "test/scripts/plugin-prerelease-test-plan.test.ts"],
-  ],
-  [
-    "scripts/lib/plugin-prerelease-test-plan.mjs",
-    ["test/scripts/plugin-prerelease-test-plan.test.ts"],
-  ],
-  [
-    "scripts/e2e/kitchen-sink-plugin-docker.sh",
-    [
-      "test/scripts/docker-build-helper.test.ts",
-      "test/scripts/plugin-prerelease-test-plan.test.ts",
-    ],
-  ],
-  [
-    "scripts/e2e/kitchen-sink-rpc-docker.sh",
-    [
-      "test/scripts/docker-build-helper.test.ts",
-      "test/scripts/plugin-prerelease-test-plan.test.ts",
-    ],
-  ],
-  [
-    "scripts/e2e/kitchen-sink-rpc-walk.mjs",
-    [
-      "test/scripts/kitchen-sink-rpc-walk.test.ts",
-      "test/scripts/plugin-prerelease-test-plan.test.ts",
-    ],
-  ],
+  ["scripts/lib/docker-e2e-scenarios.mjs", ["test/scripts/docker-e2e-plan.test.ts"]],
+  ["scripts/e2e/kitchen-sink-plugin-docker.sh", ["test/scripts/docker-build-helper.test.ts"]],
+  ["scripts/e2e/kitchen-sink-rpc-docker.sh", ["test/scripts/docker-build-helper.test.ts"]],
+  ["scripts/e2e/kitchen-sink-rpc-walk.mjs", ["test/scripts/kitchen-sink-rpc-walk.test.ts"]],
   ["scripts/measure-rpc-rtt.mjs", ["test/scripts/measure-rpc-rtt.test.ts"]],
   [
     "scripts/e2e/telegram-user-crabbox-proof.ts",
@@ -1550,7 +1275,6 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
     "scripts/e2e/config-reload-source-docker.sh",
     [
       "test/scripts/docker-e2e-plan.test.ts",
-      "test/scripts/package-acceptance-workflow.test.ts",
       "test/scripts/fixture-config.test.ts",
       "test/scripts/e2e-mock-config-limits.test.ts",
       "src/gateway/config-reload.test.ts",
@@ -1563,7 +1287,6 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
     [
       "test/scripts/docker-build-helper.test.ts",
       "test/scripts/docker-e2e-plan.test.ts",
-      "test/scripts/package-acceptance-workflow.test.ts",
       "test/scripts/gateway-network-client.test.ts",
       "src/scripts/ci-changed-scope.test.ts",
     ],
@@ -1573,9 +1296,7 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
     [
       "test/scripts/docker-build-helper.test.ts",
       "test/scripts/docker-e2e-plan.test.ts",
-      "test/scripts/package-acceptance-workflow.test.ts",
       "test/scripts/npm-onboard-channel-agent-assertions.test.ts",
-      "test/scripts/plugin-prerelease-test-plan.test.ts",
     ],
   ],
   ["scripts/e2e/npm-telegram-live-docker.sh", ["test/scripts/npm-telegram-live.test.ts"]],
@@ -1586,26 +1307,17 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
   ],
   [
     "scripts/e2e/doctor-install-switch-docker.sh",
-    [
-      "test/scripts/docker-build-helper.test.ts",
-      "test/scripts/docker-e2e-plan.test.ts",
-      "test/scripts/package-acceptance-workflow.test.ts",
-    ],
+    ["test/scripts/docker-build-helper.test.ts", "test/scripts/docker-e2e-plan.test.ts"],
   ],
   [
     "scripts/e2e/update-channel-switch-docker.sh",
-    [
-      "test/scripts/docker-build-helper.test.ts",
-      "test/scripts/docker-e2e-plan.test.ts",
-      "test/scripts/package-acceptance-workflow.test.ts",
-    ],
+    ["test/scripts/docker-build-helper.test.ts", "test/scripts/docker-e2e-plan.test.ts"],
   ],
   [
     "scripts/e2e/skill-install-docker.sh",
     [
       "test/scripts/docker-build-helper.test.ts",
       "test/scripts/docker-e2e-plan.test.ts",
-      "test/scripts/package-acceptance-workflow.test.ts",
       "test/scripts/e2e-shell-tempfiles.test.ts",
     ],
   ],
@@ -1614,7 +1326,6 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
     [
       "test/scripts/docker-build-helper.test.ts",
       "test/scripts/docker-e2e-plan.test.ts",
-      "test/scripts/package-acceptance-workflow.test.ts",
       "test/scripts/upgrade-survivor-probe-gateway.test.ts",
       "test/scripts/upgrade-survivor-assertions.test.ts",
       "test/scripts/openclaw-test-state.test.ts",
@@ -1626,7 +1337,6 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
     [
       "test/scripts/docker-build-helper.test.ts",
       "test/scripts/docker-e2e-plan.test.ts",
-      "test/scripts/plugin-prerelease-test-plan.test.ts",
       "test/scripts/bundled-plugin-install-uninstall-probe.test.ts",
     ],
   ],
@@ -1662,13 +1372,7 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
     "scripts/e2e/lib/codex-on-demand/assertions.mjs",
     ["test/scripts/codex-install-assertions.test.ts"],
   ],
-  [
-    "scripts/e2e/lib/clawhub-fixture-server.cjs",
-    [
-      "test/scripts/clawhub-fixture-server.test.ts",
-      "test/scripts/plugin-prerelease-test-plan.test.ts",
-    ],
-  ],
+  ["scripts/e2e/lib/clawhub-fixture-server.cjs", ["test/scripts/clawhub-fixture-server.test.ts"]],
   ["scripts/e2e/lib/config-reload/assert-log.mjs", ["test/scripts/e2e-mock-config-limits.test.ts"]],
   [
     "scripts/e2e/lib/config-reload/mutate-metadata.mjs",
@@ -1750,7 +1454,6 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
     [
       "test/scripts/docker-build-helper.test.ts",
       "test/scripts/docker-e2e-plan.test.ts",
-      "test/scripts/plugin-prerelease-test-plan.test.ts",
       "test/scripts/plugin-update-unchanged-docker.test.ts",
     ],
   ],
@@ -1759,7 +1462,6 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
     [
       "test/scripts/docker-build-helper.test.ts",
       "test/scripts/docker-e2e-plan.test.ts",
-      "test/scripts/package-acceptance-workflow.test.ts",
       "test/scripts/plugin-update-unchanged-docker.test.ts",
     ],
   ],
@@ -1789,34 +1491,21 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
   ],
   [
     "scripts/e2e/release-plugin-marketplace-docker.sh",
-    [
-      "test/scripts/docker-build-helper.test.ts",
-      "test/scripts/docker-e2e-plan.test.ts",
-      "test/scripts/package-acceptance-workflow.test.ts",
-    ],
+    ["test/scripts/docker-build-helper.test.ts", "test/scripts/docker-e2e-plan.test.ts"],
   ],
   [
     "scripts/e2e/release-typed-onboarding-docker.sh",
-    [
-      "test/scripts/docker-build-helper.test.ts",
-      "test/scripts/docker-e2e-plan.test.ts",
-      "test/scripts/package-acceptance-workflow.test.ts",
-    ],
+    ["test/scripts/docker-build-helper.test.ts", "test/scripts/docker-e2e-plan.test.ts"],
   ],
   [
     "scripts/e2e/release-upgrade-user-journey-docker.sh",
-    [
-      "test/scripts/docker-build-helper.test.ts",
-      "test/scripts/docker-e2e-plan.test.ts",
-      "test/scripts/package-acceptance-workflow.test.ts",
-    ],
+    ["test/scripts/docker-build-helper.test.ts", "test/scripts/docker-e2e-plan.test.ts"],
   ],
   [
     "scripts/e2e/release-user-journey-docker.sh",
     [
       "test/scripts/docker-build-helper.test.ts",
       "test/scripts/docker-e2e-plan.test.ts",
-      "test/scripts/package-acceptance-workflow.test.ts",
       "test/scripts/release-user-journey-assertions.test.ts",
     ],
   ],
@@ -1924,11 +1613,7 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
   ["scripts/e2e/openwebui-probe.mjs", ["test/e2e/qa-lab/runtime/openwebui-probe.e2e.test.ts"]],
   [
     "scripts/e2e/plugin-binding-command-escape-docker.sh",
-    [
-      "test/scripts/docker-build-helper.test.ts",
-      "test/scripts/docker-e2e-plan.test.ts",
-      "test/scripts/package-acceptance-workflow.test.ts",
-    ],
+    ["test/scripts/docker-build-helper.test.ts", "test/scripts/docker-e2e-plan.test.ts"],
   ],
   ["scripts/e2e/qr-import-docker.sh", ["test/scripts/docker-build-helper.test.ts"]],
   [
@@ -1936,10 +1621,6 @@ const TOOLING_SOURCE_TEST_TARGETS = new Map([
     ["test/scripts/docker-e2e-plan.test.ts", "test/scripts/release-media-memory-scenario.test.ts"],
   ],
   ["scripts/lib/vitest-shard-timings.mjs", ["test/scripts/vitest-shard-timings.test.ts"]],
-  [
-    "scripts/plugin-prerelease-liveish-matrix.mjs",
-    ["test/scripts/plugin-prerelease-test-plan.test.ts"],
-  ],
   ["scripts/test-projects.mjs", ["test/scripts/test-projects.test.ts"]],
   ["scripts/test-projects.test-support.d.mts", ["test/scripts/test-projects.test.ts"]],
   ["scripts/test-projects.test-support.mjs", ["test/scripts/test-projects.test.ts"]],
@@ -2030,10 +1711,6 @@ const TOOLING_TEST_TARGETS = new Map([
     "test/scripts/mantis-web-ui-chat-evidence.test.ts",
     ["test/scripts/mantis-web-ui-chat-evidence.test.ts"],
   ],
-  [
-    "test/scripts/plugin-prerelease-test-plan.test.ts",
-    ["test/scripts/plugin-prerelease-test-plan.test.ts"],
-  ],
   ["test/scripts/pr-wrappers.test.ts", ["test/scripts/pr-wrappers.test.ts"]],
   ["test/scripts/test-projects.test.ts", ["test/scripts/test-projects.test.ts"]],
   [
@@ -2073,7 +1750,6 @@ const TEST_HELPER_NORMALIZE_TEXT_TARGETS = [
   "src/tui/components/chat-log.test.ts",
 ];
 const HAPPY_PATH_PROMPT_SNAPSHOT_HELPER_TEST_TARGETS = ["test/scripts/prompt-snapshots.test.ts"];
-const APPCAST_TEST_TARGETS = ["test/appcast.test.ts", "test/scripts/make-appcast.test.ts"];
 const SOURCE_TEST_TARGETS = new Map([
   ...PRECISE_SOURCE_TEST_TARGETS,
   ["src/test-utils/openclaw-test-state.ts", ["src/test-utils/openclaw-test-state.test.ts"]],
@@ -3378,16 +3054,11 @@ function resolvePromptSnapshotFixtureTargets(changedPath) {
   return ["test/scripts/prompt-snapshots.test.ts"];
 }
 
-function resolveAppcastTargets(changedPath) {
-  return changedPath === "appcast.xml" ? APPCAST_TEST_TARGETS : null;
-}
-
 function resolvePreciseChangedTestTargets(changedPath, options) {
   const cwd = options.cwd ?? process.cwd();
   const mappedTargets =
     resolveToolingTestTargets(changedPath) ??
     SOURCE_TEST_TARGETS.get(changedPath) ??
-    resolveAppcastTargets(changedPath) ??
     resolvePromptSnapshotFixtureTargets(changedPath);
   if (mappedTargets) {
     return mappedTargets;

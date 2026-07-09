@@ -214,10 +214,6 @@ export function shouldRunCanvasA2uiNativeResourceCheck(paths) {
   );
 }
 
-export function shouldRunAppcastOwnerTest(paths) {
-  return paths.some((changedPath) => normalizeChangedPath(changedPath) === "appcast.xml");
-}
-
 export function shouldRunTestTempCreationReport(paths) {
   return paths.some((changedPath) => isChangedLaneTestPath(changedPath));
 }
@@ -327,13 +323,6 @@ export function createChangedCheckPlan(result, options = {}) {
       "Canvas A2UI native resource sync",
       "node",
       ["scripts/sync-native-a2ui.mjs", "--check"],
-      baseEnv,
-    );
-  }
-  if (shouldRunAppcastOwnerTest(result.paths)) {
-    add(
-      "appcast owner tests",
-      ["test:serial", "test/appcast.test.ts", "test/scripts/make-appcast.test.ts"],
       baseEnv,
     );
   }

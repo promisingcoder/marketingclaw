@@ -21,7 +21,6 @@ import {
   createTargetedExtensionLintCommand,
   createTargetedScriptLintCommand,
   shouldDelegateChangedCheckToCrabbox,
-  shouldRunAppcastOwnerTest,
   shouldRunCanvasA2uiNativeResourceCheck,
   shouldRunPromptSnapshotCheck,
   shouldRunPromptSnapshotOwnerTest,
@@ -1354,23 +1353,18 @@ describe("scripts/changed-lanes", () => {
       "config:docs:check",
       "deps:root-ownership:check",
     ]);
-    expect(plan.commands.find((command) => command.args[0] === "release-metadata:check")?.args).toEqual([
-      "release-metadata:check",
-      "--staged",
-    ]);
+    expect(
+      plan.commands.find((command) => command.args[0] === "release-metadata:check")?.args,
+    ).toEqual(["release-metadata:check", "--staged"]);
   });
 
   it("passes release metadata base and head refs as options", () => {
     const result = detectChangedLanes(["CHANGELOG.md"]);
     const plan = createChangedCheckPlan(result, { base: "main", head: "feature" });
 
-    expect(plan.commands.find((command) => command.args[0] === "release-metadata:check")?.args).toEqual([
-      "release-metadata:check",
-      "--base",
-      "main",
-      "--head",
-      "feature",
-    ]);
+    expect(
+      plan.commands.find((command) => command.args[0] === "release-metadata:check")?.args,
+    ).toEqual(["release-metadata:check", "--base", "main", "--head", "feature"]);
   });
 
   it("keeps docs plus changelog entries on the docs-only changed gate", () => {
@@ -1626,20 +1620,6 @@ describe("scripts/changed-lanes", () => {
         }),
       );
     }
-  });
-
-  it("routes appcast changes to appcast owner tests", () => {
-    const result = detectChangedLanes(["appcast.xml"]);
-    const plan = createChangedCheckPlan(result);
-
-    expect(shouldRunAppcastOwnerTest(result.paths)).toBe(true);
-    expect(plan.commands).toContainEqual(
-      expect.objectContaining({
-        name: "appcast owner tests",
-        args: ["test:serial", "test/appcast.test.ts", "test/scripts/make-appcast.test.ts"],
-      }),
-    );
-    expect(plan.commands.map((command) => command.name)).not.toContain("macOS app CI tests");
   });
 
   it("runs app lint when SwiftLint is available in Testbox", () => {

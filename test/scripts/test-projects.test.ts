@@ -270,17 +270,6 @@ describe("scripts/test-projects changed-target routing", () => {
       mode: "targets",
       targets: ["test/scripts/android-release-artifacts.test.ts"],
     });
-    expect(resolveChangedTestTargetPlan([".github/workflows/android-release.yml"])).toEqual({
-      mode: "targets",
-      targets: [
-        "test/scripts/package-acceptance-workflow.test.ts",
-        "test/scripts/ci-workflow-guards.test.ts",
-      ],
-    });
-    expect(resolveChangedTestTargetPlan(["scripts/release-fast-pretag-check.sh"])).toEqual({
-      mode: "targets",
-      targets: ["test/scripts/package-acceptance-workflow.test.ts"],
-    });
   });
 
   it("routes control UI i18n script changes through its regression test", () => {
@@ -315,7 +304,6 @@ describe("scripts/test-projects changed-target routing", () => {
       targets: [
         "test/scripts/docker-e2e-plan.test.ts",
         "test/scripts/docker-all-scheduler.test.ts",
-        "test/scripts/plugin-prerelease-test-plan.test.ts",
       ],
     });
     expect(resolveChangedTestTargetPlan(["scripts/github/real-behavior-proof-check.mjs"])).toEqual({
@@ -509,10 +497,7 @@ describe("scripts/test-projects changed-target routing", () => {
       ],
       [
         "scripts/e2e/lib/clawhub-fixture-server.cjs",
-        [
-          "test/scripts/clawhub-fixture-server.test.ts",
-          "test/scripts/plugin-prerelease-test-plan.test.ts",
-        ],
+        ["test/scripts/clawhub-fixture-server.test.ts"],
       ],
       [
         "scripts/e2e/lib/config-reload/assert-log.mjs",
@@ -584,11 +569,7 @@ describe("scripts/test-projects changed-target routing", () => {
       ],
       [
         "scripts/e2e/codex-npm-plugin-live-docker.sh",
-        [
-          "test/scripts/docker-build-helper.test.ts",
-          "test/scripts/docker-e2e-plan.test.ts",
-          "test/scripts/package-acceptance-workflow.test.ts",
-        ],
+        ["test/scripts/docker-build-helper.test.ts", "test/scripts/docker-e2e-plan.test.ts"],
       ],
       [
         "scripts/e2e/codex-on-demand-docker.sh",
@@ -702,7 +683,6 @@ describe("scripts/test-projects changed-target routing", () => {
           "test/scripts/docker-build-helper.test.ts",
           "test/scripts/docker-e2e-observability.test.ts",
           "test/scripts/docker-e2e-plan.test.ts",
-          "test/scripts/plugin-prerelease-test-plan.test.ts",
           "test/scripts/cron-mcp-cleanup-docker-client.test.ts",
           "test/scripts/docker-e2e-seeds.test.ts",
         ],
@@ -755,7 +735,6 @@ describe("scripts/test-projects changed-target routing", () => {
         "scripts/e2e/config-reload-source-docker.sh",
         [
           "test/scripts/docker-e2e-plan.test.ts",
-          "test/scripts/package-acceptance-workflow.test.ts",
           "test/scripts/fixture-config.test.ts",
           "test/scripts/e2e-mock-config-limits.test.ts",
           "src/gateway/config-reload.test.ts",
@@ -766,7 +745,6 @@ describe("scripts/test-projects changed-target routing", () => {
         [
           "test/scripts/docker-build-helper.test.ts",
           "test/scripts/docker-e2e-plan.test.ts",
-          "test/scripts/package-acceptance-workflow.test.ts",
           "test/scripts/gateway-network-client.test.ts",
           "src/scripts/ci-changed-scope.test.ts",
         ],
@@ -776,9 +754,7 @@ describe("scripts/test-projects changed-target routing", () => {
         [
           "test/scripts/docker-build-helper.test.ts",
           "test/scripts/docker-e2e-plan.test.ts",
-          "test/scripts/package-acceptance-workflow.test.ts",
           "test/scripts/npm-onboard-channel-agent-assertions.test.ts",
-          "test/scripts/plugin-prerelease-test-plan.test.ts",
         ],
       ],
       ["scripts/e2e/npm-telegram-live-docker.sh", ["test/scripts/npm-telegram-live.test.ts"]],
@@ -789,26 +765,17 @@ describe("scripts/test-projects changed-target routing", () => {
       ],
       [
         "scripts/e2e/doctor-install-switch-docker.sh",
-        [
-          "test/scripts/docker-build-helper.test.ts",
-          "test/scripts/docker-e2e-plan.test.ts",
-          "test/scripts/package-acceptance-workflow.test.ts",
-        ],
+        ["test/scripts/docker-build-helper.test.ts", "test/scripts/docker-e2e-plan.test.ts"],
       ],
       [
         "scripts/e2e/update-channel-switch-docker.sh",
-        [
-          "test/scripts/docker-build-helper.test.ts",
-          "test/scripts/docker-e2e-plan.test.ts",
-          "test/scripts/package-acceptance-workflow.test.ts",
-        ],
+        ["test/scripts/docker-build-helper.test.ts", "test/scripts/docker-e2e-plan.test.ts"],
       ],
       [
         "scripts/e2e/skill-install-docker.sh",
         [
           "test/scripts/docker-build-helper.test.ts",
           "test/scripts/docker-e2e-plan.test.ts",
-          "test/scripts/package-acceptance-workflow.test.ts",
           "test/scripts/e2e-shell-tempfiles.test.ts",
         ],
       ],
@@ -817,7 +784,6 @@ describe("scripts/test-projects changed-target routing", () => {
         [
           "test/scripts/docker-build-helper.test.ts",
           "test/scripts/docker-e2e-plan.test.ts",
-          "test/scripts/package-acceptance-workflow.test.ts",
           "test/scripts/upgrade-survivor-probe-gateway.test.ts",
           "test/scripts/upgrade-survivor-assertions.test.ts",
           "test/scripts/openclaw-test-state.test.ts",
@@ -828,7 +794,6 @@ describe("scripts/test-projects changed-target routing", () => {
         [
           "test/scripts/docker-build-helper.test.ts",
           "test/scripts/docker-e2e-plan.test.ts",
-          "test/scripts/plugin-prerelease-test-plan.test.ts",
           "test/scripts/bundled-plugin-install-uninstall-probe.test.ts",
         ],
       ],
@@ -853,7 +818,6 @@ describe("scripts/test-projects changed-target routing", () => {
         [
           "test/scripts/docker-build-helper.test.ts",
           "test/scripts/docker-e2e-plan.test.ts",
-          "test/scripts/plugin-prerelease-test-plan.test.ts",
           "test/scripts/plugin-update-unchanged-docker.test.ts",
         ],
       ],
@@ -862,7 +826,6 @@ describe("scripts/test-projects changed-target routing", () => {
         [
           "test/scripts/docker-build-helper.test.ts",
           "test/scripts/docker-e2e-plan.test.ts",
-          "test/scripts/package-acceptance-workflow.test.ts",
           "test/scripts/plugin-update-unchanged-docker.test.ts",
         ],
       ],
@@ -892,34 +855,21 @@ describe("scripts/test-projects changed-target routing", () => {
       ],
       [
         "scripts/e2e/release-plugin-marketplace-docker.sh",
-        [
-          "test/scripts/docker-build-helper.test.ts",
-          "test/scripts/docker-e2e-plan.test.ts",
-          "test/scripts/package-acceptance-workflow.test.ts",
-        ],
+        ["test/scripts/docker-build-helper.test.ts", "test/scripts/docker-e2e-plan.test.ts"],
       ],
       [
         "scripts/e2e/release-typed-onboarding-docker.sh",
-        [
-          "test/scripts/docker-build-helper.test.ts",
-          "test/scripts/docker-e2e-plan.test.ts",
-          "test/scripts/package-acceptance-workflow.test.ts",
-        ],
+        ["test/scripts/docker-build-helper.test.ts", "test/scripts/docker-e2e-plan.test.ts"],
       ],
       [
         "scripts/e2e/release-upgrade-user-journey-docker.sh",
-        [
-          "test/scripts/docker-build-helper.test.ts",
-          "test/scripts/docker-e2e-plan.test.ts",
-          "test/scripts/package-acceptance-workflow.test.ts",
-        ],
+        ["test/scripts/docker-build-helper.test.ts", "test/scripts/docker-e2e-plan.test.ts"],
       ],
       [
         "scripts/e2e/release-user-journey-docker.sh",
         [
           "test/scripts/docker-build-helper.test.ts",
           "test/scripts/docker-e2e-plan.test.ts",
-          "test/scripts/package-acceptance-workflow.test.ts",
           "test/scripts/release-user-journey-assertions.test.ts",
         ],
       ],
@@ -958,11 +908,7 @@ describe("scripts/test-projects changed-target routing", () => {
       ],
       [
         "scripts/e2e/plugin-binding-command-escape-docker.sh",
-        [
-          "test/scripts/docker-build-helper.test.ts",
-          "test/scripts/docker-e2e-plan.test.ts",
-          "test/scripts/package-acceptance-workflow.test.ts",
-        ],
+        ["test/scripts/docker-build-helper.test.ts", "test/scripts/docker-e2e-plan.test.ts"],
       ],
       ["scripts/e2e/qr-import-docker.sh", ["test/scripts/docker-build-helper.test.ts"]],
     ]);
@@ -1155,13 +1101,6 @@ describe("scripts/test-projects changed-target routing", () => {
     });
   });
 
-  it("keeps Crabbox config edits on package acceptance tests", () => {
-    expect(resolveChangedTestTargetPlan([".crabbox.yaml"])).toEqual({
-      mode: "targets",
-      targets: ["test/scripts/package-acceptance-workflow.test.ts"],
-    });
-  });
-
   it("keeps scripts tsconfig edits on oxlint config tests", () => {
     expect(resolveChangedTestTargetPlan(["scripts/tsconfig.json"])).toEqual({
       mode: "targets",
@@ -1235,106 +1174,9 @@ describe("scripts/test-projects changed-target routing", () => {
         "test/scripts/changed-lanes.test.ts",
         "test/scripts/check-workflows.test.ts",
         "test/scripts/plugin-contract-test-plan.test.ts",
-        "test/scripts/plugin-prerelease-test-plan.test.ts",
         "test/scripts/verify-pr-hosted-gates.test.ts",
       ],
     });
-  });
-
-  it("keeps security-sensitive guard workflow edits on guard workflow tests", () => {
-    expect(
-      resolveChangedTestTargetPlan([".github/workflows/security-sensitive-guard.yml"]),
-    ).toEqual({
-      mode: "targets",
-      targets: [
-        "test/scripts/security-sensitive-guard-workflow.test.ts",
-        "test/scripts/ci-workflow-guards.test.ts",
-      ],
-    });
-  });
-
-  it("keeps Crabbox and Testbox workflow edits on workflow regression tests", () => {
-    const workflowTargets = new Map([
-      [
-        ".github/workflows/ci-check-testbox.yml",
-        [
-          "test/scripts/ci-workflow-guards.test.ts",
-          "test/scripts/package-acceptance-workflow.test.ts",
-          "test/scripts/changed-lanes.test.ts",
-        ],
-      ],
-      [
-        ".github/workflows/ci-check-arm-testbox.yml",
-        [
-          "test/scripts/ci-workflow-guards.test.ts",
-          "test/scripts/package-acceptance-workflow.test.ts",
-        ],
-      ],
-      [
-        ".github/workflows/crabbox-hydrate.yml",
-        [
-          "test/scripts/ci-workflow-guards.test.ts",
-          "test/scripts/package-acceptance-workflow.test.ts",
-        ],
-      ],
-    ]);
-    for (const [workflowPath, targets] of workflowTargets) {
-      expect(resolveChangedTestTargetPlan([workflowPath])).toEqual({
-        mode: "targets",
-        targets,
-      });
-    }
-  });
-
-  it("keeps Mantis proof workflow edits on workflow evidence regression tests", () => {
-    const packageAcceptanceTargets = [
-      "test/scripts/package-acceptance-workflow.test.ts",
-      "test/scripts/ci-workflow-guards.test.ts",
-    ];
-    const workflowTargets = new Map([
-      [".github/workflows/mantis-discord-smoke.yml", packageAcceptanceTargets],
-      [".github/workflows/mantis-discord-status-reactions.yml", packageAcceptanceTargets],
-      [".github/workflows/mantis-discord-thread-attachment.yml", packageAcceptanceTargets],
-      [".github/workflows/mantis-slack-desktop-smoke.yml", packageAcceptanceTargets],
-      [
-        ".github/workflows/mantis-telegram-desktop-proof.yml",
-        [
-          "test/scripts/mantis-telegram-desktop-proof-workflow.test.ts",
-          "test/scripts/package-acceptance-workflow.test.ts",
-          "test/scripts/ci-workflow-guards.test.ts",
-        ],
-      ],
-      [
-        ".github/workflows/mantis-web-ui-chat-proof.yml",
-        [
-          "test/scripts/mantis-web-ui-chat-proof-workflow.test.ts",
-          "test/scripts/package-acceptance-workflow.test.ts",
-          "test/scripts/ci-workflow-guards.test.ts",
-        ],
-      ],
-    ]);
-
-    for (const [workflowPath, targets] of workflowTargets) {
-      expect(resolveChangedTestTargetPlan([workflowPath])).toEqual({
-        mode: "targets",
-        targets,
-      });
-    }
-  });
-
-  it("keeps release-check workflow edits on release workflow regression tests", () => {
-    expect(resolveChangedTestTargetPlan([".github/workflows/openclaw-release-checks.yml"])).toEqual(
-      {
-        mode: "targets",
-        targets: [
-          "test/scripts/package-acceptance-workflow.test.ts",
-          "test/scripts/openclaw-cross-os-release-checks.test.ts",
-          "test/scripts/plugin-prerelease-test-plan.test.ts",
-          "test/scripts/test-install-sh-docker.test.ts",
-          "test/scripts/ci-workflow-guards.test.ts",
-        ],
-      },
-    );
   });
 
   it("keeps workflow sanity script edits on workflow guard tests", () => {
@@ -1386,35 +1228,20 @@ describe("scripts/test-projects changed-target routing", () => {
 
     expect(resolveChangedTestTargetPlan(["scripts/github/dependency-guard.mjs"])).toEqual({
       mode: "targets",
-      targets: [
-        "test/scripts/dependency-guard-script.test.ts",
-        "test/scripts/dependency-guard-workflow.test.ts",
-      ],
+      targets: ["test/scripts/dependency-guard-script.test.ts"],
     });
 
     expect(resolveChangedTestTargetPlan(["scripts/github/guard-shared.mjs"])).toEqual({
       mode: "targets",
       targets: [
         "test/scripts/dependency-guard-script.test.ts",
-        "test/scripts/dependency-guard-workflow.test.ts",
         "test/scripts/security-sensitive-guard-script.test.ts",
-        "test/scripts/security-sensitive-guard-workflow.test.ts",
       ],
-    });
-
-    expect(
-      resolveChangedTestTargetPlan(["scripts/github/run-openclaw-cross-os-release-checks.sh"]),
-    ).toEqual({
-      mode: "targets",
-      targets: ["test/scripts/openclaw-cross-os-release-workflow.test.ts"],
     });
 
     expect(resolveChangedTestTargetPlan(["scripts/github/security-sensitive-guard.mjs"])).toEqual({
       mode: "targets",
-      targets: [
-        "test/scripts/security-sensitive-guard-script.test.ts",
-        "test/scripts/security-sensitive-guard-workflow.test.ts",
-      ],
+      targets: ["test/scripts/security-sensitive-guard-script.test.ts"],
     });
 
     expect(
@@ -1455,19 +1282,12 @@ describe("scripts/test-projects changed-target routing", () => {
         [
           "test/scripts/install-sh.test.ts",
           "test/scripts/test-install-sh-docker.test.ts",
-          "test/scripts/website-installer-sync-workflow.test.ts",
-          "test/scripts/openclaw-cross-os-release-checks.test.ts",
           "src/scripts/ci-changed-scope.test.ts",
         ],
       ],
       [
         "scripts/install.ps1",
-        [
-          "test/scripts/install-ps1.test.ts",
-          "test/scripts/website-installer-sync-workflow.test.ts",
-          "test/scripts/openclaw-cross-os-release-checks.test.ts",
-          "src/scripts/ci-changed-scope.test.ts",
-        ],
+        ["test/scripts/install-ps1.test.ts", "src/scripts/ci-changed-scope.test.ts"],
       ],
       ["scripts/podman/openclaw.container.in", ["test/scripts/test-install-sh-docker.test.ts"]],
       [
@@ -1476,7 +1296,6 @@ describe("scripts/test-projects changed-target routing", () => {
       ],
       ["scripts/ios-run.sh", ["test/scripts/ios-run.test.ts"]],
       ["scripts/create-dmg.sh", ["test/scripts/create-dmg.test.ts"]],
-      ["scripts/make_appcast.sh", ["test/scripts/make-appcast.test.ts"]],
       ["scripts/package-mac-app.sh", ["test/scripts/package-mac-app.test.ts"]],
       ["scripts/package-mac-dist.sh", ["test/scripts/package-mac-dist.test.ts"]],
       [
@@ -1484,15 +1303,6 @@ describe("scripts/test-projects changed-target routing", () => {
         ["test/scripts/package-mac-app.test.ts", "test/scripts/package-mac-dist.test.ts"],
       ],
       ["scripts/e2e/bun-global-install-smoke.sh", ["test/scripts/test-install-sh-docker.test.ts"]],
-      [
-        "scripts/sparkle-build.ts",
-        [
-          "test/appcast.test.ts",
-          "test/release-check.test.ts",
-          "test/scripts/package-mac-app.test.ts",
-          "test/scripts/package-mac-dist.test.ts",
-        ],
-      ],
       ["scripts/package-changelog.mjs", ["test/scripts/package-changelog.test.ts"]],
       [
         "scripts/test-install-sh-e2e-docker.sh",
@@ -1652,7 +1462,6 @@ describe("scripts/test-projects changed-target routing", () => {
           "test/openclaw-npm-release-check.test.ts",
           "test/scripts/check-gateway-watch-regression.test.ts",
           "test/scripts/check-openclaw-package-tarball.test.ts",
-          "test/scripts/openclaw-cross-os-release-checks.test.ts",
         ],
       ],
       [
@@ -1666,7 +1475,6 @@ describe("scripts/test-projects changed-target routing", () => {
           "test/openclaw-npm-release-check.test.ts",
           "test/scripts/check-gateway-watch-regression.test.ts",
           "test/scripts/check-openclaw-package-tarball.test.ts",
-          "test/scripts/openclaw-cross-os-release-checks.test.ts",
         ],
       ],
       [
@@ -1789,79 +1597,24 @@ describe("scripts/test-projects changed-target routing", () => {
       ],
       ["scripts/lib/ios-version.ts", ["test/scripts/ios-version.test.ts"]],
       [
-        ".github/images/live-media-runner/Dockerfile",
-        ["test/scripts/package-acceptance-workflow.test.ts"],
-      ],
-      [
         ".github/actions/detect-docs-changes/action.yml",
         ["test/scripts/ci-workflow-guards.test.ts"],
       ],
-      [
-        ".github/actions/docker-e2e-plan/action.yml",
-        [
-          "test/scripts/package-acceptance-workflow.test.ts",
-          "test/scripts/ci-workflow-guards.test.ts",
-        ],
-      ],
+      [".github/actions/docker-e2e-plan/action.yml", ["test/scripts/ci-workflow-guards.test.ts"]],
       [
         ".github/actions/ensure-base-commit/action.yml",
         ["test/scripts/ci-workflow-guards.test.ts"],
       ],
-      [
-        ".github/actions/setup-node-env/action.yml",
-        [
-          "test/scripts/package-acceptance-workflow.test.ts",
-          "test/scripts/ci-workflow-guards.test.ts",
-        ],
-      ],
+      [".github/actions/setup-node-env/action.yml", ["test/scripts/ci-workflow-guards.test.ts"]],
       [
         ".github/actions/setup-pnpm-store-cache/action.yml",
-        [
-          "test/scripts/package-acceptance-workflow.test.ts",
-          "test/scripts/ci-workflow-guards.test.ts",
-        ],
+        ["test/scripts/ci-workflow-guards.test.ts"],
       ],
       [
         ".github/actions/setup-pnpm-store-cache/ensure-node.sh",
         ["test/scripts/setup-pnpm-store-cache-ensure-node.test.ts"],
       ],
-      [
-        ".github/workflows/live-media-runner-image.yml",
-        [
-          "test/scripts/package-acceptance-workflow.test.ts",
-          "test/scripts/ci-workflow-guards.test.ts",
-        ],
-      ],
-      [
-        ".github/workflows/openclaw-live-and-e2e-checks-reusable.yml",
-        [
-          "test/scripts/package-acceptance-workflow.test.ts",
-          "test/scripts/ci-workflow-guards.test.ts",
-          "test/scripts/release-workflow-matrix-plan.test.ts",
-          "test/scripts/test-install-sh-docker.test.ts",
-        ],
-      ],
-      [
-        ".github/workflows/package-acceptance.yml",
-        [
-          "test/scripts/package-acceptance-workflow.test.ts",
-          "test/scripts/ci-workflow-guards.test.ts",
-        ],
-      ],
       [".github/workflows/workflow-sanity.yml", ["test/scripts/ci-workflow-guards.test.ts"]],
-      [
-        ".github/workflows/docker-release.yml",
-        ["src/dockerfile.test.ts", "test/scripts/ci-workflow-guards.test.ts"],
-      ],
-      [
-        ".github/workflows/full-release-validation.yml",
-        [
-          "src/dockerfile.test.ts",
-          "test/scripts/package-acceptance-workflow.test.ts",
-          "test/scripts/plugin-prerelease-test-plan.test.ts",
-          "test/scripts/ci-workflow-guards.test.ts",
-        ],
-      ],
       [
         "Dockerfile",
         [
@@ -2032,10 +1785,6 @@ describe("scripts/test-projects changed-target routing", () => {
       [
         "scripts/plugin-release-pretag-pack-check.ts",
         ["test/scripts/plugin-release-pretag-pack-check.test.ts"],
-      ],
-      [
-        "scripts/plan-release-workflow-matrix.mjs",
-        ["test/scripts/release-workflow-matrix-plan.test.ts"],
       ],
       ["scripts/release-verify-beta.ts", ["test/scripts/release-wrapper-scripts.test.ts"]],
       [
@@ -2377,7 +2126,6 @@ describe("scripts/test-projects changed-target routing", () => {
         config: "test/vitest/vitest.tooling.config.ts",
         forwardedArgs: [],
         includePatterns: [
-          "test/scripts/plugin-prerelease-test-plan.test.ts",
           "test/scripts/kitchen-sink-rpc-walk.test.ts",
           "test/scripts/openclaw-test-state.test.ts",
           "test/scripts/plugin-lifecycle-measure.test.ts",
@@ -2473,7 +2221,6 @@ describe("scripts/test-projects changed-target routing", () => {
         "test/scripts/docker-build-helper.test.ts",
         "test/scripts/docker-e2e-observability.test.ts",
         "test/scripts/docker-e2e-plan.test.ts",
-        "test/scripts/plugin-prerelease-test-plan.test.ts",
         "test/e2e/qa-lab/runtime/mcp-gateway-transport.e2e.test.ts",
         "test/scripts/cron-mcp-cleanup-docker-client.test.ts",
         "test/scripts/docker-e2e-seeds.test.ts",
@@ -2525,7 +2272,6 @@ describe("scripts/test-projects changed-target routing", () => {
         "test/scripts/docker-build-helper.test.ts",
         "test/scripts/docker-e2e-plan.test.ts",
         "test/scripts/codex-media-path-client.test.ts",
-        "test/scripts/package-acceptance-workflow.test.ts",
         "test/scripts/live-plugin-tool-assertions.test.ts",
       ],
     });
@@ -3590,8 +3336,8 @@ describe("scripts/test-projects changed-target routing", () => {
 
     expect(plan).toEqual({
       mode: "targets",
-      skippedBroadFallbackPaths: ["src/gateway/server.impl.ts"],
-      targets: ["test/scripts/package-acceptance-workflow.test.ts", "test/scripts/check.test.ts"],
+      skippedBroadFallbackPaths: [".crabbox.yaml", "src/gateway/server.impl.ts"],
+      targets: ["test/scripts/check.test.ts"],
     });
     expect(repoSourceReads).toEqual([]);
   });
@@ -3661,13 +3407,6 @@ describe("scripts/test-projects changed-target routing", () => {
         ],
       });
     }
-  });
-
-  it("routes appcast edits to appcast owner tests", () => {
-    expect(resolveChangedTestTargetPlan(["appcast.xml"])).toEqual({
-      mode: "targets",
-      targets: ["test/appcast.test.ts", "test/scripts/make-appcast.test.ts"],
-    });
   });
 
   it.each([
