@@ -16,56 +16,55 @@ working chat session.
 - **An API key** from a model provider (Anthropic, OpenAI, Google, etc.) — onboarding will prompt you
 
 <Tip>
-Check your Node version with `node --version`.
-**Windows users:** the native Windows Hub app is the easiest desktop path. The
-PowerShell installer and WSL2 Gateway paths are also supported. See [Windows](/platforms/windows).
-Need to install Node? See [Node setup](/install/node).
+Check your Node version with `node --version`. Need to install Node? See [Node setup](/install/node).
+**Windows users:** see [Windows](/platforms/windows) for the native Windows Hub companion app.
 </Tip>
+
+<Note>
+Setting up the full marketing team (the CMO plus specialists)? Follow the
+[Marketing quick start](/start/marketing-quickstart) — it covers install, onboarding,
+and provisioning the team in one place.
+</Note>
 
 ## Quick setup
 
 <Steps>
-  <Step title="Install MarketingClaw">
-    <Tabs>
-      <Tab title="macOS / Linux">
-        ```bash
-        curl -fsSL https://marketingclaw.ai/install.sh | bash
-        ```
-        <img
-  src="/assets/install-script.svg"
-  alt="Install Script Process"
-  className="rounded-lg"
-/>
-      </Tab>
-      <Tab title="Windows (PowerShell)">
-        ```powershell
-        iwr -useb https://marketingclaw.ai/install.ps1 | iex
-        ```
-      </Tab>
-    </Tabs>
+  <Step title="Install from source">
+    MarketingClaw runs from a source checkout (a pnpm workspace). Clone it, then
+    build:
+
+    ```bash
+    git clone https://github.com/promisingcoder/marketingclaw.git
+    cd marketingclaw
+
+    pnpm install
+    pnpm build && pnpm ui:build
+    ```
+
+    From a source checkout, run the CLI with `pnpm marketingclaw <command>`.
 
     <Note>
-    Other install methods (Docker, Nix, npm): [Install](/install).
+    Other runtimes (Docker, Nix) are covered under [Install](/install).
     </Note>
 
   </Step>
   <Step title="Run onboarding">
     ```bash
-    marketingclaw onboard --install-daemon
+    pnpm marketingclaw onboard
     ```
 
     The wizard walks you through choosing a model provider, setting an API key,
     and configuring the Gateway. QuickStart is usually only a few minutes, but
-    provider sign-in, channel pairing, daemon install, network downloads, skills,
-    or optional plugins can make full onboarding take longer. Skip optional
-    steps and return later with `marketingclaw configure`.
+    provider sign-in, channel pairing, network downloads, skills, or optional
+    plugins can make full onboarding take longer. Skip optional steps and return
+    later with `pnpm marketingclaw configure`.
 
     See [Onboarding (CLI)](/start/wizard) for the full reference.
 
   </Step>
   <Step title="Verify the Gateway is running">
     ```bash
-    marketingclaw gateway status
+    pnpm marketingclaw gateway status
     ```
 
     You should see the Gateway listening on port 18789.
@@ -73,7 +72,7 @@ Need to install Node? See [Node setup](/install/node).
   </Step>
   <Step title="Open the dashboard">
     ```bash
-    marketingclaw dashboard
+    pnpm marketingclaw dashboard
     ```
 
     This opens the Control UI in your browser. If it loads, everything is working.

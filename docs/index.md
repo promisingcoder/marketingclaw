@@ -1,196 +1,81 @@
 ---
-summary: "MarketingClaw is a multi-channel gateway for AI agents that runs on any OS."
+summary: "MarketingClaw is a self-hosted AI marketing team: a CMO agent plus specialists for content, social, email, SEO, and analytics."
 read_when:
   - Introducing MarketingClaw to newcomers
 title: "MarketingClaw"
 ---
 
-# MarketingClaw 🦞
+# MarketingClaw
 
 <p align="center">
-    <img
-        src="/assets/marketingclaw-logo-text-dark.png"
-        alt="MarketingClaw"
-        width="500"
-        class="dark:hidden"
-    />
-    <img
-        src="/assets/marketingclaw-logo-text.png"
-        alt="MarketingClaw"
-        width="500"
-        class="hidden dark:block"
-    />
-</p>
-
-> _"EXFOLIATE! EXFOLIATE!"_ — A space lobster, probably
-
-<p align="center">
-  <strong>Any OS gateway for AI agents across Discord, Google Chat, iMessage, Matrix, Microsoft Teams, Signal, Slack, Telegram, WhatsApp, Zalo, and more.</strong><br />
-  Send a message, get an agent response from your pocket. Run one Gateway across channel plugins, WebChat, and mobile nodes.
+  <strong>Your self-hosted AI marketing department — a CMO agent and specialists for content, social, email, SEO, and analytics, reachable on the channels you already use.</strong>
 </p>
 
 <Columns>
-  <Card title="Get Started" href="/start/getting-started" icon="rocket">
-    Install MarketingClaw and bring up the Gateway in minutes.
+  <Card title="Marketing quick start" href="/start/marketing-quickstart" icon="rocket">
+    Install from source, onboard, and provision the marketing team.
   </Card>
-  <Card title="Run Onboarding" href="/start/wizard" icon="sparkles">
-    Guided setup with `marketingclaw onboard` and pairing flows.
+  <Card title="Configuration" href="/gateway/configuration" icon="settings">
+    Models, agents, tools, sandbox, and Gateway settings.
   </Card>
-  <Card title="Open the Control UI" href="/web/control-ui" icon="layout-dashboard">
-    Launch the browser dashboard for chat, config, and sessions.
+  <Card title="Channels" href="/channels" icon="message-square">
+    Connect Slack, Telegram, WhatsApp, Discord, and more.
   </Card>
 </Columns>
 
 ## What is MarketingClaw?
 
-MarketingClaw is a **self-hosted gateway** that connects your favorite chat apps — Discord, Google Chat, iMessage, Matrix, Microsoft Teams, Signal, Slack, Telegram, WhatsApp, Zalo, and more via channel plugins — to AI coding agents. You run a single Gateway process on your own machine (or a server), and it becomes the bridge between your messaging apps and an always-available AI assistant.
+MarketingClaw is an open-source, self-hosted marketing team built on the
+MarketingClaw Gateway. Instead of a single chatbot, you run a small org: a **CMO
+agent** that owns strategy and delegates, plus specialists that execute across
+content, social, email, SEO, and analytics. They plan campaigns, draft copy,
+schedule posts, run the newsletter, and report on the numbers — and every decision
+they make is a plain file you can read, edit, and diff.
 
-**Who is it for?** Developers and power users who want a personal AI assistant they can message from anywhere — without giving up control of their data or relying on a hosted service.
+**Who is it for?** Founders, small teams, and in-house marketers who want a marketing
+team that runs on their own hardware, keeps control of their data, and never ships
+anything public without approval.
 
-**What makes it different?**
+**What do you need?** Node 24 (recommended) or Node 22.19+, an API key from your
+chosen model provider, and a few minutes. Prefer a current flagship model for the
+CMO and copywriting work.
 
-- **Self-hosted**: runs on your hardware, your rules
-- **Multi-channel**: one Gateway serves every configured channel plugin simultaneously
-- **Agent-native**: built for coding agents with tool use, sessions, memory, and multi-agent routing
-- **Open source**: MIT licensed, community-driven
+## Meet the team
 
-**What do you need?** Node 24 (recommended), or Node 22 LTS (`22.19+`) for compatibility, an API key from your chosen provider, and 5 minutes. For best quality and security, use the strongest latest-generation model available.
+- **Morgan — CMO.** Orchestrator and default agent; owns the plan and calendar.
+- **Sasha — Content.** Long-form and copy; drafts to files, never publishes.
+- **Riley — Social.** Schedules and publishes posts; triages mentions.
+- **Jordan — Email.** Newsletters and lifecycle email, approval-gated.
+- **Quinn — SEO.** Keyword research, audits, and the blog pipeline.
+- **Alex — Analytics.** Pulls the numbers into weekly reports.
 
 ## How it works
 
 ```mermaid
 flowchart LR
-  A["Chat apps + plugins"] --> B["Gateway"]
-  B --> C["MarketingClaw agent"]
-  B --> D["CLI"]
-  B --> E["Web Control UI"]
-  B --> F["macOS app"]
-  B --> G["iOS and Android nodes"]
+  A["Chat apps + WebChat"] --> B["Gateway"]
+  B --> C["Morgan (CMO)"]
+  C --> D["Content / Social / Email / SEO / Analytics"]
+  C --> E["Shared marketing files: BRAND.md, calendar, reports"]
 ```
 
-The Gateway is the single source of truth for sessions, routing, and channel connections.
-
-## Key capabilities
-
-<Columns>
-  <Card title="Multi-channel gateway" icon="network" href="/channels">
-    Discord, iMessage, Signal, Slack, Telegram, WhatsApp, WebChat, and more with a single Gateway process.
-  </Card>
-  <Card title="Plugin channels" icon="plug" href="/tools/plugin">
-    Channel plugins add Matrix, Nostr, Twitch, Zalo, and more; official plugins install on demand.
-  </Card>
-  <Card title="Multi-agent routing" icon="route" href="/concepts/multi-agent">
-    Isolated sessions per agent, workspace, or sender.
-  </Card>
-  <Card title="Media support" icon="image" href="/nodes/images">
-    Send and receive images, audio, and documents.
-  </Card>
-  <Card title="Web Control UI" icon="monitor" href="/web/control-ui">
-    Browser dashboard for chat, config, sessions, and nodes.
-  </Card>
-  <Card title="Mobile nodes" icon="smartphone" href="/nodes">
-    Pair iOS and Android nodes for Canvas, camera, and voice-enabled workflows.
-  </Card>
-</Columns>
-
-## Quick start
-
-<Steps>
-  <Step title="Install MarketingClaw">
-    ```bash
-    npm install -g openclaw@latest
-    ```
-  </Step>
-  <Step title="Onboard and install the service">
-    ```bash
-    marketingclaw onboard --install-daemon
-    ```
-  </Step>
-  <Step title="Chat">
-    Open the Control UI in your browser and send a message:
-
-    ```bash
-    marketingclaw dashboard
-    ```
-
-    Or connect a channel ([Telegram](/channels/telegram) is fastest) and chat from your phone.
-
-  </Step>
-</Steps>
-
-Need the full install and dev setup? See [Getting Started](/start/getting-started).
-
-## Dashboard
-
-Open the browser Control UI after the Gateway starts.
-
-- Local default: [http://127.0.0.1:18789/](http://127.0.0.1:18789/)
-- Remote access: [Web surfaces](/web) and [Tailscale](/gateway/tailscale)
-
-<p align="center">
-  <img src="/whatsapp-marketingclaw.jpg" alt="MarketingClaw" width="420" />
-</p>
-
-## Configuration (optional)
-
-Config lives at `~/.marketingclaw/marketingclaw.json`.
-
-- If you **do nothing**, MarketingClaw uses the bundled MarketingClaw agent runtime; DMs share the agent's main session, and each group chat gets its own session.
-- If you want to lock it down, start with `channels.whatsapp.allowFrom` and (for groups) mention rules.
-
-Example:
-
-```json5
-{
-  channels: {
-    whatsapp: {
-      allowFrom: ["+15555550123"],
-      groups: { "*": { requireMention: true } },
-    },
-  },
-  messages: { groupChat: { mentionPatterns: ["@marketingclaw"] } },
-}
-```
+The Gateway is the single control plane for sessions, channels, and routing. On top
+of it, MarketingClaw adds a flat team of role agents and a shared, file-based
+workspace under `~/.marketingclaw/marketing/`.
 
 ## Start here
 
 <Columns>
-  <Card title="Docs hubs" href="/start/hubs" icon="book-open">
-    All docs and guides, organized by use case.
+  <Card title="Marketing quick start" href="/start/marketing-quickstart" icon="rocket">
+    The canonical guide: install, onboard, provision the team, first tasks.
   </Card>
-  <Card title="Configuration" href="/gateway/configuration" icon="settings">
-    Core Gateway settings, tokens, and provider config.
-  </Card>
-  <Card title="Remote access" href="/gateway/remote" icon="globe">
-    SSH and tailnet access patterns.
-  </Card>
-  <Card title="Channels" href="/channels/telegram" icon="message-square">
-    Channel-specific setup for Discord, Feishu, Microsoft Teams, Telegram, WhatsApp, and more.
-  </Card>
-  <Card title="Nodes" href="/nodes" icon="smartphone">
-    iOS and Android nodes with pairing, Canvas, camera, and device actions.
-  </Card>
-  <Card title="Help" href="/help" icon="life-buoy">
-    Common fixes and troubleshooting entry point.
-  </Card>
-</Columns>
-
-## Learn more
-
-<Columns>
-  <Card title="Full feature list" href="/concepts/features" icon="list">
-    Complete channel, routing, and media capabilities.
+  <Card title="Getting started" href="/start/getting-started" icon="book-open">
+    Get the Gateway running and send your first message.
   </Card>
   <Card title="Multi-agent routing" href="/concepts/multi-agent" icon="route">
-    Workspace isolation and per-agent sessions.
+    How the CMO delegates to specialists with isolated sessions.
   </Card>
   <Card title="Security" href="/gateway/security" icon="shield">
-    Tokens, allowlists, and safety controls.
-  </Card>
-  <Card title="Troubleshooting" href="/gateway/troubleshooting" icon="wrench">
-    Gateway diagnostics and common errors.
-  </Card>
-  <Card title="About and credits" href="/reference/credits" icon="info">
-    Project origins, contributors, and license.
+    Pairing, allowlists, sandboxing, and safe defaults.
   </Card>
 </Columns>

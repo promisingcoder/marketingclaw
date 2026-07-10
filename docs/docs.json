@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "name": "MarketingClaw",
-  "description": "Self-hosted gateway that connects Discord, Google Chat, iMessage, Matrix, Microsoft Teams, Signal, Slack, Telegram, WhatsApp, Zalo, and more to AI coding agents. Run one Gateway process on your own machine and message your AI assistant from anywhere.",
+  "description": "Self-hosted AI marketing team: a CMO agent plus specialists for content, social, email, SEO, and analytics, running on your own hardware and reachable on Slack, Telegram, WhatsApp, Discord, and more.",
   "theme": "mint",
   "icons": {
     "library": "lucide"
@@ -38,16 +38,6 @@
         "label": "GitHub",
         "href": "https://github.com/promisingcoder/marketingclaw",
         "icon": "github"
-      },
-      {
-        "label": "Releases",
-        "href": "https://github.com/promisingcoder/marketingclaw/releases",
-        "icon": "package"
-      },
-      {
-        "label": "Discord",
-        "href": "https://discord.com/invite/clawd",
-        "icon": "discord"
       }
     ]
   },
@@ -447,6 +437,10 @@
     {
       "source": "/tools/clawdhub",
       "destination": "/clawhub"
+    },
+    {
+      "source": "/clawhub",
+      "destination": "/tools/plugin"
     },
     {
       "source": "/configuration",
@@ -1016,6 +1010,7 @@
               {
                 "group": "Overview",
                 "pages": [
+                  "start/marketing-quickstart",
                   "index",
                   "start/showcase",
                   "concepts/features"
@@ -1393,40 +1388,6 @@
                   "tools/acp-agents",
                   "tools/acp-agents-setup",
                   "tools/multi-agent-sandbox-tools"
-                ]
-              }
-            ]
-          },
-          {
-            "tab": "ClawHub",
-            "groups": [
-              {
-                "group": "Overview",
-                "pages": [
-                  "clawhub/index",
-                  "clawhub/quickstart",
-                  "clawhub/how-it-works"
-                ]
-              },
-              {
-                "group": "Using ClawHub",
-                "pages": [
-                  "clawhub/cli",
-                  "clawhub/publishing",
-                  "clawhub/skill-format",
-                  "clawhub/auth",
-                  "clawhub/telemetry",
-                  "clawhub/troubleshooting"
-                ]
-              },
-              {
-                "group": "API and trust",
-                "pages": [
-                  "clawhub/api",
-                  "clawhub/http-api",
-                  "clawhub/acceptable-usage",
-                  "clawhub/moderation",
-                  "clawhub/security-audits"
                 ]
               }
             ]

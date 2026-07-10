@@ -4101,15 +4101,11 @@ Do not edit it by hand; run `pnpm docs:map:gen`.
 
 - Route: /
 - Headings:
-  - H1: MarketingClaw 🦞
+  - H1: MarketingClaw
   - H2: What is MarketingClaw?
+  - H2: Meet the team
   - H2: How it works
-  - H2: Key capabilities
-  - H2: Quick start
-  - H2: Dashboard
-  - H2: Configuration (optional)
   - H2: Start here
-  - H2: Learn more
 
 ## install/ansible.md
 
@@ -4603,6 +4599,17 @@ Do not edit it by hand; run `pnpm docs:map:gen`.
   - H2: Troubleshooting tips
   - H2: Related
 
+## marketingclaw-agent-runtime.md
+
+- Route: /marketingclaw-agent-runtime
+- Headings:
+  - H2: Type checking and linting
+  - H2: Running Agent Runtime Tests
+  - H2: Manual testing
+  - H2: Clean slate reset
+  - H2: References
+  - H2: Related
+
 ## maturity/scorecard.md
 
 - Route: /maturity/scorecard
@@ -4805,17 +4812,6 @@ Do not edit it by hand; run `pnpm docs:map:gen`.
   - H3: Routing (trigger to target)
   - H3: Events
   - H2: Client behavior
-  - H2: Related
-
-## marketingclaw-agent-runtime.md
-
-- Route: /marketingclaw-agent-runtime
-- Headings:
-  - H2: Type checking and linting
-  - H2: Running Agent Runtime Tests
-  - H2: Manual testing
-  - H2: Clean slate reset
-  - H2: References
   - H2: Related
 
 ## perplexity.md
@@ -8316,6 +8312,14 @@ Do not edit it by hand; run `pnpm docs:map:gen`.
   - H2: Evidence to keep
   - H2: Workflow files
 
+## reference/marketingclaw-ai.md
+
+- Route: /reference/marketingclaw-ai
+- Headings:
+  - H2: Quick start
+  - H2: Design contract
+  - H2: Subpath exports
+
 ## reference/memory-config.md
 
 - Route: /reference/memory-config
@@ -8343,14 +8347,6 @@ Do not edit it by hand; run `pnpm docs:map:gen`.
   - H3: User settings
   - H3: Example
   - H2: Related
-
-## reference/marketingclaw-ai.md
-
-- Route: /reference/marketingclaw-ai
-- Headings:
-  - H2: Quick start
-  - H2: Design contract
-  - H2: Subpath exports
 
 ## reference/prompt-caching.md
 
@@ -8875,22 +8871,15 @@ Do not edit it by hand; run `pnpm docs:map:gen`.
   - H2: The Future
   - H2: Related
 
-## start/onboarding-overview.md
+## start/marketing-quickstart.md
 
-- Route: /start/onboarding-overview
+- Route: /start/marketing-quickstart
 - Headings:
-  - H2: Which path should I use?
-  - H2: What onboarding configures
-  - H2: CLI onboarding
-  - H2: macOS app onboarding
-  - H2: Custom or unlisted providers
-  - H2: Related
-
-## start/onboarding.md
-
-- Route: /start/onboarding
-- Headings:
-  - H2: Related
+  - H2: Prerequisites
+  - H2: Set up the team
+  - H2: First tasks to try
+  - H2: Where files live
+  - H2: Next steps
 
 ## start/marketingclaw.md
 
@@ -8907,6 +8896,23 @@ Do not edit it by hand; run `pnpm docs:map:gen`.
   - H2: Media in and out
   - H2: Operations checklist
   - H2: Next steps
+  - H2: Related
+
+## start/onboarding-overview.md
+
+- Route: /start/onboarding-overview
+- Headings:
+  - H2: Which path should I use?
+  - H2: What onboarding configures
+  - H2: CLI onboarding
+  - H2: macOS app onboarding
+  - H2: Custom or unlisted providers
+  - H2: Related
+
+## start/onboarding.md
+
+- Route: /start/onboarding
+- Headings:
   - H2: Related
 
 ## start/quickstart.md
