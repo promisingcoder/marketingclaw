@@ -1,7 +1,7 @@
 // Video runner tests cover provider request wiring, auth/config precedence, and
 // provider output handling for video attachments.
 import { describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.js";
+import type { MarketingClawConfig } from "../config/types.js";
 import { withTempDir } from "../test-helpers/temp-dir.js";
 import { withEnvAsync } from "../test-utils/env.js";
 import { runCapability } from "./runner.js";
@@ -42,7 +42,7 @@ function requireCapabilityOutput(result: CapabilityResult, index: number) {
 
 describe("runCapability video provider wiring", () => {
   it("truncates provider output without splitting a boundary emoji", async () => {
-    await withVideoFixture("openclaw-video-utf16-output", async ({ ctx, media, cache }) => {
+    await withVideoFixture("marketingclaw-video-utf16-output", async ({ ctx, media, cache }) => {
       const prefix = "v".repeat(79);
       const result = await runCapability({
         capability: "video",
@@ -63,7 +63,7 @@ describe("runCapability video provider wiring", () => {
               },
             },
           },
-        } as unknown as OpenClawConfig,
+        } as unknown as MarketingClawConfig,
         ctx,
         attachments: cache,
         media,
@@ -92,8 +92,8 @@ describe("runCapability video provider wiring", () => {
     let seenBaseUrl: string | undefined;
     let seenHeaders: Record<string, string> | undefined;
 
-    await withTempDir({ prefix: "openclaw-video-auth-" }, async (isolatedAgentDir) => {
-      await withVideoFixture("openclaw-video-merge", async ({ ctx, media, cache }) => {
+    await withTempDir({ prefix: "marketingclaw-video-auth-" }, async (isolatedAgentDir) => {
+      await withVideoFixture("marketingclaw-video-merge", async ({ ctx, media, cache }) => {
         const cfg = {
           models: {
             providers: {
@@ -123,7 +123,7 @@ describe("runCapability video provider wiring", () => {
               },
             },
           },
-        } as unknown as OpenClawConfig;
+        } as unknown as MarketingClawConfig;
 
         const result = await runCapability({
           capability: "video",
@@ -162,16 +162,85 @@ describe("runCapability video provider wiring", () => {
   });
 
   it("auto-selects moonshot for video when google is unavailable", async () => {
-    await withTempDir({ prefix: "openclaw-video-agent-" }, async (isolatedAgentDir) => {
+    await withTempDir({ prefix: "marketingclaw-video-agent-" }, async (isolatedAgentDir) => {
       await withEnvAsync(
         {
           GEMINI_API_KEY: undefined,
           GOOGLE_API_KEY: undefined,
           MOONSHOT_API_KEY: undefined,
-          OPENCLAW_AGENT_DIR: isolatedAgentDir,
+          MARKETINGCLAW_AGENT_DIR: isolatedAgentDir,
         },
         async () => {
-          await withVideoFixture("openclaw-video-auto-moonshot", async ({ ctx, media, cache }) => {
+          await withVideoFixture(
+            "marketingclaw-video-auto-moonshot",
+            async ({ ctx, media, cache }) => {
+              const cfg = {
+                models: {
+                  providers: {
+                    moonshot: {
+                      auth: "api-key",
+                      apiKey: "moonshot-key", // pragma: allowlist secret
+                      models: [],
+                    },
+                  },
+                },
+                tools: {
+                  media: {
+                    video: {
+                      enabled: true,
+                    },
+                  },
+                },
+              } as unknown as MarketingClawConfig;
+
+              const result = await runCapability({
+                capability: "video",
+                cfg,
+                ctx,
+                agentDir: isolatedAgentDir,
+                attachments: cache,
+                media,
+                providerRegistry: new Map<string, MediaUnderstandingProvider>([
+                  [
+                    "google",
+                    {
+                      id: "google",
+                      capabilities: ["video"],
+                      describeVideo: async () => ({ text: "google" }),
+                    },
+                  ],
+                  [
+                    "moonshot",
+                    {
+                      id: "moonshot",
+                      capabilities: ["video"],
+                      defaultModels: { video: "kimi-k2.5" },
+                      describeVideo: async (req) => ({ text: "moonshot", model: req.model }),
+                    },
+                  ],
+                ]),
+              });
+
+              expect(result.decision.outcome).toBe("success");
+              const output = requireCapabilityOutput(result, 0);
+              expect(output.provider).toBe("moonshot");
+              expect(output.text).toBe("moonshot");
+            },
+          );
+        },
+      );
+    });
+  });
+
+  it("uses the provider video default when the active provider has no model", async () => {
+    let seenModel: string | undefined;
+
+    await withTempDir(
+      { prefix: "marketingclaw-video-active-provider-" },
+      async (isolatedAgentDir) => {
+        await withVideoFixture(
+          "marketingclaw-video-active-default",
+          async ({ ctx, media, cache }) => {
             const cfg = {
               models: {
                 providers: {
@@ -189,7 +258,7 @@ describe("runCapability video provider wiring", () => {
                   },
                 },
               },
-            } as unknown as OpenClawConfig;
+            } as unknown as MarketingClawConfig;
 
             const result = await runCapability({
               capability: "video",
@@ -200,99 +269,39 @@ describe("runCapability video provider wiring", () => {
               media,
               providerRegistry: new Map<string, MediaUnderstandingProvider>([
                 [
-                  "google",
-                  {
-                    id: "google",
-                    capabilities: ["video"],
-                    describeVideo: async () => ({ text: "google" }),
-                  },
-                ],
-                [
                   "moonshot",
                   {
                     id: "moonshot",
                     capabilities: ["video"],
                     defaultModels: { video: "kimi-k2.5" },
-                    describeVideo: async (req) => ({ text: "moonshot", model: req.model }),
+                    describeVideo: async (req) => {
+                      seenModel = req.model;
+                      return { text: "moonshot", model: req.model };
+                    },
                   },
                 ],
               ]),
+              activeModel: { provider: "moonshot" },
             });
 
             expect(result.decision.outcome).toBe("success");
             const output = requireCapabilityOutput(result, 0);
             expect(output.provider).toBe("moonshot");
-            expect(output.text).toBe("moonshot");
-          });
-        },
-      );
-    });
-  });
-
-  it("uses the provider video default when the active provider has no model", async () => {
-    let seenModel: string | undefined;
-
-    await withTempDir({ prefix: "openclaw-video-active-provider-" }, async (isolatedAgentDir) => {
-      await withVideoFixture("openclaw-video-active-default", async ({ ctx, media, cache }) => {
-        const cfg = {
-          models: {
-            providers: {
-              moonshot: {
-                auth: "api-key",
-                apiKey: "moonshot-key", // pragma: allowlist secret
-                models: [],
-              },
-            },
+            expect(output.model).toBe("kimi-k2.5");
+            expect(seenModel).toBe("kimi-k2.5");
           },
-          tools: {
-            media: {
-              video: {
-                enabled: true,
-              },
-            },
-          },
-        } as unknown as OpenClawConfig;
-
-        const result = await runCapability({
-          capability: "video",
-          cfg,
-          ctx,
-          agentDir: isolatedAgentDir,
-          attachments: cache,
-          media,
-          providerRegistry: new Map<string, MediaUnderstandingProvider>([
-            [
-              "moonshot",
-              {
-                id: "moonshot",
-                capabilities: ["video"],
-                defaultModels: { video: "kimi-k2.5" },
-                describeVideo: async (req) => {
-                  seenModel = req.model;
-                  return { text: "moonshot", model: req.model };
-                },
-              },
-            ],
-          ]),
-          activeModel: { provider: "moonshot" },
-        });
-
-        expect(result.decision.outcome).toBe("success");
-        const output = requireCapabilityOutput(result, 0);
-        expect(output.provider).toBe("moonshot");
-        expect(output.model).toBe("kimi-k2.5");
-        expect(seenModel).toBe("kimi-k2.5");
-      });
-    });
+        );
+      },
+    );
   });
 
   it("preserves self-defaulting video providers without registry model metadata", async () => {
     let seenModel: string | undefined;
 
     await withTempDir(
-      { prefix: "openclaw-video-no-default-provider-" },
+      { prefix: "marketingclaw-video-no-default-provider-" },
       async (isolatedAgentDir) => {
-        await withVideoFixture("openclaw-video-no-default", async ({ ctx, media, cache }) => {
+        await withVideoFixture("marketingclaw-video-no-default", async ({ ctx, media, cache }) => {
           const cfg = {
             models: {
               providers: {
@@ -310,7 +319,7 @@ describe("runCapability video provider wiring", () => {
                 },
               },
             },
-          } as unknown as OpenClawConfig;
+          } as unknown as MarketingClawConfig;
 
           const result = await runCapability({
             capability: "video",
@@ -350,8 +359,8 @@ describe("runCapability video provider wiring", () => {
     const resolveApiKeyForProvider = vi.mocked(modelAuth.resolveApiKeyForProvider);
     resolveApiKeyForProvider.mockClear();
 
-    await withTempDir({ prefix: "openclaw-video-provider-api-" }, async (isolatedAgentDir) => {
-      await withVideoFixture("openclaw-video-provider-api", async ({ ctx, media, cache }) => {
+    await withTempDir({ prefix: "marketingclaw-video-provider-api-" }, async (isolatedAgentDir) => {
+      await withVideoFixture("marketingclaw-video-provider-api", async ({ ctx, media, cache }) => {
         let seenApiKey: string | undefined;
         const cfg = {
           models: {
@@ -370,7 +379,7 @@ describe("runCapability video provider wiring", () => {
               },
             },
           },
-        } as unknown as OpenClawConfig;
+        } as unknown as MarketingClawConfig;
 
         const result = await runCapability({
           capability: "video",

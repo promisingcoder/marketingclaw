@@ -1,5 +1,5 @@
 // Policy doctor health-check factories for one policy scope.
-import type { HealthCheck } from "openclaw/plugin-sdk/health";
+import type { HealthCheck } from "marketingclaw/plugin-sdk/health";
 import { CHECK_IDS } from "../metadata.js";
 import type { PolicyDoctorCheckDeps } from "../types.js";
 

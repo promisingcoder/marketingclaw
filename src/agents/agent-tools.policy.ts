@@ -3,15 +3,15 @@
  * sessions. Keeps runtime tool filtering tied to canonical config, session
  * provenance, and inherited sub-agent capabilities.
  */
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@marketingclaw/normalization-core/string-coerce";
 import {
   normalizeUniqueSingleOrTrimmedStringList,
   uniqueStrings,
-} from "@openclaw/normalization-core/string-normalization";
+} from "@marketingclaw/normalization-core/string-normalization";
 import { getLoadedChannelPlugin } from "../channels/plugins/index.js";
 import { resolveSessionConversation } from "../channels/plugins/session-conversation.js";
 import { resolveChannelGroupToolsPolicy } from "../config/group-policy.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import type { AgentToolsConfig } from "../config/types.tools.js";
 import { logWarn } from "../logger.js";
 import { normalizeAgentId } from "../routing/session-key.js";
@@ -82,7 +82,7 @@ function mergeConfiguredSubagentAllow(
 
 /** Resolve sub-agent tool policy from stored session capabilities. */
 export function resolveSubagentToolPolicyForSession(
-  cfg: OpenClawConfig | undefined,
+  cfg: MarketingClawConfig | undefined,
   sessionKey: string,
   opts?: {
     store?: SessionCapabilityStore;
@@ -114,7 +114,7 @@ export function resolveSubagentToolPolicyForSession(
 
 /** Resolve the tool policy inherited from a parent sub-agent session. */
 export function resolveInheritedToolPolicyForSession(
-  cfg: OpenClawConfig | undefined,
+  cfg: MarketingClawConfig | undefined,
   sessionKey: string | undefined | null,
   opts?: {
     store?: SessionCapabilityStore;
@@ -147,7 +147,7 @@ export function filterToolsByPolicy(tools: AnyAgentTool[], policy?: SandboxToolP
 
 /** Resolve the shared profile, scope, extra, and sandbox policy layers. */
 export function resolveConfiguredToolPolicies(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   agentTools?: AgentToolsConfig;
   sandboxMode?: "off" | "non-main" | "all";
   agentId?: string | null;
@@ -312,7 +312,9 @@ export function sessionKeyNamesGroupConversation(sessionKey?: string | null): bo
   return (resolveGroupContextFromSessionKey(sessionKey).groupIds?.length ?? 0) > 0;
 }
 
-function resolveExplicitProfileAlsoAllow(tools?: OpenClawConfig["tools"]): string[] | undefined {
+function resolveExplicitProfileAlsoAllow(
+  tools?: MarketingClawConfig["tools"],
+): string[] | undefined {
   return Array.isArray(tools?.alsoAllow) ? tools.alsoAllow : undefined;
 }
 
@@ -327,7 +329,7 @@ type ImplicitProfileGrantDetection = {
 };
 
 function detectImplicitProfileGrants(params: {
-  globalTools?: OpenClawConfig["tools"];
+  globalTools?: MarketingClawConfig["tools"];
   agentTools?: AgentToolsConfig;
   includeGlobalSections: boolean;
 }): ImplicitProfileGrantDetection | undefined {
@@ -360,7 +362,7 @@ function formatToolListForWarning(toolNames: string[]): string {
 
 /** Resolve the layered global, provider, agent, and profile tool policies. */
 export function resolveEffectiveToolPolicy(params: {
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   sessionKey?: string;
   agentId?: string;
   modelProvider?: string;
@@ -449,7 +451,7 @@ export function resolveEffectiveToolPolicy(params: {
 
 /** Resolve group-scoped tool policy after validating session provenance. */
 export function resolveGroupToolPolicy(params: {
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   sessionKey?: string;
   spawnedBy?: string | null;
   messageProvider?: string;

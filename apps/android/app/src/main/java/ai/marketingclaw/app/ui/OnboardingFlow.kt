@@ -1,23 +1,23 @@
-package ai.openclaw.app.ui
+package ai.marketingclaw.app.ui
 
-import ai.openclaw.app.GatewayConnectionProblem
-import ai.openclaw.app.GatewayNodeCapabilityApproval
-import ai.openclaw.app.LocationMode
-import ai.openclaw.app.MainViewModel
-import ai.openclaw.app.R
-import ai.openclaw.app.SensitiveFeatureConfig
-import ai.openclaw.app.gateway.GatewayEndpoint
-import ai.openclaw.app.gateway.isLocalCleartextGatewayHost
-import ai.openclaw.app.hasPhotoReadPermission
-import ai.openclaw.app.node.DeviceNotificationListenerService
-import ai.openclaw.app.photoReadPermissionsForRequest
-import ai.openclaw.app.ui.design.ClawDesignTheme
-import ai.openclaw.app.ui.design.ClawPrimaryButton
-import ai.openclaw.app.ui.design.ClawScaffold
-import ai.openclaw.app.ui.design.ClawSecondaryButton
-import ai.openclaw.app.ui.design.ClawTextField
-import ai.openclaw.app.ui.design.ClawTheme
-import ai.openclaw.app.ui.design.OpenClawMascot
+import ai.marketingclaw.app.GatewayConnectionProblem
+import ai.marketingclaw.app.GatewayNodeCapabilityApproval
+import ai.marketingclaw.app.LocationMode
+import ai.marketingclaw.app.MainViewModel
+import ai.marketingclaw.app.R
+import ai.marketingclaw.app.SensitiveFeatureConfig
+import ai.marketingclaw.app.gateway.GatewayEndpoint
+import ai.marketingclaw.app.gateway.isLocalCleartextGatewayHost
+import ai.marketingclaw.app.hasPhotoReadPermission
+import ai.marketingclaw.app.node.DeviceNotificationListenerService
+import ai.marketingclaw.app.photoReadPermissionsForRequest
+import ai.marketingclaw.app.ui.design.ClawDesignTheme
+import ai.marketingclaw.app.ui.design.ClawPrimaryButton
+import ai.marketingclaw.app.ui.design.ClawScaffold
+import ai.marketingclaw.app.ui.design.ClawSecondaryButton
+import ai.marketingclaw.app.ui.design.ClawTextField
+import ai.marketingclaw.app.ui.design.ClawTheme
+import ai.marketingclaw.app.ui.design.MarketingClawMascot
 import android.Manifest
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -190,7 +190,7 @@ private const val GATEWAY_CONNECT_SETTLING_MS = 2_500L
 private const val GATEWAY_CONNECT_TIMEOUT_MS = 20_000L
 private const val NODE_APPROVAL_REFRESH_OBSERVE_TIMEOUT_MS = 750L
 private const val NODE_APPROVAL_AUTO_REFRESH_MS = 2_000L
-private const val ANDROID_SETUP_GUIDE_URL = "https://docs.openclaw.ai/platforms/android"
+private const val ANDROID_SETUP_GUIDE_URL = "https://docs.marketingclaw.ai/platforms/android"
 private val OnboardingHorizontalPadding = 24.dp
 private val OnboardingTopPadding = 12.dp
 private val OnboardingBottomPadding = 20.dp
@@ -318,7 +318,7 @@ fun OnboardingFlow(
     var nodeApprovalCheckRefreshStarted by rememberSaveable { mutableStateOf(false) }
     var nodeApprovalAutoContinueEnabled by rememberSaveable { mutableStateOf(false) }
 
-    OpenClawSystemBarAppearance(lightAppearance = !onboardingDark)
+    MarketingClawSystemBarAppearance(lightAppearance = !onboardingDark)
 
     var cameraPermissionGranted by rememberSaveable {
       mutableStateOf(ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
@@ -531,7 +531,7 @@ fun OnboardingFlow(
     ) {
       val trimmed = code.trim()
       if (trimmed.isEmpty()) {
-        setupError = "Enter the setup code from openclaw qr."
+        setupError = "Enter the setup code from marketingclaw qr."
         return
       }
       val plan =
@@ -555,7 +555,7 @@ fun OnboardingFlow(
         setupError =
           endpointError?.let {
             gatewayEndpointValidationMessage(it, GatewayEndpointInputSource.SETUP_CODE)
-          } ?: "Setup code was not accepted. Generate a fresh code with openclaw qr."
+          } ?: "Setup code was not accepted. Generate a fresh code with marketingclaw qr."
         return
       }
       connectGateway(plan = plan, inputSource = inputSource)
@@ -573,7 +573,7 @@ fun OnboardingFlow(
             GatewayEndpointValidationError.IPV6_ZONE_ID_UNSUPPORTED,
             ->
               gatewayEndpointValidationMessage(scanned.error, GatewayEndpointInputSource.QR_SCAN)
-            else -> "That QR code is not an OpenClaw setup QR. Generate a fresh code with openclaw qr, then try again."
+            else -> "That QR code is not an MarketingClaw setup QR. Generate a fresh code with marketingclaw qr, then try again."
           }
         showSetupScanError(message)
         return
@@ -636,7 +636,7 @@ fun OnboardingFlow(
           try {
             InputImage.fromFilePath(context, uri)
           } catch (_: Exception) {
-            showSetupScanError("Could not read that image. Choose a clear screenshot or image of the QR from openclaw qr.")
+            showSetupScanError("Could not read that image. Choose a clear screenshot or image of the QR from marketingclaw qr.")
             return@rememberLauncherForActivityResult
           }
         setupBarcodeScanner
@@ -644,7 +644,7 @@ fun OnboardingFlow(
           .addOnSuccessListener { barcodes ->
             val rawValue = barcodes.firstNotNullOfOrNull { barcode -> barcode.rawValue?.takeIf { it.isNotBlank() } }
             if (rawValue == null) {
-              showSetupScanError("No setup QR code was found in that image. Choose the QR generated by openclaw qr, or enter the setup code manually.")
+              showSetupScanError("No setup QR code was found in that image. Choose the QR generated by marketingclaw qr, or enter the setup code manually.")
               return@addOnSuccessListener
             }
             handleScannedSetupCode(rawValue, inputSource = OnboardingGatewayInputSource.SetupGallery)
@@ -891,8 +891,8 @@ private fun WelcomeScreen(
     Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
       OnboardingHeroTopSpacer(afterHeader = false)
       OnboardingIntroHero(
-        title = "Welcome to OpenClaw",
-        subtitle = "Turn this device into a secure OpenClaw node for chat, voice, camera, and device tools.",
+        title = "Welcome to MarketingClaw",
+        subtitle = "Turn this device into a secure MarketingClaw node for chat, voice, camera, and device tools.",
         mark = { WelcomeLogo() },
       )
       Spacer(modifier = Modifier.height(24.dp))
@@ -917,7 +917,7 @@ private fun WelcomeLogo() {
     border = BorderStroke(1.dp, ClawTheme.colors.border),
   ) {
     Box(modifier = Modifier.fillMaxSize().padding(12.dp), contentAlignment = Alignment.Center) {
-      OpenClawMascot(contentDescription = "OpenClaw logo", modifier = Modifier.fillMaxSize())
+      MarketingClawMascot(contentDescription = "MarketingClaw logo", modifier = Modifier.fillMaxSize())
     }
   }
 }
@@ -975,7 +975,7 @@ private fun WelcomeChecklist() {
     Column(verticalArrangement = Arrangement.spacedBy(13.dp)) {
       WelcomeChecklistRow(icon = Icons.Default.Link, text = "Connect to your Gateway")
       WelcomeChecklistRow(icon = Icons.Default.Security, text = "Choose device permissions")
-      WelcomeChecklistRow(icon = Icons.Default.CheckCircle, text = "Use OpenClaw from your phone")
+      WelcomeChecklistRow(icon = Icons.Default.CheckCircle, text = "Use MarketingClaw from your phone")
     }
   }
 }
@@ -999,7 +999,7 @@ private fun SecurityNotice() {
       Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text(text = "Security notice", style = ClawTheme.type.section, color = ClawTheme.colors.text)
         Text(
-          text = "The connected OpenClaw agent can use device capabilities you enable. Continue only if you trust the Gateway and agent you connect to.",
+          text = "The connected MarketingClaw agent can use device capabilities you enable. Continue only if you trust the Gateway and agent you connect to.",
           style = ClawTheme.type.body,
           color = ClawTheme.colors.textMuted,
         )
@@ -1041,7 +1041,7 @@ private fun GatewaySetupScreen(
       Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         OnboardingIntroHero(
           title = "Connect Gateway",
-          subtitle = "Scan a QR code or use the setup code from your OpenClaw Gateway.",
+          subtitle = "Scan a QR code or use the setup code from your MarketingClaw Gateway.",
           mark = { GatewayLogo() },
         )
         Spacer(modifier = Modifier.height(24.dp))
@@ -1093,7 +1093,7 @@ private fun GatewayPrerequisites(onOpenSetupGuide: () -> Unit) {
     )
     GatewayPrerequisiteRow(
       title = "Access to the Gateway device",
-      body = "Have a terminal open on the device running OpenClaw.",
+      body = "Have a terminal open on the device running MarketingClaw.",
     )
     GatewayPrerequisiteRow(
       title = "Phone can reach the Gateway",
@@ -1153,13 +1153,13 @@ private fun SetupCodeInstructionsScreen(
             SetupInstruction(
               step = "Step 1",
               title = "Start your Gateway.",
-              body = "openclaw gateway",
+              body = "marketingclaw gateway",
               monospaceBody = true,
             )
             SetupInstruction(
               step = "Step 2",
               title = "Generate a QR code.",
-              body = "openclaw qr",
+              body = "marketingclaw qr",
               monospaceBody = true,
             )
           }
@@ -1303,7 +1303,7 @@ private fun ScanQrTile(
           }
           Text(text = "Scan QR code", style = ClawTheme.type.title.copy(fontSize = 20.sp, lineHeight = 25.sp), color = ClawTheme.colors.text, textAlign = TextAlign.Center)
           Text(
-            text = "Open the camera and frame the code from openclaw qr.",
+            text = "Open the camera and frame the code from marketingclaw qr.",
             style = ClawTheme.type.caption,
             color = ClawTheme.colors.textMuted,
             textAlign = TextAlign.Center,
@@ -1905,7 +1905,7 @@ private fun copyGatewayDiagnostic(
   diagnosticText: String,
 ) {
   val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-  clipboard.setPrimaryClip(ClipData.newPlainText("OpenClaw gateway diagnostic", diagnosticText))
+  clipboard.setPrimaryClip(ClipData.newPlainText("MarketingClaw gateway diagnostic", diagnosticText))
   Toast.makeText(context, "Details copied", Toast.LENGTH_SHORT).show()
 }
 
@@ -1998,7 +1998,7 @@ private fun NodeApprovalScreen(
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-          text = "Gateway pairing is complete. Approve this phone as a node so OpenClaw can use the device capabilities you enable.",
+          text = "Gateway pairing is complete. Approve this phone as a node so MarketingClaw can use the device capabilities you enable.",
           style = ClawTheme.type.body,
           color = ClawTheme.colors.textMuted,
           textAlign = TextAlign.Center,
@@ -2012,7 +2012,7 @@ private fun NodeApprovalScreen(
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth(),
           )
-          ApprovalCommandBlock(command = "openclaw nodes pending", onCopy = { onCopyCommand("openclaw nodes pending") })
+          ApprovalCommandBlock(command = "marketingclaw nodes pending", onCopy = { onCopyCommand("marketingclaw nodes pending") })
           ApprovalCommandBlock(command = approveCommand, onCopy = { onCopyCommand(approveCommand) })
           Text(
             text = "Use the requestId from the pending command in the approve command.",
@@ -2225,7 +2225,7 @@ private fun PermissionSetupScreen(
         }
         item {
           Text(
-            text = "Only enable access you are comfortable letting OpenClaw use while this phone is connected. You can change these later in Android Settings.",
+            text = "Only enable access you are comfortable letting MarketingClaw use while this phone is connected. You can change these later in Android Settings.",
             style = ClawTheme.type.body,
             color = ClawTheme.colors.textMuted,
             textAlign = TextAlign.Center,
@@ -2389,11 +2389,11 @@ internal enum class GatewayRecoveryUiState(
   ),
   Pairing(
     title = "Pairing Gateway",
-    message = "Approval is in progress.\nOpenClaw will reconnect automatically.",
+    message = "Approval is in progress.\nMarketingClaw will reconnect automatically.",
   ),
   Finishing(
     title = "Connecting Gateway",
-    message = "OpenClaw is checking gateway and node access.",
+    message = "MarketingClaw is checking gateway and node access.",
   ),
   TakingLonger(
     title = "Still connecting",
@@ -2453,7 +2453,7 @@ internal fun gatewayRecoveryDiagnosticText(
   gatewayConnectionProblem: GatewayConnectionProblem?,
 ): String =
   listOf(
-    "OpenClaw Android gateway diagnostic",
+    "MarketingClaw Android gateway diagnostic",
     "Gateway: $gatewayName",
     "Status: ${gatewayStatusForDisplay(statusText)}",
     "Gateway paired: $gatewayPaired",
@@ -2620,9 +2620,9 @@ internal fun recoveryGatewayDetail(
   } else if (gatewayConnectionProblem?.isPairingRequired == true && !gatewayConnectionProblem.canAutoRetry) {
     recoveryGatewayApprovalCommand(gatewayConnectionProblem)
       ?.let { "Gateway approval is pending. Run this on the gateway host:" }
-      ?: "Gateway approval is pending. Run openclaw devices list on the gateway host, approve this phone, then retry."
+      ?: "Gateway approval is pending. Run marketingclaw devices list on the gateway host, approve this phone, then retry."
   } else if (gatewayConnectionProblem?.isPairingRequired == true && gatewayConnectionProblem.canAutoRetry) {
-    "Gateway approval is in progress. OpenClaw will retry automatically."
+    "Gateway approval is in progress. MarketingClaw will retry automatically."
   } else if (gatewayConnectionProblem != null) {
     recoveryGatewayAuthDetail(gatewayConnectionProblem)
   } else if (nodeCapabilityApproval == GatewayNodeCapabilityApproval.Loading) {
@@ -2630,7 +2630,7 @@ internal fun recoveryGatewayDetail(
   } else if (statusText.contains("operator offline", ignoreCase = true)) {
     "Gateway paired. Waiting for operator access."
   } else if (gatewayStatusLooksLikePairing(statusText)) {
-    "Gateway approval is in progress. OpenClaw will retry automatically."
+    "Gateway approval is in progress. MarketingClaw will retry automatically."
   } else {
     remoteAddress?.takeIf { it.isNotBlank() } ?: "Gateway unreachable"
   }
@@ -2664,10 +2664,10 @@ private fun recoveryGatewayProtocolMismatchDetail(gatewayConnectionProblem: Gate
   val summary =
     when {
       clientMax != null && expected != null && clientMax < expected ->
-        "This app is older than the Gateway. Update OpenClaw on this device, then retry."
+        "This app is older than the Gateway. Update MarketingClaw on this device, then retry."
       clientMin != null && expected != null && clientMin > expected ->
-        "The Gateway is older than this app. Update OpenClaw on the Gateway host, then retry."
-      else -> "The app and Gateway use incompatible protocol versions. Update OpenClaw on both, then retry."
+        "The Gateway is older than this app. Update MarketingClaw on the Gateway host, then retry."
+      else -> "The app and Gateway use incompatible protocol versions. Update MarketingClaw on both, then retry."
     }
   return protocolMismatchVersions(clientMin, clientMax, expected)?.let { "$summary $it" } ?: summary
 }
@@ -2678,7 +2678,7 @@ internal fun recoveryGatewayProtocolMismatchCommand(
   if (gatewayConnectionProblem?.code != "PROTOCOL_MISMATCH") return null
   val clientMin = gatewayConnectionProblem.clientMinProtocol ?: return null
   val expected = gatewayConnectionProblem.expectedProtocol ?: return null
-  return "openclaw update".takeIf { clientMin > expected }
+  return "marketingclaw update".takeIf { clientMin > expected }
 }
 
 private fun protocolMismatchVersions(
@@ -2704,18 +2704,18 @@ private fun recoveryGatewayApprovalCommand(gatewayConnectionProblem: GatewayConn
   if (gatewayConnectionProblem?.isPairingRequired != true || gatewayConnectionProblem.canAutoRetry) return null
   val requestId = gatewayConnectionProblem.requestId?.trim()?.takeIf { it.isNotEmpty() }
   return if (requestId != null) {
-    "openclaw devices approve $requestId"
+    "marketingclaw devices approve $requestId"
   } else {
-    "openclaw devices list"
+    "marketingclaw devices list"
   }
 }
 
 internal fun recoveryNodeApprovalCommand(pendingRequestId: String?): String {
   val requestId = pendingRequestId?.trim()?.takeIf { it.isNotEmpty() }
   return if (requestId != null) {
-    "openclaw nodes approve $requestId"
+    "marketingclaw nodes approve $requestId"
   } else {
-    "openclaw nodes approve REQUEST_ID"
+    "marketingclaw nodes approve REQUEST_ID"
   }
 }
 
@@ -2799,7 +2799,7 @@ private fun copyApprovalCommand(
   command: String,
 ) {
   val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-  clipboard.setPrimaryClip(ClipData.newPlainText("OpenClaw pairing approval command", command))
+  clipboard.setPrimaryClip(ClipData.newPlainText("MarketingClaw pairing approval command", command))
   Toast.makeText(context, "Approval command copied", Toast.LENGTH_SHORT).show()
 }
 
@@ -2808,7 +2808,7 @@ private fun copyGatewayCommand(
   command: String,
 ) {
   val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-  clipboard.setPrimaryClip(ClipData.newPlainText("OpenClaw gateway command", command))
+  clipboard.setPrimaryClip(ClipData.newPlainText("MarketingClaw gateway command", command))
   Toast.makeText(context, "Command copied", Toast.LENGTH_SHORT).show()
 }
 
@@ -3027,7 +3027,7 @@ private fun rememberPermissionState(
       PermissionRowModel("Calendar", "Read and update events", Icons.Default.CalendarMonth, calendarGranted) {
         request(*requiredCalendarPermissions.toTypedArray())
       },
-      PermissionRowModel("Notifications", "Show OpenClaw alerts", Icons.Default.Notifications, notificationsGranted) {
+      PermissionRowModel("Notifications", "Show MarketingClaw alerts", Icons.Default.Notifications, notificationsGranted) {
         if (Build.VERSION.SDK_INT >= 33) request(Manifest.permission.POST_NOTIFICATIONS)
       },
       PermissionRowModel("Notification listener", "Read selected app notifications", Icons.Default.Sensors, notificationListenerGranted) {

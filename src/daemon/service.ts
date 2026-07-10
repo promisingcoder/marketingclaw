@@ -2,7 +2,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@marketingclaw/normalization-core/string-coerce";
 import { VERSION } from "../version.js";
 import { assertFutureConfigActionAllowed } from "./future-config-guard.js";
 import {
@@ -103,9 +103,9 @@ function mergeGatewayServiceEnv(
     ...command.environment,
   };
   for (const key of [
-    "OPENCLAW_LAUNCHD_LABEL",
-    "OPENCLAW_SYSTEMD_UNIT",
-    "OPENCLAW_WINDOWS_TASK_NAME",
+    "MARKETINGCLAW_LAUNCHD_LABEL",
+    "MARKETINGCLAW_SYSTEMD_UNIT",
+    "MARKETINGCLAW_WINDOWS_TASK_NAME",
   ]) {
     // Explicit caller env selects the target service identity; installed command
     // env may come from a different profile or stale service file.
@@ -148,13 +148,13 @@ function collectGatewayServiceStartRepairIssues(
     return [];
   }
   const issues: GatewayServiceStartRepairIssue[] = [];
-  const serviceVersion = command.environment?.OPENCLAW_SERVICE_VERSION?.trim();
+  const serviceVersion = command.environment?.MARKETINGCLAW_SERVICE_VERSION?.trim();
   if (serviceVersion && serviceVersion !== VERSION) {
     // Version drift often means the service points at old package paths; require
     // reinstall/repair before pretending restart succeeded.
     issues.push({
       code: "version-mismatch",
-      message: `service was installed by OpenClaw ${serviceVersion}, current CLI is ${VERSION}`,
+      message: `service was installed by MarketingClaw ${serviceVersion}, current CLI is ${VERSION}`,
     });
   }
   for (const candidate of command.programArguments.slice(0, 2)) {
@@ -346,7 +346,7 @@ function withFutureConfigGuard(service: GatewayService): GatewayService {
     ...service,
     stage: async (args) => {
       // Service mutations rewrite durable launchd/systemd/schtasks files, so
-      // block them when config was produced by a newer OpenClaw.
+      // block them when config was produced by a newer MarketingClaw.
       await assertFutureConfigActionAllowed("rewrite the gateway service");
       return await service.stage(args);
     },

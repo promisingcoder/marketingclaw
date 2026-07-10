@@ -1,4 +1,4 @@
-import { embeddedAgentLog } from "openclaw/plugin-sdk/agent-harness-runtime";
+import { embeddedAgentLog } from "marketingclaw/plugin-sdk/agent-harness-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { CodexAppServerClient } from "./client.js";
 import type { JsonValue } from "./protocol.js";
@@ -480,7 +480,7 @@ describe("CodexAppServerTurnRouter", () => {
         contentItems: [
           {
             type: "inputText",
-            text: "OpenClaw did not register a handler for this app-server tool call.",
+            text: "MarketingClaw did not register a handler for this app-server tool call.",
           },
         ],
         success: false,
@@ -882,7 +882,7 @@ describe("CodexAppServerTurnRouter", () => {
         contentItems: [
           {
             type: "inputText",
-            text: "OpenClaw did not register a handler for this app-server tool call.",
+            text: "MarketingClaw did not register a handler for this app-server tool call.",
           },
         ],
         success: false,

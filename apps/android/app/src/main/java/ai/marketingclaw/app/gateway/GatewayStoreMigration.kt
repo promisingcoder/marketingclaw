@@ -1,7 +1,7 @@
-package ai.openclaw.app.gateway
+package ai.marketingclaw.app.gateway
 
-import ai.openclaw.app.GatewayCredentials
-import ai.openclaw.app.SecurePrefs
+import ai.marketingclaw.app.GatewayCredentials
+import ai.marketingclaw.app.SecurePrefs
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 

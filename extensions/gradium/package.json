@@ -1,22 +1,22 @@
 {
-  "name": "@openclaw/gradium-speech",
+  "name": "@marketingclaw/gradium-speech",
   "version": "2026.6.11",
-  "description": "OpenClaw Gradium speech plugin.",
+  "description": "MarketingClaw Gradium speech plugin.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/promisingcoder/marketingclaw"
   },
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@marketingclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "marketingclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@openclaw/gradium-speech",
-      "npmSpec": "@openclaw/gradium-speech",
+      "clawhubSpec": "clawhub:@marketingclaw/gradium-speech",
+      "npmSpec": "@marketingclaw/gradium-speech",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.6.8"
     },
@@ -24,7 +24,7 @@
       "pluginApi": ">=2026.6.11"
     },
     "build": {
-      "openclawVersion": "2026.6.11",
+      "marketingclawVersion": "2026.6.11",
       "bundledDist": false
     },
     "release": {

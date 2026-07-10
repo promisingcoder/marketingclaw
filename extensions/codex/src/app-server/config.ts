@@ -6,20 +6,20 @@ import path from "node:path";
 import {
   resolveProviderIdForAuth,
   type ProviderAuthAliasLookupParams,
-} from "openclaw/plugin-sdk/agent-runtime";
+} from "marketingclaw/plugin-sdk/agent-runtime";
 import {
   resolveExecApprovalsFromFile,
   type ExecApprovalsFile,
-} from "openclaw/plugin-sdk/exec-approvals-runtime";
-import { resolvePositiveTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
-import { normalizeAgentId } from "openclaw/plugin-sdk/routing";
+} from "marketingclaw/plugin-sdk/exec-approvals-runtime";
+import { resolvePositiveTimerTimeoutMs } from "marketingclaw/plugin-sdk/number-runtime";
+import { normalizeAgentId } from "marketingclaw/plugin-sdk/routing";
 import {
   buildSecretInputSchema,
   normalizeResolvedSecretInputString,
   type SecretInput,
-} from "openclaw/plugin-sdk/secret-input";
-import { normalizeTrimmedStringList } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { detectWindowsSpawnCommandInlineArgs } from "openclaw/plugin-sdk/windows-spawn";
+} from "marketingclaw/plugin-sdk/secret-input";
+import { normalizeTrimmedStringList } from "marketingclaw/plugin-sdk/string-coerce-runtime";
+import { detectWindowsSpawnCommandInlineArgs } from "marketingclaw/plugin-sdk/windows-spawn";
 import { z } from "zod";
 import type {
   CodexApprovalPolicy,
@@ -29,7 +29,9 @@ import type {
   JsonValue,
 } from "./protocol.js";
 
-const START_OPTIONS_KEY_SECRET_SYMBOL = Symbol.for("openclaw.codexAppServerStartOptionsKeySecret");
+const START_OPTIONS_KEY_SECRET_SYMBOL = Symbol.for(
+  "marketingclaw.codexAppServerStartOptionsKeySecret",
+);
 const START_OPTIONS_KEY_SECRET = getStartOptionsKeySecret();
 const UNIX_CODEX_REQUIREMENTS_PATH = "/etc/codex/requirements.toml";
 const WINDOWS_CODEX_REQUIREMENTS_SUFFIX = "\\OpenAI\\Codex\\requirements.toml";
@@ -42,20 +44,20 @@ export type CodexAppServerHomeScope = "agent" | "user";
 type CodexAppServerPolicyMode = "yolo" | "guardian";
 export type CodexAppServerConnectionClass = "local-loopback" | "remote";
 export type CodexAppServerRemoteAppsSubstrate = "preconfigured";
-type OpenClawExecMode = "deny" | "allowlist" | "ask" | "auto" | "full";
-type OpenClawExecSecurity = "deny" | "allowlist" | "full";
-type OpenClawExecAsk = "off" | "on-miss" | "always";
-type OpenClawExecApprovalFloorsForCodexAppServer = {
-  security?: OpenClawExecSecurity;
-  ask?: OpenClawExecAsk;
+type MarketingClawExecMode = "deny" | "allowlist" | "ask" | "auto" | "full";
+type MarketingClawExecSecurity = "deny" | "allowlist" | "full";
+type MarketingClawExecAsk = "off" | "on-miss" | "always";
+type MarketingClawExecApprovalFloorsForCodexAppServer = {
+  security?: MarketingClawExecSecurity;
+  ask?: MarketingClawExecAsk;
 };
-export type OpenClawExecPolicyForCodexAppServer = {
-  mode?: OpenClawExecMode;
-  security: OpenClawExecSecurity;
-  ask: OpenClawExecAsk;
+export type MarketingClawExecPolicyForCodexAppServer = {
+  mode?: MarketingClawExecMode;
+  security: MarketingClawExecSecurity;
+  ask: MarketingClawExecAsk;
   touched: boolean;
 };
-type OpenClawExecPolicy = OpenClawExecPolicyForCodexAppServer;
+type MarketingClawExecPolicy = MarketingClawExecPolicyForCodexAppServer;
 type ProviderAuthAliasConfig = NonNullable<ProviderAuthAliasLookupParams>["config"];
 type CodexAppServerDefaultPolicy = {
   mode: CodexAppServerPolicyMode;
@@ -301,7 +303,7 @@ export const CODEX_PLUGIN_ENTRY_CONFIG_KEYS = [
 const DEFAULT_CODEX_COMPUTER_USE_PLUGIN_NAME = "computer-use";
 const DEFAULT_CODEX_COMPUTER_USE_MCP_SERVER_NAME = "computer-use";
 const DEFAULT_CODEX_COMPUTER_USE_MARKETPLACE_DISCOVERY_TIMEOUT_MS = 60_000;
-const DEFAULT_CODEX_APP_SERVER_NETWORK_PROXY_PROFILE_PREFIX = "openclaw-network";
+const DEFAULT_CODEX_APP_SERVER_NETWORK_PROXY_PROFILE_PREFIX = "marketingclaw-network";
 
 const codexAppServerTransportSchema = z.enum(["stdio", "websocket"]);
 const codexAppServerHomeScopeSchema = z.enum(["agent", "user"]);
@@ -455,11 +457,11 @@ function assertCodexAppServerCommandHasNoInlineArgs(params: {
   }
   const sourceLabel =
     params.source === "env"
-      ? "OPENCLAW_CODEX_APP_SERVER_BIN"
+      ? "MARKETINGCLAW_CODEX_APP_SERVER_BIN"
       : "plugins.entries.codex.config.appServer.command";
   const argsLabel =
     params.source === "env"
-      ? "OPENCLAW_CODEX_APP_SERVER_ARGS"
+      ? "MARKETINGCLAW_CODEX_APP_SERVER_ARGS"
       : "plugins.entries.codex.config.appServer.args";
   throw new Error(
     `${sourceLabel} must be only the Codex app-server executable path; "${inlineArgs.executable}" was configured with inline arguments "${inlineArgs.arguments}". Move those arguments to ${argsLabel}, or remove the override to use the managed Codex startup path.`,
@@ -519,8 +521,8 @@ function resolveCodexPluginDestructivePolicy(policy: CodexPluginDestructivePolic
 export function resolveCodexAppServerRuntimeOptions(
   params: {
     pluginConfig?: unknown;
-    execMode?: OpenClawExecMode;
-    execPolicy?: OpenClawExecPolicyForCodexAppServer;
+    execMode?: MarketingClawExecMode;
+    execPolicy?: MarketingClawExecPolicyForCodexAppServer;
     modelProvider?: string;
     model?: string;
     config?: ProviderAuthAliasConfig;
@@ -532,7 +534,7 @@ export function resolveCodexAppServerRuntimeOptions(
     readRequirementsFile?: (path: string) => string | undefined;
     platform?: NodeJS.Platform;
     hostName?: string;
-    openClawSandboxActive?: boolean;
+    marketingClawSandboxActive?: boolean;
   } = {},
 ): CodexAppServerRuntimeOptions {
   const env = params.env ?? process.env;
@@ -540,7 +542,7 @@ export function resolveCodexAppServerRuntimeOptions(
   const transport = resolveTransport(config.transport);
   const homeScope: CodexAppServerHomeScope = config.homeScope === "user" ? "user" : "agent";
   const configCommand = readNonEmptyString(config.command);
-  const envCommand = readNonEmptyString(env.OPENCLAW_CODEX_APP_SERVER_BIN);
+  const envCommand = readNonEmptyString(env.MARKETINGCLAW_CODEX_APP_SERVER_BIN);
   const command = configCommand ?? envCommand ?? "codex";
   const commandSource: CodexAppServerCommandSource = configCommand
     ? "config"
@@ -550,7 +552,7 @@ export function resolveCodexAppServerRuntimeOptions(
   if (commandSource === "config" || commandSource === "env") {
     assertCodexAppServerCommandHasNoInlineArgs({ command, source: commandSource });
   }
-  const args = resolveArgs(config.args, env.OPENCLAW_CODEX_APP_SERVER_ARGS);
+  const args = resolveArgs(config.args, env.MARKETINGCLAW_CODEX_APP_SERVER_ARGS);
   const headers = normalizeHeaders(config.headers);
   const clearEnv = normalizeStringList(config.clearEnv);
   const authToken = normalizeCodexAppServerSecretInput({
@@ -561,17 +563,17 @@ export function resolveCodexAppServerRuntimeOptions(
   const connectionClass = inferCodexAppServerConnectionClass({ transport, url });
   const remoteAppsSubstrate: CodexAppServerRemoteAppsSubstrate = "preconfigured";
   const remoteWorkspaceRoot = normalizeRemoteWorkspaceRoot(config.remoteWorkspaceRoot);
-  const execMode = resolveEffectiveOpenClawExecModeForCodexAppServer({
+  const execMode = resolveEffectiveMarketingClawExecModeForCodexAppServer({
     execMode: params.execMode,
     execPolicy: params.execPolicy,
   });
-  assertCodexAppServerAllowedForOpenClawExecMode(execMode);
+  assertCodexAppServerAllowedForMarketingClawExecMode(execMode);
   const explicitPolicyMode =
-    resolvePolicyMode(config.mode) ?? resolvePolicyMode(env.OPENCLAW_CODEX_APP_SERVER_MODE);
+    resolvePolicyMode(config.mode) ?? resolvePolicyMode(env.MARKETINGCLAW_CODEX_APP_SERVER_MODE);
   const configuredSandbox =
-    resolveSandbox(config.sandbox) ?? resolveSandbox(env.OPENCLAW_CODEX_APP_SERVER_SANDBOX);
+    resolveSandbox(config.sandbox) ?? resolveSandbox(env.MARKETINGCLAW_CODEX_APP_SERVER_SANDBOX);
   const explicitApprovalsReviewer = resolveApprovalsReviewer(config.approvalsReviewer);
-  const normalizedPolicyMode = resolveCodexPolicyModeForOpenClawExecMode(execMode);
+  const normalizedPolicyMode = resolveCodexPolicyModeForMarketingClawExecMode(execMode);
   const ignoreLegacyYoloPolicyMode =
     normalizedPolicyMode === "guardian" && explicitPolicyMode === "yolo";
   const canUseModelBackedReviewer = canUseCodexModelBackedApprovalsReviewerForModel({
@@ -596,7 +598,9 @@ export function resolveCodexAppServerRuntimeOptions(
     (execMode !== "auto" || !canUseModelBackedReviewer);
   const forceUserReviewer = forceUserReviewerForUnknownModel || forceUserReviewerForExecMode;
   const forceGuardianReviewer = execMode === "auto" && canUseModelBackedReviewer;
-  const execModeRequiringPromptingApprovals: Extract<OpenClawExecMode, "auto" | "ask"> | undefined =
+  const execModeRequiringPromptingApprovals:
+    | Extract<MarketingClawExecMode, "auto" | "ask">
+    | undefined =
     execMode === "auto" || execMode === "ask" ? execMode : forceUserReviewer ? "ask" : undefined;
   const forceDangerFullAccessSandbox =
     params.execPolicy?.touched === true &&
@@ -630,7 +634,7 @@ export function resolveCodexAppServerRuntimeOptions(
             ? selectForcedDangerFullAccessSandbox({
                 configuredSandbox,
                 defaultPolicy,
-                openClawSandboxActive: Boolean(params.openClawSandboxActive),
+                marketingClawSandboxActive: Boolean(params.marketingClawSandboxActive),
               })
             : selectForcedPromptingSandbox({
                 configuredSandbox,
@@ -666,7 +670,9 @@ export function resolveCodexAppServerRuntimeOptions(
   });
 
   const configApprovalPolicy = resolveApprovalPolicy(config.approvalPolicy);
-  const envApprovalPolicy = resolveApprovalPolicy(env.OPENCLAW_CODEX_APP_SERVER_APPROVAL_POLICY);
+  const envApprovalPolicy = resolveApprovalPolicy(
+    env.MARKETINGCLAW_CODEX_APP_SERVER_APPROVAL_POLICY,
+  );
   const approvalPolicy =
     configApprovalPolicy ??
     envApprovalPolicy ??
@@ -840,30 +846,30 @@ export function resolveCodexComputerUseConfig(
   const marketplaceSource =
     readNonEmptyString(params.overrides?.marketplaceSource) ??
     readNonEmptyString(config.marketplaceSource) ??
-    readNonEmptyString(env.OPENCLAW_CODEX_COMPUTER_USE_MARKETPLACE_SOURCE);
+    readNonEmptyString(env.MARKETINGCLAW_CODEX_COMPUTER_USE_MARKETPLACE_SOURCE);
   const marketplacePath =
     readNonEmptyString(params.overrides?.marketplacePath) ??
     readNonEmptyString(config.marketplacePath) ??
-    readNonEmptyString(env.OPENCLAW_CODEX_COMPUTER_USE_MARKETPLACE_PATH);
+    readNonEmptyString(env.MARKETINGCLAW_CODEX_COMPUTER_USE_MARKETPLACE_PATH);
   const marketplaceName =
     readNonEmptyString(params.overrides?.marketplaceName) ??
     readNonEmptyString(config.marketplaceName) ??
-    readNonEmptyString(env.OPENCLAW_CODEX_COMPUTER_USE_MARKETPLACE_NAME);
+    readNonEmptyString(env.MARKETINGCLAW_CODEX_COMPUTER_USE_MARKETPLACE_NAME);
   const autoInstall =
     params.overrides?.autoInstall ??
     config.autoInstall ??
-    readBooleanEnv(env.OPENCLAW_CODEX_COMPUTER_USE_AUTO_INSTALL) ??
+    readBooleanEnv(env.MARKETINGCLAW_CODEX_COMPUTER_USE_AUTO_INSTALL) ??
     false;
   const marketplaceDiscoveryTimeoutMs = normalizePositiveNumber(
     params.overrides?.marketplaceDiscoveryTimeoutMs ??
       config.marketplaceDiscoveryTimeoutMs ??
-      readNumberEnv(env.OPENCLAW_CODEX_COMPUTER_USE_MARKETPLACE_DISCOVERY_TIMEOUT_MS),
+      readNumberEnv(env.MARKETINGCLAW_CODEX_COMPUTER_USE_MARKETPLACE_DISCOVERY_TIMEOUT_MS),
     DEFAULT_CODEX_COMPUTER_USE_MARKETPLACE_DISCOVERY_TIMEOUT_MS,
   );
   const enabled =
     params.overrides?.enabled ??
     config.enabled ??
-    readBooleanEnv(env.OPENCLAW_CODEX_COMPUTER_USE) ??
+    readBooleanEnv(env.MARKETINGCLAW_CODEX_COMPUTER_USE) ??
     Boolean(autoInstall || marketplaceSource || marketplacePath || marketplaceName);
 
   return {
@@ -873,12 +879,12 @@ export function resolveCodexComputerUseConfig(
     pluginName:
       readNonEmptyString(params.overrides?.pluginName) ??
       readNonEmptyString(config.pluginName) ??
-      readNonEmptyString(env.OPENCLAW_CODEX_COMPUTER_USE_PLUGIN_NAME) ??
+      readNonEmptyString(env.MARKETINGCLAW_CODEX_COMPUTER_USE_PLUGIN_NAME) ??
       DEFAULT_CODEX_COMPUTER_USE_PLUGIN_NAME,
     mcpServerName:
       readNonEmptyString(params.overrides?.mcpServerName) ??
       readNonEmptyString(config.mcpServerName) ??
-      readNonEmptyString(env.OPENCLAW_CODEX_COMPUTER_USE_MCP_SERVER_NAME) ??
+      readNonEmptyString(env.MARKETINGCLAW_CODEX_COMPUTER_USE_MCP_SERVER_NAME) ??
       DEFAULT_CODEX_COMPUTER_USE_MCP_SERVER_NAME,
     ...(marketplaceSource ? { marketplaceSource } : {}),
     ...(marketplacePath ? { marketplacePath } : {}),
@@ -1142,8 +1148,8 @@ function resolveDefaultCodexAppServerPolicy(params: {
   transport: CodexAppServerTransportMode;
   forceGuardian?: boolean;
   forceUserReviewer?: boolean;
-  execModeRequiringPromptingApprovals?: Extract<OpenClawExecMode, "auto" | "ask">;
-  execModeRequiringUserReviewer?: OpenClawExecMode;
+  execModeRequiringPromptingApprovals?: Extract<MarketingClawExecMode, "auto" | "ask">;
+  execModeRequiringUserReviewer?: MarketingClawExecMode;
   env?: NodeJS.ProcessEnv;
   requirementsToml?: string | null;
   requirementsPath?: string;
@@ -1496,7 +1502,7 @@ function normalizeRequirementsApprovalsReviewer(
 
 function selectGuardianApprovalPolicy(
   allowedApprovalPolicies: Set<CodexAppServerApprovalPolicy> | undefined,
-  execModeRequiringPromptingApprovals?: Extract<OpenClawExecMode, "auto" | "ask">,
+  execModeRequiringPromptingApprovals?: Extract<MarketingClawExecMode, "auto" | "ask">,
 ): CodexAppServerApprovalPolicy {
   if (allowedApprovalPolicies === undefined || allowedApprovalPolicies.has("on-request")) {
     return "on-request";
@@ -1517,7 +1523,7 @@ function selectGuardianApprovalPolicy(
 
 function selectGuardianApprovalsReviewer(
   allowedApprovalsReviewers: Set<CodexAppServerApprovalsReviewer> | undefined,
-  execModeRequiringAutoReviewer?: Extract<OpenClawExecMode, "auto">,
+  execModeRequiringAutoReviewer?: Extract<MarketingClawExecMode, "auto">,
 ): CodexAppServerApprovalsReviewer {
   if (allowedApprovalsReviewers === undefined || allowedApprovalsReviewers.has("auto_review")) {
     return "auto_review";
@@ -1538,7 +1544,7 @@ function selectGuardianApprovalsReviewer(
 
 function selectUserApprovalsReviewer(
   allowedApprovalsReviewers: Set<CodexAppServerApprovalsReviewer> | undefined,
-  execModeRequiringUserReviewer?: OpenClawExecMode,
+  execModeRequiringUserReviewer?: MarketingClawExecMode,
 ): CodexAppServerApprovalsReviewer {
   if (allowedApprovalsReviewers === undefined || allowedApprovalsReviewers.has("user")) {
     return "user";
@@ -1780,13 +1786,13 @@ function selectForcedPromptingSandbox(params: {
 function selectForcedDangerFullAccessSandbox(params: {
   configuredSandbox?: CodexAppServerSandboxMode;
   defaultPolicy: CodexAppServerDefaultPolicy | undefined;
-  openClawSandboxActive: boolean;
+  marketingClawSandboxActive: boolean;
 }): CodexAppServerSandboxMode {
   if (params.configuredSandbox === "read-only") {
     return "read-only";
   }
   if (params.defaultPolicy?.dangerFullAccessAllowed === false) {
-    if (params.openClawSandboxActive) {
+    if (params.marketingClawSandboxActive) {
       return params.defaultPolicy.sandbox ?? "workspace-write";
     }
     throw new Error(
@@ -1830,21 +1836,24 @@ function resolveApprovalsReviewer(value: unknown): CodexAppServerApprovalsReview
     : undefined;
 }
 
-export function resolveOpenClawExecModeFromConfig(params: {
+export function resolveMarketingClawExecModeFromConfig(params: {
   config?: unknown;
   agentId?: string;
-}): OpenClawExecMode | undefined {
-  const policy = resolveOpenClawExecPolicyFromConfig(params);
+}): MarketingClawExecMode | undefined {
+  const policy = resolveMarketingClawExecPolicyFromConfig(params);
   return policy.touched ? policy.mode : undefined;
 }
 
-function resolveOpenClawExecPolicyFromConfig(params: {
+function resolveMarketingClawExecPolicyFromConfig(params: {
   config?: unknown;
   agentId?: string;
-}): OpenClawExecPolicy {
+}): MarketingClawExecPolicy {
   const root = readRecord(params.config);
   const globalExec = readRecord(readRecord(root?.tools)?.exec);
-  const globalPolicy = applyOpenClawExecPolicyLayer(createDefaultOpenClawExecPolicy(), globalExec);
+  const globalPolicy = applyMarketingClawExecPolicyLayer(
+    createDefaultMarketingClawExecPolicy(),
+    globalExec,
+  );
   const agentId = params.agentId?.trim();
   if (!agentId) {
     return globalPolicy;
@@ -1857,10 +1866,10 @@ function resolveOpenClawExecPolicyFromConfig(params: {
     return typeof id === "string" && normalizeAgentId(id) === normalizedAgentId;
   });
   const agentExec = readRecord(readRecord(readRecord(agentEntry)?.tools)?.exec);
-  return applyOpenClawExecPolicyLayer(globalPolicy, agentExec);
+  return applyMarketingClawExecPolicyLayer(globalPolicy, agentExec);
 }
 
-export function resolveOpenClawExecModeForCodexAppServer(params: {
+export function resolveMarketingClawExecModeForCodexAppServer(params: {
   execOverrides?: {
     security?: unknown;
     ask?: unknown;
@@ -1868,12 +1877,12 @@ export function resolveOpenClawExecModeForCodexAppServer(params: {
   approvals?: ExecApprovalsFile;
   config?: unknown;
   agentId?: string;
-}): OpenClawExecMode | undefined {
-  const policy = resolveOpenClawExecPolicyForCodexAppServer(params);
+}): MarketingClawExecMode | undefined {
+  const policy = resolveMarketingClawExecPolicyForCodexAppServer(params);
   return policy.touched ? policy.mode : undefined;
 }
 
-export function resolveOpenClawExecPolicyForCodexAppServer(params: {
+export function resolveMarketingClawExecPolicyForCodexAppServer(params: {
   execOverrides?: {
     security?: unknown;
     ask?: unknown;
@@ -1881,32 +1890,32 @@ export function resolveOpenClawExecPolicyForCodexAppServer(params: {
   approvals?: ExecApprovalsFile;
   config?: unknown;
   agentId?: string;
-}): OpenClawExecPolicyForCodexAppServer {
-  const basePolicy = resolveOpenClawExecPolicyFromConfig({
+}): MarketingClawExecPolicyForCodexAppServer {
+  const basePolicy = resolveMarketingClawExecPolicyFromConfig({
     config: params.config,
     agentId: params.agentId,
   });
-  const overridePolicy = applyOpenClawExecPolicyLayer(basePolicy, params.execOverrides);
-  const approvalFloors = resolveOpenClawExecApprovalFloorsForCodexAppServer({
+  const overridePolicy = applyMarketingClawExecPolicyLayer(basePolicy, params.execOverrides);
+  const approvalFloors = resolveMarketingClawExecApprovalFloorsForCodexAppServer({
     approvals: params.approvals,
     agentId: params.agentId,
     policy: overridePolicy,
   });
-  return applyOpenClawExecApprovalFloors(overridePolicy, approvalFloors);
+  return applyMarketingClawExecApprovalFloors(overridePolicy, approvalFloors);
 }
 
-function resolveEffectiveOpenClawExecModeForCodexAppServer(params: {
-  execMode?: OpenClawExecMode;
-  execPolicy?: OpenClawExecPolicyForCodexAppServer;
-}): OpenClawExecMode | undefined {
+function resolveEffectiveMarketingClawExecModeForCodexAppServer(params: {
+  execMode?: MarketingClawExecMode;
+  execPolicy?: MarketingClawExecPolicyForCodexAppServer;
+}): MarketingClawExecMode | undefined {
   if (params.execPolicy?.touched === true) {
     return params.execPolicy.mode;
   }
   return params.execMode;
 }
 
-function resolveCodexPolicyModeForOpenClawExecMode(
-  mode: OpenClawExecMode | undefined,
+function resolveCodexPolicyModeForMarketingClawExecMode(
+  mode: MarketingClawExecMode | undefined,
 ): CodexAppServerPolicyMode | undefined {
   if (!mode || mode === "full") {
     return undefined;
@@ -1914,7 +1923,9 @@ function resolveCodexPolicyModeForOpenClawExecMode(
   return "guardian";
 }
 
-function assertCodexAppServerAllowedForOpenClawExecMode(mode: OpenClawExecMode | undefined): void {
+function assertCodexAppServerAllowedForMarketingClawExecMode(
+  mode: MarketingClawExecMode | undefined,
+): void {
   if (mode === "deny" || mode === "allowlist") {
     throw new Error(
       `Codex app-server local execution is not available when tools.exec.mode=${mode}`,
@@ -1922,7 +1933,7 @@ function assertCodexAppServerAllowedForOpenClawExecMode(mode: OpenClawExecMode |
   }
 }
 
-function createDefaultOpenClawExecPolicy(): OpenClawExecPolicy {
+function createDefaultMarketingClawExecPolicy(): MarketingClawExecPolicy {
   return {
     security: "full",
     ask: "off",
@@ -1930,17 +1941,17 @@ function createDefaultOpenClawExecPolicy(): OpenClawExecPolicy {
   };
 }
 
-function applyOpenClawExecPolicyLayer(
-  base: OpenClawExecPolicy,
+function applyMarketingClawExecPolicyLayer(
+  base: MarketingClawExecPolicy,
   exec?: { mode?: unknown; security?: unknown; ask?: unknown },
-): OpenClawExecPolicy {
+): MarketingClawExecPolicy {
   if (!exec) {
     return base;
   }
   const mode = readExecMode(exec.mode);
   if (mode !== undefined) {
     return {
-      ...resolveOpenClawExecPolicyForMode(mode),
+      ...resolveMarketingClawExecPolicyForMode(mode),
       touched: true,
     };
   }
@@ -1952,18 +1963,18 @@ function applyOpenClawExecPolicyLayer(
   const nextSecurity = security ?? base.security;
   const nextAsk = ask ?? base.ask;
   return {
-    mode: resolveOpenClawExecModeFromPolicy({ security: nextSecurity, ask: nextAsk }),
+    mode: resolveMarketingClawExecModeFromPolicy({ security: nextSecurity, ask: nextAsk }),
     security: nextSecurity,
     ask: nextAsk,
     touched: true,
   };
 }
 
-function resolveOpenClawExecApprovalFloorsForCodexAppServer(params: {
+function resolveMarketingClawExecApprovalFloorsForCodexAppServer(params: {
   approvals?: ExecApprovalsFile;
   agentId?: string;
-  policy: OpenClawExecPolicy;
-}): OpenClawExecApprovalFloorsForCodexAppServer | undefined {
+  policy: MarketingClawExecPolicy;
+}): MarketingClawExecApprovalFloorsForCodexAppServer | undefined {
   if (!params.approvals) {
     return undefined;
   }
@@ -1977,31 +1988,33 @@ function resolveOpenClawExecApprovalFloorsForCodexAppServer(params: {
   }).agent;
 }
 
-function applyOpenClawExecApprovalFloors(
-  base: OpenClawExecPolicy,
-  approvalFloors?: OpenClawExecApprovalFloorsForCodexAppServer,
-): OpenClawExecPolicy {
+function applyMarketingClawExecApprovalFloors(
+  base: MarketingClawExecPolicy,
+  approvalFloors?: MarketingClawExecApprovalFloorsForCodexAppServer,
+): MarketingClawExecPolicy {
   if (!approvalFloors) {
     return base;
   }
   const nextSecurity = approvalFloors.security
-    ? minOpenClawExecSecurity(base.security, approvalFloors.security)
+    ? minMarketingClawExecSecurity(base.security, approvalFloors.security)
     : base.security;
-  const nextAsk = approvalFloors.ask ? maxOpenClawExecAsk(base.ask, approvalFloors.ask) : base.ask;
+  const nextAsk = approvalFloors.ask
+    ? maxMarketingClawExecAsk(base.ask, approvalFloors.ask)
+    : base.ask;
   if (nextSecurity === base.security && nextAsk === base.ask) {
     return base;
   }
   return {
-    mode: resolveOpenClawExecModeFromPolicy({ security: nextSecurity, ask: nextAsk }),
+    mode: resolveMarketingClawExecModeFromPolicy({ security: nextSecurity, ask: nextAsk }),
     security: nextSecurity,
     ask: nextAsk,
     touched: true,
   };
 }
 
-function resolveOpenClawExecPolicyForMode(
-  mode: OpenClawExecMode,
-): Omit<OpenClawExecPolicy, "touched"> {
+function resolveMarketingClawExecPolicyForMode(
+  mode: MarketingClawExecMode,
+): Omit<MarketingClawExecPolicy, "touched"> {
   switch (mode) {
     case "deny":
       return { mode, security: "deny", ask: "off" };
@@ -2017,10 +2030,10 @@ function resolveOpenClawExecPolicyForMode(
   return exhaustiveMode;
 }
 
-function resolveOpenClawExecModeFromPolicy(params: {
-  security: OpenClawExecSecurity;
-  ask: OpenClawExecAsk;
-}): OpenClawExecMode {
+function resolveMarketingClawExecModeFromPolicy(params: {
+  security: MarketingClawExecSecurity;
+  ask: MarketingClawExecAsk;
+}): MarketingClawExecMode {
   if (params.security === "deny") {
     return "deny";
   }
@@ -2033,20 +2046,23 @@ function resolveOpenClawExecModeFromPolicy(params: {
   return "ask";
 }
 
-function minOpenClawExecSecurity(
-  left: OpenClawExecSecurity,
-  right: OpenClawExecSecurity,
-): OpenClawExecSecurity {
-  const order: Record<OpenClawExecSecurity, number> = { deny: 0, allowlist: 1, full: 2 };
+function minMarketingClawExecSecurity(
+  left: MarketingClawExecSecurity,
+  right: MarketingClawExecSecurity,
+): MarketingClawExecSecurity {
+  const order: Record<MarketingClawExecSecurity, number> = { deny: 0, allowlist: 1, full: 2 };
   return order[left] <= order[right] ? left : right;
 }
 
-function maxOpenClawExecAsk(left: OpenClawExecAsk, right: OpenClawExecAsk): OpenClawExecAsk {
-  const order: Record<OpenClawExecAsk, number> = { off: 0, "on-miss": 1, always: 2 };
+function maxMarketingClawExecAsk(
+  left: MarketingClawExecAsk,
+  right: MarketingClawExecAsk,
+): MarketingClawExecAsk {
+  const order: Record<MarketingClawExecAsk, number> = { off: 0, "on-miss": 1, always: 2 };
   return order[left] >= order[right] ? left : right;
 }
 
-function readExecMode(value: unknown): OpenClawExecMode | undefined {
+function readExecMode(value: unknown): MarketingClawExecMode | undefined {
   return value === "deny" ||
     value === "allowlist" ||
     value === "ask" ||
@@ -2133,11 +2149,11 @@ function readBooleanEnv(value: string | undefined): boolean | undefined {
   return undefined;
 }
 
-function readExecSecurity(value: unknown): OpenClawExecSecurity | undefined {
+function readExecSecurity(value: unknown): MarketingClawExecSecurity | undefined {
   return value === "deny" || value === "allowlist" || value === "full" ? value : undefined;
 }
 
-function readExecAsk(value: unknown): OpenClawExecAsk | undefined {
+function readExecAsk(value: unknown): MarketingClawExecAsk | undefined {
   return value === "off" || value === "on-miss" || value === "always" ? value : undefined;
 }
 

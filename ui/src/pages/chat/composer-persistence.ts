@@ -12,7 +12,7 @@ import {
 import { getSafeSessionStorage } from "../../local-storage.ts";
 import { getChatAttachmentDataUrl } from "./attachment-payload-store.ts";
 
-const STORAGE_KEY_PREFIX = "openclaw.control.chatComposer.v1:";
+const STORAGE_KEY_PREFIX = "marketingclaw.control.chatComposer.v1:";
 const MAX_STORED_SESSIONS = 20;
 const MAX_STORED_QUEUE_ITEMS = 50;
 const CHAT_COMPOSER_DRAFT_PERSIST_DELAY_MS = 200;

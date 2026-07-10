@@ -5,7 +5,7 @@ read_when:
 title: "Tlon"
 ---
 
-Tlon is a decentralized messenger built on Urbit. OpenClaw connects to your Urbit ship and
+Tlon is a decentralized messenger built on Urbit. MarketingClaw connects to your Urbit ship and
 responds to DMs and group chat messages. Group replies require an @ mention by default, with
 authorization rules and an owner-approval flow layered on top.
 
@@ -14,21 +14,21 @@ owner approval system are supported. Reactions and polls are not.
 
 ## Bundled plugin
 
-Tlon ships bundled in current OpenClaw releases; packaged builds do not need a separate install.
+Tlon ships bundled in current MarketingClaw releases; packaged builds do not need a separate install.
 
 On an older build or custom install that excludes it, install from npm:
 
 ```bash
-openclaw plugins install @openclaw/tlon
+marketingclaw plugins install @marketingclaw/tlon
 ```
 
-Use the bare package name to track the current release tag. Pin a version (`@openclaw/tlon@x.y.z`)
+Use the bare package name to track the current release tag. Pin a version (`@marketingclaw/tlon@x.y.z`)
 only for reproducible installs.
 
 From a local checkout:
 
 ```bash
-openclaw plugins install ./path/to/local/tlon-plugin
+marketingclaw plugins install ./path/to/local/tlon-plugin
 ```
 
 Details: [Plugins](/tools/plugin)
@@ -36,7 +36,7 @@ Details: [Plugins](/tools/plugin)
 ## Setup
 
 ```bash
-openclaw channels add --channel tlon --ship ~sampel-palnet --url https://your-ship-host --code lidlut-tabwed-pillex-ridrup
+marketingclaw channels add --channel tlon --ship ~sampel-palnet --url https://your-ship-host --code lidlut-tabwed-pillex-ridrup
 ```
 
 Or edit config directly:
@@ -60,7 +60,7 @@ channel.
 
 ## Private/LAN ships
 
-OpenClaw blocks private/internal hostnames and IP ranges for SSRF protection by default. If your
+MarketingClaw blocks private/internal hostnames and IP ranges for SSRF protection by default. If your
 ship runs on a private network (localhost, LAN IP, internal hostname), opt in explicitly:
 
 ```json5
@@ -81,7 +81,7 @@ Applies to targets like `http://localhost:8080`, `http://192.168.x.x:8080`, and
 protection for that account's HTTP requests.
 
 <Note>
-`channels.tlon.allowPrivateNetwork` (flat key) is retired. `openclaw doctor --fix` moves it to
+`channels.tlon.allowPrivateNetwork` (flat key) is retired. `marketingclaw doctor --fix` moves it to
 `channels.tlon.network.dangerouslyAllowPrivateNetwork` automatically.
 </Note>
 
@@ -101,7 +101,7 @@ Pin channels manually, or turn on auto-discovery:
 ```
 
 `autoDiscoverChannels` defaults to `false` when unset in config; the setup wizard defaults the
-prompt to yes and writes `true` explicitly. With it on, OpenClaw scries joined groups on startup,
+prompt to yes and writes `true` explicitly. With it on, MarketingClaw scries joined groups on startup,
 watches new channels as group invites are accepted, and rechecks every 2 minutes.
 
 ## Access control
@@ -224,7 +224,7 @@ config stays the source of truth for values never written to the settings store.
 
 ## Delivery targets (CLI/cron)
 
-Use with `openclaw message send` or cron delivery:
+Use with `marketingclaw message send` or cron delivery:
 
 - DM: `~sampel-palnet` or `dm/~sampel-palnet`
 - Group: `chat/~host-ship/channel` or `group:~host-ship/channel`
@@ -261,10 +261,10 @@ direct Urbit operations, available automatically once the plugin is installed:
 ## Troubleshooting
 
 ```bash
-openclaw status
-openclaw gateway status
-openclaw logs --follow
-openclaw doctor
+marketingclaw status
+marketingclaw gateway status
+marketingclaw logs --follow
+marketingclaw doctor
 ```
 
 Common failures:

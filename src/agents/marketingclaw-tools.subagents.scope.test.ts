@@ -7,7 +7,7 @@ import {
   callGatewayMock,
   resetSubagentsConfigOverride,
   setSubagentsConfigOverride,
-} from "./openclaw-tools.subagents.test-harness.js";
+} from "./marketingclaw-tools.subagents.test-harness.js";
 import { addSubagentRunForTests, resetSubagentRegistryForTests } from "./subagent-registry.js";
 import { createPerSenderSessionConfig } from "./test-helpers/session-config.js";
 import { createSubagentsTool } from "./tools/subagents-tool.js";
@@ -18,7 +18,7 @@ function writeStore(storePath: string, store: Record<string, unknown>) {
   fs.writeFileSync(storePath, JSON.stringify(store, null, 2), "utf-8");
 }
 
-describe("openclaw-tools: subagents scope isolation", () => {
+describe("marketingclaw-tools: subagents scope isolation", () => {
   let storePath = "";
 
   beforeEach(() => {
@@ -27,7 +27,7 @@ describe("openclaw-tools: subagents scope isolation", () => {
     callGatewayMock.mockReset();
     storePath = path.join(
       os.tmpdir(),
-      `openclaw-subagents-scope-${Date.now()}-${Math.random().toString(16).slice(2)}.json`,
+      `marketingclaw-subagents-scope-${Date.now()}-${Math.random().toString(16).slice(2)}.json`,
     );
     setSubagentsConfigOverride({
       session: createPerSenderSessionConfig({ store: storePath }),

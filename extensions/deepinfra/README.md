@@ -1,12 +1,12 @@
-# OpenClaw DeepInfra Provider
+# MarketingClaw DeepInfra Provider
 
-Official OpenClaw provider plugin for DeepInfra.
+Official MarketingClaw provider plugin for DeepInfra.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugins install @openclaw/deepinfra-provider
-openclaw gateway restart
+marketingclaw plugins install @marketingclaw/deepinfra-provider
+marketingclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/deepinfra> for setup and configuration.
+See <https://docs.marketingclaw.ai/providers/deepinfra> for setup and configuration.

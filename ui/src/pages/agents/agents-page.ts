@@ -43,7 +43,7 @@ import {
 } from "../../lib/cron/index.ts";
 import { parseAgentSessionKey } from "../../lib/sessions/session-key.ts";
 import { normalizeStringEntries } from "../../lib/string-coerce.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { MarketingClawLightDomElement } from "../../lit/marketingclaw-element.ts";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
 import { loadAgentFileContent, saveAgentFile } from "./files.ts";
 import { loadAgentSkills } from "./skills.ts";
@@ -62,7 +62,7 @@ type AgentsRequestSources = Partial<
   Pick<ApplicationContext, "agents" | "agentIdentity" | "sessions">
 >;
 
-class AgentsPage extends OpenClawLightDomElement implements AgentsState {
+class AgentsPage extends MarketingClawLightDomElement implements AgentsState {
   @consume({ context: applicationContext, subscribe: true })
   private context!: ApplicationContext;
 
@@ -960,6 +960,6 @@ class AgentsPage extends OpenClawLightDomElement implements AgentsState {
   }
 }
 
-if (!customElements.get("openclaw-agents-page")) {
-  customElements.define("openclaw-agents-page", AgentsPage);
+if (!customElements.get("marketingclaw-agents-page")) {
+  customElements.define("marketingclaw-agents-page", AgentsPage);
 }

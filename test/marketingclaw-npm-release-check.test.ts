@@ -1,4 +1,4 @@
-// OpenClaw npm release check tests validate package release checks.
+// MarketingClaw npm release check tests validate package release checks.
 import { execFileSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -22,7 +22,7 @@ import {
   resolveNpmReleaseCheckCommandTimeoutMs,
   runNpmReleaseCheckCommand,
   shouldSkipPackedTarballValidation,
-} from "../scripts/openclaw-npm-release-check.ts";
+} from "../scripts/marketingclaw-npm-release-check.ts";
 import {
   LOCAL_BUILD_METADATA_DIST_PATHS,
   PACKAGE_DIST_INVENTORY_RELATIVE_PATH,
@@ -269,7 +269,7 @@ describe("shouldSkipPackedTarballValidation", () => {
   it("accepts truthy values for metadata-only validation", () => {
     expect(
       shouldSkipPackedTarballValidation({
-        OPENCLAW_NPM_RELEASE_SKIP_PACK_CHECK: "1",
+        MARKETINGCLAW_NPM_RELEASE_SKIP_PACK_CHECK: "1",
       }),
     ).toBe(true);
   });
@@ -277,7 +277,7 @@ describe("shouldSkipPackedTarballValidation", () => {
   it("treats false-like values as disabled", () => {
     expect(
       shouldSkipPackedTarballValidation({
-        OPENCLAW_NPM_RELEASE_SKIP_PACK_CHECK: "false",
+        MARKETINGCLAW_NPM_RELEASE_SKIP_PACK_CHECK: "false",
       }),
     ).toBe(false);
   });
@@ -310,13 +310,13 @@ describe("resolveNpmCommandInvocation", () => {
     expect(
       resolveNpmCommandInvocation({
         npmExecPath: "/usr/local/lib/node_modules/npm/bin/npm-cli.js",
-        npmArgs: ["view", "openclaw", "version"],
+        npmArgs: ["view", "marketingclaw", "version"],
         nodeExecPath: "/usr/local/bin/node",
         platform: "linux",
       }),
     ).toEqual({
       command: "/usr/local/bin/node",
-      args: ["/usr/local/lib/node_modules/npm/bin/npm-cli.js", "view", "openclaw", "version"],
+      args: ["/usr/local/lib/node_modules/npm/bin/npm-cli.js", "view", "marketingclaw", "version"],
     });
   });
 
@@ -368,7 +368,7 @@ describe("resolveNpmCommandInvocation", () => {
     expect(
       resolveNpmCommandInvocation({
         comSpec: "C:\\Windows\\System32\\cmd.exe",
-        npmArgs: ["install", "-g", "C:\\tmp\\openclaw package.tgz"],
+        npmArgs: ["install", "-g", "C:\\tmp\\marketingclaw package.tgz"],
         npmExecPath: "C:\\Program Files\\nodejs\\npm.cmd",
         nodeExecPath: "C:\\Program Files\\nodejs\\node.exe",
         platform: "win32",
@@ -379,7 +379,7 @@ describe("resolveNpmCommandInvocation", () => {
         "/d",
         "/s",
         "/c",
-        '""C:\\Program Files\\nodejs\\npm.cmd" install -g "C:\\tmp\\openclaw package.tgz""',
+        '""C:\\Program Files\\nodejs\\npm.cmd" install -g "C:\\tmp\\marketingclaw package.tgz""',
       ],
       windowsVerbatimArguments: true,
     });
@@ -400,14 +400,14 @@ describe("resolveNpmCommandInvocation", () => {
 
   if (process.platform === "win32") {
     it("executes fallback npm.cmd through cmd.exe on Windows", () => {
-      const dir = mkdtempSync(join(tmpdir(), "openclaw-fake-npm-cmd-"));
+      const dir = mkdtempSync(join(tmpdir(), "marketingclaw-fake-npm-cmd-"));
       try {
         const outputPath = join(dir, "args.json");
         writeFileSync(
           join(dir, "fake-npm.js"),
           [
             "const fs = require('node:fs');",
-            "fs.writeFileSync(process.env.OPENCLAW_FAKE_NPM_OUT, JSON.stringify(process.argv.slice(2)));",
+            "fs.writeFileSync(process.env.MARKETINGCLAW_FAKE_NPM_OUT, JSON.stringify(process.argv.slice(2)));",
           ].join("\n"),
         );
         writeFileSync(
@@ -425,7 +425,7 @@ describe("resolveNpmCommandInvocation", () => {
           cwd: dir,
           env: {
             ...process.env,
-            OPENCLAW_FAKE_NPM_OUT: outputPath,
+            MARKETINGCLAW_FAKE_NPM_OUT: outputPath,
             PATH: `${dir}${delimiter}${process.env.PATH ?? ""}`,
           },
           windowsVerbatimArguments: invocation.windowsVerbatimArguments,
@@ -482,28 +482,30 @@ describe("resolveNpmReleaseCheckCommandTimeoutMs", () => {
   it("parses only positive integer environment timeouts", () => {
     expect(resolveNpmReleaseCheckCommandTimeoutMs({})).toBe(10 * 60 * 1000);
     expect(
-      resolveNpmReleaseCheckCommandTimeoutMs({ OPENCLAW_NPM_RELEASE_CHECK_COMMAND_TIMEOUT_MS: "" }),
+      resolveNpmReleaseCheckCommandTimeoutMs({
+        MARKETINGCLAW_NPM_RELEASE_CHECK_COMMAND_TIMEOUT_MS: "",
+      }),
     ).toBe(10 * 60 * 1000);
     expect(
       resolveNpmReleaseCheckCommandTimeoutMs({
-        OPENCLAW_NPM_RELEASE_CHECK_COMMAND_TIMEOUT_MS: "1234",
+        MARKETINGCLAW_NPM_RELEASE_CHECK_COMMAND_TIMEOUT_MS: "1234",
       }),
     ).toBe(1234);
 
     for (const raw of ["nope", "10m", "1e3", "0", "-1", "9007199254740992"]) {
       expect(() =>
         resolveNpmReleaseCheckCommandTimeoutMs({
-          OPENCLAW_NPM_RELEASE_CHECK_COMMAND_TIMEOUT_MS: raw,
+          MARKETINGCLAW_NPM_RELEASE_CHECK_COMMAND_TIMEOUT_MS: raw,
         }),
-      ).toThrow(`invalid OPENCLAW_NPM_RELEASE_CHECK_COMMAND_TIMEOUT_MS: ${raw}`);
+      ).toThrow(`invalid MARKETINGCLAW_NPM_RELEASE_CHECK_COMMAND_TIMEOUT_MS: ${raw}`);
     }
   });
 });
 
 describe("parseNpmPackJsonOutput", () => {
   it("parses a plain npm pack JSON array", () => {
-    expect(parseNpmPackJsonOutput('[{"filename":"openclaw.tgz","files":[]}]')).toEqual([
-      { filename: "openclaw.tgz", files: [] },
+    expect(parseNpmPackJsonOutput('[{"filename":"marketingclaw.tgz","files":[]}]')).toEqual([
+      { filename: "marketingclaw.tgz", files: [] },
     ]);
   });
 
@@ -515,12 +517,12 @@ describe("parseNpmPackJsonOutput", () => {
       "> pnpm build && pnpm ui:build",
       "",
       "[copy-hook-metadata] Copied 4 hook metadata files.",
-      '[{"filename":"openclaw.tgz","files":[{"path":"dist/control-ui/index.html"}]}]',
+      '[{"filename":"marketingclaw.tgz","files":[{"path":"dist/control-ui/index.html"}]}]',
     ].join("\n");
 
     expect(parseNpmPackJsonOutput(stdout)).toEqual([
       {
-        filename: "openclaw.tgz",
+        filename: "marketingclaw.tgz",
         files: [{ path: "dist/control-ui/index.html" }],
       },
     ]);
@@ -620,7 +622,7 @@ describe("collectForbiddenPackedPathErrors", () => {
   });
 
   it("rejects root dist chunks that still reference the private qa lab", () => {
-    const rootDir = mkdtempSync(join(tmpdir(), "openclaw-pack-private-qa-"));
+    const rootDir = mkdtempSync(join(tmpdir(), "marketingclaw-pack-private-qa-"));
 
     try {
       mkdirSync(join(rootDir, "dist"), { recursive: true });
@@ -640,7 +642,7 @@ describe("collectForbiddenPackedPathErrors", () => {
   });
 
   it("rejects private QA paths in the generated dist inventory", () => {
-    const rootDir = mkdtempSync(join(tmpdir(), "openclaw-pack-inventory-"));
+    const rootDir = mkdtempSync(join(tmpdir(), "marketingclaw-pack-inventory-"));
 
     try {
       mkdirSync(join(rootDir, "dist"), { recursive: true });
@@ -808,11 +810,11 @@ describe("collectReleasePackageMetadataErrors", () => {
   it("validates the expected npm package metadata", () => {
     expect(
       collectReleasePackageMetadataErrors({
-        name: "openclaw",
+        name: "marketingclaw",
         description: "Multi-channel AI gateway with extensible messaging integrations",
         license: "MIT",
-        repository: { url: "git+https://github.com/openclaw/openclaw.git" },
-        bin: { openclaw: "openclaw.mjs" },
+        repository: { url: "git+https://github.com/promisingcoder/marketingclaw.git" },
+        bin: { marketingclaw: "marketingclaw.mjs" },
       }),
     ).toStrictEqual([]);
   });
@@ -820,11 +822,11 @@ describe("collectReleasePackageMetadataErrors", () => {
   it("rejects node-llama-cpp as a peer dependency", () => {
     expect(
       collectReleasePackageMetadataErrors({
-        name: "openclaw",
+        name: "marketingclaw",
         description: "Multi-channel AI gateway with extensible messaging integrations",
         license: "MIT",
-        repository: { url: "git+https://github.com/openclaw/openclaw.git" },
-        bin: { openclaw: "openclaw.mjs" },
+        repository: { url: "git+https://github.com/promisingcoder/marketingclaw.git" },
+        bin: { marketingclaw: "marketingclaw.mjs" },
         peerDependencies: { "node-llama-cpp": "3.18.1" },
         peerDependenciesMeta: { "node-llama-cpp": { optional: true } },
       }),
@@ -837,11 +839,11 @@ describe("collectReleasePackageMetadataErrors", () => {
   it("rejects node-llama-cpp as a direct runtime dependency", () => {
     expect(
       collectReleasePackageMetadataErrors({
-        name: "openclaw",
+        name: "marketingclaw",
         description: "Multi-channel AI gateway with extensible messaging integrations",
         license: "MIT",
-        repository: { url: "git+https://github.com/openclaw/openclaw.git" },
-        bin: { openclaw: "openclaw.mjs" },
+        repository: { url: "git+https://github.com/promisingcoder/marketingclaw.git" },
+        bin: { marketingclaw: "marketingclaw.mjs" },
         dependencies: { "node-llama-cpp": "3.18.1" },
       }),
     ).toContain('package.json dependencies["node-llama-cpp"] must be omitted; keep it optional.');
@@ -850,11 +852,11 @@ describe("collectReleasePackageMetadataErrors", () => {
   it("rejects local fs-safe dependency specs for npm release", () => {
     expect(
       collectReleasePackageMetadataErrors({
-        name: "openclaw",
+        name: "marketingclaw",
         description: "Multi-channel AI gateway with extensible messaging integrations",
         license: "MIT",
-        repository: { url: "git+https://github.com/openclaw/openclaw.git" },
-        bin: { openclaw: "openclaw.mjs" },
+        repository: { url: "git+https://github.com/promisingcoder/marketingclaw.git" },
+        bin: { marketingclaw: "marketingclaw.mjs" },
         dependencies: { "@openclaw/fs-safe": "link:../fs-safe" },
       }),
     ).toContain(
@@ -865,11 +867,11 @@ describe("collectReleasePackageMetadataErrors", () => {
   it("rejects node-llama-cpp as an optional dependency", () => {
     expect(
       collectReleasePackageMetadataErrors({
-        name: "openclaw",
+        name: "marketingclaw",
         description: "Multi-channel AI gateway with extensible messaging integrations",
         license: "MIT",
-        repository: { url: "git+https://github.com/openclaw/openclaw.git" },
-        bin: { openclaw: "openclaw.mjs" },
+        repository: { url: "git+https://github.com/promisingcoder/marketingclaw.git" },
+        bin: { marketingclaw: "marketingclaw.mjs" },
         optionalDependencies: { "node-llama-cpp": "3.18.1" },
       }),
     ).toContain(

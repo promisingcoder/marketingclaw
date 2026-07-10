@@ -5,7 +5,7 @@
     "onStartup": true
   },
   "name": "Codex Supervisor",
-  "description": "Supervise Codex app-server sessions from OpenClaw.",
+  "description": "Supervise Codex app-server sessions from MarketingClaw.",
   "contracts": {
     "tools": [
       "codex_endpoint_probe",

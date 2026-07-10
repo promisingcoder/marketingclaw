@@ -1,4 +1,4 @@
-import OpenClawChatUI
+import MarketingClawChatUI
 import SwiftUI
 
 struct CommandPanel<Content: View>: View {
@@ -24,7 +24,7 @@ struct CommandPanel<Content: View>: View {
             tint: self.tint,
             isProminent: self.isProminent,
             padding: self.padding,
-            radius: OpenClawProMetric.cardRadius)
+            radius: MarketingClawProMetric.cardRadius)
         {
             self.content
         }
@@ -33,7 +33,7 @@ struct CommandPanel<Content: View>: View {
 
 struct CommandControlBackground: View {
     var body: some View {
-        OpenClawProBackground()
+        MarketingClawProBackground()
     }
 }
 
@@ -43,39 +43,39 @@ struct CommandSessionRow: View {
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
             Image(systemName: self.item.icon)
-                .font(OpenClawType.captionSemiBold)
+                .font(MarketingClawType.captionSemiBold)
                 .foregroundStyle(self.item.color)
                 .frame(width: 30, height: 30)
                 .background {
-                    RoundedRectangle(cornerRadius: OpenClawRadius.sm, style: .continuous)
+                    RoundedRectangle(cornerRadius: MarketingClawRadius.sm, style: .continuous)
                         .fill(self.item.color.opacity(0.12))
                 }
             VStack(alignment: .leading, spacing: 4) {
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
                     if self.item.isUnread {
                         Circle()
-                            .fill(OpenClawBrand.accent)
+                            .fill(MarketingClawBrand.accent)
                             .frame(width: 7, height: 7)
                             .accessibilityHidden(true)
                     }
                     Text(self.item.title)
-                        .font(OpenClawType.subheadSemiBold)
+                        .font(MarketingClawType.subheadSemiBold)
                         .lineLimit(1)
                         .minimumScaleFactor(0.82)
                     Spacer(minLength: 6)
                     if self.item.isPinned {
                         Image(systemName: "pin.fill")
-                            .font(OpenClawType.caption2Medium)
-                            .foregroundStyle(OpenClawBrand.accent)
+                            .font(MarketingClawType.caption2Medium)
+                            .foregroundStyle(MarketingClawBrand.accent)
                             .accessibilityHidden(true)
                     }
                     Text(self.item.trailing)
-                        .font(OpenClawType.caption2Medium)
+                        .font(MarketingClawType.caption2Medium)
                         .foregroundStyle(.secondary)
                 }
                 HStack(spacing: 8) {
                     Text(self.item.detail)
-                        .font(OpenClawType.caption)
+                        .font(MarketingClawType.caption)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                     Spacer(minLength: 6)
@@ -84,7 +84,7 @@ struct CommandSessionRow: View {
                             .frame(width: 68)
                     }
                     Text(self.progressLabel)
-                        .font(OpenClawType.captionSemiBold)
+                        .font(MarketingClawType.captionSemiBold)
                         .foregroundStyle(self.item.color)
                         .lineLimit(1)
                         .frame(width: 48, alignment: .trailing)
@@ -113,7 +113,7 @@ struct CommandSessionActionsModifier: ViewModifier {
         case newGroup
     }
 
-    let session: OpenClawChatSessionEntry
+    let session: MarketingClawChatSessionEntry
     let categories: [String]
     let isArchived: Bool
     let isEnabled: Bool
@@ -173,18 +173,18 @@ struct CommandSessionActionsModifier: ViewModifier {
             }
             .alert(self.editorTitle, isPresented: self.editorBinding) {
                 TextField(self.editorPlaceholder, text: self.$draftText)
-                    .font(OpenClawType.body)
+                    .font(MarketingClawType.body)
                 Button {
                     self.commitEditor()
                 } label: {
                     Text(self.editor == .rename ? "Save" : "Create")
-                        .font(OpenClawType.subheadSemiBold)
+                        .font(MarketingClawType.subheadSemiBold)
                 }
                 Button(role: .cancel) {
                     self.editor = nil
                 } label: {
                     Text("Cancel")
-                        .font(OpenClawType.subheadSemiBold)
+                        .font(MarketingClawType.subheadSemiBold)
                 }
             }
             .confirmationDialog(
@@ -196,15 +196,15 @@ struct CommandSessionActionsModifier: ViewModifier {
                     self.onDelete()
                 } label: {
                     Text("Delete Session")
-                        .font(OpenClawType.subheadSemiBold)
+                        .font(MarketingClawType.subheadSemiBold)
                 }
                 Button(role: .cancel) {} label: {
                     Text("Cancel")
-                        .font(OpenClawType.subheadSemiBold)
+                        .font(MarketingClawType.subheadSemiBold)
                 }
             } message: {
                 Text("This permanently deletes the session and its transcript.")
-                    .font(OpenClawType.caption)
+                    .font(MarketingClawType.caption)
             }
     }
 
@@ -226,7 +226,7 @@ struct CommandSessionActionsModifier: ViewModifier {
             }
         } label: {
             Label("Move to Group", systemImage: "folder")
-                .font(OpenClawType.subhead)
+                .font(MarketingClawType.subhead)
         }
     }
 
@@ -235,7 +235,7 @@ struct CommandSessionActionsModifier: ViewModifier {
             self.confirmsDelete = true
         } label: {
             Label("Delete…", systemImage: "trash")
-                .font(OpenClawType.subhead)
+                .font(MarketingClawType.subhead)
         }
     }
 
@@ -260,7 +260,7 @@ struct CommandSessionActionsModifier: ViewModifier {
     {
         Button(action: action) {
             Label(title, systemImage: systemImage)
-                .font(OpenClawType.subhead)
+                .font(MarketingClawType.subhead)
         }
     }
 
@@ -298,7 +298,7 @@ struct CommandSessionActionsModifier: ViewModifier {
 
 extension View {
     func commandSessionActions(
-        session: OpenClawChatSessionEntry,
+        session: MarketingClawChatSessionEntry,
         categories: [String],
         isArchived: Bool = false,
         isEnabled: Bool = true,
@@ -328,8 +328,8 @@ extension View {
 struct CommandViewMoreRow: View {
     var body: some View {
         Label("View More", systemImage: "chevron.right")
-            .font(OpenClawType.subheadBold)
-            .foregroundStyle(OpenClawBrand.accent)
+            .font(MarketingClawType.subheadBold)
+            .foregroundStyle(MarketingClawBrand.accent)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 10)
             .contentShape(Rectangle())
@@ -344,19 +344,19 @@ struct CommandEmptyStateRow: View {
     var body: some View {
         HStack(spacing: 10) {
             Image(systemName: self.icon)
-                .font(OpenClawType.captionBold)
-                .foregroundStyle(OpenClawBrand.ok)
+                .font(MarketingClawType.captionBold)
+                .foregroundStyle(MarketingClawBrand.ok)
                 .frame(width: 30, height: 30)
                 .background {
-                    RoundedRectangle(cornerRadius: OpenClawRadius.xs, style: .continuous)
-                        .fill(OpenClawBrand.ok.opacity(0.10))
+                    RoundedRectangle(cornerRadius: MarketingClawRadius.xs, style: .continuous)
+                        .fill(MarketingClawBrand.ok.opacity(0.10))
                 }
             VStack(alignment: .leading, spacing: 2) {
                 Text(self.title)
-                    .font(OpenClawType.subheadSemiBold)
+                    .font(MarketingClawType.subheadSemiBold)
                     .lineLimit(1)
                 Text(self.detail)
-                    .font(OpenClawType.caption2Medium)
+                    .font(MarketingClawType.caption2Medium)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
             }

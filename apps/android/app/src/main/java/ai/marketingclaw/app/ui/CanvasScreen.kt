@@ -1,7 +1,7 @@
-package ai.openclaw.app.ui
+package ai.marketingclaw.app.ui
 
-import ai.openclaw.app.MainViewModel
-import ai.openclaw.app.node.CanvasNavigationPolicy
+import ai.marketingclaw.app.MainViewModel
+import ai.marketingclaw.app.node.CanvasNavigationPolicy
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.util.Log
@@ -80,7 +80,7 @@ fun CanvasScreen(
         WebSettingsCompat.setAlgorithmicDarkeningAllowed(webSettings, false)
       }
       if (isDebuggable) {
-        Log.d("OpenClawWebView", "userAgent: ${webSettings.userAgentString}")
+        Log.d("MarketingClawWebView", "userAgent: ${webSettings.userAgentString}")
       }
       webView.isScrollContainer = true
       webView.overScrollMode = View.OVER_SCROLL_IF_CONTENT_SCROLLS
@@ -127,7 +127,7 @@ fun CanvasScreen(
             error: WebResourceError,
           ) {
             if (!isDebuggable || !request.isForMainFrame) return
-            Log.e("OpenClawWebView", "onReceivedError: ${error.errorCode} ${error.description} ${request.url}")
+            Log.e("MarketingClawWebView", "onReceivedError: ${error.errorCode} ${error.description} ${request.url}")
           }
 
           override fun onReceivedHttpError(
@@ -137,7 +137,7 @@ fun CanvasScreen(
           ) {
             if (!isDebuggable || !request.isForMainFrame) return
             Log.e(
-              "OpenClawWebView",
+              "MarketingClawWebView",
               "onReceivedHttpError: ${errorResponse.statusCode} ${errorResponse.reasonPhrase} ${request.url}",
             )
           }
@@ -148,7 +148,7 @@ fun CanvasScreen(
           ) {
             currentPageUrlRef.set(url)
             if (isDebuggable) {
-              Log.d("OpenClawWebView", "onPageFinished: $url")
+              Log.d("MarketingClawWebView", "onPageFinished: $url")
             }
             viewModel.canvas.onPageFinished()
           }
@@ -159,7 +159,7 @@ fun CanvasScreen(
           ): Boolean {
             if (isDebuggable) {
               Log.e(
-                "OpenClawWebView",
+                "MarketingClawWebView",
                 "onRenderProcessGone didCrash=${detail.didCrash()} priorityAtExit=${detail.rendererPriorityAtExit()}",
               )
             }
@@ -172,7 +172,7 @@ fun CanvasScreen(
             if (!isDebuggable) return false
             val msg = consoleMessage ?: return false
             Log.d(
-              "OpenClawWebView",
+              "MarketingClawWebView",
               "console ${msg.messageLevel()} @ ${msg.sourceId()}:${msg.lineNumber()} ${msg.message()}",
             )
             return false
@@ -195,7 +195,7 @@ fun CanvasScreen(
           bridge,
         )
       } else if (isDebuggable) {
-        Log.w("OpenClawWebView", "WebMessageListener unsupported; canvas actions disabled")
+        Log.w("MarketingClawWebView", "WebMessageListener unsupported; canvas actions disabled")
       }
       viewModel.canvas.attach(webView)
       webViewRef[0] = webView
@@ -260,7 +260,7 @@ internal class CanvasA2UIActionBridge(
   }
 
   companion object {
-    const val interfaceName: String = "openclawCanvasA2UIAction"
+    const val interfaceName: String = "marketingclawCanvasA2UIAction"
     val allowedOriginRules: Set<String> = setOf("*")
   }
 }

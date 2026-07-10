@@ -1,5 +1,5 @@
-import OpenClawKit
-import OpenClawProtocol
+import MarketingClawKit
+import MarketingClawProtocol
 import SwiftUI
 
 extension AgentProTab {
@@ -9,15 +9,15 @@ extension AgentProTab {
                 HStack(alignment: .firstTextBaseline) {
                     VStack(alignment: .leading, spacing: 3) {
                         Text(self.activeAgentName)
-                            .font(OpenClawType.headline)
+                            .font(MarketingClawType.headline)
                         Text(self.skillPolicySummary)
-                            .font(OpenClawType.caption)
+                            .font(MarketingClawType.caption)
                             .foregroundStyle(.secondary)
                     }
                     Spacer(minLength: 8)
                     ProValuePill(
                         value: self.agentSkillFilter == nil ? "all" : "\(self.agentSkillFilter?.count ?? 0)",
-                        color: OpenClawBrand.accent)
+                        color: MarketingClawBrand.accent)
                 }
 
                 HStack(spacing: 8) {
@@ -25,7 +25,7 @@ extension AgentProTab {
                         Task { await self.enableAllSkills() }
                     } label: {
                         Text("Enable All")
-                            .font(OpenClawType.captionSemiBold)
+                            .font(MarketingClawType.captionSemiBold)
                     }
                     .disabled(self.skillMutationBusy)
 
@@ -33,7 +33,7 @@ extension AgentProTab {
                         Task { await self.disableAllSkills() }
                     } label: {
                         Text("Disable All")
-                            .font(OpenClawType.captionSemiBold)
+                            .font(MarketingClawType.captionSemiBold)
                     }
                     .disabled(self.skillMutationBusy)
 
@@ -41,7 +41,7 @@ extension AgentProTab {
                         Task { await self.resetSkillPolicy() }
                     } label: {
                         Text("Reset")
-                            .font(OpenClawType.captionSemiBold)
+                            .font(MarketingClawType.captionSemiBold)
                     }
                     .disabled(self.skillMutationBusy || self.agentSkillFilter == nil)
                 }
@@ -50,17 +50,17 @@ extension AgentProTab {
 
                 if let skillMutationStatusText {
                     Text(skillMutationStatusText)
-                        .font(OpenClawType.caption2)
-                        .foregroundStyle(OpenClawBrand.accent)
+                        .font(MarketingClawType.caption2)
+                        .foregroundStyle(MarketingClawBrand.accent)
                 }
                 if let skillMutationErrorText {
                     Text(skillMutationErrorText)
-                        .font(OpenClawType.caption2)
-                        .foregroundStyle(OpenClawBrand.warn)
+                        .font(MarketingClawType.caption2)
+                        .foregroundStyle(MarketingClawBrand.warn)
                 }
             }
         }
-        .padding(.horizontal, OpenClawProMetric.pagePadding)
+        .padding(.horizontal, MarketingClawProMetric.pagePadding)
     }
 
     var skillsFilterField: some View {
@@ -68,12 +68,12 @@ extension AgentProTab {
             VStack(alignment: .leading, spacing: 10) {
                 HStack(spacing: 10) {
                     Image(systemName: "magnifyingglass")
-                        .font(OpenClawType.captionSemiBold)
+                        .font(MarketingClawType.captionSemiBold)
                         .foregroundStyle(.secondary)
                     TextField("Search skills", text: self.$skillFilter)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
-                        .font(OpenClawType.subhead)
+                        .font(MarketingClawType.subhead)
                     if !self.skillFilter.isEmpty {
                         Button {
                             self.skillFilter = ""
@@ -87,7 +87,7 @@ extension AgentProTab {
                 Picker("Status", selection: self.$skillStatusFilter) {
                     ForEach(SkillStatusFilter.allCases) { filter in
                         Text(filter.title)
-                            .font(OpenClawType.captionSemiBold)
+                            .font(MarketingClawType.captionSemiBold)
                             .tag(filter)
                     }
                 }
@@ -95,19 +95,19 @@ extension AgentProTab {
                 .controlSize(.small)
             }
         }
-        .padding(.horizontal, OpenClawProMetric.pagePadding)
+        .padding(.horizontal, MarketingClawProMetric.pagePadding)
     }
 
     var clawHubSearchCard: some View {
         ProCard(radius: AgentLayout.cardRadius) {
             VStack(alignment: .leading, spacing: 12) {
                 HStack(spacing: 10) {
-                    ProIconBadge(systemName: "square.and.arrow.down", color: OpenClawBrand.accent)
+                    ProIconBadge(systemName: "square.and.arrow.down", color: MarketingClawBrand.accent)
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Install Skills")
-                            .font(OpenClawType.headline)
+                            .font(MarketingClawType.headline)
                         Text("Search ClawHub and install into this workspace.")
-                            .font(OpenClawType.caption)
+                            .font(MarketingClawType.caption)
                             .foregroundStyle(.secondary)
                     }
                     Spacer(minLength: 8)
@@ -125,7 +125,7 @@ extension AgentProTab {
                 TextField("Search ClawHub", text: self.$clawHubQuery)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
-                    .font(OpenClawType.subhead)
+                    .font(MarketingClawType.subhead)
                     .submitLabel(.search)
                     .onSubmit {
                         Task { await self.searchClawHubSkills() }
@@ -137,8 +137,8 @@ extension AgentProTab {
                 }
                 if let clawHubErrorText {
                     Text(clawHubErrorText)
-                        .font(OpenClawType.caption2)
-                        .foregroundStyle(OpenClawBrand.warn)
+                        .font(MarketingClawType.caption2)
+                        .foregroundStyle(MarketingClawBrand.warn)
                 }
                 if !self.clawHubResults.isEmpty {
                     VStack(spacing: 0) {
@@ -153,19 +153,19 @@ extension AgentProTab {
                 }
             }
         }
-        .padding(.horizontal, OpenClawProMetric.pagePadding)
+        .padding(.horizontal, MarketingClawProMetric.pagePadding)
     }
 
     func clawHubResultRow(_ result: ClawHubSearchResultLite) -> some View {
         let installing = clawHubInstallSlug == result.slug
         return HStack(alignment: .top, spacing: 10) {
-            ProIconBadge(systemName: "sparkles", color: OpenClawBrand.accent)
+            ProIconBadge(systemName: "sparkles", color: MarketingClawBrand.accent)
             VStack(alignment: .leading, spacing: 3) {
                 Text(result.displayName)
-                    .font(OpenClawType.subheadSemiBold)
+                    .font(MarketingClawType.subheadSemiBold)
                     .lineLimit(1)
                 Text(result.summary ?? result.slug)
-                    .font(OpenClawType.caption)
+                    .font(MarketingClawType.caption)
                     .foregroundStyle(.secondary)
                     .lineLimit(2)
             }
@@ -207,7 +207,7 @@ extension AgentProTab {
                     }
                 }
             }
-            .padding(.horizontal, OpenClawProMetric.pagePadding)
+            .padding(.horizontal, MarketingClawProMetric.pagePadding)
         }
     }
 
@@ -288,21 +288,21 @@ extension AgentProTab {
             ProIconBadge(systemName: self.isSkillAllowed(skill) ? "checkmark.circle" : "nosign", color: status.color)
             VStack(alignment: .leading, spacing: 4) {
                 Text(skill.displayName)
-                    .font(OpenClawType.subheadSemiBold)
+                    .font(MarketingClawType.subheadSemiBold)
                     .lineLimit(1)
                 Text(self.normalized(skill.description) ?? self.normalized(skill.source) ?? "Workspace skill")
-                    .font(OpenClawType.caption)
+                    .font(MarketingClawType.caption)
                     .foregroundStyle(.secondary)
                     .lineLimit(2)
                 if let missing = skill.missingSummary {
                     Text("Missing: \(missing)")
-                        .font(OpenClawType.caption2)
-                        .foregroundStyle(OpenClawBrand.warn)
+                        .font(MarketingClawType.caption2)
+                        .foregroundStyle(MarketingClawBrand.warn)
                         .lineLimit(1)
                 }
                 if let install = skill.installSummary {
                     Text("Setup: \(install)")
-                        .font(OpenClawType.caption2)
+                        .font(MarketingClawType.caption2)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                 }
@@ -332,7 +332,7 @@ extension AgentProTab {
                     .accessibilityLabel("Edit \(skill.displayName)")
                 }
                 Text(busy ? "saving" : status.text)
-                    .font(OpenClawType.caption2SemiBold)
+                    .font(MarketingClawType.caption2SemiBold)
                     .foregroundStyle(status.color)
                     .lineLimit(1)
             }
@@ -389,17 +389,17 @@ extension AgentProTab {
     var missingSkillEditorSheet: some View {
         NavigationStack {
             ZStack {
-                OpenClawProBackground()
+                MarketingClawProBackground()
                 VStack(spacing: 12) {
                     ProIconBadge(systemName: "sparkles", color: .secondary)
                     Text("Skill unavailable")
-                        .font(OpenClawType.headline)
+                        .font(MarketingClawType.headline)
                     Text("Return to the skills list and choose another skill.")
-                        .font(OpenClawType.subhead)
+                        .font(MarketingClawType.subhead)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
                 }
-                .padding(OpenClawSpacing.space6)
+                .padding(MarketingClawSpacing.space6)
             }
             .navigationTitle("Skill")
             .toolbar {
@@ -408,7 +408,7 @@ extension AgentProTab {
                         self.skillEditorSelection = nil
                     } label: {
                         Text("Close")
-                            .font(OpenClawType.subheadSemiBold)
+                            .font(MarketingClawType.subheadSemiBold)
                     }
                 }
             }
@@ -418,7 +418,7 @@ extension AgentProTab {
     func skillEditorSheet(_ skill: SkillStatusEntryLite) -> some View {
         NavigationStack {
             ZStack {
-                OpenClawProBackground()
+                MarketingClawProBackground()
                 ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
                         self.skillEditorHeader(skill)
@@ -437,7 +437,7 @@ extension AgentProTab {
                         self.skillEditorSelection = nil
                     } label: {
                         Text("Close")
-                            .font(OpenClawType.subheadSemiBold)
+                            .font(MarketingClawType.subheadSemiBold)
                     }
                 }
             }
@@ -453,9 +453,9 @@ extension AgentProTab {
                     color: status.color)
                 VStack(alignment: .leading, spacing: 3) {
                     Text(skill.displayName)
-                        .font(OpenClawType.headline)
+                        .font(MarketingClawType.headline)
                     Text(self.normalized(skill.description) ?? self.normalized(skill.source) ?? "Workspace skill")
-                        .font(OpenClawType.caption)
+                        .font(MarketingClawType.caption)
                         .foregroundStyle(.secondary)
                         .lineLimit(3)
                 }
@@ -463,7 +463,7 @@ extension AgentProTab {
                 ProValuePill(value: status.text, color: status.color)
             }
         }
-        .padding(.horizontal, OpenClawProMetric.pagePadding)
+        .padding(.horizontal, MarketingClawProMetric.pagePadding)
     }
 
     func skillEditorControls(_ skill: SkillStatusEntryLite) -> some View {
@@ -480,7 +480,7 @@ extension AgentProTab {
                 if let primaryEnv = skill.primaryEnv, !primaryEnv.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("API key")
-                            .font(OpenClawType.subheadSemiBold)
+                            .font(MarketingClawType.subheadSemiBold)
                         self.skillSecureField(primaryEnv, text: self.skillAPIKeyBinding(for: skill))
                             .textInputAutocapitalization(.never)
                             .autocorrectionDisabled()
@@ -488,42 +488,42 @@ extension AgentProTab {
                             Task { await self.saveSkillAPIKey(skill) }
                         } label: {
                             Label("Save key", systemImage: "key")
-                                .font(OpenClawType.captionSemiBold)
+                                .font(MarketingClawType.captionSemiBold)
                         }
                         .buttonStyle(.borderedProminent)
                         .controlSize(.small)
                         .disabled(self.isSkillConfigBusy(skill))
                         if let homepage = skill.homepageURL {
                             Link("Get key", destination: homepage)
-                                .font(OpenClawType.caption)
+                                .font(MarketingClawType.caption)
                         }
                     }
                 }
 
                 if let message = self.skillConfigMessages[skill.effectiveSkillKey] {
                     Text(message.text)
-                        .font(OpenClawType.caption2)
-                        .foregroundStyle(message.kind == .success ? OpenClawBrand.accent : OpenClawBrand.warn)
+                        .font(MarketingClawType.caption2)
+                        .foregroundStyle(message.kind == .success ? MarketingClawBrand.accent : MarketingClawBrand.warn)
                 }
             }
         }
-        .padding(.horizontal, OpenClawProMetric.pagePadding)
+        .padding(.horizontal, MarketingClawProMetric.pagePadding)
     }
 
     private func skillSecureField(_ placeholder: String, text: Binding<String>) -> some View {
         ZStack(alignment: .leading) {
             SecureField("", text: text)
-                .font(OpenClawType.subhead)
+                .font(MarketingClawType.subhead)
                 .accessibilityLabel(placeholder)
             if text.wrappedValue.isEmpty {
                 Text(placeholder)
-                    .font(OpenClawType.subheadSemiBold)
+                    .font(MarketingClawType.subheadSemiBold)
                     .foregroundStyle(.tertiary)
                     .allowsHitTesting(false)
                     .accessibilityHidden(true)
             }
         }
-        .font(OpenClawType.subhead)
+        .font(MarketingClawType.subhead)
     }
 
     func skillEditorToggleRow(
@@ -539,9 +539,9 @@ extension AgentProTab {
         } label: {
             HStack {
                 Text(title)
-                    .font(OpenClawType.subhead)
+                    .font(MarketingClawType.subhead)
                 Spacer(minLength: 8)
-                OpenClawToggleIndicator(isOn: isOn)
+                MarketingClawToggleIndicator(isOn: isOn)
             }
             .contentShape(Rectangle())
         }
@@ -555,14 +555,14 @@ extension AgentProTab {
         ProCard(radius: AgentLayout.cardRadius) {
             VStack(alignment: .leading, spacing: 10) {
                 Text("Setup")
-                    .font(OpenClawType.headline)
+                    .font(MarketingClawType.headline)
                 if let missing = skill.missingSummary {
                     Text("Missing: \(missing)")
-                        .font(OpenClawType.caption)
-                        .foregroundStyle(OpenClawBrand.warn)
+                        .font(MarketingClawType.caption)
+                        .foregroundStyle(MarketingClawBrand.warn)
                 } else {
                     Text("No missing requirements reported.")
-                        .font(OpenClawType.caption)
+                        .font(MarketingClawType.caption)
                         .foregroundStyle(.secondary)
                 }
                 if let install = skill.install?.first {
@@ -570,7 +570,7 @@ extension AgentProTab {
                         Task { await self.installSkillRequirements(skill) }
                     } label: {
                         Label(install.label, systemImage: "wrench.and.screwdriver")
-                            .font(OpenClawType.captionSemiBold)
+                            .font(MarketingClawType.captionSemiBold)
                     }
                     .buttonStyle(.bordered)
                     .controlSize(.small)
@@ -578,7 +578,7 @@ extension AgentProTab {
                 }
             }
         }
-        .padding(.horizontal, OpenClawProMetric.pagePadding)
+        .padding(.horizontal, MarketingClawProMetric.pagePadding)
     }
 
     func skillEditorMetadata(_ skill: SkillStatusEntryLite) -> some View {
@@ -588,13 +588,13 @@ extension AgentProTab {
                 self.detailMetric(label: "Source", value: self.normalized(skill.source) ?? "unknown")
                 if let filePath = self.normalized(skill.filePath) {
                     Text(filePath)
-                        .font(OpenClawType.monoCaption2)
+                        .font(MarketingClawType.monoCaption2)
                         .foregroundStyle(.secondary)
                         .textSelection(.enabled)
                 }
             }
         }
-        .padding(.horizontal, OpenClawProMetric.pagePadding)
+        .padding(.horizontal, MarketingClawProMetric.pagePadding)
     }
 
     @MainActor
@@ -841,8 +841,8 @@ extension AgentProTab {
             return ("disabled", .secondary)
         }
         if skill.hasMissingRequirements {
-            return ("setup", OpenClawBrand.warn)
+            return ("setup", MarketingClawBrand.warn)
         }
-        return ("enabled", OpenClawBrand.accent)
+        return ("enabled", MarketingClawBrand.accent)
     }
 }

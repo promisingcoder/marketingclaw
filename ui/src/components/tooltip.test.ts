@@ -14,7 +14,7 @@ type TooltipProviderElement = HTMLElement & {
 };
 
 function createTooltip(content: string) {
-  const tooltip = document.createElement("openclaw-tooltip") as TooltipElement;
+  const tooltip = document.createElement("marketingclaw-tooltip") as TooltipElement;
   tooltip.content = content;
   const trigger = document.createElement("button");
   trigger.textContent = content;
@@ -23,7 +23,7 @@ function createTooltip(content: string) {
 }
 
 function createProvider() {
-  return document.createElement("openclaw-tooltip-provider") as TooltipProviderElement;
+  return document.createElement("marketingclaw-tooltip-provider") as TooltipProviderElement;
 }
 
 function focusTrigger(trigger: HTMLElement) {
@@ -37,10 +37,10 @@ function hoverTrigger(trigger: HTMLElement) {
 }
 
 function expectPortalCount(count: number) {
-  expect(document.body.querySelectorAll(".openclaw-tooltip")).toHaveLength(count);
+  expect(document.body.querySelectorAll(".marketingclaw-tooltip")).toHaveLength(count);
 }
 
-describe("openclaw-tooltip", () => {
+describe("marketingclaw-tooltip", () => {
   beforeEach(() => {
     vi.useFakeTimers();
   });
@@ -81,7 +81,9 @@ describe("openclaw-tooltip", () => {
     focusTrigger(trigger);
 
     expectPortalCount(1);
-    expect(document.body.querySelector(".openclaw-tooltip")?.textContent).toBe("Single portal");
+    expect(document.body.querySelector(".marketingclaw-tooltip")?.textContent).toBe(
+      "Single portal",
+    );
   });
 
   it("restores the normal hover delay after the provider reconnects", async () => {

@@ -1,7 +1,7 @@
 // Control UI component implements the file preview modal element.
 import { css, html, type PropertyValues } from "lit";
 import { property, query } from "lit/decorators.js";
-import { OpenClawLitElement } from "../lit/openclaw-element.ts";
+import { MarketingClawLitElement } from "../lit/marketingclaw-element.ts";
 import { renderCopyButton } from "./copy-button.ts";
 import { icons } from "./icons.ts";
 
@@ -11,7 +11,7 @@ type FilePreviewModalFile = {
   contents: string;
 };
 
-export class OpenClawFilePreviewModal extends OpenClawLitElement {
+export class MarketingClawFilePreviewModal extends MarketingClawLitElement {
   @property({ attribute: false }) files: FilePreviewModalFile[] = [];
   @property() activePath = "";
   @property() query = "";
@@ -748,8 +748,8 @@ function fileKind(path: string): string {
   return map[ext] ?? (ext ? ext.toUpperCase() : "File");
 }
 
-if (!customElements.get("openclaw-file-preview-modal")) {
-  customElements.define("openclaw-file-preview-modal", OpenClawFilePreviewModal);
+if (!customElements.get("marketingclaw-file-preview-modal")) {
+  customElements.define("marketingclaw-file-preview-modal", MarketingClawFilePreviewModal);
 }
 
 const CODE_EXTENSIONS = new Set([
@@ -792,6 +792,6 @@ function iconForFile(path: string) {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "openclaw-file-preview-modal": OpenClawFilePreviewModal;
+    "marketingclaw-file-preview-modal": MarketingClawFilePreviewModal;
   }
 }

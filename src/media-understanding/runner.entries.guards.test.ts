@@ -49,10 +49,10 @@ describe("media-understanding formatDecisionSummary guards", () => {
 describe("media-understanding formatMissingProviderHint", () => {
   it("returns the catalog hint for a provider with mediaUnderstandingProviders contract (groq)", () => {
     const hint = formatMissingProviderHint("groq");
-    expect(hint).toContain("openclaw plugins install @openclaw/groq-provider");
-    expect(hint).toContain("openclaw plugins registry --refresh");
+    expect(hint).toContain("marketingclaw plugins install @marketingclaw/groq-provider");
+    expect(hint).toContain("marketingclaw plugins registry --refresh");
     expect(hint).toContain("stop and start the gateway service");
-    expect(hint).toContain("openclaw doctor --fix");
+    expect(hint).toContain("marketingclaw doctor --fix");
     expect(hint).toContain("official external plugin");
   });
 
@@ -80,7 +80,7 @@ describe("media-understanding formatMissingProviderHint", () => {
   it("preserves the legacy prefix when hint is appended (catalog-known id)", () => {
     const hint = formatMissingProviderHint("groq");
     const composed = `Media provider not available: groq${hint}`;
-    expect(composed).toMatch(/^Media provider not available: groq .*openclaw plugins install/);
+    expect(composed).toMatch(/^Media provider not available: groq .*marketingclaw plugins install/);
     expect(composed).toMatch(/official external plugin/);
     expect(composed).toMatch(/stop and start the gateway service/);
   });

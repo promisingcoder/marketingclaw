@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
 // Signal tests cover alias target resolution behavior.
 import { describe, expect, it } from "vitest";
 import {
@@ -17,7 +17,7 @@ describe("resolveSignalAliasTarget", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(resolveSignalAliasTarget({ cfg, input: "signal:home" })).toEqual({
       kind: "user",
@@ -42,7 +42,7 @@ describe("resolveSignalAliasTarget", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(resolveSignalAliasTarget({ cfg, accountId: "work", input: "ops" })).toEqual({
       kind: "group",
@@ -64,7 +64,7 @@ describe("resolveSignalAliasTarget", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(() => resolveSignalAliasTarget({ cfg, input: "home" })).toThrow(
       'Signal alias "home" resolves recursively through "home".',
@@ -80,7 +80,7 @@ describe("resolveSignalAliasTarget", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(() => resolveSignalAliasTarget({ cfg, input: "jane" })).toThrow(
       'Signal alias "jane" must point to an E.164 number, uuid:<id>, username:<name>, or group:<id>.',
@@ -97,7 +97,7 @@ describe("resolveSignalAliasTarget", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(resolveSignalAliasTarget({ cfg, input: "home" })).toEqual({
       kind: "user",
@@ -116,7 +116,7 @@ describe("resolveSignalAliasTarget", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(resolveSignalAliasTarget({ cfg, input: "constructor" })).toEqual({
       kind: "user",
@@ -137,7 +137,7 @@ describe("resolveSignalAliasTarget", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(resolveSignalAliasTarget({ cfg: ordinaryCfg, input: "constructor" })).toBeNull();
   });
@@ -154,7 +154,7 @@ describe("resolveSignalTarget", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(resolveSignalTarget({ cfg, input: "signal:me" })).toEqual({
       kind: "user",
@@ -188,7 +188,7 @@ describe("listSignalAliasDirectoryEntries", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(listSignalAliasDirectoryEntries({ cfg, kind: "user" })).toEqual([
       { kind: "user", id: "+15551234567", name: "me" },
@@ -215,7 +215,7 @@ describe("listSignalAliasDirectoryEntries", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(listSignalAliasDirectoryEntries({ cfg, kind: "user" })).toEqual([
       { kind: "user", id: "+15551234567", name: "me" },
@@ -233,7 +233,7 @@ describe("listSignalAliasDirectoryEntries", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(listSignalAliasDirectoryEntries({ cfg, kind: "user", query: "ops" })).toEqual([]);
     expect(listSignalAliasDirectoryEntries({ cfg, kind: "group", query: "ops" })).toEqual([
@@ -255,7 +255,7 @@ describe("listSignalAliasDirectoryEntries", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(() => listSignalAliasDirectoryEntries({ cfg, kind: "user", query: "ops" })).toThrow(
       'Signal alias "ops" must point to an E.164 number, uuid:<id>, username:<name>, or group:<id>.',

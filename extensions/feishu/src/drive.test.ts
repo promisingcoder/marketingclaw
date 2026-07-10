@@ -1,7 +1,7 @@
 // Feishu tests cover drive plugin behavior.
-import { createTestPluginApi } from "openclaw/plugin-sdk/plugin-test-api";
+import { createTestPluginApi } from "marketingclaw/plugin-sdk/plugin-test-api";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawPluginApi, PluginRuntime } from "../runtime-api.js";
+import type { MarketingClawPluginApi, PluginRuntime } from "../runtime-api.js";
 
 const createFeishuToolClientMock = vi.hoisted(() => vi.fn());
 const resolveAnyEnabledFeishuToolsConfigMock = vi.hoisted(() => vi.fn());
@@ -32,9 +32,9 @@ async function raceWithNextMacrotask<T>(promise: Promise<T>): Promise<T | "pendi
 }
 
 function createDriveToolApi(params: {
-  config: OpenClawPluginApi["config"];
-  registerTool: OpenClawPluginApi["registerTool"];
-}): OpenClawPluginApi {
+  config: MarketingClawPluginApi["config"];
+  registerTool: MarketingClawPluginApi["registerTool"];
+}): MarketingClawPluginApi {
   return createTestPluginApi({
     id: "feishu-test",
     name: "Feishu Test",

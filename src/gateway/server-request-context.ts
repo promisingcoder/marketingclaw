@@ -1,6 +1,6 @@
 // Gateway request context factory.
 // Wires live runtime state into method handlers and client management helpers.
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import type { GatewayServerLiveState } from "./server-live-state.js";
 import type { GatewayRequestContext, GatewayClient } from "./server-methods/types.js";
 import { disconnectAllSharedGatewayAuthClients } from "./server-shared-auth-generation.js";
@@ -41,7 +41,7 @@ export type GatewayRequestContextParams = {
     opts?: { role?: string; reason?: string },
   ) => void;
   disconnectDeviceTransports?: (deviceId: string, opts?: { role?: string }) => void;
-  enforceSharedGatewayAuthGenerationForConfigWrite: (nextConfig: OpenClawConfig) => void;
+  enforceSharedGatewayAuthGenerationForConfigWrite: (nextConfig: MarketingClawConfig) => void;
   nodeRegistry: GatewayRequestContext["nodeRegistry"];
   terminalSessions?: GatewayRequestContext["terminalSessions"];
   agentRunSeq: GatewayRequestContext["agentRunSeq"];

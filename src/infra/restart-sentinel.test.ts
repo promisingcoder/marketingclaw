@@ -2,11 +2,11 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 // Covers restart sentinel persistence, summaries, and messages.
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
+import type { DB as MarketingClawStateKyselyDatabase } from "../state/marketingclaw-state-db.generated.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-} from "../state/openclaw-state-db.js";
+  closeMarketingClawStateDatabaseForTest,
+  openMarketingClawStateDatabase,
+} from "../state/marketingclaw-state-db.js";
 import { withTempDir } from "../test-helpers/temp-dir.js";
 import { withEnvAsync } from "../test-utils/env.js";
 import {
@@ -35,19 +35,22 @@ import {
 import { buildUpdateRestartSentinelPayload } from "./update-restart-sentinel-payload.js";
 
 async function withRestartSentinelStateDir(run: () => Promise<void>): Promise<void> {
-  await withTempDir({ prefix: "openclaw-sentinel-" }, async (tempDir) => {
+  await withTempDir({ prefix: "marketingclaw-sentinel-" }, async (tempDir) => {
     try {
-      await withEnvAsync({ OPENCLAW_STATE_DIR: tempDir }, run);
+      await withEnvAsync({ MARKETINGCLAW_STATE_DIR: tempDir }, run);
     } finally {
-      closeOpenClawStateDatabaseForTest();
+      closeMarketingClawStateDatabaseForTest();
     }
   });
 }
 
-type GatewayRestartSentinelDatabase = Pick<OpenClawStateKyselyDatabase, "gateway_restart_sentinel">;
+type GatewayRestartSentinelDatabase = Pick<
+  MarketingClawStateKyselyDatabase,
+  "gateway_restart_sentinel"
+>;
 
 function readSentinelRow() {
-  const { db } = openOpenClawStateDatabase();
+  const { db } = openMarketingClawStateDatabase();
   const stateDb = getNodeSqliteKysely<GatewayRestartSentinelDatabase>(db);
   return executeSqliteQueryTakeFirstSync(
     db,
@@ -59,7 +62,7 @@ function readSentinelRow() {
 }
 
 function insertSentinelRow(values: { version?: number; payloadJson: string }) {
-  const { db } = openOpenClawStateDatabase();
+  const { db } = openMarketingClawStateDatabase();
   const stateDb = getNodeSqliteKysely<GatewayRestartSentinelDatabase>(db);
   executeSqliteQuerySync(
     db,
@@ -126,7 +129,10 @@ describe("restart sentinel", () => {
           reason: "restart-health-pending",
         },
       };
-      const legacyPath = path.join(process.env.OPENCLAW_STATE_DIR ?? "", "restart-sentinel.json");
+      const legacyPath = path.join(
+        process.env.MARKETINGCLAW_STATE_DIR ?? "",
+        "restart-sentinel.json",
+      );
       await fs.writeFile(legacyPath, `${JSON.stringify({ version: 1, payload })}\n`, "utf-8");
 
       await expect(hasRestartSentinel()).resolves.toBe(true);
@@ -144,7 +150,10 @@ describe("restart sentinel", () => {
 
   it("does not replay a legacy file superseded by a sqlite sentinel", async () => {
     await withRestartSentinelStateDir(async () => {
-      const legacyPath = path.join(process.env.OPENCLAW_STATE_DIR ?? "", "restart-sentinel.json");
+      const legacyPath = path.join(
+        process.env.MARKETINGCLAW_STATE_DIR ?? "",
+        "restart-sentinel.json",
+      );
       await fs.writeFile(
         legacyPath,
         `${JSON.stringify({
@@ -196,7 +205,10 @@ describe("restart sentinel", () => {
 
   it("keeps old config restart sentinels readable without restart-required stats", async () => {
     await withRestartSentinelStateDir(async () => {
-      const filePath = path.join(process.env.OPENCLAW_STATE_DIR ?? "", "restart-sentinel.json");
+      const filePath = path.join(
+        process.env.MARKETINGCLAW_STATE_DIR ?? "",
+        "restart-sentinel.json",
+      );
       const payload = {
         kind: "config-patch" as const,
         status: "ok" as const,
@@ -278,7 +290,7 @@ describe("restart sentinel", () => {
       status: "ok" as const,
       ts: Date.now(),
       message: "Run restart-gateway.ps1 to apply config changes.",
-      doctorHint: "Run openclaw doctor --non-interactive",
+      doctorHint: "Run marketingclaw doctor --non-interactive",
       stats: { mode: "config.patch", requiresRestart: true },
     };
 
@@ -286,7 +298,7 @@ describe("restart sentinel", () => {
       [
         "Gateway restart required (config.patch)",
         "Run restart-gateway.ps1 to apply config changes.",
-        "Run openclaw doctor --non-interactive",
+        "Run marketingclaw doctor --non-interactive",
       ].join("\n"),
     );
     expect(summarizeRestartSentinel(payload)).toBe("Gateway restart required (config.patch)");
@@ -320,7 +332,7 @@ describe("restart sentinel", () => {
       status: "error" as const,
       ts: Date.now(),
       message: "Patch failed",
-      doctorHint: "Run openclaw doctor",
+      doctorHint: "Run marketingclaw doctor",
       stats: { mode: "patch", reason: "validation failed" },
     };
 
@@ -329,7 +341,7 @@ describe("restart sentinel", () => {
         "Gateway restart config-patch error (patch)",
         "Patch failed",
         "Reason: validation failed",
-        "Run openclaw doctor",
+        "Run marketingclaw doctor",
       ].join("\n"),
     );
   });
@@ -485,7 +497,7 @@ describe("control-plane update restart sentinel", () => {
     const result = {
       status: "ok" as const,
       mode: "npm" as const,
-      root: "/tmp/openclaw",
+      root: "/tmp/marketingclaw",
       before: { version: "2026.4.23" },
       after: { version: "2026.4.24" },
       steps: [],
@@ -554,18 +566,18 @@ describe("restart sentinel message dedup", () => {
 
   it("formats the non-interactive doctor command as actionability guidance", () => {
     expect(formatDoctorNonInteractiveHint({ PATH: "/usr/bin:/bin" })).toBe(
-      "Recommended follow-up: run openclaw doctor --non-interactive in a terminal or approvals-capable OpenClaw surface.",
+      "Recommended follow-up: run marketingclaw doctor --non-interactive in a terminal or approvals-capable MarketingClaw surface.",
     );
   });
 
   it("keeps profile-aware doctor guidance actionable outside constrained delivery surfaces", () => {
     expect(
       formatDoctorNonInteractiveHint({
-        OPENCLAW_PROFILE: "isolated",
+        MARKETINGCLAW_PROFILE: "isolated",
         PATH: "/usr/bin:/bin",
       }),
     ).toBe(
-      "Recommended follow-up: run openclaw --profile isolated doctor --non-interactive in a terminal or approvals-capable OpenClaw surface.",
+      "Recommended follow-up: run marketingclaw --profile isolated doctor --non-interactive in a terminal or approvals-capable MarketingClaw surface.",
     );
   });
 });

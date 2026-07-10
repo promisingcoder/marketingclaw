@@ -59,9 +59,9 @@ function createThreadLifecycleAppServerOptions(): Parameters<
 function createNetworkProxyThreadLifecycleAppServerOptions() {
   const configPatch = {
     "features.network_proxy.enabled": true,
-    default_permissions: "openclaw-network",
+    default_permissions: "marketingclaw-network",
     permissions: {
-      "openclaw-network": {
+      "marketingclaw-network": {
         filesystem: {
           ":minimal": "read",
           ":project_roots": {
@@ -81,7 +81,7 @@ function createNetworkProxyThreadLifecycleAppServerOptions() {
   return {
     ...createThreadLifecycleAppServerOptions(),
     networkProxy: {
-      profileName: "openclaw-network",
+      profileName: "marketingclaw-network",
       configFingerprint: fingerprintCodexAppServerNetworkProxyConfigPatch(configPatch),
       configPatch,
     },
@@ -156,7 +156,7 @@ function createDeferredNamedDynamicTool(
 ): Parameters<typeof startOrResumeThread>[0]["dynamicTools"][number] {
   return {
     type: "namespace",
-    name: "openclaw",
+    name: "marketingclaw",
     description: "",
     tools: [{ ...createNamedDynamicTool(name), deferLoading: true }],
   };
@@ -406,7 +406,7 @@ describe("Codex app-server thread lifecycle bindings", () => {
       }),
       expect.objectContaining({
         type: "namespace",
-        name: "openclaw",
+        name: "marketingclaw",
         tools: [
           expect.objectContaining({
             type: "function",
@@ -1620,7 +1620,7 @@ describe("Codex app-server thread lifecycle bindings", () => {
     expect(requestCalls[0]?.[1].config).toMatchObject(appServer.networkProxy.configPatch);
     const binding = await readCodexAppServerBinding(sessionFile);
     expect(binding?.threadId).toBe("thread-network-proxy");
-    expect(binding?.networkProxyProfileName).toBe("openclaw-network");
+    expect(binding?.networkProxyProfileName).toBe("marketingclaw-network");
     expect(binding?.networkProxyConfigFingerprint).toBe(appServer.networkProxy.configFingerprint);
   });
 
@@ -1738,7 +1738,7 @@ describe("Codex app-server thread lifecycle bindings", () => {
       "features.hooks": true,
       "hooks.PreToolUse": [
         {
-          hooks: [{ type: "command", command: "openclaw-native-hook-relay", timeout: 5 }],
+          hooks: [{ type: "command", command: "marketingclaw-native-hook-relay", timeout: 5 }],
         },
       ],
     };

@@ -22,8 +22,8 @@ const INSTALL_E2E_RUNNER_PATH = "scripts/docker/install-sh-e2e/run.sh";
 const DOCKER_SETUP_PATH = "scripts/docker/setup.sh";
 const HOST_TIMEOUT_PATH = "scripts/lib/host-timeout.sh";
 const PODMAN_SETUP_PATH = "scripts/podman/setup.sh";
-const PODMAN_QUADLET_TEMPLATE_PATH = "scripts/podman/openclaw.container.in";
-const PODMAN_RUN_PATH = "scripts/run-openclaw-podman.sh";
+const PODMAN_QUADLET_TEMPLATE_PATH = "scripts/podman/marketingclaw.container.in";
+const PODMAN_RUN_PATH = "scripts/run-marketingclaw-podman.sh";
 const SMOKE_DOCKERFILE_PATH = "scripts/docker/install-sh-smoke/Dockerfile";
 const SMOKE_RUNNER_PATH = "scripts/docker/install-sh-smoke/run.sh";
 const NONROOT_DOCKERFILE_PATH = "scripts/docker/install-sh-nonroot/Dockerfile";
@@ -125,7 +125,7 @@ function extractInstallE2eAgentJsonParser(): string {
 }
 
 function normalizeInstallE2eAgentOutput(output: string) {
-  const root = mkdtempSync(join(tmpdir(), "openclaw-install-e2e-agent-output-"));
+  const root = mkdtempSync(join(tmpdir(), "marketingclaw-install-e2e-agent-output-"));
   const outputPath = join(root, "agent.json");
   writeFileSync(outputPath, output, "utf8");
   try {
@@ -227,7 +227,7 @@ describe("test-install-sh-docker", () => {
     expect(runDefaultSmokePlatform({ GITHUB_ACTIONS: "true" }, "x86_64")).toBe("linux/amd64");
     expect(runDefaultSmokePlatform({}, "arm64")).toBe("linux/arm64");
     expect(
-      runDefaultSmokePlatform({ OPENCLAW_INSTALL_SMOKE_PLATFORM: "linux/s390x" }, "x86_64"),
+      runDefaultSmokePlatform({ MARKETINGCLAW_INSTALL_SMOKE_PLATFORM: "linux/s390x" }, "x86_64"),
     ).toBe("linux/s390x");
   });
 
@@ -235,7 +235,7 @@ describe("test-install-sh-docker", () => {
     const script = readFileSync(SCRIPT_PATH, "utf8");
 
     expect(script).toContain(
-      'UPDATE_EXPECT_VERSION="${OPENCLAW_INSTALL_SMOKE_UPDATE_EXPECT_VERSION:-}"',
+      'UPDATE_EXPECT_VERSION="${MARKETINGCLAW_INSTALL_SMOKE_UPDATE_EXPECT_VERSION:-}"',
     );
     expect(script).toContain('if [[ -z "$UPDATE_EXPECT_VERSION" ]]; then');
     expect(script).toContain('UPDATE_EXPECT_VERSION="$packed_update_version"');
@@ -249,12 +249,12 @@ describe("test-install-sh-docker", () => {
     const runner = readFileSync(SMOKE_RUNNER_PATH, "utf8");
 
     expect(script).toContain(
-      'UPDATE_BASELINE_VERSION="${OPENCLAW_INSTALL_SMOKE_UPDATE_BASELINE:-latest}"',
+      'UPDATE_BASELINE_VERSION="${MARKETINGCLAW_INSTALL_SMOKE_UPDATE_BASELINE:-latest}"',
     );
     expect(script).toContain('quiet_npm pack "${PACKAGE_NAME}@${UPDATE_BASELINE_VERSION}"');
     expect(script).toContain('UPDATE_BASELINE_VERSION="$(');
     expect(runner).toContain(
-      'UPDATE_BASELINE_VERSION="${OPENCLAW_INSTALL_UPDATE_BASELINE:-latest}"',
+      'UPDATE_BASELINE_VERSION="${MARKETINGCLAW_INSTALL_UPDATE_BASELINE:-latest}"',
     );
     expect(runner).toContain("resolve_update_baseline_version");
     expect(runner).toContain('quiet_npm view "${PACKAGE_NAME}@${UPDATE_BASELINE_VERSION}" version');
@@ -264,17 +264,17 @@ describe("test-install-sh-docker", () => {
     const e2eDockerfile = expectInstallDockerfileContract(
       INSTALL_E2E_DOCKERFILE_PATH,
       "install-sh-e2e/run.sh",
-      "/usr/local/bin/openclaw-install-e2e",
+      "/usr/local/bin/marketingclaw-install-e2e",
     );
     const smokeDockerfile = expectInstallDockerfileContract(
       SMOKE_DOCKERFILE_PATH,
       "install-sh-smoke/run.sh",
-      "/usr/local/bin/openclaw-install-smoke",
+      "/usr/local/bin/marketingclaw-install-smoke",
     );
     const nonrootDockerfile = expectInstallDockerfileContract(
       NONROOT_DOCKERFILE_PATH,
       "install-sh-nonroot/run.sh",
-      "/usr/local/bin/openclaw-install-nonroot",
+      "/usr/local/bin/marketingclaw-install-nonroot",
     );
 
     expect(e2eDockerfile).toContain("USER appuser");
@@ -290,17 +290,17 @@ describe("test-install-sh-docker", () => {
   });
 
   it("keeps shared install helpers parsing and verifying installed CLI versions", () => {
-    const root = tempDirs.make("openclaw-install-helper-");
+    const root = tempDirs.make("marketingclaw-install-helper-");
     const binDir = join(root, "bin");
     mkdirSync(binDir, { recursive: true });
     writeFileSync(
-      join(binDir, "openclaw"),
+      join(binDir, "marketingclaw"),
       [
         "#!/usr/bin/env bash",
         "set -euo pipefail",
         'case "${1:-}" in',
         "  --version)",
-        "    printf 'OpenClaw v2026.6.21-beta.1\\r\\n'",
+        "    printf 'MarketingClaw v2026.6.21-beta.1\\r\\n'",
         "    ;;",
         "  --help)",
         "    printf 'usage\\n'",
@@ -321,8 +321,8 @@ describe("test-install-sh-docker", () => {
         [
           "set -euo pipefail",
           "source scripts/docker/install-sh-common/cli-verify.sh",
-          "printf 'parsed=%s\\n' \"$(extract_openclaw_semver 'OpenClaw v2026.6.21-beta.1+build.7')\"",
-          "verify_installed_cli openclaw 2026.6.21-beta.1",
+          "printf 'parsed=%s\\n' \"$(extract_marketingclaw_semver 'MarketingClaw v2026.6.21-beta.1+build.7')\"",
+          "verify_installed_cli marketingclaw 2026.6.21-beta.1",
         ].join("\n"),
       ],
       {
@@ -340,7 +340,7 @@ describe("test-install-sh-docker", () => {
     expect(result.stderr).toBe("");
     expect(result.stdout).toContain("parsed=2026.6.21-beta.1+build.7");
     expect(result.stdout).toContain(
-      "cli=openclaw installed=2026.6.21-beta.1 expected=2026.6.21-beta.1",
+      "cli=marketingclaw installed=2026.6.21-beta.1 expected=2026.6.21-beta.1",
     );
     expect(result.stdout).toContain("==> Sanity: CLI runs");
   });
@@ -349,11 +349,13 @@ describe("test-install-sh-docker", () => {
     const script = readFileSync(SCRIPT_PATH, "utf8");
     const dockerfile = readFileSync("Dockerfile", "utf8");
 
-    expect(script).toContain('UPDATE_DIST_IMAGE="${OPENCLAW_INSTALL_SMOKE_UPDATE_DIST_IMAGE:-}"');
+    expect(script).toContain(
+      'UPDATE_DIST_IMAGE="${MARKETINGCLAW_INSTALL_SMOKE_UPDATE_DIST_IMAGE:-}"',
+    );
     expect(script).toContain("restore_local_dist_from_image");
     expect(script).toContain('source "$ROOT_DIR/scripts/lib/docker-e2e-container.sh"');
     expect(script).toContain(
-      'DOCKER_COMMAND_TIMEOUT="${DOCKER_COMMAND_TIMEOUT:-${OPENCLAW_INSTALL_SMOKE_DOCKER_COMMAND_TIMEOUT:-600s}}"',
+      'DOCKER_COMMAND_TIMEOUT="${DOCKER_COMMAND_TIMEOUT:-${MARKETINGCLAW_INSTALL_SMOKE_DOCKER_COMMAND_TIMEOUT:-600s}}"',
     );
     expect(script).toContain('container_id="$(docker_e2e_docker_cmd create "$image")"');
     expect(script).toContain(
@@ -375,7 +377,7 @@ describe("test-install-sh-docker", () => {
     const script = readFileSync(SCRIPT_PATH, "utf8");
 
     expect(script).toContain(
-      'INSTALL_SMOKE_DOCKER_RUN_TIMEOUT="${OPENCLAW_INSTALL_SMOKE_DOCKER_RUN_TIMEOUT:-2700s}"',
+      'INSTALL_SMOKE_DOCKER_RUN_TIMEOUT="${MARKETINGCLAW_INSTALL_SMOKE_DOCKER_RUN_TIMEOUT:-2700s}"',
     );
     expect(script).toContain("run_install_smoke_container()");
     expect(script).toContain(
@@ -408,12 +410,12 @@ describe("test-install-sh-docker", () => {
     const dockerfile = readFileSync("Dockerfile", "utf8");
 
     expect(dockerfile).toContain(
-      'ARG OPENCLAW_DOCKER_BUILD_NODE_OPTIONS="--max-old-space-size=8192"',
+      'ARG MARKETINGCLAW_DOCKER_BUILD_NODE_OPTIONS="--max-old-space-size=8192"',
     );
-    expect(dockerfile).toContain('ARG OPENCLAW_DOCKER_BUILD_TSDOWN_MAX_OLD_SPACE_MB=""');
-    expect(dockerfile).toContain("ARG OPENCLAW_DOCKER_BUILD_SKIP_DTS=1");
+    expect(dockerfile).toContain('ARG MARKETINGCLAW_DOCKER_BUILD_TSDOWN_MAX_OLD_SPACE_MB=""');
+    expect(dockerfile).toContain("ARG MARKETINGCLAW_DOCKER_BUILD_SKIP_DTS=1");
     expect(dockerfile).toContain(
-      'OPENCLAW_RUN_NODE_SKIP_DTS_BUILD="$OPENCLAW_DOCKER_BUILD_SKIP_DTS" OPENCLAW_TSDOWN_MAX_OLD_SPACE_MB="$OPENCLAW_DOCKER_BUILD_TSDOWN_MAX_OLD_SPACE_MB" NODE_OPTIONS="$OPENCLAW_DOCKER_BUILD_NODE_OPTIONS" pnpm_config_verify_deps_before_run=false pnpm build:docker',
+      'MARKETINGCLAW_RUN_NODE_SKIP_DTS_BUILD="$MARKETINGCLAW_DOCKER_BUILD_SKIP_DTS" MARKETINGCLAW_TSDOWN_MAX_OLD_SPACE_MB="$MARKETINGCLAW_DOCKER_BUILD_TSDOWN_MAX_OLD_SPACE_MB" NODE_OPTIONS="$MARKETINGCLAW_DOCKER_BUILD_NODE_OPTIONS" pnpm_config_verify_deps_before_run=false pnpm build:docker',
     );
   });
 
@@ -430,9 +432,13 @@ describe("test-install-sh-docker", () => {
   it("passes the baked browser build arg through Docker setup", () => {
     const script = readFileSync(DOCKER_SETUP_PATH, "utf8");
 
-    expect(script).toContain('export OPENCLAW_INSTALL_BROWSER="${OPENCLAW_INSTALL_BROWSER:-}"');
-    expect(script).toContain("OPENCLAW_INSTALL_BROWSER \\");
-    expect(script).toContain('--build-arg "OPENCLAW_INSTALL_BROWSER=${OPENCLAW_INSTALL_BROWSER}"');
+    expect(script).toContain(
+      'export MARKETINGCLAW_INSTALL_BROWSER="${MARKETINGCLAW_INSTALL_BROWSER:-}"',
+    );
+    expect(script).toContain("MARKETINGCLAW_INSTALL_BROWSER \\");
+    expect(script).toContain(
+      '--build-arg "MARKETINGCLAW_INSTALL_BROWSER=${MARKETINGCLAW_INSTALL_BROWSER}"',
+    );
   });
 
   it("bounds Docker setup image pulls", () => {
@@ -440,10 +446,12 @@ describe("test-install-sh-docker", () => {
     const timeoutHelper = readFileSync(HOST_TIMEOUT_PATH, "utf8");
 
     expect(script).toContain('source "$ROOT_DIR/scripts/lib/host-timeout.sh"');
-    expect(script).toContain('DOCKER_PULL_TIMEOUT="${OPENCLAW_DOCKER_SETUP_PULL_TIMEOUT:-600s}"');
+    expect(script).toContain(
+      'DOCKER_PULL_TIMEOUT="${MARKETINGCLAW_DOCKER_SETUP_PULL_TIMEOUT:-600s}"',
+    );
     expect(script).toContain("run_docker_pull()");
     expect(script).toContain(
-      'openclaw_host_timeout_cmd "$DOCKER_PULL_TIMEOUT" docker pull "$image"',
+      'marketingclaw_host_timeout_cmd "$DOCKER_PULL_TIMEOUT" docker pull "$image"',
     );
     expect(timeoutHelper).toContain("elif command -v gtimeout >/dev/null 2>&1; then");
     expect(timeoutHelper).toContain('"$timeout_bin" --kill-after=30s "$timeout_value" "$@"');
@@ -455,35 +463,43 @@ describe("test-install-sh-docker", () => {
     const script = readFileSync(PODMAN_SETUP_PATH, "utf8");
 
     expect(script).toContain('source "$REPO_PATH/scripts/lib/host-timeout.sh"');
-    expect(script).toContain('PODMAN_PULL_TIMEOUT="${OPENCLAW_PODMAN_SETUP_PULL_TIMEOUT:-600s}"');
+    expect(script).toContain(
+      'PODMAN_PULL_TIMEOUT="${MARKETINGCLAW_PODMAN_SETUP_PULL_TIMEOUT:-600s}"',
+    );
     expect(script).toContain("run_podman_pull()");
     expect(script).toContain(
-      'openclaw_host_timeout_cmd "$PODMAN_PULL_TIMEOUT" podman pull "$image"',
+      'marketingclaw_host_timeout_cmd "$PODMAN_PULL_TIMEOUT" podman pull "$image"',
     );
-    expect(script).toContain('run_podman_pull "$OPENCLAW_IMAGE"');
-    expect(script).not.toContain('podman pull "$OPENCLAW_IMAGE"');
+    expect(script).toContain('run_podman_pull "$MARKETINGCLAW_IMAGE"');
+    expect(script).not.toContain('podman pull "$MARKETINGCLAW_IMAGE"');
   });
 
   it("bounds Podman setup image builds", () => {
     const script = readFileSync(PODMAN_SETUP_PATH, "utf8");
 
     expect(script).toContain(
-      'PODMAN_BUILD_TIMEOUT="${OPENCLAW_PODMAN_SETUP_BUILD_TIMEOUT:-1800s}"',
+      'PODMAN_BUILD_TIMEOUT="${MARKETINGCLAW_PODMAN_SETUP_BUILD_TIMEOUT:-1800s}"',
     );
     expect(script).toContain("run_podman_build()");
-    expect(script).toContain('openclaw_host_timeout_cmd "$PODMAN_BUILD_TIMEOUT" podman build "$@"');
-    expect(script).toContain('run_podman_build -t "$OPENCLAW_IMAGE"');
-    expect(script).not.toContain('podman build -t "$OPENCLAW_IMAGE"');
+    expect(script).toContain(
+      'marketingclaw_host_timeout_cmd "$PODMAN_BUILD_TIMEOUT" podman build "$@"',
+    );
+    expect(script).toContain('run_podman_build -t "$MARKETINGCLAW_IMAGE"');
+    expect(script).not.toContain('podman build -t "$MARKETINGCLAW_IMAGE"');
   });
 
   it("bounds detached Podman launches without timing out onboarding", () => {
     const script = readFileSync(PODMAN_RUN_PATH, "utf8");
 
-    expect(script).toContain('PODMAN_RUN_TIMEOUT="${OPENCLAW_PODMAN_RUN_TIMEOUT:-600s}"');
-    expect(script).toContain("OPENCLAW_PODMAN_RUN_TIMEOUT|OPENCLAW_PODMAN_GATEWAY_HOST_PORT");
+    expect(script).toContain('PODMAN_RUN_TIMEOUT="${MARKETINGCLAW_PODMAN_RUN_TIMEOUT:-600s}"');
+    expect(script).toContain(
+      "MARKETINGCLAW_PODMAN_RUN_TIMEOUT|MARKETINGCLAW_PODMAN_GATEWAY_HOST_PORT",
+    );
     expect(script).toContain('source "$SCRIPT_DIR/lib/host-timeout.sh"');
     expect(script).toContain("run_podman_detached()");
-    expect(script).toContain('openclaw_host_timeout_cmd "$PODMAN_RUN_TIMEOUT" podman run "$@"');
+    expect(script).toContain(
+      'marketingclaw_host_timeout_cmd "$PODMAN_RUN_TIMEOUT" podman run "$@"',
+    );
     expect(script).toContain('podman run --pull="$PODMAN_PULL" --rm -it \\');
     expect(script).toContain('run_podman_detached --pull="$PODMAN_PULL" -d --replace \\');
     expect(script).not.toContain('podman run --pull="$PODMAN_PULL" -d --replace \\');
@@ -494,23 +510,25 @@ describe("test-install-sh-docker", () => {
     const podmanSetup = readFileSync(PODMAN_SETUP_PATH, "utf8");
     const dockerfile = readFileSync("Dockerfile", "utf8");
 
-    expect(dockerfile).toContain("ARG OPENCLAW_IMAGE_PIP_PACKAGES");
+    expect(dockerfile).toContain("ARG MARKETINGCLAW_IMAGE_PIP_PACKAGES");
     expect(dockerfile).toContain(
-      "python3 -m pip install --no-cache-dir --break-system-packages $OPENCLAW_IMAGE_PIP_PACKAGES",
+      "python3 -m pip install --no-cache-dir --break-system-packages $MARKETINGCLAW_IMAGE_PIP_PACKAGES",
     );
     expect(dockerSetup).toContain(
-      'export OPENCLAW_IMAGE_PIP_PACKAGES="${OPENCLAW_IMAGE_PIP_PACKAGES:-}"',
+      'export MARKETINGCLAW_IMAGE_PIP_PACKAGES="${MARKETINGCLAW_IMAGE_PIP_PACKAGES:-}"',
     );
-    expect(dockerSetup).toContain("OPENCLAW_IMAGE_PIP_PACKAGES \\");
+    expect(dockerSetup).toContain("MARKETINGCLAW_IMAGE_PIP_PACKAGES \\");
     expect(dockerSetup).toContain(
-      '--build-arg "OPENCLAW_IMAGE_PIP_PACKAGES=${OPENCLAW_IMAGE_PIP_PACKAGES}"',
+      '--build-arg "MARKETINGCLAW_IMAGE_PIP_PACKAGES=${MARKETINGCLAW_IMAGE_PIP_PACKAGES}"',
     );
-    expect(dockerSetup).not.toContain("OPENCLAW_DOCKER_PIP_PACKAGES");
-    expect(podmanSetup).toContain('OPENCLAW_IMAGE_PIP_PACKAGES="${OPENCLAW_IMAGE_PIP_PACKAGES:-}"');
+    expect(dockerSetup).not.toContain("MARKETINGCLAW_DOCKER_PIP_PACKAGES");
     expect(podmanSetup).toContain(
-      'BUILD_ARGS+=(--build-arg "OPENCLAW_IMAGE_PIP_PACKAGES=${OPENCLAW_IMAGE_PIP_PACKAGES}")',
+      'MARKETINGCLAW_IMAGE_PIP_PACKAGES="${MARKETINGCLAW_IMAGE_PIP_PACKAGES:-}"',
     );
-    expect(podmanSetup).not.toContain("OPENCLAW_DOCKER_PIP_PACKAGES");
+    expect(podmanSetup).toContain(
+      'BUILD_ARGS+=(--build-arg "MARKETINGCLAW_IMAGE_PIP_PACKAGES=${MARKETINGCLAW_IMAGE_PIP_PACKAGES}")',
+    );
+    expect(podmanSetup).not.toContain("MARKETINGCLAW_DOCKER_PIP_PACKAGES");
   });
 
   it("keeps the Podman Quadlet template aligned with setup substitutions", () => {
@@ -518,11 +536,11 @@ describe("test-install-sh-docker", () => {
     const template = readFileSync(PODMAN_QUADLET_TEMPLATE_PATH, "utf8");
 
     expect(setupScript).toContain(
-      'QUADLET_TEMPLATE="$REPO_PATH/scripts/podman/openclaw.container.in"',
+      'QUADLET_TEMPLATE="$REPO_PATH/scripts/podman/marketingclaw.container.in"',
     );
     for (const placeholder of [
-      "OPENCLAW_CONFIG_DIR",
-      "OPENCLAW_WORKSPACE_DIR",
+      "MARKETINGCLAW_CONFIG_DIR",
+      "MARKETINGCLAW_WORKSPACE_DIR",
       "IMAGE_NAME",
       "CONTAINER_NAME",
     ]) {
@@ -532,11 +550,11 @@ describe("test-install-sh-docker", () => {
 
     expect(template).toContain("UserNS=keep-id");
     expect(template).toContain("User=%U:%G");
-    expect(template).toContain("Volume={{OPENCLAW_CONFIG_DIR}}:/home/node/.openclaw:Z");
+    expect(template).toContain("Volume={{MARKETINGCLAW_CONFIG_DIR}}:/home/node/.marketingclaw:Z");
     expect(template).toContain(
-      "Volume={{OPENCLAW_WORKSPACE_DIR}}:/home/node/.openclaw/workspace:Z",
+      "Volume={{MARKETINGCLAW_WORKSPACE_DIR}}:/home/node/.marketingclaw/workspace:Z",
     );
-    expect(template).toContain("EnvironmentFile={{OPENCLAW_CONFIG_DIR}}/.env");
+    expect(template).toContain("EnvironmentFile={{MARKETINGCLAW_CONFIG_DIR}}/.env");
     expect(template).toContain("PublishPort=127.0.0.1:18789:18789");
     expect(template).toContain("Exec=node dist/index.js gateway --bind lan --port 18789");
     expect(template).not.toContain("/home/admin");
@@ -575,18 +593,18 @@ describe("test-install-sh-docker", () => {
   });
 
   it("rejects path-like npm pack tarball filenames in update smoke metadata", () => {
-    expect(runReadPackTarballFilename("openclaw-2026.6.17.tgz")).toMatchObject({
+    expect(runReadPackTarballFilename("marketingclaw-2026.6.17.tgz")).toMatchObject({
       status: 0,
-      stdout: "openclaw-2026.6.17.tgz",
+      stdout: "marketingclaw-2026.6.17.tgz",
     });
 
     const unsafeFilenames = [
-      "../openclaw.tgz",
-      "nested/openclaw.tgz",
-      "nested\\openclaw.tgz",
-      "/tmp/openclaw.tgz",
-      "C:\\temp\\openclaw.tgz",
-      "openclaw.tar.gz",
+      "../marketingclaw.tgz",
+      "nested/marketingclaw.tgz",
+      "nested\\marketingclaw.tgz",
+      "/tmp/marketingclaw.tgz",
+      "C:\\temp\\marketingclaw.tgz",
+      "marketingclaw.tar.gz",
     ];
 
     for (const filename of unsafeFilenames) {
@@ -600,12 +618,12 @@ describe("test-install-sh-docker", () => {
   it("uses the package artifact helper for local update tarballs", () => {
     const script = readFileSync(SCRIPT_PATH, "utf8");
 
-    expect(script).toContain("node scripts/package-openclaw-for-docker.mjs");
+    expect(script).toContain("node scripts/package-marketingclaw-for-docker.mjs");
     expect(script).toContain('--pack-json "$pack_json_file"');
     expect(script).toContain("--skip-build");
     expect(script).not.toContain("node --import tsx scripts/write-package-dist-inventory.ts");
     expect(script).not.toContain("quiet_npm pack --ignore-scripts --json");
-    expect(script).toContain("node scripts/check-openclaw-package-tarball.mjs");
+    expect(script).toContain("node scripts/check-marketingclaw-package-tarball.mjs");
     expect(script).toContain("--require-bundled-workspace-deps");
   });
 
@@ -613,7 +631,7 @@ describe("test-install-sh-docker", () => {
     const wrapper = readFileSync(SCRIPT_PATH, "utf8");
     const runner = readFileSync(SMOKE_RUNNER_PATH, "utf8");
 
-    expect(wrapper).toContain('-v "$ROOT_DIR/scripts/install.sh:/tmp/openclaw-install.sh:ro"');
+    expect(wrapper).toContain('-v "$ROOT_DIR/scripts/install.sh:/tmp/marketingclaw-install.sh:ro"');
     expect(runner).toContain("Run official installer one-liner for latest release tarball");
     expect(runner).toContain("run_installer_for_package_spec");
     expect(runner).toContain('bash -c "curl -fsSL \\"\\$1\\" | bash -s --');
@@ -627,7 +645,7 @@ describe("test-install-sh-docker", () => {
       'public_latest_version="$(quiet_npm view "$PACKAGE_NAME" version 2>/dev/null || true)"',
     );
     expect(wrapper).toContain('LATEST_VERSION="$public_latest_version"');
-    expect(wrapper).toContain('-e OPENCLAW_INSTALL_EXPECT_VERSION="$LATEST_VERSION"');
+    expect(wrapper).toContain('-e MARKETINGCLAW_INSTALL_EXPECT_VERSION="$LATEST_VERSION"');
   });
 });
 
@@ -636,57 +654,65 @@ describe("install-sh E2E runner", () => {
     const wrapper = readFileSync(INSTALL_E2E_DOCKER_PATH, "utf8");
 
     expect(wrapper).toContain(
-      'AGENT_TURN_TIMEOUT_SECONDS="$(\n  docker_e2e_read_positive_int_env OPENCLAW_INSTALL_E2E_AGENT_TURN_TIMEOUT_SECONDS 300\n)"',
+      'AGENT_TURN_TIMEOUT_SECONDS="$(\n  docker_e2e_read_positive_int_env MARKETINGCLAW_INSTALL_E2E_AGENT_TURN_TIMEOUT_SECONDS 300\n)"',
     );
     expect(wrapper).toContain(
-      'OPENAI_PROVIDER_TIMEOUT_SECONDS="$(\n  docker_e2e_read_positive_int_env OPENCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS "$AGENT_TURN_TIMEOUT_SECONDS"\n)"',
+      'OPENAI_PROVIDER_TIMEOUT_SECONDS="$(\n  docker_e2e_read_positive_int_env MARKETINGCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS "$AGENT_TURN_TIMEOUT_SECONDS"\n)"',
     );
     expect(wrapper).toContain(
-      'AGENT_TURNS_PARALLEL="$(read_boolean_env OPENCLAW_INSTALL_E2E_AGENT_TURNS_PARALLEL 1)"',
+      'AGENT_TURNS_PARALLEL="$(read_boolean_env MARKETINGCLAW_INSTALL_E2E_AGENT_TURNS_PARALLEL 1)"',
     );
     expect(wrapper).toContain(
-      'AGENT_TOOL_SMOKE="$(read_boolean_env OPENCLAW_INSTALL_E2E_AGENT_TOOL_SMOKE 1)"',
+      'AGENT_TOOL_SMOKE="$(read_boolean_env MARKETINGCLAW_INSTALL_E2E_AGENT_TOOL_SMOKE 1)"',
     );
     expect(wrapper).toContain(
-      'SESSION_SCAN_BYTES="$(\n  docker_e2e_read_positive_int_env OPENCLAW_INSTALL_E2E_SESSION_SCAN_BYTES 16777216\n)"',
+      'SESSION_SCAN_BYTES="$(\n  docker_e2e_read_positive_int_env MARKETINGCLAW_INSTALL_E2E_SESSION_SCAN_BYTES 16777216\n)"',
     );
     expect(wrapper).toContain(
-      'SESSION_LINE_BYTES="$(\n  docker_e2e_read_positive_int_env OPENCLAW_INSTALL_E2E_SESSION_LINE_BYTES 1048576\n)"',
+      'SESSION_LINE_BYTES="$(\n  docker_e2e_read_positive_int_env MARKETINGCLAW_INSTALL_E2E_SESSION_LINE_BYTES 1048576\n)"',
     );
     expect(wrapper).toContain(
-      'SESSION_SCAN_DEPTH="$(docker_e2e_read_positive_int_env OPENCLAW_INSTALL_E2E_SESSION_SCAN_DEPTH 64)"',
+      'SESSION_SCAN_DEPTH="$(docker_e2e_read_positive_int_env MARKETINGCLAW_INSTALL_E2E_SESSION_SCAN_DEPTH 64)"',
     );
     expect(wrapper).toContain(
-      'SESSION_SCAN_NODES="$(docker_e2e_read_positive_int_env OPENCLAW_INSTALL_E2E_SESSION_SCAN_NODES 100000)"',
+      'SESSION_SCAN_NODES="$(docker_e2e_read_positive_int_env MARKETINGCLAW_INSTALL_E2E_SESSION_SCAN_NODES 100000)"',
     );
     expect(wrapper).toContain(
-      '-e OPENCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS="$OPENAI_PROVIDER_TIMEOUT_SECONDS"',
+      '-e MARKETINGCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS="$OPENAI_PROVIDER_TIMEOUT_SECONDS"',
     );
     expect(wrapper).toContain(
-      '-e OPENCLAW_INSTALL_E2E_AGENT_TURN_TIMEOUT_SECONDS="$AGENT_TURN_TIMEOUT_SECONDS"',
+      '-e MARKETINGCLAW_INSTALL_E2E_AGENT_TURN_TIMEOUT_SECONDS="$AGENT_TURN_TIMEOUT_SECONDS"',
     );
     expect(wrapper).toContain(
-      '-e OPENCLAW_INSTALL_E2E_AGENT_TURNS_PARALLEL="$AGENT_TURNS_PARALLEL"',
+      '-e MARKETINGCLAW_INSTALL_E2E_AGENT_TURNS_PARALLEL="$AGENT_TURNS_PARALLEL"',
     );
-    expect(wrapper).toContain('-e OPENCLAW_INSTALL_E2E_AGENT_TOOL_SMOKE="$AGENT_TOOL_SMOKE"');
-    expect(wrapper).toContain('-e OPENCLAW_INSTALL_E2E_SESSION_SCAN_BYTES="$SESSION_SCAN_BYTES"');
-    expect(wrapper).toContain('-e OPENCLAW_INSTALL_E2E_SESSION_LINE_BYTES="$SESSION_LINE_BYTES"');
-    expect(wrapper).toContain('-e OPENCLAW_INSTALL_E2E_SESSION_SCAN_DEPTH="$SESSION_SCAN_DEPTH"');
-    expect(wrapper).toContain('-e OPENCLAW_INSTALL_E2E_SESSION_SCAN_NODES="$SESSION_SCAN_NODES"');
+    expect(wrapper).toContain('-e MARKETINGCLAW_INSTALL_E2E_AGENT_TOOL_SMOKE="$AGENT_TOOL_SMOKE"');
+    expect(wrapper).toContain(
+      '-e MARKETINGCLAW_INSTALL_E2E_SESSION_SCAN_BYTES="$SESSION_SCAN_BYTES"',
+    );
+    expect(wrapper).toContain(
+      '-e MARKETINGCLAW_INSTALL_E2E_SESSION_LINE_BYTES="$SESSION_LINE_BYTES"',
+    );
+    expect(wrapper).toContain(
+      '-e MARKETINGCLAW_INSTALL_E2E_SESSION_SCAN_DEPTH="$SESSION_SCAN_DEPTH"',
+    );
+    expect(wrapper).toContain(
+      '-e MARKETINGCLAW_INSTALL_E2E_SESSION_SCAN_NODES="$SESSION_SCAN_NODES"',
+    );
     expect(wrapper).not.toContain(
-      'OPENCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS="${OPENCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS:-}"',
+      'MARKETINGCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS="${MARKETINGCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS:-}"',
     );
   });
 
   it.each([
-    ["turn timeout", "OPENCLAW_INSTALL_E2E_AGENT_TURN_TIMEOUT_SECONDS", "300s"],
-    ["provider timeout", "OPENCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS", "1e3"],
-    ["parallel toggle", "OPENCLAW_INSTALL_E2E_AGENT_TURNS_PARALLEL", "2"],
-    ["tool smoke toggle", "OPENCLAW_INSTALL_E2E_AGENT_TOOL_SMOKE", "false"],
-    ["session scan bytes", "OPENCLAW_INSTALL_E2E_SESSION_SCAN_BYTES", "16mb"],
-    ["session line bytes", "OPENCLAW_INSTALL_E2E_SESSION_LINE_BYTES", "1mb"],
-    ["session scan depth", "OPENCLAW_INSTALL_E2E_SESSION_SCAN_DEPTH", "0"],
-    ["session scan nodes", "OPENCLAW_INSTALL_E2E_SESSION_SCAN_NODES", "100k"],
+    ["turn timeout", "MARKETINGCLAW_INSTALL_E2E_AGENT_TURN_TIMEOUT_SECONDS", "300s"],
+    ["provider timeout", "MARKETINGCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS", "1e3"],
+    ["parallel toggle", "MARKETINGCLAW_INSTALL_E2E_AGENT_TURNS_PARALLEL", "2"],
+    ["tool smoke toggle", "MARKETINGCLAW_INSTALL_E2E_AGENT_TOOL_SMOKE", "false"],
+    ["session scan bytes", "MARKETINGCLAW_INSTALL_E2E_SESSION_SCAN_BYTES", "16mb"],
+    ["session line bytes", "MARKETINGCLAW_INSTALL_E2E_SESSION_LINE_BYTES", "1mb"],
+    ["session scan depth", "MARKETINGCLAW_INSTALL_E2E_SESSION_SCAN_DEPTH", "0"],
+    ["session scan nodes", "MARKETINGCLAW_INSTALL_E2E_SESSION_SCAN_NODES", "100k"],
   ])("rejects invalid install E2E Docker %s before image build", (_label, envName, value) => {
     const result = spawnSync("bash", [INSTALL_E2E_DOCKER_PATH], {
       encoding: "utf8",
@@ -705,16 +731,16 @@ describe("install-sh E2E runner", () => {
     const script = readFileSync(INSTALL_E2E_RUNNER_PATH, "utf8");
 
     expect(script).toContain(
-      'AGENT_TURN_TIMEOUT_SECONDS="$(read_positive_int_env OPENCLAW_INSTALL_E2E_AGENT_TURN_TIMEOUT_SECONDS 300)"',
+      'AGENT_TURN_TIMEOUT_SECONDS="$(read_positive_int_env MARKETINGCLAW_INSTALL_E2E_AGENT_TURN_TIMEOUT_SECONDS 300)"',
     );
     expect(script).toContain(
-      'AGENT_TURNS_PARALLEL="$(read_boolean_env OPENCLAW_INSTALL_E2E_AGENT_TURNS_PARALLEL 1)"',
+      'AGENT_TURNS_PARALLEL="$(read_boolean_env MARKETINGCLAW_INSTALL_E2E_AGENT_TURNS_PARALLEL 1)"',
     );
     expect(script).toContain(
-      'AGENT_TOOL_SMOKE="$(read_boolean_env OPENCLAW_INSTALL_E2E_AGENT_TOOL_SMOKE 1)"',
+      'AGENT_TOOL_SMOKE="$(read_boolean_env MARKETINGCLAW_INSTALL_E2E_AGENT_TOOL_SMOKE 1)"',
     );
     expect(script).toContain(
-      'OPENAI_PROVIDER_TIMEOUT_SECONDS="$(read_positive_int_env OPENCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS "$AGENT_TURN_TIMEOUT_SECONDS")"',
+      'OPENAI_PROVIDER_TIMEOUT_SECONDS="$(read_positive_int_env MARKETINGCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS "$AGENT_TURN_TIMEOUT_SECONDS")"',
     );
     expect(script).toContain('timeout --kill-after=15s "${AGENT_TURN_TIMEOUT_SECONDS}s"');
     expect(script).toContain('\\"timeoutSeconds\\":${OPENAI_PROVIDER_TIMEOUT_SECONDS}');
@@ -737,10 +763,10 @@ describe("install-sh E2E runner", () => {
   });
 
   it.each([
-    ["turn timeout", "OPENCLAW_INSTALL_E2E_AGENT_TURN_TIMEOUT_SECONDS", "300s"],
-    ["provider timeout", "OPENCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS", "1e3"],
-    ["parallel toggle", "OPENCLAW_INSTALL_E2E_AGENT_TURNS_PARALLEL", "2"],
-    ["tool smoke toggle", "OPENCLAW_INSTALL_E2E_AGENT_TOOL_SMOKE", "false"],
+    ["turn timeout", "MARKETINGCLAW_INSTALL_E2E_AGENT_TURN_TIMEOUT_SECONDS", "300s"],
+    ["provider timeout", "MARKETINGCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS", "1e3"],
+    ["parallel toggle", "MARKETINGCLAW_INSTALL_E2E_AGENT_TURNS_PARALLEL", "2"],
+    ["tool smoke toggle", "MARKETINGCLAW_INSTALL_E2E_AGENT_TOOL_SMOKE", "false"],
   ])("rejects invalid install E2E %s before credential preflight", (_label, envName, value) => {
     const result = spawnSync("bash", [INSTALL_E2E_RUNNER_PATH], {
       encoding: "utf8",
@@ -752,7 +778,7 @@ describe("install-sh E2E runner", () => {
 
     expect(result.status).toBe(2);
     expect(result.stderr).toContain(`invalid ${envName}: ${value}`);
-    expect(result.stderr).not.toContain("OPENCLAW_E2E_MODELS=both requires");
+    expect(result.stderr).not.toContain("MARKETINGCLAW_E2E_MODELS=both requires");
   });
 });
 
@@ -761,10 +787,10 @@ describe("install-sh smoke runner", () => {
     const script = readFileSync(SMOKE_RUNNER_PATH, "utf8");
 
     expect(script).toContain(
-      'HEARTBEAT_INTERVAL="$(read_nonnegative_int_env OPENCLAW_INSTALL_SMOKE_HEARTBEAT_INTERVAL 60)"',
+      'HEARTBEAT_INTERVAL="$(read_nonnegative_int_env MARKETINGCLAW_INSTALL_SMOKE_HEARTBEAT_INTERVAL 60)"',
     );
     expect(script).toContain(
-      'INSTALL_COMMAND_TIMEOUT="$(read_positive_int_env OPENCLAW_INSTALL_SMOKE_COMMAND_TIMEOUT 900)"',
+      'INSTALL_COMMAND_TIMEOUT="$(read_positive_int_env MARKETINGCLAW_INSTALL_SMOKE_COMMAND_TIMEOUT 900)"',
     );
     expect(script).toContain('if [[ "$interval" == "0" ]]; then');
     expect(script).toContain("run_with_heartbeat");
@@ -773,7 +799,7 @@ describe("install-sh smoke runner", () => {
     expect(script).toContain("==> Still running");
     expect(script).toContain("print_install_audit");
     expect(script).toContain('install -g "$@"');
-    expect(script).toContain("openclaw update --tag");
+    expect(script).toContain("marketingclaw update --tag");
     expect(script).toContain("is_self_swapped_package_process_exit");
     expect(script).toContain("legacy updater process exited after self-swap");
     expect(script).toContain("parseFirstJsonObject");
@@ -781,8 +807,8 @@ describe("install-sh smoke runner", () => {
   });
 
   it.each([
-    ["command timeout", "OPENCLAW_INSTALL_SMOKE_COMMAND_TIMEOUT", "900s"],
-    ["heartbeat interval", "OPENCLAW_INSTALL_SMOKE_HEARTBEAT_INTERVAL", "60s"],
+    ["command timeout", "MARKETINGCLAW_INSTALL_SMOKE_COMMAND_TIMEOUT", "900s"],
+    ["heartbeat interval", "MARKETINGCLAW_INSTALL_SMOKE_HEARTBEAT_INTERVAL", "60s"],
   ])("rejects invalid install smoke %s before running npm", (_label, envName, value) => {
     const result = spawnSync("bash", [SMOKE_RUNNER_PATH], {
       encoding: "utf8",
@@ -794,15 +820,15 @@ describe("install-sh smoke runner", () => {
 
     expect(result.status).toBe(2);
     expect(result.stderr).toContain(`invalid ${envName}: ${value}`);
-    expect(result.stderr).not.toContain("unsupported OPENCLAW_INSTALL_SMOKE_MODE");
+    expect(result.stderr).not.toContain("unsupported MARKETINGCLAW_INSTALL_SMOKE_MODE");
   });
 
   it("covers plain npm global installs and npm-driven updates", () => {
     const script = readFileSync(SCRIPT_PATH, "utf8");
     const runner = readFileSync(SMOKE_RUNNER_PATH, "utf8");
 
-    expect(script).toContain('SKIP_NPM_GLOBAL="${OPENCLAW_INSTALL_SMOKE_SKIP_NPM_GLOBAL:-0}"');
-    expect(script).toContain('NPM_CACHE_DIR="${OPENCLAW_INSTALL_SMOKE_NPM_CACHE_DIR:-}"');
+    expect(script).toContain('SKIP_NPM_GLOBAL="${MARKETINGCLAW_INSTALL_SMOKE_SKIP_NPM_GLOBAL:-0}"');
+    expect(script).toContain('NPM_CACHE_DIR="${MARKETINGCLAW_INSTALL_SMOKE_NPM_CACHE_DIR:-}"');
     expect(script).toContain("-e npm_config_cache=/npm-cache");
     expect(script).toContain('${NPM_CACHE_DOCKER_ARGS[@]+"${NPM_CACHE_DOCKER_ARGS[@]}"}');
     expect(script).toContain("remove_owned_npm_cache");
@@ -814,7 +840,7 @@ describe("install-sh smoke runner", () => {
       /Run CLI installer non-root test[\s\S]*"\$\{NPM_CACHE_DOCKER_ARGS\[@\]\}"/,
     );
     expect(script).toContain("==> Run direct npm global smoke");
-    expect(script).toContain("OPENCLAW_INSTALL_SMOKE_MODE=npm-global");
+    expect(script).toContain("MARKETINGCLAW_INSTALL_SMOKE_MODE=npm-global");
     expect(runner).toContain("run_npm_global_smoke");
     expect(runner).toContain("==> Direct npm global install candidate");
     expect(runner).toContain("==> Direct npm global update candidate");
@@ -825,12 +851,12 @@ describe("install-sh smoke runner", () => {
 
     expect(script).toContain("SMOKE_RUNNER_ENV_ARGS=()");
     for (const envName of [
-      "OPENCLAW_INSTALL_ALLOW_LEGACY_UPDATE_WARNING",
-      "OPENCLAW_INSTALL_SELF_UPDATE_WARNING_FIXED_VERSION",
-      "OPENCLAW_INSTALL_SMOKE_COMMAND_TIMEOUT",
-      "OPENCLAW_INSTALL_SMOKE_HEARTBEAT_INTERVAL",
-      "OPENCLAW_INSTALL_SMOKE_PREVIOUS",
-      "OPENCLAW_INSTALL_SMOKE_SKIP_PREVIOUS",
+      "MARKETINGCLAW_INSTALL_ALLOW_LEGACY_UPDATE_WARNING",
+      "MARKETINGCLAW_INSTALL_SELF_UPDATE_WARNING_FIXED_VERSION",
+      "MARKETINGCLAW_INSTALL_SMOKE_COMMAND_TIMEOUT",
+      "MARKETINGCLAW_INSTALL_SMOKE_HEARTBEAT_INTERVAL",
+      "MARKETINGCLAW_INSTALL_SMOKE_PREVIOUS",
+      "MARKETINGCLAW_INSTALL_SMOKE_SKIP_PREVIOUS",
     ]) {
       expect(script).toContain(envName);
     }
@@ -854,27 +880,27 @@ describe("bun global install smoke", () => {
     const script = readFileSync(BUN_GLOBAL_SMOKE_PATH, "utf8");
     const assertions = readFileSync(BUN_GLOBAL_ASSERTIONS_PATH, "utf8");
 
-    expect(script).toContain("node scripts/package-openclaw-for-docker.mjs");
+    expect(script).toContain("node scripts/package-marketingclaw-for-docker.mjs");
     expect(script).toContain("--skip-build");
-    expect(script).toContain("--output-name openclaw-current.tgz");
+    expect(script).toContain("--output-name marketingclaw-current.tgz");
     expect(script).not.toContain("npm pack --ignore-scripts --json --pack-destination");
     expect(script).toContain('"$bun_path" install -g "$PACKAGE_TGZ" --no-progress');
     expect(script).toContain("infer image providers --json");
     expect(script).toContain("assert-image-providers");
     expect(assertions).toContain("image providers output is missing bundled provider");
-    expect(script).toContain("OPENCLAW_BUN_GLOBAL_SMOKE_DIST_IMAGE");
+    expect(script).toContain("MARKETINGCLAW_BUN_GLOBAL_SMOKE_DIST_IMAGE");
     expect(script).toContain('source "$ROOT_DIR/scripts/lib/docker-e2e-container.sh"');
     expect(script).toContain(
-      'COMMAND_TIMEOUT_MS="$(read_positive_int_env OPENCLAW_BUN_GLOBAL_SMOKE_TIMEOUT_MS 180000)"',
+      'COMMAND_TIMEOUT_MS="$(read_positive_int_env MARKETINGCLAW_BUN_GLOBAL_SMOKE_TIMEOUT_MS 180000)"',
     );
     expect(script).toContain(
-      'DOCKER_COMMAND_TIMEOUT="${DOCKER_COMMAND_TIMEOUT:-${OPENCLAW_BUN_GLOBAL_SMOKE_DOCKER_COMMAND_TIMEOUT:-600s}}"',
+      'DOCKER_COMMAND_TIMEOUT="${DOCKER_COMMAND_TIMEOUT:-${MARKETINGCLAW_BUN_GLOBAL_SMOKE_DOCKER_COMMAND_TIMEOUT:-600s}}"',
     );
     expect(script).toContain('container_id="$(docker_e2e_docker_cmd create "$image")"');
     expect(script).toContain(
       'docker_e2e_docker_cmd cp "${container_id}:/app/dist" "$temp_dir/dist"',
     );
-    expect(script).toContain('"${container_id}:/app/node_modules/@openclaw/ai/dist"');
+    expect(script).toContain('"${container_id}:/app/node_modules/@marketingclaw/ai/dist"');
     expect(script).toContain('"$temp_dir/ai-dist"');
     expect(script).toContain('mv "$temp_dir/ai-dist" "$ROOT_DIR/packages/ai/dist"');
     expect(script).toContain("cleanup_restore_dist() {");
@@ -896,12 +922,12 @@ describe("bun global install smoke", () => {
       encoding: "utf8",
       env: {
         ...process.env,
-        OPENCLAW_BUN_GLOBAL_SMOKE_TIMEOUT_MS: "180000ms",
+        MARKETINGCLAW_BUN_GLOBAL_SMOKE_TIMEOUT_MS: "180000ms",
       },
     });
 
     expect(result.status).toBe(2);
-    expect(result.stderr).toContain("invalid OPENCLAW_BUN_GLOBAL_SMOKE_TIMEOUT_MS: 180000ms");
+    expect(result.stderr).toContain("invalid MARKETINGCLAW_BUN_GLOBAL_SMOKE_TIMEOUT_MS: 180000ms");
     expect(result.stderr).not.toContain("Bun is required");
   });
 
@@ -909,9 +935,9 @@ describe("bun global install smoke", () => {
     const script = readFileSync(BUN_GLOBAL_SMOKE_PATH, "utf8");
 
     expect(script).toContain('PACK_DIR="$(mktemp -d');
-    expect(script).toContain("node scripts/package-openclaw-for-docker.mjs");
+    expect(script).toContain("node scripts/package-marketingclaw-for-docker.mjs");
     expect(script).toContain('--output-dir "$PACK_DIR"');
-    expect(script).toContain("--output-name openclaw-current.tgz");
+    expect(script).toContain("--output-name marketingclaw-current.tgz");
   });
 
   it("resolves the matching candidate AI package without changing the public registry", () => {
@@ -919,27 +945,30 @@ describe("bun global install smoke", () => {
 
     expect(script).toContain("assert-release-versions");
     expect(script).toContain('"$BUN_INSTALL/install/global/package.json"');
-    expect(script).toContain("package/node_modules/@openclaw/ai");
+    expect(script).toContain("package/node_modules/@marketingclaw/ai");
     expect(script).toContain("--strip-components=4");
     expect(script).toContain('npm pack --ignore-scripts --silent --pack-destination "$PACK_DIR"');
-    expect(script).toContain('overrides: { "@openclaw/ai": `file:${aiPackageTarball}` }');
+    expect(script).toContain('overrides: { "@marketingclaw/ai": `file:${aiPackageTarball}` }');
     expect(script).not.toContain("--registry");
-    expect(script).not.toContain("@openclaw:registry");
+    expect(script).not.toContain("@marketingclaw:registry");
   });
 
   it("requires root and AI candidate versions to match", () => {
-    const tempDir = tempDirs.make("openclaw-bun-candidate-versions-");
-    const rootManifestPath = join(tempDir, "openclaw.json");
+    const tempDir = tempDirs.make("marketingclaw-bun-candidate-versions-");
+    const rootManifestPath = join(tempDir, "marketingclaw.json");
     const aiManifestPath = join(tempDir, "ai.json");
     writeFileSync(
       rootManifestPath,
       JSON.stringify({
-        name: "openclaw",
+        name: "marketingclaw",
         version: "2026.6.17",
-        dependencies: { "@openclaw/ai": "2026.6.17" },
+        dependencies: { "@marketingclaw/ai": "2026.6.17" },
       }),
     );
-    writeFileSync(aiManifestPath, JSON.stringify({ name: "@openclaw/ai", version: "2026.6.17" }));
+    writeFileSync(
+      aiManifestPath,
+      JSON.stringify({ name: "@marketingclaw/ai", version: "2026.6.17" }),
+    );
 
     const matching = spawnSync(
       process.execPath,
@@ -948,7 +977,10 @@ describe("bun global install smoke", () => {
     );
     expect(matching).toMatchObject({ status: 0, stdout: "2026.6.17" });
 
-    writeFileSync(aiManifestPath, JSON.stringify({ name: "@openclaw/ai", version: "2026.6.18" }));
+    writeFileSync(
+      aiManifestPath,
+      JSON.stringify({ name: "@marketingclaw/ai", version: "2026.6.18" }),
+    );
     const mismatched = spawnSync(
       process.execPath,
       [BUN_GLOBAL_ASSERTIONS_PATH, "assert-release-versions", rootManifestPath, aiManifestPath],
@@ -956,31 +988,31 @@ describe("bun global install smoke", () => {
     );
     expect(mismatched.status).not.toBe(0);
     expect(mismatched.stderr).toContain(
-      "candidate version mismatch: openclaw=2026.6.17, dependency=2026.6.17, @openclaw/ai=2026.6.18",
+      "candidate version mismatch: marketingclaw=2026.6.17, dependency=2026.6.17, @marketingclaw/ai=2026.6.18",
     );
   });
 
   it.runIf(process.platform !== "win32")(
     "uses bundled AI bytes when a prebuilt tarball is provided",
     () => {
-      const tempDir = tempDirs.make("openclaw-bun-prebuilt-");
+      const tempDir = tempDirs.make("marketingclaw-bun-prebuilt-");
       const packageDir = join(tempDir, "fixture", "package");
-      const aiDir = join(packageDir, "node_modules", "@openclaw", "ai");
-      const packageTgz = join(tempDir, "openclaw-prebuilt.tgz");
+      const aiDir = join(packageDir, "node_modules", "@marketingclaw", "ai");
+      const packageTgz = join(tempDir, "marketingclaw-prebuilt.tgz");
       const bunPath = join(tempDir, "bun");
       mkdirSync(aiDir, { recursive: true });
       writeFileSync(
         join(packageDir, "package.json"),
         JSON.stringify({
-          name: "openclaw",
+          name: "marketingclaw",
           version: "2026.6.17",
-          dependencies: { "@openclaw/ai": "2026.6.17" },
-          bundleDependencies: ["@openclaw/ai"],
+          dependencies: { "@marketingclaw/ai": "2026.6.17" },
+          bundleDependencies: ["@marketingclaw/ai"],
         }),
       );
       writeFileSync(
         join(aiDir, "package.json"),
-        JSON.stringify({ name: "@openclaw/ai", version: "2026.6.17" }),
+        JSON.stringify({ name: "@marketingclaw/ai", version: "2026.6.17" }),
       );
       const packed = spawnSync(
         "tar",
@@ -998,22 +1030,22 @@ if [ "\${1:-}" = "--version" ]; then
   echo "1.3.14"
   exit 0
 fi
-override="$(node -e 'const p=require(process.argv[1]);process.stdout.write(p.overrides["@openclaw/ai"])' "$BUN_INSTALL/install/global/package.json")"
+override="$(node -e 'const p=require(process.argv[1]);process.stdout.write(p.overrides["@marketingclaw/ai"])' "$BUN_INSTALL/install/global/package.json")"
 case "\${override#file:}" in
   *.tgz) ;;
   *) exit 1 ;;
 esac
 test -f "\${override#file:}"
 mkdir -p "$BUN_INSTALL/bin"
-cat >"$BUN_INSTALL/bin/openclaw" <<'OPENCLAW'
+cat >"$BUN_INSTALL/bin/marketingclaw" <<'MARKETINGCLAW'
 #!/usr/bin/env bash
 if [ "\${1:-}" = "--version" ]; then
-  echo "OpenClaw 2026.6.17"
+  echo "MarketingClaw 2026.6.17"
 else
   printf '[{"id":"google"},{"id":"openai"},{"id":"xai"}]\n'
 fi
-OPENCLAW
-chmod +x "$BUN_INSTALL/bin/openclaw"
+MARKETINGCLAW
+chmod +x "$BUN_INSTALL/bin/marketingclaw"
 `,
       );
       chmodSync(bunPath, 0o755);
@@ -1023,9 +1055,9 @@ chmod +x "$BUN_INSTALL/bin/openclaw"
         env: {
           ...process.env,
           BUN_BIN: bunPath,
-          OPENCLAW_BUN_GLOBAL_SMOKE_HOST_BUILD: "0",
-          OPENCLAW_BUN_GLOBAL_SMOKE_PACKAGE_TGZ: packageTgz,
-          OPENCLAW_BUN_GLOBAL_SMOKE_TIMEOUT_MS: "10000",
+          MARKETINGCLAW_BUN_GLOBAL_SMOKE_HOST_BUILD: "0",
+          MARKETINGCLAW_BUN_GLOBAL_SMOKE_PACKAGE_TGZ: packageTgz,
+          MARKETINGCLAW_BUN_GLOBAL_SMOKE_TIMEOUT_MS: "10000",
         },
       });
 
@@ -1037,7 +1069,7 @@ chmod +x "$BUN_INSTALL/bin/openclaw"
   it.runIf(process.platform !== "win32" && existsSync("/usr/bin/time"))(
     "preserves Bun global timeout kill grace after the leader exits",
     () => {
-      const tempDir = tempDirs.make("openclaw-bun-global-timeout-grace-");
+      const tempDir = tempDirs.make("marketingclaw-bun-global-timeout-grace-");
       const readyPath = path.join(tempDir, "ready");
       const drainedPath = path.join(tempDir, "drained");
       const childScript = [
@@ -1069,7 +1101,7 @@ chmod +x "$BUN_INSTALL/bin/openclaw"
           encoding: "utf8",
           env: {
             ...process.env,
-            OPENCLAW_BUN_GLOBAL_SMOKE_TIMEOUT_KILL_GRACE_MS: "1000",
+            MARKETINGCLAW_BUN_GLOBAL_SMOKE_TIMEOUT_KILL_GRACE_MS: "1000",
           },
           timeout: 5_000,
         },
@@ -1085,7 +1117,7 @@ chmod +x "$BUN_INSTALL/bin/openclaw"
   it.runIf(process.platform !== "win32")(
     "cleans Bun global smoke descendants on parent signal",
     async () => {
-      const tempDir = tempDirs.make("openclaw-bun-global-parent-signal-");
+      const tempDir = tempDirs.make("marketingclaw-bun-global-parent-signal-");
       const readyPath = path.join(tempDir, "ready");
       const descendantPidPath = path.join(tempDir, "descendant.pid");
       let descendantPid = 0;
@@ -1116,7 +1148,7 @@ chmod +x "$BUN_INSTALL/bin/openclaw"
         {
           env: {
             ...process.env,
-            OPENCLAW_BUN_GLOBAL_SMOKE_TIMEOUT_KILL_GRACE_MS: "100",
+            MARKETINGCLAW_BUN_GLOBAL_SMOKE_TIMEOUT_KILL_GRACE_MS: "100",
           },
           stdio: ["ignore", "pipe", "pipe"],
         },
@@ -1169,7 +1201,7 @@ chmod +x "$BUN_INSTALL/bin/openclaw"
         encoding: "utf8",
         env: {
           ...process.env,
-          OPENCLAW_BUN_GLOBAL_SMOKE_TIMEOUT_KILL_GRACE_MS: "50",
+          MARKETINGCLAW_BUN_GLOBAL_SMOKE_TIMEOUT_KILL_GRACE_MS: "50",
         },
         timeout: 5000,
       },

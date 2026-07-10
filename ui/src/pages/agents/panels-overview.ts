@@ -113,7 +113,7 @@ export function renderAgentOverview(params: {
         <div class="agent-kv">
           <div class="label">Workspace</div>
           <div>
-            <openclaw-tooltip content="Open Files tab">
+            <marketingclaw-tooltip content="Open Files tab">
               <button
                 type="button"
                 class="workspace-link mono"
@@ -122,7 +122,7 @@ export function renderAgentOverview(params: {
               >
                 ${workspace}
               </button>
-            </openclaw-tooltip>
+            </marketingclaw-tooltip>
           </div>
         </div>
         <div class="agent-kv">

@@ -2,16 +2,16 @@ import { html } from "lit";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { i18n, t } from "../i18n/index.ts";
 import {
-  OpenClawLightDomContentsElement,
-  OpenClawLightDomElement,
-  OpenClawLitElement,
-} from "./openclaw-element.ts";
+  MarketingClawLightDomContentsElement,
+  MarketingClawLightDomElement,
+  MarketingClawLitElement,
+} from "./marketingclaw-element.ts";
 
-const LIGHT_ELEMENT_NAME = "test-openclaw-light-dom-element";
-const LIGHT_CONTENTS_ELEMENT_NAME = "test-openclaw-light-dom-contents-element";
-const SHADOW_ELEMENT_NAME = "test-openclaw-shadow-dom-element";
+const LIGHT_ELEMENT_NAME = "test-marketingclaw-light-dom-element";
+const LIGHT_CONTENTS_ELEMENT_NAME = "test-marketingclaw-light-dom-contents-element";
+const SHADOW_ELEMENT_NAME = "test-marketingclaw-shadow-dom-element";
 
-class TestLightDomElement extends OpenClawLightDomElement {
+class TestLightDomElement extends MarketingClawLightDomElement {
   renderCount = 0;
 
   override render() {
@@ -20,13 +20,13 @@ class TestLightDomElement extends OpenClawLightDomElement {
   }
 }
 
-class TestShadowDomElement extends OpenClawLitElement {
+class TestShadowDomElement extends MarketingClawLitElement {
   override render() {
     return html`<span>shadow content</span>`;
   }
 }
 
-class TestLightDomContentsElement extends OpenClawLightDomContentsElement {
+class TestLightDomContentsElement extends MarketingClawLightDomContentsElement {
   override render() {
     return html`<span>contents</span>`;
   }
@@ -42,7 +42,7 @@ if (!customElements.get(LIGHT_CONTENTS_ELEMENT_NAME)) {
   customElements.define(LIGHT_CONTENTS_ELEMENT_NAME, TestLightDomContentsElement);
 }
 
-describe("OpenClaw Lit elements", () => {
+describe("MarketingClaw Lit elements", () => {
   beforeEach(async () => {
     await i18n.setLocale("en");
   });

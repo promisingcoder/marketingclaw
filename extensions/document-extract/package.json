@@ -1,16 +1,16 @@
 {
-  "name": "@openclaw/document-extract-plugin",
+  "name": "@marketingclaw/document-extract-plugin",
   "version": "2026.6.11",
   "private": true,
-  "description": "OpenClaw local document extraction plugin",
+  "description": "MarketingClaw local document extraction plugin",
   "type": "module",
   "dependencies": {
     "clawpdf": "0.3.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@marketingclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "marketingclaw": {
     "extensions": [
       "./index.ts"
     ]

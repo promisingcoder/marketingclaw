@@ -1,8 +1,8 @@
 import AppKit
 import Observation
-import OpenClawDiscovery
-import OpenClawIPC
-import OpenClawKit
+import MarketingClawDiscovery
+import MarketingClawIPC
+import MarketingClawKit
 import SwiftUI
 
 struct GeneralSettings: View {
@@ -67,19 +67,19 @@ struct GeneralSettings: View {
         VStack(alignment: .leading, spacing: 20) {
             SettingsPageHeader(
                 title: "General",
-                subtitle: "Everyday OpenClaw app behavior.")
+                subtitle: "Everyday MarketingClaw app behavior.")
 
-            self.openClawStatusPanel
+            self.marketingClawStatusPanel
 
             SettingsCardGroup("App") {
                 SettingsCardToggleRow(
                     title: "Launch at login",
-                    subtitle: "Automatically start OpenClaw after you sign in.",
+                    subtitle: "Automatically start MarketingClaw after you sign in.",
                     binding: self.$state.launchAtLogin)
 
                 SettingsCardToggleRow(
                     title: "Show Dock icon",
-                    subtitle: "Keep OpenClaw visible in the Dock. When off, windows still show the Dock icon while open.",
+                    subtitle: "Keep MarketingClaw visible in the Dock. When off, windows still show the Dock icon while open.",
                     binding: self.$state.showDockIcon)
 
                 SettingsCardToggleRow(
@@ -137,7 +137,7 @@ struct GeneralSettings: View {
         }
     }
 
-    private var openClawStatusPanel: some View {
+    private var marketingClawStatusPanel: some View {
         HStack(alignment: .center, spacing: 14) {
             ZStack {
                 Circle()
@@ -149,7 +149,7 @@ struct GeneralSettings: View {
             .frame(width: 42, height: 42)
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(self.state.isPaused ? "OpenClaw paused" : "OpenClaw active")
+                Text(self.state.isPaused ? "MarketingClaw paused" : "MarketingClaw active")
                     .font(.headline)
                 Text(self.generalStatusSubtitle)
                     .font(.footnote)
@@ -159,7 +159,7 @@ struct GeneralSettings: View {
 
             Spacer(minLength: 20)
 
-            Toggle("OpenClaw active", isOn: self.activeBinding)
+            Toggle("MarketingClaw active", isOn: self.activeBinding)
                 .labelsHidden()
                 .toggleStyle(.switch)
         }
@@ -290,7 +290,7 @@ struct GeneralSettings: View {
     private var connectionStatusSubtitle: String {
         switch self.state.connectionMode {
         case .local:
-            return "OpenClaw starts and monitors the Gateway on this Mac."
+            return "MarketingClaw starts and monitors the Gateway on this Mac."
         case .remote:
             let target = self.state.remoteTransport == .ssh ? self.state.remoteTarget : self.state.remoteUrl
             let trimmed = target.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -306,7 +306,7 @@ struct GeneralSettings: View {
     private var gatewayModeGroup: some View {
         SettingsCardGroup("Gateway") {
             SettingsCardRow(
-                title: "OpenClaw runs",
+                title: "MarketingClaw runs",
                 subtitle: "Pick whether this app owns a local Gateway or attaches to another host.",
                 showsDivider: self.state.connectionMode == .unconfigured)
             {
@@ -457,11 +457,11 @@ struct GeneralSettings: View {
                         text: self.$state.remoteIdentity)
                     self.advancedTextField(
                         "Project root",
-                        placeholder: "/home/you/Projects/openclaw",
+                        placeholder: "/home/you/Projects/marketingclaw",
                         text: self.$state.remoteProjectRoot)
                     self.advancedTextField(
                         "CLI path",
-                        placeholder: "/Applications/OpenClaw.app/.../openclaw",
+                        placeholder: "/Applications/MarketingClaw.app/.../marketingclaw",
                         text: self.$state.remoteCliPath)
                 }
                 .padding(.top, 10)
@@ -552,7 +552,7 @@ struct GeneralSettings: View {
             if self.state.remoteTokenUnsupported {
                 Text(
                     "The current gateway.remote.token value is not plain text. "
-                        + "OpenClaw for macOS cannot use it directly; "
+                        + "MarketingClaw for macOS cannot use it directly; "
                         + "enter a plaintext token here to replace it.")
                     .font(.caption)
                     .foregroundStyle(.orange)
@@ -754,7 +754,7 @@ extension GeneralSettings {
         let alert = NSAlert()
         alert.messageText = "Log file not found"
         alert.informativeText = """
-        Looked for openclaw logs in /tmp/openclaw/.
+        Looked for marketingclaw logs in /tmp/marketingclaw/.
         Run a health check or send a message to generate activity, then try again.
         """
         alert.alertStyle = .informational
@@ -787,8 +787,8 @@ extension GeneralSettings {
         state.remoteUrl = "wss://gateway.example.ts.net"
         state.remoteToken = "example-token"
         state.remoteIdentity = "/tmp/id_ed25519"
-        state.remoteProjectRoot = "/tmp/openclaw"
-        state.remoteCliPath = "/tmp/openclaw"
+        state.remoteProjectRoot = "/tmp/marketingclaw"
+        state.remoteCliPath = "/tmp/marketingclaw"
 
         let view = GeneralSettings(state: state)
         view.gatewayStatus = GatewayEnvironmentStatus(

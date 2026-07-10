@@ -1,19 +1,19 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../../test-utils/openclaw-test-state.js";
+  createMarketingClawTestState,
+  type MarketingClawTestState,
+} from "../../test-utils/marketingclaw-test-state.js";
 import { createTrackedTempDirs } from "../../test-utils/tracked-temp-dirs.js";
 import { resolveSkillWorkshopToolApproval } from "./policy.js";
 import { proposeCreateSkill } from "./service.js";
 
 const tempDirs = createTrackedTempDirs();
-let testState: OpenClawTestState;
+let testState: MarketingClawTestState;
 
 beforeEach(async () => {
-  testState = await createOpenClawTestState({
+  testState = await createMarketingClawTestState({
     layout: "state-only",
-    prefix: "openclaw-skill-workshop-policy-",
+    prefix: "marketingclaw-skill-workshop-policy-",
   });
 });
 
@@ -24,7 +24,7 @@ afterEach(async () => {
 
 describe("resolveSkillWorkshopToolApproval", () => {
   it("describes the target proposal and bounds the approval wait", async () => {
-    const workspaceDir = await tempDirs.make("openclaw-skill-workshop-policy-workspace-");
+    const workspaceDir = await tempDirs.make("marketingclaw-skill-workshop-policy-workspace-");
     const description = "d".repeat(160);
     const proposal = await proposeCreateSkill({
       workspaceDir,
@@ -70,7 +70,7 @@ describe("resolveSkillWorkshopToolApproval", () => {
   });
 
   it("bounds approval metadata without dropping required proposal facts", async () => {
-    const workspaceDir = await tempDirs.make("openclaw-skill-workshop-policy-long-name-");
+    const workspaceDir = await tempDirs.make("marketingclaw-skill-workshop-policy-long-name-");
     const description = "d".repeat(160);
     const proposal = await proposeCreateSkill({
       workspaceDir,
@@ -97,7 +97,7 @@ describe("resolveSkillWorkshopToolApproval", () => {
   });
 
   it("renders proposal-controlled fields without approval-line injection", async () => {
-    const workspaceDir = await tempDirs.make("openclaw-skill-workshop-policy-controls-");
+    const workspaceDir = await tempDirs.make("marketingclaw-skill-workshop-policy-controls-");
     const proposal = await proposeCreateSkill({
       workspaceDir,
       name: "Line\nBreak\u202eSpoof",
@@ -125,7 +125,7 @@ describe("resolveSkillWorkshopToolApproval", () => {
   });
 
   it("falls back to the action description when the proposal cannot be resolved", async () => {
-    const workspaceDir = await tempDirs.make("openclaw-skill-workshop-policy-missing-");
+    const workspaceDir = await tempDirs.make("marketingclaw-skill-workshop-policy-missing-");
 
     const result = await resolveSkillWorkshopToolApproval({
       toolName: "skill_workshop",

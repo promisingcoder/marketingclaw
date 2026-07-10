@@ -29,7 +29,7 @@ import {
   updateSessionGoalStatus,
 } from "../config/sessions.js";
 import { applySessionPatchProjection } from "../config/sessions/session-accessor.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { isChatStopCommandText } from "../gateway/chat-abort.js";
 import {
   projectRecentChatDisplayMessages,
@@ -131,7 +131,7 @@ const embeddedSessionStartupMigrationLog = {
   warn: (message: string) => logWarn(message, silentRuntime),
 };
 
-function hasProviderWildcardModelAllowlist(cfg: OpenClawConfig) {
+function hasProviderWildcardModelAllowlist(cfg: MarketingClawConfig) {
   const modelMaps = [
     cfg.agents?.defaults?.models,
     ...(cfg.agents?.list?.map((agent) => agent?.models) ?? []),
@@ -141,7 +141,7 @@ function hasProviderWildcardModelAllowlist(cfg: OpenClawConfig) {
   );
 }
 
-function resolveConfiguredReplaceModeCatalog(cfg: OpenClawConfig) {
+function resolveConfiguredReplaceModeCatalog(cfg: MarketingClawConfig) {
   if (cfg.models?.mode !== "replace") {
     return undefined;
   }
@@ -151,12 +151,12 @@ function resolveConfiguredReplaceModeCatalog(cfg: OpenClawConfig) {
   return buildConfiguredModelCatalog({ cfg });
 }
 
-function shouldLoadFullGatewayCatalogForReplaceMode(cfg: OpenClawConfig) {
+function shouldLoadFullGatewayCatalogForReplaceMode(cfg: MarketingClawConfig) {
   return cfg.models?.mode === "replace" && hasProviderWildcardModelAllowlist(cfg);
 }
 
 function ensureEmbeddedHistoryRuntimePluginsLoaded(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   sessionAgentId: string;
 }): { status: "warmed" } | { status: "failed"; error: string } {
   try {
@@ -171,7 +171,7 @@ function ensureEmbeddedHistoryRuntimePluginsLoaded(params: {
   }
 }
 
-async function loadEmbeddedTuiModelCatalog(cfg: OpenClawConfig) {
+async function loadEmbeddedTuiModelCatalog(cfg: MarketingClawConfig) {
   const configuredCatalog = resolveConfiguredReplaceModeCatalog(cfg);
   if (configuredCatalog !== undefined) {
     return configuredCatalog;
@@ -1233,7 +1233,7 @@ export class EmbeddedTuiBackend implements TuiBackend {
           // The per-message timestamp prefix is applied at the single LLM
           // boundary (normalizeMessagesForLlmBoundary) from each message's own
           // timestamp, so the current turn and historical turns carry identical
-          // bytes on the wire. See: https://github.com/openclaw/openclaw/issues/3658
+          // bytes on the wire. See: https://github.com/promisingcoder/marketingclaw/issues/3658
           message: params.message,
           sessionKey: canonicalKey,
           ...(params.agentId ? { agentId: params.agentId } : {}),

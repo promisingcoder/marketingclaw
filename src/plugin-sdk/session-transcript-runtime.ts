@@ -17,7 +17,7 @@ import {
   type SessionTranscriptDeliveryMirror,
   type SessionTranscriptUpdateMode,
 } from "../config/sessions/transcript.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { normalizeAgentId } from "../routing/session-key.js";
 import {
   formatSessionTranscriptMemoryHitKey,
@@ -74,7 +74,7 @@ export type SessionTranscriptAppendMessageParams<TMessage> = SessionTranscriptTa
   TranscriptMessageAppendOptions<TMessage>;
 
 export type SessionTranscriptAssistantMirrorAppendParams = SessionTranscriptReadParams & {
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   deliveryMirror?: SessionTranscriptDeliveryMirror;
   idempotencyKey?: string;
   mediaUrls?: string[];

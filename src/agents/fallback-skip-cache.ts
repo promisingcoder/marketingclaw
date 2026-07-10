@@ -20,10 +20,10 @@ import { modelKey } from "./model-selection-normalize.js";
 /**
  * Default time-to-live for a skip marker. Disabled by default so existing
  * fallback retry behavior stays unchanged unless an operator opts in with
- * OPENCLAW_FALLBACK_SKIP_TTL_MS.
+ * MARKETINGCLAW_FALLBACK_SKIP_TTL_MS.
  */
 const DEFAULT_FALLBACK_SKIP_TTL_MS = 0;
-const FALLBACK_SKIP_TTL_ENV = "OPENCLAW_FALLBACK_SKIP_TTL_MS";
+const FALLBACK_SKIP_TTL_ENV = "MARKETINGCLAW_FALLBACK_SKIP_TTL_MS";
 const FALLBACK_SKIP_TTL_MIN_MS = 1_000;
 const FALLBACK_SKIP_TTL_MAX_MS = 10 * 60_000;
 
@@ -68,20 +68,20 @@ const GLOBAL_PRUNE_INTERVAL_MS = 5_000;
 
 function getState(): SkipCacheState {
   const globalStore = globalThis as typeof globalThis & {
-    openclawFallbackSkipCache?: SkipBySession;
-    openclawFallbackSkipCacheState?: SkipCacheState;
+    marketingclawFallbackSkipCache?: SkipBySession;
+    marketingclawFallbackSkipCacheState?: SkipCacheState;
   };
-  if (!globalStore.openclawFallbackSkipCacheState) {
+  if (!globalStore.marketingclawFallbackSkipCacheState) {
     // Reuse the existing buckets map if a prior version of this module already
     // populated the legacy global; otherwise start fresh.
-    const buckets = globalStore.openclawFallbackSkipCache ?? new Map();
-    globalStore.openclawFallbackSkipCacheState = {
+    const buckets = globalStore.marketingclawFallbackSkipCache ?? new Map();
+    globalStore.marketingclawFallbackSkipCacheState = {
       buckets,
       lastGlobalPruneAtMs: 0,
     };
-    globalStore.openclawFallbackSkipCache = buckets;
+    globalStore.marketingclawFallbackSkipCache = buckets;
   }
-  return globalStore.openclawFallbackSkipCacheState;
+  return globalStore.marketingclawFallbackSkipCacheState;
 }
 
 function getBuckets(): SkipBySession {

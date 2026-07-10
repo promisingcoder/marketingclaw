@@ -1,9 +1,12 @@
 // Discord plugin module implements ingress behavior.
-import { agentCommandFromIngress } from "openclaw/plugin-sdk/agent-runtime";
-import type { DiscordAccountConfig, OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolveRealtimeBootstrapContextInstructions } from "openclaw/plugin-sdk/realtime-bootstrap-context";
-import { createSubsystemLogger, type RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { agentCommandFromIngress } from "marketingclaw/plugin-sdk/agent-runtime";
+import type {
+  DiscordAccountConfig,
+  MarketingClawConfig,
+} from "marketingclaw/plugin-sdk/config-contracts";
+import { resolveRealtimeBootstrapContextInstructions } from "marketingclaw/plugin-sdk/realtime-bootstrap-context";
+import { createSubsystemLogger, type RuntimeEnv } from "marketingclaw/plugin-sdk/runtime-env";
+import { normalizeOptionalString } from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import { formatMention } from "../mentions.js";
 import { normalizeDiscordSlug } from "../monitor/allow-list.js";
 import { buildDiscordGroupSystemPrompt } from "../monitor/inbound-context.js";
@@ -65,7 +68,7 @@ function summarizeAgentTurnPayloads(payloads: readonly unknown[]): string {
 export async function resolveDiscordVoiceIngressContext(params: {
   entry: VoiceSessionEntry;
   userId: string;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   discordConfig: DiscordAccountConfig;
   ownerAllowFrom?: string[];
   fetchGuildName: (guildId: string) => Promise<string | undefined>;
@@ -108,7 +111,7 @@ export async function runDiscordVoiceAgentTurn(params: {
   entry: VoiceSessionEntry;
   userId: string;
   message: string;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   discordConfig: DiscordAccountConfig;
   runtime: RuntimeEnv;
   context?: DiscordVoiceIngressContext;
@@ -166,7 +169,7 @@ export async function runDiscordVoiceAgentTurn(params: {
 
 export async function resolveDiscordVoiceRealtimeBootstrapContext(params: {
   entry: VoiceSessionEntry;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   discordConfig: DiscordAccountConfig;
 }): Promise<string | undefined> {
   const realtimeConfig = params.discordConfig.voice?.realtime;

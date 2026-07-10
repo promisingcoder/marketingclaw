@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-repo="openclaw/openclaw"
+repo="marketingclaw/marketingclaw"
 months="12"
 include_global="0"
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -143,8 +143,8 @@ done
   exit 2
 }
 
-OPENCLAW_GH_BIN="$(resolve_plain_gh_bin)" || die "missing required command: gh"
-export OPENCLAW_GH_BIN
+MARKETINGCLAW_GH_BIN="$(resolve_plain_gh_bin)" || die "missing required command: gh"
+export MARKETINGCLAW_GH_BIN
 need jq
 
 since_ts=$(date_utc_relative_months "$months")

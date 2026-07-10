@@ -2,10 +2,10 @@
 export {
   registerSessionBindingAdapter,
   testing,
-} from "openclaw/plugin-sdk/session-binding-runtime";
-export { resolveAgentRoute } from "openclaw/plugin-sdk/routing";
+} from "marketingclaw/plugin-sdk/session-binding-runtime";
+export { resolveAgentRoute } from "marketingclaw/plugin-sdk/routing";
 export {
   createTestRegistry,
   setActivePluginRegistry,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
-export type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "marketingclaw/plugin-sdk/plugin-test-runtime";
+export type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";

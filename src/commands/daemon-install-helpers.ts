@@ -5,14 +5,14 @@ import path from "node:path";
 import type { AuthProfileStore } from "../agents/auth-profiles/types.js";
 import { formatCliCommand } from "../cli/command-format.js";
 import { collectDurableServiceEnvVarSources } from "../config/state-dir-dotenv.js";
-import type { OpenClawConfig } from "../config/types.js";
+import type { MarketingClawConfig } from "../config/types.js";
 import { coerceSecretRef, resolveSecretInputRef, type SecretRef } from "../config/types.secrets.js";
 import { resolveGatewayLaunchAgentLabel } from "../daemon/constants.js";
 import { resolveGatewayStateDir, resolveGatewayTaskScriptPath } from "../daemon/paths.js";
 import {
-  OPENCLAW_WRAPPER_ENV_KEY,
+  MARKETINGCLAW_WRAPPER_ENV_KEY,
   resolveGatewayProgramArguments,
-  resolveOpenClawWrapperPath,
+  resolveMarketingClawWrapperPath,
 } from "../daemon/program-args.js";
 import {
   addServiceEnvPlanEntries,
@@ -68,7 +68,7 @@ const NON_PERSISTED_CONFIG_SECRET_ENV_TARGET_IDS = new Set([
 ]);
 const EXEC_SECRET_REF_PASS_ENV_ALLOWED_OVERRIDE_ONLY_KEYS = new Set(["HOME"]);
 
-function configContainsSecretRef(config: OpenClawConfig | undefined): boolean {
+function configContainsSecretRef(config: MarketingClawConfig | undefined): boolean {
   if (!config) {
     return false;
   }
@@ -183,7 +183,7 @@ type ExecSecretRefPassEnvSource = {
 
 function collectConfigSecretRefServiceEnvSources(params: {
   env: Record<string, string | undefined>;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   configContainsSecretRef: boolean;
   stateDirDotEnvEnvironment: Record<string, string | undefined>;
   warn?: DaemonInstallWarnFn;
@@ -238,7 +238,7 @@ function collectConfigSecretRefServiceEnvSources(params: {
 
 function collectExecSecretRefPassEnvServiceEnvVars(params: {
   env: Record<string, string | undefined>;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   configContainsSecretRef: boolean;
   authStore?: AuthProfileStore;
   durableEnvironment: Record<string, string | undefined>;
@@ -343,7 +343,7 @@ function collectExecSecretRefPassEnvServiceEnvVars(params: {
 
 function collectPluginConfigSecretRefs(params: {
   env: Record<string, string | undefined>;
-  config: OpenClawConfig;
+  config: MarketingClawConfig;
 }): SecretRef[] {
   const context = createResolverContext({
     sourceConfig: params.config,
@@ -456,12 +456,12 @@ function mergeServicePath(
 }
 
 // Operator opt-in env vars that should survive service regeneration even though
-// they share the OPENCLAW_ prefix that is otherwise stripped from preserved
+// they share the MARKETINGCLAW_ prefix that is otherwise stripped from preserved
 // environments. These represent intentional, user-placed configuration on the
 // service definition that the install/repair flow should not silently revert.
-const PRESERVED_OPENCLAW_OPERATOR_OPT_IN_ENV_KEYS = new Set([
-  "OPENCLAW_CLI_CONTAINER_BYPASS",
-  "OPENCLAW_CONTAINER_HINT",
+const PRESERVED_MARKETINGCLAW_OPERATOR_OPT_IN_ENV_KEYS = new Set([
+  "MARKETINGCLAW_CLI_CONTAINER_BYPASS",
+  "MARKETINGCLAW_CONTAINER_HINT",
 ]);
 
 /** Preserve safe operator-owned env vars from an existing service definition. */
@@ -483,7 +483,8 @@ export function collectPreservedExistingServiceEnvVars(
       upper === "HOME" ||
       upper === "PATH" ||
       upper === "TMPDIR" ||
-      (upper.startsWith("OPENCLAW_") && !PRESERVED_OPENCLAW_OPERATOR_OPT_IN_ENV_KEYS.has(upper))
+      (upper.startsWith("MARKETINGCLAW_") &&
+        !PRESERVED_MARKETINGCLAW_OPERATOR_OPT_IN_ENV_KEYS.has(upper))
     ) {
       continue;
     }
@@ -594,7 +595,7 @@ function resolveGatewayInstallWorkingDirectory(params: {
 
 async function buildGatewayInstallEnvironment(params: {
   env: Record<string, string | undefined>;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   authStore?: AuthProfileStore;
   warn?: DaemonInstallWarnFn;
   serviceEnvironment: Record<string, string | undefined>;
@@ -728,7 +729,7 @@ export async function buildGatewayInstallPlan(params: {
   platform?: NodeJS.Platform;
   warn?: DaemonInstallWarnFn;
   /** Full config to extract env vars from (env vars + inline env keys). */
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   authStore?: AuthProfileStore;
   existingEnvironmentValueSources?: Record<
     string,
@@ -742,23 +743,23 @@ export async function buildGatewayInstallPlan(params: {
     devMode: params.devMode,
     nodePath: params.nodePath,
   });
-  const wrapperInput = params.wrapperPath ?? params.env[OPENCLAW_WRAPPER_ENV_KEY];
+  const wrapperInput = params.wrapperPath ?? params.env[MARKETINGCLAW_WRAPPER_ENV_KEY];
   const wrapperPointsAtWindowsTaskScript =
     Boolean(wrapperInput?.trim()) &&
     platform === "win32" &&
     isSameServicePath(wrapperInput, resolveGatewayTaskScriptPath(params.env), platform);
   if (wrapperPointsAtWindowsTaskScript) {
     params.warn?.(
-      `Ignoring ${OPENCLAW_WRAPPER_ENV_KEY} because it points to the Windows task script; using the OpenClaw gateway entrypoint directly to avoid a recursive gateway.cmd wrapper.`,
+      `Ignoring ${MARKETINGCLAW_WRAPPER_ENV_KEY} because it points to the Windows task script; using the MarketingClaw gateway entrypoint directly to avoid a recursive gateway.cmd wrapper.`,
     );
   }
   const wrapperPath = wrapperPointsAtWindowsTaskScript
     ? undefined
-    : await resolveOpenClawWrapperPath(wrapperInput);
+    : await resolveMarketingClawWrapperPath(wrapperInput);
   const serviceInputEnv: Record<string, string | undefined> = wrapperPath
-    ? { ...params.env, [OPENCLAW_WRAPPER_ENV_KEY]: wrapperPath }
+    ? { ...params.env, [MARKETINGCLAW_WRAPPER_ENV_KEY]: wrapperPath }
     : wrapperPointsAtWindowsTaskScript
-      ? omitEnvKey(params.env, OPENCLAW_WRAPPER_ENV_KEY)
+      ? omitEnvKey(params.env, MARKETINGCLAW_WRAPPER_ENV_KEY)
       : params.env;
   const { programArguments, workingDirectory } = await resolveGatewayProgramArguments({
     port: params.port,
@@ -779,7 +780,7 @@ export async function buildGatewayInstallPlan(params: {
     port: params.port,
     launchdLabel:
       platform === "darwin"
-        ? resolveGatewayLaunchAgentLabel(serviceInputEnv.OPENCLAW_PROFILE)
+        ? resolveGatewayLaunchAgentLabel(serviceInputEnv.MARKETINGCLAW_PROFILE)
         : undefined,
     platform,
     extraPathDirs: resolveDaemonServicePathDirs({
@@ -847,5 +848,5 @@ function omitEnvKey(
 export function gatewayInstallErrorHint(platform = process.platform): string {
   return platform === "win32"
     ? "Tip: native Windows now falls back to a per-user Startup-folder login item when Scheduled Task creation is denied; if install still fails, rerun from an elevated PowerShell or skip service install."
-    : `Tip: rerun \`${formatCliCommand("openclaw gateway install")}\` after fixing the error.`;
+    : `Tip: rerun \`${formatCliCommand("marketingclaw gateway install")}\` after fixing the error.`;
 }

@@ -1458,8 +1458,8 @@ surfaces:
           supported: false
           reason: none
           human_override: false
-  - id: openclaw-app-sdk
-    name: OpenClaw App SDK
+  - id: marketingclaw-app-sdk
+    name: MarketingClaw App SDK
     family: core
     level:
       id: alpha

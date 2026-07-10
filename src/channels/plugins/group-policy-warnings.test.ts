@@ -1,6 +1,6 @@
 // Group policy warning tests cover user-facing warnings for channel group access policy.
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import {
   collectAllowlistProviderGroupPolicyWarnings,
   collectAllowlistProviderRestrictSendersWarnings,
@@ -50,13 +50,13 @@ describe("group policy warning builders", () => {
   });
 
   it("projects cfg-only warning collector inputs", () => {
-    const collect = projectConfigWarningCollector<{ cfg: OpenClawConfig; accountId: string }>(
+    const collect = projectConfigWarningCollector<{ cfg: MarketingClawConfig; accountId: string }>(
       ({ cfg }) => [cfg.channels ? "configured" : "none"],
     );
 
     expect(
       collect({
-        cfg: { channels: { slack: {} } } as OpenClawConfig,
+        cfg: { channels: { slack: {} } } as MarketingClawConfig,
         accountId: "acct-1",
       }),
     ).toEqual(["configured"]);
@@ -64,14 +64,14 @@ describe("group policy warning builders", () => {
 
   it("projects cfg+accountId warning collector inputs", () => {
     const collect = projectConfigAccountIdWarningCollector<{
-      cfg: OpenClawConfig;
+      cfg: MarketingClawConfig;
       accountId?: string | null;
       account: { accountId: string };
     }>(({ accountId }) => [accountId ?? "default"]);
 
     expect(
       collect({
-        cfg: {} as OpenClawConfig,
+        cfg: {} as MarketingClawConfig,
         accountId: "acct-1",
         account: { accountId: "ignored" },
       }),
@@ -91,16 +91,16 @@ describe("group policy warning builders", () => {
     const collect = projectAccountConfigWarningCollector<
       { accountId: string },
       Record<string, unknown>,
-      { account: { accountId: string }; cfg: OpenClawConfig }
+      { account: { accountId: string }; cfg: MarketingClawConfig }
     >(
-      (cfg: OpenClawConfig) => cfg.channels ?? {},
+      (cfg: MarketingClawConfig) => cfg.channels ?? {},
       ({ account, cfg }) => [account.accountId, Object.keys(cfg).join(",") || "none"],
     );
 
     expect(
       collect({
         account: { accountId: "acct-1" },
-        cfg: { channels: { slack: {} } } as OpenClawConfig,
+        cfg: { channels: { slack: {} } } as MarketingClawConfig,
       }),
     ).toEqual(["acct-1", "slack"]);
   });

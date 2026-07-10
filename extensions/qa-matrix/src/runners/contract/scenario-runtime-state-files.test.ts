@@ -5,7 +5,7 @@ import path from "node:path";
 import {
   createPluginStateSyncKeyedStoreForTests,
   resetPluginStateStoreForTests,
-} from "openclaw/plugin-sdk/plugin-state-test-runtime";
+} from "marketingclaw/plugin-sdk/plugin-state-test-runtime";
 import { afterEach, describe, expect, it } from "vitest";
 import type { MatrixQaScenarioContext } from "./scenario-runtime-shared.js";
 import { waitForMatrixInboundDedupeEntry } from "./scenario-runtime-state-files.js";
@@ -15,7 +15,7 @@ const dedupeStoreRuntime = {
     return {
       namespace: "inbound-dedupe",
       maxEntries: 20_000,
-      env: { ...process.env, OPENCLAW_STATE_DIR: params.stateDir },
+      env: { ...process.env, MARKETINGCLAW_STATE_DIR: params.stateDir },
     };
   },
 };
@@ -64,6 +64,6 @@ describe("Matrix QA persisted state probes", () => {
         stateDir,
         timeoutMs: 1_000,
       }),
-    ).resolves.toBe(path.join(accountRoot, "state", "openclaw.sqlite"));
+    ).resolves.toBe(path.join(accountRoot, "state", "marketingclaw.sqlite"));
   });
 });

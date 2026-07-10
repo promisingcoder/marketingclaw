@@ -103,20 +103,20 @@ function createAgentRuntime(
     ) => await run(new AbortController().signal),
   );
   const resolveAgentDir = vi.fn((_cfg: CoreConfig, agentId: string) => {
-    return `/tmp/openclaw/agents/${agentId}`;
+    return `/tmp/marketingclaw/agents/${agentId}`;
   });
   const resolveAgentWorkspaceDir = vi.fn((_cfg: CoreConfig, agentId: string) => {
-    return `/tmp/openclaw/workspace/${agentId}`;
+    return `/tmp/marketingclaw/workspace/${agentId}`;
   });
   const resolveAgentIdentity = vi.fn((_cfg: CoreConfig, agentId: string) => ({
     name: `${agentId} tester`,
   }));
   const resolveStorePath = vi.fn((_store: string | undefined, params: { agentId?: string }) => {
-    return `/tmp/openclaw/${params.agentId ?? "main"}/sessions.json`;
+    return `/tmp/marketingclaw/${params.agentId ?? "main"}/sessions.json`;
   });
   const resolveSessionFilePath = vi.fn(
     (_sessionId: string, _entry: unknown, params: { agentId?: string }) => {
-      return `/tmp/openclaw/${params.agentId ?? "main"}/sessions/session.jsonl`;
+      return `/tmp/marketingclaw/${params.agentId ?? "main"}/sessions/session.jsonl`;
     },
   );
 
@@ -230,7 +230,7 @@ describe("generateVoiceResponse", () => {
     expect(args.onBlockReplyFlush).toEqual(expect.any(Function));
     expect(runWithWorkAdmission).toHaveBeenCalledWith(
       {
-        storePath: "/tmp/openclaw/main/sessions.json",
+        storePath: "/tmp/marketingclaw/main/sessions.json",
         sessionKey: "agent:main:voice:15550001111",
       },
       expect.any(Function),
@@ -546,7 +546,7 @@ describe("generateVoiceResponse", () => {
       "session entry patch",
     );
     expect(patchSessionEntryCall[0]).toMatchObject({
-      storePath: "/tmp/openclaw/main/sessions.json",
+      storePath: "/tmp/marketingclaw/main/sessions.json",
       sessionKey: "agent:main:voice:15550001111",
       replaceEntry: true,
     });
@@ -705,17 +705,17 @@ describe("generateVoiceResponse", () => {
       throw new Error("Expected default voice session entry");
     }
     const args = requireEmbeddedAgentArgs(runEmbeddedAgent);
-    expect(args.agentDir).toBe("/tmp/openclaw/agents/main");
+    expect(args.agentDir).toBe("/tmp/marketingclaw/agents/main");
     expect(args.agentId).toBe("main");
     expect(args.sessionKey).toBe("agent:main:voice:15550001111");
     expect(args.sessionTarget).toStrictEqual({
       agentId: "main",
       sessionId: defaultSessionEntry.sessionId,
       sessionKey: "agent:main:voice:15550001111",
-      storePath: "/tmp/openclaw/main/sessions.json",
+      storePath: "/tmp/marketingclaw/main/sessions.json",
     });
     expect(args.sandboxSessionKey).toBe("agent:main:voice:15550001111");
-    expect(args.workspaceDir).toBe("/tmp/openclaw/workspace/main");
+    expect(args.workspaceDir).toBe("/tmp/marketingclaw/workspace/main");
     expect(args.sessionFile).toBeUndefined();
   });
 
@@ -754,17 +754,17 @@ describe("generateVoiceResponse", () => {
       throw new Error("Expected routed voice session entry");
     }
     const args = requireEmbeddedAgentArgs(runEmbeddedAgent);
-    expect(args.agentDir).toBe("/tmp/openclaw/agents/voice");
+    expect(args.agentDir).toBe("/tmp/marketingclaw/agents/voice");
     expect(args.agentId).toBe("voice");
     expect(args.sessionKey).toBe("agent:voice:voice:15550001111");
     expect(args.sessionTarget).toStrictEqual({
       agentId: "voice",
       sessionId: voiceSessionEntry.sessionId,
       sessionKey: "agent:voice:voice:15550001111",
-      storePath: "/tmp/openclaw/voice/sessions.json",
+      storePath: "/tmp/marketingclaw/voice/sessions.json",
     });
     expect(args.sandboxSessionKey).toBe("agent:voice:voice:15550001111");
-    expect(args.workspaceDir).toBe("/tmp/openclaw/workspace/voice");
+    expect(args.workspaceDir).toBe("/tmp/marketingclaw/workspace/voice");
     expect(args.sessionFile).toBeUndefined();
   });
 

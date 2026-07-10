@@ -50,7 +50,7 @@ func chatReaderScrollReleasesFollow(_ phase: ScrollPhase) -> Bool {
 }
 
 @MainActor
-public struct OpenClawChatView: View {
+public struct MarketingClawChatView: View {
     public enum Style {
         case standard
         case onboarding
@@ -73,7 +73,7 @@ public struct OpenClawChatView: View {
         }
     }
 
-    @State private var viewModel: OpenClawChatViewModel
+    @State private var viewModel: MarketingClawChatViewModel
     @Environment(\.scenePhase) private var scenePhase
     @State private var scrollerBottomID = UUID()
     @State private var scrollPosition: UUID?
@@ -100,9 +100,9 @@ public struct OpenClawChatView: View {
     private let messagePlaceholder: String?
     private let emptyAssistantIntro: String?
     private let emptyAssistantPrompts: [StarterPrompt]
-    private let talkControl: OpenClawChatTalkControl?
-    private let voiceNoteControl: OpenClawChatVoiceNoteControl?
-    private let speech: OpenClawChatSpeechController?
+    private let talkControl: MarketingClawChatTalkControl?
+    private let voiceNoteControl: MarketingClawChatVoiceNoteControl?
+    private let speech: MarketingClawChatSpeechController?
 
     private enum ScrollFollowTarget: Equatable {
         case latest
@@ -136,7 +136,7 @@ public struct OpenClawChatView: View {
     }
 
     public init(
-        viewModel: OpenClawChatViewModel,
+        viewModel: MarketingClawChatViewModel,
         drawsBackground: Bool = true,
         showsSessionSwitcher: Bool = false,
         style: Style = .standard,
@@ -153,9 +153,9 @@ public struct OpenClawChatView: View {
         messagePlaceholder: String? = nil,
         emptyAssistantIntro: String? = nil,
         emptyAssistantPrompts: [StarterPrompt] = [],
-        talkControl: OpenClawChatTalkControl? = nil,
-        voiceNoteControl: OpenClawChatVoiceNoteControl? = nil,
-        speech: OpenClawChatSpeechController? = nil)
+        talkControl: MarketingClawChatTalkControl? = nil,
+        voiceNoteControl: MarketingClawChatVoiceNoteControl? = nil,
+        speech: MarketingClawChatSpeechController? = nil)
     {
         _viewModel = State(initialValue: viewModel)
         self.drawsBackground = drawsBackground
@@ -182,7 +182,7 @@ public struct OpenClawChatView: View {
     public var body: some View {
         ZStack {
             if self.drawsBackground, self.style == .standard {
-                OpenClawChatTheme.background
+                MarketingClawChatTheme.background
                     .ignoresSafeArea()
             }
 
@@ -225,7 +225,7 @@ public struct OpenClawChatView: View {
     }
 
     private var composer: some View {
-        OpenClawChatComposer(
+        MarketingClawChatComposer(
             viewModel: self.viewModel,
             style: self.style,
             showsSessionSwitcher: self.showsSessionSwitcher,
@@ -404,7 +404,7 @@ public struct OpenClawChatView: View {
     }
 
     @ViewBuilder
-    private func messageRow(for msg: OpenClawChatMessage) -> some View {
+    private func messageRow(for msg: MarketingClawChatMessage) -> some View {
         let bubble = ChatMessageBubble(
             message: msg,
             style: self.style,
@@ -436,7 +436,7 @@ public struct OpenClawChatView: View {
                     } label: {
                         Label {
                             Text("Retry Send")
-                                .font(OpenClawChatTypography.body)
+                                .font(MarketingClawChatTypography.body)
                         } icon: {
                             Image(systemName: "arrow.clockwise")
                         }
@@ -450,7 +450,7 @@ public struct OpenClawChatView: View {
                     } label: {
                         Label {
                             Text("Delete")
-                                .font(OpenClawChatTypography.body)
+                                .font(MarketingClawChatTypography.body)
                         } icon: {
                             Image(systemName: "trash")
                         }
@@ -481,10 +481,10 @@ public struct OpenClawChatView: View {
                     Label {
                         if speech.isActive(msg.id) {
                             Text("Stop Listening")
-                                .font(OpenClawChatTypography.body)
+                                .font(MarketingClawChatTypography.body)
                         } else {
                             Text("Listen")
-                                .font(OpenClawChatTypography.body)
+                                .font(MarketingClawChatTypography.body)
                         }
                     } icon: {
                         Image(systemName: speech.isActive(msg.id) ? "stop.circle" : "speaker.wave.2")
@@ -503,13 +503,13 @@ public struct OpenClawChatView: View {
         }
     }
 
-    private func isListenable(_ msg: OpenClawChatMessage) -> Bool {
+    private func isListenable(_ msg: MarketingClawChatMessage) -> Bool {
         msg.role.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() == "assistant"
             && ChatMessageVisibleText.hasVisibleText(in: msg)
     }
 
     private func speechChipIsPreparing(
-        _ speech: OpenClawChatSpeechController,
+        _ speech: MarketingClawChatSpeechController,
         messageID: UUID) -> Bool?
     {
         switch speech.phase {
@@ -523,7 +523,7 @@ public struct OpenClawChatView: View {
     }
 
     @ViewBuilder
-    private func copyMessageButton(for message: OpenClawChatMessage) -> some View {
+    private func copyMessageButton(for message: MarketingClawChatMessage) -> some View {
         let text = self.primaryText(in: message)
         if !text.isEmpty {
             Button {
@@ -531,7 +531,7 @@ public struct OpenClawChatView: View {
             } label: {
                 Label {
                     Text("Copy Message")
-                        .font(OpenClawChatTypography.body)
+                        .font(MarketingClawChatTypography.body)
                 } icon: {
                     Image(systemName: "doc.on.doc")
                 }
@@ -548,8 +548,8 @@ public struct OpenClawChatView: View {
         #endif
     }
 
-    private var visibleMessages: [OpenClawChatMessage] {
-        let base: [OpenClawChatMessage]
+    private var visibleMessages: [MarketingClawChatMessage] {
+        let base: [MarketingClawChatMessage]
         if self.style == .onboarding {
             guard let first = viewModel.messages.first else { return [] }
             base = first.role.lowercased() == "user" ? Array(self.viewModel.messages.dropFirst()) : self.viewModel
@@ -590,15 +590,15 @@ public struct OpenClawChatView: View {
             self.moveScrollPosition(to: self.scrollerBottomID)
         } label: {
             Label("Jump to latest", systemImage: "arrow.down")
-                .font(OpenClawChatTypography.body(size: 16, weight: .semibold, relativeTo: .callout))
+                .font(MarketingClawChatTypography.body(size: 16, weight: .semibold, relativeTo: .callout))
                 .padding(.horizontal, 13)
                 .padding(.vertical, 8)
         }
         .buttonStyle(.plain)
-        .foregroundStyle(OpenClawChatTheme.assistantText)
+        .foregroundStyle(MarketingClawChatTheme.assistantText)
         .background(
             Capsule()
-                .fill(OpenClawChatTheme.subtleCard)
+                .fill(MarketingClawChatTheme.subtleCard)
                 .shadow(color: .black.opacity(0.16), radius: 10, y: 4))
         .accessibilityLabel("Jump to latest reply")
     }
@@ -839,8 +839,8 @@ public struct OpenClawChatView: View {
         }
     }
 
-    private func mergeToolResults(in messages: [OpenClawChatMessage]) -> [OpenClawChatMessage] {
-        var result: [OpenClawChatMessage] = []
+    private func mergeToolResults(in messages: [MarketingClawChatMessage]) -> [MarketingClawChatMessage] {
+        var result: [MarketingClawChatMessage] = []
         result.reserveCapacity(messages.count)
 
         for message in messages {
@@ -864,7 +864,7 @@ public struct OpenClawChatView: View {
 
             var content = last.content
             content.append(
-                OpenClawChatMessageContent(
+                MarketingClawChatMessageContent(
                     type: "tool_result",
                     text: toolText,
                     thinking: nil,
@@ -876,7 +876,7 @@ public struct OpenClawChatView: View {
                     name: message.toolName,
                     arguments: nil))
 
-            let merged = OpenClawChatMessage(
+            let merged = MarketingClawChatMessage(
                 id: last.id,
                 role: last.role,
                 content: content,
@@ -893,12 +893,12 @@ public struct OpenClawChatView: View {
         return result
     }
 
-    private func isToolResultMessage(_ message: OpenClawChatMessage) -> Bool {
+    private func isToolResultMessage(_ message: MarketingClawChatMessage) -> Bool {
         let role = message.role.lowercased()
         return role == "toolresult" || role == "tool_result"
     }
 
-    private func shouldDisplayMessage(_ message: OpenClawChatMessage) -> Bool {
+    private func shouldDisplayMessage(_ message: MarketingClawChatMessage) -> Bool {
         if self.hasInlineAttachments(in: message) {
             return true
         }
@@ -924,20 +924,20 @@ public struct OpenClawChatView: View {
         return !self.toolCalls(in: message).isEmpty || !self.inlineToolResults(in: message).isEmpty
     }
 
-    private func primaryText(in message: OpenClawChatMessage) -> String {
+    private func primaryText(in message: MarketingClawChatMessage) -> String {
         let parts = message.content.compactMap { content -> String? in
             let kind = (content.type ?? "text").lowercased()
             guard kind == "text" || kind.isEmpty else { return nil }
             return content.text
         }
-        return OpenClawChatMessage.displayText(
+        return MarketingClawChatMessage.displayText(
             contentText: parts.joined(separator: "\n"),
             role: message.role,
             stopReason: message.stopReason,
             errorMessage: message.errorMessage)
     }
 
-    private func hasInlineAttachments(in message: OpenClawChatMessage) -> Bool {
+    private func hasInlineAttachments(in message: MarketingClawChatMessage) -> Bool {
         message.content.contains { content in
             switch content.type ?? "text" {
             case "file", "attachment":
@@ -948,7 +948,7 @@ public struct OpenClawChatView: View {
         }
     }
 
-    private func toolCalls(in message: OpenClawChatMessage) -> [OpenClawChatMessageContent] {
+    private func toolCalls(in message: MarketingClawChatMessage) -> [MarketingClawChatMessageContent] {
         message.content.filter { content in
             let kind = (content.type ?? "").lowercased()
             if ["toolcall", "tool_call", "tooluse", "tool_use"].contains(kind) {
@@ -958,14 +958,14 @@ public struct OpenClawChatView: View {
         }
     }
 
-    private func inlineToolResults(in message: OpenClawChatMessage) -> [OpenClawChatMessageContent] {
+    private func inlineToolResults(in message: MarketingClawChatMessage) -> [MarketingClawChatMessageContent] {
         message.content.filter { content in
             let kind = (content.type ?? "").lowercased()
             return kind == "toolresult" || kind == "tool_result"
         }
     }
 
-    private func toolCallIds(in message: OpenClawChatMessage) -> Set<String> {
+    private func toolCallIds(in message: MarketingClawChatMessage) -> Set<String> {
         var ids = Set<String>()
         for content in self.toolCalls(in: message) {
             if let id = content.id {
@@ -978,7 +978,7 @@ public struct OpenClawChatView: View {
         return ids
     }
 
-    private func toolResultText(from message: OpenClawChatMessage) -> String {
+    private func toolResultText(from message: MarketingClawChatMessage) -> String {
         self.primaryText(in: message)
     }
 
@@ -995,22 +995,22 @@ public struct OpenClawChatView: View {
 
 private struct ChatAssistantIntroCard: View {
     let text: String
-    let prompts: [OpenClawChatView.StarterPrompt]
-    let onPrompt: (OpenClawChatView.StarterPrompt) -> Void
+    let prompts: [MarketingClawChatView.StarterPrompt]
+    let onPrompt: (MarketingClawChatView.StarterPrompt) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             // Rendered as a grey assistant bubble so the greeting reads like the
             // agent's first message, matching the in-conversation bubble style.
             Text(self.text)
-                .font(OpenClawChatTypography.body)
-                .foregroundStyle(OpenClawChatTheme.assistantText)
+                .font(MarketingClawChatTypography.body)
+                .foregroundStyle(MarketingClawChatTheme.assistantText)
                 .multilineTextAlignment(.leading)
                 .padding(.vertical, 10)
                 .padding(.horizontal, 14)
                 .background(
                     RoundedRectangle(cornerRadius: 18, style: .continuous)
-                        .fill(OpenClawChatTheme.assistantBubble))
+                        .fill(MarketingClawChatTheme.assistantBubble))
 
             ForEach(self.prompts) { prompt in
                 Button {
@@ -1018,18 +1018,18 @@ private struct ChatAssistantIntroCard: View {
                 } label: {
                     HStack(spacing: 8) {
                         Text(prompt.title)
-                            .font(OpenClawChatTypography.body(size: 15, weight: .semibold, relativeTo: .callout))
+                            .font(MarketingClawChatTypography.body(size: 15, weight: .semibold, relativeTo: .callout))
                             .multilineTextAlignment(.leading)
                         Spacer(minLength: 8)
                         Image(systemName: "arrow.up.right")
-                            .font(OpenClawChatTypography.captionSemiBold)
+                            .font(MarketingClawChatTypography.captionSemiBold)
                             .foregroundStyle(.secondary)
                     }
                     .padding(.horizontal, 12)
                     .padding(.vertical, 10)
                     .background(
                         RoundedRectangle(cornerRadius: 14, style: .continuous)
-                            .fill(OpenClawChatTheme.subtleCard))
+                            .fill(MarketingClawChatTheme.subtleCard))
                 }
                 .buttonStyle(.plain)
                 .accessibilityIdentifier("chat-starter-\(prompt.id)")
@@ -1047,14 +1047,14 @@ private struct ChatLoadingBubble: View {
             ProgressView()
                 .controlSize(.small)
             Text("Loading chat")
-                .font(OpenClawChatTypography.captionSemiBold)
+                .font(MarketingClawChatTypography.captionSemiBold)
                 .foregroundStyle(.secondary)
         }
         .padding(.vertical, 9)
         .padding(.horizontal, 12)
         .background(
             Capsule()
-                .fill(OpenClawChatTheme.subtleCard))
+                .fill(MarketingClawChatTheme.subtleCard))
         .padding(.leading, 10)
     }
 }
@@ -1070,15 +1070,15 @@ private struct ChatNoticeCard: View {
         // Native empty/error state: SwiftUI's standard ContentUnavailableView, not a custom card.
         ContentUnavailableView {
             Label(self.title, systemImage: self.systemImage)
-                .font(OpenClawChatTypography.headline)
+                .font(MarketingClawChatTypography.headline)
         } description: {
             Text(self.message)
-                .font(OpenClawChatTypography.body)
+                .font(MarketingClawChatTypography.body)
         } actions: {
             if let actionTitle, let action {
                 Button(action: action) {
                     Text(actionTitle)
-                        .font(OpenClawChatTypography.body(size: 15, weight: .semibold, relativeTo: .subheadline))
+                        .font(MarketingClawChatTypography.body(size: 15, weight: .semibold, relativeTo: .subheadline))
                 }
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
@@ -1098,16 +1098,16 @@ private struct ChatNoticeBanner: View {
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
             Image(systemName: self.systemImage)
-                .font(OpenClawChatTypography.display(size: 15, weight: .semibold, relativeTo: .subheadline))
+                .font(MarketingClawChatTypography.display(size: 15, weight: .semibold, relativeTo: .subheadline))
                 .foregroundStyle(self.tint)
                 .padding(.top, 1)
 
             VStack(alignment: .leading, spacing: 3) {
                 Text(self.title)
-                    .font(OpenClawChatTypography.captionSemiBold)
+                    .font(MarketingClawChatTypography.captionSemiBold)
 
                 Text(self.message)
-                    .font(OpenClawChatTypography.caption)
+                    .font(MarketingClawChatTypography.caption)
                     .foregroundStyle(.secondary)
                     .lineLimit(2)
             }
@@ -1132,7 +1132,7 @@ private struct ChatNoticeBanner: View {
         .padding(.vertical, 10)
         .background(
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(OpenClawChatTheme.subtleCard)
+                .fill(MarketingClawChatTheme.subtleCard)
                 .overlay(
                     RoundedRectangle(cornerRadius: 14, style: .continuous)
                         .strokeBorder(Color.white.opacity(0.12), lineWidth: 1)))

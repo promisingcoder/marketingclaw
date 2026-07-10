@@ -13,7 +13,7 @@ const coreCliCommandCatalog = defineCommandDescriptorCatalog([
   },
   {
     name: "setup",
-    description: "Alias for openclaw onboard",
+    description: "Alias for marketingclaw onboard",
     hasSubcommands: false,
   },
   {
@@ -34,7 +34,7 @@ const coreCliCommandCatalog = defineCommandDescriptorCatalog([
   },
   {
     name: "backup",
-    description: "Create and verify local backup archives for OpenClaw state",
+    description: "Create and verify local backup archives for MarketingClaw state",
     hasSubcommands: true,
   },
   {
@@ -69,7 +69,7 @@ const coreCliCommandCatalog = defineCommandDescriptorCatalog([
   },
   {
     name: "mcp",
-    description: "Manage OpenClaw mcp.servers config and channel bridge",
+    description: "Manage MarketingClaw mcp.servers config and channel bridge",
     hasSubcommands: true,
     parentDefaultHelp: true,
   },

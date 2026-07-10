@@ -4,7 +4,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.js";
+import type { MarketingClawConfig } from "../config/types.js";
 import type { MediaUnderstandingConfig } from "../config/types.tools.js";
 import { withEnvAsync } from "../test-utils/env.js";
 import { clearMediaUnderstandingBinaryCacheForTests, runCapability } from "./runner.js";
@@ -41,7 +41,7 @@ function createOpenAiAudioProvider(
   });
 }
 
-function createOpenAiAudioCfg(extra?: Partial<OpenClawConfig>): OpenClawConfig {
+function createOpenAiAudioCfg(extra?: Partial<MarketingClawConfig>): MarketingClawConfig {
   return {
     models: {
       providers: {
@@ -52,7 +52,7 @@ function createOpenAiAudioCfg(extra?: Partial<OpenClawConfig>): OpenClawConfig {
       },
     },
     ...extra,
-  } as unknown as OpenClawConfig;
+  } as unknown as MarketingClawConfig;
 }
 
 async function createMockExecutable(dir: string, name: string) {
@@ -63,10 +63,10 @@ async function createMockExecutable(dir: string, name: string) {
 
 async function runAutoAudioCase(params: {
   transcribeAudio: (req: AudioTranscriptionRequest) => Promise<{ text: string; model: string }>;
-  cfgExtra?: Partial<OpenClawConfig>;
+  cfgExtra?: Partial<MarketingClawConfig>;
 }) {
   let runResult: Awaited<ReturnType<typeof runCapability>> | undefined;
-  await withAudioFixture("openclaw-auto-audio", async ({ ctx, media, cache }) => {
+  await withAudioFixture("marketingclaw-auto-audio", async ({ ctx, media, cache }) => {
     const providerRegistry = createOpenAiAudioProvider(params.transcribeAudio);
     const cfg = createOpenAiAudioCfg(params.cfgExtra);
     runResult = await runCapability({
@@ -125,60 +125,63 @@ describe("runCapability auto audio entries", () => {
     }));
 
     try {
-      await withAudioFixture("openclaw-auto-audio-oauth-skip", async ({ ctx, media, cache }) => {
-        const openAiTranscribe = vi.fn(async (req: AudioTranscriptionRequest) => ({
-          text: "openai",
-          model: req.model ?? "unknown",
-        }));
-        const mistralTranscribe = vi.fn(async (req: AudioTranscriptionRequest) => ({
-          text: `mistral:${req.apiKey}`,
-          model: req.model ?? "unknown",
-        }));
+      await withAudioFixture(
+        "marketingclaw-auto-audio-oauth-skip",
+        async ({ ctx, media, cache }) => {
+          const openAiTranscribe = vi.fn(async (req: AudioTranscriptionRequest) => ({
+            text: "openai",
+            model: req.model ?? "unknown",
+          }));
+          const mistralTranscribe = vi.fn(async (req: AudioTranscriptionRequest) => ({
+            text: `mistral:${req.apiKey}`,
+            model: req.model ?? "unknown",
+          }));
 
-        const result = await runCapability({
-          capability: "audio",
-          cfg: {
-            models: {
-              providers: {
-                openai: {
-                  models: [],
-                },
-                mistral: {
-                  models: [],
+          const result = await runCapability({
+            capability: "audio",
+            cfg: {
+              models: {
+                providers: {
+                  openai: {
+                    models: [],
+                  },
+                  mistral: {
+                    models: [],
+                  },
                 },
               },
-            },
-          } as unknown as OpenClawConfig,
-          ctx,
-          attachments: cache,
-          media,
-          providerRegistry: createProviderRegistry({
-            openai: {
-              id: "openai",
-              capabilities: ["audio"],
-              defaultModels: { audio: "gpt-4o-transcribe" },
-              transcribeAudio: openAiTranscribe,
-            },
-            mistral: {
-              id: "mistral",
-              capabilities: ["audio"],
-              defaultModels: { audio: "voxtral-mini-latest" },
-              transcribeAudio: mistralTranscribe,
-            },
-          }),
-        });
+            } as unknown as MarketingClawConfig,
+            ctx,
+            attachments: cache,
+            media,
+            providerRegistry: createProviderRegistry({
+              openai: {
+                id: "openai",
+                capabilities: ["audio"],
+                defaultModels: { audio: "gpt-4o-transcribe" },
+                transcribeAudio: openAiTranscribe,
+              },
+              mistral: {
+                id: "mistral",
+                capabilities: ["audio"],
+                defaultModels: { audio: "voxtral-mini-latest" },
+                transcribeAudio: mistralTranscribe,
+              },
+            }),
+          });
 
-        expect(result.decision.outcome).toBe("success");
-        expect(requireCapabilityOutput(result, 0)).toEqual({
-          kind: "audio.transcription",
-          attachmentIndex: 0,
-          provider: "mistral",
-          model: "voxtral-mini-latest",
-          text: "mistral:mistral-key",
-        });
-        expect(openAiTranscribe).not.toHaveBeenCalled();
-        expect(mistralTranscribe).toHaveBeenCalledTimes(1);
-      });
+          expect(result.decision.outcome).toBe("success");
+          expect(requireCapabilityOutput(result, 0)).toEqual({
+            kind: "audio.transcription",
+            attachmentIndex: 0,
+            provider: "mistral",
+            model: "voxtral-mini-latest",
+            text: "mistral:mistral-key",
+          });
+          expect(openAiTranscribe).not.toHaveBeenCalled();
+          expect(mistralTranscribe).toHaveBeenCalledTimes(1);
+        },
+      );
 
       expect(hasAvailableAuthForProvider).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -203,38 +206,41 @@ describe("runCapability auto audio entries", () => {
     const resolveApiKeyForProvider = vi.mocked(modelAuth.resolveApiKeyForProvider);
     resolveApiKeyForProvider.mockClear();
 
-    await withAudioFixture("openclaw-auto-audio-workspace-auth", async ({ ctx, media, cache }) => {
-      const result = await runCapability({
-        capability: "audio",
-        cfg: {
-          models: {
-            providers: {
-              openai: {
-                models: [],
+    await withAudioFixture(
+      "marketingclaw-auto-audio-workspace-auth",
+      async ({ ctx, media, cache }) => {
+        const result = await runCapability({
+          capability: "audio",
+          cfg: {
+            models: {
+              providers: {
+                openai: {
+                  models: [],
+                },
               },
             },
-          },
-        } as unknown as OpenClawConfig,
-        ctx,
-        attachments: cache,
-        media,
-        providerRegistry: createOpenAiAudioProvider(async (req) => ({
-          text: `workspace ${req.apiKey}`,
-          model: req.model ?? "unknown",
-        })),
-        agentDir: "/tmp/openclaw-agent",
-        workspaceDir: "/tmp/openclaw-workspace",
-      });
+          } as unknown as MarketingClawConfig,
+          ctx,
+          attachments: cache,
+          media,
+          providerRegistry: createOpenAiAudioProvider(async (req) => ({
+            text: `workspace ${req.apiKey}`,
+            model: req.model ?? "unknown",
+          })),
+          agentDir: "/tmp/marketingclaw-agent",
+          workspaceDir: "/tmp/marketingclaw-workspace",
+        });
 
-      expect(result.decision.outcome).toBe("success");
-      expect(requireCapabilityOutput(result, 0).text).toBe("workspace test-key");
-    });
+        expect(result.decision.outcome).toBe("success");
+        expect(requireCapabilityOutput(result, 0).text).toBe("workspace test-key");
+      },
+    );
 
     expect(resolveApiKeyForProvider).toHaveBeenCalledWith(
       expect.objectContaining({
         provider: "openai",
-        agentDir: "/tmp/openclaw-agent",
-        workspaceDir: "/tmp/openclaw-workspace",
+        agentDir: "/tmp/marketingclaw-agent",
+        workspaceDir: "/tmp/marketingclaw-workspace",
       }),
     );
   });
@@ -243,7 +249,7 @@ describe("runCapability auto audio entries", () => {
     let runResult: Awaited<ReturnType<typeof runCapability>> | undefined;
     let seenModel: string | undefined;
 
-    await withAudioFixture("openclaw-auto-audio-codex", async ({ ctx, media, cache }) => {
+    await withAudioFixture("marketingclaw-auto-audio-codex", async ({ ctx, media, cache }) => {
       const providerRegistry = createProviderRegistry({
         openai: {
           id: "openai",
@@ -264,7 +270,7 @@ describe("runCapability auto audio entries", () => {
             },
           },
         },
-      } as unknown as OpenClawConfig;
+      } as unknown as MarketingClawConfig;
 
       runResult = await runCapability({
         capability: "audio",
@@ -291,7 +297,7 @@ describe("runCapability auto audio entries", () => {
   });
 
   it("prefers provider keys over auto-detected local whisper", async () => {
-    const binDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auto-audio-bin-"));
+    const binDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-auto-audio-bin-"));
     try {
       await createMockExecutable(binDir, "whisper");
       clearMediaUnderstandingBinaryCacheForTests();
@@ -393,7 +399,7 @@ describe("runCapability auto audio entries", () => {
             },
           },
         },
-      } as Partial<OpenClawConfig>,
+      } as Partial<MarketingClawConfig>,
     });
 
     expect(requireCapabilityOutput(result, 0).text).toBe("ok");
@@ -420,7 +426,7 @@ describe("runCapability auto audio entries", () => {
             },
           },
         },
-      } as Partial<OpenClawConfig>,
+      } as Partial<MarketingClawConfig>,
     });
 
     expect(requireCapabilityOutput(result, 0).text).toBe("ok");
@@ -442,7 +448,7 @@ describe("runCapability auto audio entries", () => {
               audio,
             },
           },
-        } as Partial<OpenClawConfig>,
+        } as Partial<MarketingClawConfig>,
       });
     };
 
@@ -474,7 +480,7 @@ describe("runCapability auto audio entries", () => {
   });
 
   it("uses mistral when only mistral key is configured", async () => {
-    const isolatedAgentDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-audio-agent-"));
+    const isolatedAgentDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-audio-agent-"));
     let runResult: Awaited<ReturnType<typeof runCapability>> | undefined;
     try {
       await withEnvAsync(
@@ -485,55 +491,58 @@ describe("runCapability auto audio entries", () => {
           GEMINI_API_KEY: undefined,
           GOOGLE_API_KEY: undefined,
           MISTRAL_API_KEY: "mistral-test-key", // pragma: allowlist secret
-          OPENCLAW_AGENT_DIR: isolatedAgentDir,
+          MARKETINGCLAW_AGENT_DIR: isolatedAgentDir,
         },
         async () => {
-          await withAudioFixture("openclaw-auto-audio-mistral", async ({ ctx, media, cache }) => {
-            const providerRegistry = createProviderRegistry({
-              openai: {
-                id: "openai",
-                capabilities: ["audio"],
-                transcribeAudio: async () => ({
-                  text: "openai",
-                  model: "gpt-4o-transcribe",
-                }),
-              },
-              mistral: {
-                id: "mistral",
-                capabilities: ["audio"],
-                transcribeAudio: async (req) => ({
-                  text: "mistral",
-                  model: req.model ?? "unknown",
-                }),
-              },
-            });
-            const cfg = {
-              models: {
-                providers: {
-                  mistral: {
-                    apiKey: "mistral-test-key", // pragma: allowlist secret
-                    models: [],
+          await withAudioFixture(
+            "marketingclaw-auto-audio-mistral",
+            async ({ ctx, media, cache }) => {
+              const providerRegistry = createProviderRegistry({
+                openai: {
+                  id: "openai",
+                  capabilities: ["audio"],
+                  transcribeAudio: async () => ({
+                    text: "openai",
+                    model: "gpt-4o-transcribe",
+                  }),
+                },
+                mistral: {
+                  id: "mistral",
+                  capabilities: ["audio"],
+                  transcribeAudio: async (req) => ({
+                    text: "mistral",
+                    model: req.model ?? "unknown",
+                  }),
+                },
+              });
+              const cfg = {
+                models: {
+                  providers: {
+                    mistral: {
+                      apiKey: "mistral-test-key", // pragma: allowlist secret
+                      models: [],
+                    },
                   },
                 },
-              },
-              tools: {
-                media: {
-                  audio: {
-                    enabled: true,
+                tools: {
+                  media: {
+                    audio: {
+                      enabled: true,
+                    },
                   },
                 },
-              },
-            } as unknown as OpenClawConfig;
+              } as unknown as MarketingClawConfig;
 
-            runResult = await runCapability({
-              capability: "audio",
-              cfg,
-              ctx,
-              attachments: cache,
-              media,
-              providerRegistry,
-            });
-          });
+              runResult = await runCapability({
+                capability: "audio",
+                cfg,
+                ctx,
+                attachments: cache,
+                media,
+                providerRegistry,
+              });
+            },
+          );
         },
       );
     } finally {

@@ -2,9 +2,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const isProviderApiKeyConfiguredMock = vi.hoisted(() => vi.fn<(p: unknown) => boolean>());
-vi.mock("openclaw/plugin-sdk/provider-auth", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/provider-auth")>(
-    "openclaw/plugin-sdk/provider-auth",
+vi.mock("marketingclaw/plugin-sdk/provider-auth", async () => {
+  const actual = await vi.importActual<typeof import("marketingclaw/plugin-sdk/provider-auth")>(
+    "marketingclaw/plugin-sdk/provider-auth",
   );
   return {
     ...actual,
@@ -116,9 +116,9 @@ function requireFirstFetchCall(mockFetch: ReturnType<typeof vi.fn>): [unknown, u
 }
 
 describe("DEEPINFRA_MODELS_URL", () => {
-  it("points at /v1/openai/models with the openclaw sort + filter=with_meta gate", () => {
+  it("points at /v1/openai/models with the marketingclaw sort + filter=with_meta gate", () => {
     expect(DEEPINFRA_MODELS_URL).toBe(
-      "https://api.deepinfra.com/v1/openai/models?sort_by=openclaw&filter=with_meta",
+      "https://api.deepinfra.com/v1/openai/models?sort_by=marketingclaw&filter=with_meta",
     );
   });
 });
@@ -134,12 +134,12 @@ describe("hasDeepInfraApiKey", () => {
   it("falls back to the auth-profile store when no env var is set", () => {
     isProviderApiKeyConfiguredMock.mockReturnValue(true);
 
-    expect(hasDeepInfraApiKey({ env: {}, agentDir: "/tmp/openclaw-agent" })).toBe(true);
+    expect(hasDeepInfraApiKey({ env: {}, agentDir: "/tmp/marketingclaw-agent" })).toBe(true);
 
     expect(isProviderApiKeyConfiguredMock).toHaveBeenCalledTimes(1);
     expect(isProviderApiKeyConfiguredMock).toHaveBeenCalledWith({
       provider: "deepinfra",
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/marketingclaw-agent",
     });
   });
 
@@ -147,7 +147,7 @@ describe("hasDeepInfraApiKey", () => {
     expect(
       hasDeepInfraApiKey({
         env: {},
-        agentDir: "/tmp/openclaw-agent",
+        agentDir: "/tmp/marketingclaw-agent",
         config: {
           models: {
             providers: {
@@ -169,7 +169,7 @@ describe("hasDeepInfraApiKey", () => {
     expect(
       hasDeepInfraApiKey({
         env: { DEEPINFRA_API_KEY: "sk-x" },
-        agentDir: "/tmp/openclaw-agent",
+        agentDir: "/tmp/marketingclaw-agent",
       }),
     ).toBe(true);
 
@@ -179,11 +179,11 @@ describe("hasDeepInfraApiKey", () => {
   it("returns false when env is empty and the auth-profile store has no deepinfra profile", () => {
     isProviderApiKeyConfiguredMock.mockReturnValue(false);
 
-    expect(hasDeepInfraApiKey({ env: {}, agentDir: "/tmp/openclaw-agent" })).toBe(false);
+    expect(hasDeepInfraApiKey({ env: {}, agentDir: "/tmp/marketingclaw-agent" })).toBe(false);
 
     expect(isProviderApiKeyConfiguredMock).toHaveBeenCalledWith({
       provider: "deepinfra",
-      agentDir: "/tmp/openclaw-agent",
+      agentDir: "/tmp/marketingclaw-agent",
     });
   });
 });
@@ -202,7 +202,7 @@ describe("discoverDeepInfraModels (chat-only shim)", () => {
     expect(streamingUsageIncompatibleModelIds).toStrictEqual([]);
   });
 
-  it("fetches the openclaw-projection endpoint and parses chat-surface entries when an API key is configured", async () => {
+  it("fetches the marketingclaw-projection endpoint and parses chat-surface entries when an API key is configured", async () => {
     const mockFetch = vi.fn().mockResolvedValue(jsonResponse({ data: [makeAgentModelEntry()] }));
 
     await withFetchPathTest(mockFetch, { DEEPINFRA_API_KEY: "sk-test" }, async () => {

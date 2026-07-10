@@ -111,9 +111,9 @@ export function renderOverview(props: OverviewProps) {
                         const v = (e.target as HTMLInputElement).value;
                         props.onConnectionChange({ token: v });
                       }}
-                      placeholder="OPENCLAW_GATEWAY_TOKEN"
+                      placeholder="MARKETINGCLAW_GATEWAY_TOKEN"
                     />
-                    <openclaw-tooltip
+                    <marketingclaw-tooltip
                       .content=${props.showGatewayToken
                         ? t("overview.access.hideToken")
                         : t("overview.access.showToken")}
@@ -128,7 +128,7 @@ export function renderOverview(props: OverviewProps) {
                       >
                         ${props.showGatewayToken ? icons.eye : icons.eyeOff}
                       </button>
-                    </openclaw-tooltip>
+                    </marketingclaw-tooltip>
                   </div>
                 </label>
                 <label class="field">
@@ -145,7 +145,7 @@ export function renderOverview(props: OverviewProps) {
                       }}
                       placeholder=${t("overview.access.passwordPlaceholder")}
                     />
-                    <openclaw-tooltip
+                    <marketingclaw-tooltip
                       .content=${props.showGatewayPassword
                         ? t("overview.access.hidePassword")
                         : t("overview.access.showPassword")}
@@ -160,7 +160,7 @@ export function renderOverview(props: OverviewProps) {
                       >
                         ${props.showGatewayPassword ? icons.eye : icons.eyeOff}
                       </button>
-                    </openclaw-tooltip>
+                    </marketingclaw-tooltip>
                   </div>
                 </label>
               `}

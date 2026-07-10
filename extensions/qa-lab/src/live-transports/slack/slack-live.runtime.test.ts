@@ -14,10 +14,10 @@ describe("Slack live QA runtime helpers", () => {
   it("resolves env credential payloads", () => {
     expect(
       testing.resolveSlackQaRuntimeEnv({
-        OPENCLAW_QA_SLACK_CHANNEL_ID: "C123456789",
-        OPENCLAW_QA_SLACK_DRIVER_BOT_TOKEN: "xoxb-driver",
-        OPENCLAW_QA_SLACK_SUT_BOT_TOKEN: "xoxb-sut",
-        OPENCLAW_QA_SLACK_SUT_APP_TOKEN: "xapp-sut",
+        MARKETINGCLAW_QA_SLACK_CHANNEL_ID: "C123456789",
+        MARKETINGCLAW_QA_SLACK_DRIVER_BOT_TOKEN: "xoxb-driver",
+        MARKETINGCLAW_QA_SLACK_SUT_BOT_TOKEN: "xoxb-sut",
+        MARKETINGCLAW_QA_SLACK_SUT_APP_TOKEN: "xapp-sut",
       }),
     ).toEqual({
       channelId: "C123456789",
@@ -30,12 +30,12 @@ describe("Slack live QA runtime helpers", () => {
   it("rejects malformed Slack channel ids", () => {
     expect(() =>
       testing.resolveSlackQaRuntimeEnv({
-        OPENCLAW_QA_SLACK_CHANNEL_ID: "qa-channel",
-        OPENCLAW_QA_SLACK_DRIVER_BOT_TOKEN: "xoxb-driver",
-        OPENCLAW_QA_SLACK_SUT_BOT_TOKEN: "xoxb-sut",
-        OPENCLAW_QA_SLACK_SUT_APP_TOKEN: "xapp-sut",
+        MARKETINGCLAW_QA_SLACK_CHANNEL_ID: "qa-channel",
+        MARKETINGCLAW_QA_SLACK_DRIVER_BOT_TOKEN: "xoxb-driver",
+        MARKETINGCLAW_QA_SLACK_SUT_BOT_TOKEN: "xoxb-sut",
+        MARKETINGCLAW_QA_SLACK_SUT_APP_TOKEN: "xapp-sut",
       }),
-    ).toThrow("OPENCLAW_QA_SLACK channelId must be a Slack id like C123 or U123.");
+    ).toThrow("MARKETINGCLAW_QA_SLACK channelId must be a Slack id like C123 or U123.");
   });
 
   it("canonicalizes the SUT account before config and approval routing", () => {
@@ -110,7 +110,7 @@ describe("Slack live QA runtime helpers", () => {
   });
 
   it("rejects an incompatible Codex approval model before credential acquisition", async () => {
-    const outputDir = await fs.mkdtemp(path.join(tmpdir(), "openclaw-slack-codex-model-"));
+    const outputDir = await fs.mkdtemp(path.join(tmpdir(), "marketingclaw-slack-codex-model-"));
     await expect(
       runSlackQaLive({
         credentialSource: "convex",
@@ -267,7 +267,7 @@ describe("Slack live QA runtime helpers", () => {
       }),
     ).toContain("Do not ask for approval in chat");
     expect(testing.resolveCodexFileApprovalTargetPath("MARKER")).toMatch(
-      /\.openclaw-qa-codex-file-approval-marker\.txt$/u,
+      /\.marketingclaw-qa-codex-file-approval-marker\.txt$/u,
     );
   });
 
@@ -469,7 +469,7 @@ describe("Slack live QA runtime helpers", () => {
           {
             id: "plugin:abc123",
             request: {
-              pluginId: "openclaw-codex-app-server",
+              pluginId: "marketingclaw-codex-app-server",
               title: "Codex app-server file approval",
               toolName: "codex_file_approval",
               sessionKey: "agent:qa:slack-codex-approval-plugin-native-token",
@@ -492,7 +492,7 @@ describe("Slack live QA runtime helpers", () => {
           {
             id: "plugin:abc123",
             request: {
-              pluginId: "openclaw-codex-app-server",
+              pluginId: "marketingclaw-codex-app-server",
               title: "Codex app-server file approval",
               toolName: "codex_file_approval",
               sessionKey: "agent:qa:slack-codex-approval-plugin-native-token",
@@ -514,11 +514,11 @@ describe("Slack live QA runtime helpers", () => {
         actionValues: [],
         approvalKind: "plugin",
         decision: "allow-once",
-        extraTextMatches: ["openclaw-codex-app-server", "Codex app-server file approval"],
+        extraTextMatches: ["marketingclaw-codex-app-server", "Codex app-server file approval"],
         text: [
           "Plugin approval: Allowed once",
           "Codex app-server file approval",
-          "Plugin: openclaw-codex-app-server",
+          "Plugin: marketingclaw-codex-app-server",
         ].join("\n"),
       }),
     ).toBe(true);
@@ -537,11 +537,11 @@ describe("Slack live QA runtime helpers", () => {
     expect(
       testing.matchesSlackApprovalPromptText({
         approvalKind: "plugin",
-        extraTextMatches: ["openclaw-codex-app-server", "Codex app-server command approval"],
+        extraTextMatches: ["marketingclaw-codex-app-server", "Codex app-server command approval"],
         text: [
           "Plugin approval required",
           "Codex app-server command approval",
-          "Plugin: openclaw-codex-app-server",
+          "Plugin: marketingclaw-codex-app-server",
         ].join("\n"),
       }),
     ).toBe(true);
@@ -586,8 +586,8 @@ describe("Slack live QA runtime helpers", () => {
   it("resolves Slack approval checkpoint configuration from env", () => {
     expect(
       testing.resolveSlackApprovalCheckpointConfig({
-        OPENCLAW_QA_SLACK_APPROVAL_CHECKPOINT_DIR: "/tmp/checkpoints",
-        OPENCLAW_QA_SLACK_APPROVAL_CHECKPOINT_TIMEOUT_MS: "5000",
+        MARKETINGCLAW_QA_SLACK_APPROVAL_CHECKPOINT_DIR: "/tmp/checkpoints",
+        MARKETINGCLAW_QA_SLACK_APPROVAL_CHECKPOINT_TIMEOUT_MS: "5000",
       }),
     ).toEqual({
       checkpointDir: "/tmp/checkpoints",
@@ -666,12 +666,12 @@ describe("Slack live QA runtime helpers", () => {
     expect(testing.resolveSlackQaReadyTimeoutMs({})).toBe(45_000);
     expect(
       testing.resolveSlackQaReadyTimeoutMs({
-        OPENCLAW_QA_TRANSPORT_READY_TIMEOUT_MS: "180000",
+        MARKETINGCLAW_QA_TRANSPORT_READY_TIMEOUT_MS: "180000",
       }),
     ).toBe(180_000);
     expect(
       testing.resolveSlackQaReadyTimeoutMs({
-        OPENCLAW_QA_TRANSPORT_READY_TIMEOUT_MS: "bad",
+        MARKETINGCLAW_QA_TRANSPORT_READY_TIMEOUT_MS: "bad",
       }),
     ).toBe(45_000);
   });
@@ -881,7 +881,7 @@ describe("Slack live QA runtime helpers", () => {
   });
 
   it("writes artifacts when Convex credential acquisition fails", async () => {
-    const outputDir = await fs.mkdtemp(path.join(tmpdir(), "openclaw-slack-qa-"));
+    const outputDir = await fs.mkdtemp(path.join(tmpdir(), "marketingclaw-slack-qa-"));
     const result = await runSlackQaLive({
       credentialRole: "ci",
       credentialSource: "convex",
@@ -891,7 +891,7 @@ describe("Slack live QA runtime helpers", () => {
     expect(result.scenarios).toHaveLength(1);
     expect(result.scenarios[0]?.id).toBe("slack-canary");
     expect(result.scenarios[0]?.status).toBe("fail");
-    expect(result.scenarios[0]?.details).toContain("Missing OPENCLAW_QA_CONVEX_SITE_URL");
+    expect(result.scenarios[0]?.details).toContain("Missing MARKETINGCLAW_QA_CONVEX_SITE_URL");
     await expect(fs.stat(result.reportPath).then((stats) => stats.isFile())).resolves.toBe(true);
     expect(path.basename(result.summaryPath)).toBe(QA_EVIDENCE_FILENAME);
     const summary = JSON.parse(await fs.readFile(result.summaryPath, "utf8")) as {
@@ -909,7 +909,7 @@ describe("Slack live QA runtime helpers", () => {
       result: {
         status: "fail",
         failure: {
-          reason: expect.stringContaining("Missing OPENCLAW_QA_CONVEX_SITE_URL"),
+          reason: expect.stringContaining("Missing MARKETINGCLAW_QA_CONVEX_SITE_URL"),
         },
       },
     });

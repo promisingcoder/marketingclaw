@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { MarketingClawConfig } from "../../config/config.js";
 import type { SessionEntry } from "../../config/sessions/types.js";
 
 const hoisted = vi.hoisted(() => ({
@@ -39,7 +39,7 @@ describe("command resolveSession provider-owned daily reset", () => {
     seedProviderOwned(sessionKey);
 
     const result = resolveSession({
-      cfg: { session: {} } as OpenClawConfig,
+      cfg: { session: {} } as MarketingClawConfig,
       sessionKey,
       agentId: "main",
     });
@@ -61,7 +61,7 @@ describe("command resolveSession provider-owned daily reset", () => {
     };
 
     const result = resolveSession({
-      cfg: { session: {} } as OpenClawConfig,
+      cfg: { session: {} } as MarketingClawConfig,
       sessionKey,
       agentId: "main",
     });

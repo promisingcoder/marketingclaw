@@ -1,12 +1,12 @@
-# OpenClaw Chutes Provider
+# MarketingClaw Chutes Provider
 
-Official OpenClaw provider plugin for Chutes.
+Official MarketingClaw provider plugin for Chutes.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugins install @openclaw/chutes-provider
-openclaw gateway restart
+marketingclaw plugins install @marketingclaw/chutes-provider
+marketingclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/chutes> for setup and configuration.
+See <https://docs.marketingclaw.ai/providers/chutes> for setup and configuration.

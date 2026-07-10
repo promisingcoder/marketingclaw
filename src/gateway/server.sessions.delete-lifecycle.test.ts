@@ -17,7 +17,7 @@ import {
   beginSessionWorkAdmission,
   runExclusiveSessionLifecycleMutation,
 } from "../sessions/session-lifecycle-admission.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeMarketingClawStateDatabaseForTest } from "../state/marketingclaw-state-db.js";
 import { embeddedRunMock, rpcReq, testState, writeSessionStore } from "./test-helpers.js";
 import {
   setupGatewaySessionsTestHarness,
@@ -47,13 +47,13 @@ async function initializeRemoteBackedGitWorkspace(root: string): Promise<string>
   const remote = path.join(root, "remote.git");
   await fs.mkdir(workspace, { recursive: true });
   await execFileAsync("git", ["-C", workspace, "init", "-b", "main"]);
-  await execFileAsync("git", ["-C", workspace, "config", "user.name", "OpenClaw Test"]);
+  await execFileAsync("git", ["-C", workspace, "config", "user.name", "MarketingClaw Test"]);
   await execFileAsync("git", [
     "-C",
     workspace,
     "config",
     "user.email",
-    "openclaw-test@example.invalid",
+    "marketingclaw-test@example.invalid",
   ]);
   await fs.writeFile(path.join(workspace, "README.md"), "base\n");
   await execFileAsync("git", ["-C", workspace, "add", "README.md"]);
@@ -65,7 +65,7 @@ async function initializeRemoteBackedGitWorkspace(root: string): Promise<string>
 }
 
 afterEach(() => {
-  closeOpenClawStateDatabaseForTest();
+  closeMarketingClawStateDatabaseForTest();
 });
 
 function expectObject(value: unknown) {
@@ -114,12 +114,12 @@ function expectThreadBindingsUnbound(targetSessionKey: string) {
 
 test("sessions.delete removes clean session worktrees and keeps dirty ones", async () => {
   const root = await fs.mkdtemp(
-    path.join(await fs.realpath(os.tmpdir()), "openclaw-delete-worktree-"),
+    path.join(await fs.realpath(os.tmpdir()), "marketingclaw-delete-worktree-"),
   );
   const workspace = await initializeRemoteBackedGitWorkspace(root);
-  const previousStateDir = process.env.OPENCLAW_STATE_DIR;
-  process.env.OPENCLAW_STATE_DIR = path.join(root, "state");
-  closeOpenClawStateDatabaseForTest();
+  const previousStateDir = process.env.MARKETINGCLAW_STATE_DIR;
+  process.env.MARKETINGCLAW_STATE_DIR = path.join(root, "state");
+  closeMarketingClawStateDatabaseForTest();
   testState.agentConfig = { workspace };
   await createSessionStoreDir();
   let dirtyWorktreeId: string | undefined;
@@ -140,7 +140,7 @@ test("sessions.delete removes clean session worktrees and keeps dirty ones", asy
     await expect(fs.access(cleanWorktree!.path)).rejects.toThrow();
     expect(getRegistryWorktree(process.env, cleanWorktree!.id)).toMatchObject({
       removedAt: expect.any(Number),
-      snapshotRef: expect.stringMatching(/^refs\/openclaw\/snapshots\//),
+      snapshotRef: expect.stringMatching(/^refs\/marketingclaw\/snapshots\//),
     });
 
     const dirty = await directSessionReq<{
@@ -164,11 +164,11 @@ test("sessions.delete removes clean session worktrees and keeps dirty ones", asy
     ) {
       await managedWorktrees.remove({ id: dirtyWorktreeId, reason: "test-cleanup", force: true });
     }
-    closeOpenClawStateDatabaseForTest();
+    closeMarketingClawStateDatabaseForTest();
     if (previousStateDir === undefined) {
-      delete process.env.OPENCLAW_STATE_DIR;
+      delete process.env.MARKETINGCLAW_STATE_DIR;
     } else {
-      process.env.OPENCLAW_STATE_DIR = previousStateDir;
+      process.env.MARKETINGCLAW_STATE_DIR = previousStateDir;
     }
     testState.agentConfig = undefined;
     await fs.rm(root, { recursive: true, force: true });

@@ -71,7 +71,7 @@ function writeSourceToolPluginProject(params: {
       {
         name: params.packageName,
         type: "module",
-        openclaw: { extensions: ["./src/index.ts"] },
+        marketingclaw: { extensions: ["./src/index.ts"] },
       },
       null,
       2,
@@ -80,7 +80,7 @@ function writeSourceToolPluginProject(params: {
   const entryPath = path.join(sourceDir, "index.ts");
   fs.writeFileSync(
     entryPath,
-    `import { defineToolPlugin } from "openclaw/plugin-sdk/tool-plugin";
+    `import { defineToolPlugin } from "marketingclaw/plugin-sdk/tool-plugin";
 
 export default defineToolPlugin({
   id: ${JSON.stringify(params.pluginId)},
@@ -102,11 +102,11 @@ export default defineToolPlugin({
 
 describe("plugin authoring commands", () => {
   beforeAll(async () => {
-    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-plugin-source-warm-"));
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-plugin-source-warm-"));
     try {
       const entryPath = writeSourceToolPluginProject({
         tmpDir,
-        packageName: "openclaw-plugin-source-warm",
+        packageName: "marketingclaw-plugin-source-warm",
         pluginId: "source-warm",
         toolName: "source_warm_echo",
       });
@@ -204,14 +204,14 @@ describe("plugin authoring commands", () => {
         metadata,
         entry: "./src/index.ts",
         manifest,
-        packageManifest: { version: "1.2.3", openclaw: { extensions: ["./src/index.ts"] } },
+        packageManifest: { version: "1.2.3", marketingclaw: { extensions: ["./src/index.ts"] } },
       }),
     ).toEqual([]);
   });
 
   it("drops stale manifest-owned tool metadata when no generated metadata remains", () => {
     const metadata = createDemoMetadata();
-    const packageManifest = { version: "1.2.3", openclaw: { extensions: ["./src/index.ts"] } };
+    const packageManifest = { version: "1.2.3", marketingclaw: { extensions: ["./src/index.ts"] } };
     const manifest = buildToolPluginManifest({
       metadata,
       packageManifest,
@@ -240,13 +240,13 @@ describe("plugin authoring commands", () => {
       buildToolPluginPackageManifest({
         packageManifest: {
           name: "demo",
-          openclaw: { setupEntry: "./setup.ts", extensions: ["./src/other.ts"] },
+          marketingclaw: { setupEntry: "./setup.ts", extensions: ["./src/other.ts"] },
         },
         entry: "./src/index.ts",
       }),
     ).toEqual({
       name: "demo",
-      openclaw: {
+      marketingclaw: {
         setupEntry: "./setup.ts",
         extensions: ["./src/other.ts", "./src/index.ts"],
       },
@@ -255,7 +255,7 @@ describe("plugin authoring commands", () => {
 
   it("validates manifest tools and package entry metadata", () => {
     const metadata = createDemoMetadata();
-    const packageManifest = { version: "1.2.3", openclaw: { extensions: ["./src/index.ts"] } };
+    const packageManifest = { version: "1.2.3", marketingclaw: { extensions: ["./src/index.ts"] } };
 
     expect(
       validateToolPluginProject({
@@ -279,28 +279,28 @@ describe("plugin authoring commands", () => {
           configSchema: {},
           contracts: { tools: ["other_tool"] },
         },
-        packageManifest: { openclaw: { extensions: ["./src/index.ts"] } },
+        packageManifest: { marketingclaw: { extensions: ["./src/index.ts"] } },
       }),
     ).toEqual([
-      "openclaw.plugin.json generated metadata is stale. Run openclaw plugins build.",
-      "openclaw.plugin.json contracts.tools is missing: demo_echo",
-      "openclaw.plugin.json contracts.tools has no matching defineToolPlugin tool: other_tool",
+      "marketingclaw.plugin.json generated metadata is stale. Run marketingclaw plugins build.",
+      "marketingclaw.plugin.json contracts.tools is missing: demo_echo",
+      "marketingclaw.plugin.json contracts.tools has no matching defineToolPlugin tool: other_tool",
     ]);
   });
 
   it("reports missing entries with an author-facing path", async () => {
-    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-plugin-missing-"));
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-plugin-missing-"));
 
     await expect(
       loadToolPlugin({ rootDir: tmpDir, entryPath: path.join(tmpDir, "dist/index.js") }),
     ).rejects.toThrow("plugin entry not found: ./dist/index.js");
   });
 
-  it("loads source entries that import the OpenClaw plugin SDK package subpath", async () => {
-    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-plugin-source-"));
+  it("loads source entries that import the MarketingClaw plugin SDK package subpath", async () => {
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-plugin-source-"));
     const entryPath = writeSourceToolPluginProject({
       tmpDir,
-      packageName: "openclaw-plugin-source-demo",
+      packageName: "marketingclaw-plugin-source-demo",
       pluginId: "source-demo",
       toolName: "source_echo",
     });
@@ -315,7 +315,7 @@ describe("plugin authoring commands", () => {
   });
 
   it("scaffolds a dist-entry tool plugin project", async () => {
-    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-plugin-init-"));
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-plugin-init-"));
     const projectDir = path.join(tmpDir, "stock-quotes");
 
     await runPluginsInitCommand("stock-quotes", {
@@ -333,24 +333,25 @@ describe("plugin authoring commands", () => {
         typebox: "^1.1.38",
       },
       peerDependencies: {
-        openclaw: ">=2026.5.17",
+        marketingclaw: ">=2026.5.17",
       },
       devDependencies: {
-        openclaw: "latest",
+        marketingclaw: "latest",
         typescript: "^5.9.0",
         vitest: "^3.2.0",
       },
       scripts: {
-        "plugin:build": "npm run build && openclaw plugins build --entry ./dist/index.js",
-        "plugin:validate": "npm run build && openclaw plugins validate --entry ./dist/index.js",
+        "plugin:build": "npm run build && marketingclaw plugins build --entry ./dist/index.js",
+        "plugin:validate":
+          "npm run build && marketingclaw plugins validate --entry ./dist/index.js",
         test: "vitest run --config ./vitest.config.ts",
       },
-      openclaw: {
+      marketingclaw: {
         extensions: ["./dist/index.js"],
       },
     });
     expect(
-      JSON.parse(fs.readFileSync(path.join(projectDir, "openclaw.plugin.json"), "utf8")),
+      JSON.parse(fs.readFileSync(path.join(projectDir, "marketingclaw.plugin.json"), "utf8")),
     ).toMatchObject({
       id: "stock-quotes",
       name: 'Stock "Quotes"',
@@ -370,7 +371,7 @@ describe("plugin authoring commands", () => {
   });
 
   it("scaffolds a provider plugin project with ClawHub validation and release metadata", async () => {
-    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-provider-init-"));
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-provider-init-"));
     const projectDir = path.join(tmpDir, "plugin-init-test");
 
     await runPluginsInitCommand("plugin-init-test", {
@@ -383,25 +384,25 @@ describe("plugin authoring commands", () => {
       fs.readFileSync(path.join(projectDir, "package.json"), "utf8"),
     );
     expect(packageManifest).toMatchObject({
-      name: "openclaw-plugin-plugin-init-test",
+      name: "marketingclaw-plugin-plugin-init-test",
       scripts: {
         build: "tsc -p tsconfig.json",
         test: "vitest run --config ./vitest.config.ts",
         validate: "npm run build && clawhub package validate . --out .clawhub-validation",
       },
       peerDependencies: {
-        openclaw: `>=${VERSION}`,
+        marketingclaw: `>=${VERSION}`,
       },
       devDependencies: {
         clawhub: "latest",
-        openclaw: "latest",
+        marketingclaw: "latest",
         typescript: "^5.9.0",
         vitest: "^3.2.0",
       },
-      openclaw: {
+      marketingclaw: {
         extensions: ["./dist/index.js"],
         install: {
-          clawhubSpec: "clawhub:openclaw-plugin-plugin-init-test",
+          clawhubSpec: "clawhub:marketingclaw-plugin-plugin-init-test",
           defaultChoice: "clawhub",
           minHostVersion: `>=${VERSION}`,
         },
@@ -409,7 +410,7 @@ describe("plugin authoring commands", () => {
           pluginApi: `>=${VERSION}`,
         },
         build: {
-          openclawVersion: VERSION,
+          marketingclawVersion: VERSION,
         },
         release: {
           publishToClawHub: true,
@@ -420,7 +421,7 @@ describe("plugin authoring commands", () => {
     expect(packageManifest.scripts).not.toHaveProperty("plugin:validate");
 
     const manifest = JSON.parse(
-      fs.readFileSync(path.join(projectDir, "openclaw.plugin.json"), "utf8"),
+      fs.readFileSync(path.join(projectDir, "marketingclaw.plugin.json"), "utf8"),
     );
     expect(manifest).toMatchObject({
       id: "plugin-init-test",
@@ -448,7 +449,7 @@ describe("plugin authoring commands", () => {
     expect(indexSource).toContain("buildSingleProviderApiKeyCatalog");
 
     expect(fs.readFileSync(path.join(projectDir, "src/index.test.ts"), "utf8")).toContain(
-      "OpenClawPluginApi",
+      "MarketingClawPluginApi",
     );
     expect(fs.readFileSync(path.join(projectDir, "vitest.config.ts"), "utf8")).toContain(
       'include: ["src/**/*.test.ts"]',
@@ -467,7 +468,7 @@ describe("plugin authoring commands", () => {
     expect(workflow).not.toContain("secrets: inherit");
     expect(workflow).toContain("workflow_dispatch:");
     expect(workflow).toContain(
-      "openclaw/clawhub/.github/workflows/package-publish.yml@9d49df109d4ad3dc8a6ecf05d26b39f46d294721",
+      "marketingclaw/clawhub/.github/workflows/package-publish.yml@9d49df109d4ad3dc8a6ecf05d26b39f46d294721",
     );
   });
 });

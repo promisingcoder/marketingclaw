@@ -12,27 +12,27 @@ import {
   type BuildMentionRegexesOptions,
   type InboundEventKind,
   type NormalizedLocation,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { resolveChannelGroupPolicy } from "openclaw/plugin-sdk/channel-policy";
-import { hasControlCommand } from "openclaw/plugin-sdk/command-detection";
-import { isAbortRequestText } from "openclaw/plugin-sdk/command-primitives-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "marketingclaw/plugin-sdk/channel-inbound";
+import { resolveChannelGroupPolicy } from "marketingclaw/plugin-sdk/channel-policy";
+import { hasControlCommand } from "marketingclaw/plugin-sdk/command-detection";
+import { isAbortRequestText } from "marketingclaw/plugin-sdk/command-primitives-runtime";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
 import type {
   TelegramDirectConfig,
   TelegramGroupConfig,
   TelegramTopicConfig,
-} from "openclaw/plugin-sdk/config-contracts";
+} from "marketingclaw/plugin-sdk/config-contracts";
 import {
   createInternalHookEvent,
   fireAndForgetHook,
   toInternalMessageReceivedContext,
   triggerInternalHook,
-} from "openclaw/plugin-sdk/hook-runtime";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import type { HistoryEntry } from "openclaw/plugin-sdk/reply-history";
-import type { MsgContext } from "openclaw/plugin-sdk/reply-runtime";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeOptionalLowercaseString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "marketingclaw/plugin-sdk/hook-runtime";
+import { createLazyRuntimeModule } from "marketingclaw/plugin-sdk/lazy-runtime";
+import type { HistoryEntry } from "marketingclaw/plugin-sdk/reply-history";
+import type { MsgContext } from "marketingclaw/plugin-sdk/reply-runtime";
+import { logVerbose } from "marketingclaw/plugin-sdk/runtime-env";
+import { normalizeOptionalLowercaseString } from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import type { NormalizedAllowFrom } from "./bot-access.js";
 import type {
   TelegramLogger,
@@ -160,7 +160,7 @@ function resolveTelegramMentionFacts(params: {
 }
 
 async function resolveStickerVisionSupport(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   agentId?: string;
 }): Promise<boolean> {
   try {
@@ -172,7 +172,7 @@ async function resolveStickerVisionSupport(params: {
 }
 
 export async function resolveTelegramInboundBody(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   primaryCtx: TelegramContext;
   msg: TelegramContext["message"];
   allMedia: TelegramMediaRef[];

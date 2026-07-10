@@ -1,5 +1,5 @@
 // Telegram tests cover bot message context.require mention plugin behavior.
-import { getRuntimeConfig } from "openclaw/plugin-sdk/runtime-config-snapshot";
+import { getRuntimeConfig } from "marketingclaw/plugin-sdk/runtime-config-snapshot";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const { defaultRouteConfig } = vi.hoisted(() => ({
@@ -12,10 +12,10 @@ const { defaultRouteConfig } = vi.hoisted(() => ({
   },
 }));
 
-vi.mock("openclaw/plugin-sdk/runtime-config-snapshot", async () => {
+vi.mock("marketingclaw/plugin-sdk/runtime-config-snapshot", async () => {
   const actual = await vi.importActual<
-    typeof import("openclaw/plugin-sdk/runtime-config-snapshot")
-  >("openclaw/plugin-sdk/runtime-config-snapshot");
+    typeof import("marketingclaw/plugin-sdk/runtime-config-snapshot")
+  >("marketingclaw/plugin-sdk/runtime-config-snapshot");
   return {
     ...actual,
     getRuntimeConfig: vi.fn(() => defaultRouteConfig),
@@ -309,7 +309,7 @@ describe("buildTelegramMessageContext requireMention precedence", () => {
         [
           { sender: "Alice", body: "before self marker", timestamp: 1, messageId: "1" },
           {
-            sender: buildTelegramGroupHistorySelfSender("OpenClaw"),
+            sender: buildTelegramGroupHistorySelfSender("MarketingClaw"),
             body: "self marker body",
             timestamp: 2,
             messageId: "2",
@@ -383,7 +383,7 @@ describe("buildTelegramMessageContext requireMention precedence", () => {
     expect(roomEvent?.ctxPayload.InboundHistory).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ body: "before self marker" }),
-        expect.objectContaining({ body: "self marker body", sender: "OpenClaw (you)" }),
+        expect.objectContaining({ body: "self marker body", sender: "MarketingClaw (you)" }),
         expect.objectContaining({ body: "after watermark" }),
       ]),
     );

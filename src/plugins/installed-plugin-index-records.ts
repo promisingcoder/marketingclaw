@@ -1,5 +1,5 @@
 /** Builds and compares installed plugin index records for refresh decisions. */
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import {
   clearLoadInstalledPluginIndexInstallRecordsCache,
@@ -74,9 +74,9 @@ export function writePersistedInstalledPluginIndexInstallRecordsSync(
 
 /** Returns config with plugin install records attached at the canonical config path. */
 export function withPluginInstallRecords(
-  config: OpenClawConfig,
+  config: MarketingClawConfig,
   records: Record<string, PluginInstallRecord>,
-): OpenClawConfig {
+): MarketingClawConfig {
   return {
     ...config,
     plugins: {
@@ -88,9 +88,9 @@ export function withPluginInstallRecords(
 
 /** Returns config with legacy plugin install records removed. */
 export function withoutPluginInstallRecords(
-  config: OpenClawConfig,
+  config: MarketingClawConfig,
   options: { preserveEmptyPlugins?: boolean } = {},
-): OpenClawConfig {
+): MarketingClawConfig {
   if (!config.plugins?.installs) {
     return config;
   }

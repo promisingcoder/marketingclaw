@@ -2,7 +2,7 @@
 name: discrawl
 description: "Discord archive: search, sync freshness, DMs, summaries, TUI, repo/release work."
 metadata:
-  openclaw:
+  marketingclaw:
     homepage: https://github.com/openclaw/discrawl
     requires:
       bins:
@@ -30,8 +30,8 @@ for current external context.
 - Cache: platform-native XDG cache dir
 - Logs: platform-native XDG state dir
 - Git share repo: platform-native XDG data dir
-- Repo: `openclaw/discrawl`; use `~/GIT/_Perso/discrawl` only after verifying
-  its remote targets `openclaw/discrawl`, otherwise use a fresh checkout
+- Repo: `marketingclaw/discrawl`; use `~/GIT/_Perso/discrawl` only after verifying
+  its remote targets `marketingclaw/discrawl`, otherwise use a fresh checkout
 - Preferred CLI: `discrawl`; fallback to `go run ./cmd/discrawl` from the repo
   if the installed binary is stale
 
@@ -125,7 +125,7 @@ Never use `--unsafe --confirm` unless the user explicitly asks for a database
 mutation and the write has been reviewed.
 
 When the installed CLI lacks a new feature, build or run from a verified
-`openclaw/discrawl` checkout before concluding the feature is missing.
+`marketingclaw/discrawl` checkout before concluding the feature is missing.
 
 ## Discord Boundaries
 

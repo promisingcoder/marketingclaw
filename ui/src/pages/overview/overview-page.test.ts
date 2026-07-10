@@ -74,7 +74,7 @@ function contextWithGateway(
 }
 
 function createPage(context: ApplicationContext): TestOverviewPage {
-  const page = document.createElement("openclaw-overview-page") as TestOverviewPage;
+  const page = document.createElement("marketingclaw-overview-page") as TestOverviewPage;
   page.context = context;
   page.render = () => nothing;
   return page;

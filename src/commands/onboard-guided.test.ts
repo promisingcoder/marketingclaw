@@ -22,12 +22,12 @@ const readConfigFileSnapshot = vi.hoisted(() =>
   vi.fn(async () => ({ exists: false, valid: true, config: {} })),
 );
 
-const logPathTracker = createSuiteLogPathTracker("openclaw-guided-onboard-log-");
+const logPathTracker = createSuiteLogPathTracker("marketingclaw-guided-onboard-log-");
 
 vi.mock("../config/config.js", () => ({ readConfigFileSnapshot }));
 
 vi.mock("./onboard-helpers.js", () => ({
-  DEFAULT_WORKSPACE: "/tmp/openclaw-workspace",
+  DEFAULT_WORKSPACE: "/tmp/marketingclaw-workspace",
   printWizardHeader: vi.fn(),
 }));
 
@@ -56,7 +56,7 @@ function detection(
   return {
     candidates: [candidate("claude-cli", "Claude Code")],
     manualProviders: [],
-    workspace: "/tmp/openclaw-workspace",
+    workspace: "/tmp/marketingclaw-workspace",
     setupComplete: false,
     ...overrides,
   };
@@ -122,7 +122,7 @@ describe("runGuidedOnboarding", () => {
       expect.objectContaining({ kind: "claude-cli", workspace: "/tmp/work", surface: "cli" }),
     );
     expect(select).not.toHaveBeenCalled();
-    expect(prompter.outro).toHaveBeenCalledWith("OpenClaw is ready.");
+    expect(prompter.outro).toHaveBeenCalledWith("MarketingClaw is ready.");
   });
 
   it("suppresses activation subsystem output and restores it when activation throws", async () => {
@@ -264,7 +264,7 @@ describe("runGuidedOnboarding", () => {
 
     expect(activate).toHaveBeenCalledTimes(2);
     expect(select).toHaveBeenCalledOnce();
-    expect(prompter.outro).toHaveBeenCalledWith("OpenClaw is ready.");
+    expect(prompter.outro).toHaveBeenCalledWith("MarketingClaw is ready.");
   });
 
   it("accepts and verifies a manual provider key without displaying it", async () => {

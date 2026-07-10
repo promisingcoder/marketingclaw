@@ -1,13 +1,13 @@
 // Signal type declarations define plugin contracts.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
 import type {
   DmPolicy,
   GroupPolicy,
   SignalReactionNotificationMode,
-} from "openclaw/plugin-sdk/config-contracts";
-import type { HistoryEntry } from "openclaw/plugin-sdk/reply-history";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
+} from "marketingclaw/plugin-sdk/config-contracts";
+import type { HistoryEntry } from "marketingclaw/plugin-sdk/reply-history";
+import type { ReplyPayload } from "marketingclaw/plugin-sdk/reply-runtime";
+import type { RuntimeEnv } from "marketingclaw/plugin-sdk/runtime-env";
 import type { SignalSender } from "../identity.js";
 
 export type SignalEnvelope = {
@@ -90,7 +90,7 @@ export type SignalNativeReplyContext = {
 
 export type SignalEventHandlerDeps = {
   runtime: RuntimeEnv;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   baseUrl: string;
   account?: string;
   accountUuid?: string;
@@ -118,7 +118,7 @@ export type SignalEventHandlerDeps = {
     maxBytes: number;
   }) => Promise<{ path: string; contentType?: string } | null>;
   deliverReplies: (params: {
-    cfg: OpenClawConfig;
+    cfg: MarketingClawConfig;
     replies: ReplyPayload[];
     target: string;
     baseUrl: string;

@@ -1,13 +1,16 @@
 // Slack plugin module implements prepare thread context behavior.
-import { formatInboundEnvelope } from "openclaw/plugin-sdk/channel-inbound";
-import { runTasksWithConcurrency } from "openclaw/plugin-sdk/concurrency-runtime";
-import type { ContextVisibilityMode, OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
+import { formatInboundEnvelope } from "marketingclaw/plugin-sdk/channel-inbound";
+import { runTasksWithConcurrency } from "marketingclaw/plugin-sdk/concurrency-runtime";
+import type {
+  ContextVisibilityMode,
+  MarketingClawConfig,
+} from "marketingclaw/plugin-sdk/config-contracts";
+import { createLazyRuntimeModule } from "marketingclaw/plugin-sdk/lazy-runtime";
+import { logVerbose } from "marketingclaw/plugin-sdk/runtime-env";
 import {
   filterSupplementalContextItems,
   shouldIncludeSupplementalContext,
-} from "openclaw/plugin-sdk/security-runtime";
+} from "marketingclaw/plugin-sdk/security-runtime";
 import type { ResolvedSlackAccount } from "../../accounts.js";
 import type { SlackMessageEvent } from "../../types.js";
 import { resolveSlackAllowListMatch } from "../allow-list.js";
@@ -48,7 +51,7 @@ type SlackSessionFreshnessRuntime = {
     resolveEntryResetFreshness?: (params: {
       storePath?: string;
       sessionKey: string;
-      sessionCfg?: OpenClawConfig["session"];
+      sessionCfg?: MarketingClawConfig["session"];
       resetType: "thread";
       resetOverride?: ReturnType<typeof resolveChannelResetConfig>;
     }) => SlackSessionResetFreshness;
@@ -144,7 +147,7 @@ export async function resolveSlackThreadContextData(params: {
   allowNameMatching: boolean;
   contextVisibilityMode: ContextVisibilityMode;
   envelopeOptions: ReturnType<
-    typeof import("openclaw/plugin-sdk/channel-inbound").resolveEnvelopeFormatOptions
+    typeof import("marketingclaw/plugin-sdk/channel-inbound").resolveEnvelopeFormatOptions
   >;
   effectiveDirectMedia: SlackMediaResult[] | null;
   eventScope?: SlackEventScope;

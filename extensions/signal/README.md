@@ -1,13 +1,13 @@
-# Signal OpenClaw channel
+# Signal MarketingClaw channel
 
-Official OpenClaw channel plugin for Signal.
+Official MarketingClaw channel plugin for Signal.
 
 ## Install
 
 ```sh
-openclaw plugins install @openclaw/signal
+marketingclaw plugins install @marketingclaw/signal
 ```
 
 ## Docs
 
-See `docs/channels/signal.md` in the OpenClaw repository, or the published docs at `https://docs.openclaw.ai/channels/signal`.
+See `docs/channels/signal.md` in the MarketingClaw repository, or the published docs at `https://docs.marketingclaw.ai/channels/signal`.

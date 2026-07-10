@@ -6,9 +6,17 @@ import { resolveBundledPluginsDir } from "./bundled-dir.js";
 import { formatPluginSourceForTable, resolvePluginSourceRoots } from "./source-display.js";
 
 const PLUGIN_SOURCE_ROOTS = {
-  stock: path.resolve(path.sep, "opt", "homebrew", "lib", "node_modules", "openclaw", "extensions"),
-  global: path.resolve(path.sep, "Users", "x", ".openclaw", "extensions"),
-  workspace: path.resolve(path.sep, "Users", "x", "ws", ".openclaw", "extensions"),
+  stock: path.resolve(
+    path.sep,
+    "opt",
+    "homebrew",
+    "lib",
+    "node_modules",
+    "marketingclaw",
+    "extensions",
+  ),
+  global: path.resolve(path.sep, "Users", "x", ".marketingclaw", "extensions"),
+  workspace: path.resolve(path.sep, "Users", "x", "ws", ".marketingclaw", "extensions"),
 };
 
 function expectFormattedSource(params: {
@@ -74,10 +82,10 @@ describe("formatPluginSourceForTable", () => {
   ])("shortens $origin sources under the $sourceKey root", expectFormattedSourceCase);
 
   it("ignores untrusted explicit env override for the stock source root", () => {
-    const homeDir = path.resolve(path.sep, "tmp", "openclaw-home");
+    const homeDir = path.resolve(path.sep, "tmp", "marketingclaw-home");
     const rawEnv = {
-      OPENCLAW_BUNDLED_PLUGINS_DIR: "~/bundled",
-      OPENCLAW_STATE_DIR: "~/state",
+      MARKETINGCLAW_BUNDLED_PLUGINS_DIR: "~/bundled",
+      MARKETINGCLAW_STATE_DIR: "~/state",
     } as NodeJS.ProcessEnv;
     const stock = withPathResolutionEnv(homeDir, rawEnv, (env) => resolveBundledPluginsDir(env));
     if (!stock) {
@@ -90,7 +98,7 @@ describe("formatPluginSourceForTable", () => {
       expected: {
         stock,
         global: path.join(homeDir, "state", "extensions"),
-        workspace: path.join(homeDir, "ws", ".openclaw", "extensions"),
+        workspace: path.join(homeDir, "ws", ".marketingclaw", "extensions"),
       },
     });
   });

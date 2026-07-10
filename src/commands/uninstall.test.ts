@@ -29,7 +29,7 @@ describe("uninstallCommand", () => {
 
     expect(
       cleanupCommandLogMessages(runtime).some((message) =>
-        message.includes("openclaw backup create"),
+        message.includes("marketingclaw backup create"),
       ),
     ).toBe(true);
   });
@@ -44,7 +44,7 @@ describe("uninstallCommand", () => {
 
     expect(
       cleanupCommandLogMessages(runtime).some((message) =>
-        message.includes("openclaw backup create"),
+        message.includes("marketingclaw backup create"),
       ),
     ).toBe(false);
   });
@@ -62,7 +62,7 @@ describe("uninstallCommand", () => {
       runtime,
       expect.objectContaining({
         dryRun: true,
-        preservePaths: ["/tmp/.openclaw/workspace"],
+        preservePaths: ["/tmp/.marketingclaw/workspace"],
       }),
     );
   });
@@ -95,7 +95,7 @@ describe("uninstallCommand", () => {
     });
 
     expect(removeWorkspaceAttestationPaths).toHaveBeenCalledWith(
-      ["/tmp/.openclaw/workspace"],
+      ["/tmp/.marketingclaw/workspace"],
       runtime,
       { dryRun: true },
     );

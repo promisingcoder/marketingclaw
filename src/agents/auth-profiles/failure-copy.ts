@@ -3,7 +3,7 @@
  * Maps failover reasons into provider-specific recovery guidance while keeping
  * raw error detail as a short diagnostic suffix.
  */
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import type { FailoverReason } from "../embedded-agent-helpers/types.js";
 import { buildProviderAuthRecoveryHint } from "../provider-auth-recovery-hint.js";
@@ -25,7 +25,7 @@ type AuthProfileFailureCopyParams = {
    * structured recovery copy applies.
    */
   cause?: unknown;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 };

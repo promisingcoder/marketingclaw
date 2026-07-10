@@ -1,6 +1,6 @@
 import Foundation
-import OpenClawKit
+import MarketingClawKit
 
-// Prefer the OpenClawKit wrapper to keep gateway request payloads consistent.
-typealias AnyCodable = OpenClawKit.AnyCodable
-typealias InstanceIdentity = OpenClawKit.InstanceIdentity
+// Prefer the MarketingClawKit wrapper to keep gateway request payloads consistent.
+typealias AnyCodable = MarketingClawKit.AnyCodable
+typealias InstanceIdentity = MarketingClawKit.InstanceIdentity

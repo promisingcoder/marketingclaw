@@ -1,11 +1,11 @@
-# OpenClaw Feishu/Lark
+# MarketingClaw Feishu/Lark
 
-Official OpenClaw channel plugin for Feishu and Lark workplace chats. Community maintained by @m1heng.
+Official MarketingClaw channel plugin for Feishu and Lark workplace chats. Community maintained by @m1heng.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugin add @openclaw/feishu
+marketingclaw plugin add @marketingclaw/feishu
 ```
 
-Configure the Feishu/Lark app credentials in OpenClaw, then connect the plugin to the chats where agents should receive and send messages.
+Configure the Feishu/Lark app credentials in MarketingClaw, then connect the plugin to the chats where agents should receive and send messages.

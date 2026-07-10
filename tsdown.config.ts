@@ -39,7 +39,7 @@ const env = {
   NODE_ENV: "production",
 };
 const OUTPUT_SOURCE_MAPS = process.env.OUTPUT_SOURCE_MAPS === "1";
-const RUN_NODE_SKIP_DTS_BUILD = process.env.OPENCLAW_RUN_NODE_SKIP_DTS_BUILD === "1";
+const RUN_NODE_SKIP_DTS_BUILD = process.env.MARKETINGCLAW_RUN_NODE_SKIP_DTS_BUILD === "1";
 const TSDOWN_DECLARATIONS = RUN_NODE_SKIP_DTS_BUILD ? false : true;
 
 const SUPPRESSED_EVAL_WARNING_PATHS = [
@@ -77,7 +77,7 @@ function matchesExternalOption(
 }
 
 function buildInputOptions(options: InputOptionsArg): InputOptionsReturn {
-  if (process.env.OPENCLAW_BUILD_VERBOSE === "1") {
+  if (process.env.MARKETINGCLAW_BUILD_VERBOSE === "1") {
     return undefined;
   }
 
@@ -158,7 +158,7 @@ function nodeWorkspacePackageBuildConfig(config: UserConfig): UserConfig {
 }
 
 const bundledPluginBuildEntries = collectBundledPluginBuildEntries();
-const shouldBuildPrivateQaEntries = process.env.OPENCLAW_BUILD_PRIVATE_QA === "1";
+const shouldBuildPrivateQaEntries = process.env.MARKETINGCLAW_BUILD_PRIVATE_QA === "1";
 const productionPluginSdkEntrypoints = shouldBuildPrivateQaEntries
   ? pluginSdkEntrypoints
   : publicPluginSdkEntrypoints;
@@ -200,7 +200,7 @@ const explicitNeverBundleDependencies = [
   "@lancedb/lancedb",
   "@larksuiteoapi/node-sdk",
   "@matrix-org/matrix-sdk-crypto-nodejs",
-  "@openclaw/ai",
+  "@marketingclaw/ai",
   "@vitest/expect",
   "jimp",
   "matrix-js-sdk",
@@ -219,15 +219,15 @@ function shouldNeverBundleDependency(id: string): boolean {
 
 function shouldAlwaysBundleDependency(id: string): boolean {
   return (
-    id === "openclaw/plugin-sdk/ssrf-runtime-internal" ||
+    id === "marketingclaw/plugin-sdk/ssrf-runtime-internal" ||
     id === "@openclaw/fs-safe" ||
     id.startsWith("@openclaw/fs-safe/") ||
-    id === "@openclaw/normalization-core" ||
-    id.startsWith("@openclaw/normalization-core/") ||
-    id === "@openclaw/media-core" ||
-    id.startsWith("@openclaw/media-core/") ||
-    id === "@openclaw/acp-core" ||
-    id.startsWith("@openclaw/acp-core/") ||
+    id === "@marketingclaw/normalization-core" ||
+    id.startsWith("@marketingclaw/normalization-core/") ||
+    id === "@marketingclaw/media-core" ||
+    id.startsWith("@marketingclaw/media-core/") ||
+    id === "@marketingclaw/acp-core" ||
+    id.startsWith("@marketingclaw/acp-core/") ||
     id === "zod" ||
     id.startsWith("zod/")
   );
@@ -302,7 +302,7 @@ function buildCoreDistEntries(): Record<string, string> {
     "plugins/runtime/index": "src/plugins/runtime/index.ts",
     "llm-slug-generator": "src/hooks/llm-slug-generator.ts",
     "mcp/plugin-tools-serve": "src/mcp/plugin-tools-serve.ts",
-    "mcp/openclaw-tools-serve": "src/mcp/openclaw-tools-serve.ts",
+    "mcp/marketingclaw-tools-serve": "src/mcp/marketingclaw-tools-serve.ts",
   };
 }
 
@@ -562,13 +562,13 @@ function buildModelCatalogCoreDistEntries(): Record<string, string> {
 
 function shouldExternalizeAgentCoreDependency(id: string): boolean {
   return (
-    id === "@openclaw/ai" ||
-    id.startsWith("@openclaw/ai/") ||
-    id === "@openclaw/llm-core" ||
-    id.startsWith("@openclaw/llm-core/") ||
+    id === "@marketingclaw/ai" ||
+    id.startsWith("@marketingclaw/ai/") ||
+    id === "@marketingclaw/llm-core" ||
+    id.startsWith("@marketingclaw/llm-core/") ||
     id === "ignore" ||
-    id === "openclaw" ||
-    id.startsWith("openclaw/") ||
+    id === "marketingclaw" ||
+    id.startsWith("marketingclaw/") ||
     id === "typebox" ||
     id.startsWith("typebox/") ||
     id === "yaml" ||
@@ -584,8 +584,8 @@ function shouldExternalizeGatewayClientDependency(id: string): boolean {
   return (
     id === "ws" ||
     id.startsWith("ws/") ||
-    id === "@openclaw/gateway-protocol" ||
-    id.startsWith("@openclaw/gateway-protocol/")
+    id === "@marketingclaw/gateway-protocol" ||
+    id.startsWith("@marketingclaw/gateway-protocol/")
   );
 }
 
@@ -594,7 +594,7 @@ function shouldExternalizeNetPolicyDependency(id: string): boolean {
 }
 
 function shouldExternalizeSpeechCoreDependency(id: string): boolean {
-  return id === "openclaw" || id.startsWith("openclaw/");
+  return id === "marketingclaw" || id.startsWith("marketingclaw/");
 }
 
 function shouldExternalizeLlmCoreDependency(id: string): boolean {

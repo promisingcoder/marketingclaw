@@ -127,7 +127,7 @@ function handleRawDetailsToggle(event: Event) {
 // preview iframe can fit short/tall widgets. The event source must be one of our
 // preview frames and the height is clamped, so widget code can only resize its
 // own frame within the same bounds the preview contract allows.
-const WIDGET_SIZE_MESSAGE_TYPE = "openclaw:widget-size";
+const WIDGET_SIZE_MESSAGE_TYPE = "marketingclaw:widget-size";
 const WIDGET_FRAME_MIN_HEIGHT = 160;
 const WIDGET_FRAME_MAX_HEIGHT = 1200;
 // Preview frames render inside lit shadow roots, so a document query cannot
@@ -507,7 +507,7 @@ export function renderExpandedToolCardContent(
               ${canOpenSidebar
                 ? html`
                     <div class="chat-tool-card__actions">
-                      <openclaw-tooltip content="Open in the side panel">
+                      <marketingclaw-tooltip content="Open in the side panel">
                         <button
                           class="chat-tool-card__action-btn"
                           type="button"
@@ -516,7 +516,7 @@ export function renderExpandedToolCardContent(
                         >
                           <span class="chat-tool-card__action-icon">${icons.panelRightOpen}</span>
                         </button>
-                      </openclaw-tooltip>
+                      </marketingclaw-tooltip>
                     </div>
                   `
                 : nothing}

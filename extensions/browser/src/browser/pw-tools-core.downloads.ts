@@ -4,7 +4,7 @@
  */
 import path from "node:path";
 import type { Page } from "playwright-core";
-import { resolvePreferredOpenClawTmpDir } from "../infra/tmp-openclaw-dir.js";
+import { resolvePreferredMarketingClawTmpDir } from "../infra/tmp-marketingclaw-dir.js";
 import { DEFAULT_BROWSER_DOWNLOAD_TIMEOUT_MS } from "./constants.js";
 import type { BrowserDownloadResult } from "./download-types.js";
 import { resolveStrictExistingUploadPaths } from "./paths.js";
@@ -47,7 +47,7 @@ function createExplicitDownloadCapture(params: {
 }
 
 function resolveImplicitDownloadRoot(): string {
-  return path.join(resolvePreferredOpenClawTmpDir(), "downloads");
+  return path.join(resolvePreferredMarketingClawTmpDir(), "downloads");
 }
 
 /** Arms the next page file chooser and fills it with strict existing paths. */

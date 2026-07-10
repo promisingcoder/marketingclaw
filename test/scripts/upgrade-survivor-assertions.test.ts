@@ -41,7 +41,7 @@ function writeMigratedSessionState(stateDir: string): void {
     },
   });
 
-  const db = new DatabaseSync(join(agentDbDir, "openclaw-agent.sqlite"));
+  const db = new DatabaseSync(join(agentDbDir, "marketingclaw-agent.sqlite"));
   try {
     db.exec(`
       CREATE TABLE IF NOT EXISTS cache_entries (
@@ -94,7 +94,7 @@ function writeMigratedSessionState(stateDir: string): void {
 }
 
 function assertConfiguredPluginState(params: { installPath?: string } = {}): void {
-  const root = mkdtempSync(join(tmpdir(), "openclaw-upgrade-survivor-"));
+  const root = mkdtempSync(join(tmpdir(), "marketingclaw-upgrade-survivor-"));
   try {
     const stateDir = join(root, "state");
     const workspace = join(root, "workspace");
@@ -109,15 +109,15 @@ function assertConfiguredPluginState(params: { installPath?: string } = {}): voi
     });
     writeMigratedSessionState(stateDir);
     writeJson(join(matrixInstallDir, "package.json"), {
-      name: "@openclaw/matrix",
+      name: "@marketingclaw/matrix",
     });
     writeJson(join(stateDir, "plugins", "installs.json"), {
       installRecords: {
         matrix: {
           source: "clawhub",
-          spec: "clawhub:@openclaw/matrix",
+          spec: "clawhub:@marketingclaw/matrix",
           installPath: matrixInstallDir,
-          clawhubPackage: "@openclaw/matrix",
+          clawhubPackage: "@marketingclaw/matrix",
           clawhubChannel: "official",
           artifactKind: "npm-pack",
         },
@@ -133,10 +133,10 @@ function assertConfiguredPluginState(params: { installPath?: string } = {}): voi
     execFileSync(process.execPath, [ASSERTIONS_PATH, "assert-state"], {
       env: {
         ...process.env,
-        OPENCLAW_STATE_DIR: stateDir,
-        OPENCLAW_TEST_WORKSPACE_DIR: workspace,
-        OPENCLAW_UPGRADE_SURVIVOR_CONFIG_COVERAGE_JSON: coveragePath,
-        OPENCLAW_UPGRADE_SURVIVOR_SCENARIO: "configured-plugin-installs",
+        MARKETINGCLAW_STATE_DIR: stateDir,
+        MARKETINGCLAW_TEST_WORKSPACE_DIR: workspace,
+        MARKETINGCLAW_UPGRADE_SURVIVOR_CONFIG_COVERAGE_JSON: coveragePath,
+        MARKETINGCLAW_UPGRADE_SURVIVOR_SCENARIO: "configured-plugin-installs",
       },
       stdio: "pipe",
     });
@@ -146,8 +146,8 @@ function assertConfiguredPluginState(params: { installPath?: string } = {}): voi
 }
 
 describe("upgrade survivor assertions", () => {
-  it("accepts the ACPX OpenClaw tools bridge scenario during seed", () => {
-    const root = mkdtempSync(join(tmpdir(), "openclaw-upgrade-survivor-acpx-"));
+  it("accepts the ACPX MarketingClaw tools bridge scenario during seed", () => {
+    const root = mkdtempSync(join(tmpdir(), "marketingclaw-upgrade-survivor-acpx-"));
     try {
       const stateDir = join(root, "state");
       const workspace = join(root, "workspace");
@@ -157,9 +157,9 @@ describe("upgrade survivor assertions", () => {
       execFileSync(process.execPath, [ASSERTIONS_PATH, "seed"], {
         env: {
           ...process.env,
-          OPENCLAW_STATE_DIR: stateDir,
-          OPENCLAW_TEST_WORKSPACE_DIR: workspace,
-          OPENCLAW_UPGRADE_SURVIVOR_SCENARIO: "acpx-openclaw-tools-bridge",
+          MARKETINGCLAW_STATE_DIR: stateDir,
+          MARKETINGCLAW_TEST_WORKSPACE_DIR: workspace,
+          MARKETINGCLAW_UPGRADE_SURVIVOR_SCENARIO: "acpx-marketingclaw-tools-bridge",
         },
         stdio: "pipe",
       });
@@ -168,10 +168,10 @@ describe("upgrade survivor assertions", () => {
     }
   });
 
-  it("asserts the ACPX OpenClaw tools bridge config survived", () => {
-    const root = mkdtempSync(join(tmpdir(), "openclaw-upgrade-survivor-acpx-config-"));
+  it("asserts the ACPX MarketingClaw tools bridge config survived", () => {
+    const root = mkdtempSync(join(tmpdir(), "marketingclaw-upgrade-survivor-acpx-config-"));
     try {
-      const configPath = join(root, "openclaw.json");
+      const configPath = join(root, "marketingclaw.json");
       const coveragePath = join(root, "coverage.json");
       writeJson(configPath, {
         plugins: {
@@ -180,23 +180,23 @@ describe("upgrade survivor assertions", () => {
             acpx: {
               enabled: true,
               config: {
-                openClawToolsMcpBridge: true,
+                marketingClawToolsMcpBridge: true,
               },
             },
           },
         },
       });
       writeJson(coveragePath, {
-        acceptedIntents: ["acpx-openclaw-tools-bridge"],
+        acceptedIntents: ["acpx-marketingclaw-tools-bridge"],
         skippedIntents: [],
       });
 
       execFileSync(process.execPath, [ASSERTIONS_PATH, "assert-config"], {
         env: {
           ...process.env,
-          OPENCLAW_CONFIG_PATH: configPath,
-          OPENCLAW_UPGRADE_SURVIVOR_CONFIG_COVERAGE_JSON: coveragePath,
-          OPENCLAW_UPGRADE_SURVIVOR_SCENARIO: "acpx-openclaw-tools-bridge",
+          MARKETINGCLAW_CONFIG_PATH: configPath,
+          MARKETINGCLAW_UPGRADE_SURVIVOR_CONFIG_COVERAGE_JSON: coveragePath,
+          MARKETINGCLAW_UPGRADE_SURVIVOR_SCENARIO: "acpx-marketingclaw-tools-bridge",
         },
         stdio: "pipe",
       });
@@ -210,7 +210,7 @@ describe("upgrade survivor assertions", () => {
   });
 
   it("rejects ClawHub npm-pack installs outside the managed extensions root", () => {
-    const root = mkdtempSync(join(tmpdir(), "openclaw-upgrade-survivor-outside-"));
+    const root = mkdtempSync(join(tmpdir(), "marketingclaw-upgrade-survivor-outside-"));
     try {
       expect(() =>
         assertConfiguredPluginState({ installPath: join(root, "outside-matrix") }),

@@ -3,9 +3,9 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../../test-utils/openclaw-test-state.js";
+  createMarketingClawTestState,
+  type MarketingClawTestState,
+} from "../../test-utils/marketingclaw-test-state.js";
 import { createTrackedTempDirs } from "../../test-utils/tracked-temp-dirs.js";
 import { buildWorkspaceSkillStatus } from "../discovery/status.js";
 import {
@@ -29,13 +29,13 @@ import {
 import { readSkillProposalManifest, updateSkillProposalRecord } from "./store.js";
 
 const tempDirs = createTrackedTempDirs();
-let testState: OpenClawTestState;
+let testState: MarketingClawTestState;
 let stateDir = "";
 
 beforeEach(async () => {
-  testState = await createOpenClawTestState({
+  testState = await createMarketingClawTestState({
     layout: "state-only",
-    prefix: "openclaw-skill-workshop-state-",
+    prefix: "marketingclaw-skill-workshop-state-",
   });
   stateDir = testState.stateDir;
 });
@@ -47,7 +47,7 @@ afterEach(async () => {
 });
 
 async function makeWorkspace(): Promise<string> {
-  return await tempDirs.make("openclaw-skill-workshop-");
+  return await tempDirs.make("marketingclaw-skill-workshop-");
 }
 
 describe("skill workshop proposals", () => {
@@ -142,7 +142,7 @@ describe("skill workshop proposals", () => {
     const status = buildWorkspaceSkillStatus(workspaceDir);
     expect(status.skills.find((skill) => skill.name === "weather-helper")).toMatchObject({
       name: "weather-helper",
-      source: "openclaw-workspace",
+      source: "marketingclaw-workspace",
       filePath: applied.targetSkillFile,
     });
     expect((await inspectSkillProposal(proposal.record.id))?.record.status).toBe("applied");
@@ -152,7 +152,7 @@ describe("skill workshop proposals", () => {
     "applies updates through opted-in trusted workspace skills symlink targets",
     async () => {
       const workspaceDir = await makeWorkspace();
-      const targetSkillsDir = await tempDirs.make("openclaw-skill-workshop-target-skills-");
+      const targetSkillsDir = await tempDirs.make("marketingclaw-skill-workshop-target-skills-");
       await fs.symlink(targetSkillsDir, path.join(workspaceDir, "skills"), "dir");
       const skillDir = path.join(targetSkillsDir, "shared-skill");
       await writeSkill({
@@ -199,7 +199,7 @@ describe("skill workshop proposals", () => {
     "blocks trusted workspace skills symlink writes until workshop writes are enabled",
     async () => {
       const workspaceDir = await makeWorkspace();
-      const targetSkillsDir = await tempDirs.make("openclaw-skill-workshop-readonly-skills-");
+      const targetSkillsDir = await tempDirs.make("marketingclaw-skill-workshop-readonly-skills-");
       await fs.symlink(targetSkillsDir, path.join(workspaceDir, "skills"), "dir");
       const config = { skills: { load: { allowSymlinkTargets: [targetSkillsDir] } } };
       const proposal = await proposeCreateSkill({
@@ -232,8 +232,10 @@ describe("skill workshop proposals", () => {
     "validates support file targets against trusted symlink write roots",
     async () => {
       const workspaceDir = await makeWorkspace();
-      const targetSkillsDir = await tempDirs.make("openclaw-skill-workshop-support-trusted-");
-      const untrustedSkillsDir = await tempDirs.make("openclaw-skill-workshop-support-untrusted-");
+      const targetSkillsDir = await tempDirs.make("marketingclaw-skill-workshop-support-trusted-");
+      const untrustedSkillsDir = await tempDirs.make(
+        "marketingclaw-skill-workshop-support-untrusted-",
+      );
       await fs.symlink(targetSkillsDir, path.join(workspaceDir, "skills"), "dir");
       await fs.symlink(untrustedSkillsDir, path.join(workspaceDir, "other-skills"), "dir");
       const config = {
@@ -282,7 +284,7 @@ describe("skill workshop proposals", () => {
     "blocks untrusted workspace skills symlink targets before support files are written",
     async () => {
       const workspaceDir = await makeWorkspace();
-      const targetSkillsDir = await tempDirs.make("openclaw-skill-workshop-untrusted-skills-");
+      const targetSkillsDir = await tempDirs.make("marketingclaw-skill-workshop-untrusted-skills-");
       await fs.symlink(targetSkillsDir, path.join(workspaceDir, "skills"), "dir");
       const proposal = await proposeCreateSkill({
         workspaceDir,
@@ -318,7 +320,7 @@ describe("skill workshop proposals", () => {
       name: "Frontmatter Skill",
       description: "Preserve metadata",
       content:
-        "---\nuser-invocable: false\nmetadata:\n  openclaw:\n    requires:\n      env:\n        - API_TOKEN\n---\n\n# Frontmatter Skill\n",
+        "---\nuser-invocable: false\nmetadata:\n  marketingclaw:\n    requires:\n      env:\n        - API_TOKEN\n---\n\n# Frontmatter Skill\n",
     });
 
     await expect(
@@ -329,7 +331,7 @@ describe("skill workshop proposals", () => {
       "utf8",
     );
     expect(createdSkill).toContain("user-invocable: false");
-    expect(createdSkill).toContain("metadata:\n  openclaw:");
+    expect(createdSkill).toContain("metadata:\n  marketingclaw:");
     expect(createdSkill).not.toContain("status: proposal");
     expect(createdSkill).not.toContain("version: ");
     expect(createdSkill).not.toContain("date: ");

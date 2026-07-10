@@ -1,22 +1,22 @@
 {
-  "name": "@openclaw/inworld-speech",
+  "name": "@marketingclaw/inworld-speech",
   "version": "2026.6.11",
-  "description": "OpenClaw Inworld speech plugin.",
+  "description": "MarketingClaw Inworld speech plugin.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/promisingcoder/marketingclaw"
   },
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@marketingclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "marketingclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@openclaw/inworld-speech",
-      "npmSpec": "@openclaw/inworld-speech",
+      "clawhubSpec": "clawhub:@marketingclaw/inworld-speech",
+      "npmSpec": "@marketingclaw/inworld-speech",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.6.8"
     },
@@ -24,7 +24,7 @@
       "pluginApi": ">=2026.6.11"
     },
     "build": {
-      "openclawVersion": "2026.6.11",
+      "marketingclawVersion": "2026.6.11",
       "bundledDist": false
     },
     "release": {

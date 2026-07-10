@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import OpenClawChatUI
+@testable import MarketingClawChatUI
 
 @MainActor
 private final class FakeVoiceNoteAudioCapture: VoiceNoteAudioCapture {
@@ -52,7 +52,7 @@ final class VoiceNoteRecorderTests: XCTestCase {
     @MainActor
     func testStartAndFinishProduceRecordingWithDuration() async throws {
         let capture = FakeVoiceNoteAudioCapture()
-        let recorder = OpenClawVoiceNoteRecorder(capture: capture)
+        let recorder = MarketingClawVoiceNoteRecorder(capture: capture)
         var activeChanges: [Bool] = []
         recorder.onRecordingActiveChanged = { activeChanges.append($0) }
         capture.onStart = { XCTAssertEqual(activeChanges, [true]) }
@@ -75,7 +75,7 @@ final class VoiceNoteRecorderTests: XCTestCase {
     @MainActor
     func testCompletedRecordingHasOneStagingOwner() async throws {
         let capture = FakeVoiceNoteAudioCapture()
-        let recorder = OpenClawVoiceNoteRecorder(capture: capture)
+        let recorder = MarketingClawVoiceNoteRecorder(capture: capture)
 
         let started = await recorder.start()
         XCTAssertTrue(started)
@@ -95,7 +95,7 @@ final class VoiceNoteRecorderTests: XCTestCase {
     @MainActor
     func testCancelReturnsToIdleAndDeletesTemporaryFile() async throws {
         let capture = FakeVoiceNoteAudioCapture()
-        let recorder = OpenClawVoiceNoteRecorder(capture: capture)
+        let recorder = MarketingClawVoiceNoteRecorder(capture: capture)
 
         let started = await recorder.start()
         XCTAssertTrue(started)
@@ -112,7 +112,7 @@ final class VoiceNoteRecorderTests: XCTestCase {
     @MainActor
     func testSuccessiveRecordingsUseUniqueTemporaryFiles() async throws {
         let capture = FakeVoiceNoteAudioCapture()
-        let recorder = OpenClawVoiceNoteRecorder(
+        let recorder = MarketingClawVoiceNoteRecorder(
             capture: capture,
             now: { Date(timeIntervalSince1970: 0) })
 
@@ -132,7 +132,7 @@ final class VoiceNoteRecorderTests: XCTestCase {
     func testDurationCapAutoFinishes() async throws {
         let capture = FakeVoiceNoteAudioCapture()
         capture.duration = 0.25
-        let recorder = OpenClawVoiceNoteRecorder(
+        let recorder = MarketingClawVoiceNoteRecorder(
             capture: capture,
             durationLimit: 0,
             timerIntervalNanoseconds: 1_000_000)
@@ -153,7 +153,7 @@ final class VoiceNoteRecorderTests: XCTestCase {
     func testPermissionDeniedBecomesUserVisibleFailure() async {
         let capture = FakeVoiceNoteAudioCapture()
         capture.permissionGranted = false
-        let recorder = OpenClawVoiceNoteRecorder(capture: capture)
+        let recorder = MarketingClawVoiceNoteRecorder(capture: capture)
 
         let started = await recorder.start()
         XCTAssertFalse(started)
@@ -168,7 +168,7 @@ final class VoiceNoteRecorderTests: XCTestCase {
     func testCaptureStartFailureReleasesRecordingActivity() async {
         let capture = FakeVoiceNoteAudioCapture()
         capture.startError = NSError(domain: "VoiceNoteRecorderTests", code: 1)
-        let recorder = OpenClawVoiceNoteRecorder(capture: capture)
+        let recorder = MarketingClawVoiceNoteRecorder(capture: capture)
         var activeChanges: [Bool] = []
         recorder.onRecordingActiveChanged = { activeChanges.append($0) }
 
@@ -184,7 +184,7 @@ final class VoiceNoteRecorderTests: XCTestCase {
     @MainActor
     func testCaptureInterruptionFailsAndDeletesTemporaryFile() async throws {
         let capture = FakeVoiceNoteAudioCapture()
-        let recorder = OpenClawVoiceNoteRecorder(capture: capture)
+        let recorder = MarketingClawVoiceNoteRecorder(capture: capture)
         var activeChanges: [Bool] = []
         recorder.onRecordingActiveChanged = { activeChanges.append($0) }
 
@@ -206,7 +206,7 @@ final class VoiceNoteRecorderTests: XCTestCase {
     @MainActor
     func testStartIsRefusedWhileAlreadyRecording() async {
         let capture = FakeVoiceNoteAudioCapture()
-        let recorder = OpenClawVoiceNoteRecorder(capture: capture)
+        let recorder = MarketingClawVoiceNoteRecorder(capture: capture)
 
         let firstStart = await recorder.start()
         let secondStart = await recorder.start()
@@ -217,17 +217,17 @@ final class VoiceNoteRecorderTests: XCTestCase {
     }
 
     func testDurationLabelBoundsMalformedHistoryValues() {
-        XCTAssertEqual(openClawVoiceNoteDurationLabel(.infinity), "0:00")
-        XCTAssertEqual(openClawVoiceNoteDurationLabel(.nan), "0:00")
-        XCTAssertEqual(openClawVoiceNoteDurationLabel(1e100), "3:00")
-        XCTAssertEqual(openClawVoiceNoteDurationLabel(-1), "0:00")
+        XCTAssertEqual(marketingClawVoiceNoteDurationLabel(.infinity), "0:00")
+        XCTAssertEqual(marketingClawVoiceNoteDurationLabel(.nan), "0:00")
+        XCTAssertEqual(marketingClawVoiceNoteDurationLabel(1e100), "3:00")
+        XCTAssertEqual(marketingClawVoiceNoteDurationLabel(-1), "0:00")
     }
 
     @MainActor
     func testRecordingPublishesCaptureLevelsAndResetsOnFinish() async throws {
         let capture = FakeVoiceNoteAudioCapture()
         capture.meterLevel = 0.8
-        let recorder = OpenClawVoiceNoteRecorder(
+        let recorder = MarketingClawVoiceNoteRecorder(
             capture: capture,
             timerIntervalNanoseconds: 2_000_000)
 
@@ -246,9 +246,9 @@ final class VoiceNoteRecorderTests: XCTestCase {
 
     @MainActor
     func testRecordButtonRequiresAttachmentInput() {
-        let recorder = OpenClawVoiceNoteRecorder(capture: FakeVoiceNoteAudioCapture())
-        let control = OpenClawChatVoiceNoteControl(recorder: recorder, isTalkActive: false)
-        let button = OpenClawVoiceNoteButton(
+        let recorder = MarketingClawVoiceNoteRecorder(capture: FakeVoiceNoteAudioCapture())
+        let control = MarketingClawChatVoiceNoteControl(recorder: recorder, isTalkActive: false)
+        let button = MarketingClawVoiceNoteButton(
             control: control,
             compact: false,
             isComposerEnabled: true,

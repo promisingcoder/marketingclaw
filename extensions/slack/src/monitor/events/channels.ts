@@ -1,11 +1,11 @@
 // Slack plugin module implements channels behavior.
 import type { SlackEventMiddlewareArgs } from "@slack/bolt";
-import { resolveChannelConfigWrites } from "openclaw/plugin-sdk/channel-config-writes";
-import { mutateConfigFile } from "openclaw/plugin-sdk/config-mutation";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { getRuntimeConfig } from "openclaw/plugin-sdk/runtime-config-snapshot";
-import { danger, warn } from "openclaw/plugin-sdk/runtime-env";
-import { enqueueSystemEvent } from "openclaw/plugin-sdk/system-event-runtime";
+import { resolveChannelConfigWrites } from "marketingclaw/plugin-sdk/channel-config-writes";
+import { mutateConfigFile } from "marketingclaw/plugin-sdk/config-mutation";
+import { formatErrorMessage } from "marketingclaw/plugin-sdk/error-runtime";
+import { getRuntimeConfig } from "marketingclaw/plugin-sdk/runtime-config-snapshot";
+import { danger, warn } from "marketingclaw/plugin-sdk/runtime-env";
+import { enqueueSystemEvent } from "marketingclaw/plugin-sdk/system-event-runtime";
 import { migrateSlackChannelConfig } from "../../channel-migration.js";
 import { resolveSlackChannelLabel } from "../channel-config.js";
 import type { SlackMonitorContext } from "../context.js";

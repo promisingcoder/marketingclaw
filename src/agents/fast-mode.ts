@@ -1,10 +1,10 @@
 /**
  * Resolves fast-mode state from agent config and runtime defaults.
  */
-import type { FastMode } from "@openclaw/normalization-core/string-coerce";
+import type { FastMode } from "@marketingclaw/normalization-core/string-coerce";
 import { normalizeFastMode } from "../auto-reply/thinking.shared.js";
 import type { SessionEntry } from "../config/sessions.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import {
   type FastModeSource,
   resolveFastModeModelAutoOnSeconds,
@@ -26,7 +26,7 @@ export {
   resolveFastModeForElapsed,
   resolveFastModeModelAutoOnSeconds,
 } from "../shared/fast-mode.js";
-export type { FastMode } from "@openclaw/normalization-core/string-coerce";
+export type { FastMode } from "@marketingclaw/normalization-core/string-coerce";
 export type { FastModeAutoProgressState } from "../shared/fast-mode.js";
 
 // Resolves effective fast-mode state from session, agent, model config, then
@@ -39,7 +39,7 @@ type FastModeState = {
 };
 
 function resolveConfiguredFastModeRaw(params: {
-  cfg: OpenClawConfig | undefined;
+  cfg: MarketingClawConfig | undefined;
   provider: string;
   model: string;
 }): unknown {
@@ -49,7 +49,7 @@ function resolveConfiguredFastModeRaw(params: {
 
 /** Resolve the effective fast-mode setting and its source. */
 export function resolveFastModeState(params: {
-  cfg: OpenClawConfig | undefined;
+  cfg: MarketingClawConfig | undefined;
   provider: string;
   model: string;
   agentId?: string;

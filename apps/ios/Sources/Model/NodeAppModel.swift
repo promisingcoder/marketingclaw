@@ -1,9 +1,9 @@
 import CoreLocation
 import CryptoKit
 import Observation
-import OpenClawChatUI
-import OpenClawKit
-import OpenClawProtocol
+import MarketingClawChatUI
+import MarketingClawKit
+import MarketingClawProtocol
 import os
 import Security
 import SwiftUI
@@ -21,7 +21,7 @@ private struct GatewayRelayIdentityResponse: Decodable {
 }
 
 private struct WatchChatPreview {
-    var items: [OpenClawWatchChatItem]
+    var items: [MarketingClawWatchChatItem]
     var statusText: String?
 }
 
@@ -34,13 +34,13 @@ private struct WatchChatMetadataEnvelope: Decodable {
     var messageToolMirror: [String: String]?
 
     enum CodingKeys: String, CodingKey {
-        case metadata = "__openclaw"
-        case messageToolMirror = "openclawMessageToolMirror"
+        case metadata = "__marketingclaw"
+        case messageToolMirror = "marketingclawMessageToolMirror"
     }
 }
 
 private struct WatchChatMessageEntry {
-    var message: OpenClawChatMessage
+    var message: MarketingClawChatMessage
     var text: String
     var serverId: String?
     var isMessageToolMirror: Bool
@@ -154,17 +154,17 @@ final class NodeAppModel {
         var pendingResolutions: [WatchExecApprovalResolveEvent]?
     }
 
-    private let deepLinkLogger = Logger(subsystem: "ai.openclawfoundation.app", category: "DeepLink")
+    private let deepLinkLogger = Logger(subsystem: "ai.marketingclaw.app", category: "DeepLink")
     private nonisolated static let agentRequestNodeEventTimeoutSeconds = 8
     private nonisolated static let execApprovalNotificationGuidanceSuppressedKey =
         "notifications.execApprovalGuidance.suppressed"
-    private let pushWakeLogger = Logger(subsystem: "ai.openclawfoundation.app", category: "PushWake")
-    private let pendingActionLogger = Logger(subsystem: "ai.openclawfoundation.app", category: "PendingAction")
-    private let locationWakeLogger = Logger(subsystem: "ai.openclawfoundation.app", category: "LocationWake")
-    private let watchReplyLogger = Logger(subsystem: "ai.openclawfoundation.app", category: "WatchReply")
-    private let watchExecApprovalLogger = Logger(subsystem: "ai.openclawfoundation.app", category: "WatchExecApproval")
+    private let pushWakeLogger = Logger(subsystem: "ai.marketingclaw.app", category: "PushWake")
+    private let pendingActionLogger = Logger(subsystem: "ai.marketingclaw.app", category: "PendingAction")
+    private let locationWakeLogger = Logger(subsystem: "ai.marketingclaw.app", category: "LocationWake")
+    private let watchReplyLogger = Logger(subsystem: "ai.marketingclaw.app", category: "WatchReply")
+    private let watchExecApprovalLogger = Logger(subsystem: "ai.marketingclaw.app", category: "WatchExecApproval")
     private let execApprovalNotificationLogger = Logger(
-        subsystem: "ai.openclawfoundation.app",
+        subsystem: "ai.marketingclaw.app",
         category: "ExecApprovalNotification")
     enum CameraHUDKind {
         case photo
@@ -255,7 +255,7 @@ final class NodeAppModel {
     private var gatewayHealthMonitorDisabled = false
     private let notificationCenter: NotificationCentering
     let voiceWake = VoiceWakeManager()
-    let voiceNoteRecorder: OpenClawVoiceNoteRecorder
+    let voiceNoteRecorder: MarketingClawVoiceNoteRecorder
     let talkMode: TalkModeManager
     private let locationService: any LocationServicing
     private let deviceStatusService: any DeviceStatusServicing
@@ -290,7 +290,7 @@ final class NodeAppModel {
     @ObservationIgnored private var watchMessageRetryAttempts: [String: Int] = [:]
     @ObservationIgnored private var watchMessageRetryTask: Task<Void, Never>?
     @ObservationIgnored private let appleReviewDemoChatTransport = AppleReviewDemoChatTransport()
-    @ObservationIgnored private var chatTranscriptCachesByGatewayID: [String: OpenClawChatSQLiteTranscriptCache] = [:]
+    @ObservationIgnored private var chatTranscriptCachesByGatewayID: [String: MarketingClawChatSQLiteTranscriptCache] = [:]
     private var watchExecApprovalPromptsByID: [String: ExecApprovalPrompt] = [:]
     private var pendingWatchExecApprovalRecoveryPushes: [ExecApprovalNotificationPrompt] = []
     private var pendingExecApprovalResolvedPushes: [ExecApprovalNotificationPrompt] = []
@@ -338,7 +338,7 @@ final class NodeAppModel {
         return self.isOperatorGatewayConnected ? "operator" : "offline"
     }
 
-    func makeChatTransport(outboxGatewayID: String? = nil) -> any OpenClawChatTransport {
+    func makeChatTransport(outboxGatewayID: String? = nil) -> any MarketingClawChatTransport {
         if self.isScreenshotFixtureModeEnabled {
             return LocalFixtureChatTransport(fixture: .appScreenshots)
         }
@@ -387,13 +387,13 @@ final class NodeAppModel {
     /// the paired gateway identity (one SQLite file per gateway, memoized so
     /// retire/purge can close every open handle). Nil for fixture/unpaired
     /// transports: no cache and no outbox.
-    func makeChatOfflineStore() -> OpenClawChatSQLiteTranscriptCache? {
+    func makeChatOfflineStore() -> MarketingClawChatSQLiteTranscriptCache? {
         guard let gatewayID = self.chatTranscriptCacheGatewayID else { return nil }
         if let cache = self.chatTranscriptCachesByGatewayID[gatewayID] {
             return cache
         }
         guard let databaseURL = Self.chatTranscriptCacheDatabaseURL(gatewayID: gatewayID) else { return nil }
-        let cache = OpenClawChatSQLiteTranscriptCache(databaseURL: databaseURL, gatewayID: gatewayID)
+        let cache = MarketingClawChatSQLiteTranscriptCache(databaseURL: databaseURL, gatewayID: gatewayID)
         self.chatTranscriptCachesByGatewayID[gatewayID] = cache
         return cache
     }
@@ -420,12 +420,12 @@ final class NodeAppModel {
         self.homeCanvasRevision &+= 1
     }
 
-    func loadCachedChatSessions() async -> [OpenClawChatSessionEntry] {
+    func loadCachedChatSessions() async -> [MarketingClawChatSessionEntry] {
         guard let cache = self.makeChatOfflineStore() else { return [] }
         return await cache.loadSessions()
     }
 
-    func storeCachedChatSessions(_ sessions: [OpenClawChatSessionEntry]) async {
+    func storeCachedChatSessions(_ sessions: [MarketingClawChatSessionEntry]) async {
         guard let cache = self.makeChatOfflineStore() else { return }
         await cache.storeSessions(sessions)
     }
@@ -440,7 +440,7 @@ final class NodeAppModel {
             if let cache = self.chatTranscriptCachesByGatewayID[gatewayID] {
                 await cache.retire()
             }
-            OpenClawChatSQLiteTranscriptCache.removeDatabaseFiles(at: databaseURL)
+            MarketingClawChatSQLiteTranscriptCache.removeDatabaseFiles(at: databaseURL)
             self.chatTranscriptCachesByGatewayID.removeValue(forKey: gatewayID)
             self.chatTranscriptCacheGeneration &+= 1
             return
@@ -468,7 +468,7 @@ final class NodeAppModel {
     }
 
     private static func chatTranscriptCacheDirectoryURL() -> URL? {
-        try? OpenClawNodeStorage.appSupportDir()
+        try? MarketingClawNodeStorage.appSupportDir()
             .appendingPathComponent("chat-cache", isDirectory: true)
     }
 
@@ -514,7 +514,7 @@ final class NodeAppModel {
         motionService: any MotionServicing = MotionService(),
         watchMessagingService: any WatchMessagingServicing = WatchMessagingService(),
         talkMode: TalkModeManager = TalkModeManager(),
-        voiceNoteRecorder: OpenClawVoiceNoteRecorder = OpenClawVoiceNoteRecorder())
+        voiceNoteRecorder: MarketingClawVoiceNoteRecorder = MarketingClawVoiceNoteRecorder())
     {
         self.screen = screen
         self.camera = camera
@@ -642,7 +642,7 @@ final class NodeAppModel {
         }()
         guard !userAction.isEmpty else { return }
 
-        guard let name = OpenClawCanvasA2UIAction.extractActionName(userAction) else { return }
+        guard let name = MarketingClawCanvasA2UIAction.extractActionName(userAction) else { return }
         let actionId: String = {
             let id = (userAction["id"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
             return id.isEmpty ? UUID().uuidString : id
@@ -664,15 +664,15 @@ final class NodeAppModel {
             deviceName: UIDevice.current.name,
             interfaceIdiom: UIDevice.current.userInterfaceIdiom)
         let instanceId = (UserDefaults.standard.string(forKey: "node.instanceId") ?? "ios-node").lowercased()
-        let contextJSON = OpenClawCanvasA2UIAction.compactJSON(userAction["context"])
+        let contextJSON = MarketingClawCanvasA2UIAction.compactJSON(userAction["context"])
         let sessionKey = mainSessionKey
 
-        let messageContext = OpenClawCanvasA2UIAction.AgentMessageContext(
+        let messageContext = MarketingClawCanvasA2UIAction.AgentMessageContext(
             actionName: name,
             session: .init(key: sessionKey, surfaceId: surfaceId),
             component: .init(id: sourceComponentId, host: host, instanceId: instanceId),
             contextJSON: contextJSON)
-        let message = OpenClawCanvasA2UIAction.formatAgentMessage(messageContext)
+        let message = MarketingClawCanvasA2UIAction.formatAgentMessage(messageContext)
 
         let ok: Bool
         var errorText: String?
@@ -697,7 +697,7 @@ final class NodeAppModel {
             }
         }
 
-        let js = OpenClawCanvasA2UIAction.jsDispatchA2UIActionStatus(actionId: actionId, ok: ok, error: errorText)
+        let js = MarketingClawCanvasA2UIAction.jsDispatchA2UIActionStatus(actionId: actionId, ok: ok, error: errorText)
         do {
             _ = try await self.screen.eval(javaScript: js)
         } catch {
@@ -1024,7 +1024,7 @@ final class NodeAppModel {
         self.talkMode.applyAudioRoutePreferenceChanged()
     }
 
-    func requestLocationPermissions(mode: OpenClawLocationMode) async -> Bool {
+    func requestLocationPermissions(mode: MarketingClawLocationMode) async -> Bool {
         guard mode != .off else {
             self.reconcileSignificantLocationMonitoring(
                 mode: mode,
@@ -1046,7 +1046,7 @@ final class NodeAppModel {
     }
 
     private func reconcileSignificantLocationMonitoring(
-        mode: OpenClawLocationMode,
+        mode: MarketingClawLocationMode,
         authorizationStatus: CLAuthorizationStatus)
     {
         guard mode == .always, authorizationStatus == .authorizedAlways else {
@@ -1113,7 +1113,7 @@ final class NodeAppModel {
                 timeoutSeconds: 8,
                 ifCurrentRoute: sourceRoute)
             let decoded = try JSONDecoder().decode(AgentsListResult.self, from: res)
-            let routingIdentity = OpenClawChatSessionRoutingIdentity(
+            let routingIdentity = MarketingClawChatSessionRoutingIdentity(
                 scope: decoded.scope.value as? String,
                 mainSessionKey: decoded.mainkey,
                 defaultAgentID: decoded.defaultid)
@@ -1307,7 +1307,7 @@ final class NodeAppModel {
                         method: "health",
                         paramsJSON: nil,
                         timeoutSeconds: 6)
-                    guard let decoded = try? JSONDecoder().decode(OpenClawGatewayHealthOK.self, from: data) else {
+                    guard let decoded = try? JSONDecoder().decode(MarketingClawGatewayHealthOK.self, from: data) else {
                         return false
                     }
                     return decoded.ok ?? false
@@ -1350,7 +1350,7 @@ final class NodeAppModel {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(
+                error: MarketingClawNodeError(
                     code: .backgroundUnavailable,
                     message: "NODE_BACKGROUND_UNAVAILABLE: canvas/camera/screen commands require foreground"))
         }
@@ -1359,7 +1359,7 @@ final class NodeAppModel {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(
+                error: MarketingClawNodeError(
                     code: .unavailable,
                     message: "CAMERA_DISABLED: enable Camera in iOS Settings → Camera → Allow Camera"))
         }
@@ -1373,12 +1373,12 @@ final class NodeAppModel {
                 return BridgeInvokeResponse(
                     id: req.id,
                     ok: false,
-                    error: OpenClawNodeError(code: .invalidRequest, message: "INVALID_REQUEST: unknown command"))
+                    error: MarketingClawNodeError(code: .invalidRequest, message: "INVALID_REQUEST: unknown command"))
             case .handlerUnavailable:
                 return BridgeInvokeResponse(
                     id: req.id,
                     ok: false,
-                    error: OpenClawNodeError(code: .unavailable, message: "node handler unavailable"))
+                    error: MarketingClawNodeError(code: .unavailable, message: "node handler unavailable"))
             }
         } catch {
             if command.hasPrefix("camera.") {
@@ -1388,7 +1388,7 @@ final class NodeAppModel {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(code: .unavailable, message: error.localizedDescription))
+                error: MarketingClawNodeError(code: .unavailable, message: error.localizedDescription))
         }
     }
 
@@ -1396,8 +1396,8 @@ final class NodeAppModel {
         _ req: BridgeInvokeRequest,
         gatewayStableID: String?) -> BridgeInvokeRequest
     {
-        guard req.command == OpenClawWatchCommand.notify.rawValue,
-              var params = try? decodeParams(OpenClawWatchNotifyParams.self, from: req.paramsJSON)
+        guard req.command == MarketingClawWatchCommand.notify.rawValue,
+              var params = try? decodeParams(MarketingClawWatchNotifyParams.self, from: req.paramsJSON)
         else { return req }
         // Gateway identity comes from the installed node route, never the request payload.
         params.gatewayStableID = trimmedOrNil(gatewayStableID)
@@ -1421,7 +1421,7 @@ final class NodeAppModel {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(
+                error: MarketingClawNodeError(
                     code: .unavailable,
                     message: "LOCATION_DISABLED: enable Location in Settings"))
         }
@@ -1429,12 +1429,12 @@ final class NodeAppModel {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(
+                error: MarketingClawNodeError(
                     code: .backgroundUnavailable,
                     message: "LOCATION_BACKGROUND_UNAVAILABLE: background location requires Always"))
         }
-        let params = (try? Self.decodeParams(OpenClawLocationGetParams.self, from: req.paramsJSON)) ??
-            OpenClawLocationGetParams()
+        let params = (try? Self.decodeParams(MarketingClawLocationGetParams.self, from: req.paramsJSON)) ??
+            MarketingClawLocationGetParams()
         let desired = params.desiredAccuracy ??
             (isLocationPreciseEnabled() ? .precise : .balanced)
         let status = self.locationService.authorizationStatus()
@@ -1442,7 +1442,7 @@ final class NodeAppModel {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(
+                error: MarketingClawNodeError(
                     code: .unavailable,
                     message: "LOCATION_PERMISSION_REQUIRED: grant Location permission"))
         }
@@ -1450,7 +1450,7 @@ final class NodeAppModel {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(
+                error: MarketingClawNodeError(
                     code: .unavailable,
                     message: "LOCATION_PERMISSION_REQUIRED: enable Always for background access"))
         }
@@ -1460,7 +1460,7 @@ final class NodeAppModel {
             maxAgeMs: params.maxAgeMs,
             timeoutMs: params.timeoutMs)
         let isPrecise = self.locationService.accuracyAuthorization() == .fullAccuracy
-        let payload = OpenClawLocationPayload(
+        let payload = MarketingClawLocationPayload(
             lat: location.coordinate.latitude,
             lon: location.coordinate.longitude,
             accuracyMeters: location.horizontalAccuracy,
@@ -1476,10 +1476,10 @@ final class NodeAppModel {
 
     private func handleCanvasInvoke(_ req: BridgeInvokeRequest) async throws -> BridgeInvokeResponse {
         switch req.command {
-        case OpenClawCanvasCommand.present.rawValue:
+        case MarketingClawCanvasCommand.present.rawValue:
             // iOS ignores placement hints; canvas always fills the screen.
-            let params = (try? Self.decodeParams(OpenClawCanvasPresentParams.self, from: req.paramsJSON)) ??
-                OpenClawCanvasPresentParams()
+            let params = (try? Self.decodeParams(MarketingClawCanvasPresentParams.self, from: req.paramsJSON)) ??
+                MarketingClawCanvasPresentParams()
             let url = params.url?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
             if url.isEmpty {
                 self.screen.presentDefaultCanvas()
@@ -1487,21 +1487,21 @@ final class NodeAppModel {
                 self.screen.present(urlString: url)
             }
             return BridgeInvokeResponse(id: req.id, ok: true)
-        case OpenClawCanvasCommand.hide.rawValue:
+        case MarketingClawCanvasCommand.hide.rawValue:
             self.screen.hideCanvas()
             return BridgeInvokeResponse(id: req.id, ok: true)
-        case OpenClawCanvasCommand.navigate.rawValue:
-            let params = try Self.decodeParams(OpenClawCanvasNavigateParams.self, from: req.paramsJSON)
+        case MarketingClawCanvasCommand.navigate.rawValue:
+            let params = try Self.decodeParams(MarketingClawCanvasNavigateParams.self, from: req.paramsJSON)
             let trimmedURL = params.url.trimmingCharacters(in: .whitespacesAndNewlines)
             self.screen.present(urlString: trimmedURL)
             return BridgeInvokeResponse(id: req.id, ok: true)
-        case OpenClawCanvasCommand.evalJS.rawValue:
-            let params = try Self.decodeParams(OpenClawCanvasEvalParams.self, from: req.paramsJSON)
+        case MarketingClawCanvasCommand.evalJS.rawValue:
+            let params = try Self.decodeParams(MarketingClawCanvasEvalParams.self, from: req.paramsJSON)
             let result = try await screen.eval(javaScript: params.javaScript)
             let payload = try Self.encodePayload(["result": result])
             return BridgeInvokeResponse(id: req.id, ok: true, payloadJSON: payload)
-        case OpenClawCanvasCommand.snapshot.rawValue:
-            let params = try? Self.decodeParams(OpenClawCanvasSnapshotParams.self, from: req.paramsJSON)
+        case MarketingClawCanvasCommand.snapshot.rawValue:
+            let params = try? Self.decodeParams(MarketingClawCanvasSnapshotParams.self, from: req.paramsJSON)
             let format = params?.format ?? .jpeg
             let maxWidth: CGFloat? = {
                 if let raw = params?.maxWidth, raw > 0 { return CGFloat(raw) }
@@ -1525,14 +1525,14 @@ final class NodeAppModel {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(code: .invalidRequest, message: "INVALID_REQUEST: unknown command"))
+                error: MarketingClawNodeError(code: .invalidRequest, message: "INVALID_REQUEST: unknown command"))
         }
     }
 
     private func handleCanvasA2UIInvoke(_ req: BridgeInvokeRequest) async throws -> BridgeInvokeResponse {
         let command = req.command
         switch command {
-        case OpenClawCanvasA2UICommand.reset.rawValue:
+        case MarketingClawCanvasA2UICommand.reset.rawValue:
             switch await ensureA2UIReadyWithCapabilityRefresh(timeoutMs: 5000) {
             case .ready:
                 break
@@ -1540,32 +1540,32 @@ final class NodeAppModel {
                 return BridgeInvokeResponse(
                     id: req.id,
                     ok: false,
-                    error: OpenClawNodeError(
+                    error: MarketingClawNodeError(
                         code: .unavailable,
                         message: "A2UI_HOST_UNAVAILABLE: bundled A2UI host not reachable"))
             }
             let json = try await screen.eval(javaScript: """
             (() => {
-              const host = globalThis.openclawA2UI;
-              if (!host) return JSON.stringify({ ok: false, error: "missing openclawA2UI" });
+              const host = globalThis.marketingclawA2UI;
+              if (!host) return JSON.stringify({ ok: false, error: "missing marketingclawA2UI" });
               return JSON.stringify(host.reset());
             })()
             """)
             return BridgeInvokeResponse(id: req.id, ok: true, payloadJSON: json)
 
-        case OpenClawCanvasA2UICommand.push.rawValue, OpenClawCanvasA2UICommand.pushJSONL.rawValue:
-            let messages: [OpenClawKit.AnyCodable]
-            if command == OpenClawCanvasA2UICommand.pushJSONL.rawValue {
-                let params = try Self.decodeParams(OpenClawCanvasA2UIPushJSONLParams.self, from: req.paramsJSON)
-                messages = try OpenClawCanvasA2UIJSONL.decodeMessagesFromJSONL(params.jsonl)
+        case MarketingClawCanvasA2UICommand.push.rawValue, MarketingClawCanvasA2UICommand.pushJSONL.rawValue:
+            let messages: [MarketingClawKit.AnyCodable]
+            if command == MarketingClawCanvasA2UICommand.pushJSONL.rawValue {
+                let params = try Self.decodeParams(MarketingClawCanvasA2UIPushJSONLParams.self, from: req.paramsJSON)
+                messages = try MarketingClawCanvasA2UIJSONL.decodeMessagesFromJSONL(params.jsonl)
             } else {
                 do {
-                    let params = try Self.decodeParams(OpenClawCanvasA2UIPushParams.self, from: req.paramsJSON)
+                    let params = try Self.decodeParams(MarketingClawCanvasA2UIPushParams.self, from: req.paramsJSON)
                     messages = params.messages
                 } catch {
                     // Be forgiving: some clients still send JSONL payloads to `canvas.a2ui.push`.
-                    let params = try Self.decodeParams(OpenClawCanvasA2UIPushJSONLParams.self, from: req.paramsJSON)
-                    messages = try OpenClawCanvasA2UIJSONL.decodeMessagesFromJSONL(params.jsonl)
+                    let params = try Self.decodeParams(MarketingClawCanvasA2UIPushJSONLParams.self, from: req.paramsJSON)
+                    messages = try MarketingClawCanvasA2UIJSONL.decodeMessagesFromJSONL(params.jsonl)
                 }
             }
 
@@ -1576,17 +1576,17 @@ final class NodeAppModel {
                 return BridgeInvokeResponse(
                     id: req.id,
                     ok: false,
-                    error: OpenClawNodeError(
+                    error: MarketingClawNodeError(
                         code: .unavailable,
                         message: "A2UI_HOST_UNAVAILABLE: bundled A2UI host not reachable"))
             }
 
-            let messagesJSON = try OpenClawCanvasA2UIJSONL.encodeMessagesJSONArray(messages)
+            let messagesJSON = try MarketingClawCanvasA2UIJSONL.encodeMessagesJSONArray(messages)
             let js = """
             (() => {
               try {
-                const host = globalThis.openclawA2UI;
-                if (!host) return JSON.stringify({ ok: false, error: "missing openclawA2UI" });
+                const host = globalThis.marketingclawA2UI;
+                if (!host) return JSON.stringify({ ok: false, error: "missing marketingclawA2UI" });
                 const messages = \(messagesJSON);
                 return JSON.stringify(host.applyMessages(messages));
               } catch (e) {
@@ -1601,24 +1601,24 @@ final class NodeAppModel {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(code: .invalidRequest, message: "INVALID_REQUEST: unknown command"))
+                error: MarketingClawNodeError(code: .invalidRequest, message: "INVALID_REQUEST: unknown command"))
         }
     }
 
     private func handleCameraInvoke(_ req: BridgeInvokeRequest) async throws -> BridgeInvokeResponse {
         switch req.command {
-        case OpenClawCameraCommand.list.rawValue:
+        case MarketingClawCameraCommand.list.rawValue:
             let devices = await camera.listDevices()
             struct Payload: Codable {
                 var devices: [CameraController.CameraDeviceInfo]
             }
             let payload = try Self.encodePayload(Payload(devices: devices))
             return BridgeInvokeResponse(id: req.id, ok: true, payloadJSON: payload)
-        case OpenClawCameraCommand.snap.rawValue:
+        case MarketingClawCameraCommand.snap.rawValue:
             showCameraHUD(text: "Taking photo…", kind: .photo)
             triggerCameraFlash()
-            let params = (try? Self.decodeParams(OpenClawCameraSnapParams.self, from: req.paramsJSON)) ??
-                OpenClawCameraSnapParams()
+            let params = (try? Self.decodeParams(MarketingClawCameraSnapParams.self, from: req.paramsJSON)) ??
+                MarketingClawCameraSnapParams()
             let res = try await camera.snap(params: params)
 
             struct Payload: Codable {
@@ -1634,9 +1634,9 @@ final class NodeAppModel {
                 height: res.height))
             showCameraHUD(text: "Photo captured", kind: .success, autoHideSeconds: 1.6)
             return BridgeInvokeResponse(id: req.id, ok: true, payloadJSON: payload)
-        case OpenClawCameraCommand.clip.rawValue:
-            let params = (try? Self.decodeParams(OpenClawCameraClipParams.self, from: req.paramsJSON)) ??
-                OpenClawCameraClipParams()
+        case MarketingClawCameraCommand.clip.rawValue:
+            let params = (try? Self.decodeParams(MarketingClawCameraClipParams.self, from: req.paramsJSON)) ??
+                MarketingClawCameraClipParams()
 
             let suspended = (params.includeAudio ?? true) ? self.voiceWake.suspendForExternalAudioCapture() : false
             defer { self.voiceWake.resumeAfterExternalAudioCapture(wasSuspended: suspended) }
@@ -1661,13 +1661,13 @@ final class NodeAppModel {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(code: .invalidRequest, message: "INVALID_REQUEST: unknown command"))
+                error: MarketingClawNodeError(code: .invalidRequest, message: "INVALID_REQUEST: unknown command"))
         }
     }
 
     private func handleScreenRecordInvoke(_ req: BridgeInvokeRequest) async throws -> BridgeInvokeResponse {
-        let params = (try? Self.decodeParams(OpenClawScreenRecordParams.self, from: req.paramsJSON)) ??
-            OpenClawScreenRecordParams()
+        let params = (try? Self.decodeParams(MarketingClawScreenRecordParams.self, from: req.paramsJSON)) ??
+            MarketingClawScreenRecordParams()
         if let format = params.format, format.lowercased() != "mp4" {
             throw NSError(domain: "Screen", code: 30, userInfo: [
                 NSLocalizedDescriptionKey: "INVALID_REQUEST: screen format must be mp4",
@@ -1703,14 +1703,14 @@ final class NodeAppModel {
     }
 
     private func handleSystemNotify(_ req: BridgeInvokeRequest) async throws -> BridgeInvokeResponse {
-        let params = try Self.decodeParams(OpenClawSystemNotifyParams.self, from: req.paramsJSON)
+        let params = try Self.decodeParams(MarketingClawSystemNotifyParams.self, from: req.paramsJSON)
         let title = params.title.trimmingCharacters(in: .whitespacesAndNewlines)
         let body = params.body.trimmingCharacters(in: .whitespacesAndNewlines)
         if title.isEmpty, body.isEmpty {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(code: .invalidRequest, message: "INVALID_REQUEST: empty notification"))
+                error: MarketingClawNodeError(code: .invalidRequest, message: "INVALID_REQUEST: empty notification"))
         }
 
         let status = await notificationAuthorizationStatus()
@@ -1718,7 +1718,7 @@ final class NodeAppModel {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(code: .unavailable, message: "NOT_AUTHORIZED: notifications"))
+                error: MarketingClawNodeError(code: .unavailable, message: "NOT_AUTHORIZED: notifications"))
         }
 
         let addResult = await runNotificationCall(timeoutSeconds: 2.0) { [notificationCenter] in
@@ -1751,19 +1751,19 @@ final class NodeAppModel {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(code: .unavailable, message: "NOTIFICATION_FAILED: \(error.message)"))
+                error: MarketingClawNodeError(code: .unavailable, message: "NOTIFICATION_FAILED: \(error.message)"))
         }
         return BridgeInvokeResponse(id: req.id, ok: true)
     }
 
     private func handleChatPushInvoke(_ req: BridgeInvokeRequest) async throws -> BridgeInvokeResponse {
-        let params = try Self.decodeParams(OpenClawChatPushParams.self, from: req.paramsJSON)
+        let params = try Self.decodeParams(MarketingClawChatPushParams.self, from: req.paramsJSON)
         let text = params.text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(code: .invalidRequest, message: "INVALID_REQUEST: empty chat.push text"))
+                error: MarketingClawNodeError(code: .invalidRequest, message: "INVALID_REQUEST: empty chat.push text"))
         }
 
         let shouldSpeak = params.speak ?? true
@@ -1773,14 +1773,14 @@ final class NodeAppModel {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(code: .unavailable, message: "NOT_AUTHORIZED: notifications"))
+                error: MarketingClawNodeError(code: .unavailable, message: "NOT_AUTHORIZED: notifications"))
         }
 
         let messageId = UUID().uuidString
         if notificationsAllowed {
             let addResult = await runNotificationCall(timeoutSeconds: 2.0) { [notificationCenter] in
                 let content = UNMutableNotificationContent()
-                content.title = "OpenClaw"
+                content.title = "MarketingClaw"
                 content.body = text
                 content.sound = .default
                 content.userInfo = ["messageId": messageId]
@@ -1794,7 +1794,7 @@ final class NodeAppModel {
                 return BridgeInvokeResponse(
                     id: req.id,
                     ok: false,
-                    error: OpenClawNodeError(code: .unavailable, message: "NOTIFICATION_FAILED: \(error.message)"))
+                    error: MarketingClawNodeError(code: .unavailable, message: "NOTIFICATION_FAILED: \(error.message)"))
             }
         }
 
@@ -1805,7 +1805,7 @@ final class NodeAppModel {
             }
         }
 
-        let payload = OpenClawChatPushPayload(messageId: messageId)
+        let payload = MarketingClawChatPushPayload(messageId: messageId)
         let json = try Self.encodePayload(payload)
         return BridgeInvokeResponse(id: req.id, ok: true, payloadJSON: json)
     }
@@ -1898,11 +1898,11 @@ final class NodeAppModel {
 
     private func handleDeviceInvoke(_ req: BridgeInvokeRequest) async throws -> BridgeInvokeResponse {
         switch req.command {
-        case OpenClawDeviceCommand.status.rawValue:
+        case MarketingClawDeviceCommand.status.rawValue:
             let payload = try await deviceStatusService.status()
             let json = try Self.encodePayload(payload)
             return BridgeInvokeResponse(id: req.id, ok: true, payloadJSON: json)
-        case OpenClawDeviceCommand.info.rawValue:
+        case MarketingClawDeviceCommand.info.rawValue:
             let payload = self.deviceStatusService.info()
             let json = try Self.encodePayload(payload)
             return BridgeInvokeResponse(id: req.id, ok: true, payloadJSON: json)
@@ -1910,13 +1910,13 @@ final class NodeAppModel {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(code: .invalidRequest, message: "INVALID_REQUEST: unknown command"))
+                error: MarketingClawNodeError(code: .invalidRequest, message: "INVALID_REQUEST: unknown command"))
         }
     }
 
     private func handlePhotosInvoke(_ req: BridgeInvokeRequest) async throws -> BridgeInvokeResponse {
-        let params = (try? Self.decodeParams(OpenClawPhotosLatestParams.self, from: req.paramsJSON)) ??
-            OpenClawPhotosLatestParams()
+        let params = (try? Self.decodeParams(MarketingClawPhotosLatestParams.self, from: req.paramsJSON)) ??
+            MarketingClawPhotosLatestParams()
         let payload = try await photosService.latest(params: params)
         let json = try Self.encodePayload(payload)
         return BridgeInvokeResponse(id: req.id, ok: true, payloadJSON: json)
@@ -1924,14 +1924,14 @@ final class NodeAppModel {
 
     private func handleContactsInvoke(_ req: BridgeInvokeRequest) async throws -> BridgeInvokeResponse {
         switch req.command {
-        case OpenClawContactsCommand.search.rawValue:
-            let params = (try? Self.decodeParams(OpenClawContactsSearchParams.self, from: req.paramsJSON)) ??
-                OpenClawContactsSearchParams()
+        case MarketingClawContactsCommand.search.rawValue:
+            let params = (try? Self.decodeParams(MarketingClawContactsSearchParams.self, from: req.paramsJSON)) ??
+                MarketingClawContactsSearchParams()
             let payload = try await contactsService.search(params: params)
             let json = try Self.encodePayload(payload)
             return BridgeInvokeResponse(id: req.id, ok: true, payloadJSON: json)
-        case OpenClawContactsCommand.add.rawValue:
-            let params = try Self.decodeParams(OpenClawContactsAddParams.self, from: req.paramsJSON)
+        case MarketingClawContactsCommand.add.rawValue:
+            let params = try Self.decodeParams(MarketingClawContactsAddParams.self, from: req.paramsJSON)
             let payload = try await contactsService.add(params: params)
             let json = try Self.encodePayload(payload)
             return BridgeInvokeResponse(id: req.id, ok: true, payloadJSON: json)
@@ -1939,20 +1939,20 @@ final class NodeAppModel {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(code: .invalidRequest, message: "INVALID_REQUEST: unknown command"))
+                error: MarketingClawNodeError(code: .invalidRequest, message: "INVALID_REQUEST: unknown command"))
         }
     }
 
     private func handleCalendarInvoke(_ req: BridgeInvokeRequest) async throws -> BridgeInvokeResponse {
         switch req.command {
-        case OpenClawCalendarCommand.events.rawValue:
-            let params = (try? Self.decodeParams(OpenClawCalendarEventsParams.self, from: req.paramsJSON)) ??
-                OpenClawCalendarEventsParams()
+        case MarketingClawCalendarCommand.events.rawValue:
+            let params = (try? Self.decodeParams(MarketingClawCalendarEventsParams.self, from: req.paramsJSON)) ??
+                MarketingClawCalendarEventsParams()
             let payload = try await calendarService.events(params: params)
             let json = try Self.encodePayload(payload)
             return BridgeInvokeResponse(id: req.id, ok: true, payloadJSON: json)
-        case OpenClawCalendarCommand.add.rawValue:
-            let params = try Self.decodeParams(OpenClawCalendarAddParams.self, from: req.paramsJSON)
+        case MarketingClawCalendarCommand.add.rawValue:
+            let params = try Self.decodeParams(MarketingClawCalendarAddParams.self, from: req.paramsJSON)
             let payload = try await calendarService.add(params: params)
             let json = try Self.encodePayload(payload)
             return BridgeInvokeResponse(id: req.id, ok: true, payloadJSON: json)
@@ -1960,20 +1960,20 @@ final class NodeAppModel {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(code: .invalidRequest, message: "INVALID_REQUEST: unknown command"))
+                error: MarketingClawNodeError(code: .invalidRequest, message: "INVALID_REQUEST: unknown command"))
         }
     }
 
     private func handleRemindersInvoke(_ req: BridgeInvokeRequest) async throws -> BridgeInvokeResponse {
         switch req.command {
-        case OpenClawRemindersCommand.list.rawValue:
-            let params = (try? Self.decodeParams(OpenClawRemindersListParams.self, from: req.paramsJSON)) ??
-                OpenClawRemindersListParams()
+        case MarketingClawRemindersCommand.list.rawValue:
+            let params = (try? Self.decodeParams(MarketingClawRemindersListParams.self, from: req.paramsJSON)) ??
+                MarketingClawRemindersListParams()
             let payload = try await remindersService.list(params: params)
             let json = try Self.encodePayload(payload)
             return BridgeInvokeResponse(id: req.id, ok: true, payloadJSON: json)
-        case OpenClawRemindersCommand.add.rawValue:
-            let params = try Self.decodeParams(OpenClawRemindersAddParams.self, from: req.paramsJSON)
+        case MarketingClawRemindersCommand.add.rawValue:
+            let params = try Self.decodeParams(MarketingClawRemindersAddParams.self, from: req.paramsJSON)
             let payload = try await remindersService.add(params: params)
             let json = try Self.encodePayload(payload)
             return BridgeInvokeResponse(id: req.id, ok: true, payloadJSON: json)
@@ -1981,21 +1981,21 @@ final class NodeAppModel {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(code: .invalidRequest, message: "INVALID_REQUEST: unknown command"))
+                error: MarketingClawNodeError(code: .invalidRequest, message: "INVALID_REQUEST: unknown command"))
         }
     }
 
     private func handleMotionInvoke(_ req: BridgeInvokeRequest) async throws -> BridgeInvokeResponse {
         switch req.command {
-        case OpenClawMotionCommand.activity.rawValue:
-            let params = (try? Self.decodeParams(OpenClawMotionActivityParams.self, from: req.paramsJSON)) ??
-                OpenClawMotionActivityParams()
+        case MarketingClawMotionCommand.activity.rawValue:
+            let params = (try? Self.decodeParams(MarketingClawMotionActivityParams.self, from: req.paramsJSON)) ??
+                MarketingClawMotionActivityParams()
             let payload = try await motionService.activities(params: params)
             let json = try Self.encodePayload(payload)
             return BridgeInvokeResponse(id: req.id, ok: true, payloadJSON: json)
-        case OpenClawMotionCommand.pedometer.rawValue:
-            let params = (try? Self.decodeParams(OpenClawPedometerParams.self, from: req.paramsJSON)) ??
-                OpenClawPedometerParams()
+        case MarketingClawMotionCommand.pedometer.rawValue:
+            let params = (try? Self.decodeParams(MarketingClawPedometerParams.self, from: req.paramsJSON)) ??
+                MarketingClawPedometerParams()
             let payload = try await motionService.pedometer(params: params)
             let json = try Self.encodePayload(payload)
             return BridgeInvokeResponse(id: req.id, ok: true, payloadJSON: json)
@@ -2003,12 +2003,12 @@ final class NodeAppModel {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(code: .invalidRequest, message: "INVALID_REQUEST: unknown command"))
+                error: MarketingClawNodeError(code: .invalidRequest, message: "INVALID_REQUEST: unknown command"))
         }
     }
 
     private func handleTalkInvoke(_ req: BridgeInvokeRequest) async throws -> BridgeInvokeResponse {
-        if req.command == OpenClawTalkCommand.pttOnce.rawValue {
+        if req.command == MarketingClawTalkCommand.pttOnce.rawValue {
             try self.rejectTalkCaptureWhileVoiceNoteActive()
             self.acquirePttVoiceWakeLease()
             defer { self.releasePttVoiceWakeLease() }
@@ -2021,14 +2021,14 @@ final class NodeAppModel {
         defer { self.releaseTalkInvoke() }
 
         switch req.command {
-        case OpenClawTalkCommand.pttStart.rawValue:
+        case MarketingClawTalkCommand.pttStart.rawValue:
             try self.rejectTalkCaptureWhileVoiceNoteActive()
             let acquiredLease = !self.pttSessionOwnsVoiceWakeLease
             if acquiredLease {
                 self.acquirePttVoiceWakeLease()
                 self.pttSessionOwnsVoiceWakeLease = true
             }
-            let payload: OpenClawTalkPTTStartPayload
+            let payload: MarketingClawTalkPTTStartPayload
             do {
                 payload = try await self.talkMode.beginPushToTalk()
             } catch {
@@ -2040,7 +2040,7 @@ final class NodeAppModel {
             }
             let json = try Self.encodePayload(payload)
             return BridgeInvokeResponse(id: req.id, ok: true, payloadJSON: json)
-        case OpenClawTalkCommand.pttStop.rawValue:
+        case MarketingClawTalkCommand.pttStop.rawValue:
             let payload = await talkMode.endPushToTalk()
             if self.pttSessionOwnsVoiceWakeLease {
                 self.pttSessionOwnsVoiceWakeLease = false
@@ -2048,7 +2048,7 @@ final class NodeAppModel {
             }
             let json = try Self.encodePayload(payload)
             return BridgeInvokeResponse(id: req.id, ok: true, payloadJSON: json)
-        case OpenClawTalkCommand.pttCancel.rawValue:
+        case MarketingClawTalkCommand.pttCancel.rawValue:
             let payload = await talkMode.cancelPushToTalk()
             if self.pttSessionOwnsVoiceWakeLease {
                 self.pttSessionOwnsVoiceWakeLease = false
@@ -2060,7 +2060,7 @@ final class NodeAppModel {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(code: .invalidRequest, message: "INVALID_REQUEST: unknown command"))
+                error: MarketingClawNodeError(code: .invalidRequest, message: "INVALID_REQUEST: unknown command"))
         }
     }
 
@@ -2120,113 +2120,113 @@ extension NodeAppModel {
             }
         }
 
-        register([OpenClawLocationCommand.get.rawValue]) { [weak self] req in
+        register([MarketingClawLocationCommand.get.rawValue]) { [weak self] req in
             guard let self else { throw NodeCapabilityRouter.RouterError.handlerUnavailable }
             return try await self.handleLocationInvoke(req)
         }
 
         register([
-            OpenClawCanvasCommand.present.rawValue,
-            OpenClawCanvasCommand.hide.rawValue,
-            OpenClawCanvasCommand.navigate.rawValue,
-            OpenClawCanvasCommand.evalJS.rawValue,
-            OpenClawCanvasCommand.snapshot.rawValue,
+            MarketingClawCanvasCommand.present.rawValue,
+            MarketingClawCanvasCommand.hide.rawValue,
+            MarketingClawCanvasCommand.navigate.rawValue,
+            MarketingClawCanvasCommand.evalJS.rawValue,
+            MarketingClawCanvasCommand.snapshot.rawValue,
         ]) { [weak self] req in
             guard let self else { throw NodeCapabilityRouter.RouterError.handlerUnavailable }
             return try await self.handleCanvasInvoke(req)
         }
 
         register([
-            OpenClawCanvasA2UICommand.reset.rawValue,
-            OpenClawCanvasA2UICommand.push.rawValue,
-            OpenClawCanvasA2UICommand.pushJSONL.rawValue,
+            MarketingClawCanvasA2UICommand.reset.rawValue,
+            MarketingClawCanvasA2UICommand.push.rawValue,
+            MarketingClawCanvasA2UICommand.pushJSONL.rawValue,
         ]) { [weak self] req in
             guard let self else { throw NodeCapabilityRouter.RouterError.handlerUnavailable }
             return try await self.handleCanvasA2UIInvoke(req)
         }
 
         register([
-            OpenClawCameraCommand.list.rawValue,
-            OpenClawCameraCommand.snap.rawValue,
-            OpenClawCameraCommand.clip.rawValue,
+            MarketingClawCameraCommand.list.rawValue,
+            MarketingClawCameraCommand.snap.rawValue,
+            MarketingClawCameraCommand.clip.rawValue,
         ]) { [weak self] req in
             guard let self else { throw NodeCapabilityRouter.RouterError.handlerUnavailable }
             return try await self.handleCameraInvoke(req)
         }
 
-        register([OpenClawScreenCommand.record.rawValue]) { [weak self] req in
+        register([MarketingClawScreenCommand.record.rawValue]) { [weak self] req in
             guard let self else { throw NodeCapabilityRouter.RouterError.handlerUnavailable }
             return try await self.handleScreenRecordInvoke(req)
         }
 
-        register([OpenClawSystemCommand.notify.rawValue]) { [weak self] req in
+        register([MarketingClawSystemCommand.notify.rawValue]) { [weak self] req in
             guard let self else { throw NodeCapabilityRouter.RouterError.handlerUnavailable }
             return try await self.handleSystemNotify(req)
         }
 
-        register([OpenClawChatCommand.push.rawValue]) { [weak self] req in
+        register([MarketingClawChatCommand.push.rawValue]) { [weak self] req in
             guard let self else { throw NodeCapabilityRouter.RouterError.handlerUnavailable }
             return try await self.handleChatPushInvoke(req)
         }
 
         register([
-            OpenClawDeviceCommand.status.rawValue,
-            OpenClawDeviceCommand.info.rawValue,
+            MarketingClawDeviceCommand.status.rawValue,
+            MarketingClawDeviceCommand.info.rawValue,
         ]) { [weak self] req in
             guard let self else { throw NodeCapabilityRouter.RouterError.handlerUnavailable }
             return try await self.handleDeviceInvoke(req)
         }
 
         register([
-            OpenClawWatchCommand.status.rawValue,
-            OpenClawWatchCommand.notify.rawValue,
+            MarketingClawWatchCommand.status.rawValue,
+            MarketingClawWatchCommand.notify.rawValue,
         ]) { [weak self] req in
             guard let self else { throw NodeCapabilityRouter.RouterError.handlerUnavailable }
             return try await self.handleWatchInvoke(req)
         }
 
-        register([OpenClawPhotosCommand.latest.rawValue]) { [weak self] req in
+        register([MarketingClawPhotosCommand.latest.rawValue]) { [weak self] req in
             guard let self else { throw NodeCapabilityRouter.RouterError.handlerUnavailable }
             return try await self.handlePhotosInvoke(req)
         }
 
         register([
-            OpenClawContactsCommand.search.rawValue,
-            OpenClawContactsCommand.add.rawValue,
+            MarketingClawContactsCommand.search.rawValue,
+            MarketingClawContactsCommand.add.rawValue,
         ]) { [weak self] req in
             guard let self else { throw NodeCapabilityRouter.RouterError.handlerUnavailable }
             return try await self.handleContactsInvoke(req)
         }
 
         register([
-            OpenClawCalendarCommand.events.rawValue,
-            OpenClawCalendarCommand.add.rawValue,
+            MarketingClawCalendarCommand.events.rawValue,
+            MarketingClawCalendarCommand.add.rawValue,
         ]) { [weak self] req in
             guard let self else { throw NodeCapabilityRouter.RouterError.handlerUnavailable }
             return try await self.handleCalendarInvoke(req)
         }
 
         register([
-            OpenClawRemindersCommand.list.rawValue,
-            OpenClawRemindersCommand.add.rawValue,
+            MarketingClawRemindersCommand.list.rawValue,
+            MarketingClawRemindersCommand.add.rawValue,
         ]) { [weak self] req in
             guard let self else { throw NodeCapabilityRouter.RouterError.handlerUnavailable }
             return try await self.handleRemindersInvoke(req)
         }
 
         register([
-            OpenClawMotionCommand.activity.rawValue,
-            OpenClawMotionCommand.pedometer.rawValue,
+            MarketingClawMotionCommand.activity.rawValue,
+            MarketingClawMotionCommand.pedometer.rawValue,
         ]) { [weak self] req in
             guard let self else { throw NodeCapabilityRouter.RouterError.handlerUnavailable }
             return try await self.handleMotionInvoke(req)
         }
 
         register([
-            OpenClawTalkCommand.pttStart.rawValue,
-            OpenClawTalkCommand.pttStop.rawValue,
-            OpenClawTalkCommand.pttCancel.rawValue,
-            OpenClawTalkCommand.pttOnce.rawValue,
+            MarketingClawTalkCommand.pttStart.rawValue,
+            MarketingClawTalkCommand.pttStop.rawValue,
+            MarketingClawTalkCommand.pttCancel.rawValue,
+            MarketingClawTalkCommand.pttOnce.rawValue,
         ]) { [weak self] req in
             guard let self else { throw NodeCapabilityRouter.RouterError.handlerUnavailable }
             return try await self.handleTalkInvoke(req)
@@ -2237,9 +2237,9 @@ extension NodeAppModel {
 
     private func handleWatchInvoke(_ req: BridgeInvokeRequest) async throws -> BridgeInvokeResponse {
         switch req.command {
-        case OpenClawWatchCommand.status.rawValue:
+        case MarketingClawWatchCommand.status.rawValue:
             let status = await watchMessagingService.status()
-            let payload = OpenClawWatchStatusPayload(
+            let payload = MarketingClawWatchStatusPayload(
                 supported: status.supported,
                 paired: status.paired,
                 appInstalled: status.appInstalled,
@@ -2247,8 +2247,8 @@ extension NodeAppModel {
                 activationState: status.activationState)
             let json = try Self.encodePayload(payload)
             return BridgeInvokeResponse(id: req.id, ok: true, payloadJSON: json)
-        case OpenClawWatchCommand.notify.rawValue:
-            let params = try Self.decodeParams(OpenClawWatchNotifyParams.self, from: req.paramsJSON)
+        case MarketingClawWatchCommand.notify.rawValue:
+            let params = try Self.decodeParams(MarketingClawWatchNotifyParams.self, from: req.paramsJSON)
             let normalizedParams = Self.normalizeWatchNotifyParams(params)
             let title = normalizedParams.title
             let body = normalizedParams.body
@@ -2256,7 +2256,7 @@ extension NodeAppModel {
                 return BridgeInvokeResponse(
                     id: req.id,
                     ok: false,
-                    error: OpenClawNodeError(
+                    error: MarketingClawNodeError(
                         code: .invalidRequest,
                         message: "INVALID_REQUEST: empty watch notification"))
             }
@@ -2279,7 +2279,7 @@ extension NodeAppModel {
                             sendResult: result)
                     }
                 }
-                let payload = OpenClawWatchNotifyPayload(
+                let payload = MarketingClawWatchNotifyPayload(
                     deliveredImmediately: result.deliveredImmediately,
                     queuedForDelivery: result.queuedForDelivery,
                     transport: result.transport)
@@ -2289,7 +2289,7 @@ extension NodeAppModel {
                 return BridgeInvokeResponse(
                     id: req.id,
                     ok: false,
-                    error: OpenClawNodeError(
+                    error: MarketingClawNodeError(
                         code: .unavailable,
                         message: error.localizedDescription))
             }
@@ -2297,7 +2297,7 @@ extension NodeAppModel {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(code: .invalidRequest, message: "INVALID_REQUEST: unknown command"))
+                error: MarketingClawNodeError(code: .invalidRequest, message: "INVALID_REQUEST: unknown command"))
         }
     }
 
@@ -2319,7 +2319,7 @@ extension NodeAppModel {
         let status = await watchMessagingService.status()
         guard status.supported, status.paired, status.appInstalled else {
             throw NSError(domain: "WatchDirectSetup", code: 3, userInfo: [
-                NSLocalizedDescriptionKey: "Pair an Apple Watch and install the OpenClaw watch app first.",
+                NSLocalizedDescriptionKey: "Pair an Apple Watch and install the MarketingClaw watch app first.",
             ])
         }
 
@@ -2342,9 +2342,9 @@ extension NodeAppModel {
         self.watchMessagingStatus = await self.watchMessagingService.status()
     }
 
-    private func locationMode() -> OpenClawLocationMode {
+    private func locationMode() -> MarketingClawLocationMode {
         let raw = UserDefaults.standard.string(forKey: "location.enabledMode") ?? "off"
-        return OpenClawLocationMode(rawValue: raw) ?? .off
+        return MarketingClawLocationMode(rawValue: raw) ?? .off
     }
 
     private func isLocationPreciseEnabled() -> Bool {
@@ -2442,7 +2442,7 @@ extension NodeAppModel {
     /// snapshot confirms the read (unread != true), so a run finishing while the
     /// session stays open re-acknowledges without patch loops (the gateway stamps
     /// lastReadAt server-side, which makes the exchange convergent).
-    func reconcileChatSessionReadState(_ entries: [OpenClawChatSessionEntry]) {
+    func reconcileChatSessionReadState(_ entries: [MarketingClawChatSessionEntry]) {
         guard let openedKey = self.openedChatSessionKey,
               let entry = entries.first(where: { $0.key == openedKey })
         else { return }
@@ -2505,7 +2505,7 @@ extension NodeAppModel {
     }
 
     var chatSessionRoutingContract: String? {
-        OpenClawChatSessionRoutingContract.make(
+        MarketingClawChatSessionRoutingContract.make(
             scope: self.gatewaySessionScope,
             mainKey: self.mainSessionBaseKey,
             defaultAgentID: self.gatewayDefaultAgentId)
@@ -3154,7 +3154,7 @@ extension NodeAppModel {
             kind: .unknown,
             owner: .iphone,
             title: "Credential save failed",
-            message: "OpenClaw disconnected because it could not securely save the new gateway credential.",
+            message: "MarketingClaw disconnected because it could not securely save the new gateway credential.",
             retryable: true,
             pauseReconnect: true,
             technicalDetails: "Gateway credential handoff persistence failed."))
@@ -3415,7 +3415,7 @@ extension NodeAppModel {
                             BridgeInvokeResponse(
                                 id: req.id,
                                 ok: false,
-                                error: OpenClawNodeError(
+                                error: MarketingClawNodeError(
                                     code: .invalidRequest,
                                     message: "INVALID_REQUEST: operator session cannot invoke node commands"))
                         })
@@ -3563,7 +3563,7 @@ extension NodeAppModel {
                                 return BridgeInvokeResponse(
                                     id: req.id,
                                     ok: false,
-                                    error: OpenClawNodeError(
+                                    error: MarketingClawNodeError(
                                         code: .unavailable,
                                         message: "UNAVAILABLE: node not ready"))
                             }
@@ -3782,7 +3782,7 @@ extension NodeAppModel {
 
     private func legacyClientIdFallback(currentClientId: String, error: Error) -> String? {
         let normalizedClientId = currentClientId.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-        guard normalizedClientId == "openclaw-ios" else { return nil }
+        guard normalizedClientId == "marketingclaw-ios" else { return nil }
         let message = error.localizedDescription.lowercased()
         guard message.contains("invalid connect params"), message.contains("/client/id") else {
             return nil
@@ -4006,8 +4006,8 @@ extension NodeAppModel {
         self.recordShareEvent("Share self-test running…")
 
         let payload = SharedContentPayload(
-            title: "OpenClaw Share Self-Test",
-            url: URL(string: "https://openclaw.ai/share-self-test"),
+            title: "MarketingClaw Share Self-Test",
+            url: URL(string: "https://marketingclaw.ai/share-self-test"),
             text: "Validate iOS share->deep-link->gateway forwarding.")
         guard let deepLink = ShareToAgentDeepLink.buildURL(
             from: payload,
@@ -4509,13 +4509,13 @@ extension NodeAppModel {
         self.persistWatchExecApprovalBridgeState()
     }
 
-    private static func makeWatchExecApprovalItem(from prompt: ExecApprovalPrompt) -> OpenClawWatchExecApprovalItem {
+    private static func makeWatchExecApprovalItem(from prompt: ExecApprovalPrompt) -> MarketingClawWatchExecApprovalItem {
         let decisions = prompt.allowedDecisions.compactMap { decision in
             let normalizedDecision = decision.trimmingCharacters(in: .whitespacesAndNewlines)
-            return OpenClawWatchExecApprovalDecision(rawValue: normalizedDecision)
+            return MarketingClawWatchExecApprovalDecision(rawValue: normalizedDecision)
         }
         let preview = Self.trimmedOrNil(prompt.commandPreview) ?? Self.trimmedOrNil(prompt.commandText)
-        return OpenClawWatchExecApprovalItem(
+        return MarketingClawWatchExecApprovalItem(
             id: prompt.id,
             gatewayStableID: prompt.gatewayStableID,
             commandText: prompt.commandText,
@@ -4539,7 +4539,7 @@ extension NodeAppModel {
     private func publishWatchExecApprovalPrompt(_ prompt: ExecApprovalPrompt, reason: String) async {
         guard self.isExecApprovalPromptCurrent(prompt) else { return }
         let deliveryGeneration = self.gatewayConnectGeneration
-        let message = OpenClawWatchExecApprovalPromptMessage(
+        let message = MarketingClawWatchExecApprovalPromptMessage(
             approval: Self.makeWatchExecApprovalItem(from: prompt),
             sentAtMs: Int64(Date().timeIntervalSince1970 * 1000),
             deliveryId: UUID().uuidString,
@@ -4569,7 +4569,7 @@ extension NodeAppModel {
     private func publishWatchExecApprovalResolved(
         approvalId: String,
         gatewayStableID: String,
-        decision: OpenClawWatchExecApprovalDecision?,
+        decision: MarketingClawWatchExecApprovalDecision?,
         source: String) async
     {
         let normalizedApprovalID = approvalId.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -4577,7 +4577,7 @@ extension NodeAppModel {
         if self.watchExecApprovalPromptsByID[normalizedApprovalID]?.gatewayStableID == gatewayStableID {
             self.removeWatchExecApprovalPrompt(normalizedApprovalID)
         }
-        let message = OpenClawWatchExecApprovalResolvedMessage(
+        let message = MarketingClawWatchExecApprovalResolvedMessage(
             approvalId: normalizedApprovalID,
             gatewayStableID: gatewayStableID,
             decision: decision,
@@ -4599,14 +4599,14 @@ extension NodeAppModel {
     private func publishWatchExecApprovalExpired(
         approvalId: String,
         gatewayStableID: String,
-        reason: OpenClawWatchExecApprovalCloseReason) async
+        reason: MarketingClawWatchExecApprovalCloseReason) async
     {
         let normalizedApprovalID = approvalId.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !normalizedApprovalID.isEmpty else { return }
         if self.watchExecApprovalPromptsByID[normalizedApprovalID]?.gatewayStableID == gatewayStableID {
             self.removeWatchExecApprovalPrompt(normalizedApprovalID)
         }
-        let message = OpenClawWatchExecApprovalExpiredMessage(
+        let message = MarketingClawWatchExecApprovalExpiredMessage(
             approvalId: normalizedApprovalID,
             gatewayStableID: gatewayStableID,
             reason: reason,
@@ -4646,7 +4646,7 @@ extension NodeAppModel {
                 return lhs.id < rhs.id
             }
             .map(Self.makeWatchExecApprovalItem)
-        let message = OpenClawWatchExecApprovalSnapshotMessage(
+        let message = MarketingClawWatchExecApprovalSnapshotMessage(
             approvals: approvals,
             gatewayStableID: currentExecApprovalGatewayStableID(),
             sentAtMs: Int64(Date().timeIntervalSince1970 * 1000),
@@ -4676,7 +4676,7 @@ extension NodeAppModel {
 
     private func makeWatchChatPreview() async -> WatchChatPreview {
         do {
-            let payload: OpenClawChatHistoryPayload
+            let payload: MarketingClawChatHistoryPayload
             if self.isAppleReviewDemoModeEnabled {
                 payload = try await self.appleReviewDemoChatTransport.requestHistory(sessionKey: self.chatSessionKey)
             } else {
@@ -4700,7 +4700,7 @@ extension NodeAppModel {
     }
 
     private nonisolated static func watchChatReplyText(
-        from raw: [OpenClawKit.AnyCodable],
+        from raw: [MarketingClawKit.AnyCodable],
         runId: String,
         submittedText: String,
         submittedAtMs: Int64) -> String?
@@ -4743,10 +4743,10 @@ extension NodeAppModel {
     }
 
     private nonisolated static func decodeWatchChatMessage(
-        _ raw: OpenClawKit.AnyCodable) -> WatchChatMessageEntry?
+        _ raw: MarketingClawKit.AnyCodable) -> WatchChatMessageEntry?
     {
         guard let data = try? JSONEncoder().encode(raw),
-              let message = try? JSONDecoder().decode(OpenClawChatMessage.self, from: data),
+              let message = try? JSONDecoder().decode(MarketingClawChatMessage.self, from: data),
               let text = nonEmptyWatchChatText(watchChatText(from: message))
         else {
             return nil
@@ -4760,7 +4760,7 @@ extension NodeAppModel {
     }
 
     private nonisolated static func makeWatchChatItems(
-        from raw: [OpenClawKit.AnyCodable]) -> [OpenClawWatchChatItem]
+        from raw: [MarketingClawKit.AnyCodable]) -> [MarketingClawWatchChatItem]
     {
         let readableMessages = raw.compactMap(self.decodeWatchChatMessage)
         var idOccurrences: [String: Int] = [:]
@@ -4773,7 +4773,7 @@ extension NodeAppModel {
         }
         return identified.suffix(self.watchChatPreviewItemLimit).map { entry, stableId in
             let timestampMs = self.watchTimestampMs(entry.message.timestamp)
-            return OpenClawWatchChatItem(
+            return MarketingClawWatchChatItem(
                 id: stableId,
                 role: entry.message.role,
                 text: self.truncatedWatchChatText(entry.text),
@@ -4788,7 +4788,7 @@ extension NodeAppModel {
         return "\(entry.message.role)-\(digest)"
     }
 
-    private nonisolated static func watchChatText(from message: OpenClawChatMessage) -> String {
+    private nonisolated static func watchChatText(from message: MarketingClawChatMessage) -> String {
         let parts = message.content.compactMap { content -> String? in
             let kind = (content.type ?? "text").lowercased()
             guard kind.isEmpty || kind == "text" || kind == "output_text" else { return nil }
@@ -4798,7 +4798,7 @@ extension NodeAppModel {
             if let text = self.nonEmptyWatchChatText(content.content?.value as? String) {
                 return text
             }
-            if let dict = content.content?.value as? [String: OpenClawKit.AnyCodable],
+            if let dict = content.content?.value as? [String: MarketingClawKit.AnyCodable],
                let text = self.nonEmptyWatchChatText(dict["text"]?.value as? String)
             {
                 return text
@@ -4837,7 +4837,7 @@ extension NodeAppModel {
     }
 
     private func makeWatchAppSnapshot(
-        chatPreview: WatchChatPreview? = nil) -> OpenClawWatchAppSnapshotMessage
+        chatPreview: WatchChatPreview? = nil) -> MarketingClawWatchAppSnapshotMessage
     {
         self.pruneExpiredWatchExecApprovalPrompts()
         let watchGatewayConnected = self.isAppleReviewDemoModeEnabled
@@ -4846,7 +4846,7 @@ extension NodeAppModel {
         let watchGatewayStatusText = watchGatewayConnected || displayStatusText != "Connected"
             ? displayStatusText
             : self.operatorStatusText
-        return OpenClawWatchAppSnapshotMessage(
+        return MarketingClawWatchAppSnapshotMessage(
             gatewayStatusText: watchGatewayStatusText,
             gatewayConnected: watchGatewayConnected,
             agentName: self.chatAgentName,
@@ -5188,7 +5188,7 @@ extension NodeAppModel {
     private func sendWatchChatCompletion(commandId: String, replyText: String) async {
         do {
             _ = try await self.watchMessagingService.sendChatCompletion(
-                OpenClawWatchChatCompletionMessage(
+                MarketingClawWatchChatCompletionMessage(
                     commandId: commandId,
                     replyText: replyText,
                     sentAtMs: Int64(Date().timeIntervalSince1970 * 1000)))
@@ -5699,7 +5699,7 @@ extension NodeAppModel {
             self.pushWakeLogger.info("Ignored APNs payload wakeId=\(wakeId, privacy: .public): not silent push")
             return false
         }
-        let pushKind = Self.openclawPushKind(userInfo)
+        let pushKind = Self.marketingclawPushKind(userInfo)
         let receivedMessage =
             "Silent push received wakeId=\(wakeId) "
                 + "kind=\(pushKind) "
@@ -5978,14 +5978,14 @@ extension NodeAppModel {
         return String(raw.prefix(8))
     }
 
-    private static func openclawPushKind(_ userInfo: [AnyHashable: Any]) -> String {
-        if let payload = userInfo["openclaw"] as? [String: Any],
+    private static func marketingclawPushKind(_ userInfo: [AnyHashable: Any]) -> String {
+        if let payload = userInfo["marketingclaw"] as? [String: Any],
            let kind = payload["kind"] as? String
         {
             let trimmed = kind.trimmingCharacters(in: .whitespacesAndNewlines)
             if !trimmed.isEmpty { return trimmed }
         }
-        if let payload = userInfo["openclaw"] as? [AnyHashable: Any],
+        if let payload = userInfo["marketingclaw"] as? [AnyHashable: Any],
            let kind = payload["kind"] as? String
         {
             let trimmed = kind.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -6384,7 +6384,7 @@ extension NodeAppModel {
         else {
             self.execApprovalNotificationLogger.error(
                 "Exec approval action failed id=\(normalizedApprovalID, privacy: .public): operator not connected")
-            return .failed(message: "OpenClaw couldn't connect to the gateway operator session.")
+            return .failed(message: "MarketingClaw couldn't connect to the gateway operator session.")
         }
 
         do {
@@ -6404,7 +6404,7 @@ extension NodeAppModel {
             await self.publishWatchExecApprovalResolved(
                 approvalId: normalizedApprovalID,
                 gatewayStableID: expectedGatewayStableID,
-                decision: OpenClawWatchExecApprovalDecision(rawValue: normalizedDecision),
+                decision: MarketingClawWatchExecApprovalDecision(rawValue: normalizedDecision),
                 source: "iphone")
             return .resolved
         } catch {
@@ -6435,7 +6435,7 @@ extension NodeAppModel {
                 "Exec approval action failed id=\(normalizedApprovalID) error=\(error.localizedDescription)"
             self.execApprovalNotificationLogger.error("\(logMessage, privacy: .public)")
             return .failed(
-                message: "OpenClaw couldn't resolve this approval right now. Try again.")
+                message: "MarketingClaw couldn't resolve this approval right now. Try again.")
         }
     }
 
@@ -7183,12 +7183,12 @@ extension NodeAppModel {
         await self.canPublishAPNsRegistration(usesRelayTransport: usesRelayTransport)
     }
 
-    nonisolated static func _test_makeWatchChatItems(from raw: [OpenClawKit.AnyCodable]) -> [OpenClawWatchChatItem] {
+    nonisolated static func _test_makeWatchChatItems(from raw: [MarketingClawKit.AnyCodable]) -> [MarketingClawWatchChatItem] {
         self.makeWatchChatItems(from: raw)
     }
 
     nonisolated static func _test_watchChatReplyText(
-        from raw: [OpenClawKit.AnyCodable],
+        from raw: [MarketingClawKit.AnyCodable],
         runId: String,
         submittedText: String,
         submittedAtMs: Int64) -> String?

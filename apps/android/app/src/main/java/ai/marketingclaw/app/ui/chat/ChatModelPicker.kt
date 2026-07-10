@@ -1,6 +1,6 @@
-package ai.openclaw.app.ui.chat
+package ai.marketingclaw.app.ui.chat
 
-import ai.openclaw.app.GatewayModelSummary
+import ai.marketingclaw.app.GatewayModelSummary
 
 internal data class ChatModelPickerSections(
   val pinned: List<GatewayModelSummary>,

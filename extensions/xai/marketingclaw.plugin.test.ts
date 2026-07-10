@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 const manifest = JSON.parse(
-  readFileSync(new URL("./openclaw.plugin.json", import.meta.url), "utf8"),
+  readFileSync(new URL("./marketingclaw.plugin.json", import.meta.url), "utf8"),
 ) as {
   modelIdNormalization?: {
     providers?: Record<string, { aliases?: Record<string, string> }>;

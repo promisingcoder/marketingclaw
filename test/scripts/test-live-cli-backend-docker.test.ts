@@ -27,16 +27,16 @@ describe("scripts/test-live-cli-backend-docker.sh", () => {
   it("forwards both fresh and resume CLI arg overrides into the Docker container", () => {
     const forwardedVars = readForwardedDockerEnvVars();
 
-    expect(forwardedVars).toContain("OPENCLAW_LIVE_CLI_BACKEND_ARGS");
-    expect(forwardedVars).toContain("OPENCLAW_LIVE_CLI_BACKEND_RESUME_ARGS");
-    expect(forwardedVars).toContain("OPENCLAW_TEST_CONSOLE");
+    expect(forwardedVars).toContain("MARKETINGCLAW_LIVE_CLI_BACKEND_ARGS");
+    expect(forwardedVars).toContain("MARKETINGCLAW_LIVE_CLI_BACKEND_RESUME_ARGS");
+    expect(forwardedVars).toContain("MARKETINGCLAW_TEST_CONSOLE");
   });
 
   it("forwards advisory provider-skip controls into the Docker container", () => {
     const forwardedVars = readForwardedDockerEnvVars();
 
-    expect(forwardedVars).toContain("OPENCLAW_LIVE_CLI_BACKEND_ADVISORY");
-    expect(forwardedVars).toContain("OPENCLAW_LIVE_CLI_BACKEND_ALLOW_PROVIDER_SKIP");
+    expect(forwardedVars).toContain("MARKETINGCLAW_LIVE_CLI_BACKEND_ADVISORY");
+    expect(forwardedVars).toContain("MARKETINGCLAW_LIVE_CLI_BACKEND_ALLOW_PROVIDER_SKIP");
   });
 
   it("rejects invalid setup timeout values before metadata or Docker setup", () => {
@@ -44,13 +44,13 @@ describe("scripts/test-live-cli-backend-docker.sh", () => {
       encoding: "utf8",
       env: {
         ...process.env,
-        OPENCLAW_LIVE_CLI_BACKEND_SETUP_TIMEOUT_SECONDS: "180s",
+        MARKETINGCLAW_LIVE_CLI_BACKEND_SETUP_TIMEOUT_SECONDS: "180s",
       },
     });
 
     expect(result.status).toBe(2);
     expect(result.stderr).toContain(
-      "invalid OPENCLAW_LIVE_CLI_BACKEND_SETUP_TIMEOUT_SECONDS: 180s",
+      "invalid MARKETINGCLAW_LIVE_CLI_BACKEND_SETUP_TIMEOUT_SECONDS: 180s",
     );
     expect(result.stderr).not.toContain("Cannot find package 'tsx'");
     expect(result.stderr).not.toContain("docker");
@@ -61,7 +61,7 @@ describe("scripts/test-live-cli-backend-docker.sh", () => {
 
     expect(script).toContain('direct_probe_log="$(mktemp)"');
     expect(script).toContain("This is a local CLI smoke test.");
-    expect(script).not.toContain("OPENCLAW-CLAUDE-SUBSCRIPTION-DIRECT");
+    expect(script).not.toContain("MARKETINGCLAW-CLAUDE-SUBSCRIPTION-DIRECT");
     expect(script).toContain("direct Claude subscription probe exited with status");
     expect(script).toContain("<redacted-email>");
     expect(script).toContain("<redacted-secret>");

@@ -153,7 +153,7 @@ async function waitForChild(child: ReturnType<typeof spawn>): Promise<void> {
 
 describe("reply session initialization concurrency", () => {
   it("commits after same-session activity from another process", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-reply-init-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-reply-init-"));
     const sessionAccessorUrl = pathToFileURL(
       path.resolve("src/config/sessions/session-accessor.ts"),
     ).href;

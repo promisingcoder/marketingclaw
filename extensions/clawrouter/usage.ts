@@ -1,5 +1,5 @@
-import type { ProviderUsageSnapshot } from "openclaw/plugin-sdk/provider-usage";
-import { readResponseWithLimit } from "openclaw/plugin-sdk/response-limit-runtime";
+import type { ProviderUsageSnapshot } from "marketingclaw/plugin-sdk/provider-usage";
+import { readResponseWithLimit } from "marketingclaw/plugin-sdk/response-limit-runtime";
 import { normalizeClawRouterRootUrl } from "./provider-catalog.js";
 
 const CLAWROUTER_USAGE_RESPONSE_MAX_BYTES = 1024 * 1024;

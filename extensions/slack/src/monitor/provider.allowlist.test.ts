@@ -1,6 +1,6 @@
 // Slack tests cover provider.allowlist plugin behavior.
-import { CHANNEL_APPROVAL_NATIVE_RUNTIME_CONTEXT_CAPABILITY } from "openclaw/plugin-sdk/approval-handler-adapter-runtime";
-import type { ChannelRuntimeSurface } from "openclaw/plugin-sdk/channel-contract";
+import { CHANNEL_APPROVAL_NATIVE_RUNTIME_CONTEXT_CAPABILITY } from "marketingclaw/plugin-sdk/approval-handler-adapter-runtime";
+import type { ChannelRuntimeSurface } from "marketingclaw/plugin-sdk/channel-contract";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   flush,
@@ -51,9 +51,9 @@ describe("slack allowlist log formatting", () => {
         input: "C0AQXEG6QFJ",
         resolved: true,
         id: "C0AQXEG6QFJ",
-        name: "openclawtest",
+        name: "marketingclawtest",
       }),
-    ).toBe("C0AQXEG6QFJ→openclawtest (id:C0AQXEG6QFJ)");
+    ).toBe("C0AQXEG6QFJ→marketingclawtest (id:C0AQXEG6QFJ)");
   });
 
   it("prints user names alongside ids", () => {

@@ -1,13 +1,13 @@
-# SearXNG OpenClaw plugin
+# SearXNG MarketingClaw plugin
 
-Official OpenClaw plugin for SearXNG.
+Official MarketingClaw plugin for SearXNG.
 
 ## Install
 
 ```sh
-openclaw plugins install @openclaw/searxng-plugin
+marketingclaw plugins install @marketingclaw/searxng-plugin
 ```
 
 ## Docs
 
-See `docs/tools/searxng-search.md` in the OpenClaw repository, or the published docs at `https://docs.openclaw.ai/tools/searxng-search`.
+See `docs/tools/searxng-search.md` in the MarketingClaw repository, or the published docs at `https://docs.marketingclaw.ai/tools/searxng-search`.

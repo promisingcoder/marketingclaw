@@ -89,7 +89,7 @@ describe("chat page split layout host", () => {
     document.body.append(page);
     await page.updateComplete;
 
-    const panes = page.querySelectorAll<RenderedPane>("openclaw-chat-pane");
+    const panes = page.querySelectorAll<RenderedPane>("marketingclaw-chat-pane");
     expect(panes).toHaveLength(1);
     expect(panes[0].paneId).toBe("single");
     expect(panes[0].sessionKey).toBe("main");
@@ -105,7 +105,7 @@ describe("chat page split layout host", () => {
     document.body.append(page);
     await page.updateComplete;
 
-    const pane = page.querySelector<RenderedPane>("openclaw-chat-pane");
+    const pane = page.querySelector<RenderedPane>("marketingclaw-chat-pane");
     expect(pane?.sessionKey).toBe("");
     expect(pane?.active).toBe(true);
   });
@@ -117,7 +117,7 @@ describe("chat page split layout host", () => {
     setLayout(page, createSplitLayout("main"));
     await page.updateComplete;
 
-    const panes = [...page.querySelectorAll<RenderedPane>("openclaw-chat-pane")];
+    const panes = [...page.querySelectorAll<RenderedPane>("marketingclaw-chat-pane")];
     const dividers = page.querySelectorAll<ResizableDivider>("resizable-divider");
     expect(panes.map((pane) => pane.paneId)).toEqual(["p1", "p2"]);
     expect(panes.map((pane) => pane.active)).toEqual([false, true]);
@@ -137,7 +137,7 @@ describe("chat page split layout host", () => {
     setLayout(page, createSplitLayout("main"));
     await page.updateComplete;
 
-    const panes = [...page.querySelectorAll<RenderedPane>("openclaw-chat-pane")];
+    const panes = [...page.querySelectorAll<RenderedPane>("marketingclaw-chat-pane")];
     expect(panes.map((pane) => pane.paneId)).toEqual(["p2"]);
     expect(panes[0].active).toBe(true);
     expect(page.querySelectorAll(".chat-split-toolbar__pane")).toHaveLength(1);
@@ -315,7 +315,7 @@ describe("chat page split layout host", () => {
     const navigation = setNavigationContext(page);
     await page.updateComplete;
 
-    const pane = [...page.querySelectorAll<RenderedPane>("openclaw-chat-pane")].find(
+    const pane = [...page.querySelectorAll<RenderedPane>("marketingclaw-chat-pane")].find(
       (candidate) => candidate.paneId === "p1",
     );
     const container = page.querySelector<HTMLElement>(".chat-split-view__drop-container");

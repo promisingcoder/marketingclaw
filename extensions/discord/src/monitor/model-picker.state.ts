@@ -1,9 +1,12 @@
 // Discord plugin module implements model picker.state behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import type { ModelsProviderData } from "openclaw/plugin-sdk/models-provider-runtime";
-import { parseStrictInteger, parseStrictPositiveInteger } from "openclaw/plugin-sdk/number-runtime";
-import { normalizeProviderId } from "openclaw/plugin-sdk/provider-model-shared";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import { createLazyRuntimeModule } from "marketingclaw/plugin-sdk/lazy-runtime";
+import type { ModelsProviderData } from "marketingclaw/plugin-sdk/models-provider-runtime";
+import {
+  parseStrictInteger,
+  parseStrictPositiveInteger,
+} from "marketingclaw/plugin-sdk/number-runtime";
+import { normalizeProviderId } from "marketingclaw/plugin-sdk/provider-model-shared";
 import type { ComponentData } from "../internal/discord.js";
 
 export const DISCORD_MODEL_PICKER_CUSTOM_ID_KEY = "mdlpk";
@@ -107,7 +110,7 @@ export type DiscordModelPickerModelPage = DiscordModelPickerPage<string> & {
 };
 
 const loadModelsProviderRuntime = createLazyRuntimeModule(
-  () => import("openclaw/plugin-sdk/models-provider-runtime"),
+  () => import("marketingclaw/plugin-sdk/models-provider-runtime"),
 );
 
 function encodeCustomIdValue(value: string): string {
@@ -193,7 +196,7 @@ function paginateItems<T>(params: {
 }
 
 export async function loadDiscordModelPickerData(
-  cfg: OpenClawConfig,
+  cfg: MarketingClawConfig,
   agentId?: string,
 ): Promise<ModelsProviderData> {
   const { buildModelsProviderData } = await loadModelsProviderRuntime();

@@ -1,6 +1,6 @@
-// Keep the runtime class on the public package specifier so OpenClaw and
+// Keep the runtime class on the public package specifier so MarketingClaw and
 // external consumers share one constructor identity.
-import { EventStream as LlmEventStream } from "@openclaw/ai/event-stream";
+import { EventStream as LlmEventStream } from "@marketingclaw/ai/event-stream";
 import type {
   AssistantMessage,
   AssistantMessageEvent,

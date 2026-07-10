@@ -9,7 +9,7 @@ import {
 } from "../agents/auth-profiles/sqlite.js";
 import { saveAuthProfileStore } from "../agents/auth-profiles/store.js";
 import type { AuthProfileStore } from "../agents/auth-profiles/types.js";
-import { closeOpenClawAgentDatabasesForTest } from "../state/openclaw-agent-db.js";
+import { closeMarketingClawAgentDatabasesForTest } from "../state/marketingclaw-agent-db.js";
 import { runSecretsAudit } from "./audit.js";
 
 type AuditFixture = {
@@ -38,7 +38,7 @@ function countNonEmptyLines(value: string): number {
 }
 
 async function writeJsonFile(filePath: string, value: unknown): Promise<void> {
-  if (path.basename(filePath) === "openclaw-agent.sqlite") {
+  if (path.basename(filePath) === "marketingclaw-agent.sqlite") {
     saveAuthProfileStore(value as AuthProfileStore, path.dirname(filePath), {
       filterExternalAuthProfiles: false,
       syncExternalCli: false,
@@ -49,7 +49,7 @@ async function writeJsonFile(filePath: string, value: unknown): Promise<void> {
 }
 
 async function removeAuthStore(fixture: AuditFixture): Promise<void> {
-  closeOpenClawAgentDatabasesForTest();
+  closeMarketingClawAgentDatabasesForTest();
   await fs.rm(fixture.authStorePath, { force: true });
 }
 
@@ -146,9 +146,9 @@ async function expectPathMissing(filePath: string): Promise<void> {
 }
 
 async function createAuditFixture(): Promise<AuditFixture> {
-  const rootDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-secrets-audit-"));
-  const stateDir = path.join(rootDir, ".openclaw");
-  const configPath = path.join(stateDir, "openclaw.json");
+  const rootDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-secrets-audit-"));
+  const stateDir = path.join(rootDir, ".marketingclaw");
+  const configPath = path.join(stateDir, "marketingclaw.json");
   const agentDir = path.join(stateDir, "agents", "main", "agent");
   const authStorePath = resolveAuthProfileDatabasePath(agentDir);
   const authJsonPath = path.join(agentDir, "auth.json");
@@ -168,8 +168,8 @@ async function createAuditFixture(): Promise<AuditFixture> {
     modelsPath,
     envPath,
     env: {
-      OPENCLAW_STATE_DIR: stateDir,
-      OPENCLAW_CONFIG_PATH: configPath,
+      MARKETINGCLAW_STATE_DIR: stateDir,
+      MARKETINGCLAW_CONFIG_PATH: configPath,
       OPENAI_API_KEY: "env-openai-key", // pragma: allowlist secret
       PATH: resolveRuntimePathEnv(),
     },
@@ -228,7 +228,7 @@ describe("secrets audit", () => {
       await seedAuditFixture(warmFixture);
       await runSecretsAudit({ env: warmFixture.env });
     } finally {
-      closeOpenClawAgentDatabasesForTest();
+      closeMarketingClawAgentDatabasesForTest();
       await fs.rm(warmFixture.rootDir, { recursive: true, force: true });
     }
   });
@@ -273,7 +273,7 @@ describe("secrets audit", () => {
   });
 
   afterEach(async () => {
-    closeOpenClawAgentDatabasesForTest();
+    closeMarketingClawAgentDatabasesForTest();
     await fs.rm(fixture.rootDir, { recursive: true, force: true });
   });
 
@@ -600,7 +600,7 @@ describe("secrets audit", () => {
     const report = await runSecretsAudit({
       env: {
         ...fixture.env,
-        OPENCLAW_AGENT_DIR: externalAgentDir,
+        MARKETINGCLAW_AGENT_DIR: externalAgentDir,
       },
     });
     expect(
@@ -713,7 +713,7 @@ describe("secrets audit", () => {
     },
   );
 
-  it("does not flag non-sensitive routing headers in openclaw config", async () => {
+  it("does not flag non-sensitive routing headers in marketingclaw config", async () => {
     await writeJsonFile(fixture.configPath, {
       models: {
         providers: {
@@ -747,7 +747,7 @@ describe("secrets audit", () => {
     ).toBe(false);
   });
 
-  it("keeps request headers in openclaw config covered by plaintext audit", async () => {
+  it("keeps request headers in marketingclaw config covered by plaintext audit", async () => {
     await writeJsonFile(fixture.configPath, {
       models: {
         providers: {
@@ -783,7 +783,7 @@ describe("secrets audit", () => {
     ).toBe(true);
   });
 
-  it("does not flag openclaw.json model provider apiKey marker values as plaintext", async () => {
+  it("does not flag marketingclaw.json model provider apiKey marker values as plaintext", async () => {
     await writeJsonFile(fixture.configPath, {
       models: {
         providers: {

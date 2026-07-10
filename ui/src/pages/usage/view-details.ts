@@ -1,4 +1,4 @@
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { truncateUtf16Safe } from "@marketingclaw/normalization-core/utf16-slice";
 // Control UI view renders usage render details screen content.
 import { html, svg, nothing } from "lit";
 import { formatDurationCompact } from "../../../../src/infra/format-time/format-duration.ts";
@@ -295,7 +295,7 @@ function renderSessionDetailPanel(
               `
             : nothing}
         </div>
-        <openclaw-tooltip .content=${t("usage.details.close")}>
+        <marketingclaw-tooltip .content=${t("usage.details.close")}>
           <button
             class="btn btn--sm btn--ghost"
             @click=${onClose}
@@ -303,7 +303,7 @@ function renderSessionDetailPanel(
           >
             ×
           </button>
-        </openclaw-tooltip>
+        </marketingclaw-tooltip>
       </div>
       ${session.scope === "family" && session.includedSessionIds?.length
         ? html`

@@ -2,19 +2,19 @@ import type {
   ProviderFetchUsageSnapshotContext,
   ProviderResolveUsageAuthContext,
   ProviderResolvedUsageAuth,
-} from "openclaw/plugin-sdk/plugin-entry";
+} from "marketingclaw/plugin-sdk/plugin-entry";
 import {
   buildUsageHttpErrorSnapshot,
   fetchCodexUsage,
   type ProviderUsageCostDaily,
   type ProviderUsageModelBreakdown,
   type ProviderUsageSnapshot,
-} from "openclaw/plugin-sdk/provider-usage";
-import { readResponseWithLimit } from "openclaw/plugin-sdk/response-limit-runtime";
+} from "marketingclaw/plugin-sdk/provider-usage";
+import { readResponseWithLimit } from "marketingclaw/plugin-sdk/response-limit-runtime";
 
 const OPENAI_COSTS_URL = "https://api.openai.com/v1/organization/costs";
 const OPENAI_COMPLETIONS_USAGE_URL = "https://api.openai.com/v1/organization/usage/completions";
-const OPENAI_ADMIN_TOKEN_PREFIX = "openclaw:openai-admin:v1:";
+const OPENAI_ADMIN_TOKEN_PREFIX = "marketingclaw:openai-admin:v1:";
 const OPENAI_USAGE_RESPONSE_MAX_BYTES = 4 * 1024 * 1024;
 const OPENAI_USAGE_HISTORY_DAYS = 30;
 const MAX_PAGES = 100;

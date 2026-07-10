@@ -1,18 +1,18 @@
 {
-  "name": "@openclaw/moonshot-provider",
+  "name": "@marketingclaw/moonshot-provider",
   "version": "2026.6.11",
-  "description": "OpenClaw Moonshot provider plugin",
+  "description": "MarketingClaw Moonshot provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@marketingclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "marketingclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@openclaw/moonshot-provider",
-      "npmSpec": "@openclaw/moonshot-provider",
+      "clawhubSpec": "clawhub:@marketingclaw/moonshot-provider",
+      "npmSpec": "@marketingclaw/moonshot-provider",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.6.9"
     },
@@ -20,7 +20,7 @@
       "pluginApi": ">=2026.6.11"
     },
     "build": {
-      "openclawVersion": "2026.6.11",
+      "marketingclawVersion": "2026.6.11",
       "bundledDist": false
     },
     "release": {
@@ -30,6 +30,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/promisingcoder/marketingclaw"
   }
 }

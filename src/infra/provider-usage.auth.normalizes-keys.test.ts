@@ -4,7 +4,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { NON_ENV_SECRETREF_MARKER } from "../agents/model-auth-markers.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { MarketingClawConfig } from "../config/config.js";
 import type { ModelDefinitionConfig } from "../config/types.models.js";
 import { createSuiteTempRootTracker } from "../test-helpers/temp-dir.js";
 
@@ -170,7 +170,7 @@ const providerRuntimeMocks = vi.hoisted(() => ({
           params.context.env?.ANTHROPIC_ADMIN_KEY ?? params.context.env?.ANTHROPIC_ADMIN_API_KEY;
         if (adminKey) {
           return {
-            token: `openclaw:anthropic-admin:v1:${JSON.stringify({ token: adminKey })}`,
+            token: `marketingclaw:anthropic-admin:v1:${JSON.stringify({ token: adminKey })}`,
           };
         }
         const candidates =
@@ -182,7 +182,7 @@ const providerRuntimeMocks = vi.hoisted(() => ({
         );
         if (storedAdminKey) {
           return {
-            token: `openclaw:anthropic-admin:v1:${JSON.stringify({ token: storedAdminKey })}`,
+            token: `marketingclaw:anthropic-admin:v1:${JSON.stringify({ token: storedAdminKey })}`,
           };
         }
         const oauth = await params.context.resolveOAuthToken();
@@ -199,7 +199,7 @@ const providerRuntimeMocks = vi.hoisted(() => ({
       if (params.provider === "openai") {
         const adminKey = params.context.env?.OPENAI_ADMIN_KEY;
         if (adminKey) {
-          return { token: `openclaw:openai-admin:v1:${JSON.stringify({ token: adminKey })}` };
+          return { token: `marketingclaw:openai-admin:v1:${JSON.stringify({ token: adminKey })}` };
         }
         const oauth = await params.context.resolveOAuthToken();
         if (oauth) {
@@ -295,7 +295,9 @@ let resolveProviderAuths: typeof import("./provider-usage.auth.js").resolveProvi
 let clearRuntimeAuthProfileStoreSnapshots: typeof import("../agents/auth-profiles.js").clearRuntimeAuthProfileStoreSnapshots;
 let clearConfigCache: typeof import("../config/config.js").clearConfigCache;
 let clearRuntimeConfigSnapshot: typeof import("../config/config.js").clearRuntimeConfigSnapshot;
-const suiteRootTracker = createSuiteTempRootTracker({ prefix: "openclaw-provider-auth-suite-" });
+const suiteRootTracker = createSuiteTempRootTracker({
+  prefix: "marketingclaw-provider-auth-suite-",
+});
 
 describe("resolveProviderAuths key normalization", () => {
   const EMPTY_PROVIDER_ENV = {
@@ -337,7 +339,7 @@ describe("resolveProviderAuths key normalization", () => {
 
   async function withSuiteHome<T>(fn: (home: string) => Promise<T>): Promise<T> {
     const base = await suiteRootTracker.make("case");
-    const stateDir = path.join(base, ".openclaw");
+    const stateDir = path.join(base, ".marketingclaw");
     const agentDir = path.join(stateDir, "agents", "main", "agent");
     nodeFs.mkdirSync(path.join(stateDir, "agents", "main", "sessions"), { recursive: true });
     nodeFs.mkdirSync(agentDir, { recursive: true });
@@ -350,7 +352,7 @@ describe("resolveProviderAuths key normalization", () => {
   }
 
   function agentDirForHome(home: string): string {
-    return path.join(home, ".openclaw", "agents", "main", "agent");
+    return path.join(home, ".marketingclaw", "agents", "main", "agent");
   }
 
   function buildSuiteEnv(
@@ -361,7 +363,7 @@ describe("resolveProviderAuths key normalization", () => {
       ...EMPTY_PROVIDER_ENV,
       HOME: home,
       USERPROFILE: home,
-      OPENCLAW_STATE_DIR: path.join(home, ".openclaw"),
+      MARKETINGCLAW_STATE_DIR: path.join(home, ".marketingclaw"),
       ...env,
     };
     const match = home.match(/^([A-Za-z]:)(.*)$/);
@@ -383,10 +385,10 @@ describe("resolveProviderAuths key normalization", () => {
   }
 
   async function writeConfig(home: string, config: Record<string, unknown>) {
-    const stateDir = path.join(home, ".openclaw");
+    const stateDir = path.join(home, ".marketingclaw");
     await fs.mkdir(stateDir, { recursive: true });
     await fs.writeFile(
-      path.join(stateDir, "openclaw.json"),
+      path.join(stateDir, "marketingclaw.json"),
       `${JSON.stringify(config, null, 2)}\n`,
       "utf8",
     );
@@ -433,7 +435,7 @@ describe("resolveProviderAuths key normalization", () => {
             },
           },
         },
-      } satisfies OpenClawConfig;
+      } satisfies MarketingClawConfig;
       await writeConfig(home, config);
 
       return await resolveProviderAuths({
@@ -449,7 +451,7 @@ describe("resolveProviderAuths key normalization", () => {
     providers: Parameters<typeof resolveProviderAuths>[0]["providers"];
     expected: Awaited<ReturnType<typeof resolveProviderAuths>>;
     env?: Record<string, string | undefined>;
-    config?: OpenClawConfig;
+    config?: MarketingClawConfig;
     setup?: (home: string) => Promise<void>;
   }) {
     await withSuiteHome(async (home) => {
@@ -613,7 +615,7 @@ describe("resolveProviderAuths key normalization", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies MarketingClawConfig;
     await expectResolvedAuthsFromSuiteHome({
       providers: ["zai", "minimax", "xiaomi", "xiaomi-token-plan"],
       setup: async (home) => {
@@ -659,7 +661,7 @@ describe("resolveProviderAuths key normalization", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies MarketingClawConfig;
     await expectResolvedAuthsFromSuiteHome({
       providers: ["openai"],
       env: {
@@ -676,7 +678,7 @@ describe("resolveProviderAuths key normalization", () => {
       expected: [
         {
           provider: "openai",
-          token: 'openclaw:openai-admin:v1:{"token":"env-openai-admin-key"}',
+          token: 'marketingclaw:openai-admin:v1:{"token":"env-openai-admin-key"}',
         },
       ],
     });
@@ -719,7 +721,7 @@ describe("resolveProviderAuths key normalization", () => {
             "anthropic:default": { provider: "anthropic", mode: "token" },
           },
         },
-      } satisfies OpenClawConfig;
+      } satisfies MarketingClawConfig;
       await writeConfig(home, config);
       await writeAuthProfiles(home, {
         "anthropic:default": {
@@ -821,7 +823,7 @@ describe("resolveProviderAuths key normalization", () => {
       expected: [
         {
           provider: "anthropic",
-          token: 'openclaw:anthropic-admin:v1:{"token":"sk-ant-admin-status-key"}',
+          token: 'marketingclaw:anthropic-admin:v1:{"token":"sk-ant-admin-status-key"}',
         },
       ],
     });
@@ -850,7 +852,7 @@ describe("resolveProviderAuths key normalization", () => {
       expected: [
         {
           provider: "anthropic",
-          token: 'openclaw:anthropic-admin:v1:{"token":"sk-ant-admin-billing"}',
+          token: 'marketingclaw:anthropic-admin:v1:{"token":"sk-ant-admin-billing"}',
         },
       ],
     });

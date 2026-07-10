@@ -1,6 +1,6 @@
 /** Tests image-generation runtime fallback, overrides, and error reporting. */
 import { beforeEach, describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { MarketingClawConfig } from "../config/config.js";
 import {
   generateImage,
   listRuntimeImageGenerationProviders,
@@ -10,7 +10,7 @@ import {
 import type { ImageGenerationProvider } from "./types.js";
 
 let providers: ImageGenerationProvider[] = [];
-let listedConfigs: Array<OpenClawConfig | undefined> = [];
+let listedConfigs: Array<MarketingClawConfig | undefined> = [];
 let providerEnvVars: Record<string, string[]> = {};
 let warnings: string[] = [];
 
@@ -76,7 +76,7 @@ describe("image-generation runtime", () => {
             imageGenerationModel: { primary: "image-plugin/img-v1" },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       prompt: "draw a cat",
       agentDir: "/tmp/agent",
       authStore,
@@ -129,7 +129,7 @@ describe("image-generation runtime", () => {
             imageGenerationModel: { primary: "image-plugin/img-v1" },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       prompt: "draw a cat",
       autoProviderFallback: false,
     };
@@ -174,7 +174,7 @@ describe("image-generation runtime", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       prompt: "draw a cat",
     });
 
@@ -213,7 +213,7 @@ describe("image-generation runtime", () => {
             imageGenerationModel: { primary: "image-plugin/img-v1" },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       prompt: "draw a cat",
     });
 
@@ -252,7 +252,7 @@ describe("image-generation runtime", () => {
     ];
 
     const result = await runGenerateImage({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       prompt: "draw a cat",
     });
 
@@ -340,7 +340,7 @@ describe("image-generation runtime", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       prompt: "edit this image",
       inferredResolution: "2K",
       inputImages,
@@ -361,7 +361,7 @@ describe("image-generation runtime", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       prompt: "edit this image",
       inferredResolution: "2K",
       inputImages,
@@ -382,7 +382,7 @@ describe("image-generation runtime", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       prompt: "edit this image",
       inferredResolution: "2K",
       inputImages,
@@ -402,7 +402,7 @@ describe("image-generation runtime", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       prompt: "edit this image",
       inferredResolution: "2K",
       inputImages,
@@ -448,7 +448,7 @@ describe("image-generation runtime", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       prompt: "combine references",
       inputImages: Array.from({ length: 14 }, () => ({
         buffer: Buffer.from("reference"),
@@ -514,7 +514,7 @@ describe("image-generation runtime", () => {
             imageGenerationModel: { primary: "openai/gpt-image-1" },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       prompt: "draw a cat",
       size: "1024x1024",
       aspectRatio: "1:1",
@@ -579,7 +579,7 @@ describe("image-generation runtime", () => {
             imageGenerationModel: { primary: "openai/gpt-image-2" },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       prompt: "draw a cheap preview",
       quality: "low",
       outputFormat: "jpeg",
@@ -647,7 +647,7 @@ describe("image-generation runtime", () => {
             imageGenerationModel: { primary: "vydra/grok-imagine" },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       prompt: "draw a cat",
       quality: "low",
       outputFormat: "jpeg",
@@ -714,7 +714,7 @@ describe("image-generation runtime", () => {
             imageGenerationModel: { primary: "minimax/image-01" },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       prompt: "draw a cat",
       size: "1280x720",
     });
@@ -793,7 +793,7 @@ describe("image-generation runtime", () => {
             imageGenerationModel: { primary: "fal/krea/v2/medium/text-to-image" },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       prompt: "draw a cat",
       size: "1024x768",
       aspectRatio: "20:9",
@@ -833,9 +833,9 @@ describe("image-generation runtime", () => {
     providers = registryProviders;
 
     expect(
-      listRuntimeImageGenerationProviders({ config: {} as OpenClawConfig }, runtimeDeps),
+      listRuntimeImageGenerationProviders({ config: {} as MarketingClawConfig }, runtimeDeps),
     ).toEqual(registryProviders);
-    expect(listedConfigs).toEqual([{} as OpenClawConfig]);
+    expect(listedConfigs).toEqual([{} as MarketingClawConfig]);
   });
 
   it("builds a generic config hint without hardcoded provider ids", async () => {
@@ -871,7 +871,7 @@ describe("image-generation runtime", () => {
     };
 
     await expect(
-      runGenerateImage({ cfg: {} as OpenClawConfig, prompt: "draw a cat" }),
+      runGenerateImage({ cfg: {} as MarketingClawConfig, prompt: "draw a cat" }),
     ).rejects.toThrow(
       'No image-generation model configured. Set agents.defaults.imageGenerationModel.primary to a provider/model like "vision-one/paint-v1". If you want a specific provider, also configure that provider\'s auth/API key first (vision-one: VISION_ONE_API_KEY; vision-two: VISION_TWO_API_KEY).',
     );

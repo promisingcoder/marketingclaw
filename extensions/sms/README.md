@@ -1,13 +1,13 @@
-# SMS OpenClaw channel
+# SMS MarketingClaw channel
 
-Official OpenClaw channel plugin for SMS.
+Official MarketingClaw channel plugin for SMS.
 
 ## Install
 
 ```sh
-openclaw plugins install @openclaw/sms
+marketingclaw plugins install @marketingclaw/sms
 ```
 
 ## Docs
 
-See `docs/channels/sms.md` in the OpenClaw repository, or the published docs at `https://docs.openclaw.ai/channels/sms`.
+See `docs/channels/sms.md` in the MarketingClaw repository, or the published docs at `https://docs.marketingclaw.ai/channels/sms`.

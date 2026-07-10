@@ -1,5 +1,5 @@
 import Foundation
-import OpenClawProtocol
+import MarketingClawProtocol
 
 public enum GatewayConnectAuthDetailCode: String, Sendable {
     case authRequired = "AUTH_REQUIRED"

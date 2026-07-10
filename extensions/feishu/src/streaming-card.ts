@@ -7,9 +7,9 @@ import {
   asDateTimestampMs,
   resolveDateTimestampMs,
   resolveExpiresAtMsFromDurationSeconds,
-} from "openclaw/plugin-sdk/number-runtime";
-import { fetchWithSsrFGuard, type LookupFn } from "openclaw/plugin-sdk/ssrf-runtime";
-import { sliceUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "marketingclaw/plugin-sdk/number-runtime";
+import { fetchWithSsrFGuard, type LookupFn } from "marketingclaw/plugin-sdk/ssrf-runtime";
+import { sliceUtf16Safe } from "marketingclaw/plugin-sdk/text-utility-runtime";
 import { getFeishuUserAgent } from "./client.js";
 import { requestFeishuApi } from "./comment-shared.js";
 import { readFeishuJsonResponse } from "./json-response.js";

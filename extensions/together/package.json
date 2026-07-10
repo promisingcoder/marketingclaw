@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/together-provider",
+  "name": "@marketingclaw/together-provider",
   "version": "2026.6.11",
   "private": true,
-  "description": "OpenClaw Together provider plugin",
+  "description": "MarketingClaw Together provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@marketingclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "marketingclaw": {
     "extensions": [
       "./index.ts"
     ]

@@ -12,7 +12,7 @@ import {
 
 const chromiumExecutablePath = resolvePlaywrightChromiumExecutablePath(chromium.executablePath());
 const chromiumAvailable = canRunPlaywrightChromium(chromiumExecutablePath);
-const allowMissingChromium = process.env.OPENCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM === "1";
+const allowMissingChromium = process.env.MARKETINGCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM === "1";
 const describeControlUiE2e = chromiumAvailable || !allowMissingChromium ? describe : describe.skip;
 
 let browser: Browser;
@@ -22,7 +22,7 @@ describeControlUiE2e("Control UI mobile pairing mocked Gateway E2E", () => {
   beforeAll(async () => {
     if (!chromiumAvailable) {
       throw new Error(
-        `Playwright Chromium is not installed or cannot start at ${chromiumExecutablePath}. Run \`pnpm --dir ui exec playwright install --with-deps chromium\`, or set OPENCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM=1 only when intentionally skipping this lane.`,
+        `Playwright Chromium is not installed or cannot start at ${chromiumExecutablePath}. Run \`pnpm --dir ui exec playwright install --with-deps chromium\`, or set MARKETINGCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM=1 only when intentionally skipping this lane.`,
       );
     }
     server = await startControlUiE2eServer();
@@ -78,8 +78,8 @@ describeControlUiE2e("Control UI mobile pairing mocked Gateway E2E", () => {
       await gateway.deferNext("device.pair.list");
       await sidebarPairingButton.click();
 
-      const dialog = page.getByRole("dialog", { name: "OpenClaw mobile" });
-      const qr = page.getByAltText("OpenClaw mobile pairing QR code");
+      const dialog = page.getByRole("dialog", { name: "MarketingClaw mobile" });
+      const qr = page.getByAltText("MarketingClaw mobile pairing QR code");
       await dialog.waitFor();
       await qr.waitFor();
       expect(await dialog.isVisible()).toBe(true);
@@ -88,7 +88,9 @@ describeControlUiE2e("Control UI mobile pairing mocked Gateway E2E", () => {
         true,
       );
       expect(
-        await page.getByText("Official OpenClaw mobile apps connect automatically").isVisible(),
+        await page
+          .getByText("Official MarketingClaw mobile apps connect automatically")
+          .isVisible(),
       ).toBe(true);
       await gateway.resolveDeferred("device.pair.list", {
         paired: [],
@@ -96,7 +98,9 @@ describeControlUiE2e("Control UI mobile pairing mocked Gateway E2E", () => {
       });
       expect(await page.getByText("Device requests waiting for review: 1").isVisible()).toBe(true);
       expect(
-        await page.getByText("Official OpenClaw mobile apps connect automatically").isVisible(),
+        await page
+          .getByText("Official MarketingClaw mobile apps connect automatically")
+          .isVisible(),
       ).toBe(false);
 
       const firstRequest = await gateway.waitForRequest("device.pair.setupCode");

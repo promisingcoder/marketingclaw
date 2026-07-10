@@ -1,14 +1,14 @@
 // Persists restart sentinel state that coordinates deferred restarts.
 import { readFile, rm } from "node:fs/promises";
 import path from "node:path";
-import { isRecord as isPlainRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord as isPlainRecord } from "@marketingclaw/normalization-core/record-coerce";
 import { formatCliCommand } from "../cli/command-format.js";
 import { resolveStateDir } from "../config/paths.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
+import type { DB as MarketingClawStateKyselyDatabase } from "../state/marketingclaw-state-db.generated.js";
 import {
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-} from "../state/openclaw-state-db.js";
+  openMarketingClawStateDatabase,
+  runMarketingClawStateWriteTransaction,
+} from "../state/marketingclaw-state-db.js";
 import { resolveRuntimeServiceVersion } from "../version.js";
 import {
   executeSqliteQuerySync,
@@ -78,15 +78,18 @@ export type RestartSentinel = {
 
 const RESTART_SENTINEL_KEY = "current";
 const LEGACY_RESTART_SENTINEL_FILENAME = "restart-sentinel.json";
-type GatewayRestartSentinelDatabase = Pick<OpenClawStateKyselyDatabase, "gateway_restart_sentinel">;
+type GatewayRestartSentinelDatabase = Pick<
+  MarketingClawStateKyselyDatabase,
+  "gateway_restart_sentinel"
+>;
 
 export function formatDoctorNonInteractiveHint(
   env: Record<string, string | undefined> = process.env as Record<string, string | undefined>,
 ): string {
   return `Recommended follow-up: run ${formatCliCommand(
-    "openclaw doctor --non-interactive",
+    "marketingclaw doctor --non-interactive",
     env,
-  )} in a terminal or approvals-capable OpenClaw surface.`;
+  )} in a terminal or approvals-capable MarketingClaw surface.`;
 }
 
 export async function writeRestartSentinel(
@@ -94,7 +97,7 @@ export async function writeRestartSentinel(
   env: NodeJS.ProcessEnv = process.env,
 ): Promise<void> {
   const updatedAtMs = Date.now();
-  runOpenClawStateWriteTransaction(
+  runMarketingClawStateWriteTransaction(
     ({ db }) => {
       const stateDb = getNodeSqliteKysely<GatewayRestartSentinelDatabase>(db);
       executeSqliteQuerySync(
@@ -212,7 +215,7 @@ export async function markUpdateRestartSentinelFailure(
 
 export async function clearRestartSentinel(env: NodeJS.ProcessEnv = process.env): Promise<void> {
   try {
-    runOpenClawStateWriteTransaction(
+    runMarketingClawStateWriteTransaction(
       ({ db }) => {
         const stateDb = getNodeSqliteKysely<GatewayRestartSentinelDatabase>(db);
         executeSqliteQuerySync(
@@ -273,7 +276,7 @@ export async function readRestartSentinel(
   env: NodeJS.ProcessEnv = process.env,
 ): Promise<RestartSentinel | null> {
   try {
-    const database = openOpenClawStateDatabase({ env });
+    const database = openMarketingClawStateDatabase({ env });
     const stateDb = getNodeSqliteKysely<GatewayRestartSentinelDatabase>(database.db);
     const row = executeSqliteQueryTakeFirstSync(
       database.db,
@@ -304,7 +307,7 @@ export async function readRestartSentinel(
 
 export async function hasRestartSentinel(env: NodeJS.ProcessEnv = process.env): Promise<boolean> {
   try {
-    const database = openOpenClawStateDatabase({ env });
+    const database = openMarketingClawStateDatabase({ env });
     const stateDb = getNodeSqliteKysely<GatewayRestartSentinelDatabase>(database.db);
     const row = executeSqliteQueryTakeFirstSync(
       database.db,

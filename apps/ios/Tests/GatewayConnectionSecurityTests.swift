@@ -1,9 +1,9 @@
 import Foundation
 import Network
-import OpenClawKit
+import MarketingClawKit
 import os
 import Testing
-@testable import OpenClaw
+@testable import MarketingClaw
 
 @Suite(.serialized) struct GatewayConnectionSecurityTests {
     @MainActor
@@ -18,7 +18,7 @@ import Testing
         gatewayPort: Int?,
         fingerprint: String?) -> GatewayDiscoveryModel.DiscoveredGateway
     {
-        let endpoint: NWEndpoint = .service(name: "Test", type: "_openclaw-gw._tcp", domain: "local.", interface: nil)
+        let endpoint: NWEndpoint = .service(name: "Test", type: "_marketclaw-gw._tcp", domain: "local.", interface: nil)
         return GatewayDiscoveryModel.DiscoveredGateway(
             name: "Test",
             endpoint: endpoint,
@@ -153,7 +153,7 @@ import Testing
     @Test @MainActor func `manual connections allow private lan plaintext`() {
         let controller = self.makeController()
 
-        #expect(controller._test_resolveManualUseTLS(host: "openclaw.local", useTLS: false) == false)
+        #expect(controller._test_resolveManualUseTLS(host: "marketingclaw.local", useTLS: false) == false)
         #expect(controller._test_resolveManualUseTLS(host: "192.168.1.20", useTLS: false) == false)
         #expect(controller._test_resolveManualUseTLS(host: "10.0.0.5", useTLS: false) == false)
         #expect(controller._test_resolveManualUseTLS(host: "172.16.1.5", useTLS: false) == false)

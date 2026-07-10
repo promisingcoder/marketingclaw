@@ -1,6 +1,6 @@
-package ai.openclaw.app
+package ai.marketingclaw.app
 
-import ai.openclaw.app.node.asObjectOrNull
+import ai.marketingclaw.app.node.asObjectOrNull
 import kotlinx.serialization.json.Json
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull

@@ -34,7 +34,7 @@ import {
 } from "../../lib/cron/index.ts";
 import { searchForSession } from "../../lib/sessions/index.ts";
 import { sortUniqueStrings } from "../../lib/string-coerce.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { MarketingClawLightDomElement } from "../../lit/marketingclaw-element.ts";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
 import { createDefaultDraft, draftToCronFormPatch, renderCronQuickCreate } from "./quick-create.ts";
 import type { CronQuickCreateDraft, CronQuickCreateStep } from "./quick-create.ts";
@@ -56,7 +56,7 @@ function unique(values: string[]): string[] {
   return sortUniqueStrings(values.map((value) => value.trim()).filter(Boolean));
 }
 
-class CronPage extends OpenClawLightDomElement {
+class CronPage extends MarketingClawLightDomElement {
   @consume({ context: applicationContext, subscribe: true })
   private context!: ApplicationContext;
 
@@ -460,4 +460,4 @@ class CronPage extends OpenClawLightDomElement {
   }
 }
 
-customElements.define("openclaw-cron-page", CronPage);
+customElements.define("marketingclaw-cron-page", CronPage);

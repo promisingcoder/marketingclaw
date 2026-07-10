@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { ErrorCode, McpError } from "@modelcontextprotocol/sdk/types.js";
-import { MAX_TIMER_TIMEOUT_MS } from "openclaw/plugin-sdk/number-runtime";
+import { MAX_TIMER_TIMEOUT_MS } from "marketingclaw/plugin-sdk/number-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   clickChromeMcpCoords,
@@ -61,7 +61,7 @@ function createFakeSession(): ChromeMcpSession {
       const pageLines = [
         "## Pages",
         `1: ${currentUrl} [selected]`,
-        "2: https://github.com/openclaw/openclaw/pull/45318",
+        "2: https://github.com/promisingcoder/marketingclaw/pull/45318",
       ];
       if (createdPageOpen) {
         pageLines.push(`3: ${currentUrl}`);
@@ -85,7 +85,7 @@ function createFakeSession(): ChromeMcpSession {
             text: [
               "## Pages",
               "1: https://developer.chrome.com/blog/chrome-devtools-mcp-debug-your-browser-session",
-              "2: https://github.com/openclaw/openclaw/pull/45318",
+              "2: https://github.com/promisingcoder/marketingclaw/pull/45318",
               `3: ${currentUrl} [selected]`,
             ].join("\n"),
           },
@@ -178,7 +178,7 @@ describe("chrome MCP page parsing", () => {
       {
         targetId: "2",
         title: "",
-        url: "https://github.com/openclaw/openclaw/pull/45318",
+        url: "https://github.com/promisingcoder/marketingclaw/pull/45318",
         type: "page",
       },
     ]);
@@ -299,10 +299,10 @@ describe("chrome MCP page parsing", () => {
     const user = "browser-user";
     const password = "browser-password-1234567890"; // pragma: allowlist secret
     const cdpUrl = `wss://${user}:${password}@browserless.example/chrome?token=${secretToken}`;
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-chrome-mcp-test-"));
-    const configPath = path.join(tempDir, "openclaw.json");
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-chrome-mcp-test-"));
+    const configPath = path.join(tempDir, "marketingclaw.json");
     await fs.writeFile(configPath, JSON.stringify({ logging: { redactSensitive: "off" } }));
-    vi.stubEnv("OPENCLAW_CONFIG_PATH", configPath);
+    vi.stubEnv("MARKETINGCLAW_CONFIG_PATH", configPath);
     const fakeMcpCommand = path.join(tempDir, "fake-mcp.mjs");
     await fs.writeFile(
       fakeMcpCommand,
@@ -350,7 +350,7 @@ describe("chrome MCP page parsing", () => {
   });
 
   it("redacts home-relative user data dirs from attach failures", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-chrome-mcp-test-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-chrome-mcp-test-"));
     const homeDir = os.homedir();
     const userDataDir = path.join(
       homeDir,

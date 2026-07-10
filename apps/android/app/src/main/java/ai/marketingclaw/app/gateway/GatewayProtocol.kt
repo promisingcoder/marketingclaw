@@ -1,4 +1,4 @@
-package ai.openclaw.app.gateway
+package ai.marketingclaw.app.gateway
 
 /** Gateway protocol version emitted by Android node clients. */
 const val GATEWAY_PROTOCOL_VERSION = 4

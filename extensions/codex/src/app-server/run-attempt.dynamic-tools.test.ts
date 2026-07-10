@@ -1,14 +1,17 @@
 // Codex tests cover run attemptynamic tools plugin behavior.
 import path from "node:path";
-import { onAgentEvent, type AgentEventPayload } from "openclaw/plugin-sdk/agent-harness-runtime";
+import {
+  onAgentEvent,
+  type AgentEventPayload,
+} from "marketingclaw/plugin-sdk/agent-harness-runtime";
 import {
   emitTrustedDiagnosticEvent,
   onInternalDiagnosticEvent,
   waitForDiagnosticEventsDrained,
   type DiagnosticEventPayload,
-} from "openclaw/plugin-sdk/diagnostic-runtime";
-import { initializeGlobalHookRunner } from "openclaw/plugin-sdk/hook-runtime";
-import { createMockPluginRegistry } from "openclaw/plugin-sdk/plugin-test-runtime";
+} from "marketingclaw/plugin-sdk/diagnostic-runtime";
+import { initializeGlobalHookRunner } from "marketingclaw/plugin-sdk/hook-runtime";
+import { createMockPluginRegistry } from "marketingclaw/plugin-sdk/plugin-test-runtime";
 import { describe, expect, it, vi } from "vitest";
 import {
   emitDynamicToolStartedDiagnostic,
@@ -102,7 +105,7 @@ describe("runCodexAppServerAttempt dynamic tools", () => {
     params.sessionKey = "agent:main:main";
 
     expect(
-      testing.resolveOpenClawCodingToolsSessionKeys(
+      testing.resolveMarketingClawCodingToolsSessionKeys(
         params,
         "agent:main:telegram:default:direct:1234",
       ),
@@ -111,7 +114,7 @@ describe("runCodexAppServerAttempt dynamic tools", () => {
       runSessionKey: "agent:main:main",
     });
 
-    expect(testing.resolveOpenClawCodingToolsSessionKeys(params, "agent:main:main")).toEqual({
+    expect(testing.resolveMarketingClawCodingToolsSessionKeys(params, "agent:main:main")).toEqual({
       sessionKey: "agent:main:main",
       runSessionKey: undefined,
     });
@@ -163,7 +166,7 @@ describe("runCodexAppServerAttempt dynamic tools", () => {
     };
     expect(toolResult.success).toBe(false);
     expect(toolResult.contentItems?.[0]?.type).toBe("inputText");
-    expect(toolResult.contentItems?.[0]?.text).toMatch(/^Unknown OpenClaw tool: lookup$/u);
+    expect(toolResult.contentItems?.[0]?.text).toMatch(/^Unknown MarketingClaw tool: lookup$/u);
 
     await harness.completeTurn({ threadId: "thread-1", turnId: "turn-1" });
     await run;
@@ -205,7 +208,9 @@ describe("runCodexAppServerAttempt dynamic tools", () => {
     expect(resultEvent?.data?.result).not.toHaveProperty("success");
     expect(resultEvent?.data?.result).not.toHaveProperty("contentItems");
     expect(resultEvent?.data?.result?.content?.[0]?.type).toBe("text");
-    expect(resultEvent?.data?.result?.content?.[0]?.text).toBe("Unknown OpenClaw tool: lookup");
+    expect(resultEvent?.data?.result?.content?.[0]?.text).toBe(
+      "Unknown MarketingClaw tool: lookup",
+    );
     expect(JSON.stringify(agentEvents)).not.toContain("plain-secret-value-12345");
     const globalStartEvent = globalAgentEvents.find(
       (event) => event.stream === "tool" && event.data.phase === "start",
@@ -602,7 +607,7 @@ describe("runCodexAppServerAttempt dynamic tools", () => {
           contentItems: [
             {
               type: "inputText",
-              text: "OpenClaw dynamic tool call timed out after 1ms while running tool echo.",
+              text: "MarketingClaw dynamic tool call timed out after 1ms while running tool echo.",
             },
           ],
         },

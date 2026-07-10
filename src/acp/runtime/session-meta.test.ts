@@ -2,10 +2,10 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { MarketingClawConfig } from "../../config/config.js";
 import { loadSessionStore } from "../../config/sessions/store-load.js";
 import { writeSessionStoreForTestAsync } from "../../config/sessions/test-helpers.js";
-import { closeOpenClawStateDatabaseForTest } from "../../state/openclaw-state-db.js";
+import { closeMarketingClawStateDatabaseForTest } from "../../state/marketingclaw-state-db.js";
 import { withTempDir } from "../../test-helpers/temp-dir.js";
 import {
   listAcpSessionEntries,
@@ -18,14 +18,14 @@ import {
 
 describe("ACP session metadata SQLite store", () => {
   afterEach(() => {
-    closeOpenClawStateDatabaseForTest();
+    closeMarketingClawStateDatabaseForTest();
   });
 
   it("persists ACP metadata in SQLite without writing sessions.json acp blocks", async () => {
-    await withTempDir({ prefix: "openclaw-acp-meta-" }, async (dir) => {
+    await withTempDir({ prefix: "marketingclaw-acp-meta-" }, async (dir) => {
       const storePath = path.join(dir, "sessions.json");
-      const databasePath = path.join(dir, "state", "openclaw.sqlite");
-      const cfg = { session: { store: storePath } } as OpenClawConfig;
+      const databasePath = path.join(dir, "state", "marketingclaw.sqlite");
+      const cfg = { session: { store: storePath } } as MarketingClawConfig;
       const sessionKey = "agent:codex:acp:binding:discord:default:feedface";
       await fs.writeFile(
         storePath,
@@ -74,10 +74,10 @@ describe("ACP session metadata SQLite store", () => {
   });
 
   it("creates a session-store row for new SQLite ACP sessions without embedding ACP metadata", async () => {
-    await withTempDir({ prefix: "openclaw-acp-meta-" }, async (dir) => {
+    await withTempDir({ prefix: "marketingclaw-acp-meta-" }, async (dir) => {
       const storePath = path.join(dir, "sessions.json");
-      const databasePath = path.join(dir, "state", "openclaw.sqlite");
-      const cfg = { session: { store: storePath } } as OpenClawConfig;
+      const databasePath = path.join(dir, "state", "marketingclaw.sqlite");
+      const cfg = { session: { store: storePath } } as MarketingClawConfig;
       const sessionKey = "agent:codex:acp:new-session";
 
       const result = await upsertAcpSessionMeta({
@@ -105,10 +105,10 @@ describe("ACP session metadata SQLite store", () => {
   });
 
   it("normalizes ACP metadata lookups and writes to the resolved session-store key", async () => {
-    await withTempDir({ prefix: "openclaw-acp-meta-" }, async (dir) => {
+    await withTempDir({ prefix: "marketingclaw-acp-meta-" }, async (dir) => {
       const storePath = path.join(dir, "sessions.json");
-      const databasePath = path.join(dir, "state", "openclaw.sqlite");
-      const cfg = { session: { store: storePath } } as OpenClawConfig;
+      const databasePath = path.join(dir, "state", "marketingclaw.sqlite");
+      const cfg = { session: { store: storePath } } as MarketingClawConfig;
       const storeSessionKey = "agent:codex:acp:binding:discord:default:feedface";
       const rawSessionKey = storeSessionKey.toUpperCase();
       await fs.writeFile(
@@ -193,10 +193,10 @@ describe("ACP session metadata SQLite store", () => {
   });
 
   it("keeps SQLite ACP metadata visible when legacy store keys are canonicalized", async () => {
-    await withTempDir({ prefix: "openclaw-acp-meta-" }, async (dir) => {
+    await withTempDir({ prefix: "marketingclaw-acp-meta-" }, async (dir) => {
       const storePath = path.join(dir, "sessions.json");
-      const databasePath = path.join(dir, "state", "openclaw.sqlite");
-      const cfg = { session: { store: storePath } } as OpenClawConfig;
+      const databasePath = path.join(dir, "state", "marketingclaw.sqlite");
+      const cfg = { session: { store: storePath } } as MarketingClawConfig;
       const legacyStoreSessionKey = "agent:CODEX:acp:legacy-runtime";
       const canonicalSessionKey = "agent:codex:acp:legacy-runtime";
       await fs.writeFile(
@@ -240,10 +240,10 @@ describe("ACP session metadata SQLite store", () => {
   });
 
   it("binds ACP metadata to the final accessor-selected entry for alias writes", async () => {
-    await withTempDir({ prefix: "openclaw-acp-meta-" }, async (dir) => {
+    await withTempDir({ prefix: "marketingclaw-acp-meta-" }, async (dir) => {
       const storePath = path.join(dir, "sessions.json");
-      const databasePath = path.join(dir, "state", "openclaw.sqlite");
-      const cfg = { session: { store: storePath } } as OpenClawConfig;
+      const databasePath = path.join(dir, "state", "marketingclaw.sqlite");
+      const cfg = { session: { store: storePath } } as MarketingClawConfig;
       const canonicalSessionKey = "agent:codex:acp:alias-runtime";
       const legacyStoreSessionKey = "agent:CODEX:acp:alias-runtime";
       await fs.writeFile(
@@ -291,10 +291,10 @@ describe("ACP session metadata SQLite store", () => {
   });
 
   it("ignores SQLite ACP metadata rows for replaced session ids", async () => {
-    await withTempDir({ prefix: "openclaw-acp-meta-" }, async (dir) => {
+    await withTempDir({ prefix: "marketingclaw-acp-meta-" }, async (dir) => {
       const storePath = path.join(dir, "sessions.json");
-      const databasePath = path.join(dir, "state", "openclaw.sqlite");
-      const cfg = { session: { store: storePath } } as OpenClawConfig;
+      const databasePath = path.join(dir, "state", "marketingclaw.sqlite");
+      const cfg = { session: { store: storePath } } as MarketingClawConfig;
       const sessionKey = "agent:codex:acp:binding:discord:default:feedface";
       await fs.writeFile(
         storePath,
@@ -346,10 +346,10 @@ describe("ACP session metadata SQLite store", () => {
   });
 
   it("repairs ACP metadata rows when session-store keys are canonicalized", async () => {
-    await withTempDir({ prefix: "openclaw-acp-meta-" }, async (dir) => {
+    await withTempDir({ prefix: "marketingclaw-acp-meta-" }, async (dir) => {
       const storePath = path.join(dir, "sessions.json");
-      const databasePath = path.join(dir, "state", "openclaw.sqlite");
-      const cfg = { session: { store: storePath } } as OpenClawConfig;
+      const databasePath = path.join(dir, "state", "marketingclaw.sqlite");
+      const cfg = { session: { store: storePath } } as MarketingClawConfig;
       const legacyKey = "agent:CODEX:acp:legacy-runtime";
       const canonicalKey = "agent:codex:acp:legacy-runtime";
       await writeSessionStoreForTestAsync(storePath, {
@@ -396,10 +396,10 @@ describe("ACP session metadata SQLite store", () => {
   });
 
   it("lists SQLite ACP rows while joining current session-store entries", async () => {
-    await withTempDir({ prefix: "openclaw-acp-meta-" }, async (dir) => {
+    await withTempDir({ prefix: "marketingclaw-acp-meta-" }, async (dir) => {
       const storePath = path.join(dir, "sessions", "codex.json");
-      const databasePath = path.join(dir, "state", "openclaw.sqlite");
-      const cfg = { session: { store: storePath } } as OpenClawConfig;
+      const databasePath = path.join(dir, "state", "marketingclaw.sqlite");
+      const cfg = { session: { store: storePath } } as MarketingClawConfig;
       const sessionKey = "agent:codex:acp:s1";
       await fs.mkdir(path.dirname(storePath), { recursive: true });
       await fs.writeFile(
@@ -449,10 +449,10 @@ describe("ACP session metadata SQLite store", () => {
     });
   });
 
-  it("honors OPENCLAW_STATE_DIR when joining listed SQLite rows to session stores", async () => {
-    await withTempDir({ prefix: "openclaw-acp-meta-" }, async (dir) => {
-      const env = { ...process.env, OPENCLAW_STATE_DIR: dir } as NodeJS.ProcessEnv;
-      const cfg = {} as OpenClawConfig;
+  it("honors MARKETINGCLAW_STATE_DIR when joining listed SQLite rows to session stores", async () => {
+    await withTempDir({ prefix: "marketingclaw-acp-meta-" }, async (dir) => {
+      const env = { ...process.env, MARKETINGCLAW_STATE_DIR: dir } as NodeJS.ProcessEnv;
+      const cfg = {} as MarketingClawConfig;
       const sessionKey = "agent:codex:acp:s1";
       const storePath = path.join(dir, "agents", "codex", "sessions", "sessions.json");
       await fs.mkdir(path.dirname(storePath), { recursive: true });

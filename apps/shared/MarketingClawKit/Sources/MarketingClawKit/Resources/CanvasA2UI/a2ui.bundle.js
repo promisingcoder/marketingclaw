@@ -12025,7 +12025,7 @@ const statusBlur = isAndroid ? "10px" : "14px";
 const postNativeMessage = (handler, payload) => {
 	Reflect.apply(handler.postMessage, handler, [payload]);
 };
-const openclawTheme = {
+const marketingclawTheme = {
 	components: {
 		AudioPlayer: emptyClasses(),
 		Button: emptyClasses(),
@@ -12181,7 +12181,7 @@ const openclawTheme = {
 		Image: { borderRadius: "12px" }
 	}
 };
-var OpenClawA2UIHost = class extends i$7 {
+var MarketingClawA2UIHost = class extends i$7 {
 	static properties = {
 		surfaces: { state: true },
 		pendingAction: { state: true },
@@ -12190,7 +12190,7 @@ var OpenClawA2UIHost = class extends i$7 {
 	#processor = Data.createSignalA2uiMessageProcessor();
 	themeProvider = new i$2(this, {
 		context: themeContext,
-		initialValue: openclawTheme
+		initialValue: marketingclawTheme
 	});
 	surfaces = [];
 	pendingAction = null;
@@ -12202,8 +12202,8 @@ var OpenClawA2UIHost = class extends i$7 {
       height: 100%;
       position: relative;
       box-sizing: border-box;
-      padding: var(--openclaw-a2ui-inset-top, 0px) var(--openclaw-a2ui-inset-right, 0px)
-        var(--openclaw-a2ui-inset-bottom, 0px) var(--openclaw-a2ui-inset-left, 0px);
+      padding: var(--marketingclaw-a2ui-inset-top, 0px) var(--marketingclaw-a2ui-inset-right, 0px)
+        var(--marketingclaw-a2ui-inset-bottom, 0px) var(--marketingclaw-a2ui-inset-left, 0px);
     }
 
     #surfaces {
@@ -12212,14 +12212,14 @@ var OpenClawA2UIHost = class extends i$7 {
       gap: 12px;
       height: 100%;
       overflow: auto;
-      padding-bottom: var(--openclaw-a2ui-scroll-pad-bottom, 0px);
+      padding-bottom: var(--marketingclaw-a2ui-scroll-pad-bottom, 0px);
     }
 
     .status {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      top: var(--openclaw-a2ui-status-top, 12px);
+      top: var(--marketingclaw-a2ui-status-top, 12px);
       display: inline-flex;
       align-items: center;
       gap: 8px;
@@ -12245,7 +12245,7 @@ var OpenClawA2UIHost = class extends i$7 {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      bottom: var(--openclaw-a2ui-toast-bottom, 12px);
+      bottom: var(--marketingclaw-a2ui-toast-bottom, 12px);
       display: inline-flex;
       align-items: center;
       gap: 8px;
@@ -12276,7 +12276,7 @@ var OpenClawA2UIHost = class extends i$7 {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      top: var(--openclaw-a2ui-empty-top, var(--openclaw-a2ui-status-top, 12px));
+      top: var(--marketingclaw-a2ui-empty-top, var(--marketingclaw-a2ui-status-top, 12px));
       text-align: center;
       opacity: 0.8;
       padding: 10px 12px;
@@ -12308,20 +12308,20 @@ var OpenClawA2UIHost = class extends i$7 {
   `;
 	connectedCallback() {
 		super.connectedCallback();
-		globalThis.openclawA2UI = {
+		globalThis.marketingclawA2UI = {
 			applyMessages: (messages) => this.applyMessages(messages),
 			reset: () => this.reset(),
 			getSurfaces: () => Array.from(this.#processor.getSurfaces().keys())
 		};
 		this.addEventListener("a2uiaction", (evt) => this.#handleA2UIAction(evt));
 		this.#statusListener = (evt) => this.#handleActionStatus(evt);
-		for (const eventName of ["openclaw:a2ui-action-status"]) globalThis.addEventListener(eventName, this.#statusListener);
+		for (const eventName of ["marketingclaw:a2ui-action-status"]) globalThis.addEventListener(eventName, this.#statusListener);
 		this.#syncSurfaces();
 	}
 	disconnectedCallback() {
 		super.disconnectedCallback();
 		if (this.#statusListener) {
-			for (const eventName of ["openclaw:a2ui-action-status"]) globalThis.removeEventListener(eventName, this.#statusListener);
+			for (const eventName of ["marketingclaw:a2ui-action-status"]) globalThis.removeEventListener(eventName, this.#statusListener);
 			this.#statusListener = null;
 		}
 	}
@@ -12420,10 +12420,10 @@ var OpenClawA2UIHost = class extends i$7 {
 			timestamp: (/* @__PURE__ */ new Date()).toISOString(),
 			...Object.keys(context).length ? { context } : {}
 		};
-		globalThis["__openclawLastA2UIAction"] = userAction;
-		const handler = globalThis.webkit?.messageHandlers?.openclawCanvasA2UIAction ?? globalThis.openclawCanvasA2UIAction;
+		globalThis["__marketingclawLastA2UIAction"] = userAction;
+		const handler = globalThis.webkit?.messageHandlers?.marketingclawCanvasA2UIAction ?? globalThis.marketingclawCanvasA2UIAction;
 		if (handler?.postMessage) try {
-			if (handler === globalThis.openclawCanvasA2UIAction) postNativeMessage(handler, JSON.stringify({ userAction }));
+			if (handler === globalThis.marketingclawCanvasA2UIAction) postNativeMessage(handler, JSON.stringify({ userAction }));
 			else postNativeMessage(handler, { userAction });
 		} catch (e) {
 			const msg = String(e?.message ?? e);
@@ -12492,4 +12492,4 @@ var OpenClawA2UIHost = class extends i$7 {
       </section>`;
 	}
 };
-if (!customElements.get("openclaw-a2ui-host")) customElements.define("openclaw-a2ui-host", OpenClawA2UIHost);
+if (!customElements.get("marketingclaw-a2ui-host")) customElements.define("marketingclaw-a2ui-host", MarketingClawA2UIHost);

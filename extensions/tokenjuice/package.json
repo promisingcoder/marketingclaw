@@ -1,34 +1,34 @@
 {
-  "name": "@openclaw/tokenjuice",
+  "name": "@marketingclaw/tokenjuice",
   "version": "2026.6.11",
-  "description": "OpenClaw tokenjuice exec output compaction plugin",
+  "description": "MarketingClaw tokenjuice exec output compaction plugin",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/promisingcoder/marketingclaw"
   },
   "type": "module",
   "dependencies": {
     "tokenjuice": "0.8.1"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.6.11"
+    "marketingclaw": ">=2026.6.11"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "marketingclaw": {
       "optional": true
     }
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@marketingclaw/plugin-sdk": "workspace:*",
+    "marketingclaw": "workspace:*"
   },
-  "openclaw": {
+  "marketingclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@openclaw/tokenjuice",
-      "npmSpec": "@openclaw/tokenjuice",
+      "clawhubSpec": "clawhub:@marketingclaw/tokenjuice",
+      "npmSpec": "@marketingclaw/tokenjuice",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.5.28"
     },
@@ -36,7 +36,7 @@
       "pluginApi": ">=2026.6.11"
     },
     "build": {
-      "openclawVersion": "2026.6.11",
+      "marketingclawVersion": "2026.6.11",
       "bundledDist": false
     },
     "release": {

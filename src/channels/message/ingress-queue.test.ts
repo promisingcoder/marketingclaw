@@ -4,33 +4,33 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { executeSqliteQuerySync, getNodeSqliteKysely } from "../../infra/kysely-sync.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../../state/openclaw-state-db.generated.js";
+import type { DB as MarketingClawStateKyselyDatabase } from "../../state/marketingclaw-state-db.generated.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-} from "../../state/openclaw-state-db.js";
+  closeMarketingClawStateDatabaseForTest,
+  openMarketingClawStateDatabase,
+} from "../../state/marketingclaw-state-db.js";
 import { createChannelIngressQueue, createStateDirEnv } from "./ingress-queue.js";
 
-type ChannelIngressTestDatabase = Pick<OpenClawStateKyselyDatabase, "channel_ingress_events">;
+type ChannelIngressTestDatabase = Pick<MarketingClawStateKyselyDatabase, "channel_ingress_events">;
 
 async function withTempState<T>(fn: (stateDir: string) => Promise<T>): Promise<T> {
-  const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-ingress-queue-"));
+  const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-ingress-queue-"));
   try {
     return await fn(stateDir);
   } finally {
-    closeOpenClawStateDatabaseForTest();
+    closeMarketingClawStateDatabaseForTest();
     await fs.rm(stateDir, { recursive: true, force: true });
   }
 }
 
 describe("channel ingress queue", () => {
   afterEach(() => {
-    closeOpenClawStateDatabaseForTest();
+    closeMarketingClawStateDatabaseForTest();
   });
 
   it("opens a custom state database without copying the full process env", async () => {
     const baseEnv: NodeJS.ProcessEnv = {
-      HOME: "/home/openclaw",
+      HOME: "/home/marketingclaw",
       PATH: "/usr/local/bin:/usr/bin",
     };
     for (let index = 0; index < 10_000; index += 1) {
@@ -45,13 +45,13 @@ describe("channel ingress queue", () => {
     await withTempState(async (stateDir) => {
       const env = createStateDirEnv(stateDir, inheritedEnv);
 
-      expect(env.OPENCLAW_STATE_DIR).toBe(stateDir);
-      expect(env.HOME).toBe("/home/openclaw");
+      expect(env.MARKETINGCLAW_STATE_DIR).toBe(stateDir);
+      expect(env.HOME).toBe("/home/marketingclaw");
       expect(Object.getPrototypeOf(env)).toBe(inheritedEnv);
-      expect(Object.keys(env)).toEqual(["OPENCLAW_STATE_DIR"]);
+      expect(Object.keys(env)).toEqual(["MARKETINGCLAW_STATE_DIR"]);
 
-      const database = openOpenClawStateDatabase({ env });
-      expect(database.path).toBe(path.join(stateDir, "state", "openclaw.sqlite"));
+      const database = openMarketingClawStateDatabase({ env });
+      expect(database.path).toBe(path.join(stateDir, "state", "marketingclaw.sqlite"));
     });
   });
 
@@ -510,7 +510,7 @@ describe("channel ingress queue", () => {
       await queue.release("retry", { lastError: "stale retry text", releasedAt: 26 });
       await queue.complete("retry", { completedAt: 27 });
 
-      const database = openOpenClawStateDatabase({
+      const database = openMarketingClawStateDatabase({
         env: createStateDirEnv(stateDir),
       });
       const kysely = getNodeSqliteKysely<ChannelIngressTestDatabase>(database.db);

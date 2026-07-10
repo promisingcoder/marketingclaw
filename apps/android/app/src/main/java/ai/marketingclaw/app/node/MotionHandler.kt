@@ -1,6 +1,6 @@
-package ai.openclaw.app.node
+package ai.marketingclaw.app.node
 
-import ai.openclaw.app.gateway.GatewaySession
+import ai.marketingclaw.app.gateway.GatewaySession
 import android.Manifest
 import android.content.Context
 import android.hardware.Sensor

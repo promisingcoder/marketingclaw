@@ -3,7 +3,7 @@ import type {
   fetchProviderDownloadResponse,
   fetchProviderOperationResponse,
   resolveProviderHttpRequestConfig,
-} from "openclaw/plugin-sdk/provider-http";
+} from "marketingclaw/plugin-sdk/provider-http";
 import { afterEach, vi, type Mock } from "vitest";
 
 type ResolveProviderHttpRequestConfigParams = Parameters<
@@ -88,12 +88,12 @@ minimaxProviderHttpMocks.fetchProviderDownloadResponseMock.mockImplementation(
   },
 );
 
-vi.mock("openclaw/plugin-sdk/provider-auth-runtime", () => ({
+vi.mock("marketingclaw/plugin-sdk/provider-auth-runtime", () => ({
   resolveApiKeyForProvider: minimaxProviderHttpMocks.resolveApiKeyForProviderMock,
 }));
 
-vi.mock("openclaw/plugin-sdk/provider-http", async (importActual) => {
-  const actual = await importActual<typeof import("openclaw/plugin-sdk/provider-http")>();
+vi.mock("marketingclaw/plugin-sdk/provider-http", async (importActual) => {
+  const actual = await importActual<typeof import("marketingclaw/plugin-sdk/provider-http")>();
   return {
     assertOkOrThrowHttpError: minimaxProviderHttpMocks.assertOkOrThrowHttpErrorMock,
     createProviderOperationDeadline: ({

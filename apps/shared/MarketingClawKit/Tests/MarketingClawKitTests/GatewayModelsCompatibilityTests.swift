@@ -1,4 +1,4 @@
-import OpenClawProtocol
+import MarketingClawProtocol
 import Testing
 
 struct GatewayModelsCompatibilityTests {

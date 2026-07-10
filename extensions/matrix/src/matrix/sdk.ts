@@ -1,5 +1,13 @@
 // Matrix plugin module implements sdk behavior.
 import { EventEmitter } from "node:events";
+import { KeyedAsyncQueue } from "marketingclaw/plugin-sdk/keyed-async-queue";
+import { createLazyRuntimeModule } from "marketingclaw/plugin-sdk/lazy-runtime";
+import type { PinnedDispatcherPolicy } from "marketingclaw/plugin-sdk/ssrf-dispatcher";
+import {
+  normalizeNullableString,
+  normalizeStringEntries,
+  uniqueStrings,
+} from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import {
   ClientEvent,
   Filter,
@@ -12,14 +20,6 @@ import {
 } from "matrix-js-sdk/lib/matrix.js";
 import type { Direction } from "matrix-js-sdk/lib/models/event-timeline.js";
 import { VerificationMethod } from "matrix-js-sdk/lib/types.js";
-import { KeyedAsyncQueue } from "openclaw/plugin-sdk/keyed-async-queue";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import type { PinnedDispatcherPolicy } from "openclaw/plugin-sdk/ssrf-dispatcher";
-import {
-  normalizeNullableString,
-  normalizeStringEntries,
-  uniqueStrings,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
 import type { SsrFPolicy } from "../runtime-api.js";
 import { resolveMatrixRoomKeyBackupReadinessError } from "./backup-health.js";
 import { SqliteBackedMatrixSyncStore } from "./client/file-sync-store.js";

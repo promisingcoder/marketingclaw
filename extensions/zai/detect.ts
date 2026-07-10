@@ -1,6 +1,6 @@
 // Zai plugin module implements detect behavior.
-import { resolveTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
-import { readResponseWithLimit } from "openclaw/plugin-sdk/response-limit-runtime";
+import { resolveTimerTimeoutMs } from "marketingclaw/plugin-sdk/number-runtime";
+import { readResponseWithLimit } from "marketingclaw/plugin-sdk/response-limit-runtime";
 import {
   ZAI_CN_BASE_URL,
   ZAI_CODING_CN_BASE_URL,

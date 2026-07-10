@@ -1,5 +1,5 @@
 // Memory Host SDK module implements qmd query parser behavior.
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { truncateUtf16Safe } from "@marketingclaw/normalization-core/utf16-slice";
 import { formatErrorMessage } from "./error-utils.js";
 import { normalizeLowercaseStringOrEmpty } from "./string-utils.js";
 

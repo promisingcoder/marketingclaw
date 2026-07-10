@@ -12,7 +12,7 @@ import {
 const tempDirs: string[] = [];
 
 async function makeTempDir() {
-  const dir = await fs.mkdtemp(path.join(tmpdir(), "openclaw-native-a2ui-"));
+  const dir = await fs.mkdtemp(path.join(tmpdir(), "marketingclaw-native-a2ui-"));
   tempDirs.push(dir);
   return dir;
 }
@@ -39,9 +39,9 @@ describe("scripts/sync-native-a2ui.mjs", () => {
         "/repo",
         "apps",
         "shared",
-        "OpenClawKit",
+        "MarketingClawKit",
         "Sources",
-        "OpenClawKit",
+        "MarketingClawKit",
         "Resources",
         "CanvasA2UI",
       ),

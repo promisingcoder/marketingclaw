@@ -124,7 +124,7 @@ test("webchat clients cannot patch, delete, compact, or restore sessions", async
 });
 
 test("session:patch hook fires with correct context", async () => {
-  const dir = makeTempDir(permHookTempDirs, "openclaw-sessions-patch-hook-");
+  const dir = makeTempDir(permHookTempDirs, "marketingclaw-sessions-patch-hook-");
   const storePath = path.join(dir, "sessions.json");
   testState.sessionStorePath = storePath;
 
@@ -164,7 +164,7 @@ test("session:patch hook fires with correct context", async () => {
 });
 
 test("session:patch hook does not fire for webchat clients", async () => {
-  const dir = makeTempDir(permHookTempDirs, "openclaw-sessions-webchat-hook-");
+  const dir = makeTempDir(permHookTempDirs, "marketingclaw-sessions-webchat-hook-");
   const storePath = path.join(dir, "sessions.json");
   testState.sessionStorePath = storePath;
 
@@ -193,7 +193,7 @@ test("session:patch hook does not fire for webchat clients", async () => {
 });
 
 test("session:patch hook only fires after successful patch", async () => {
-  const dir = makeTempDir(permHookTempDirs, "openclaw-sessions-success-hook-");
+  const dir = makeTempDir(permHookTempDirs, "marketingclaw-sessions-success-hook-");
   const storePath = path.join(dir, "sessions.json");
   testState.sessionStorePath = storePath;
 
@@ -305,7 +305,7 @@ test("session:patch hook mutations cannot change the response path", async () =>
 });
 
 test("control-ui client can delete sessions even in webchat mode", async () => {
-  const dir = makeTempDir(permHookTempDirs, "openclaw-sessions-control-ui-delete-");
+  const dir = makeTempDir(permHookTempDirs, "marketingclaw-sessions-control-ui-delete-");
   const storePath = path.join(dir, "sessions.json");
   testState.sessionStorePath = storePath;
 

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ModelsAuthLoginFlowOptions } from "../../commands/models/auth.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import { buildBuiltinChatCommands } from "../commands-registry.shared.js";
 import type { HandleCommandsParams } from "./commands-types.js";
 import { buildCommandTestParams } from "./commands.test-harness.js";
@@ -32,7 +32,7 @@ function buildLoginParams(
       commands: { text: true, ownerAllowFrom: ["owner"] },
       channels: { slack: { allowFrom: ["owner"] } },
       session: { mainKey: "main" },
-    } as OpenClawConfig,
+    } as MarketingClawConfig,
     {
       Provider: "slack",
       Surface: "slack",
@@ -43,7 +43,7 @@ function buildLoginParams(
       MessageThreadId: "thread-1",
       ...overrides.ctx,
     },
-    { workspaceDir: "/tmp/openclaw-login-test" },
+    { workspaceDir: "/tmp/marketingclaw-login-test" },
   );
   params.sessionKey = overrides.sessionKey ?? "agent:main:slack:channel:C123";
   params.agentId = overrides.agentId;
@@ -204,7 +204,7 @@ describe("handleLoginCommand", () => {
     expect(result).toEqual({
       shouldContinue: false,
       reply: {
-        text: "Codex login codes are only sent in a private chat or Web UI session. Open a private chat with OpenClaw and send `/login codex` there.",
+        text: "Codex login codes are only sent in a private chat or Web UI session. Open a private chat with MarketingClaw and send `/login codex` there.",
       },
     });
     expect(onBlockReply).not.toHaveBeenCalled();
@@ -300,7 +300,7 @@ describe("handleLoginCommand", () => {
     expect(result).toEqual({
       shouldContinue: false,
       reply: {
-        text: "Only a configured OpenClaw owner/admin can start Codex login from this channel.",
+        text: "Only a configured MarketingClaw owner/admin can start Codex login from this channel.",
       },
     });
     expect(runModelsAuthLoginFlowMock).not.toHaveBeenCalled();
@@ -316,14 +316,14 @@ describe("handleLoginCommand", () => {
     params.cfg = {
       ...params.cfg,
       commands: { text: true },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     const result = await handleLoginCommand(params, true);
 
     expect(result).toEqual({
       shouldContinue: false,
       reply: {
-        text: "Only a configured OpenClaw owner/admin can start Codex login from this channel.",
+        text: "Only a configured MarketingClaw owner/admin can start Codex login from this channel.",
       },
     });
     expect(runModelsAuthLoginFlowMock).not.toHaveBeenCalled();

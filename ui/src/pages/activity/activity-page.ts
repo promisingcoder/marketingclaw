@@ -12,7 +12,7 @@ import {
 import { loadSettings } from "../../app/settings.ts";
 import { resolveSessionKey } from "../../lib/sessions/index.ts";
 import { uiSessionEventMatches } from "../../lib/sessions/session-key.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { MarketingClawLightDomElement } from "../../lit/marketingclaw-element.ts";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
 import {
   parseToolActivityEvent,
@@ -24,7 +24,7 @@ import { renderActivity } from "./view.ts";
 
 let activityClearBoundary: EventLogEntry | undefined;
 
-class ActivityPage extends OpenClawLightDomElement {
+class ActivityPage extends MarketingClawLightDomElement {
   @consume({ context: applicationContext, subscribe: true })
   private context!: ApplicationContext;
 
@@ -246,4 +246,4 @@ class ActivityPage extends OpenClawLightDomElement {
   }
 }
 
-customElements.define("openclaw-activity-page", ActivityPage);
+customElements.define("marketingclaw-activity-page", ActivityPage);

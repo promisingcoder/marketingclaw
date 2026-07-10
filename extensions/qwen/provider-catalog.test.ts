@@ -10,7 +10,7 @@ import {
   QWEN_STANDARD_GLOBAL_BASE_URL,
   QWEN_DEFAULT_MODEL_ID,
 } from "./api.js";
-import manifest from "./openclaw.plugin.json" with { type: "json" };
+import manifest from "./marketingclaw.plugin.json" with { type: "json" };
 import { buildQwenOAuthProvider } from "./provider-catalog.js";
 
 type QwenProvider = ReturnType<typeof buildQwenProvider>;

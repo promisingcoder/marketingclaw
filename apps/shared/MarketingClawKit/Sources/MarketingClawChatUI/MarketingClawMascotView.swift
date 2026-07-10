@@ -1,11 +1,11 @@
 import SwiftUI
 
-/// Animated OpenClaw mascot. Redraws the canonical 120x120 vector from
+/// Animated MarketingClaw mascot. Redraws the canonical 120x120 vector from
 /// `ui/public/favicon.svg` so individual parts (claws, antennae, eyes) can
-/// animate like the openclaw.ai hero mark; the bundled PNG asset cannot.
-/// Styling (palette, glow colors, float depth) follows the openclaw.ai hero
+/// animate like the marketingclaw.ai hero mark; the bundled PNG asset cannot.
+/// Styling (palette, glow colors, float depth) follows the marketingclaw.ai hero
 /// (`src/pages/index.astro` + `Layout.astro` theme variables).
-public struct OpenClawMascotView: View {
+public struct MarketingClawMascotView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.colorScheme) private var colorScheme
 
@@ -16,17 +16,17 @@ public struct OpenClawMascotView: View {
     }
 
     public var body: some View {
-        let palette = OpenClawMascotPalette.forScheme(self.colorScheme)
+        let palette = MarketingClawMascotPalette.forScheme(self.colorScheme)
         if self.reduceMotion {
-            OpenClawMascotCanvas(pose: .still, palette: palette)
+            MarketingClawMascotCanvas(pose: .still, palette: palette)
         } else {
             TimelineView(.animation(minimumInterval: 1.0 / 30.0)) { timeline in
-                let pose = OpenClawMascotPose.at(time: timeline.date.timeIntervalSinceReferenceDate)
+                let pose = MarketingClawMascotPose.at(time: timeline.date.timeIntervalSinceReferenceDate)
                 // Float translates the whole canvas like the site floats the hero
                 // container; drawing the offset inside the canvas would clip the
                 // antennae (art starts at y~5 of 120) at the -9.6 float peak.
                 GeometryReader { proxy in
-                    OpenClawMascotCanvas(pose: pose, palette: palette)
+                    MarketingClawMascotCanvas(pose: pose, palette: palette)
                         .offset(
                             y: self.floats
                                 ? pose.floatOffset * min(proxy.size.width, proxy.size.height) / 120
@@ -36,7 +36,7 @@ public struct OpenClawMascotView: View {
         }
     }
 
-    /// openclaw.ai hero drop-shadow color (`--logo-glow` / `--logo-glow-hover`).
+    /// marketingclaw.ai hero drop-shadow color (`--logo-glow` / `--logo-glow-hover`).
     /// Pair with a shadow radius of ~10% of the mascot size (15% while hovering)
     /// to match the site's `drop-shadow(0 0 20px)` on a 100px mark.
     public static func heroGlowColor(for colorScheme: ColorScheme, hovering: Bool = false) -> Color {
@@ -49,44 +49,44 @@ public struct OpenClawMascotView: View {
     }
 }
 
-/// Body/antenna colors from the openclaw.ai theme variables: `:root` (dark)
+/// Body/antenna colors from the marketingclaw.ai theme variables: `:root` (dark)
 /// and `html[data-theme='light']` in `Layout.astro`. Eye colors are fixed in
 /// the site markup and shared by both themes.
-struct OpenClawMascotPalette: Equatable {
+struct MarketingClawMascotPalette: Equatable {
     let gradientTop: Color
     let gradientBottom: Color
     let antenna: Color
 
-    static let dark = OpenClawMascotPalette(
+    static let dark = MarketingClawMascotPalette(
         gradientTop: Color(red: 1, green: 77 / 255, blue: 77 / 255),
         gradientBottom: Color(red: 153 / 255, green: 27 / 255, blue: 27 / 255),
         antenna: Color(red: 1, green: 77 / 255, blue: 77 / 255))
 
-    static let light = OpenClawMascotPalette(
+    static let light = MarketingClawMascotPalette(
         gradientTop: Color(red: 255 / 255, green: 112 / 255, blue: 121 / 255),
         gradientBottom: Color(red: 234 / 255, green: 76 / 255, blue: 89 / 255),
         antenna: Color(red: 239 / 255, green: 75 / 255, blue: 88 / 255))
 
-    static func forScheme(_ colorScheme: ColorScheme) -> OpenClawMascotPalette {
+    static func forScheme(_ colorScheme: ColorScheme) -> MarketingClawMascotPalette {
         colorScheme == .light ? .light : .dark
     }
 }
 
-/// Part transforms for one animation frame. Mirrors the openclaw.ai CSS
+/// Part transforms for one animation frame. Mirrors the marketingclaw.ai CSS
 /// keyframes: float 4s, antenna wiggle 2s, eye blink 3s, claw snap 4s with
 /// the right claw trailing by 0.2s.
-struct OpenClawMascotPose: Equatable {
+struct MarketingClawMascotPose: Equatable {
     var floatOffset: CGFloat = 0
     var antennaDegrees: CGFloat = 0
     var leftClawDegrees: CGFloat = 0
     var rightClawDegrees: CGFloat = 0
     var eyeGlowOpacity: CGFloat = 1
 
-    static let still = OpenClawMascotPose()
+    static let still = MarketingClawMascotPose()
 
-    static func at(time: TimeInterval) -> OpenClawMascotPose {
+    static func at(time: TimeInterval) -> MarketingClawMascotPose {
         // Float depth matches the hero: -8px on a 100px mark = 8% of the 120 box.
-        OpenClawMascotPose(
+        MarketingClawMascotPose(
             floatOffset: -4.8 * (1 - cos(2 * .pi * self.cyclePhase(time, period: 4))),
             antennaDegrees: -3 * sin(2 * .pi * self.cyclePhase(time, period: 2)),
             leftClawDegrees: self.clawSnapDegrees(phase: self.cyclePhase(time, period: 4)),
@@ -125,9 +125,9 @@ struct OpenClawMascotPose: Equatable {
     }
 }
 
-private struct OpenClawMascotCanvas: View {
-    let pose: OpenClawMascotPose
-    let palette: OpenClawMascotPalette
+private struct MarketingClawMascotCanvas: View {
+    let pose: MarketingClawMascotPose
+    let palette: MarketingClawMascotPalette
 
     var body: some View {
         Canvas { context, size in
@@ -200,8 +200,8 @@ private struct OpenClawMascotCanvas: View {
     private static func draw(
         context: inout GraphicsContext,
         size: CGSize,
-        pose: OpenClawMascotPose,
-        palette: OpenClawMascotPalette)
+        pose: MarketingClawMascotPose,
+        palette: MarketingClawMascotPalette)
     {
         let scale = min(size.width, size.height) / 120
         context.scaleBy(x: scale, y: scale)
@@ -241,7 +241,7 @@ private struct OpenClawMascotCanvas: View {
     /// one canvas-wide gradient would leave the claws nearly flat-colored.
     private static func gradient(
         for path: Path,
-        palette: OpenClawMascotPalette) -> GraphicsContext.Shading
+        palette: MarketingClawMascotPalette) -> GraphicsContext.Shading
     {
         let box = path.boundingRect
         return .linearGradient(

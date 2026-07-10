@@ -1,5 +1,5 @@
 // Applies policy checks to installed plugin index records.
-import type { OpenClawConfig } from "../config/types.js";
+import type { MarketingClawConfig } from "../config/types.js";
 import { listPluginCompatRecords } from "./compat/registry.js";
 import { normalizePluginsConfig } from "./config-state.js";
 import { hashJson } from "./installed-plugin-index-hash.js";
@@ -19,7 +19,9 @@ export function resolveCompatRegistryVersion(): string {
 }
 
 /** Hashes config policy inputs that can change installed plugin activation. */
-export function resolveInstalledPluginIndexPolicyHash(config: OpenClawConfig | undefined): string {
+export function resolveInstalledPluginIndexPolicyHash(
+  config: MarketingClawConfig | undefined,
+): string {
   const normalized = normalizePluginsConfig(config?.plugins);
   const channelPolicy: Record<string, boolean> = {};
   const channels = config?.channels;

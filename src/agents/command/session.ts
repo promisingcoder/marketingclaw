@@ -27,7 +27,7 @@ import { resolveChannelResetConfig, resolveSessionResetType } from "../../config
 import { resolveSessionKey } from "../../config/sessions/session-key.js";
 import { loadSessionStore } from "../../config/sessions/store-load.js";
 import type { SessionEntry } from "../../config/sessions/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import {
   buildAgentMainSessionKey,
   classifySessionKeyShape,
@@ -90,7 +90,7 @@ export function buildExplicitSessionIdSessionKey(params: {
 }
 
 function resolveLegacyMainStoreSessionForDefaultAgent(opts: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   defaultAgentId: string;
   mainKey: string;
   sessionKey?: string;
@@ -151,7 +151,7 @@ function resolveLegacyMainStoreSessionForDefaultAgent(opts: {
 }
 
 function collectSessionIdMatchesForRequest(opts: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   sessionStore: Record<string, SessionEntry>;
   storePath: string;
   storeAgentId?: string;
@@ -209,7 +209,7 @@ function collectSessionIdMatchesForRequest(opts: {
  * into that agent's main session key.
  */
 export function resolveStoredSessionKeyForSessionId(opts: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   sessionId: string;
   agentId?: string;
 }): SessionKeyResolution {
@@ -236,7 +236,7 @@ export function resolveStoredSessionKeyForSessionId(opts: {
 
 /** Resolves the session key/store targeted by one command request. */
 export function resolveSessionKeyForRequest(opts: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   to?: string;
   sessionId?: string;
   sessionKey?: string;
@@ -337,7 +337,7 @@ export function resolveSessionKeyForRequest(opts: {
 
 /** Resolves or creates the session used by one agent command request. */
 export function resolveSession(opts: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   to?: string;
   sessionId?: string;
   sessionKey?: string;
@@ -401,9 +401,8 @@ export function resolveSession(opts: {
   const sessionId =
     requestedSessionId || (fresh ? sessionEntry?.sessionId : undefined) || crypto.randomUUID();
   const isNewSession = !fresh && !requestedSessionId;
-  const resolvedSessionEntry = isNewSession && sessionEntry
-    ? clearRotatedSessionMetadata(sessionEntry)
-    : sessionEntry;
+  const resolvedSessionEntry =
+    isNewSession && sessionEntry ? clearRotatedSessionMetadata(sessionEntry) : sessionEntry;
 
   clearBootstrapSnapshotOnSessionRollover({
     sessionKey,

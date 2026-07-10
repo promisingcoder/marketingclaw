@@ -1,6 +1,6 @@
 // Qa Matrix plugin module implements request behavior.
-import { resolveTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
-import { readResponseWithLimit } from "openclaw/plugin-sdk/response-limit-runtime";
+import { resolveTimerTimeoutMs } from "marketingclaw/plugin-sdk/number-runtime";
+import { readResponseWithLimit } from "marketingclaw/plugin-sdk/response-limit-runtime";
 
 export type MatrixQaFetchLike = typeof fetch;
 

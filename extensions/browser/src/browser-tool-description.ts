@@ -4,8 +4,8 @@ export function describeBrowserTool(opts: {
   hostHint: string;
 }): string {
   return [
-    "Control the browser via OpenClaw's browser control server (status/start/stop/profiles/tabs/open/snapshot/screenshot/download/actions).",
-    "Browser choice: omit profile to use the configured default (normally the isolated OpenClaw-managed `openclaw` browser).",
+    "Control the browser via MarketingClaw's browser control server (status/start/stop/profiles/tabs/open/snapshot/screenshot/download/actions).",
+    "Browser choice: omit profile to use the configured default (normally the isolated MarketingClaw-managed `marketingclaw` browser).",
     "When existing logins/cookies matter, use action=profiles to inspect available profiles, then select the appropriate profile by name. Do not assume a profile name. Use only when the task requires an existing session and the user has authorized it.",
     "For Chrome MCP existing-session profiles, omit timeoutMs on act:type, evaluate, hover, scrollIntoView, drag, select, and fill; that driver rejects per-call timeout overrides for those actions.",
     'When a node-hosted browser proxy is available, the tool may auto-route to it. Pin a node with node=<id|name> or target="node".',

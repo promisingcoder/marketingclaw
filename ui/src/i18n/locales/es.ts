@@ -144,11 +144,11 @@ export const es: TranslationMap = {
     pairing: {
       button: "Vincular dispositivo móvil",
       adminRequired: "Se requiere acceso de administrador para crear códigos de configuración.",
-      title: "OpenClaw móvil",
+      title: "MarketingClaw móvil",
       subtitle: "Escanea este código QR en la app móvil para conectar un teléfono nuevo.",
       generating: "Creando un código de configuración seguro…",
       failed: "No se pudo crear un código de configuración.",
-      qrAlt: "Código QR de vinculación de OpenClaw móvil",
+      qrAlt: "Código QR de vinculación de MarketingClaw móvil",
       qrUnavailable: "QR no disponible. Copia el código de configuración en su lugar.",
       copySetupCode: "Copiar código de configuración",
       newCode: "Código nuevo",
@@ -156,7 +156,7 @@ export const es: TranslationMap = {
       pending: "Solicitudes de dispositivos pendientes de revisión: {count}",
       review: "Revisión",
       waiting:
-        "Las apps móviles oficiales de OpenClaw se conectan automáticamente después de escanear.",
+        "Las apps móviles oficiales de MarketingClaw se conectan automáticamente después de escanear.",
       help: "Ayuda de vinculación",
       manageDevices: "Gestionar dispositivos",
     },
@@ -182,7 +182,7 @@ export const es: TranslationMap = {
   },
   worktrees: {
     title: "Worktrees administrados",
-    subtitle: "Checkouts de repositorios aislados propiedad de OpenClaw.",
+    subtitle: "Checkouts de repositorios aislados propiedad de MarketingClaw.",
     cleanNow: "Limpiar ahora",
     name: "Nombre",
     repo: "Repositorio",
@@ -556,7 +556,7 @@ export const es: TranslationMap = {
       "Revisa, perfecciona y aplica propuestas antes de que se conviertan en Skills activas.",
     nodes: "Dispositivos emparejados, capacidades y exposición de comandos.",
     chat: "Sesión de chat directa con la puerta de enlace para intervenciones rápidas.",
-    config: "Editar ~/.openclaw/openclaw.json de forma segura.",
+    config: "Editar ~/.marketingclaw/marketingclaw.json de forma segura.",
     profile: "Las estadísticas, rachas y vida de tu agente en el arrecife.",
     communications: "Canales, mensajes y configuración de audio.",
     appearance: "Configuración del tema, la UI y el asistente de configuración.",
@@ -1077,7 +1077,7 @@ export const es: TranslationMap = {
       metadataUpgradeSummary:
         "Este dispositivo ya está emparejado, pero el cambio de metadatos está pendiente de aprobación.",
       mobileHint:
-        "¿En el móvil? Copia la URL completa (incluyendo #token=...) desde openclaw dashboard --no-open en tu escritorio.",
+        "¿En el móvil? Copia la URL completa (incluyendo #token=...) desde marketingclaw dashboard --no-open en tu escritorio.",
       docsTitle: "Documentación de emparejamiento de dispositivos (se abre en una pestaña nueva)",
       docsLink: "Documentación: Emparejamiento de dispositivos",
     },
@@ -1115,7 +1115,8 @@ export const es: TranslationMap = {
       modelAuthExpiresIn: "caduca {when}",
       modelAuthAttentionExpiredTitle: "La autenticación del modelo ha caducado",
       modelAuthAttentionExpiringTitle: "La autenticación del modelo caducará pronto",
-      modelAuthAttentionExpiredDesc: "{providers} — vuelve a autenticarte con openclaw models auth",
+      modelAuthAttentionExpiredDesc:
+        "{providers} — vuelve a autenticarte con marketingclaw models auth",
       modelAuthAttentionExpiringEntry: "{provider} ({when})",
     },
     attention: {
@@ -1574,16 +1575,17 @@ export const es: TranslationMap = {
         summary:
           "Se puede acceder al Gateway, pero necesita un token o una contraseña coincidente antes de que este navegador pueda conectarse.",
         stepPaste:
-          "Pega el token de openclaw dashboard --no-open o introduce la contraseña configurada.",
+          "Pega el token de marketingclaw dashboard --no-open o introduce la contraseña configurada.",
         stepGenerate:
-          "Si no hay token configurado, ejecuta openclaw doctor --generate-gateway-token en el host del Gateway.",
+          "Si no hay token configurado, ejecuta marketingclaw doctor --generate-gateway-token en el host del Gateway.",
         stepConnect: "Haz clic en Connect de nuevo después de actualizar la credencial.",
       },
       authFailed: {
         title: "La autenticación no coincide",
         summary:
           "La credencial proporcionada fue rechazada. La causa más común es un token obsoleto o copiado desde otra URL de Gateway.",
-        stepDashboard: "Ejecuta openclaw dashboard --no-open y abre la URL nueva o pega su token.",
+        stepDashboard:
+          "Ejecuta marketingclaw dashboard --no-open y abre la URL nueva o pega su token.",
         stepReplace:
           "Reemplaza valores obsoletos de token/contraseña; no reutilices un token de otra URL de Gateway.",
         stepMode:
@@ -1608,8 +1610,8 @@ export const es: TranslationMap = {
           "Este navegador necesita una aprobación única del host del Gateway antes de poder usar Control UI.",
         upgradeSummary:
           "Este navegador ya es conocido, pero el acceso solicitado cambió y necesita una aprobación nueva.",
-        stepList: "Ejecuta openclaw devices list en el host del Gateway.",
-        stepApproveId: "Aprueba esta solicitud: openclaw devices approve {requestId}.",
+        stepList: "Ejecuta marketingclaw devices list en el host del Gateway.",
+        stepApproveId: "Aprueba esta solicitud: marketingclaw devices approve {requestId}.",
         stepApprove: "Aprueba la solicitud pendiente de navegador/dispositivo desde esa lista.",
         stepReconnect: "Vuelve a conectar después de completar la aprobación.",
       },
@@ -1637,22 +1639,22 @@ export const es: TranslationMap = {
         summary:
           "La Control UI servida y el Gateway en ejecución no coinciden en el protocolo de conexión admitido.",
         stepDashboard:
-          "Vuelve a abrir el dashboard servido con openclaw dashboard para que UI y Gateway provengan de la misma instalación.",
+          "Vuelve a abrir el dashboard servido con marketingclaw dashboard para que UI y Gateway provengan de la misma instalación.",
         stepDevUi:
           "Si usas pnpm ui:dev, reconstruye o reinicia la UI de desarrollo contra el checkout actual.",
         stepRestart:
-          "Reinicia el Gateway después de actualizar OpenClaw para que sirva el protocolo actual.",
+          "Reinicia el Gateway después de actualizar MarketingClaw para que sirva el protocolo actual.",
       },
       network: {
         title: "No se pudo conectar",
         summary:
           "El navegador no pudo completar la conexión al Gateway. Revisa el destino y el transporte antes de reintentar credenciales.",
         stepGateway:
-          "Confirma que el Gateway esté en ejecución con openclaw status u openclaw gateway run.",
+          "Confirma que el Gateway esté en ejecución con marketingclaw status u marketingclaw gateway run.",
         stepUrl:
           "Revisa la URL de WebSocket y usa wss:// cuando el Gateway esté detrás de HTTPS/Tailscale Serve.",
         stepDashboard:
-          "Vuelve a abrir el dashboard con openclaw dashboard --no-open para copiar la URL y los detalles de autenticación actuales.",
+          "Vuelve a abrir el dashboard con marketingclaw dashboard --no-open para copiar la URL y los detalles de autenticación actuales.",
       },
     },
   },

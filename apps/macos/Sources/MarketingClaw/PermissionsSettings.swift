@@ -1,6 +1,6 @@
 import CoreLocation
-import OpenClawIPC
-import OpenClawKit
+import MarketingClawIPC
+import MarketingClawKit
 import SwiftUI
 
 struct PermissionsSettings: View {
@@ -59,7 +59,7 @@ struct PermissionsSettings: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(complete ? "All access granted" : "\(granted) of \(total) permissions granted")
                     .font(.headline)
-                Text("OpenClaw only asks for macOS capabilities when a feature needs them.")
+                Text("MarketingClaw only asks for macOS capabilities when a feature needs them.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -80,9 +80,9 @@ struct PermissionsSettings: View {
 private struct LocationAccessSettings: View {
     private static let controlWidth: CGFloat = 180
 
-    @AppStorage(locationModeKey) private var locationModeRaw: String = OpenClawLocationMode.off.rawValue
+    @AppStorage(locationModeKey) private var locationModeRaw: String = MarketingClawLocationMode.off.rawValue
     @AppStorage(locationPreciseKey) private var locationPreciseEnabled: Bool = true
-    @State private var lastLocationModeRaw: String = OpenClawLocationMode.off.rawValue
+    @State private var lastLocationModeRaw: String = MarketingClawLocationMode.off.rawValue
 
     var body: some View {
         VStack(spacing: 0) {
@@ -91,9 +91,9 @@ private struct LocationAccessSettings: View {
                 subtitle: "Allow agents to use device location when a tool asks for it.")
             {
                 Picker("Location Access", selection: self.$locationModeRaw) {
-                    Text("Off").tag(OpenClawLocationMode.off.rawValue)
-                    Text("While Using").tag(OpenClawLocationMode.whileUsing.rawValue)
-                    Text("Always").tag(OpenClawLocationMode.always.rawValue)
+                    Text("Off").tag(MarketingClawLocationMode.off.rawValue)
+                    Text("While Using").tag(MarketingClawLocationMode.whileUsing.rawValue)
+                    Text("Always").tag(MarketingClawLocationMode.always.rawValue)
                 }
                 .labelsHidden()
                 .pickerStyle(.menu)
@@ -118,7 +118,7 @@ private struct LocationAccessSettings: View {
         .onChange(of: self.locationModeRaw) { _, newValue in
             let previous = self.lastLocationModeRaw
             self.lastLocationModeRaw = newValue
-            guard let mode = OpenClawLocationMode(rawValue: newValue) else { return }
+            guard let mode = MarketingClawLocationMode(rawValue: newValue) else { return }
             Task {
                 let granted = await self.requestLocationAuthorization(mode: mode)
                 if !granted {
@@ -131,11 +131,11 @@ private struct LocationAccessSettings: View {
         }
     }
 
-    private var locationMode: OpenClawLocationMode {
-        OpenClawLocationMode(rawValue: self.locationModeRaw) ?? .off
+    private var locationMode: MarketingClawLocationMode {
+        MarketingClawLocationMode(rawValue: self.locationModeRaw) ?? .off
     }
 
-    private func requestLocationAuthorization(mode: OpenClawLocationMode) async -> Bool {
+    private func requestLocationAuthorization(mode: MarketingClawLocationMode) async -> Bool {
         guard mode != .off else { return true }
         guard CLLocationManager.locationServicesEnabled() else {
             await MainActor.run { LocationPermissionHelper.openSettings() }

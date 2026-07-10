@@ -1,14 +1,14 @@
 // Signal plugin module implements shared behavior.
-import { describeAccountSnapshot } from "openclaw/plugin-sdk/account-helpers";
+import { describeAccountSnapshot } from "marketingclaw/plugin-sdk/account-helpers";
 import {
   adaptScopedAccountAccessor,
   createScopedChannelConfigAdapter,
-} from "openclaw/plugin-sdk/channel-config-helpers";
-import { createRestrictSendersChannelSecurity } from "openclaw/plugin-sdk/channel-policy";
-import { createChannelPluginBase, getChatChannelMeta } from "openclaw/plugin-sdk/core";
-import type { ChannelPlugin } from "openclaw/plugin-sdk/core";
-import { normalizeStringifiedEntries } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { normalizeE164 } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "marketingclaw/plugin-sdk/channel-config-helpers";
+import { createRestrictSendersChannelSecurity } from "marketingclaw/plugin-sdk/channel-policy";
+import { createChannelPluginBase, getChatChannelMeta } from "marketingclaw/plugin-sdk/core";
+import type { ChannelPlugin } from "marketingclaw/plugin-sdk/core";
+import { normalizeStringifiedEntries } from "marketingclaw/plugin-sdk/string-coerce-runtime";
+import { normalizeE164 } from "marketingclaw/plugin-sdk/text-utility-runtime";
 import {
   listSignalAccountIds,
   resolveDefaultSignalAccountId,

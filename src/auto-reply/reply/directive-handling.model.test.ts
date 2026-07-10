@@ -237,7 +237,7 @@ vi.mock("../../agents/harness/selection.js", () => ({
   }: {
     provider?: string;
     modelId?: string;
-    config?: OpenClawConfig;
+    config?: MarketingClawConfig;
   }) => {
     const modelRuntime =
       provider && modelId
@@ -279,7 +279,7 @@ import {
   replaceRuntimeAuthProfileStoreSnapshots,
 } from "../../agents/auth-profiles.js";
 import type { ModelAliasIndex } from "../../agents/model-selection.js";
-import type { ModelDefinitionConfig, OpenClawConfig } from "../../config/config.js";
+import type { ModelDefinitionConfig, MarketingClawConfig } from "../../config/config.js";
 import type { SessionEntry } from "../../config/sessions.js";
 import { loadSessionStore, saveSessionStore } from "../../config/sessions/store.js";
 import {
@@ -367,11 +367,11 @@ function baseAliasIndex(): ModelAliasIndex {
   return { byAlias: new Map(), byKey: new Map() };
 }
 
-function baseConfig(): OpenClawConfig {
+function baseConfig(): MarketingClawConfig {
   return {
     commands: { text: true },
     agents: { defaults: {} },
-  } as unknown as OpenClawConfig;
+  } as unknown as MarketingClawConfig;
 }
 
 function modelDefinition(id: string, name: string): ModelDefinitionConfig {
@@ -490,7 +490,7 @@ function resolveModelSelectionForCommand(params: {
 }) {
   return resolveModelSelectionFromDirective({
     directives: parseInlineDirectives(params.command),
-    cfg: { commands: { text: true } } as unknown as OpenClawConfig,
+    cfg: { commands: { text: true } } as unknown as MarketingClawConfig,
     agentDir: TEST_AGENT_DIR,
     defaultProvider: "anthropic",
     defaultModel: "claude-opus-4-6",
@@ -504,7 +504,7 @@ function resolveModelSelectionForCommand(params: {
 async function persistModelDirectiveForTest(params: {
   command: string;
   profiles?: Record<string, ApiKeyProfile>;
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
   aliasIndex?: ModelAliasIndex;
   allowedModelKeys: string[];
   allowedModelCatalog?: ModelCatalogEntry[];
@@ -618,9 +618,14 @@ describe("/model chat UX", () => {
   });
 
   it("passes workspace scope through the /model list browser alias", async () => {
-    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-model-list-auth-label-"));
+    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-model-list-auth-label-"));
     const workspaceDir = path.join(tempRoot, "workspace");
-    const pluginDir = path.join(workspaceDir, ".openclaw", "extensions", "workspace-model-list");
+    const pluginDir = path.join(
+      workspaceDir,
+      ".marketingclaw",
+      "extensions",
+      "workspace-model-list",
+    );
     const bundledDir = path.join(tempRoot, "bundled");
     const stateDir = path.join(tempRoot, "state");
     const credentialPath = path.join(tempRoot, "credentials.json");
@@ -630,7 +635,7 @@ describe("/model chat UX", () => {
     fs.writeFileSync(path.join(pluginDir, "index.ts"), "export default {}\n", "utf8");
     fs.writeFileSync(credentialPath, "{}", "utf8");
     fs.writeFileSync(
-      path.join(pluginDir, "openclaw.plugin.json"),
+      path.join(pluginDir, "marketingclaw.plugin.json"),
       JSON.stringify({
         id: "workspace-model-list",
         configSchema: { type: "object" },
@@ -656,8 +661,8 @@ describe("/model chat UX", () => {
     try {
       await withEnvAsync(
         {
-          OPENCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
-          OPENCLAW_STATE_DIR: stateDir,
+          MARKETINGCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
+          MARKETINGCLAW_STATE_DIR: stateDir,
           WORKSPACE_MODEL_LIST_CREDENTIALS: credentialPath,
         },
         async () => {
@@ -668,7 +673,7 @@ describe("/model chat UX", () => {
             cfg: {
               ...baseConfig(),
               plugins: { allow: ["workspace-model-list"] },
-            } as unknown as OpenClawConfig,
+            } as unknown as MarketingClawConfig,
           });
 
           expect(reply?.text).toContain("- anthropic");
@@ -719,7 +724,7 @@ describe("/model chat UX", () => {
             },
           },
         },
-      } as unknown as OpenClawConfig,
+      } as unknown as MarketingClawConfig,
       allowedModelCatalog: [
         { provider: "anthropic", id: "claude-opus-4-6", name: "Claude Opus 4.5" },
         { provider: "openai", id: "gpt-4.1-mini", name: "GPT-4.1 mini" },
@@ -750,7 +755,7 @@ describe("/model chat UX", () => {
             },
           },
         },
-      } as unknown as OpenClawConfig,
+      } as unknown as MarketingClawConfig,
       allowedModelCatalog: [
         { provider: "google", id: "gemini-3-flash-preview", name: "Gemini 3 Flash" },
         {
@@ -788,7 +793,7 @@ describe("/model chat UX", () => {
             },
           },
         },
-      } as unknown as OpenClawConfig,
+      } as unknown as MarketingClawConfig,
       allowedModelCatalog: [
         { provider: "google", id: "gemini-3-flash-preview", name: "Gemini 3 Flash" },
         {
@@ -838,7 +843,7 @@ describe("/model chat UX", () => {
             },
           },
         },
-      } as unknown as OpenClawConfig,
+      } as unknown as MarketingClawConfig,
       allowedModelCatalog: [{ provider: "openai", id: "gpt-5.5", name: "GPT-5.5" }],
     });
 
@@ -880,7 +885,7 @@ describe("/model chat UX", () => {
             },
           },
         },
-      } as unknown as OpenClawConfig,
+      } as unknown as MarketingClawConfig,
       allowedModelCatalog: [{ provider: "openai", id: "gpt-5.5", name: "GPT-5.5" }],
     });
 
@@ -889,7 +894,7 @@ describe("/model chat UX", () => {
     expect(reply?.text).not.toContain("via codex runtime");
   });
 
-  it("does not borrow Codex auth when OpenAI model policy pins OpenClaw runtime", async () => {
+  it("does not borrow Codex auth when OpenAI model policy pins MarketingClaw runtime", async () => {
     setAuthProfiles({
       "openai:patrick@example.test": {
         type: "oauth",
@@ -913,12 +918,12 @@ describe("/model chat UX", () => {
             model: { primary: "openai/gpt-5.5" },
             models: {
               "openai/gpt-5.5": {
-                agentRuntime: { id: "openclaw" },
+                agentRuntime: { id: "marketingclaw" },
               },
             },
           },
         },
-      } as unknown as OpenClawConfig,
+      } as unknown as MarketingClawConfig,
       allowedModelCatalog: [{ provider: "openai", id: "gpt-5.5", name: "GPT-5.5" }],
     });
 
@@ -955,12 +960,12 @@ describe("/model chat UX", () => {
             model: { primary: "openai/gpt-5.5" },
             models: {
               "openai/gpt-5.5": {
-                agentRuntime: { id: "openclaw" },
+                agentRuntime: { id: "marketingclaw" },
               },
             },
           },
         },
-      } as unknown as OpenClawConfig,
+      } as unknown as MarketingClawConfig,
       allowedModelCatalog: [{ provider: "openai", id: "gpt-5.5", name: "GPT-5.5" }],
     });
 
@@ -970,9 +975,16 @@ describe("/model chat UX", () => {
   });
 
   it("uses workspace-scoped auth evidence in /model status labels", async () => {
-    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-model-status-auth-label-"));
+    const tempRoot = fs.mkdtempSync(
+      path.join(os.tmpdir(), "marketingclaw-model-status-auth-label-"),
+    );
     const workspaceDir = path.join(tempRoot, "workspace");
-    const pluginDir = path.join(workspaceDir, ".openclaw", "extensions", "workspace-model-auth");
+    const pluginDir = path.join(
+      workspaceDir,
+      ".marketingclaw",
+      "extensions",
+      "workspace-model-auth",
+    );
     const bundledDir = path.join(tempRoot, "bundled");
     const stateDir = path.join(tempRoot, "state");
     const credentialPath = path.join(tempRoot, "credentials.json");
@@ -982,7 +994,7 @@ describe("/model chat UX", () => {
     fs.writeFileSync(path.join(pluginDir, "index.ts"), "export default {}\n", "utf8");
     fs.writeFileSync(credentialPath, "{}", "utf8");
     fs.writeFileSync(
-      path.join(pluginDir, "openclaw.plugin.json"),
+      path.join(pluginDir, "marketingclaw.plugin.json"),
       JSON.stringify({
         id: "workspace-model-auth",
         configSchema: { type: "object" },
@@ -1010,8 +1022,8 @@ describe("/model chat UX", () => {
         {
           ANTHROPIC_API_KEY: undefined,
           ANTHROPIC_OAUTH_TOKEN: undefined,
-          OPENCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
-          OPENCLAW_STATE_DIR: stateDir,
+          MARKETINGCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
+          MARKETINGCLAW_STATE_DIR: stateDir,
           WORKSPACE_MODEL_CREDENTIALS: credentialPath,
         },
         async () => {
@@ -1028,7 +1040,7 @@ describe("/model chat UX", () => {
                   },
                 },
               },
-            } as unknown as OpenClawConfig,
+            } as unknown as MarketingClawConfig,
             allowedModelCatalog: [
               { provider: "anthropic", id: "claude-opus-4-6", name: "Claude Opus 4.6" },
             ],
@@ -1044,7 +1056,7 @@ describe("/model chat UX", () => {
 
   it("auto-applies closest match for typos", () => {
     const directives = parseInlineDirectives("/model anthropic/claud-opus-4-5");
-    const cfg = { commands: { text: true } } as unknown as OpenClawConfig;
+    const cfg = { commands: { text: true } } as unknown as MarketingClawConfig;
 
     const resolved = resolveModelSelectionFromDirective({
       directives,
@@ -1088,10 +1100,10 @@ describe("/model chat UX", () => {
     expect(resolved.modelSelection).toBeUndefined();
     expect(resolved.errorText).toContain('Model "openai/gpt-5.5" is not allowed.');
     expect(resolved.errorText).toContain(
-      `openclaw config set agents.defaults.models '{"openai/gpt-5.5":{}}' --strict-json --merge`,
+      `marketingclaw config set agents.defaults.models '{"openai/gpt-5.5":{}}' --strict-json --merge`,
     );
     expect(resolved.errorText).toContain("Then retry: /model openai/gpt-5.5 --runtime codex");
-    expect(resolved.errorText).toContain("openclaw plugins enable codex");
+    expect(resolved.errorText).toContain("marketingclaw plugins enable codex");
   });
 
   it("treats explicit default /model selection as resettable default", () => {
@@ -1177,7 +1189,7 @@ describe("/model chat UX", () => {
 
     const resolved = resolveModelSelectionFromDirective({
       directives: parseInlineDirectives(`/model gpt@${OPENAI_DATE_PROFILE_ID}`),
-      cfg: { commands: { text: true } } as unknown as OpenClawConfig,
+      cfg: { commands: { text: true } } as unknown as MarketingClawConfig,
       agentDir: TEST_AGENT_DIR,
       defaultProvider: "anthropic",
       defaultModel: "claude-opus-4-6",
@@ -1290,7 +1302,7 @@ describe("/model chat UX", () => {
             },
           },
         },
-      } as unknown as OpenClawConfig,
+      } as unknown as MarketingClawConfig,
     });
 
     expect(persisted.provider).toBe("openai");
@@ -1318,7 +1330,7 @@ describe("/model chat UX", () => {
             contextTokens: 1_000_000,
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
     });
 
     expect(persisted.contextTokens).toBe(272_000);
@@ -1342,7 +1354,7 @@ describe("/model chat UX", () => {
     const { sessionEntry } = await persistModelDirectiveForTest({
       command: "/model openai/gpt-4o --runtime claude-cli hello",
       allowedModelKeys: ["openai/gpt-4o"],
-      sessionEntry: createSessionEntry({ agentRuntimeOverride: "openclaw" }),
+      sessionEntry: createSessionEntry({ agentRuntimeOverride: "marketingclaw" }),
       provider: "openai",
       model: "gpt-4o",
       initialModelLabel: "openai/gpt-4o",
@@ -1628,7 +1640,7 @@ describe("handleDirectiveOnly model persist behavior (fixes #1435)", () => {
   });
 
   it("suppresses model side effects when a concurrent switch wins", async () => {
-    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-model-directive-race-"));
+    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-model-directive-race-"));
     const storePath = path.join(tempRoot, "sessions.json");
     const sessionEntry = createSessionEntry({
       providerOverride: "anthropic",
@@ -1678,7 +1690,9 @@ describe("handleDirectiveOnly model persist behavior (fixes #1435)", () => {
   });
 
   it("reports a rejected non-model directive after session rotation", async () => {
-    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-elevated-directive-race-"));
+    const tempRoot = fs.mkdtempSync(
+      path.join(os.tmpdir(), "marketingclaw-elevated-directive-race-"),
+    );
     const storePath = path.join(tempRoot, "sessions.json");
     const sessionEntry = createSessionEntry({ elevatedLevel: "full" });
     const rotatedEntry: SessionEntry = {
@@ -1715,7 +1729,9 @@ describe("handleDirectiveOnly model persist behavior (fixes #1435)", () => {
   });
 
   it("rejects an explicit same-value directive after a concurrent change", async () => {
-    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-elevated-directive-race-"));
+    const tempRoot = fs.mkdtempSync(
+      path.join(os.tmpdir(), "marketingclaw-elevated-directive-race-"),
+    );
     const storePath = path.join(tempRoot, "sessions.json");
     const sessionEntry = createSessionEntry({ elevatedLevel: "off" });
     const concurrentEntry: SessionEntry = {
@@ -1756,7 +1772,7 @@ describe("handleDirectiveOnly model persist behavior (fixes #1435)", () => {
         }),
       },
     ]);
-    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-thinking-remap-race-"));
+    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-thinking-remap-race-"));
     const storePath = path.join(tempRoot, "sessions.json");
     const sessionEntry = createSessionEntry({ thinkingLevel: "xhigh" });
     const concurrentEntry: SessionEntry = {
@@ -2254,7 +2270,7 @@ describe("handleDirectiveOnly model persist behavior (fixes #1435)", () => {
 
 describe("persistInlineDirectives session directive persistence policy", () => {
   it("checks an explicit same-value model selection against persisted state", async () => {
-    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-inline-model-race-"));
+    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-inline-model-race-"));
     const storePath = path.join(tempRoot, "sessions.json");
     const sessionKey = "agent:main:dm:same-model";
     const sessionEntry = createSessionEntry({
@@ -2306,7 +2322,7 @@ describe("persistInlineDirectives session directive persistence policy", () => {
   });
 
   it("returns the concurrent model winner without emitting switch side effects", async () => {
-    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-inline-model-race-"));
+    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-inline-model-race-"));
     const storePath = path.join(tempRoot, "sessions.json");
     const sessionKey = "agent:main:dm:race";
     const sessionEntry = createSessionEntry({

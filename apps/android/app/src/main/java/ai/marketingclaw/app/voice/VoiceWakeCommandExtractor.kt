@@ -1,4 +1,4 @@
-package ai.openclaw.app.voice
+package ai.marketingclaw.app.voice
 
 object VoiceWakeCommandExtractor {
   /** Extracts the command text that follows a configured wake phrase. */

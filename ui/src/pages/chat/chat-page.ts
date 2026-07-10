@@ -11,7 +11,7 @@ import { t } from "../../i18n/index.ts";
 import { resolveSessionDisplayName } from "../../lib/session-display.ts";
 import { readSessionDragData, sessionDragActive } from "../../lib/sessions/drag.ts";
 import { searchForSession } from "../../lib/sessions/index.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { MarketingClawLightDomElement } from "../../lit/marketingclaw-element.ts";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
 import "./chat-pane.ts";
 import {
@@ -45,7 +45,7 @@ const NARROW_SPLIT_QUERY = "(max-width: 1099px)";
 type DropIndicator = { paneId: string; zone: SplitDropZone; rect: SplitDropRect };
 type ChatPaneElement = HTMLElement & { paneId?: string };
 
-export class ChatPage extends OpenClawLightDomElement {
+export class ChatPage extends MarketingClawLightDomElement {
   @consume({ context: applicationContext, subscribe: true })
   private context!: ApplicationContext;
   @property({ attribute: false }) data!: ChatRouteData;
@@ -132,7 +132,7 @@ export class ChatPage extends OpenClawLightDomElement {
       event.dataTransfer.dropEffect = "copy";
     }
     const target = event.target instanceof Element ? event.target : null;
-    const pane = target?.closest<ChatPaneElement>("openclaw-chat-pane");
+    const pane = target?.closest<ChatPaneElement>("marketingclaw-chat-pane");
     if (!pane || !this.contains(pane)) {
       // Dividers and pane gaps sit between drop targets; keep the last preview
       // instead of flickering it away while the pointer crosses them.
@@ -183,7 +183,7 @@ export class ChatPage extends OpenClawLightDomElement {
     event.preventDefault();
     const sessionKey = readSessionDragData(event.dataTransfer);
     const target = event.target instanceof Element ? event.target : null;
-    const pane = target?.closest<ChatPaneElement>("openclaw-chat-pane");
+    const pane = target?.closest<ChatPaneElement>("marketingclaw-chat-pane");
     // Fall back to the retained preview when the drop lands on a divider or
     // gap, so the drop always matches what the indicator promised.
     const indicator =
@@ -363,7 +363,7 @@ export class ChatPage extends OpenClawLightDomElement {
     // Tabbing can land on a toolbar segment the clipped track has translated
     // off-screen; scroll its pane into view so the scroll sync follows and the
     // focused control becomes visible (no-op when already in view).
-    const pane = Array.from(this.querySelectorAll<ChatPaneElement>("openclaw-chat-pane")).find(
+    const pane = Array.from(this.querySelectorAll<ChatPaneElement>("marketingclaw-chat-pane")).find(
       (element) => element.paneId === paneId,
     );
     pane?.scrollIntoView({ block: "nearest", inline: "nearest" });
@@ -409,7 +409,7 @@ export class ChatPage extends OpenClawLightDomElement {
 
   private renderPane(pane: ChatSplitPane, active: boolean, weight: number) {
     return html`
-      <openclaw-chat-pane
+      <marketingclaw-chat-pane
         class="chat-split-view__pane ${active ? "chat-split-view__pane--active" : ""}"
         style="flex: ${weight} 1 0"
         .paneId=${pane.id}
@@ -418,7 +418,7 @@ export class ChatPage extends OpenClawLightDomElement {
         .draft=${active ? this.data?.draft : undefined}
         .onFocusPane=${this.handleFocusPane}
         .onPaneSessionChange=${this.handlePaneSessionChange}
-      ></openclaw-chat-pane>
+      ></marketingclaw-chat-pane>
     `;
   }
 
@@ -462,7 +462,7 @@ export class ChatPage extends OpenClawLightDomElement {
         <div class="chat-pane__actions">
           ${!this.narrow
             ? html`
-                <openclaw-tooltip .content=${t("chat.splitView.splitDown")}>
+                <marketingclaw-tooltip .content=${t("chat.splitView.splitDown")}>
                   <button
                     class="btn btn--ghost btn--icon"
                     type="button"
@@ -471,8 +471,8 @@ export class ChatPage extends OpenClawLightDomElement {
                   >
                     ${icons.panelBottomOpen}
                   </button>
-                </openclaw-tooltip>
-                <openclaw-tooltip .content=${t("chat.splitView.splitRight")}>
+                </marketingclaw-tooltip>
+                <marketingclaw-tooltip .content=${t("chat.splitView.splitRight")}>
                   <button
                     class="btn btn--ghost btn--icon"
                     type="button"
@@ -481,10 +481,10 @@ export class ChatPage extends OpenClawLightDomElement {
                   >
                     ${icons.panelRightOpen}
                   </button>
-                </openclaw-tooltip>
+                </marketingclaw-tooltip>
               `
             : nothing}
-          <openclaw-tooltip .content=${t("chat.splitView.closePane")}>
+          <marketingclaw-tooltip .content=${t("chat.splitView.closePane")}>
             <button
               class="btn btn--ghost btn--icon"
               type="button"
@@ -493,7 +493,7 @@ export class ChatPage extends OpenClawLightDomElement {
             >
               ${icons.x}
             </button>
-          </openclaw-tooltip>
+          </marketingclaw-tooltip>
         </div>
       </div>
     `;
@@ -618,18 +618,18 @@ export class ChatPage extends OpenClawLightDomElement {
         ${this.layout
           ? this.renderSplitLayout(this.layout)
           : html`
-              <openclaw-chat-pane
+              <marketingclaw-chat-pane
                 .paneId=${"single"}
                 .sessionKey=${this.data?.sessionKey ?? ""}
                 .active=${true}
                 .draft=${this.data?.draft}
                 .onFocusPane=${this.handleFocusPane}
                 .onPaneSessionChange=${this.handlePaneSessionChange}
-              ></openclaw-chat-pane>
+              ></marketingclaw-chat-pane>
             `}
         ${!this.layout && !this.narrow
           ? html`
-              <openclaw-tooltip .content=${t("chat.splitView.open")}>
+              <marketingclaw-tooltip .content=${t("chat.splitView.open")}>
                 <button
                   class="btn btn--sm btn--icon chat-open-split-view"
                   type="button"
@@ -638,7 +638,7 @@ export class ChatPage extends OpenClawLightDomElement {
                 >
                   ${icons.panelRightOpen}
                 </button>
-              </openclaw-tooltip>
+              </marketingclaw-tooltip>
             `
           : nothing}
         ${indicator
@@ -660,6 +660,6 @@ export class ChatPage extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-chat-page")) {
-  customElements.define("openclaw-chat-page", ChatPage);
+if (!customElements.get("marketingclaw-chat-page")) {
+  customElements.define("marketingclaw-chat-page", ChatPage);
 }

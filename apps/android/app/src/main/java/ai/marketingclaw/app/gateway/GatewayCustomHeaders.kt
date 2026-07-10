@@ -1,4 +1,4 @@
-package ai.openclaw.app.gateway
+package ai.marketingclaw.app.gateway
 
 /**
  * Operator-defined HTTP headers attached to gateway connections so gateways fronted by

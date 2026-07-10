@@ -1,8 +1,8 @@
 import AppKit
-import OpenClawChatUI
-import OpenClawDiscovery
-import OpenClawIPC
-import OpenClawKit
+import MarketingClawChatUI
+import MarketingClawDiscovery
+import MarketingClawIPC
+import MarketingClawKit
 import SwiftUI
 
 extension OnboardingView {
@@ -32,7 +32,7 @@ extension OnboardingView {
         self.onboardingPage {
             VStack(spacing: 18) {
                 VStack(spacing: 8) {
-                    Text("Welcome to OpenClaw")
+                    Text("Welcome to MarketingClaw")
                         .font(.largeTitle.weight(.semibold))
                     Text("Your personal AI assistant, living on your own Mac.")
                         .font(.title3)
@@ -65,7 +65,7 @@ extension OnboardingView {
 
                 Label {
                     Text(
-                        "OpenClaw can take actions using the permissions and services you enable. " +
+                        "MarketingClaw can take actions using the permissions and services you enable. " +
                             "Review prompts and only connect tools you trust.")
                 } icon: {
                     Image(systemName: "info.circle")
@@ -83,7 +83,7 @@ extension OnboardingView {
             Text("Where should your assistant live?")
                 .font(.largeTitle.weight(.semibold))
             Text(
-                "Most people pick this Mac — OpenClaw installs everything and keeps it " +
+                "Most people pick this Mac — MarketingClaw installs everything and keeps it " +
                     "running in the background. You can change this anytime in Settings.")
                 .font(.body)
                 .foregroundStyle(.secondary)
@@ -140,7 +140,7 @@ extension OnboardingView {
                 Spacer(minLength: 0)
             }
             if self.selectedConnectionMode == .unconfigured {
-                Text("OK — OpenClaw won’t start anything yet. Pick Local or Remote later in Settings → General.")
+                Text("OK — MarketingClaw won’t start anything yet. Pick Local or Remote later in Settings → General.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity)
@@ -301,7 +301,7 @@ extension OnboardingView {
                             Text("Project root")
                                 .font(.callout.weight(.semibold))
                                 .frame(width: labelWidth, alignment: .leading)
-                            TextField("/home/you/Projects/openclaw", text: self.$state.remoteProjectRoot)
+                            TextField("/home/you/Projects/marketingclaw", text: self.$state.remoteProjectRoot)
                                 .textFieldStyle(.roundedBorder)
                                 .frame(width: fieldWidth)
                         }
@@ -310,7 +310,7 @@ extension OnboardingView {
                                 .font(.callout.weight(.semibold))
                                 .frame(width: labelWidth, alignment: .leading)
                             TextField(
-                                "/Applications/OpenClaw.app/.../openclaw",
+                                "/Applications/MarketingClaw.app/.../marketingclaw",
                                 text: self.$state.remoteCliPath)
                                 .textFieldStyle(.roundedBorder)
                                 .frame(width: fieldWidth)
@@ -436,7 +436,7 @@ extension OnboardingView {
             if self.state.remoteTokenUnsupported {
                 Text(
                     "The current gateway.remote.token value is not plain text. "
-                        + "OpenClaw for macOS cannot use it directly; "
+                        + "MarketingClaw for macOS cannot use it directly; "
                         + "enter a plaintext token here to replace it.")
                     .font(.caption)
                     .foregroundStyle(.orange)
@@ -641,7 +641,7 @@ extension OnboardingView {
                 Spacer(minLength: 0)
                 SelectionStateIndicator(selected: selected)
             }
-            .openClawSelectableRowChrome(selected: selected)
+            .marketingClawSelectableRowChrome(selected: selected)
         }
         .buttonStyle(.plain)
     }
@@ -659,7 +659,7 @@ extension OnboardingView {
                 }
             }
             Text(
-                "These macOS permissions let OpenClaw automate apps and capture context on this Mac. " +
+                "These macOS permissions let MarketingClaw automate apps and capture context on this Mac. " +
                     "Status updates automatically.")
                 .font(.body)
                 .foregroundStyle(.secondary)
@@ -688,7 +688,7 @@ extension OnboardingView {
             Text("Getting things ready")
                 .font(.largeTitle.weight(.semibold))
             Text(
-                "OpenClaw is setting up its background service on this Mac. " +
+                "MarketingClaw is setting up its background service on this Mac. " +
                     "This usually takes under a minute — no Terminal, no administrator password.")
                 .font(.body)
                 .foregroundStyle(.secondary)
@@ -698,7 +698,7 @@ extension OnboardingView {
 
             self.onboardingCard(spacing: 14, padding: 16) {
                 self.installStepRow(
-                    title: "Install OpenClaw",
+                    title: "Install MarketingClaw",
                     detail: self.cliInstalled
                         ? (self.cliInstallLocation ?? "Installed")
                         : "A private copy inside your user folder.",
@@ -808,7 +808,7 @@ extension OnboardingView {
             Text("Agent workspace")
                 .font(.largeTitle.weight(.semibold))
             Text(
-                "OpenClaw runs the agent from a dedicated workspace so it can load `AGENTS.md` " +
+                "MarketingClaw runs the agent from a dedicated workspace so it can load `AGENTS.md` " +
                     "and write files there without mixing into your other projects.")
                 .font(.body)
                 .foregroundStyle(.secondary)
@@ -835,7 +835,7 @@ extension OnboardingView {
                         Text("Workspace folder")
                             .font(.headline)
                         TextField(
-                            AgentWorkspace.displayPath(for: OpenClawConfigFile.defaultWorkspaceURL()),
+                            AgentWorkspace.displayPath(for: MarketingClawConfigFile.defaultWorkspaceURL()),
                             text: self.$workspacePath)
                             .textFieldStyle(.roundedBorder)
 
@@ -865,7 +865,7 @@ extension OnboardingView {
                                     let saved = await self.saveAgentWorkspace(AgentWorkspace.displayPath(for: url))
                                     if saved {
                                         self.workspaceStatus =
-                                            "Saved to ~/.openclaw/openclaw.json (agents.defaults.workspace)"
+                                            "Saved to ~/.marketingclaw/marketingclaw.json (agents.defaults.workspace)"
                                     }
                                 }
                             }
@@ -907,7 +907,7 @@ extension OnboardingView {
                 .fixedSize(horizontal: false, vertical: true)
 
             self.onboardingGlassCard(padding: 8) {
-                OpenClawChatView(viewModel: self.onboardingChatModel, style: .onboarding)
+                MarketingClawChatView(viewModel: self.onboardingChatModel, style: .onboarding)
                     .frame(maxHeight: .infinity)
             }
             .frame(maxHeight: .infinity)
@@ -939,8 +939,8 @@ extension OnboardingView {
                     self.featureRow(
                         title: "Remote gateway checklist",
                         subtitle: """
-                        On your gateway host: install/update the `openclaw` package and make sure credentials exist
-                        (typically `~/.openclaw/credentials/oauth.json`). Then connect again if needed.
+                        On your gateway host: install/update the `marketingclaw` package and make sure credentials exist
+                        (typically `~/.marketingclaw/credentials/oauth.json`). Then connect again if needed.
                         """,
                         systemImage: "network")
                     Divider()
@@ -948,7 +948,7 @@ extension OnboardingView {
                 }
                 self.featureRow(
                     title: "Open the menu bar panel",
-                    subtitle: "Click the OpenClaw menu bar icon for quick chat and status.",
+                    subtitle: "Click the MarketingClaw menu bar icon for quick chat and status.",
                     systemImage: "bubble.left.and.bubble.right")
                 self.featureActionRow(
                     title: "Connect Discord, Slack, Telegram, WhatsApp, …",

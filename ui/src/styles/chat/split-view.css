@@ -1,4 +1,4 @@
-openclaw-chat-pane {
+marketingclaw-chat-pane {
   display: flex;
   flex-direction: column;
   flex: 1 1 0;
@@ -97,7 +97,7 @@ openclaw-chat-pane {
       opacity 0.12s ease;
   }
 
-  .chat-split-view openclaw-chat-pane {
+  .chat-split-view marketingclaw-chat-pane {
     animation: chat-pane-in 0.16s ease;
   }
 

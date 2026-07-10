@@ -1,4 +1,4 @@
-// OpenClaw agent database tests cover agent-scoped DB storage and migrations.
+// MarketingClaw agent database tests cover agent-scoped DB storage and migrations.
 import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
@@ -9,22 +9,22 @@ import { executeSqliteQueryTakeFirstSync, getNodeSqliteKysely } from "../infra/k
 import { requireNodeSqlite } from "../infra/node-sqlite.js";
 import { listOpenFileDescriptorsForPath } from "../infra/open-file-descriptors.test-support.js";
 import { readSqliteNumberPragma } from "../infra/sqlite-pragma.test-support.js";
-import type { DB as OpenClawAgentKyselyDatabase } from "./openclaw-agent-db.generated.js";
+import type { DB as MarketingClawAgentKyselyDatabase } from "./marketingclaw-agent-db.generated.js";
 import {
-  closeOpenClawAgentDatabasesForTest,
-  openOpenClawAgentDatabase,
-  resolveOpenClawAgentSqlitePath,
-} from "./openclaw-agent-db.js";
+  closeMarketingClawAgentDatabasesForTest,
+  openMarketingClawAgentDatabase,
+  resolveMarketingClawAgentSqlitePath,
+} from "./marketingclaw-agent-db.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-} from "./openclaw-state-db.js";
+  closeMarketingClawStateDatabaseForTest,
+  openMarketingClawStateDatabase,
+} from "./marketingclaw-state-db.js";
 import {
   collectSqliteSchemaShape,
   createSqliteSchemaShapeFromSql,
 } from "./sqlite-schema-shape.test-support.js";
 
-type AgentDbTestDatabase = Pick<OpenClawAgentKyselyDatabase, "schema_meta">;
+type AgentDbTestDatabase = Pick<MarketingClawAgentKyselyDatabase, "schema_meta">;
 
 type RegisteredAgentDatabaseRow = {
   agent_id: string;
@@ -36,11 +36,11 @@ type RegisteredAgentDatabaseRow = {
 const agentDbTempDirs: string[] = [];
 
 function createTempStateDir(): string {
-  return makeTempDir(agentDbTempDirs, "openclaw-agent-db-");
+  return makeTempDir(agentDbTempDirs, "marketingclaw-agent-db-");
 }
 
 function listRegisteredAgentDatabasesForTest(options: { env?: NodeJS.ProcessEnv } = {}) {
-  const rows = openOpenClawStateDatabase(options)
+  const rows = openMarketingClawStateDatabase(options)
     .db.prepare(
       "SELECT agent_id, path, schema_version, size_bytes FROM agent_databases ORDER BY agent_id, path",
     )
@@ -58,25 +58,25 @@ afterAll(() => {
 });
 
 afterEach(() => {
-  closeOpenClawAgentDatabasesForTest();
-  closeOpenClawStateDatabaseForTest();
+  closeMarketingClawAgentDatabasesForTest();
+  closeMarketingClawStateDatabaseForTest();
 });
 
-describe("openclaw agent database", () => {
+describe("marketingclaw agent database", () => {
   it("resolves under the per-agent state directory", () => {
     const stateDir = createTempStateDir();
 
     expect(
-      resolveOpenClawAgentSqlitePath({
+      resolveMarketingClawAgentSqlitePath({
         agentId: "Worker-1",
-        env: { OPENCLAW_STATE_DIR: stateDir },
+        env: { MARKETINGCLAW_STATE_DIR: stateDir },
       }),
-    ).toBe(path.join(stateDir, "agents", "worker-1", "agent", "openclaw-agent.sqlite"));
+    ).toBe(path.join(stateDir, "agents", "worker-1", "agent", "marketingclaw-agent.sqlite"));
   });
 
   it("keeps test default state under a worker-sharded temp directory", () => {
     expect(
-      resolveOpenClawAgentSqlitePath({
+      resolveMarketingClawAgentSqlitePath({
         agentId: "main",
         env: {
           VITEST: "true",
@@ -86,33 +86,33 @@ describe("openclaw agent database", () => {
     ).toBe(
       path.join(
         os.tmpdir(),
-        "openclaw-test-state",
+        "marketingclaw-test-state",
         `${process.pid}-7`,
         "agents",
         "main",
         "agent",
-        "openclaw-agent.sqlite",
+        "marketingclaw-agent.sqlite",
       ),
     );
   });
 
   it("creates the per-agent schema and registers it globally", () => {
     const stateDir = createTempStateDir();
-    const database = openOpenClawAgentDatabase({
+    const database = openMarketingClawAgentDatabase({
       agentId: "worker-1",
-      env: { OPENCLAW_STATE_DIR: stateDir },
+      env: { MARKETINGCLAW_STATE_DIR: stateDir },
     });
 
     expect(collectSqliteSchemaShape(database.db)).toEqual(
-      createSqliteSchemaShapeFromSql(new URL("./openclaw-agent-schema.sql", import.meta.url)),
+      createSqliteSchemaShapeFromSql(new URL("./marketingclaw-agent-schema.sql", import.meta.url)),
     );
     expect(database.agentId).toBe("worker-1");
     expect(database.path).toBe(
-      path.join(stateDir, "agents", "worker-1", "agent", "openclaw-agent.sqlite"),
+      path.join(stateDir, "agents", "worker-1", "agent", "marketingclaw-agent.sqlite"),
     );
 
     const registered = listRegisteredAgentDatabasesForTest({
-      env: { OPENCLAW_STATE_DIR: stateDir },
+      env: { MARKETINGCLAW_STATE_DIR: stateDir },
     }).find((entry) => entry.agentId === "worker-1");
 
     expect(registered).toMatchObject({
@@ -129,9 +129,9 @@ describe("openclaw agent database", () => {
     fs.writeFileSync(databasePath, "not a sqlite database");
 
     expect(() =>
-      openOpenClawAgentDatabase({
+      openMarketingClawAgentDatabase({
         agentId: "worker-1",
-        env: { OPENCLAW_STATE_DIR: stateDir },
+        env: { MARKETINGCLAW_STATE_DIR: stateDir },
         path: databasePath,
       }),
     ).toThrow("file is not a database");
@@ -140,14 +140,14 @@ describe("openclaw agent database", () => {
 
   it("keeps multiple registered paths for the same agent", () => {
     const stateDir = createTempStateDir();
-    const env = { OPENCLAW_STATE_DIR: stateDir };
+    const env = { MARKETINGCLAW_STATE_DIR: stateDir };
     const relocatedPath = path.join(stateDir, "relocated", "worker-1.sqlite");
-    const relocated = openOpenClawAgentDatabase({
+    const relocated = openMarketingClawAgentDatabase({
       agentId: "worker-1",
       env,
       path: relocatedPath,
     });
-    const defaultDatabase = openOpenClawAgentDatabase({
+    const defaultDatabase = openMarketingClawAgentDatabase({
       agentId: "worker-1",
       env,
     });
@@ -161,8 +161,8 @@ describe("openclaw agent database", () => {
 
   it("rejects the legacy agent registry primary key with a doctor repair hint", () => {
     const stateDir = createTempStateDir();
-    const env = { OPENCLAW_STATE_DIR: stateDir };
-    const stateDatabasePath = path.join(stateDir, "state", "openclaw.sqlite");
+    const env = { MARKETINGCLAW_STATE_DIR: stateDir };
+    const stateDatabasePath = path.join(stateDir, "state", "marketingclaw.sqlite");
     fs.mkdirSync(path.dirname(stateDatabasePath), { recursive: true });
     const { DatabaseSync } = requireNodeSqlite();
     const legacyDb = new DatabaseSync(stateDatabasePath);
@@ -182,7 +182,7 @@ describe("openclaw agent database", () => {
         size_bytes
       ) VALUES (
         'worker-1',
-        '/legacy/worker-1/openclaw-agent.sqlite',
+        '/legacy/worker-1/marketingclaw-agent.sqlite',
         1,
         10,
         20
@@ -191,16 +191,16 @@ describe("openclaw agent database", () => {
     legacyDb.close();
 
     expect(() =>
-      openOpenClawAgentDatabase({
+      openMarketingClawAgentDatabase({
         agentId: "worker-1",
         env,
       }),
-    ).toThrow(/run openclaw doctor --fix/);
+    ).toThrow(/run marketingclaw doctor --fix/);
   });
 
   it("keys explicit relative paths by resolved database pathname", () => {
-    const agentModuleUrl = new URL("./openclaw-agent-db.ts", import.meta.url).href;
-    const stateModuleUrl = new URL("./openclaw-state-db.ts", import.meta.url).href;
+    const agentModuleUrl = new URL("./marketingclaw-agent-db.ts", import.meta.url).href;
+    const stateModuleUrl = new URL("./marketingclaw-state-db.ts", import.meta.url).href;
     const output = execFileSync(
       process.execPath,
       [
@@ -213,17 +213,17 @@ describe("openclaw agent database", () => {
           import os from "node:os";
           import path from "node:path";
           import {
-            closeOpenClawAgentDatabasesForTest,
-            openOpenClawAgentDatabase,
+            closeMarketingClawAgentDatabasesForTest,
+            openMarketingClawAgentDatabase,
           } from ${JSON.stringify(agentModuleUrl)};
           import {
-            closeOpenClawStateDatabaseForTest,
-            openOpenClawStateDatabase,
+            closeMarketingClawStateDatabaseForTest,
+            openMarketingClawStateDatabase,
           } from ${JSON.stringify(stateModuleUrl)};
 
-          const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-agent-db-state-"));
-          const env = { OPENCLAW_STATE_DIR: stateDir };
-          const root = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-agent-db-relative-"));
+          const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-agent-db-state-"));
+          const env = { MARKETINGCLAW_STATE_DIR: stateDir };
+          const root = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-agent-db-relative-"));
           const firstDir = path.join(root, "first");
           const secondDir = path.join(root, "second");
           fs.mkdirSync(firstDir);
@@ -231,14 +231,14 @@ describe("openclaw agent database", () => {
           const previousCwd = process.cwd();
           try {
             process.chdir(firstDir);
-            const first = openOpenClawAgentDatabase({
+            const first = openMarketingClawAgentDatabase({
               agentId: "worker-1",
               env,
               path: "agent.sqlite",
             });
 
             process.chdir(secondDir);
-            const second = openOpenClawAgentDatabase({
+            const second = openMarketingClawAgentDatabase({
               agentId: "worker-1",
               env,
               path: "agent.sqlite",
@@ -248,7 +248,7 @@ describe("openclaw agent database", () => {
               sameHandle: first === second,
               firstFileExists: fs.existsSync(path.join(firstDir, "agent.sqlite")),
               secondFileExists: fs.existsSync(path.join(secondDir, "agent.sqlite")),
-              registeredPaths: openOpenClawStateDatabase({ env }).db
+              registeredPaths: openMarketingClawStateDatabase({ env }).db
                 .prepare("SELECT path FROM agent_databases WHERE agent_id = ? ORDER BY path")
                 .all("worker-1")
                 .map((entry) => entry.path),
@@ -256,8 +256,8 @@ describe("openclaw agent database", () => {
             }));
           } finally {
             process.chdir(previousCwd);
-            closeOpenClawAgentDatabasesForTest();
-            closeOpenClawStateDatabaseForTest();
+            closeMarketingClawAgentDatabasesForTest();
+            closeMarketingClawStateDatabaseForTest();
           }
         `,
       ],
@@ -279,26 +279,26 @@ describe("openclaw agent database", () => {
 
   it("rejects sharing one explicit database path across agent ids", () => {
     const stateDir = createTempStateDir();
-    const env = { OPENCLAW_STATE_DIR: stateDir };
+    const env = { MARKETINGCLAW_STATE_DIR: stateDir };
     const databasePath = path.join(stateDir, "relocated", "shared.sqlite");
 
-    openOpenClawAgentDatabase({
+    openMarketingClawAgentDatabase({
       agentId: "worker-1",
       env,
       path: databasePath,
     });
 
     expect(() =>
-      openOpenClawAgentDatabase({
+      openMarketingClawAgentDatabase({
         agentId: "worker-2",
         env,
         path: databasePath,
       }),
     ).toThrow(/already open for agent worker-1/);
 
-    closeOpenClawAgentDatabasesForTest();
+    closeMarketingClawAgentDatabasesForTest();
     expect(() =>
-      openOpenClawAgentDatabase({
+      openMarketingClawAgentDatabase({
         agentId: "worker-2",
         env,
         path: databasePath,
@@ -308,23 +308,23 @@ describe("openclaw agent database", () => {
 
   it("rejects explicit paths that point at the global state database", () => {
     const stateDir = createTempStateDir();
-    const env = { OPENCLAW_STATE_DIR: stateDir };
-    const databasePath = path.join(stateDir, "state", "openclaw.sqlite");
-    const stateDatabase = openOpenClawStateDatabase({
+    const env = { MARKETINGCLAW_STATE_DIR: stateDir };
+    const databasePath = path.join(stateDir, "state", "marketingclaw.sqlite");
+    const stateDatabase = openMarketingClawStateDatabase({
       env,
       path: databasePath,
     });
-    closeOpenClawStateDatabaseForTest();
+    closeMarketingClawStateDatabaseForTest();
 
     expect(() =>
-      openOpenClawAgentDatabase({
+      openMarketingClawAgentDatabase({
         agentId: "worker-1",
         env,
         path: stateDatabase.path,
       }),
     ).toThrow(/schema role global/);
 
-    const reopenedStateDatabase = openOpenClawStateDatabase({
+    const reopenedStateDatabase = openMarketingClawStateDatabase({
       env,
       path: databasePath,
     });
@@ -336,11 +336,11 @@ describe("openclaw agent database", () => {
 
   it("does not chmod shared parent directories for explicit database paths", () => {
     const parentDir = createTempStateDir();
-    const env = { OPENCLAW_STATE_DIR: parentDir };
+    const env = { MARKETINGCLAW_STATE_DIR: parentDir };
     fs.chmodSync(parentDir, 0o755);
     const databasePath = path.join(parentDir, "worker-1.sqlite");
 
-    openOpenClawAgentDatabase({
+    openMarketingClawAgentDatabase({
       agentId: "worker-1",
       env,
       path: databasePath,
@@ -351,9 +351,9 @@ describe("openclaw agent database", () => {
 
   it("configures durable SQLite connection pragmas", () => {
     const stateDir = createTempStateDir();
-    const database = openOpenClawAgentDatabase({
+    const database = openMarketingClawAgentDatabase({
       agentId: "worker-1",
-      env: { OPENCLAW_STATE_DIR: stateDir },
+      env: { MARKETINGCLAW_STATE_DIR: stateDir },
     });
 
     expect(readSqliteNumberPragma(database.db, "busy_timeout")).toBe(30_000);
@@ -369,9 +369,9 @@ describe("openclaw agent database", () => {
 
   it("records durable per-agent schema metadata", () => {
     const stateDir = createTempStateDir();
-    const database = openOpenClawAgentDatabase({
+    const database = openMarketingClawAgentDatabase({
       agentId: "worker-1",
-      env: { OPENCLAW_STATE_DIR: stateDir },
+      env: { MARKETINGCLAW_STATE_DIR: stateDir },
     });
     const agentDb = getNodeSqliteKysely<AgentDbTestDatabase>(database.db);
 
@@ -394,7 +394,7 @@ describe("openclaw agent database", () => {
       "agents",
       "worker-1",
       "agent",
-      "openclaw-agent.sqlite",
+      "marketingclaw-agent.sqlite",
     );
     fs.mkdirSync(path.dirname(databasePath), { recursive: true });
     const { DatabaseSync } = requireNodeSqlite();
@@ -403,16 +403,16 @@ describe("openclaw agent database", () => {
     db.close();
 
     expect(() =>
-      openOpenClawAgentDatabase({
+      openMarketingClawAgentDatabase({
         agentId: "worker-1",
-        env: { OPENCLAW_STATE_DIR: stateDir },
+        env: { MARKETINGCLAW_STATE_DIR: stateDir },
       }),
     ).toThrow(/newer schema version 2/);
   });
 
   it("closes cached handles on normal process exit so no stale WAL remains", () => {
     const stateDir = createTempStateDir();
-    const agentModuleUrl = new URL("./openclaw-agent-db.ts", import.meta.url).href;
+    const agentModuleUrl = new URL("./marketingclaw-agent-db.ts", import.meta.url).href;
     const output = execFileSync(
       process.execPath,
       [
@@ -422,11 +422,11 @@ describe("openclaw agent database", () => {
         "-e",
         `
           import fs from "node:fs";
-          import { openOpenClawAgentDatabase } from ${JSON.stringify(agentModuleUrl)};
+          import { openMarketingClawAgentDatabase } from ${JSON.stringify(agentModuleUrl)};
 
-          const database = openOpenClawAgentDatabase({
+          const database = openMarketingClawAgentDatabase({
             agentId: "worker-1",
-            env: { OPENCLAW_STATE_DIR: process.env.OPENCLAW_AGENT_DB_EXIT_TEST_DIR },
+            env: { MARKETINGCLAW_STATE_DIR: process.env.MARKETINGCLAW_AGENT_DB_EXIT_TEST_DIR },
           });
           const walPath = database.path + "-wal";
           console.log(JSON.stringify({
@@ -437,7 +437,7 @@ describe("openclaw agent database", () => {
       ],
       {
         encoding: "utf8",
-        env: { ...process.env, OPENCLAW_AGENT_DB_EXIT_TEST_DIR: stateDir },
+        env: { ...process.env, MARKETINGCLAW_AGENT_DB_EXIT_TEST_DIR: stateDir },
       },
     );
     const result = JSON.parse(output) as {

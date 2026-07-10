@@ -153,7 +153,7 @@ describe("renderAgents", () => {
 
     try {
       render(renderAgents(createProps()), container);
-      const select = container.querySelector("openclaw-agent-select") as
+      const select = container.querySelector("marketingclaw-agent-select") as
         | (HTMLElement & {
             agents: Array<{ id: string }>;
             updateComplete: Promise<boolean>;

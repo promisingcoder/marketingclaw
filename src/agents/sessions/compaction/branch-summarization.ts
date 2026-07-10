@@ -7,7 +7,7 @@ import type { Model } from "../../../llm/types.js";
 import {
   collectEntriesForBranchSummaryFromBranches,
   generateBranchSummary as generateBranchSummaryCore,
-  openClawAgentCoreRuntime,
+  marketingClawAgentCoreRuntime,
   prepareBranchEntries,
   type BranchPreparation,
   type BranchSummaryDetails,
@@ -62,7 +62,7 @@ export async function generateBranchSummary(
   options: GenerateBranchSummaryOptions,
 ): Promise<BranchSummaryResult> {
   const result = await generateBranchSummaryCore(entries, {
-    runtime: openClawAgentCoreRuntime,
+    runtime: marketingClawAgentCoreRuntime,
     ...options,
   });
   if (result.ok) {

@@ -1,7 +1,7 @@
-package ai.openclaw.app.voice
+package ai.marketingclaw.app.voice
 
-import ai.openclaw.app.gateway.GatewayConnectErrorDetails
-import ai.openclaw.app.gateway.GatewaySession
+import ai.marketingclaw.app.gateway.GatewayConnectErrorDetails
+import ai.marketingclaw.app.gateway.GatewaySession
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue

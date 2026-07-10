@@ -1,9 +1,9 @@
 // Googlechat plugin module implements group policy behavior.
-import { resolveChannelGroupRequireMention } from "openclaw/plugin-sdk/channel-policy";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/core";
+import { resolveChannelGroupRequireMention } from "marketingclaw/plugin-sdk/channel-policy";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/core";
 
 type GoogleChatGroupContext = {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   accountId?: string | null;
   groupId?: string | null;
 };

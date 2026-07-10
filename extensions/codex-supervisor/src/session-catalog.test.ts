@@ -1,6 +1,6 @@
-import type { GatewayRequestHandlerOptions } from "openclaw/plugin-sdk/gateway-runtime";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
-import type { PluginRuntime } from "openclaw/plugin-sdk/plugin-runtime";
+import type { GatewayRequestHandlerOptions } from "marketingclaw/plugin-sdk/gateway-runtime";
+import type { MarketingClawPluginApi } from "marketingclaw/plugin-sdk/plugin-entry";
+import type { PluginRuntime } from "marketingclaw/plugin-sdk/plugin-runtime";
 import { describe, expect, it, vi } from "vitest";
 import {
   CODEX_APP_SERVER_THREADS_LIST_COMMAND,
@@ -544,7 +544,7 @@ describe("Codex session catalog Gateway registration", () => {
       runtime,
       session: { controls: { registerControlUiDescriptor } },
       registerGatewayMethod,
-    } as unknown as OpenClawPluginApi;
+    } as unknown as MarketingClawPluginApi;
     const supervisor = new CodexSupervisor([localEndpoint]);
 
     registerCodexSessionCatalogGateway({ api, supervisor });
@@ -621,7 +621,7 @@ describe("Codex session catalog Gateway registration", () => {
       runtime: createRuntime({ nodes: [] }),
       session: { controls: { registerControlUiDescriptor: vi.fn() } },
       registerGatewayMethod,
-    } as unknown as OpenClawPluginApi;
+    } as unknown as MarketingClawPluginApi;
     registerCodexSessionCatalogGateway({ api, supervisor: new CodexSupervisor([localEndpoint]) });
     const handler = registerGatewayMethod.mock.calls[0]?.[1] as (
       params: GatewayRequestHandlerOptions,

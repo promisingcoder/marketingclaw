@@ -1,6 +1,6 @@
-import { buildExecApprovalPendingReplyPayload } from "openclaw/plugin-sdk/approval-reply-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
+import { buildExecApprovalPendingReplyPayload } from "marketingclaw/plugin-sdk/approval-reply-runtime";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import type { ReplyPayload } from "marketingclaw/plugin-sdk/reply-runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   clearSignalApprovalReactionTargetsForTest,
@@ -37,12 +37,12 @@ const cfg = {
       targets: [{ channel: "signal", to: approver }],
     },
   },
-} as OpenClawConfig;
+} as MarketingClawConfig;
 
 async function deliverReplyPayload(
   payload: ReplyPayload,
   options: {
-    config?: OpenClawConfig;
+    config?: MarketingClawConfig;
     account?: string;
     accountUuid?: string;
     accountId?: string;
@@ -131,7 +131,7 @@ describe("Signal monitor approval reply delivery", () => {
         },
       },
       approvals: cfg.approvals,
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     await deliverReplyPayload(payload, {
       config: uuidOnlyConfig,

@@ -2,17 +2,17 @@
 import {
   DEFAULT_TIMING,
   type StatusReactionController,
-} from "openclaw/plugin-sdk/channel-feedback";
+} from "marketingclaw/plugin-sdk/channel-feedback";
 import {
   buildChannelInboundEventContext,
   type CommandTurnContext,
   toInboundMediaFacts,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { hasVisibleInboundReplyDispatch } from "openclaw/plugin-sdk/channel-inbound";
-import { deliverInboundReplyWithMessageSendContext } from "openclaw/plugin-sdk/channel-outbound";
-import { buildInboundHistoryFromEntries } from "openclaw/plugin-sdk/reply-history";
-import type { FinalizedMsgContext } from "openclaw/plugin-sdk/reply-runtime";
-import { normalizeStringEntries } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "marketingclaw/plugin-sdk/channel-inbound";
+import { hasVisibleInboundReplyDispatch } from "marketingclaw/plugin-sdk/channel-inbound";
+import { deliverInboundReplyWithMessageSendContext } from "marketingclaw/plugin-sdk/channel-outbound";
+import { buildInboundHistoryFromEntries } from "marketingclaw/plugin-sdk/reply-history";
+import type { FinalizedMsgContext } from "marketingclaw/plugin-sdk/reply-runtime";
+import { normalizeStringEntries } from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import { requireWhatsAppInboundAdmission } from "../../inbound/admission.js";
 import type { AdmittedWebInboundMessage } from "../../inbound/types.js";
 import {

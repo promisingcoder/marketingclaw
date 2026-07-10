@@ -112,13 +112,13 @@ describe("resolveSearchItems", () => {
     const result = firecrawlClient.resolveSearchItems({
       data: [
         { url: "https://example.com", title: "Example" },
-        { url: "https://openclaw.ai", title: "OpenClaw" },
+        { url: "https://marketingclaw.ai", title: "MarketingClaw" },
       ],
     });
 
     expect(result).toHaveLength(2);
     expect(result[0]).toMatchObject({ url: "https://example.com", title: "Example" });
-    expect(result[1]).toMatchObject({ url: "https://openclaw.ai", title: "OpenClaw" });
+    expect(result[1]).toMatchObject({ url: "https://marketingclaw.ai", title: "MarketingClaw" });
   });
 
   it("extracts items from a results array", () => {

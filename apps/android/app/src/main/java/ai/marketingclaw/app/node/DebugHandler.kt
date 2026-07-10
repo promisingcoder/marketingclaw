@@ -1,8 +1,8 @@
-package ai.openclaw.app.node
+package ai.marketingclaw.app.node
 
-import ai.openclaw.app.BuildConfig
-import ai.openclaw.app.gateway.DeviceIdentityStore
-import ai.openclaw.app.gateway.GatewaySession
+import ai.marketingclaw.app.BuildConfig
+import ai.marketingclaw.app.gateway.DeviceIdentityStore
+import ai.marketingclaw.app.gateway.GatewaySession
 import android.content.Context
 import kotlinx.serialization.json.JsonPrimitive
 

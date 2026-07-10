@@ -18,144 +18,144 @@ Coverage score math uses distinct primary-fulfilled coverage IDs over distinct r
 
 ## Current Coverage By Profile
 
-| Profile | Categories | Coverage IDs | Primary linked | Any linked | Candidate links | No direct e2e candidate | Primary % | Any-linked % |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| smoke-ci | 34 | 290 | 94 | 149 | 3 | 138 | 32.4% | 51.4% |
-| release | 167 | 1101 | 105 | 170 | 20 | 911 | 9.5% | 15.4% |
-| all | 281 | 1665 | 105 | 171 | 31 | 1463 | 6.3% | 10.3% |
+| Profile  | Categories | Coverage IDs | Primary linked | Any linked | Candidate links | No direct e2e candidate | Primary % | Any-linked % |
+| -------- | ---------- | ------------ | -------------- | ---------- | --------------- | ----------------------- | --------- | ------------ |
+| smoke-ci | 34         | 290          | 94             | 149        | 3               | 138                     | 32.4%     | 51.4%        |
+| release  | 167        | 1101         | 105            | 170        | 20              | 911                     | 9.5%      | 15.4%        |
+| all      | 281        | 1665         | 105            | 171        | 31              | 1463                    | 6.3%      | 10.3%        |
 
 ## Current Coverage By Surface
 
-| Surface | Coverage IDs | Primary linked | Any linked | Candidate links | No direct e2e candidate | Primary % | Any-linked % | After candidate % |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| agent-runtime-and-provider-execution<br>Agent Runtime | 94 | 43 | 76 | 0 | 18 | 45.7% | 80.9% | 80.9% |
-| android-app<br>Android app | 10 | 0 | 0 | 0 | 10 | 0% | 0% | 0% |
-| anthropic-provider-path<br>Anthropic provider path | 40 | 3 | 5 | 1 | 34 | 7.5% | 12.5% | 15% |
-| automation-cron-hooks-tasks-polling<br>Automation: cron, hooks, tasks, polling | 68 | 5 | 9 | 2 | 57 | 7.4% | 13.2% | 16.2% |
-| browser-automation-and-exec-sandbox-tools<br>Browser automation, exec, and sandbox tools | 22 | 5 | 6 | 0 | 16 | 22.7% | 27.3% | 27.3% |
-| browser-control-ui-and-webchat<br>Gateway Web App | 56 | 5 | 10 | 2 | 44 | 8.9% | 17.9% | 21.4% |
-| channel-framework<br>Channel framework | 65 | 25 | 36 | 1 | 28 | 38.5% | 55.4% | 56.9% |
-| clawhub-and-external-plugin-distribution<br>ClawHub | 50 | 0 | 0 | 3 | 47 | 0% | 0% | 6% |
-| cli-install-update-onboard-doctor<br>CLI | 43 | 1 | 7 | 1 | 35 | 2.3% | 16.3% | 18.6% |
-| discord<br>Discord | 39 | 0 | 0 | 0 | 39 | 0% | 0% | 0% |
-| docker-podman-hosting<br>Docker and Podman hosting | 27 | 2 | 4 | 7 | 16 | 7.4% | 14.8% | 40.7% |
-| feishu-qq-bot-wechat-yuanbao-zalo-zalo-personal-regional-channels<br>Feishu, QQ Bot, WeChat, Yuanbao, Zalo, Zalo Personal, regional channels | 9 | 0 | 0 | 0 | 9 | 0% | 0% | 0% |
-| gateway-runtime<br>Gateway runtime | 105 | 8 | 15 | 0 | 90 | 7.6% | 14.3% | 14.3% |
-| google-chat<br>Google Chat | 45 | 0 | 0 | 0 | 45 | 0% | 0% | 0% |
-| google-provider-path<br>Google provider path | 44 | 0 | 0 | 0 | 44 | 0% | 0% | 0% |
-| image-video-music-generation-tools<br>Image, video, and music generation tools | 42 | 0 | 0 | 0 | 42 | 0% | 0% | 0% |
-| imessage-bluebubbles<br>iMessage and BlueBubbles | 31 | 0 | 0 | 0 | 31 | 0% | 0% | 0% |
-| ios-app<br>iOS app | 15 | 0 | 0 | 0 | 15 | 0% | 0% | 0% |
-| kubernetes-hosting<br>Kubernetes hosting | 20 | 0 | 0 | 0 | 20 | 0% | 0% | 0% |
-| linux-companion-app<br>Linux companion app | 26 | 0 | 0 | 0 | 26 | 0% | 0% | 0% |
-| linux-gateway-host<br>Linux Gateway host | 23 | 0 | 0 | 0 | 23 | 0% | 0% | 0% |
-| local-model-providers-ollama-vllm-sglang-lm-studio<br>Local model providers: Ollama, vLLM, SGLang, LM Studio | 37 | 0 | 0 | 1 | 36 | 0% | 0% | 2.7% |
-| long-tail-hosted-providers<br>Long-tail hosted providers | 32 | 0 | 0 | 2 | 30 | 0% | 0% | 6.3% |
-| macos-companion-app<br>macOS companion app | 35 | 0 | 0 | 0 | 35 | 0% | 0% | 0% |
-| macos-gateway-host<br>macOS Gateway host | 41 | 0 | 0 | 0 | 41 | 0% | 0% | 0% |
-| matrix<br>Matrix | 23 | 0 | 0 | 0 | 23 | 0% | 0% | 0% |
-| mattermost-line-irc-nextcloud-talk-nostr-twitch-tlon-synology-chat<br>Mattermost, LINE, IRC, Nextcloud Talk, Nostr, Twitch, Tlon, Synology Chat | 4 | 0 | 0 | 0 | 4 | 0% | 0% | 0% |
-| media-understanding-and-media-generation<br>Media understanding and media generation | 48 | 6 | 8 | 2 | 38 | 12.5% | 16.7% | 20.8% |
-| microsoft-teams<br>Microsoft Teams | 33 | 0 | 0 | 0 | 33 | 0% | 0% | 0% |
-| native-windows-cli-and-gateway<br>Native Windows | 28 | 0 | 0 | 0 | 28 | 0% | 0% | 0% |
-| native-windows-companion-app<br>Native Windows companion app | 24 | 0 | 0 | 1 | 23 | 0% | 0% | 4.2% |
-| nix-install-path<br>Nix install path | 30 | 0 | 0 | 0 | 30 | 0% | 0% | 0% |
-| openai-codex-provider-path<br>OpenAI and Codex provider path | 26 | 10 | 17 | 0 | 9 | 38.5% | 65.4% | 65.4% |
-| openclaw-app-sdk<br>OpenClaw App SDK | 31 | 1 | 2 | 0 | 29 | 3.2% | 6.5% | 6.5% |
-| openrouter-provider-path<br>OpenRouter provider path | 41 | 0 | 0 | 0 | 41 | 0% | 0% | 0% |
-| plugin-sdk-and-bundled-plugin-architecture<br>Plugins | 69 | 11 | 25 | 1 | 43 | 15.9% | 36.2% | 37.7% |
-| raspberry-pi-small-linux-devices<br>Raspberry Pi and small Linux devices | 36 | 0 | 0 | 1 | 35 | 0% | 0% | 2.8% |
-| security-auth-pairing-and-secrets<br>Security, auth, pairing, and secrets | 41 | 8 | 12 | 0 | 29 | 19.5% | 29.3% | 29.3% |
-| session-memory-and-context-engine<br>Session, memory, and context engine | 57 | 32 | 48 | 0 | 9 | 56.1% | 84.2% | 84.2% |
-| signal<br>Signal | 24 | 0 | 0 | 0 | 24 | 0% | 0% | 0% |
-| slack<br>Slack | 25 | 0 | 0 | 0 | 25 | 0% | 0% | 0% |
-| telegram<br>Telegram | 31 | 1 | 1 | 1 | 29 | 3.2% | 3.2% | 6.5% |
-| telemetry-diagnostics-and-observability<br>Observability | 58 | 15 | 24 | 0 | 34 | 25.9% | 41.4% | 41.4% |
-| tui-and-terminal-ux<br>TUI | 33 | 0 | 0 | 0 | 33 | 0% | 0% | 0% |
-| voice-and-realtime-talk<br>Voice and realtime talk | 36 | 0 | 0 | 1 | 35 | 0% | 0% | 2.8% |
-| voice-call-channel<br>Voice Call channel | 8 | 0 | 0 | 1 | 7 | 0% | 0% | 12.5% |
-| watchos-companion-surfaces<br>watchOS companion surfaces | 26 | 0 | 0 | 2 | 24 | 0% | 0% | 7.7% |
-| web-search-tools<br>Web search tools | 44 | 5 | 7 | 0 | 37 | 11.4% | 15.9% | 15.9% |
-| whatsapp<br>WhatsApp | 20 | 0 | 0 | 0 | 20 | 0% | 0% | 0% |
-| windows-via-wsl2<br>Windows via WSL2 | 49 | 3 | 3 | 1 | 45 | 6.1% | 6.1% | 8.2% |
+| Surface                                                                                                                                         | Coverage IDs | Primary linked | Any linked | Candidate links | No direct e2e candidate | Primary % | Any-linked % | After candidate % |
+| ----------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | -------------- | ---------- | --------------- | ----------------------- | --------- | ------------ | ----------------- |
+| agent-runtime-and-provider-execution<br>Agent Runtime                                                                                           | 94           | 43             | 76         | 0               | 18                      | 45.7%     | 80.9%        | 80.9%             |
+| android-app<br>Android app                                                                                                                      | 10           | 0              | 0          | 0               | 10                      | 0%        | 0%           | 0%                |
+| anthropic-provider-path<br>Anthropic provider path                                                                                              | 40           | 3              | 5          | 1               | 34                      | 7.5%      | 12.5%        | 15%               |
+| automation-cron-hooks-tasks-polling<br>Automation: cron, hooks, tasks, polling                                                                  | 68           | 5              | 9          | 2               | 57                      | 7.4%      | 13.2%        | 16.2%             |
+| browser-automation-and-exec-sandbox-tools<br>Browser automation, exec, and sandbox tools                                                        | 22           | 5              | 6          | 0               | 16                      | 22.7%     | 27.3%        | 27.3%             |
+| browser-control-ui-and-webchat<br>Gateway Web App                                                                                               | 56           | 5              | 10         | 2               | 44                      | 8.9%      | 17.9%        | 21.4%             |
+| channel-framework<br>Channel framework                                                                                                          | 65           | 25             | 36         | 1               | 28                      | 38.5%     | 55.4%        | 56.9%             |
+| clawhub-and-external-plugin-distribution<br>ClawHub                                                                                             | 50           | 0              | 0          | 3               | 47                      | 0%        | 0%           | 6%                |
+| cli-install-update-onboard-doctor<br>CLI                                                                                                        | 43           | 1              | 7          | 1               | 35                      | 2.3%      | 16.3%        | 18.6%             |
+| discord<br>Discord                                                                                                                              | 39           | 0              | 0          | 0               | 39                      | 0%        | 0%           | 0%                |
+| docker-podman-hosting<br>Docker and Podman hosting                                                                                              | 27           | 2              | 4          | 7               | 16                      | 7.4%      | 14.8%        | 40.7%             |
+| feishu-qq-bot-wechat-yuanbao-zalo-zalo-personal-regional-channels<br>Feishu, QQ Bot, WeChat, Yuanbao, Zalo, Zalo Personal, regional channels    | 9            | 0              | 0          | 0               | 9                       | 0%        | 0%           | 0%                |
+| gateway-runtime<br>Gateway runtime                                                                                                              | 105          | 8              | 15         | 0               | 90                      | 7.6%      | 14.3%        | 14.3%             |
+| google-chat<br>Google Chat                                                                                                                      | 45           | 0              | 0          | 0               | 45                      | 0%        | 0%           | 0%                |
+| google-provider-path<br>Google provider path                                                                                                    | 44           | 0              | 0          | 0               | 44                      | 0%        | 0%           | 0%                |
+| image-video-music-generation-tools<br>Image, video, and music generation tools                                                                  | 42           | 0              | 0          | 0               | 42                      | 0%        | 0%           | 0%                |
+| imessage-bluebubbles<br>iMessage and BlueBubbles                                                                                                | 31           | 0              | 0          | 0               | 31                      | 0%        | 0%           | 0%                |
+| ios-app<br>iOS app                                                                                                                              | 15           | 0              | 0          | 0               | 15                      | 0%        | 0%           | 0%                |
+| kubernetes-hosting<br>Kubernetes hosting                                                                                                        | 20           | 0              | 0          | 0               | 20                      | 0%        | 0%           | 0%                |
+| linux-companion-app<br>Linux companion app                                                                                                      | 26           | 0              | 0          | 0               | 26                      | 0%        | 0%           | 0%                |
+| linux-gateway-host<br>Linux Gateway host                                                                                                        | 23           | 0              | 0          | 0               | 23                      | 0%        | 0%           | 0%                |
+| local-model-providers-ollama-vllm-sglang-lm-studio<br>Local model providers: Ollama, vLLM, SGLang, LM Studio                                    | 37           | 0              | 0          | 1               | 36                      | 0%        | 0%           | 2.7%              |
+| long-tail-hosted-providers<br>Long-tail hosted providers                                                                                        | 32           | 0              | 0          | 2               | 30                      | 0%        | 0%           | 6.3%              |
+| macos-companion-app<br>macOS companion app                                                                                                      | 35           | 0              | 0          | 0               | 35                      | 0%        | 0%           | 0%                |
+| macos-gateway-host<br>macOS Gateway host                                                                                                        | 41           | 0              | 0          | 0               | 41                      | 0%        | 0%           | 0%                |
+| matrix<br>Matrix                                                                                                                                | 23           | 0              | 0          | 0               | 23                      | 0%        | 0%           | 0%                |
+| mattermost-line-irc-nextcloud-talk-nostr-twitch-tlon-synology-chat<br>Mattermost, LINE, IRC, Nextcloud Talk, Nostr, Twitch, Tlon, Synology Chat | 4            | 0              | 0          | 0               | 4                       | 0%        | 0%           | 0%                |
+| media-understanding-and-media-generation<br>Media understanding and media generation                                                            | 48           | 6              | 8          | 2               | 38                      | 12.5%     | 16.7%        | 20.8%             |
+| microsoft-teams<br>Microsoft Teams                                                                                                              | 33           | 0              | 0          | 0               | 33                      | 0%        | 0%           | 0%                |
+| native-windows-cli-and-gateway<br>Native Windows                                                                                                | 28           | 0              | 0          | 0               | 28                      | 0%        | 0%           | 0%                |
+| native-windows-companion-app<br>Native Windows companion app                                                                                    | 24           | 0              | 0          | 1               | 23                      | 0%        | 0%           | 4.2%              |
+| nix-install-path<br>Nix install path                                                                                                            | 30           | 0              | 0          | 0               | 30                      | 0%        | 0%           | 0%                |
+| openai-codex-provider-path<br>OpenAI and Codex provider path                                                                                    | 26           | 10             | 17         | 0               | 9                       | 38.5%     | 65.4%        | 65.4%             |
+| marketingclaw-app-sdk<br>MarketingClaw App SDK                                                                                                  | 31           | 1              | 2          | 0               | 29                      | 3.2%      | 6.5%         | 6.5%              |
+| openrouter-provider-path<br>OpenRouter provider path                                                                                            | 41           | 0              | 0          | 0               | 41                      | 0%        | 0%           | 0%                |
+| plugin-sdk-and-bundled-plugin-architecture<br>Plugins                                                                                           | 69           | 11             | 25         | 1               | 43                      | 15.9%     | 36.2%        | 37.7%             |
+| raspberry-pi-small-linux-devices<br>Raspberry Pi and small Linux devices                                                                        | 36           | 0              | 0          | 1               | 35                      | 0%        | 0%           | 2.8%              |
+| security-auth-pairing-and-secrets<br>Security, auth, pairing, and secrets                                                                       | 41           | 8              | 12         | 0               | 29                      | 19.5%     | 29.3%        | 29.3%             |
+| session-memory-and-context-engine<br>Session, memory, and context engine                                                                        | 57           | 32             | 48         | 0               | 9                       | 56.1%     | 84.2%        | 84.2%             |
+| signal<br>Signal                                                                                                                                | 24           | 0              | 0          | 0               | 24                      | 0%        | 0%           | 0%                |
+| slack<br>Slack                                                                                                                                  | 25           | 0              | 0          | 0               | 25                      | 0%        | 0%           | 0%                |
+| telegram<br>Telegram                                                                                                                            | 31           | 1              | 1          | 1               | 29                      | 3.2%      | 3.2%         | 6.5%              |
+| telemetry-diagnostics-and-observability<br>Observability                                                                                        | 58           | 15             | 24         | 0               | 34                      | 25.9%     | 41.4%        | 41.4%             |
+| tui-and-terminal-ux<br>TUI                                                                                                                      | 33           | 0              | 0          | 0               | 33                      | 0%        | 0%           | 0%                |
+| voice-and-realtime-talk<br>Voice and realtime talk                                                                                              | 36           | 0              | 0          | 1               | 35                      | 0%        | 0%           | 2.8%              |
+| voice-call-channel<br>Voice Call channel                                                                                                        | 8            | 0              | 0          | 1               | 7                       | 0%        | 0%           | 12.5%             |
+| watchos-companion-surfaces<br>watchOS companion surfaces                                                                                        | 26           | 0              | 0          | 2               | 24                      | 0%        | 0%           | 7.7%              |
+| web-search-tools<br>Web search tools                                                                                                            | 44           | 5              | 7          | 0               | 37                      | 11.4%     | 15.9%        | 15.9%             |
+| whatsapp<br>WhatsApp                                                                                                                            | 20           | 0              | 0          | 0               | 20                      | 0%        | 0%           | 0%                |
+| windows-via-wsl2<br>Windows via WSL2                                                                                                            | 49           | 3              | 3          | 1               | 45                      | 6.1%      | 6.1%         | 8.2%              |
 
 ## Existing Native QA Links
 
-| Scenario | Kind | Path |
-| --- | --- | --- |
-| `qa/scenarios/channels/channel-message-flows.yaml` | vitest | `extensions/telegram/src/channel-message-flows.qa.e2e.test.ts` |
-| `qa/scenarios/plugins/plugin-lifecycle-probe.yaml` | vitest | `test/e2e/qa-lab/plugins/plugin-lifecycle-probe.e2e.test.ts` |
-| `qa/scenarios/runtime/gateway-smoke.yaml` | vitest | `test/e2e/qa-lab/runtime/gateway-smoke.e2e.test.ts` |
-| `qa/scenarios/runtime/openai-compatible-chat-tools.yaml` | vitest | `test/e2e/qa-lab/runtime/openai-compatible-chat-tools.e2e.test.ts` |
-| `qa/scenarios/runtime/openai-web-search-minimal.yaml` | vitest | `test/e2e/qa-lab/runtime/openai-web-search-minimal.e2e.test.ts` |
-| `qa/scenarios/runtime/openai-web-search-native-assertions.yaml` | vitest | `test/e2e/qa-lab/runtime/openai-web-search-minimal-assertions.e2e.test.ts` |
-| `qa/scenarios/runtime/openwebui-openai-compatible.yaml` | vitest | `test/e2e/qa-lab/runtime/openwebui-probe.e2e.test.ts` |
-| `qa/scenarios/runtime/package-openclaw-for-docker.yaml` | vitest | `test/e2e/qa-lab/runtime/package-openclaw-for-docker.e2e.test.ts` |
-| `qa/scenarios/runtime/qa-otel-smoke.yaml` | vitest | `test/e2e/qa-lab/runtime/qa-otel-smoke.e2e.test.ts` |
-| `qa/scenarios/ui/control-ui-chat-flow-playwright.yaml` | playwright | `ui/src/ui/e2e/chat-flow.e2e.test.ts` |
-| `qa/scenarios/ui/ux-matrix-evidence-dashboard.yaml` | script | `scripts/qa/ux-matrix-evidence-producer.ts` |
+| Scenario                                                        | Kind       | Path                                                                       |
+| --------------------------------------------------------------- | ---------- | -------------------------------------------------------------------------- |
+| `qa/scenarios/channels/channel-message-flows.yaml`              | vitest     | `extensions/telegram/src/channel-message-flows.qa.e2e.test.ts`             |
+| `qa/scenarios/plugins/plugin-lifecycle-probe.yaml`              | vitest     | `test/e2e/qa-lab/plugins/plugin-lifecycle-probe.e2e.test.ts`               |
+| `qa/scenarios/runtime/gateway-smoke.yaml`                       | vitest     | `test/e2e/qa-lab/runtime/gateway-smoke.e2e.test.ts`                        |
+| `qa/scenarios/runtime/openai-compatible-chat-tools.yaml`        | vitest     | `test/e2e/qa-lab/runtime/openai-compatible-chat-tools.e2e.test.ts`         |
+| `qa/scenarios/runtime/openai-web-search-minimal.yaml`           | vitest     | `test/e2e/qa-lab/runtime/openai-web-search-minimal.e2e.test.ts`            |
+| `qa/scenarios/runtime/openai-web-search-native-assertions.yaml` | vitest     | `test/e2e/qa-lab/runtime/openai-web-search-minimal-assertions.e2e.test.ts` |
+| `qa/scenarios/runtime/openwebui-openai-compatible.yaml`         | vitest     | `test/e2e/qa-lab/runtime/openwebui-probe.e2e.test.ts`                      |
+| `qa/scenarios/runtime/package-marketingclaw-for-docker.yaml`    | vitest     | `test/e2e/qa-lab/runtime/package-marketingclaw-for-docker.e2e.test.ts`     |
+| `qa/scenarios/runtime/qa-otel-smoke.yaml`                       | vitest     | `test/e2e/qa-lab/runtime/qa-otel-smoke.e2e.test.ts`                        |
+| `qa/scenarios/ui/control-ui-chat-flow-playwright.yaml`          | playwright | `ui/src/ui/e2e/chat-flow.e2e.test.ts`                                      |
+| `qa/scenarios/ui/ux-matrix-evidence-dashboard.yaml`             | script     | `scripts/qa/ux-matrix-evidence-producer.ts`                                |
 
 ## Existing E2E Tests To Migrate Or Link
 
 Add small native scenario YAML wrappers for these rather than duplicating the tests. Use `scenario.execution.kind: vitest` for `*.test.ts` files and `scenario.execution.kind: script` for shell/Node proof scripts.
 
-| Coverage ID | Surface | Category | Existing test/proof path |
-| --- | --- | --- | --- |
-| `anthropic.auth-profile-health` | anthropic-provider-path | Provider Auth and Recovery | `src/agents/embedded-agent-runner.run-embedded-agent.auth-profile-rotation.e2e.test.ts` |
-| `automation.active-hours` | automation-cron-hooks-tasks-polling | Heartbeat | `src/infra/heartbeat-runner.active-hours-schedule.e2e.test.ts` |
-| `automation.heartbeat-scheduling` | automation-cron-hooks-tasks-polling | Heartbeat | `src/infra/heartbeat-runner.active-hours-schedule.e2e.test.ts` |
-| `ui.assistant-media-tickets` | browser-control-ui-and-webchat | WebChat Conversations | `src/gateway/control-ui-assistant-media.e2e.test.ts` |
-| `ui.browser-talk-start-stop` | browser-control-ui-and-webchat | Browser Realtime Talk | `ui/src/ui/realtime-talk-google-live.test.ts` |
-| `clawhub.marketplace-list` | clawhub-and-external-plugin-distribution | Plugin Lifecycle and Health | `scripts/e2e/lib/plugins/marketplace.sh`<br>`scripts/e2e/lib/release-plugin-marketplace/scenario.sh` |
-| `clawhub.npm-pack-local-release-candidate-installs` | clawhub-and-external-plugin-distribution | Plugin Lifecycle and Health | `scripts/release-candidate-checklist.mjs`<br>`test/scripts/release-candidate-checklist.test.ts` |
-| `clawhub.skill-installs` | clawhub-and-external-plugin-distribution | Plugin Lifecycle and Health | `src/cli/skills-cli.clawhub-install.e2e.test.ts` |
-| `cli.channel-picker` | cli-install-update-onboard-doctor | Plugin and Channel Setup | `src/commands/onboard-channels.e2e.test.ts` |
-| `docker.backed-agent-sandbox-support` | docker-podman-hosting | Agent Sandbox and Tooling | `scripts/e2e/agent-bundle-mcp-tools-docker-client.ts`<br>`scripts/e2e/agent-bundle-mcp-tools-docker.sh`<br>`scripts/e2e/agents-delete-shared-workspace-docker.sh`<br>`scripts/e2e/npm-onboard-channel-agent-docker.sh` |
-| `docker.compose` | docker-podman-hosting | Container Operations | `src/docker-setup.e2e.test.ts` |
-| `docker.compose-network-access` | docker-podman-hosting | Container Operations | `scripts/e2e/gateway-network-docker.sh` |
-| `docker.first-run-onboarding` | docker-podman-hosting | Container Setup | `scripts/e2e/crestodian-first-run-docker-client.ts`<br>`scripts/e2e/crestodian-first-run-docker.sh` |
-| `docker.local-image-setup-script` | docker-podman-hosting | Container Setup | `scripts/e2e/build-image.sh`<br>`scripts/e2e/openai-image-auth-docker-client.ts`<br>`scripts/e2e/openai-image-auth-docker.sh` |
-| `docker.only-first-run-notes` | docker-podman-hosting | Container Setup | `scripts/e2e/crestodian-first-run-docker.sh`<br>`scripts/e2e/crestodian-first-run-docker-client.ts`<br>`scripts/docker-e2e-rerun.mjs`<br>`scripts/docker/install-sh-e2e/run.sh` |
-| `docker.release-workflow` | docker-podman-hosting | Image Release and Validation | `scripts/e2e/release-media-memory-docker.sh`<br>`scripts/e2e/release-plugin-marketplace-docker.sh`<br>`scripts/e2e/release-typed-onboarding-docker.sh`<br>`scripts/e2e/release-upgrade-user-journey-docker.sh` |
-| `local-models.openai-compatible-chat-and-tool-semantics` | local-model-providers-ollama-vllm-sglang-lm-studio | OpenAI-Compatible Runtime Compatibility | `scripts/e2e/openai-chat-tools-docker.sh` |
-| `hosted-providers.image-generation-providers` | long-tail-hosted-providers | Hosted Media Providers | `test/image-generation.infer-cli.live.test.ts`<br>`test/image-generation.runtime.live.test.ts` |
-| `hosted-providers.video-generation-providers` | long-tail-hosted-providers | Hosted Media Providers | `extensions/video-generation-providers.live.test.ts` |
-| `media.reference-image-video-and-audio-inputs` | media-understanding-and-media-generation | Media Generation | `extensions/video-generation-providers.live.test.ts` |
-| `media.video-generation-tool-invocation` | media-understanding-and-media-generation | Media Generation | `extensions/video-generation-providers.live.test.ts` |
-| `windows.native-windows-chat-window` | native-windows-companion-app | Chat Sessions | `scripts/e2e/parallels/windows-smoke.ts`<br>`scripts/e2e/parallels-windows-smoke.sh`<br>`scripts/e2e/parallels/windows-git.ts` |
-| `plugins.packaged-bundled-plugins` | plugin-sdk-and-bundled-plugin-architecture | Bundled plugins | `scripts/e2e/lib/bundled-plugin-install-uninstall/probe.mjs` |
-| `raspberry-pi.first-run-verification` | raspberry-pi-small-linux-devices | Setup and Compatibility | `scripts/e2e/crestodian-first-run-docker-client.ts`<br>`scripts/e2e/crestodian-first-run-docker.sh` |
-| `telegram.bot-token` | telegram | Channel Setup and Operations | `extensions/telegram/src/bot.media.e2e-harness.ts`<br>`extensions/telegram/src/bot.media.stickers-and-fragments.e2e.test.ts`<br>`extensions/telegram/src/bot.media.downloads-media-file-path-no-file-download.e2e.test.ts` |
-| `voice.active-talk-agent-run-status` | voice-and-realtime-talk | Realtime Talk Sessions | `src/agents/embedded-agent-runner.run-embedded-agent.auth-profile-rotation.e2e.test.ts`<br>`src/agents/test-helpers/embedded-agent-runner-e2e-fixtures.ts`<br>`src/auto-reply/reply/agent-runner.runreplyagent.e2e.test.ts`<br>`src/commands/doctor.warns-per-agent-sandbox-docker-browser-prune.e2e.test.ts` |
-| `voice-call.cli-rpc-agent-tool` | voice-call-channel | Channel Setup and Operations | `src/agents/agent-tools.before-tool-call.e2e.test.ts` |
-| `watchos.gateway-side-ios-exec-approval` | watchos-companion-surfaces | Delivery and Recovery | `src/agents/bash-tools.exec-gateway-approval.e2e.test.ts` |
-| `watchos.watch-exec-approval-prompt` | watchos-companion-surfaces | Exec Approvals | `src/agents/bash-tools.exec-gateway-approval.e2e.test.ts` |
-| `wsl2.npm-pnpm-git-package-root` | windows-via-wsl2 | CLI | `scripts/e2e/parallels/npm-update-smoke.ts` |
+| Coverage ID                                              | Surface                                            | Category                                | Existing test/proof path                                                                                                                                                                                                                                                                                      |
+| -------------------------------------------------------- | -------------------------------------------------- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anthropic.auth-profile-health`                          | anthropic-provider-path                            | Provider Auth and Recovery              | `src/agents/embedded-agent-runner.run-embedded-agent.auth-profile-rotation.e2e.test.ts`                                                                                                                                                                                                                       |
+| `automation.active-hours`                                | automation-cron-hooks-tasks-polling                | Heartbeat                               | `src/infra/heartbeat-runner.active-hours-schedule.e2e.test.ts`                                                                                                                                                                                                                                                |
+| `automation.heartbeat-scheduling`                        | automation-cron-hooks-tasks-polling                | Heartbeat                               | `src/infra/heartbeat-runner.active-hours-schedule.e2e.test.ts`                                                                                                                                                                                                                                                |
+| `ui.assistant-media-tickets`                             | browser-control-ui-and-webchat                     | WebChat Conversations                   | `src/gateway/control-ui-assistant-media.e2e.test.ts`                                                                                                                                                                                                                                                          |
+| `ui.browser-talk-start-stop`                             | browser-control-ui-and-webchat                     | Browser Realtime Talk                   | `ui/src/ui/realtime-talk-google-live.test.ts`                                                                                                                                                                                                                                                                 |
+| `clawhub.marketplace-list`                               | clawhub-and-external-plugin-distribution           | Plugin Lifecycle and Health             | `scripts/e2e/lib/plugins/marketplace.sh`<br>`scripts/e2e/lib/release-plugin-marketplace/scenario.sh`                                                                                                                                                                                                          |
+| `clawhub.npm-pack-local-release-candidate-installs`      | clawhub-and-external-plugin-distribution           | Plugin Lifecycle and Health             | `scripts/release-candidate-checklist.mjs`<br>`test/scripts/release-candidate-checklist.test.ts`                                                                                                                                                                                                               |
+| `clawhub.skill-installs`                                 | clawhub-and-external-plugin-distribution           | Plugin Lifecycle and Health             | `src/cli/skills-cli.clawhub-install.e2e.test.ts`                                                                                                                                                                                                                                                              |
+| `cli.channel-picker`                                     | cli-install-update-onboard-doctor                  | Plugin and Channel Setup                | `src/commands/onboard-channels.e2e.test.ts`                                                                                                                                                                                                                                                                   |
+| `docker.backed-agent-sandbox-support`                    | docker-podman-hosting                              | Agent Sandbox and Tooling               | `scripts/e2e/agent-bundle-mcp-tools-docker-client.ts`<br>`scripts/e2e/agent-bundle-mcp-tools-docker.sh`<br>`scripts/e2e/agents-delete-shared-workspace-docker.sh`<br>`scripts/e2e/npm-onboard-channel-agent-docker.sh`                                                                                        |
+| `docker.compose`                                         | docker-podman-hosting                              | Container Operations                    | `src/docker-setup.e2e.test.ts`                                                                                                                                                                                                                                                                                |
+| `docker.compose-network-access`                          | docker-podman-hosting                              | Container Operations                    | `scripts/e2e/gateway-network-docker.sh`                                                                                                                                                                                                                                                                       |
+| `docker.first-run-onboarding`                            | docker-podman-hosting                              | Container Setup                         | `scripts/e2e/crestodian-first-run-docker-client.ts`<br>`scripts/e2e/crestodian-first-run-docker.sh`                                                                                                                                                                                                           |
+| `docker.local-image-setup-script`                        | docker-podman-hosting                              | Container Setup                         | `scripts/e2e/build-image.sh`<br>`scripts/e2e/openai-image-auth-docker-client.ts`<br>`scripts/e2e/openai-image-auth-docker.sh`                                                                                                                                                                                 |
+| `docker.only-first-run-notes`                            | docker-podman-hosting                              | Container Setup                         | `scripts/e2e/crestodian-first-run-docker.sh`<br>`scripts/e2e/crestodian-first-run-docker-client.ts`<br>`scripts/docker-e2e-rerun.mjs`<br>`scripts/docker/install-sh-e2e/run.sh`                                                                                                                               |
+| `docker.release-workflow`                                | docker-podman-hosting                              | Image Release and Validation            | `scripts/e2e/release-media-memory-docker.sh`<br>`scripts/e2e/release-plugin-marketplace-docker.sh`<br>`scripts/e2e/release-typed-onboarding-docker.sh`<br>`scripts/e2e/release-upgrade-user-journey-docker.sh`                                                                                                |
+| `local-models.openai-compatible-chat-and-tool-semantics` | local-model-providers-ollama-vllm-sglang-lm-studio | OpenAI-Compatible Runtime Compatibility | `scripts/e2e/openai-chat-tools-docker.sh`                                                                                                                                                                                                                                                                     |
+| `hosted-providers.image-generation-providers`            | long-tail-hosted-providers                         | Hosted Media Providers                  | `test/image-generation.infer-cli.live.test.ts`<br>`test/image-generation.runtime.live.test.ts`                                                                                                                                                                                                                |
+| `hosted-providers.video-generation-providers`            | long-tail-hosted-providers                         | Hosted Media Providers                  | `extensions/video-generation-providers.live.test.ts`                                                                                                                                                                                                                                                          |
+| `media.reference-image-video-and-audio-inputs`           | media-understanding-and-media-generation           | Media Generation                        | `extensions/video-generation-providers.live.test.ts`                                                                                                                                                                                                                                                          |
+| `media.video-generation-tool-invocation`                 | media-understanding-and-media-generation           | Media Generation                        | `extensions/video-generation-providers.live.test.ts`                                                                                                                                                                                                                                                          |
+| `windows.native-windows-chat-window`                     | native-windows-companion-app                       | Chat Sessions                           | `scripts/e2e/parallels/windows-smoke.ts`<br>`scripts/e2e/parallels-windows-smoke.sh`<br>`scripts/e2e/parallels/windows-git.ts`                                                                                                                                                                                |
+| `plugins.packaged-bundled-plugins`                       | plugin-sdk-and-bundled-plugin-architecture         | Bundled plugins                         | `scripts/e2e/lib/bundled-plugin-install-uninstall/probe.mjs`                                                                                                                                                                                                                                                  |
+| `raspberry-pi.first-run-verification`                    | raspberry-pi-small-linux-devices                   | Setup and Compatibility                 | `scripts/e2e/crestodian-first-run-docker-client.ts`<br>`scripts/e2e/crestodian-first-run-docker.sh`                                                                                                                                                                                                           |
+| `telegram.bot-token`                                     | telegram                                           | Channel Setup and Operations            | `extensions/telegram/src/bot.media.e2e-harness.ts`<br>`extensions/telegram/src/bot.media.stickers-and-fragments.e2e.test.ts`<br>`extensions/telegram/src/bot.media.downloads-media-file-path-no-file-download.e2e.test.ts`                                                                                    |
+| `voice.active-talk-agent-run-status`                     | voice-and-realtime-talk                            | Realtime Talk Sessions                  | `src/agents/embedded-agent-runner.run-embedded-agent.auth-profile-rotation.e2e.test.ts`<br>`src/agents/test-helpers/embedded-agent-runner-e2e-fixtures.ts`<br>`src/auto-reply/reply/agent-runner.runreplyagent.e2e.test.ts`<br>`src/commands/doctor.warns-per-agent-sandbox-docker-browser-prune.e2e.test.ts` |
+| `voice-call.cli-rpc-agent-tool`                          | voice-call-channel                                 | Channel Setup and Operations            | `src/agents/agent-tools.before-tool-call.e2e.test.ts`                                                                                                                                                                                                                                                         |
+| `watchos.gateway-side-ios-exec-approval`                 | watchos-companion-surfaces                         | Delivery and Recovery                   | `src/agents/bash-tools.exec-gateway-approval.e2e.test.ts`                                                                                                                                                                                                                                                     |
+| `watchos.watch-exec-approval-prompt`                     | watchos-companion-surfaces                         | Exec Approvals                          | `src/agents/bash-tools.exec-gateway-approval.e2e.test.ts`                                                                                                                                                                                                                                                     |
+| `wsl2.npm-pnpm-git-package-root`                         | windows-via-wsl2                                   | CLI                                     | `scripts/e2e/parallels/npm-update-smoke.ts`                                                                                                                                                                                                                                                                   |
 
 ## New Exploration Groups
 
 These are the largest no-direct-e2e-candidate groups. Start here after linking the existing candidates.
 
-| Group | No direct e2e candidate | Action |
-| --- | --- | --- |
-| gateway-runtime<br>Gateway runtime | 90 | Add focused core QA Lab scenarios before broad live lanes. |
-| automation-cron-hooks-tasks-polling<br>Automation: cron, hooks, tasks, polling | 57 | Add focused core QA Lab scenarios before broad live lanes. |
-| clawhub-and-external-plugin-distribution<br>ClawHub | 47 | Add owner-level release/profile exploration; no direct scenario wrapper candidate found. |
-| google-chat<br>Google Chat | 45 | Add or promote channel live transport scenario pack coverage. |
-| windows-via-wsl2<br>Windows via WSL2 | 45 | Add platform install/update/gateway smoke exploration in Crabbox/Testbox. |
-| browser-control-ui-and-webchat<br>Gateway Web App | 44 | Add owner-level release/profile exploration; no direct scenario wrapper candidate found. |
-| google-provider-path<br>Google provider path | 44 | Add provider live smoke plus contract-normalization scenario wrappers. |
-| plugin-sdk-and-bundled-plugin-architecture<br>Plugins | 43 | Add focused core QA Lab scenarios before broad live lanes. |
-| image-video-music-generation-tools<br>Image, video, and music generation tools | 42 | Add owner-level release/profile exploration; no direct scenario wrapper candidate found. |
-| macos-gateway-host<br>macOS Gateway host | 41 | Add platform install/update/gateway smoke exploration in Crabbox/Testbox. |
-| openrouter-provider-path<br>OpenRouter provider path | 41 | Add provider live smoke plus contract-normalization scenario wrappers. |
-| discord<br>Discord | 39 | Add or promote channel live transport scenario pack coverage. |
-| media-understanding-and-media-generation<br>Media understanding and media generation | 38 | Add owner-level release/profile exploration; no direct scenario wrapper candidate found. |
-| web-search-tools<br>Web search tools | 37 | Add focused core QA Lab scenarios before broad live lanes. |
-| local-model-providers-ollama-vllm-sglang-lm-studio<br>Local model providers: Ollama, vLLM, SGLang, LM Studio | 36 | Add provider live smoke plus contract-normalization scenario wrappers. |
-| cli-install-update-onboard-doctor<br>CLI | 35 | Add focused core QA Lab scenarios before broad live lanes. |
-| macos-companion-app<br>macOS companion app | 35 | Add platform install/update/gateway smoke exploration in Crabbox/Testbox. |
-| raspberry-pi-small-linux-devices<br>Raspberry Pi and small Linux devices | 35 | Add platform install/update/gateway smoke exploration in Crabbox/Testbox. |
+| Group                                                                                                        | No direct e2e candidate | Action                                                                                   |
+| ------------------------------------------------------------------------------------------------------------ | ----------------------- | ---------------------------------------------------------------------------------------- |
+| gateway-runtime<br>Gateway runtime                                                                           | 90                      | Add focused core QA Lab scenarios before broad live lanes.                               |
+| automation-cron-hooks-tasks-polling<br>Automation: cron, hooks, tasks, polling                               | 57                      | Add focused core QA Lab scenarios before broad live lanes.                               |
+| clawhub-and-external-plugin-distribution<br>ClawHub                                                          | 47                      | Add owner-level release/profile exploration; no direct scenario wrapper candidate found. |
+| google-chat<br>Google Chat                                                                                   | 45                      | Add or promote channel live transport scenario pack coverage.                            |
+| windows-via-wsl2<br>Windows via WSL2                                                                         | 45                      | Add platform install/update/gateway smoke exploration in Crabbox/Testbox.                |
+| browser-control-ui-and-webchat<br>Gateway Web App                                                            | 44                      | Add owner-level release/profile exploration; no direct scenario wrapper candidate found. |
+| google-provider-path<br>Google provider path                                                                 | 44                      | Add provider live smoke plus contract-normalization scenario wrappers.                   |
+| plugin-sdk-and-bundled-plugin-architecture<br>Plugins                                                        | 43                      | Add focused core QA Lab scenarios before broad live lanes.                               |
+| image-video-music-generation-tools<br>Image, video, and music generation tools                               | 42                      | Add owner-level release/profile exploration; no direct scenario wrapper candidate found. |
+| macos-gateway-host<br>macOS Gateway host                                                                     | 41                      | Add platform install/update/gateway smoke exploration in Crabbox/Testbox.                |
+| openrouter-provider-path<br>OpenRouter provider path                                                         | 41                      | Add provider live smoke plus contract-normalization scenario wrappers.                   |
+| discord<br>Discord                                                                                           | 39                      | Add or promote channel live transport scenario pack coverage.                            |
+| media-understanding-and-media-generation<br>Media understanding and media generation                         | 38                      | Add owner-level release/profile exploration; no direct scenario wrapper candidate found. |
+| web-search-tools<br>Web search tools                                                                         | 37                      | Add focused core QA Lab scenarios before broad live lanes.                               |
+| local-model-providers-ollama-vllm-sglang-lm-studio<br>Local model providers: Ollama, vLLM, SGLang, LM Studio | 36                      | Add provider live smoke plus contract-normalization scenario wrappers.                   |
+| cli-install-update-onboard-doctor<br>CLI                                                                     | 35                      | Add focused core QA Lab scenarios before broad live lanes.                               |
+| macos-companion-app<br>macOS companion app                                                                   | 35                      | Add platform install/update/gateway smoke exploration in Crabbox/Testbox.                |
+| raspberry-pi-small-linux-devices<br>Raspberry Pi and small Linux devices                                     | 35                      | Add platform install/update/gateway smoke exploration in Crabbox/Testbox.                |
 
 ## Full No-Direct-E2E-Candidate Coverage ID Appendix
 
@@ -236,9 +236,9 @@ These are the largest no-direct-e2e-candidate groups. Start here after linking t
 
 ### telemetry-diagnostics-and-observability (34)
 
-- Health and Repair (10): `telemetry.background-health-monitor-loop`, `telemetry.core-doctor-checks`, `telemetry.gateway-rpc-health`, `telemetry.openclaw-health`, `telemetry.per-account-enable-disable-settings`, `telemetry.plugin-sdk-doctor-health-contracts`, `telemetry.restart-logging`, `telemetry.startup-grace`, `telemetry.structured-health-checks`, `windows.openclaw-status`
-- Logging (5): `telemetry.gateway-rpc-logs-tail`, `telemetry.openclaw-logs`, `telemetry.redaction-patterns-and-sinks`, `telemetry.rolling-gateway-jsonl-file-logs`, `telemetry.trace-correlation-fields`
-- Diagnostic Collection (7): `telemetry.bounded-in-process-stability-recorder`, `telemetry.chat-diagnostics`, `telemetry.critical-memory-pressure-snapshot-option`, `telemetry.memory-pressure-events`, `telemetry.openclaw-gateway-diagnostics-export`, `telemetry.openclaw-gateway-stability`, `telemetry.openclaw-gateway-stability-bundle`
+- Health and Repair (10): `telemetry.background-health-monitor-loop`, `telemetry.core-doctor-checks`, `telemetry.gateway-rpc-health`, `telemetry.marketingclaw-health`, `telemetry.per-account-enable-disable-settings`, `telemetry.plugin-sdk-doctor-health-contracts`, `telemetry.restart-logging`, `telemetry.startup-grace`, `telemetry.structured-health-checks`, `windows.marketingclaw-status`
+- Logging (5): `telemetry.gateway-rpc-logs-tail`, `telemetry.marketingclaw-logs`, `telemetry.redaction-patterns-and-sinks`, `telemetry.rolling-gateway-jsonl-file-logs`, `telemetry.trace-correlation-fields`
+- Diagnostic Collection (7): `telemetry.bounded-in-process-stability-recorder`, `telemetry.chat-diagnostics`, `telemetry.critical-memory-pressure-snapshot-option`, `telemetry.memory-pressure-events`, `telemetry.marketingclaw-gateway-diagnostics-export`, `telemetry.marketingclaw-gateway-stability`, `telemetry.marketingclaw-gateway-stability-bundle`
 - Telemetry Export (8): `automation.async-dispatch`, `telemetry.diagnostic-event-types`, `telemetry.diagnostics-otel-plugin-install`, `telemetry.diagnostics-prometheus-plugin-install`, `telemetry.model-call-diagnostic-events`, `telemetry.trusted-diagnostic-event-subscription`, `telemetry.trusted-trace-context`, `telemetry.w3c-trace-context-creation`
 - Session Diagnostics (4): `telemetry.diagnostic-session-activity-snapshots`, `telemetry.export-of-session-signals-to-stability`, `telemetry.model-usage`, `telemetry.session-state`
 
@@ -247,9 +247,9 @@ These are the largest no-direct-e2e-candidate groups. Start here after linking t
 - Cron Jobs (9): `automation.create-edit-remove-jobs`, `automation.delivery-previews`, `automation.failure-destinations`, `automation.model-provider-preflight`, `automation.schedule-types`, `automation.skipped-run-alerts`, `automation.timeout-and-denial-diagnostics`, `automation.timezone-and-stagger`, `automation.webhook-delivery`
 - Event Ingress (15): `automation.async-dispatch`, `automation.gmail-event-routing`, `automation.gmail-setup-wizard`, `automation.hook-auth-policy`, `automation.imessage-watch-fallback`, `automation.mapped-hooks`, `automation.polling-stall-diagnostics`, `automation.post-hooks-agent`, `automation.post-hooks-wake`, `automation.push-token-validation`, `automation.tailscale-public-routing`, `automation.telegram-long-polling`, `automation.telegram-webhook-mode`, `automation.watcher-start-serve`, `automation.zalo-polling-webhook-mode`
 - Automation Hooks (11): `automation.api-on-registration`, `automation.cron-changed`, `automation.hook-cli-management`, `automation.hook-discovery`, `automation.hook-md-authoring`, `automation.hook-packs`, `automation.lifecycle-event-dispatch`, `automation.message-hooks`, `automation.plugin-approval-requests`, `automation.session-lifecycle-hooks`, `automation.tool-call-policy-hooks`
-- Background Tasks and Flows (10): `automation.chat-task-board`, `automation.flow-audit-and-maintenance`, `automation.managed-flows`, `automation.mirrored-flows`, `automation.openclaw-tasks-flow`, `automation.plugin-managedflows`, `automation.task-audit-and-maintenance`, `automation.task-list-show-cancel`, `automation.task-notifications`, `automation.task-pressure-status`
+- Background Tasks and Flows (10): `automation.chat-task-board`, `automation.flow-audit-and-maintenance`, `automation.managed-flows`, `automation.mirrored-flows`, `automation.marketingclaw-tasks-flow`, `automation.plugin-managedflows`, `automation.task-audit-and-maintenance`, `automation.task-list-show-cancel`, `automation.task-notifications`, `automation.task-pressure-status`
 - Heartbeat (2): `automation.due-only-heartbeat-tasks`, `automation.wake-and-cooldown-handling`
-- Polling Controls (10): `automation.background-process-status`, `automation.channel-capability-gates`, `automation.no-progress-loop-detection`, `automation.openclaw-message-poll`, `automation.poll-flags`, `automation.process-input-controls`, `automation.process-log`, `automation.process-poll`, `automation.teams-polls`, `automation.telegram-polls`
+- Polling Controls (10): `automation.background-process-status`, `automation.channel-capability-gates`, `automation.no-progress-loop-detection`, `automation.marketingclaw-message-poll`, `automation.poll-flags`, `automation.process-input-controls`, `automation.process-log`, `automation.process-poll`, `automation.teams-polls`, `automation.telegram-polls`
 
 ### media-understanding-and-media-generation (38)
 
@@ -288,12 +288,12 @@ These are the largest no-direct-e2e-candidate groups. Start here after linking t
 
 ### clawhub-and-external-plugin-distribution (47)
 
-- Publishing (7): `clawhub.external-code-plugin-package-contract-required`, `clawhub.npm-trusted-publishing-provenance`, `clawhub.openclaw-owned-package-release-validation-for-clawhub`, `clawhub.package-publishing-owner`, `clawhub.skill-package-metadata`, `clawhub.skill-publishing-flow`, `clawhub.version-bump-gates`
-- Catalog Discovery (5): `clawhub.catalog-lookup-failure`, `clawhub.distinction-between-plugin-search`, `clawhub.openclaw-plugins-search-as-the-clawhub`, `clawhub.search-result-metadata`, `clawhub.skill-catalog-search`
-- Compatibility and Trust (12): `clawhub.archive`, `clawhub.built-in-dangerous-code-scanner`, `clawhub.compatibility-docs`, `clawhub.npm-compatibility-fallback-to-the-newest`, `clawhub.npm-integrity-drift`, `clawhub.official-external-plugin-catalog-behavior`, `clawhub.openclaw-compat-pluginapi`, `clawhub.operator-trust-model-for-installing`, `clawhub.package-compatibility-validation`, `clawhub.publishing-review-hidden-release-behavior-as-upstream`, `clawhub.skill-archive-safety`, `clawhub.skill-audit-signals`
+- Publishing (7): `clawhub.external-code-plugin-package-contract-required`, `clawhub.npm-trusted-publishing-provenance`, `clawhub.marketingclaw-owned-package-release-validation-for-clawhub`, `clawhub.package-publishing-owner`, `clawhub.skill-package-metadata`, `clawhub.skill-publishing-flow`, `clawhub.version-bump-gates`
+- Catalog Discovery (5): `clawhub.catalog-lookup-failure`, `clawhub.distinction-between-plugin-search`, `clawhub.marketingclaw-plugins-search-as-the-clawhub`, `clawhub.search-result-metadata`, `clawhub.skill-catalog-search`
+- Compatibility and Trust (12): `clawhub.archive`, `clawhub.built-in-dangerous-code-scanner`, `clawhub.compatibility-docs`, `clawhub.npm-compatibility-fallback-to-the-newest`, `clawhub.npm-integrity-drift`, `clawhub.official-external-plugin-catalog-behavior`, `clawhub.marketingclaw-compat-pluginapi`, `clawhub.operator-trust-model-for-installing`, `clawhub.package-compatibility-validation`, `clawhub.publishing-review-hidden-release-behavior-as-upstream`, `clawhub.skill-archive-safety`, `clawhub.skill-audit-signals`
 - Plugin Lifecycle and Health (23): `clawhub.bare-package-behavior-during-the-launch`, `clawhub.codex`, `clawhub.dependency-ownership-between-plugin-packages`, `clawhub.downgrade`, `clawhub.explicit-pinned-versions`, `clawhub.gateway-restart-reload-requirements-after`, `clawhub.legacy-dependency-root-cleanup`, `clawhub.local`, `clawhub.local-plugin-index`, `clawhub.managed-install-records-that-preserve-source`, `clawhub.peer-dependency-relinking`, `clawhub.per-plugin-managed-npm-project`, `clawhub.plugins-list`, `clawhub.reinstall-vs-update-semantics`, `clawhub.remote-marketplace-path-safety`, `clawhub.runtime-verification-after-gateway`, `clawhub.skill-dependency-installers`, `clawhub.skill-upload-install-path`, `clawhub.source-prefixes`, `clawhub.supported-mapped-features`, `clawhub.troubleshooting-stale-config`, `clawhub.uninstall-config-index-policy-file-cleanup`, `clawhub.update-by-plugin-id`
 
-### openclaw-app-sdk (29)
+### marketingclaw-app-sdk (29)
 
 - Client API (4): `app-sdk.app-plugin-boundary`, `app-sdk.namespace-layout`, `app-sdk.package-split`, `app-sdk.sdk-entrypoints`
 - Gateway Access (5): `app-sdk.auto-gateway`, `app-sdk.custom-transport`, `app-sdk.gateway-connect`, `app-sdk.scopes-and-redaction`, `app-sdk.url-and-token-config`
@@ -307,8 +307,8 @@ These are the largest no-direct-e2e-candidate groups. Start here after linking t
 - CLI Setup (4): `macos.app-triggered-cli-install`, `macos.hosted-installer`, `macos.node-24-recommendation`, `macos.shell-path-and-version-manager-drift`
 - Local Gateway Integration (9): `macos.app-local-remote-connection-mode`, `macos.app-managed-gateway-launchagent-install-restart-uninstall`, `macos.attach-to-existing-local-gateway-compatibility`, `macos.bonjour-discovery`, `macos.cli-install-detection`, `macos.gateway-endpoint`, `macos.gateway-mode-local-configuration`, `macos.local-app-endpoint-resolution`, `macos.loopback-bind`
 - Remote Gateway Mode (5): `macos.app-remote-over-ssh`, `macos.local-node-host-startup`, `macos.remote-endpoint-token-password-tls-fingerprint`, `macos.ssh-tunnel-setup`, `macos.tailscale-magicdns`
-- Gateway Service Lifecycle (10): `macos.app-managed-launchagent-handoff`, `macos.gateway-token-env-handling`, `macos.launchagent-labels`, `macos.launchctl-bootstrap`, `macos.managed-service-refresh`, `macos.openclaw-uninstall`, `macos.openclaw-update-package-git-handoff`, `macos.per-user-gateway-launchagent-install`, `macos.stale-updater-launchd-job-detection`, `macos.stranded-service-recovery`
-- Diagnostics and Observability (4): `macos.gateway-silently-stops-responding`, `macos.launchagent-log-paths`, `macos.openclaw-gateway-status-deep`, `macos.stale-updater-jobs`
+- Gateway Service Lifecycle (10): `macos.app-managed-launchagent-handoff`, `macos.gateway-token-env-handling`, `macos.launchagent-labels`, `macos.launchctl-bootstrap`, `macos.managed-service-refresh`, `macos.marketingclaw-uninstall`, `macos.marketingclaw-update-package-git-handoff`, `macos.per-user-gateway-launchagent-install`, `macos.stale-updater-launchd-job-detection`, `macos.stranded-service-recovery`
+- Diagnostics and Observability (4): `macos.gateway-silently-stops-responding`, `macos.launchagent-log-paths`, `macos.marketingclaw-gateway-status-deep`, `macos.stale-updater-jobs`
 - Permissions and Native Capabilities (4): `macos.native-node-capability-exposure`, `macos.permission-driven-support`, `macos.system-run-policy`, `macos.tcc-permission-prompts-status`
 - Profiles and Isolation (5): `macos.derived-ports`, `macos.extra-gateway-process-detection`, `macos.profile-specific-launchagent-labels`, `macos.profile-specific-state-config-workspace-roots`, `macos.rescue-bot-setup`
 
@@ -342,18 +342,18 @@ These are the largest no-direct-e2e-candidate groups. Start here after linking t
 ### windows-via-wsl2 (45)
 
 - WSL Setup (6): `wsl2.linux-install-flow-inside-wsl2`, `wsl2.network-family-requirements`, `wsl2.node-runtime`, `wsl2.runtime-boundary`, `wsl2.source-install-and-build-inside-wsl2`, `wsl2.ubuntu-installation`
-- CLI (7): `windows.openclaw-onboard`, `wsl2.cli-entrypoints`, `wsl2.managed-systemd-gateway-restart`, `wsl2.openclaw-doctor-status-and-logs`, `wsl2.openclaw-update`, `wsl2.package-manager-caveats`, `wsl2.service-metadata-refresh`
+- CLI (7): `windows.marketingclaw-onboard`, `wsl2.cli-entrypoints`, `wsl2.managed-systemd-gateway-restart`, `wsl2.marketingclaw-doctor-status-and-logs`, `wsl2.marketingclaw-update`, `wsl2.package-manager-caveats`, `wsl2.service-metadata-refresh`
 - Gateway Service Lifecycle (10): `wsl2.clear-expectations-around-pc-power`, `wsl2.doctor-service-repair`, `wsl2.gateway-service-install`, `wsl2.onboarded-systemd-install`, `wsl2.systemd-availability-after-windows-boot`, `wsl2.systemd-user-unit-rendering`, `wsl2.verification-before-windows-sign-in`, `wsl2.windows-startup-task-for-wsl`, `wsl2.wsl-aware-systemd-unavailable-hints`, `wsl2.wsl-user-service-linger`
 - Gateway Access and Exposure (11): `security.provider-credentials`, `wsl2.gateway-auth-secretrefs`, `wsl2.gateway-token-password-auth`, `wsl2.ipv4-networking`, `wsl2.loopback-and-lan-exposure`, `wsl2.reachable-gateway-urls`, `wsl2.remote-url-credential-precedence`, `wsl2.tailscale-remote-access`, `wsl2.windows-firewall-rules`, `wsl2.windows-portproxy-setup`, `wsl2.wsl-virtual-network`
-- Diagnostics and Repair (5): `telemetry.openclaw-logs`, `windows.openclaw-status`, `wsl2.operator-repair-guidance-after-wsl2-service`, `wsl2.secretref`, `wsl2.wsl-systemd-unavailable-hints`
+- Diagnostics and Repair (5): `telemetry.marketingclaw-logs`, `windows.marketingclaw-status`, `wsl2.operator-repair-guidance-after-wsl2-service`, `wsl2.secretref`, `wsl2.wsl-systemd-unavailable-hints`
 - Browser and Control UI (6): `wsl2.browser-profile-cdpurl`, `wsl2.gateway-with-windows-browser`, `wsl2.host-local-chrome-mcp`, `wsl2.layered-diagnostics`, `wsl2.raw-remote-cdp-to-windows-chrome`, `wsl2.windows-control-ui-url`
 
 ### native-windows-cli-and-gateway (28)
 
-- CLI (9): `windows.command-shims`, `windows.daemon-install-flags`, `windows.local-gateway-config`, `windows.native-vs-wsl-setup-boundary`, `windows.node-and-package-manager-bootstrap`, `windows.npm-global-install`, `windows.openclaw-onboard`, `windows.packaged-cli-launcher`, `windows.powershell-installer`
-- Gateway Management (11): `windows.foreground-runtime-health-readiness`, `windows.gateway-launcher-files`, `windows.openclaw-gateway`, `windows.openclaw-gateway-install`, `windows.openclaw-status`, `windows.post-install-diagnostics`, `windows.scheduled-task-runtime-status`, `windows.service-inspection`, `windows.specific-restart-signal`, `windows.startup-folder-fallback`, `windows.unmanaged-foreground-mode`
+- CLI (9): `windows.command-shims`, `windows.daemon-install-flags`, `windows.local-gateway-config`, `windows.native-vs-wsl-setup-boundary`, `windows.node-and-package-manager-bootstrap`, `windows.npm-global-install`, `windows.marketingclaw-onboard`, `windows.packaged-cli-launcher`, `windows.powershell-installer`
+- Gateway Management (11): `windows.foreground-runtime-health-readiness`, `windows.gateway-launcher-files`, `windows.marketingclaw-gateway`, `windows.marketingclaw-gateway-install`, `windows.marketingclaw-status`, `windows.post-install-diagnostics`, `windows.scheduled-task-runtime-status`, `windows.service-inspection`, `windows.specific-restart-signal`, `windows.startup-folder-fallback`, `windows.unmanaged-foreground-mode`
 - Networking (4): `windows.gateway-status-and-probe-output`, `windows.loopback-lan-and-wsl-boundary`, `windows.native-windows-host-networking`, `windows.netsh-interface-portproxy`
-- Updates (4): `windows.detached-update-handoff`, `windows.managed-gateway-stop-restart`, `windows.openclaw-update-on-native-windows-package`, `windows.package-locks`
+- Updates (4): `windows.detached-update-handoff`, `windows.managed-gateway-stop-restart`, `windows.marketingclaw-update-on-native-windows-package`, `windows.package-locks`
 
 ### native-windows-companion-app (23)
 
@@ -394,7 +394,7 @@ These are the largest no-direct-e2e-candidate groups. Start here after linking t
 
 ### raspberry-pi-small-linux-devices (35)
 
-- Setup and Compatibility (11): `raspberry-pi.64-bit-arm-boundary`, `raspberry-pi.fallback-build-guidance`, `raspberry-pi.hardware-and-64-bit-os-requirements`, `raspberry-pi.installer-architecture-detection`, `raspberry-pi.node-runtime-setup`, `raspberry-pi.npm-pnpm-bun-install-modes`, `raspberry-pi.openclaw-install-and-onboarding`, `raspberry-pi.optional-arm-binary-checks`, `raspberry-pi.slow-device-caveats`, `raspberry-pi.supported-pi-model-selection`, `raspberry-pi.unsupported-device-guidance`
+- Setup and Compatibility (11): `raspberry-pi.64-bit-arm-boundary`, `raspberry-pi.fallback-build-guidance`, `raspberry-pi.hardware-and-64-bit-os-requirements`, `raspberry-pi.installer-architecture-detection`, `raspberry-pi.node-runtime-setup`, `raspberry-pi.npm-pnpm-bun-install-modes`, `raspberry-pi.marketingclaw-install-and-onboarding`, `raspberry-pi.optional-arm-binary-checks`, `raspberry-pi.slow-device-caveats`, `raspberry-pi.supported-pi-model-selection`, `raspberry-pi.unsupported-device-guidance`
 - Remote Access and Auth (9): `raspberry-pi.authenticated-control-ui-access`, `raspberry-pi.device-pairing-approvals`, `raspberry-pi.gateway-shared-secret-auth`, `raspberry-pi.headless-api-key-auth`, `raspberry-pi.loopback-non-loopback-exposure-controls`, `raspberry-pi.secretref-handling`, `raspberry-pi.ssh-tunnel-dashboard-access`, `raspberry-pi.tailscale-serve-funnel`, `raspberry-pi.token-drift-recovery`
 - Gateway Runtime (10): `raspberry-pi.always-on-gateway-process`, `raspberry-pi.backup-restore`, `raspberry-pi.channel-startup`, `raspberry-pi.cloud-model-configuration`, `raspberry-pi.gateway-health-status`, `raspberry-pi.linger-boot-persistence`, `raspberry-pi.restart-tuning`, `raspberry-pi.service-drop-ins`, `raspberry-pi.status-log-inspection`, `raspberry-pi.user-service-install`
 - Performance and Diagnostics (5): `raspberry-pi.compile-cache-no-respawn-settings`, `raspberry-pi.diagnostics-bundles`, `raspberry-pi.oom-performance-troubleshooting`, `raspberry-pi.swap-and-low-ram-tuning`, `raspberry-pi.usb-ssd-guidance`
@@ -415,7 +415,7 @@ These are the largest no-direct-e2e-candidate groups. Start here after linking t
 
 ### nix-install-path (30)
 
-- Install Handoff (4): `nix.install-discoverability`, `nix.install-overview`, `nix.openclaw-source-of-truth`, `nix.verification-handoff`
+- Install Handoff (4): `nix.install-discoverability`, `nix.install-overview`, `nix.marketingclaw-source-of-truth`, `nix.verification-handoff`
 - Plugin Lifecycle (4): `nix.declarative-plugin-selection`, `nix.hardlink-safety`, `nix.lifecycle-command-refusal`, `nix.store-plugin-loading`
 - Activation and App UX (7): `nix.environment-activation`, `nix.macos-defaults-activation`, `nix.managed-by-nix-banner`, `nix.onboarding-skip`, `nix.read-only-config-controls`, `nix.runtime-nix-mode-detection`, `nix.stable-nix-defaults`
 - Config and State (7): `nix.agent-first-nix-edits`, `nix.config-writer-refusal`, `nix.explicit-config-path`, `nix.immutable-config-guard`, `nix.immutable-store-config-support`, `nix.state-integrity-checks`, `nix.writable-state-directory`
@@ -440,7 +440,7 @@ These are the largest no-direct-e2e-candidate groups. Start here after linking t
 
 ### whatsapp (20)
 
-- Channel Setup and Operations (5): `whatsapp.baileys-socket-lifecycle`, `whatsapp.channel-config-schema`, `whatsapp.official-openclaw-whatsapp-plugin-metadata`, `whatsapp.openclaw-plugin-install-whatsapp`, `whatsapp.operator-troubleshooting`
+- Channel Setup and Operations (5): `whatsapp.baileys-socket-lifecycle`, `whatsapp.channel-config-schema`, `whatsapp.official-marketingclaw-whatsapp-plugin-metadata`, `whatsapp.marketingclaw-plugin-install-whatsapp`, `whatsapp.operator-troubleshooting`
 - Access and Identity (7): `whatsapp.baileys-multi-file-auth-persistence`, `whatsapp.direct-message-dmpolicy`, `whatsapp.dm-pairing-challenge`, `whatsapp.multi-account-default-account-resolution`, `whatsapp.privacy-controls-for-plugin-hooks`, `whatsapp.qr-login`, `whatsapp.sender-identity-extraction`
 - Conversation Routing and Delivery (4): `security.group-allowlists`, `whatsapp.group-session-keys`, `whatsapp.outbound-text-sends`, `whatsapp.provider-accepted-receipts`
 - Media and Rich Content (2): `whatsapp.inbound-media-download`, `whatsapp.outbound-image`

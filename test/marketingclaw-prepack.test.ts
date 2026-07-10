@@ -1,11 +1,11 @@
-// OpenClaw prepack tests validate package prepack output.
+// MarketingClaw prepack tests validate package prepack output.
 import { describe, expect, it } from "vitest";
 import {
   collectPreparedPrepackErrors,
   resolvePrepackCommandStdio,
   resolvePrepackCommandTimeoutMs,
   runPrepackCommand,
-} from "../scripts/openclaw-prepack.ts";
+} from "../scripts/marketingclaw-prepack.ts";
 
 describe("collectPreparedPrepackErrors", () => {
   it("accepts prepared release artifacts", () => {
@@ -71,17 +71,17 @@ describe("runPrepackCommand", () => {
 describe("resolvePrepackCommandTimeoutMs", () => {
   it("parses only positive integer environment timeouts", () => {
     expect(resolvePrepackCommandTimeoutMs({})).toBe(30 * 60 * 1000);
-    expect(resolvePrepackCommandTimeoutMs({ OPENCLAW_PREPACK_COMMAND_TIMEOUT_MS: "" })).toBe(
+    expect(resolvePrepackCommandTimeoutMs({ MARKETINGCLAW_PREPACK_COMMAND_TIMEOUT_MS: "" })).toBe(
       30 * 60 * 1000,
     );
-    expect(resolvePrepackCommandTimeoutMs({ OPENCLAW_PREPACK_COMMAND_TIMEOUT_MS: "1234" })).toBe(
-      1234,
-    );
+    expect(
+      resolvePrepackCommandTimeoutMs({ MARKETINGCLAW_PREPACK_COMMAND_TIMEOUT_MS: "1234" }),
+    ).toBe(1234);
 
     for (const raw of ["nope", "10m", "1e3", "0", "-1", "9007199254740992"]) {
       expect(() =>
-        resolvePrepackCommandTimeoutMs({ OPENCLAW_PREPACK_COMMAND_TIMEOUT_MS: raw }),
-      ).toThrow(`invalid OPENCLAW_PREPACK_COMMAND_TIMEOUT_MS: ${raw}`);
+        resolvePrepackCommandTimeoutMs({ MARKETINGCLAW_PREPACK_COMMAND_TIMEOUT_MS: raw }),
+      ).toThrow(`invalid MARKETINGCLAW_PREPACK_COMMAND_TIMEOUT_MS: ${raw}`);
     }
   });
 });

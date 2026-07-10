@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/video-generation-core",
+  "name": "@marketingclaw/video-generation-core",
   "version": "2026.6.11",
   "private": true,
-  "description": "OpenClaw video generation runtime package",
+  "description": "MarketingClaw video generation runtime package",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@marketingclaw/plugin-sdk": "workspace:*"
   }
 }

@@ -1,6 +1,6 @@
 // Telegram plugin module implements delivery.resolve media behavior.
-import { logVerbose, sleepWithAbort } from "openclaw/plugin-sdk/runtime-env";
-import { formatErrorMessage } from "openclaw/plugin-sdk/ssrf-runtime";
+import { logVerbose, sleepWithAbort } from "marketingclaw/plugin-sdk/runtime-env";
+import { formatErrorMessage } from "marketingclaw/plugin-sdk/ssrf-runtime";
 import { resolveTelegramApiBase, shouldRetryTelegramTransportFallback } from "../fetch.js";
 import {
   readRemoteMediaBuffer,

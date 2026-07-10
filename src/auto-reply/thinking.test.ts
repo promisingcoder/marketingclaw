@@ -315,7 +315,7 @@ describe("listThinkingLevels", () => {
   });
 
   it("exposes Claude Opus xhigh on custom anthropic-messages providers without a plugin profile", () => {
-    // Regression for openclaw#91975: a renamed provider serving Claude Opus over
+    // Regression for marketingclaw#91975: a renamed provider serving Claude Opus over
     // anthropic-messages used to fall back to a base profile (no xhigh) and silently
     // clamp `--thinking xhigh` to `off`.
     const catalog = [
@@ -874,7 +874,9 @@ describe("resolveEffectiveResponseUsage", () => {
     // Explicit "off" is stored and wins — non-off config default cannot re-enable it.
     expect(resolveEffectiveResponseUsage("off", "tokens")).toBe("off");
     expect(resolveEffectiveResponseUsage("off", "full")).toBe("off");
-    expect(resolveEffectiveResponseUsage("off", { default: "full", discord: "full" }, "discord")).toBe("off");
+    expect(
+      resolveEffectiveResponseUsage("off", { default: "full", discord: "full" }, "discord"),
+    ).toBe("off");
   });
 
   it("session explicit on value overrides config default", () => {
@@ -888,6 +890,6 @@ describe("resolveEffectiveResponseUsage", () => {
     // - "off"     = explicit off  → stays off
     const cfg = "tokens" as const;
     expect(resolveEffectiveResponseUsage(undefined, cfg)).toBe("tokens"); // inherits
-    expect(resolveEffectiveResponseUsage("off", cfg)).toBe("off");        // explicit off persists
+    expect(resolveEffectiveResponseUsage("off", cfg)).toBe("off"); // explicit off persists
   });
 });

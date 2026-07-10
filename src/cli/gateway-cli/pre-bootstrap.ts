@@ -43,17 +43,17 @@ const GATEWAY_CONFIG_SELECTION_ENV_KEYS = new Set([
   "HOME",
   "HOMEDRIVE",
   "HOMEPATH",
-  "OPENCLAW_AGENT_DIR",
-  "OPENCLAW_CONFIG_PATH",
-  "OPENCLAW_HOME",
-  "OPENCLAW_INCLUDE_ROOTS",
-  "OPENCLAW_NIX_MODE",
-  "OPENCLAW_OAUTH_DIR",
-  "OPENCLAW_PACKAGE_DIR",
-  "OPENCLAW_PROFILE",
-  "OPENCLAW_STATE_DIR",
-  "OPENCLAW_TEST_FAST",
-  "OPENCLAW_WORKSPACE_DIR",
+  "MARKETINGCLAW_AGENT_DIR",
+  "MARKETINGCLAW_CONFIG_PATH",
+  "MARKETINGCLAW_HOME",
+  "MARKETINGCLAW_INCLUDE_ROOTS",
+  "MARKETINGCLAW_NIX_MODE",
+  "MARKETINGCLAW_OAUTH_DIR",
+  "MARKETINGCLAW_PACKAGE_DIR",
+  "MARKETINGCLAW_PROFILE",
+  "MARKETINGCLAW_STATE_DIR",
+  "MARKETINGCLAW_TEST_FAST",
+  "MARKETINGCLAW_WORKSPACE_DIR",
   "PI_CODING_AGENT_DIR",
   "PREFIX",
   "USERPROFILE",
@@ -61,8 +61,8 @@ const GATEWAY_CONFIG_SELECTION_ENV_KEYS = new Set([
 
 const GATEWAY_RESET_SELECTION_ENV_KEYS = new Set([
   ...GATEWAY_CONFIG_SELECTION_ENV_KEYS,
-  "OPENCLAW_PROFILE",
-  "OPENCLAW_WORKSPACE_DIR",
+  "MARKETINGCLAW_PROFILE",
+  "MARKETINGCLAW_WORKSPACE_DIR",
 ]);
 
 function resolveGatewayConfigSelectionSignature(env: NodeJS.ProcessEnv): string {
@@ -103,7 +103,7 @@ function resolveGatewayRunDotEnvPaths(params: {
 }
 
 function resolveInvocationDestructiveOverride(): string | undefined {
-  if (process.env.OPENCLAW_SERVICE_MARKER?.trim()) {
+  if (process.env.MARKETINGCLAW_SERVICE_MARKER?.trim()) {
     delete process.env[ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS_ENV];
     return undefined;
   }
@@ -111,7 +111,7 @@ function resolveInvocationDestructiveOverride(): string | undefined {
 }
 
 function applyInvocationDestructiveOverride(value: string | undefined): void {
-  if (process.env.OPENCLAW_SERVICE_MARKER?.trim() || value === undefined) {
+  if (process.env.MARKETINGCLAW_SERVICE_MARKER?.trim() || value === undefined) {
     delete process.env[ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS_ENV];
   } else {
     process.env[ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS_ENV] = value;
@@ -350,7 +350,7 @@ async function guardGatewayRunSelectedConfig(
     }
     if (!snapshot.valid) {
       // Invalid config source is untrusted. In particular, applying its env block could let an
-      // off-root $include self-authorize OPENCLAW_INCLUDE_ROOTS on the next read. Only explicit dev
+      // off-root $include self-authorize MARKETINGCLAW_INCLUDE_ROOTS on the next read. Only explicit dev
       // reset may proceed as the recovery path; ordinary startup skips mutation-capable bootstrap.
       if (params.opts.reset) {
         lastGuardedGatewayRunSnapshot = snapshot;

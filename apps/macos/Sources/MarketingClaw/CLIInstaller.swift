@@ -32,11 +32,11 @@ enum CLIInstaller {
         var message: String {
             switch self {
             case let .ready(_, version):
-                "OpenClaw Gateway \(version) is ready."
+                "MarketingClaw Gateway \(version) is ready."
             case .missing:
-                "OpenClaw Gateway is not installed yet."
+                "MarketingClaw Gateway is not installed yet."
             case .unusable:
-                "The OpenClaw Gateway could not be verified. Setup will repair it."
+                "The MarketingClaw Gateway could not be verified. Setup will repair it."
             case let .incompatible(_, found, required):
                 "Gateway \(found) does not match app \(required). Setup will update it."
             }
@@ -62,7 +62,7 @@ enum CLIInstaller {
     {
         var locations: [String] = []
         for basePath in searchPaths {
-            let candidate = URL(fileURLWithPath: basePath).appendingPathComponent("openclaw").path
+            let candidate = URL(fileURLWithPath: basePath).appendingPathComponent("marketingclaw").path
             var isDirectory: ObjCBool = false
 
             guard fileManager.fileExists(atPath: candidate, isDirectory: &isDirectory),
@@ -84,7 +84,7 @@ enum CLIInstaller {
 
     static func managedExecutableLocation() -> String {
         URL(fileURLWithPath: self.installPrefix())
-            .appendingPathComponent("bin/openclaw")
+            .appendingPathComponent("bin/marketingclaw")
             .path
     }
 
@@ -205,9 +205,9 @@ enum CLIInstaller {
     static func install(statusHandler: @escaping @MainActor @Sendable (String) async -> Void) async -> Bool {
         let expected = GatewayEnvironment.expectedGatewayVersionString() ?? "latest"
         let prefix = Self.installPrefix()
-        await statusHandler("Installing openclaw CLI…")
+        await statusHandler("Installing marketingclaw CLI…")
         guard let installerURL = Bundle.main.url(forResource: "install-cli", withExtension: "sh") else {
-            await statusHandler("Install failed: installer resource is missing. Reinstall OpenClaw.")
+            await statusHandler("Install failed: installer resource is missing. Reinstall MarketingClaw.")
             return false
         }
         let cmd = self.installScriptCommand(
@@ -224,7 +224,7 @@ enum CLIInstaller {
             }
             let parsed = self.parseInstallEvents(response.stdout)
             let installedVersion = parsed.last { $0.event == "done" }?.version
-            let summary = installedVersion.map { "Installed openclaw \($0)." } ?? "Installed openclaw."
+            let summary = installedVersion.map { "Installed marketingclaw \($0)." } ?? "Installed marketingclaw."
             await statusHandler(summary)
             return true
         }
@@ -243,7 +243,7 @@ enum CLIInstaller {
 
     private static func installPrefix() -> String {
         FileManager().homeDirectoryForCurrentUser
-            .appendingPathComponent(".openclaw")
+            .appendingPathComponent(".marketingclaw")
             .path
     }
 

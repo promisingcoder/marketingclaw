@@ -1,6 +1,6 @@
 // Matrix plugin module implements setup dm policy behavior.
-import type { DmPolicy } from "openclaw/plugin-sdk/config-contracts";
-import { addWildcardAllowFrom, normalizeAllowFromEntries } from "openclaw/plugin-sdk/setup";
+import type { DmPolicy } from "marketingclaw/plugin-sdk/config-contracts";
+import { addWildcardAllowFrom, normalizeAllowFromEntries } from "marketingclaw/plugin-sdk/setup";
 import type { MatrixConfig } from "./types.js";
 
 type MatrixDmAllowFrom = NonNullable<MatrixConfig["dm"]>["allowFrom"];

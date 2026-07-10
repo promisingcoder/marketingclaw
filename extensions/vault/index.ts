@@ -1,10 +1,13 @@
-import { definePluginEntry, type OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
+import {
+  definePluginEntry,
+  type MarketingClawPluginApi,
+} from "marketingclaw/plugin-sdk/plugin-entry";
 
 export default definePluginEntry({
   id: "vault",
   name: "Vault",
   description: "HashiCorp Vault SecretRef provider integration.",
-  register(api: OpenClawPluginApi) {
+  register(api: MarketingClawPluginApi) {
     api.registerCli(
       async ({ program, config }) => {
         const { registerVaultCommands } = await import("./src/cli.js");

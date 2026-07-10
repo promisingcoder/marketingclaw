@@ -1,4 +1,4 @@
-import OpenClawKit
+import MarketingClawKit
 import SwiftUI
 import VisionKit
 

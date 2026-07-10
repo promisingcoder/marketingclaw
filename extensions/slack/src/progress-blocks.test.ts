@@ -98,8 +98,9 @@ describe("buildSlackProgressDraftBlocks", () => {
           kind: "tool",
           icon: "🛠️",
           label: "Exec",
-          detail: "run tests in /Users/example/Projects/openclaw/packages/very/deep/path/example",
-          text: "🛠️ Exec: run tests in /Users/example/Projects/openclaw/packages/very/deep/path/example",
+          detail:
+            "run tests in /Users/example/Projects/marketingclaw/packages/very/deep/path/example",
+          text: "🛠️ Exec: run tests in /Users/example/Projects/marketingclaw/packages/very/deep/path/example",
         },
       ],
     });
@@ -203,8 +204,9 @@ describe("native Slack progress stream chunks", () => {
             kind: "tool",
             icon: "🛠️",
             label: "Exec",
-            detail: "run tests in /Users/example/Projects/openclaw/packages/very/deep/path/example",
-            text: "🛠️ Exec: run tests in /Users/example/Projects/openclaw/packages/very/deep/path/example",
+            detail:
+              "run tests in /Users/example/Projects/marketingclaw/packages/very/deep/path/example",
+            text: "🛠️ Exec: run tests in /Users/example/Projects/marketingclaw/packages/very/deep/path/example",
           },
         ],
       }),

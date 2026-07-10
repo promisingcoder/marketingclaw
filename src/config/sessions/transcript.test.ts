@@ -7,10 +7,10 @@ import { repairToolUseResultPairing } from "../../agents/session-transcript-repa
 import * as transcriptEvents from "../../sessions/transcript-events.js";
 import type { SessionTranscriptUpdate } from "../../sessions/transcript-events.js";
 import {
-  OPENCLAW_DELIVERY_MIRROR_MODEL,
-  OPENCLAW_TRANSCRIPT_ARTIFACT_API,
-  OPENCLAW_TRANSCRIPT_ARTIFACT_PROVIDER,
-} from "../../shared/transcript-only-openclaw-assistant.js";
+  MARKETINGCLAW_DELIVERY_MIRROR_MODEL,
+  MARKETINGCLAW_TRANSCRIPT_ARTIFACT_API,
+  MARKETINGCLAW_TRANSCRIPT_ARTIFACT_PROVIDER,
+} from "../../shared/transcript-only-marketingclaw-assistant.js";
 import { deleteTestEnvValue, setTestEnvValue } from "../../test-utils/env.js";
 import { resolveSessionTranscriptPathInDir } from "./paths.js";
 import { updateSessionStoreEntry } from "./store.js";
@@ -126,9 +126,9 @@ describe("appendAssistantMessageToSessionTranscript", () => {
 
   it("uses configured session.store when storePath is omitted", async () => {
     const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "transcript-config-store-"));
-    const previousStateDir = process.env.OPENCLAW_STATE_DIR;
+    const previousStateDir = process.env.MARKETINGCLAW_STATE_DIR;
     try {
-      setTestEnvValue("OPENCLAW_STATE_DIR", path.join(tempDir, "default-state"));
+      setTestEnvValue("MARKETINGCLAW_STATE_DIR", path.join(tempDir, "default-state"));
       const sessionsDir = path.join(tempDir, "configured", "sessions");
       fs.mkdirSync(sessionsDir, { recursive: true });
       const storePath = path.join(sessionsDir, "sessions.json");
@@ -164,9 +164,9 @@ describe("appendAssistantMessageToSessionTranscript", () => {
       );
     } finally {
       if (previousStateDir === undefined) {
-        deleteTestEnvValue("OPENCLAW_STATE_DIR");
+        deleteTestEnvValue("MARKETINGCLAW_STATE_DIR");
       } else {
-        setTestEnvValue("OPENCLAW_STATE_DIR", previousStateDir);
+        setTestEnvValue("MARKETINGCLAW_STATE_DIR", previousStateDir);
       }
       fs.rmSync(tempDir, { recursive: true, force: true });
     }
@@ -174,10 +174,10 @@ describe("appendAssistantMessageToSessionTranscript", () => {
 
   it("uses the session key agent for configured session.store templates", async () => {
     const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "transcript-agent-store-"));
-    const previousStateDir = process.env.OPENCLAW_STATE_DIR;
+    const previousStateDir = process.env.MARKETINGCLAW_STATE_DIR;
     const emitSpy = vi.spyOn(transcriptEvents, "emitSessionTranscriptUpdate");
     try {
-      setTestEnvValue("OPENCLAW_STATE_DIR", path.join(tempDir, "default-state"));
+      setTestEnvValue("MARKETINGCLAW_STATE_DIR", path.join(tempDir, "default-state"));
       const storeTemplate = path.join(tempDir, "agents", "{agentId}", "sessions", "sessions.json");
       const sessionsDir = path.join(tempDir, "agents", "worker", "sessions");
       fs.mkdirSync(sessionsDir, { recursive: true });
@@ -225,9 +225,9 @@ describe("appendAssistantMessageToSessionTranscript", () => {
     } finally {
       emitSpy.mockRestore();
       if (previousStateDir === undefined) {
-        deleteTestEnvValue("OPENCLAW_STATE_DIR");
+        deleteTestEnvValue("MARKETINGCLAW_STATE_DIR");
       } else {
-        setTestEnvValue("OPENCLAW_STATE_DIR", previousStateDir);
+        setTestEnvValue("MARKETINGCLAW_STATE_DIR", previousStateDir);
       }
       fs.rmSync(tempDir, { recursive: true, force: true });
     }
@@ -528,8 +528,8 @@ describe("appendAssistantMessageToSessionTranscript", () => {
     expect(event?.sessionKey).toBe(sessionKey);
     expect(event?.messageId).toBeTypeOf("string");
     expect(message?.role).toBe("assistant");
-    expect(message?.api).toBe(OPENCLAW_TRANSCRIPT_ARTIFACT_API);
-    expect(message?.provider).toBe("openclaw");
+    expect(message?.api).toBe(MARKETINGCLAW_TRANSCRIPT_ARTIFACT_API);
+    expect(message?.provider).toBe("marketingclaw");
     expect(message?.model).toBe("delivery-mirror");
     expect(message?.content).toEqual([{ type: "text", text: "Hello from delivery mirror!" }]);
     emitSpy.mockRestore();
@@ -623,7 +623,7 @@ describe("appendAssistantMessageToSessionTranscript", () => {
       expect(nextTurn.messageId).not.toBe(first.messageId);
       const lines = fs.readFileSync(first.sessionFile, "utf-8").trim().split("\n");
       expect(lines).toHaveLength(3);
-      expect(JSON.parse(lines[1]).message.openclawDeliveryMirror).toEqual({
+      expect(JSON.parse(lines[1]).message.marketingclawDeliveryMirror).toEqual({
         kind: "channel-final",
         sourceMessageId: "message-1",
       });
@@ -679,16 +679,16 @@ describe("appendAssistantMessageToSessionTranscript", () => {
       const firstMirror = JSON.parse(lines[1]).message;
       const secondMirror = JSON.parse(lines[2]).message;
       expect(firstMirror).toMatchObject({
-        api: OPENCLAW_TRANSCRIPT_ARTIFACT_API,
-        provider: OPENCLAW_TRANSCRIPT_ARTIFACT_PROVIDER,
-        model: OPENCLAW_DELIVERY_MIRROR_MODEL,
-        openclawDeliveryMirror: {
+        api: MARKETINGCLAW_TRANSCRIPT_ARTIFACT_API,
+        provider: MARKETINGCLAW_TRANSCRIPT_ARTIFACT_PROVIDER,
+        model: MARKETINGCLAW_DELIVERY_MIRROR_MODEL,
+        marketingclawDeliveryMirror: {
           kind: "channel-final-suppressed",
           reason: "stale-foreground",
           sourceMessageId: "message-1",
         },
       });
-      expect(secondMirror.openclawDeliveryMirror).toEqual({
+      expect(secondMirror.marketingclawDeliveryMirror).toEqual({
         kind: "channel-final-suppressed",
         reason: "stale-foreground",
         sourceMessageId: "message-2",
@@ -811,7 +811,7 @@ describe("appendAssistantMessageToSessionTranscript", () => {
     ]);
   });
 
-  it("skips transcript-only OpenClaw assistant entries when reading recent prompt context", async () => {
+  it("skips transcript-only MarketingClaw assistant entries when reading recent prompt context", async () => {
     writeTranscriptStore();
     const sessionFile = resolveSessionTranscriptPathInDir(sessionId, fixture.sessionsDir());
 
@@ -824,7 +824,7 @@ describe("appendAssistantMessageToSessionTranscript", () => {
       message: {
         ...createExactAssistantMessage({
           text: "Transcript delivery bookkeeping",
-          provider: "openclaw",
+          provider: "marketingclaw",
           model: "gateway-injected",
         }),
         timestamp: 2_000,
@@ -927,7 +927,7 @@ describe("appendAssistantMessageToSessionTranscript", () => {
     }
   });
 
-  it("skips transcript-only OpenClaw assistant entries when reading latest assistant text", async () => {
+  it("skips transcript-only MarketingClaw assistant entries when reading latest assistant text", async () => {
     writeTranscriptStore();
 
     const finalResult = await appendExactAssistantMessageToSessionTranscript({
@@ -950,7 +950,7 @@ describe("appendAssistantMessageToSessionTranscript", () => {
       storePath: fixture.storePath(),
       message: createExactAssistantMessage({
         text: "Injected transcript text",
-        provider: "openclaw",
+        provider: "marketingclaw",
         model: "gateway-injected",
       }),
     });
@@ -962,7 +962,7 @@ describe("appendAssistantMessageToSessionTranscript", () => {
     expect(latestAssistantText?.text).toBe("Complete final answer");
   });
 
-  it("does not report transcript-only OpenClaw assistant entries as latest assistant text", async () => {
+  it("does not report transcript-only MarketingClaw assistant entries as latest assistant text", async () => {
     writeTranscriptStore();
 
     const mirrorResult = await appendAssistantMessageToSessionTranscript({
@@ -981,7 +981,7 @@ describe("appendAssistantMessageToSessionTranscript", () => {
     expect(latestAssistantText).toBeUndefined();
   });
 
-  it("keeps transcript-only OpenClaw assistant entries available to the tail reader", async () => {
+  it("keeps transcript-only MarketingClaw assistant entries available to the tail reader", async () => {
     writeTranscriptStore();
 
     const mirrorResult = await appendAssistantMessageToSessionTranscript({
@@ -1001,8 +1001,8 @@ describe("appendAssistantMessageToSessionTranscript", () => {
     expect(tailAssistantText?.text).toBe("Tail delivery mirror");
   });
 
-  it("scans past trailing non-assistant entries (e.g. openclaw.cache-ttl) to find the latest assistant text", async () => {
-    // Regression for openclaw/openclaw#83427: the cache-ttl custom entry was
+  it("scans past trailing non-assistant entries (e.g. marketingclaw.cache-ttl) to find the latest assistant text", async () => {
+    // Regression for marketingclaw/marketingclaw#83427: the cache-ttl custom entry was
     // emitted after the canonical assistant turn, and the tail reader returned
     // undefined on the first non-assistant line, so the gap-fill check in
     // persistTextTurnTranscript wrote a duplicate `api: "cli"` assistant
@@ -1025,7 +1025,7 @@ describe("appendAssistantMessageToSessionTranscript", () => {
 
     const cacheTtlEntry = `${JSON.stringify({
       type: "custom",
-      customType: "openclaw.cache-ttl",
+      customType: "marketingclaw.cache-ttl",
       timestamp: new Date().toISOString(),
       data: {
         provider: "anthropic",
@@ -1073,8 +1073,8 @@ describe("appendAssistantMessageToSessionTranscript", () => {
       expect(lines.length).toBe(4);
 
       const messageLine = JSON.parse(lines[3]);
-      expect(messageLine.message.api).toBe(OPENCLAW_TRANSCRIPT_ARTIFACT_API);
-      expect(messageLine.message.provider).toBe("openclaw");
+      expect(messageLine.message.api).toBe(MARKETINGCLAW_TRANSCRIPT_ARTIFACT_API);
+      expect(messageLine.message.provider).toBe("marketingclaw");
       expect(messageLine.message.model).toBe("delivery-mirror");
       expect(messageLine.message.content[0].text).toBe("Repeated answer");
     }
@@ -1115,7 +1115,7 @@ describe("appendAssistantMessageToSessionTranscript", () => {
     const linesAfterMirror = fs.readFileSync(sessionFile, "utf-8").trim().split("\n");
     expect(linesAfterMirror).toHaveLength(3);
     const mirrorLine = JSON.parse(linesAfterMirror[2]);
-    expect(mirrorLine.message.api).toBe(OPENCLAW_TRANSCRIPT_ARTIFACT_API);
+    expect(mirrorLine.message.api).toBe(MARKETINGCLAW_TRANSCRIPT_ARTIFACT_API);
     expect(mirrorLine.message.model).toBe("delivery-mirror");
 
     await appendSessionTranscriptMessage({
@@ -1251,7 +1251,7 @@ describe("appendAssistantMessageToSessionTranscript", () => {
             textSignature: JSON.stringify({ v: 1, id: "item_final", phase: "final_answer" }),
           },
         ],
-        provider: "openclaw",
+        provider: "marketingclaw",
         model: "delivery-mirror",
       }),
     });
@@ -1511,7 +1511,7 @@ describe("appendAssistantMessageToSessionTranscript", () => {
           updateMode: "none",
           message: createExactAssistantMessage({
             text: "Mirrored reply",
-            provider: "openclaw",
+            provider: "marketingclaw",
             model: "delivery-mirror",
           }),
         }),
@@ -1548,7 +1548,7 @@ describe("appendAssistantMessageToSessionTranscript", () => {
       updateMode: "file-only",
       message: createExactAssistantMessage({
         text: "Done.",
-        provider: "openclaw",
+        provider: "marketingclaw",
         model: "delivery-mirror",
       }),
     });
@@ -1963,7 +1963,7 @@ describe("appendAssistantMessageToSessionTranscript", () => {
       transcriptPath: sessionFile,
       message: {
         role: "assistant",
-        provider: "openclaw",
+        provider: "marketingclaw",
         model: "delivery-mirror",
         content: "second side delivery",
       },
@@ -2063,7 +2063,7 @@ describe("appendAssistantMessageToSessionTranscript", () => {
       transcriptPath: sessionFile,
       message: {
         role: "assistant",
-        provider: "openclaw",
+        provider: "marketingclaw",
         model: "delivery-mirror",
         content: "second side delivery",
       },

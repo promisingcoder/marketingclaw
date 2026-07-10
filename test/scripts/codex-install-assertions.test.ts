@@ -15,7 +15,10 @@ import { cleanupTempDirs, makeTempDir } from "../helpers/temp-dir.js";
 const ASSERTIONS_SCRIPT = "scripts/e2e/lib/codex-on-demand/assertions.mjs";
 const DISABLE_EXPERIMENTAL_WARNING = "--disable-warning=ExperimentalWarning";
 const tempDirs: string[] = [];
-const tmpFixtureFiles = ["/tmp/openclaw-codex-inspect.json", "/tmp/openclaw-plugins-list.json"];
+const tmpFixtureFiles = [
+  "/tmp/marketingclaw-codex-inspect.json",
+  "/tmp/marketingclaw-plugins-list.json",
+];
 
 afterEach(() => {
   for (const file of tmpFixtureFiles) {
@@ -38,7 +41,7 @@ function writeJson(filePath: string, value: unknown) {
 
 function writeAuthProfileStoreSqlite(agentDir: string) {
   mkdirSync(agentDir, { recursive: true });
-  const db = new DatabaseSync(path.join(agentDir, "openclaw-agent.sqlite"));
+  const db = new DatabaseSync(path.join(agentDir, "marketingclaw-agent.sqlite"));
   try {
     db.exec(`
       CREATE TABLE IF NOT EXISTS auth_profile_store (
@@ -78,8 +81,8 @@ function runCodexOnDemandAssertions(root: string) {
       ...process.env,
       HOME: path.join(root, "home"),
       NODE_OPTIONS: nodeOptionsWithoutExperimentalWarnings(),
-      OPENCLAW_CONFIG_PATH: path.join(root, "state", "openclaw.json"),
-      OPENCLAW_STATE_DIR: path.join(root, "state"),
+      MARKETINGCLAW_CONFIG_PATH: path.join(root, "state", "marketingclaw.json"),
+      MARKETINGCLAW_STATE_DIR: path.join(root, "state"),
     },
   });
 }
@@ -87,9 +90,16 @@ function runCodexOnDemandAssertions(root: string) {
 function createCodexInstallFixture(root: string) {
   const stateDir = path.join(root, "state");
   const npmRoot = path.join(stateDir, "npm");
-  const installPath = path.join(npmRoot, "projects", "codex", "node_modules", "@openclaw", "codex");
-  const projectRoot = npmProjectRootForInstalledPackage(installPath, "@openclaw/codex");
-  writeJson(path.join(installPath, "package.json"), { name: "@openclaw/codex" });
+  const installPath = path.join(
+    npmRoot,
+    "projects",
+    "codex",
+    "node_modules",
+    "@marketingclaw",
+    "codex",
+  );
+  const projectRoot = npmProjectRootForInstalledPackage(installPath, "@marketingclaw/codex");
+  writeJson(path.join(installPath, "package.json"), { name: "@marketingclaw/codex" });
   const openAiCodexRoot = path.join(projectRoot, "node_modules", "@openai", "codex");
   writeJson(path.join(openAiCodexRoot, "package.json"), {
     name: "@openai/codex",
@@ -99,7 +109,7 @@ function createCodexInstallFixture(root: string) {
   mkdirSync(path.dirname(codexBin), { recursive: true });
   writeFileSync(codexBin, "#!/usr/bin/env node\n", { mode: 0o755 });
   chmodSync(codexBin, 0o755);
-  writeJson(path.join(stateDir, "openclaw.json"), {
+  writeJson(path.join(stateDir, "marketingclaw.json"), {
     agents: { defaults: { model: { primary: "openai/gpt-5.5" } } },
     models: { providers: { openai: { agentRuntime: { id: "codex" } } } },
     plugins: {
@@ -107,15 +117,15 @@ function createCodexInstallFixture(root: string) {
         codex: {
           installPath,
           source: "npm",
-          spec: "npm:@openclaw/codex",
+          spec: "npm:@marketingclaw/codex",
         },
       },
     },
   });
-  writeJson("/tmp/openclaw-codex-inspect.json", {
+  writeJson("/tmp/marketingclaw-codex-inspect.json", {
     plugin: { id: "codex", status: "loaded", agentHarnessIds: ["codex"] },
   });
-  writeJson("/tmp/openclaw-plugins-list.json", {
+  writeJson("/tmp/marketingclaw-plugins-list.json", {
     plugins: [{ id: "codex", enabled: true, status: "loaded" }],
   });
   writeAuthProfileStoreSqlite(path.join(stateDir, "agents", "main", "agent"));
@@ -123,7 +133,7 @@ function createCodexInstallFixture(root: string) {
 
 describe("Codex install helpers", () => {
   it("resolves package roots and package manifests inside managed npm installs", () => {
-    const root = makeTempDir(tempDirs, "openclaw-codex-install-utils-");
+    const root = makeTempDir(tempDirs, "marketingclaw-codex-install-utils-");
     const packageRoot = path.join(
       root,
       "state",
@@ -131,10 +141,10 @@ describe("Codex install helpers", () => {
       "projects",
       "codex",
       "node_modules",
-      "@openclaw",
+      "@marketingclaw",
       "codex",
     );
-    const projectRoot = npmProjectRootForInstalledPackage(packageRoot, "@openclaw/codex");
+    const projectRoot = npmProjectRootForInstalledPackage(packageRoot, "@marketingclaw/codex");
     const dependencyPackage = path.join(
       projectRoot,
       "node_modules",
@@ -155,7 +165,7 @@ describe("Codex install helpers", () => {
   });
 
   it("accepts a complete on-demand Codex npm install fixture", () => {
-    const root = makeTempDir(tempDirs, "openclaw-codex-on-demand-");
+    const root = makeTempDir(tempDirs, "marketingclaw-codex-on-demand-");
     createCodexInstallFixture(root);
 
     const result = runCodexOnDemandAssertions(root);
@@ -165,7 +175,7 @@ describe("Codex install helpers", () => {
   });
 
   it("rejects on-demand fixtures missing the managed @openai/codex dependency", () => {
-    const root = makeTempDir(tempDirs, "openclaw-codex-on-demand-missing-");
+    const root = makeTempDir(tempDirs, "marketingclaw-codex-on-demand-missing-");
     createCodexInstallFixture(root);
     rmSync(path.join(root, "state", "npm", "projects", "codex", "node_modules", "@openai"), {
       force: true,
@@ -179,7 +189,7 @@ describe("Codex install helpers", () => {
   });
 
   it("rejects on-demand fixtures missing the managed Codex executable", () => {
-    const root = makeTempDir(tempDirs, "openclaw-codex-on-demand-missing-bin-");
+    const root = makeTempDir(tempDirs, "marketingclaw-codex-on-demand-missing-bin-");
     createCodexInstallFixture(root);
     rmSync(
       path.join(

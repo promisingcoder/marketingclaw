@@ -1,6 +1,6 @@
 // Google tests cover realtime voice provider plugin behavior.
-import { REALTIME_VOICE_AUDIO_FORMAT_PCM16_24KHZ } from "openclaw/plugin-sdk/realtime-voice";
-import type { RealtimeVoiceTool } from "openclaw/plugin-sdk/realtime-voice";
+import { REALTIME_VOICE_AUDIO_FORMAT_PCM16_24KHZ } from "marketingclaw/plugin-sdk/realtime-voice";
+import type { RealtimeVoiceTool } from "marketingclaw/plugin-sdk/realtime-voice";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { buildGoogleRealtimeVoiceProvider } from "./realtime-voice-provider.js";
 
@@ -182,7 +182,7 @@ describe("buildGoogleRealtimeVoiceProvider", () => {
         enableAffectiveDialog: true,
         thinkingBudget: 8_193,
       },
-      tools: [createRealtimeTool("openclaw_agent_consult")],
+      tools: [createRealtimeTool("marketingclaw_agent_consult")],
       onAudio: vi.fn(),
       onClearAudio: vi.fn(),
     });
@@ -198,7 +198,7 @@ describe("buildGoogleRealtimeVoiceProvider", () => {
       tools?: Array<{ functionDeclarations?: Array<{ behavior?: string; name?: string }> }>;
     };
     expect(config.tools?.[0]?.functionDeclarations?.[0]).toMatchObject({
-      name: "openclaw_agent_consult",
+      name: "marketingclaw_agent_consult",
     });
     expect(config.tools?.[0]?.functionDeclarations?.[0]).not.toHaveProperty("behavior");
   });
@@ -281,8 +281,8 @@ describe("buildGoogleRealtimeVoiceProvider", () => {
         },
         {
           type: "function",
-          name: "openclaw_agent_consult",
-          description: "Ask OpenClaw",
+          name: "marketingclaw_agent_consult",
+          description: "Ask MarketingClaw",
           parameters: {
             type: "object",
             properties: {
@@ -351,8 +351,8 @@ describe("buildGoogleRealtimeVoiceProvider", () => {
       },
       required: ["query"],
     });
-    expect(declarations[1]?.name).toBe("openclaw_agent_consult");
-    expect(declarations[1]?.description).toBe("Ask OpenClaw");
+    expect(declarations[1]?.name).toBe("marketingclaw_agent_consult");
+    expect(declarations[1]?.description).toBe("Ask MarketingClaw");
     expect(declarations[1]?.parameters).toEqual({
       type: "object",
       properties: {
@@ -492,8 +492,8 @@ describe("buildGoogleRealtimeVoiceProvider", () => {
       tools: [
         {
           type: "function",
-          name: "openclaw_agent_consult",
-          description: "Ask OpenClaw",
+          name: "marketingclaw_agent_consult",
+          description: "Ask MarketingClaw",
           parameters: {
             type: "object",
             properties: {
@@ -550,7 +550,7 @@ describe("buildGoogleRealtimeVoiceProvider", () => {
       "Puck",
     );
     const declaration = liveConstraints?.config?.tools?.[0]?.functionDeclarations?.[0];
-    expect(declaration?.name).toBe("openclaw_agent_consult");
+    expect(declaration?.name).toBe("marketingclaw_agent_consult");
     expect(declaration?.behavior).toBe("NON_BLOCKING");
     expect(declaration?.parameters).toEqual({
       type: "object",
@@ -603,7 +603,7 @@ describe("buildGoogleRealtimeVoiceProvider", () => {
         thinkingLevel: "low",
         thinkingBudget: 8_193,
       },
-      tools: [createRealtimeTool("openclaw_agent_consult")],
+      tools: [createRealtimeTool("marketingclaw_agent_consult")],
     });
 
     const tokenConfig = requireFirstMockArg(createTokenMock, "Google Live auth token config") as {
@@ -625,7 +625,7 @@ describe("buildGoogleRealtimeVoiceProvider", () => {
     expect(constraints?.config?.thinkingConfig).toEqual({ thinkingLevel: "LOW" });
     expect(constraints?.config).not.toHaveProperty("enableAffectiveDialog");
     expect(constraints?.config?.tools?.[0]?.functionDeclarations?.[0]).toMatchObject({
-      name: "openclaw_agent_consult",
+      name: "marketingclaw_agent_consult",
     });
     expect(constraints?.config?.tools?.[0]?.functionDeclarations?.[0]).not.toHaveProperty(
       "behavior",
@@ -1325,7 +1325,7 @@ describe("buildGoogleRealtimeVoiceProvider", () => {
       setupComplete: { sessionId: "session-1" },
       toolCall: {
         functionCalls: [
-          { id: "consult-call", name: "openclaw_agent_consult", args: { prompt: "hi" } },
+          { id: "consult-call", name: "marketingclaw_agent_consult", args: { prompt: "hi" } },
         ],
       },
     });
@@ -1341,7 +1341,7 @@ describe("buildGoogleRealtimeVoiceProvider", () => {
       functionResponses: [
         {
           id: "consult-call",
-          name: "openclaw_agent_consult",
+          name: "marketingclaw_agent_consult",
           scheduling: "WHEN_IDLE",
           willContinue: true,
           response: { status: "working", message: "Tell the participant you are checking." },
@@ -1352,7 +1352,7 @@ describe("buildGoogleRealtimeVoiceProvider", () => {
       functionResponses: [
         {
           id: "consult-call",
-          name: "openclaw_agent_consult",
+          name: "marketingclaw_agent_consult",
           scheduling: "WHEN_IDLE",
           response: { text: "The meeting starts at 3." },
         },
@@ -1376,7 +1376,7 @@ describe("buildGoogleRealtimeVoiceProvider", () => {
       setupComplete: { sessionId: "session-1" },
       toolCall: {
         functionCalls: [
-          { id: "consult-call", name: "openclaw_agent_consult", args: { prompt: "hi" } },
+          { id: "consult-call", name: "marketingclaw_agent_consult", args: { prompt: "hi" } },
         ],
       },
     });
@@ -1393,7 +1393,7 @@ describe("buildGoogleRealtimeVoiceProvider", () => {
       functionResponses: [
         {
           id: "consult-call",
-          name: "openclaw_agent_consult",
+          name: "marketingclaw_agent_consult",
           response: { text: "The meeting starts at 3." },
         },
       ],

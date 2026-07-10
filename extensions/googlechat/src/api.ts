@@ -1,12 +1,12 @@
 // Googlechat API module exposes the plugin public contract.
 import crypto from "node:crypto";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "marketingclaw/plugin-sdk/error-runtime";
 import {
   parseMediaContentLength,
   readResponseTextSnippet,
-} from "openclaw/plugin-sdk/media-runtime";
-import { readResponseWithLimit } from "openclaw/plugin-sdk/response-limit-runtime";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "marketingclaw/plugin-sdk/media-runtime";
+import { readResponseWithLimit } from "marketingclaw/plugin-sdk/response-limit-runtime";
+import { fetchWithSsrFGuard } from "marketingclaw/plugin-sdk/ssrf-runtime";
 import type { ResolvedGoogleChatAccount } from "./accounts.js";
 import { shouldSuppressGoogleChatManualExecApprovalFollowupText } from "./approval-card-actions.js";
 import { getGoogleChatAccessToken } from "./auth.js";
@@ -271,7 +271,7 @@ export async function uploadGoogleChatAttachment(params: {
   contentType?: string;
 }): Promise<{ attachmentUploadToken?: string }> {
   const { account, space, filename, buffer, contentType } = params;
-  const boundary = `openclaw-${crypto.randomUUID()}`;
+  const boundary = `marketingclaw-${crypto.randomUUID()}`;
   const metadata = JSON.stringify({ filename });
   const header = `--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${metadata}\r\n`;
   const mediaHeader = `--${boundary}\r\nContent-Type: ${contentType ?? "application/octet-stream"}\r\n\r\n`;

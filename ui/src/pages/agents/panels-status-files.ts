@@ -298,7 +298,7 @@ export function renderAgentChannels(params: {
                           ? html`
                               <div>
                                 <a
-                                  href="https://docs.openclaw.ai/channels"
+                                  href="https://docs.marketingclaw.ai/channels"
                                   target="_blank"
                                   rel="noopener"
                                   style="color: var(--accent); font-size: 12px"
@@ -617,7 +617,7 @@ export function renderAgentFiles(params: {
                             </div>
                           </div>
                           <div class="md-preview-dialog__actions">
-                            <openclaw-tooltip .content=${t("agents.files.expandPreview")}>
+                            <marketingclaw-tooltip .content=${t("agents.files.expandPreview")}>
                               <button
                                 type="button"
                                 class="btn btn--sm md-preview-icon-btn md-preview-expand-btn"
@@ -638,8 +638,8 @@ export function renderAgentFiles(params: {
                                   >${icons.minimize}</span
                                 >
                               </button>
-                            </openclaw-tooltip>
-                            <openclaw-tooltip .content=${t("agents.files.editFile")}>
+                            </marketingclaw-tooltip>
+                            <marketingclaw-tooltip .content=${t("agents.files.editFile")}>
                               <button
                                 type="button"
                                 class="btn btn--sm md-preview-icon-btn"
@@ -653,8 +653,8 @@ export function renderAgentFiles(params: {
                               >
                                 <span aria-hidden="true">${icons.edit}</span>
                               </button>
-                            </openclaw-tooltip>
-                            <openclaw-tooltip .content=${t("agents.files.closePreview")}>
+                            </marketingclaw-tooltip>
+                            <marketingclaw-tooltip .content=${t("agents.files.closePreview")}>
                               <button
                                 type="button"
                                 class="btn btn--sm md-preview-icon-btn"
@@ -665,7 +665,7 @@ export function renderAgentFiles(params: {
                               >
                                 <span aria-hidden="true">${icons.x}</span>
                               </button>
-                            </openclaw-tooltip>
+                            </marketingclaw-tooltip>
                           </div>
                         </div>
                         <div class="md-preview-dialog__meta">

@@ -1,7 +1,7 @@
-package ai.openclaw.app.node
+package ai.marketingclaw.app.node
 
-import ai.openclaw.app.gateway.GatewaySession
-import ai.openclaw.app.mainActivityPendingIntent
+import ai.marketingclaw.app.gateway.GatewaySession
+import ai.marketingclaw.app.mainActivityPendingIntent
 import android.Manifest
 import android.app.Notification
 import android.app.NotificationChannel
@@ -17,7 +17,7 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.contentOrNull
 
-private const val NOTIFICATION_CHANNEL_BASE_ID = "openclaw.system.notify"
+private const val NOTIFICATION_CHANNEL_BASE_ID = "marketingclaw.system.notify"
 private const val NOTIFICATION_CONTENT_REQUEST_CODE = 3
 
 /** Parsed payload for system.notify invocations. */
@@ -69,9 +69,9 @@ private class AndroidSystemNotificationPoster(
     // to stable channel ids instead of mutating one shared channel.
     val (suffix, importance, name) =
       when (normalizedPriority) {
-        "passive" -> Triple("passive", NotificationManager.IMPORTANCE_LOW, "OpenClaw Passive")
-        "timesensitive" -> Triple("timesensitive", NotificationManager.IMPORTANCE_HIGH, "OpenClaw Time Sensitive")
-        else -> Triple("active", NotificationManager.IMPORTANCE_DEFAULT, "OpenClaw Active")
+        "passive" -> Triple("passive", NotificationManager.IMPORTANCE_LOW, "MarketingClaw Passive")
+        "timesensitive" -> Triple("timesensitive", NotificationManager.IMPORTANCE_HIGH, "MarketingClaw Time Sensitive")
+        else -> Triple("active", NotificationManager.IMPORTANCE_DEFAULT, "MarketingClaw Active")
       }
     val channelId = "$NOTIFICATION_CHANNEL_BASE_ID.$suffix"
     val manager = appContext.getSystemService(NotificationManager::class.java)

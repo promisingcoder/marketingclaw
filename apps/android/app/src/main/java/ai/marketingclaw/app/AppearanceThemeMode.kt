@@ -1,4 +1,4 @@
-package ai.openclaw.app
+package ai.marketingclaw.app
 
 /** User-selectable app theme mode for Android appearance settings. */
 enum class AppearanceThemeMode(

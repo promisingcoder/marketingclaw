@@ -1,4 +1,4 @@
-import { resolveApprovalOverGateway } from "openclaw/plugin-sdk/approval-gateway-runtime";
+import { resolveApprovalOverGateway } from "marketingclaw/plugin-sdk/approval-gateway-runtime";
 import { googleChatApprovalAuth } from "./approval-auth.js";
 import {
   claimGoogleChatApprovalCardBinding,

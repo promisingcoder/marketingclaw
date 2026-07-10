@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
 import { afterEach, describe, expect, it } from "vitest";
 import { listRaftAccountIds, resolveRaftAccount } from "./accounts.js";
 import { RaftConfigSchema } from "./config-schema.js";
@@ -27,7 +27,7 @@ describe("Raft account resolution", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(listRaftAccountIds(cfg)).toEqual(["default", "support"]);
     expect(resolveRaftAccount({ cfg })).toMatchObject({
@@ -49,14 +49,14 @@ describe("Raft account resolution", () => {
           profile: "configured-profile",
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(resolveRaftAccount({ cfg }).profile).toBe("configured-profile");
   });
 
   it("keeps named account setup scoped to that account", () => {
     const next = raftSetupPlugin.setup!.applyAccountConfig({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       accountId: "support",
       input: {
         profile: "support-profile",

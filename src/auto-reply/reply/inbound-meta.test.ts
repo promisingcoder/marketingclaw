@@ -125,7 +125,7 @@ describe("buildInboundMetaSystemPrompt", () => {
     } as TemplateContext);
 
     const payload = parseInboundMetaPayload(prompt);
-    expect(payload["schema"]).toBe("openclaw.inbound_meta.v2");
+    expect(payload["schema"]).toBe("marketingclaw.inbound_meta.v2");
     expect(payload["chat_id"]).toBeUndefined();
     expect(payload["account_id"]).toBe("work");
     expect(payload["channel"]).toBe("telegram");
@@ -429,7 +429,7 @@ describe("buildInboundUserContextPrefix", () => {
   it("omits conversation label block for direct chats", () => {
     const text = buildInboundUserContextPrefix({
       ChatType: "direct",
-      ConversationLabel: "openclaw-tui",
+      ConversationLabel: "marketingclaw-tui",
     } as TemplateContext);
 
     expect(text).toBe("");
@@ -510,14 +510,14 @@ describe("buildInboundUserContextPrefix", () => {
   it("does not treat group chats as direct based on sender id", () => {
     const text = buildInboundUserContextPrefix({
       ChatType: "group",
-      SenderId: "openclaw-control-ui",
+      SenderId: "marketingclaw-control-ui",
       MessageSid: "123",
       ConversationLabel: "some-label",
     } as TemplateContext);
 
     const conversationInfo = parseConversationInfoPayload(text);
     expect(conversationInfo["message_id"]).toBe("123");
-    expect(conversationInfo["sender"]).toEqual({ id: "openclaw-control-ui" });
+    expect(conversationInfo["sender"]).toEqual({ id: "marketingclaw-control-ui" });
     expect(conversationInfo["conversation_label"]).toBe("some-label");
   });
 
@@ -1071,7 +1071,7 @@ describe("buildInboundUserContextPrefix", () => {
                   sender: "Bot",
                   body: "Earlier technical answer",
                   media_type: "image/png",
-                  media_path: "/home/user/.openclaw/media/inbound/sticker.webp",
+                  media_path: "/home/user/.marketingclaw/media/inbound/sticker.webp",
                   media_ref: "telegram:file/old-provider-ref",
                   is_reply_target: true,
                 },
@@ -1100,7 +1100,7 @@ describe("buildInboundUserContextPrefix", () => {
       "#1200 [reply target] Bot: Earlier technical answer [image/png media://inbound/sticker.webp]",
     );
     expect(text).not.toContain("telegram:file/old-provider-ref");
-    expect(text).not.toContain("/home/user/.openclaw/media/inbound/sticker.webp");
+    expect(text).not.toContain("/home/user/.marketingclaw/media/inbound/sticker.webp");
     expect(text).not.toContain("Current local chat window (untrusted metadata):");
     expect(text).not.toContain('"message_id": "34273"');
   });
@@ -1420,7 +1420,7 @@ describe("buildInboundUserContextPrefix", () => {
           messageId: "m-1",
           media: [
             {
-              path: "/tmp/openclaw-secret-image.png",
+              path: "/tmp/marketingclaw-secret-image.png",
               url: "https://cdn.example.test/private-token",
               contentType: "image/png",
               kind: "image",
@@ -1436,7 +1436,7 @@ describe("buildInboundUserContextPrefix", () => {
 
     expect(text).toContain("#m-1");
     expect(text).toContain("Alice: <media:image> (1 image) [image/png]");
-    expect(text).not.toContain("/tmp/openclaw-secret-image.png");
+    expect(text).not.toContain("/tmp/marketingclaw-secret-image.png");
     expect(text).not.toContain("private-token");
   });
 
@@ -1451,14 +1451,14 @@ describe("buildInboundUserContextPrefix", () => {
           messageId: "m-2",
           media: [
             {
-              path: "/tmp/openclaw-secret-image-1.png",
+              path: "/tmp/marketingclaw-secret-image-1.png",
               url: "https://cdn.example.test/private-token-1",
               contentType: "image/png",
               kind: "image",
               messageId: "m-2",
             },
             {
-              path: "/tmp/openclaw-secret-image-2.jpg",
+              path: "/tmp/marketingclaw-secret-image-2.jpg",
               url: "https://cdn.example.test/private-token-2",
               contentType: "image/jpeg",
               kind: "image",
@@ -1474,8 +1474,8 @@ describe("buildInboundUserContextPrefix", () => {
 
     expect(text).toContain("#m-2");
     expect(text).toContain("Alice: <media:image> (2 images) [image/png, image/jpeg]");
-    expect(text).not.toContain("/tmp/openclaw-secret-image-1.png");
-    expect(text).not.toContain("/tmp/openclaw-secret-image-2.jpg");
+    expect(text).not.toContain("/tmp/marketingclaw-secret-image-1.png");
+    expect(text).not.toContain("/tmp/marketingclaw-secret-image-2.jpg");
     expect(text).not.toContain("private-token-1");
     expect(text).not.toContain("private-token-2");
   });

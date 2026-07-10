@@ -1,8 +1,8 @@
 // Signal plugin module implements inbound context behavior.
-import { filterChannelInboundQuoteContext } from "openclaw/plugin-sdk/channel-inbound";
-import { resolveChannelContextVisibilityMode } from "openclaw/plugin-sdk/context-visibility-runtime";
-import type { ContextVisibilityDecision } from "openclaw/plugin-sdk/security-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { filterChannelInboundQuoteContext } from "marketingclaw/plugin-sdk/channel-inbound";
+import { resolveChannelContextVisibilityMode } from "marketingclaw/plugin-sdk/context-visibility-runtime";
+import type { ContextVisibilityDecision } from "marketingclaw/plugin-sdk/security-runtime";
+import { normalizeOptionalString } from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import {
   formatSignalSenderDisplay,
   isSignalSenderAllowed,

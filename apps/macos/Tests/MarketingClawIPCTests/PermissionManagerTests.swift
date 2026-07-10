@@ -1,7 +1,7 @@
 import CoreLocation
-import OpenClawIPC
+import MarketingClawIPC
 import Testing
-@testable import OpenClaw
+@testable import MarketingClaw
 
 @Suite(.serialized)
 @MainActor

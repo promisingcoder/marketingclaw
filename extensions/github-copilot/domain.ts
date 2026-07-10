@@ -4,13 +4,13 @@
 // security-critical host allowlist (`normalizeGithubCopilotDomain`). The
 // env/config precedence below is GitHub Copilot provider policy, not a
 // plugin-SDK contract, so it is intentionally not part of the SDK surface.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { normalizeGithubCopilotDomain } from "openclaw/plugin-sdk/provider-auth";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import { normalizeGithubCopilotDomain } from "marketingclaw/plugin-sdk/provider-auth";
 
 /** Public GitHub Copilot host used when no data-residency domain is configured. */
 export const PUBLIC_GITHUB_COPILOT_DOMAIN = "github.com";
 
-function readConfiguredGithubCopilotDomain(config?: OpenClawConfig): string | undefined {
+function readConfiguredGithubCopilotDomain(config?: MarketingClawConfig): string | undefined {
   const params = config?.models?.providers?.["github-copilot"]?.params;
   const value = params && typeof params === "object" ? params.githubDomain : undefined;
   return typeof value === "string" && value.trim().length > 0 ? value.trim() : undefined;
@@ -25,7 +25,7 @@ function readConfiguredGithubCopilotDomain(config?: OpenClawConfig): string | un
  */
 export function resolveGithubCopilotDomain(params?: {
   env?: NodeJS.ProcessEnv;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
 }): string {
   const env = params?.env ?? process.env;
   const fromEnv = env.COPILOT_GITHUB_DOMAIN?.trim();

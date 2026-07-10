@@ -1,5 +1,5 @@
 // Shared abort runtime types for cancellation and cutoff persistence.
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import type { FinalizedMsgContext } from "../templating.js";
 
 /** Result from the fast abort path before normal reply dispatch starts. */
@@ -13,7 +13,7 @@ type FastAbortResult = {
 /** Runtime hook that may convert a message into an immediate abort action. */
 export type TryFastAbortFromMessage = (params: {
   ctx: FinalizedMsgContext;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
 }) => Promise<FastAbortResult>;
 
 /** Formats the user-visible abort acknowledgement text. */

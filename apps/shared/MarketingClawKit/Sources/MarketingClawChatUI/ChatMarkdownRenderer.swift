@@ -15,7 +15,7 @@ struct ChatMarkdownRenderer: View {
     }
 
     struct InlineMathTypography {
-        static let body = Self(size: OpenClawChatTypography.bodySize, relativeTo: .body)
+        static let body = Self(size: MarketingClawChatTypography.bodySize, relativeTo: .body)
         static let callout = Self(size: 16, relativeTo: .callout)
 
         let size: CGFloat
@@ -115,7 +115,7 @@ struct ChatMarkdownRenderer: View {
     }
 
     private var linkColor: Color {
-        self.context == .user ? self.textColor : OpenClawChatTheme.accent
+        self.context == .user ? self.textColor : MarketingClawChatTheme.accent
     }
 }
 
@@ -518,7 +518,7 @@ private struct InlineImageList: View {
     var body: some View {
         ForEach(self.images, id: \.id) { item in
             if let img = item.image {
-                OpenClawPlatformImageFactory.image(img)
+                MarketingClawPlatformImageFactory.image(img)
                     .resizable()
                     .scaledToFit()
                     .frame(maxHeight: 260)
@@ -528,7 +528,7 @@ private struct InlineImageList: View {
                             .strokeBorder(Color.white.opacity(0.12), lineWidth: 1))
             } else {
                 Text(item.label.isEmpty ? "Image" : item.label)
-                    .font(OpenClawChatTypography.footnote)
+                    .font(MarketingClawChatTypography.footnote)
                     .foregroundStyle(.secondary)
             }
         }

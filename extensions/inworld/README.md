@@ -1,12 +1,12 @@
-# OpenClaw Inworld Plugin
+# MarketingClaw Inworld Plugin
 
-Official OpenClaw plugin for Inworld.
+Official MarketingClaw plugin for Inworld.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugins install @openclaw/inworld-speech
-openclaw gateway restart
+marketingclaw plugins install @marketingclaw/inworld-speech
+marketingclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/inworld> for setup and configuration.
+See <https://docs.marketingclaw.ai/providers/inworld> for setup and configuration.

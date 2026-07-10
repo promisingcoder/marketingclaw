@@ -1,6 +1,6 @@
 // Canvas tests cover index plugin behavior.
-import type { AnyAgentTool, OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
-import { createTestPluginApi } from "openclaw/plugin-sdk/plugin-test-api";
+import type { AnyAgentTool, MarketingClawPluginApi } from "marketingclaw/plugin-sdk/plugin-entry";
+import { createTestPluginApi } from "marketingclaw/plugin-sdk/plugin-test-api";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import canvasPlugin from "./index.js";
 import { SHOW_WIDGET_REQUIRED_CLIENT_CAPS } from "./src/tool-schema.js";
@@ -60,16 +60,16 @@ vi.mock("./src/widget-tool.js", () => ({
 }));
 
 function registerCanvas() {
-  const routes: Array<Parameters<OpenClawPluginApi["registerHttpRoute"]>[0]> = [];
-  const services: Array<Parameters<OpenClawPluginApi["registerService"]>[0]> = [];
-  const resolvers: Array<Parameters<OpenClawPluginApi["registerHostedMediaResolver"]>[0]> = [];
+  const routes: Array<Parameters<MarketingClawPluginApi["registerHttpRoute"]>[0]> = [];
+  const services: Array<Parameters<MarketingClawPluginApi["registerService"]>[0]> = [];
+  const resolvers: Array<Parameters<MarketingClawPluginApi["registerHostedMediaResolver"]>[0]> = [];
   const tools: Array<{
-    tool: Parameters<OpenClawPluginApi["registerTool"]>[0];
-    opts: Parameters<OpenClawPluginApi["registerTool"]>[1];
+    tool: Parameters<MarketingClawPluginApi["registerTool"]>[0];
+    opts: Parameters<MarketingClawPluginApi["registerTool"]>[1];
   }> = [];
   const cliFeatures: Array<{
-    registrar: Parameters<OpenClawPluginApi["registerNodeCliFeature"]>[0];
-    opts: Parameters<OpenClawPluginApi["registerNodeCliFeature"]>[1];
+    registrar: Parameters<MarketingClawPluginApi["registerNodeCliFeature"]>[0];
+    opts: Parameters<MarketingClawPluginApi["registerNodeCliFeature"]>[1];
   }> = [];
   canvasPlugin.register?.(
     createTestPluginApi({
@@ -102,7 +102,7 @@ describe("Canvas plugin entry", () => {
     await services[0]?.stop?.({} as never);
     expect(mocks.createCanvasHttpRouteHandler).not.toHaveBeenCalled();
 
-    await routes[0]?.handler({ url: "/__openclaw__/canvas" } as never, {} as never);
+    await routes[0]?.handler({ url: "/__marketingclaw__/canvas" } as never, {} as never);
     expect(mocks.createCanvasHttpRouteHandler).toHaveBeenCalledTimes(1);
     expect(mocks.httpHandler.handleHttpRequest).toHaveBeenCalledTimes(1);
 
@@ -122,7 +122,7 @@ describe("Canvas plugin entry", () => {
     expect(mocks.createCanvasTool).not.toHaveBeenCalled();
     expect(mocks.createShowWidgetTool).not.toHaveBeenCalled();
 
-    await expect(resolvers[0]?.("/__openclaw__/canvas/documents/id/index.html")).resolves.toBe(
+    await expect(resolvers[0]?.("/__marketingclaw__/canvas/documents/id/index.html")).resolves.toBe(
       "/tmp/canvas-asset",
     );
     expect(mocks.resolveCanvasHttpPathToLocalPath).toHaveBeenCalledTimes(1);

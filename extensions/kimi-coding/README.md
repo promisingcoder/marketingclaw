@@ -1,12 +1,12 @@
-# OpenClaw Kimi Coding Provider
+# MarketingClaw Kimi Coding Provider
 
-Official OpenClaw provider plugin for Kimi Coding.
+Official MarketingClaw provider plugin for Kimi Coding.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugins install @openclaw/kimi-provider
-openclaw gateway restart
+marketingclaw plugins install @marketingclaw/kimi-provider
+marketingclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/moonshot> for setup and configuration.
+See <https://docs.marketingclaw.ai/providers/moonshot> for setup and configuration.

@@ -1,14 +1,14 @@
 import AppKit
 import Foundation
 import Observation
-import OpenClawKit
+import MarketingClawKit
 import ServiceManagement
 import SwiftUI
 
 @MainActor
 @Observable
 final class AppState {
-    private static let logger = Logger(subsystem: "ai.openclaw", category: "app-state")
+    private static let logger = Logger(subsystem: "ai.marketingclaw", category: "app-state")
 
     private let isPreview: Bool
     private var isInitializing = true
@@ -364,7 +364,7 @@ final class AppState {
             UserDefaults.standard.set(IconOverrideSelection.system.rawValue, forKey: iconOverrideKey)
         }
 
-        let configRoot = OpenClawConfigFile.loadDict()
+        let configRoot = MarketingClawConfigFile.loadDict()
         let configRemoteToken = GatewayRemoteConfig.resolveTokenValue(root: configRoot)
         let configRemoteResolution = GatewayRemoteConfig.resolveTransportResolution(root: configRoot)
         let configRemoteTransport = configRemoteResolution.transport
@@ -472,8 +472,8 @@ final class AppState {
         let preservePort: Bool = if LoopbackHost.isLoopbackHost(host) {
             true
         } else if let expectedRemoteHost {
-            OpenClawConfigFile.canonicalHostForComparison(host) ==
-                OpenClawConfigFile.canonicalHostForComparison(expectedRemoteHost)
+            MarketingClawConfigFile.canonicalHostForComparison(host) ==
+                MarketingClawConfigFile.canonicalHostForComparison(expectedRemoteHost)
         } else {
             false
         }
@@ -568,7 +568,7 @@ final class AppState {
     }
 
     private func startConfigWatcher() {
-        let configUrl = OpenClawConfigFile.url()
+        let configUrl = MarketingClawConfigFile.url()
         self.configWatcher = ConfigFileWatcher(url: configUrl) { [weak self] in
             Task { @MainActor in
                 self?.applyConfigFromDisk()
@@ -578,7 +578,7 @@ final class AppState {
     }
 
     private func applyConfigFromDisk() {
-        let root = OpenClawConfigFile.loadDict()
+        let root = MarketingClawConfigFile.loadDict()
         self.applyConfigOverrides(root)
         MacNodeModeCoordinator.shared.refresh()
     }
@@ -719,7 +719,7 @@ final class AppState {
 
         // Keep app-only connection settings local to avoid overwriting remote gateway config.
         let synced = Self.syncedGatewayRoot(
-            currentRoot: OpenClawConfigFile.loadDict(),
+            currentRoot: MarketingClawConfigFile.loadDict(),
             draft: .init(
                 connectionMode: self.connectionMode,
                 remoteTransport: self.remoteTransport,
@@ -729,7 +729,7 @@ final class AppState {
                 remoteToken: self.remoteToken,
                 remoteTokenDirty: self.remoteTokenDirty))
         guard synced.changed else { return }
-        guard OpenClawConfigFile.saveDict(synced.root) else {
+        guard MarketingClawConfigFile.saveDict(synced.root) else {
             Self.logger.warning("gateway config sync rejected to protect persisted gateway auth/mode")
             return
         }
@@ -878,7 +878,7 @@ extension AppState {
         state.remoteUrl = "wss://gateway.example.ts.net"
         state.remoteToken = "example-token"
         state.remoteIdentity = "~/.ssh/id_ed25519"
-        state.remoteProjectRoot = "~/Projects/openclaw"
+        state.remoteProjectRoot = "~/Projects/marketingclaw"
         state.remoteCliPath = ""
         return state
     }

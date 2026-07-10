@@ -12,7 +12,7 @@ import {
 const SCRIPT_PATH = "scripts/install.sh";
 
 function runInstallShell(script: string, env: NodeJS.ProcessEnv = {}) {
-  const home = mkdtempSync(join(tmpdir(), "openclaw-install-home-"));
+  const home = mkdtempSync(join(tmpdir(), "marketingclaw-install-home-"));
   try {
     return spawnSync("bash", ["-c", script], {
       encoding: "utf8",
@@ -22,7 +22,7 @@ function runInstallShell(script: string, env: NodeJS.ProcessEnv = {}) {
         ...env,
         BASH_ENV: "",
         ENV: "",
-        OPENCLAW_INSTALL_SH_NO_RUN: "1",
+        MARKETINGCLAW_INSTALL_SH_NO_RUN: "1",
       },
     });
   } finally {
@@ -34,14 +34,17 @@ describe("install.sh", () => {
   const script = readFileSync(SCRIPT_PATH, "utf8");
 
   it("runs installer snippets without inherited shell startup files", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-shell-env-"));
+    const tmp = mkdtempSync(join(tmpdir(), "marketingclaw-install-shell-env-"));
     const bashEnvPath = join(tmp, "bash_env");
-    writeFileSync(bashEnvPath, "export OPENCLAW_BASH_ENV_LEAKED=1\n");
+    writeFileSync(bashEnvPath, "export MARKETINGCLAW_BASH_ENV_LEAKED=1\n");
 
     try {
-      const result = runInstallShell('printf "leaked=%s\\n" "${OPENCLAW_BASH_ENV_LEAKED:-0}"', {
-        BASH_ENV: bashEnvPath,
-      });
+      const result = runInstallShell(
+        'printf "leaked=%s\\n" "${MARKETINGCLAW_BASH_ENV_LEAKED:-0}"',
+        {
+          BASH_ENV: bashEnvPath,
+        },
+      );
 
       expect(result.status).toBe(0);
       expect(result.stdout).toBe("leaked=0\n");
@@ -107,8 +110,8 @@ NODE
       check_git() { return 0; }
       ensure_pnpm() { :; }
       ensure_pnpm_binary_for_scripts() { :; }
-      resolve_git_openclaw_ref() { printf 'main\\n'; }
-      checkout_git_openclaw_ref() { :; }
+      resolve_git_marketingclaw_ref() { printf 'main\\n'; }
+      checkout_git_marketingclaw_ref() { :; }
       cleanup_legacy_submodules() { :; }
       activate_repo_pnpm_version() { :; }
       git_install_lockfile_flag() { printf '%s\\n' '--frozen-lockfile'; }
@@ -128,8 +131,8 @@ NODE
         return 1
       }
 
-      install_openclaw_from_git "$repo"
-      wrapper="$HOME/.local/bin/openclaw"
+      install_marketingclaw_from_git "$repo"
+      wrapper="$HOME/.local/bin/marketingclaw"
       grep -F "$tmp/$node_dir/node" "$wrapper"
       cd /
       PATH="/usr/bin:/bin" "$wrapper" --version
@@ -411,7 +414,7 @@ NODE
   });
 
   it("installs Git with apk on Alpine", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-git-apk-"));
+    const tmp = mkdtempSync(join(tmpdir(), "marketingclaw-install-git-apk-"));
     const bin = join(tmp, "bin");
     const apkLog = join(tmp, "apk-args.txt");
     mkdirSync(bin, { recursive: true });
@@ -455,7 +458,7 @@ NODE
   });
 
   it("does not select apk Git on non-Alpine hosts", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-git-native-"));
+    const tmp = mkdtempSync(join(tmpdir(), "marketingclaw-install-git-native-"));
     const bin = join(tmp, "bin");
     const apkLog = join(tmp, "apk-args.txt");
     mkdirSync(bin, { recursive: true });
@@ -515,7 +518,7 @@ NODE
   });
 
   it("does not emit --before when raw user npmrc config contains min-release-age", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-npmrc-"));
+    const tmp = mkdtempSync(join(tmpdir(), "marketingclaw-install-npmrc-"));
     const bin = join(tmp, "bin");
     const home = join(tmp, "home");
     const npmrc = join(tmp, "user.npmrc");
@@ -577,7 +580,7 @@ NODE
   });
 
   it("does not emit --before when default global npmrc config contains min-release-age", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-global-npmrc-"));
+    const tmp = mkdtempSync(join(tmpdir(), "marketingclaw-install-global-npmrc-"));
     const bin = join(tmp, "bin");
     const home = join(tmp, "home");
     const prefix = join(tmp, "prefix");
@@ -649,7 +652,7 @@ NODE
   });
 
   it("does not emit --before when builtin npmrc config contains min-release-age", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-builtin-npmrc-"));
+    const tmp = mkdtempSync(join(tmpdir(), "marketingclaw-install-builtin-npmrc-"));
     const bin = join(tmp, "bin");
     const home = join(tmp, "home");
     const npmrc = join(tmp, "npmrc");
@@ -718,12 +721,12 @@ NODE
     }
   });
 
-  it("uses OPENCLAW_HOME for git defaults", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-home-"));
+  it("uses MARKETINGCLAW_HOME for git defaults", () => {
+    const tmp = mkdtempSync(join(tmpdir(), "marketingclaw-install-home-"));
     const osHome = join(tmp, "os-home");
-    const openclawHome = join(tmp, "openclaw-home");
+    const marketingclawHome = join(tmp, "marketingclaw-home");
     mkdirSync(osHome, { recursive: true });
-    mkdirSync(openclawHome, { recursive: true });
+    mkdirSync(marketingclawHome, { recursive: true });
 
     let result: ReturnType<typeof runInstallShell> | undefined;
     try {
@@ -735,8 +738,8 @@ NODE
         ].join("\n"),
         {
           HOME: osHome,
-          OPENCLAW_HOME: openclawHome,
-          OPENCLAW_GIT_DIR: undefined,
+          MARKETINGCLAW_HOME: marketingclawHome,
+          MARKETINGCLAW_GIT_DIR: undefined,
           TERM: "dumb",
         },
       );
@@ -746,24 +749,24 @@ NODE
 
     expect(result?.status).toBe(0);
     const output = result?.stdout ?? "";
-    expect(output).toContain(`git=${join(openclawHome, "openclaw")}`);
+    expect(output).toContain(`git=${join(marketingclawHome, "marketingclaw")}`);
     const mkdirParentIndex = script.indexOf('mkdir -p "$(dirname "$repo_dir")"');
     const cloneIndex = script.indexOf(
-      'run_quiet_step "Cloning OpenClaw" git clone "$repo_url" "$repo_dir"',
+      'run_quiet_step "Cloning MarketingClaw" git clone "$repo_url" "$repo_dir"',
     );
     expect(mkdirParentIndex).toBeGreaterThan(-1);
     expect(cloneIndex).toBeGreaterThan(-1);
     expect(mkdirParentIndex).toBeLessThan(cloneIndex);
   });
 
-  it("does not treat OS HOME config as active when OPENCLAW_HOME is set", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-legacy-config-"));
+  it("does not treat OS HOME config as active when MARKETINGCLAW_HOME is set", () => {
+    const tmp = mkdtempSync(join(tmpdir(), "marketingclaw-install-legacy-config-"));
     const osHome = join(tmp, "os-home");
-    const openclawHome = join(tmp, "openclaw-home");
-    const legacyConfigDir = join(osHome, ".openclaw");
+    const marketingclawHome = join(tmp, "marketingclaw-home");
+    const legacyConfigDir = join(osHome, ".marketingclaw");
     mkdirSync(legacyConfigDir, { recursive: true });
-    mkdirSync(openclawHome, { recursive: true });
-    writeFileSync(join(legacyConfigDir, "openclaw.json"), "{}\n");
+    mkdirSync(marketingclawHome, { recursive: true });
+    writeFileSync(join(legacyConfigDir, "marketingclaw.json"), "{}\n");
 
     let result: ReturnType<typeof runInstallShell> | undefined;
     try {
@@ -771,12 +774,12 @@ NODE
         [
           `cd ${JSON.stringify(process.cwd())}`,
           `source ${JSON.stringify(SCRIPT_PATH)}`,
-          'if has_openclaw_config; then printf "configured=1\\n"; else printf "configured=0\\n"; fi',
+          'if has_marketingclaw_config; then printf "configured=1\\n"; else printf "configured=0\\n"; fi',
         ].join("\n"),
         {
           HOME: osHome,
-          OPENCLAW_HOME: openclawHome,
-          OPENCLAW_CONFIG_PATH: undefined,
+          MARKETINGCLAW_HOME: marketingclawHome,
+          MARKETINGCLAW_CONFIG_PATH: undefined,
           TERM: "dumb",
         },
       );
@@ -789,10 +792,10 @@ NODE
     expect(result?.stderr ?? "").toBe("");
   });
 
-  it.each(["openclaw.json", "clawdbot.json"])(
-    "detects %s under OPENCLAW_STATE_DIR",
+  it.each(["marketingclaw.json", "clawdbot.json"])(
+    "detects %s under MARKETINGCLAW_STATE_DIR",
     (configName) => {
-      const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-state-config-"));
+      const tmp = mkdtempSync(join(tmpdir(), "marketingclaw-install-state-config-"));
       const stateDir = join(tmp, "state");
       mkdirSync(stateDir, { recursive: true });
       writeFileSync(join(stateDir, configName), "{}\n");
@@ -803,11 +806,11 @@ NODE
           [
             `cd ${JSON.stringify(process.cwd())}`,
             `source ${JSON.stringify(SCRIPT_PATH)}`,
-            'if has_openclaw_config; then printf "configured=1\\n"; else printf "configured=0\\n"; fi',
+            'if has_marketingclaw_config; then printf "configured=1\\n"; else printf "configured=0\\n"; fi',
           ].join("\n"),
           {
-            OPENCLAW_CONFIG_PATH: undefined,
-            OPENCLAW_STATE_DIR: stateDir,
+            MARKETINGCLAW_CONFIG_PATH: undefined,
+            MARKETINGCLAW_STATE_DIR: stateDir,
             TERM: "dumb",
           },
         );
@@ -821,13 +824,13 @@ NODE
     },
   );
 
-  it("does not fall back to home config when OPENCLAW_STATE_DIR is set", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-state-override-"));
+  it("does not fall back to home config when MARKETINGCLAW_STATE_DIR is set", () => {
+    const tmp = mkdtempSync(join(tmpdir(), "marketingclaw-install-state-override-"));
     const home = join(tmp, "home");
     const stateDir = join(tmp, "state");
-    mkdirSync(join(home, ".openclaw"), { recursive: true });
+    mkdirSync(join(home, ".marketingclaw"), { recursive: true });
     mkdirSync(stateDir, { recursive: true });
-    writeFileSync(join(home, ".openclaw", "openclaw.json"), "{}\n");
+    writeFileSync(join(home, ".marketingclaw", "marketingclaw.json"), "{}\n");
 
     let result: ReturnType<typeof runInstallShell> | undefined;
     try {
@@ -835,13 +838,13 @@ NODE
         [
           `cd ${JSON.stringify(process.cwd())}`,
           `source ${JSON.stringify(SCRIPT_PATH)}`,
-          'if has_openclaw_config; then printf "configured=1\\n"; else printf "configured=0\\n"; fi',
+          'if has_marketingclaw_config; then printf "configured=1\\n"; else printf "configured=0\\n"; fi',
         ].join("\n"),
         {
           HOME: home,
-          OPENCLAW_CONFIG_PATH: undefined,
-          OPENCLAW_HOME: undefined,
-          OPENCLAW_STATE_DIR: stateDir,
+          MARKETINGCLAW_CONFIG_PATH: undefined,
+          MARKETINGCLAW_HOME: undefined,
+          MARKETINGCLAW_STATE_DIR: stateDir,
           TERM: "dumb",
         },
       );
@@ -856,12 +859,12 @@ NODE
 
   it.each([
     {
-      expected: /No TTY; run .*\/\.local\/bin\/openclaw onboard to finish setup/,
+      expected: /No TTY; run .*\/\.local\/bin\/marketingclaw onboard to finish setup/,
       name: "starts setup",
       noOnboard: 0,
     },
     {
-      expected: /Skipping onboard .*run .*\/\.local\/bin\/openclaw onboard later/,
+      expected: /Skipping onboard .*run .*\/\.local\/bin\/marketingclaw onboard later/,
       name: "honors --no-onboard",
       noOnboard: 1,
     },
@@ -872,7 +875,7 @@ NODE
       set -euo pipefail
       source "${SCRIPT_PATH}"
       INSTALL_METHOD=git
-      GIT_DIR="$HOME/openclaw"
+      GIT_DIR="$HOME/marketingclaw"
       NO_ONBOARD=${noOnboard}
       NO_PROMPT=1
       VERIFY_INSTALL=1
@@ -882,22 +885,22 @@ NODE
       print_installer_banner() { :; }
       print_gum_status() { :; }
       detect_os_or_die() { OS=linux; }
-      detect_openclaw_checkout() { return 1; }
+      detect_marketingclaw_checkout() { return 1; }
       show_install_plan() { :; }
-      check_existing_openclaw() { return 0; }
+      check_existing_marketingclaw() { return 0; }
       load_nvm_for_node_detection() { :; }
       check_node() { return 0; }
       activate_supported_node_on_path() { :; }
       ensure_default_node_active_shell() { return 0; }
       npm() { return 1; }
-      install_openclaw_from_git() {
+      install_marketingclaw_from_git() {
         mkdir -p "$HOME/.local/bin"
-        printf '#!/bin/sh\\nexit 0\\n' > "$HOME/.local/bin/openclaw"
-        chmod +x "$HOME/.local/bin/openclaw"
+        printf '#!/bin/sh\\nexit 0\\n' > "$HOME/.local/bin/marketingclaw"
+        chmod +x "$HOME/.local/bin/marketingclaw"
         export PATH="$HOME/.local/bin:$PATH"
       }
-      resolve_openclaw_bin() { printf '%s\\n' "$HOME/.local/bin/openclaw"; }
-      warn_duplicate_openclaw_global_installs() { :; }
+      resolve_marketingclaw_bin() { printf '%s\\n' "$HOME/.local/bin/marketingclaw"; }
+      warn_duplicate_marketingclaw_global_installs() { :; }
       npm_global_bin_dir() { :; }
       warn_shell_path_missing_dir() { :; }
       refresh_gateway_service_if_loaded() { printf 'gateway-refresh-called\\n'; }
@@ -905,7 +908,7 @@ NODE
         printf 'doctor-called\\n'
         return 0
       }
-      resolve_openclaw_version() { printf 'test-version\\n'; }
+      resolve_marketingclaw_version() { printf 'test-version\\n'; }
       is_gateway_daemon_loaded() {
         printf 'gateway-probe-called\\n'
         return 1
@@ -920,7 +923,7 @@ NODE
       expect(result.stdout).not.toContain("doctor-called");
       expect(result.stdout).not.toContain("gateway-refresh-called");
       expect(result.stdout).not.toContain("gateway-probe-called");
-      expect(result.stdout).toMatch(/Update command:.*\/\.local\/bin\/openclaw update/);
+      expect(result.stdout).toMatch(/Update command:.*\/\.local\/bin\/marketingclaw update/);
       expect(result.stdout).toMatch(expected);
     },
   );
@@ -930,7 +933,7 @@ NODE
       set -euo pipefail
       source "${SCRIPT_PATH}"
       INSTALL_METHOD=git
-      GIT_DIR="$HOME/openclaw"
+      GIT_DIR="$HOME/marketingclaw"
       NO_ONBOARD=0
       NO_PROMPT=1
       VERIFY_INSTALL=1
@@ -940,26 +943,26 @@ NODE
       print_installer_banner() { :; }
       print_gum_status() { :; }
       detect_os_or_die() { OS=linux; }
-      detect_openclaw_checkout() { return 1; }
+      detect_marketingclaw_checkout() { return 1; }
       show_install_plan() { :; }
-      check_existing_openclaw() { return 0; }
+      check_existing_marketingclaw() { return 0; }
       load_nvm_for_node_detection() { :; }
       check_node() { return 0; }
       activate_supported_node_on_path() { :; }
       ensure_default_node_active_shell() { return 0; }
       npm() { return 1; }
-      install_openclaw_from_git() {
+      install_marketingclaw_from_git() {
         mkdir -p "$HOME/.local/bin"
-        printf '#!/bin/sh\\nexit 1\\n' > "$HOME/.local/bin/openclaw"
-        chmod +x "$HOME/.local/bin/openclaw"
+        printf '#!/bin/sh\\nexit 1\\n' > "$HOME/.local/bin/marketingclaw"
+        chmod +x "$HOME/.local/bin/marketingclaw"
         export PATH="$HOME/.local/bin:$PATH"
       }
-      resolve_openclaw_bin() { printf '%s\\n' "$HOME/.local/bin/openclaw"; }
-      warn_duplicate_openclaw_global_installs() { :; }
+      resolve_marketingclaw_bin() { printf '%s\\n' "$HOME/.local/bin/marketingclaw"; }
+      warn_duplicate_marketingclaw_global_installs() { :; }
       npm_global_bin_dir() { :; }
       warn_shell_path_missing_dir() { :; }
       refresh_gateway_service_if_loaded() { :; }
-      resolve_openclaw_version() { printf 'test-version\\n'; }
+      resolve_marketingclaw_version() { printf 'test-version\\n'; }
       maybe_open_dashboard() { :; }
       show_footer_links() { :; }
 
@@ -967,7 +970,9 @@ NODE
     `);
 
     expect(result.status).toBe(1);
-    expect(result.stdout).toMatch(/No TTY; run .*\/\.local\/bin\/openclaw onboard to finish setup/);
+    expect(result.stdout).toMatch(
+      /No TTY; run .*\/\.local\/bin\/marketingclaw onboard to finish setup/,
+    );
   });
 
   it("runs migration doctor for a configured upgrade without a TTY", () => {
@@ -978,30 +983,30 @@ NODE
       NO_ONBOARD=0
       NO_PROMPT=0
       OS=linux
-      mkdir -p "$HOME/.openclaw"
-      printf '{}\\n' > "$HOME/.openclaw/openclaw.json"
+      mkdir -p "$HOME/.marketingclaw"
+      printf '{}\\n' > "$HOME/.marketingclaw/marketingclaw.json"
 
       bootstrap_gum_temp() { :; }
       print_installer_banner() { :; }
       print_gum_status() { :; }
       detect_os_or_die() { OS=linux; }
-      detect_openclaw_checkout() { return 1; }
+      detect_marketingclaw_checkout() { return 1; }
       show_install_plan() { :; }
-      check_existing_openclaw() { return 0; }
+      check_existing_marketingclaw() { return 0; }
       load_nvm_for_node_detection() { :; }
       check_node() { return 0; }
       activate_supported_node_on_path() { :; }
       ensure_default_node_active_shell() { return 0; }
       check_git() { return 0; }
       fix_npm_permissions() { :; }
-      install_openclaw() {
+      install_marketingclaw() {
         mkdir -p "$HOME/.local/bin"
-        printf '#!/bin/sh\\nexit 0\\n' > "$HOME/.local/bin/openclaw"
-        chmod +x "$HOME/.local/bin/openclaw"
+        printf '#!/bin/sh\\nexit 0\\n' > "$HOME/.local/bin/marketingclaw"
+        chmod +x "$HOME/.local/bin/marketingclaw"
         export PATH="$HOME/.local/bin:$PATH"
       }
-      resolve_openclaw_bin() { printf '%s\\n' "$HOME/.local/bin/openclaw"; }
-      warn_duplicate_openclaw_global_installs() { :; }
+      resolve_marketingclaw_bin() { printf '%s\\n' "$HOME/.local/bin/marketingclaw"; }
+      warn_duplicate_marketingclaw_global_installs() { :; }
       npm_global_bin_dir() { :; }
       warn_shell_path_missing_dir() { :; }
       refresh_gateway_service_if_loaded() { :; }
@@ -1009,7 +1014,7 @@ NODE
         printf 'doctor-called\\n'
         return 0
       }
-      resolve_openclaw_version() { printf 'test-version\\n'; }
+      resolve_marketingclaw_version() { printf 'test-version\\n'; }
       is_gateway_daemon_loaded() { return 1; }
       verify_installation() { return 0; }
       maybe_open_dashboard() { printf 'dashboard-called\\n'; }
@@ -1023,26 +1028,28 @@ NODE
     expect(result.stdout).toContain("dashboard-called");
   });
 
-  it("rejects OpenClaw GitHub source targets for npm installs", () => {
+  it("rejects MarketingClaw GitHub source targets for npm installs", () => {
     const result = runInstallShell(`
       set -euo pipefail
       source "${SCRIPT_PATH}"
       set +e
-      OPENCLAW_VERSION=main
+      MARKETINGCLAW_VERSION=main
       USE_BETA=0
-      install_openclaw
+      install_marketingclaw
       status=$?
       printf 'status=%s\\n' "$status"
     `);
 
     expect(result.status).toBe(0);
     expect(result.stdout).toContain("status=1");
-    expect(result.stdout).toContain("npm installs do not support OpenClaw GitHub source targets");
+    expect(result.stdout).toContain(
+      "npm installs do not support MarketingClaw GitHub source targets",
+    );
     expect(result.stdout).toContain("--install-method git --version main");
   });
 
   it("does not emit before args when npmrc min-release-age computes a before cutoff", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-npm-freshness-"));
+    const tmp = mkdtempSync(join(tmpdir(), "marketingclaw-install-npm-freshness-"));
     const bin = join(tmp, "bin");
     const home = join(tmp, "home");
     const argsLog = join(tmp, "npm-args.log");
@@ -1076,7 +1083,7 @@ NODE
   });
 
   it("ignores project npmrc when choosing global install freshness args", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-global-freshness-"));
+    const tmp = mkdtempSync(join(tmpdir(), "marketingclaw-install-global-freshness-"));
     const bin = join(tmp, "bin");
     const home = join(tmp, "home");
     const project = join(tmp, "project");
@@ -1129,7 +1136,7 @@ NODE
         "parse_args --verify",
         "configure_install_stage_total",
         'ui_stage "Preparing environment"',
-        'ui_stage "Installing OpenClaw"',
+        'ui_stage "Installing MarketingClaw"',
         'ui_stage "Finalizing setup"',
         'ui_stage "Verifying installation"',
       ].join("\n"),
@@ -1142,7 +1149,7 @@ NODE
   });
 
   it("bounds installer npm prefix probes during finalization helpers", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-npm-probe-"));
+    const tmp = mkdtempSync(join(tmpdir(), "marketingclaw-install-npm-probe-"));
     const npm = join(tmp, "npm");
     writeFileSync(
       npm,
@@ -1153,7 +1160,7 @@ NODE
         "  exit 0",
         "fi",
         'if [[ "$1" == "config" && "$2" == "get" && "$3" == "prefix" ]]; then',
-        '  printf "/tmp/openclaw-npm\\n"',
+        '  printf "/tmp/marketingclaw-npm\\n"',
         "  exit 0",
         "fi",
         "exit 1",
@@ -1166,13 +1173,13 @@ NODE
       const result = runInstallShell(
         [`source ${JSON.stringify(SCRIPT_PATH)}`, "npm_global_bin_dir"].join("\n"),
         {
-          OPENCLAW_INSTALL_PROBE_TIMEOUT_SECONDS: "0.1",
+          MARKETINGCLAW_INSTALL_PROBE_TIMEOUT_SECONDS: "0.1",
           PATH: `${tmp}:${process.env.PATH ?? ""}`,
         },
       );
 
       expect(result.status).toBe(0);
-      expect(result.stdout.trim()).toBe("/tmp/openclaw-npm/bin");
+      expect(result.stdout.trim()).toBe("/tmp/marketingclaw-npm/bin");
       expect(result.stderr).toContain(
         "timed out during installer finalization probe: npm prefix -g",
       );
@@ -1182,8 +1189,8 @@ NODE
   });
 
   it("bounds daemon status probes during finalization helpers", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-probe-"));
-    const claw = join(tmp, "openclaw");
+    const tmp = mkdtempSync(join(tmpdir(), "marketingclaw-install-probe-"));
+    const claw = join(tmp, "marketingclaw");
     writeFileSync(
       claw,
       [
@@ -1207,13 +1214,13 @@ NODE
           '  printf "not-loaded\\n"',
           "fi",
         ].join("\n"),
-        { OPENCLAW_INSTALL_PROBE_TIMEOUT_SECONDS: "0.01" },
+        { MARKETINGCLAW_INSTALL_PROBE_TIMEOUT_SECONDS: "0.01" },
       );
 
       expect(result.status).toBe(0);
       expect(result.stdout.trim()).toBe("not-loaded");
       expect(result.stderr).toContain(
-        "timed out during installer finalization probe: openclaw daemon status --json",
+        "timed out during installer finalization probe: marketingclaw daemon status --json",
       );
     } finally {
       rmSync(tmp, { force: true, recursive: true });
@@ -1225,7 +1232,7 @@ NODE
       /# Step 1: Node\.js[\s\S]*?load_nvm_for_node_detection\s+if ! check_node; then/,
     );
 
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-nvm-"));
+    const tmp = mkdtempSync(join(tmpdir(), "marketingclaw-install-nvm-"));
     const home = join(tmp, "home");
     const systemBin = join(tmp, "system-bin");
     const nvmBin = join(home, ".nvm/versions/node/v22.22.1/bin");
@@ -1303,7 +1310,7 @@ NODE
   });
 
   it("promotes a supported Linux Node binary over stale PATH entries", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-node-promote-"));
+    const tmp = mkdtempSync(join(tmpdir(), "marketingclaw-install-node-promote-"));
     const staleBin = join(tmp, "usr-local-bin");
     const supportedBin = join(tmp, "usr-bin");
     mkdirSync(staleBin, { recursive: true });
@@ -1361,7 +1368,7 @@ NODE
     };
     expect(pkg.engines?.node).toBe(">=22.19.0 <23 || >=23.11.0");
 
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-node-floor-"));
+    const tmp = mkdtempSync(join(tmpdir(), "marketingclaw-install-node-floor-"));
     const bin = join(tmp, "bin");
     mkdirSync(bin, { recursive: true });
 
@@ -1411,7 +1418,7 @@ NODE
   });
 
   it("persists a supported Linux Node path before noninteractive shell guards", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-linux-node-path-"));
+    const tmp = mkdtempSync(join(tmpdir(), "marketingclaw-install-linux-node-path-"));
     const home = join(tmp, "home");
     const oldBin = join(tmp, "old/bin");
     const installedBin = join(tmp, "usr/bin");
@@ -1476,7 +1483,7 @@ NODE
   });
 
   it("warns before redirecting an unwritable npm prefix", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-npm-prefix-"));
+    const tmp = mkdtempSync(join(tmpdir(), "marketingclaw-install-npm-prefix-"));
     const home = join(tmp, "home");
     const events = join(tmp, "events.log");
     mkdirSync(home, { recursive: true });
@@ -1529,7 +1536,7 @@ NODE
   });
 
   it("persists npm prefix PATH before noninteractive shell guards", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-npm-prefix-shell-"));
+    const tmp = mkdtempSync(join(tmpdir(), "marketingclaw-install-npm-prefix-shell-"));
     const home = join(tmp, "home");
     mkdirSync(home, { recursive: true });
     writeFileSync(
@@ -1579,20 +1586,20 @@ NODE
     expect(result?.stdout).toContain(`path=${home}/.npm-global/bin`);
   });
 
-  it("uses a quoted absolute openclaw path in follow-up commands when npm bin is not on the original PATH", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-command-"));
+  it("uses a quoted absolute marketingclaw path in follow-up commands when npm bin is not on the original PATH", () => {
+    const tmp = mkdtempSync(join(tmpdir(), "marketingclaw-install-command-"));
     const npmBin = join(tmp, "npm bin");
     const staleBin = join(tmp, "stale-bin");
     const visibleBin = join(tmp, "visible-bin");
     mkdirSync(npmBin, { recursive: true });
     mkdirSync(staleBin, { recursive: true });
     mkdirSync(visibleBin, { recursive: true });
-    const openclawBin = join(npmBin, "openclaw");
-    const staleOpenclawBin = join(staleBin, "openclaw");
-    writeFileSync(openclawBin, "#!/bin/sh\nexit 0\n");
-    writeFileSync(staleOpenclawBin, "#!/bin/sh\nexit 0\n");
-    chmodSync(openclawBin, 0o755);
-    chmodSync(staleOpenclawBin, 0o755);
+    const marketingclawBin = join(npmBin, "marketingclaw");
+    const staleMarketingclawBin = join(staleBin, "marketingclaw");
+    writeFileSync(marketingclawBin, "#!/bin/sh\nexit 0\n");
+    writeFileSync(staleMarketingclawBin, "#!/bin/sh\nexit 0\n");
+    chmodSync(marketingclawBin, 0o755);
+    chmodSync(staleMarketingclawBin, 0o755);
 
     let result: ReturnType<typeof runInstallShell> | undefined;
     try {
@@ -1600,24 +1607,24 @@ NODE
         set -euo pipefail
         source "${SCRIPT_PATH}"
         ORIGINAL_PATH=${JSON.stringify(`${visibleBin}:/usr/bin:/bin`)}
-        printf 'missing=%s\\n' "$(openclaw_command_for_user "${openclawBin}")"
+        printf 'missing=%s\\n' "$(marketingclaw_command_for_user "${marketingclawBin}")"
         ORIGINAL_PATH=${JSON.stringify(`${npmBin}:${visibleBin}:/usr/bin:/bin`)}
-        printf 'present=%s\\n' "$(openclaw_command_for_user "${openclawBin}")"
+        printf 'present=%s\\n' "$(marketingclaw_command_for_user "${marketingclawBin}")"
         ORIGINAL_PATH=${JSON.stringify(`${staleBin}:${npmBin}:/usr/bin:/bin`)}
-        printf 'shadowed=%s\\n' "$(openclaw_command_for_user "${openclawBin}")"
+        printf 'shadowed=%s\\n' "$(marketingclaw_command_for_user "${marketingclawBin}")"
       `);
     } finally {
       rmSync(tmp, { recursive: true, force: true });
     }
 
     expect(result?.status).toBe(0);
-    expect(result?.stdout).toContain(`missing=${openclawBin.replace(/ /g, "\\ ")}`);
-    expect(result?.stdout).toContain("present=openclaw");
-    expect(result?.stdout).toContain(`shadowed=${openclawBin.replace(/ /g, "\\ ")}`);
+    expect(result?.stdout).toContain(`missing=${marketingclawBin.replace(/ /g, "\\ ")}`);
+    expect(result?.stdout).toContain("present=marketingclaw");
+    expect(result?.stdout).toContain(`shadowed=${marketingclawBin.replace(/ /g, "\\ ")}`);
   });
 
   it("prefers the binary owned by the completed install method over stale PATH entries", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-selected-bin-"));
+    const tmp = mkdtempSync(join(tmpdir(), "marketingclaw-install-selected-bin-"));
     const home = join(tmp, "home");
     const npmBin = join(tmp, "npm-bin");
     const staleBin = join(tmp, "stale-bin");
@@ -1626,9 +1633,9 @@ NODE
     mkdirSync(staleBin, { recursive: true });
     mkdirSync(gitBin, { recursive: true });
     for (const bin of [
-      join(npmBin, "openclaw"),
-      join(staleBin, "openclaw"),
-      join(gitBin, "openclaw"),
+      join(npmBin, "marketingclaw"),
+      join(staleBin, "marketingclaw"),
+      join(gitBin, "marketingclaw"),
     ]) {
       writeFileSync(bin, "#!/bin/sh\nexit 0\n");
       chmodSync(bin, 0o755);
@@ -1641,10 +1648,10 @@ NODE
           set -euo pipefail
           source "${SCRIPT_PATH}"
           INSTALL_METHOD=git
-          printf 'git=%s\\n' "$(resolve_installed_openclaw_bin)"
+          printf 'git=%s\\n' "$(resolve_installed_marketingclaw_bin)"
           INSTALL_METHOD=npm
           npm_global_bin_dir() { printf '%s\\n' "${npmBin}"; }
-          printf 'npm=%s\\n' "$(resolve_installed_openclaw_bin)"
+          printf 'npm=%s\\n' "$(resolve_installed_marketingclaw_bin)"
         `,
         {
           HOME: home,
@@ -1656,28 +1663,28 @@ NODE
     }
 
     expect(result?.status).toBe(0);
-    expect(result?.stdout).toContain(`git=${join(gitBin, "openclaw")}`);
-    expect(result?.stdout).toContain(`npm=${join(npmBin, "openclaw")}`);
+    expect(result?.stdout).toContain(`git=${join(gitBin, "marketingclaw")}`);
+    expect(result?.stdout).toContain(`npm=${join(npmBin, "marketingclaw")}`);
   });
 
   it("uses the selected binary in gateway recovery guidance", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-gateway-guidance-"));
+    const tmp = mkdtempSync(join(tmpdir(), "marketingclaw-install-gateway-guidance-"));
     const currentBin = join(tmp, "current bin");
     const staleBin = join(tmp, "stale-bin");
     mkdirSync(currentBin, { recursive: true });
     mkdirSync(staleBin, { recursive: true });
-    const openclawBin = join(currentBin, "openclaw");
-    writeFileSync(openclawBin, "#!/bin/sh\nexit 0\n");
-    writeFileSync(join(staleBin, "openclaw"), "#!/bin/sh\nexit 0\n");
-    chmodSync(openclawBin, 0o755);
-    chmodSync(join(staleBin, "openclaw"), 0o755);
+    const marketingclawBin = join(currentBin, "marketingclaw");
+    writeFileSync(marketingclawBin, "#!/bin/sh\nexit 0\n");
+    writeFileSync(join(staleBin, "marketingclaw"), "#!/bin/sh\nexit 0\n");
+    chmodSync(marketingclawBin, 0o755);
+    chmodSync(join(staleBin, "marketingclaw"), 0o755);
 
     let result: ReturnType<typeof runInstallShell> | undefined;
     try {
       result = runInstallShell(`
         set -euo pipefail
         source "${SCRIPT_PATH}"
-        OPENCLAW_BIN=${JSON.stringify(openclawBin)}
+        MARKETINGCLAW_BIN=${JSON.stringify(marketingclawBin)}
         ORIGINAL_PATH=${JSON.stringify(`${staleBin}:${currentBin}:/usr/bin:/bin`)}
         VERIFY_INSTALL=1
         is_gateway_daemon_loaded() { return 0; }
@@ -1694,7 +1701,7 @@ NODE
       rmSync(tmp, { recursive: true, force: true });
     }
 
-    const quotedBin = openclawBin.replace(/ /g, "\\ ");
+    const quotedBin = marketingclawBin.replace(/ /g, "\\ ");
     expect(result?.status).toBe(0);
     expect(result?.stdout).toContain(`Run: ${quotedBin} gateway restart`);
     expect(result?.stdout).toContain(`Run: ${quotedBin} gateway status --deep`);
@@ -1719,20 +1726,20 @@ NODE
       set -euo pipefail
       source "${SCRIPT_PATH}"
       npm() {
-        if [[ "$1" == "view" && "$2" == "openclaw" && "$3" == "dist-tags.beta" ]]; then
+        if [[ "$1" == "view" && "$2" == "marketingclaw" && "$3" == "dist-tags.beta" ]]; then
           printf '2026.5.12-beta.3\\n'
           return 0
         fi
         return 1
       }
-      OPENCLAW_VERSION=v2026.5.12-beta.3
-      printf 'tag=%s\\n' "$(resolve_git_openclaw_ref)"
-      OPENCLAW_VERSION=2026.5.12-beta.3
-      printf 'semver=%s\\n' "$(resolve_git_openclaw_ref)"
-      OPENCLAW_VERSION=beta
-      printf 'beta=%s\\n' "$(resolve_git_openclaw_ref)"
-      OPENCLAW_VERSION=main
-      printf 'main=%s\\n' "$(resolve_git_openclaw_ref)"
+      MARKETINGCLAW_VERSION=v2026.5.12-beta.3
+      printf 'tag=%s\\n' "$(resolve_git_marketingclaw_ref)"
+      MARKETINGCLAW_VERSION=2026.5.12-beta.3
+      printf 'semver=%s\\n' "$(resolve_git_marketingclaw_ref)"
+      MARKETINGCLAW_VERSION=beta
+      printf 'beta=%s\\n' "$(resolve_git_marketingclaw_ref)"
+      MARKETINGCLAW_VERSION=main
+      printf 'main=%s\\n' "$(resolve_git_marketingclaw_ref)"
     `);
 
     expect(result.status).toBe(0);
@@ -1787,7 +1794,7 @@ NODE
   });
 
   it("uses the repo Corepack pnpm when a global pnpm version is already present", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-pnpm-version-"));
+    const tmp = mkdtempSync(join(tmpdir(), "marketingclaw-install-pnpm-version-"));
     const bin = join(tmp, "bin");
     const outer = join(tmp, "outer");
     const repo = join(tmp, "repo");
@@ -1952,7 +1959,7 @@ describe("install.sh macOS Homebrew Node behavior", () => {
   });
 
   it("reruns spinner-wrapped commands when gum reports ioctl failure", () => {
-    const dir = mkdtempSync(join(tmpdir(), "openclaw-install-sh-gum-"));
+    const dir = mkdtempSync(join(tmpdir(), "marketingclaw-install-sh-gum-"));
     try {
       const gumPath = join(dir, "gum");
       const commandPath = join(dir, "command");
@@ -1986,47 +1993,47 @@ describe("install.sh macOS Homebrew Node behavior", () => {
   });
 });
 
-describe("install.sh duplicate OpenClaw install detection", () => {
+describe("install.sh duplicate MarketingClaw install detection", () => {
   it("warns with concrete package paths and versions for duplicate npm roots", () => {
     const result = runInstallShell(`
       set -euo pipefail
       source "${SCRIPT_PATH}"
       root="$(mktemp -d)"
       trap 'rm -rf "$root"' EXIT
-      mkdir -p "$root/brew/openclaw" "$root/fnm/openclaw"
-      printf '{"version":"2026.3.7"}\\n' > "$root/brew/openclaw/package.json"
-      printf '{"version":"2026.3.1"}\\n' > "$root/fnm/openclaw/package.json"
-      collect_openclaw_npm_root_candidates() { printf '%s\\n' "$root/brew" "$root/fnm"; }
-      OPENCLAW_BIN="$root/fnm/.bin/openclaw"
+      mkdir -p "$root/brew/marketingclaw" "$root/fnm/marketingclaw"
+      printf '{"version":"2026.3.7"}\\n' > "$root/brew/marketingclaw/package.json"
+      printf '{"version":"2026.3.1"}\\n' > "$root/fnm/marketingclaw/package.json"
+      collect_marketingclaw_npm_root_candidates() { printf '%s\\n' "$root/brew" "$root/fnm"; }
+      MARKETINGCLAW_BIN="$root/fnm/.bin/marketingclaw"
       ui_warn() { echo "WARN: $*"; }
-      warn_duplicate_openclaw_global_installs
+      warn_duplicate_marketingclaw_global_installs
     `);
 
     expect(result.status).toBe(0);
-    expect(result.stdout).toContain("Multiple OpenClaw global installs detected");
+    expect(result.stdout).toContain("Multiple MarketingClaw global installs detected");
     expect(result.stdout).toContain("2026.3.7");
     expect(result.stdout).toContain("2026.3.1");
-    expect(result.stdout).toContain("/brew/openclaw");
-    expect(result.stdout).toContain("/fnm/openclaw");
-    expect(result.stdout).toContain("Active openclaw:");
-    expect(result.stdout).toContain("npm uninstall -g openclaw");
+    expect(result.stdout).toContain("/brew/marketingclaw");
+    expect(result.stdout).toContain("/fnm/marketingclaw");
+    expect(result.stdout).toContain("Active marketingclaw:");
+    expect(result.stdout).toContain("npm uninstall -g marketingclaw");
   });
 
-  it("stays quiet when only one OpenClaw npm root exists", () => {
+  it("stays quiet when only one MarketingClaw npm root exists", () => {
     const result = runInstallShell(`
       set -euo pipefail
       source "${SCRIPT_PATH}"
       root="$(mktemp -d)"
       trap 'rm -rf "$root"' EXIT
-      mkdir -p "$root/only/openclaw"
-      printf '{"version":"2026.3.7"}\\n' > "$root/only/openclaw/package.json"
-      collect_openclaw_npm_root_candidates() { printf '%s\\n' "$root/only"; }
+      mkdir -p "$root/only/marketingclaw"
+      printf '{"version":"2026.3.7"}\\n' > "$root/only/marketingclaw/package.json"
+      collect_marketingclaw_npm_root_candidates() { printf '%s\\n' "$root/only"; }
       ui_warn() { echo "WARN: $*"; }
-      warn_duplicate_openclaw_global_installs
+      warn_duplicate_marketingclaw_global_installs
     `);
 
     expect(result.status).toBe(0);
-    expect(result.stdout).not.toContain("Multiple OpenClaw global installs detected");
+    expect(result.stdout).not.toContain("Multiple MarketingClaw global installs detected");
   });
 });
 

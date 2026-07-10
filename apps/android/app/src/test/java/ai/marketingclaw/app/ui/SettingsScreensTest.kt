@@ -1,8 +1,8 @@
-package ai.openclaw.app.ui
+package ai.marketingclaw.app.ui
 
-import ai.openclaw.app.GatewayConnectionProblem
-import ai.openclaw.app.GatewayNodeCapabilityApproval
-import ai.openclaw.app.LocationMode
+import ai.marketingclaw.app.GatewayConnectionProblem
+import ai.marketingclaw.app.GatewayNodeCapabilityApproval
+import ai.marketingclaw.app.LocationMode
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -82,11 +82,11 @@ class SettingsScreensTest {
   @Test
   fun nodeApprovalCommandUsesOnlyASafeExactRequestId() {
     assertEquals(
-      "openclaw nodes approve request-1",
+      "marketingclaw nodes approve request-1",
       gatewayNodeApprovalCommand(GatewayNodeCapabilityApproval.PendingApproval("request-1")),
     )
     assertEquals(
-      "openclaw nodes status",
+      "marketingclaw nodes status",
       gatewayNodeApprovalCommand(GatewayNodeCapabilityApproval.PendingReapproval("request-1; unsafe")),
     )
     assertEquals(null, gatewayNodeApprovalCommand(GatewayNodeCapabilityApproval.Approved))

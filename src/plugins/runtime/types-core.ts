@@ -40,7 +40,7 @@ type RuntimeConfigAfterWrite = import("../../config/config.js").ConfigWriteAfter
 type RuntimeConfigReplaceResult = import("../../config/mutate.js").ConfigReplaceResult;
 type RuntimeConfigMutationBase = import("../../config/mutate.js").ConfigMutationBase;
 type RuntimeConfigMutationContext = {
-  snapshot: import("../../config/types.openclaw.js").ConfigFileSnapshot;
+  snapshot: import("../../config/types.marketingclaw.js").ConfigFileSnapshot;
   previousHash: string | null;
 };
 type RuntimeMutateConfigFileParams<T = void> = {
@@ -49,12 +49,12 @@ type RuntimeMutateConfigFileParams<T = void> = {
   afterWrite: RuntimeConfigAfterWrite;
   writeOptions?: RuntimeWriteConfigOptions;
   mutate: (
-    draft: import("../../config/types.openclaw.js").OpenClawConfig,
+    draft: import("../../config/types.marketingclaw.js").MarketingClawConfig,
     context: RuntimeConfigMutationContext,
   ) => Promise<T | void> | T | void;
 };
 type RuntimeReplaceConfigFileParams = {
-  nextConfig: import("../../config/types.openclaw.js").OpenClawConfig;
+  nextConfig: import("../../config/types.marketingclaw.js").MarketingClawConfig;
   baseHash?: string;
   afterWrite: RuntimeConfigAfterWrite;
   writeOptions?: RuntimeWriteConfigOptions;
@@ -187,7 +187,7 @@ export type PluginRuntimeCore = {
   version: string;
   config: {
     /** Current process runtime config snapshot. Prefer config passed into the active call path. */
-    current: () => DeepReadonly<import("../../config/types.openclaw.js").OpenClawConfig>;
+    current: () => DeepReadonly<import("../../config/types.marketingclaw.js").MarketingClawConfig>;
     /**
      * Persist a focused config mutation. Callers must choose the post-write
      * behavior explicitly so the gateway can hot-reload, restart, or defer.
@@ -208,7 +208,7 @@ export type PluginRuntimeCore = {
      * plugins and repo code are blocked from using this by the
      * deprecated-internal-config-api architecture guard.
      */
-    loadConfig: () => import("../../config/types.openclaw.js").OpenClawConfig;
+    loadConfig: () => import("../../config/types.marketingclaw.js").MarketingClawConfig;
     /**
      * @deprecated Use mutateConfigFile() or replaceConfigFile() with an
      * explicit afterWrite intent so restart behavior stays under host control.
@@ -216,7 +216,7 @@ export type PluginRuntimeCore = {
      * deprecated-internal-config-api architecture guard.
      */
     writeConfigFile: (
-      cfg: import("../../config/types.openclaw.js").OpenClawConfig,
+      cfg: import("../../config/types.marketingclaw.js").MarketingClawConfig,
       options?: RuntimeWriteConfigOptions & { afterWrite?: RuntimeConfigAfterWrite },
     ) => Promise<void>;
   };
@@ -229,7 +229,7 @@ export type PluginRuntimeCore = {
     resolveAgentWorkspaceDir: typeof import("../../agents/agent-scope.js").resolveAgentWorkspaceDir;
     resolveAgentIdentity: typeof import("../../agents/identity.js").resolveAgentIdentity;
     resolveThinkingDefault: (params: {
-      cfg: import("../../config/types.openclaw.js").OpenClawConfig;
+      cfg: import("../../config/types.marketingclaw.js").MarketingClawConfig;
       provider: string;
       model: string;
       catalog?: import("../../agents/model-catalog.types.js").ModelCatalogEntry[];
@@ -312,8 +312,8 @@ export type PluginRuntimeCore = {
   };
   media: {
     loadWebMedia: typeof import("../../media/web-media.js").loadWebMedia;
-    detectMime: typeof import("@openclaw/media-core/mime").detectMime;
-    mediaKindFromMime: typeof import("@openclaw/media-core/constants").mediaKindFromMime;
+    detectMime: typeof import("@marketingclaw/media-core/mime").detectMime;
+    mediaKindFromMime: typeof import("@marketingclaw/media-core/constants").mediaKindFromMime;
     isVoiceCompatibleAudio: typeof import("../../media/audio.js").isVoiceCompatibleAudio;
     getImageMetadata: typeof import("../../media/media-services.js").getImageMetadata;
     resizeToJpeg: typeof import("../../media/media-services.js").resizeToJpeg;
@@ -412,20 +412,24 @@ export type PluginRuntimeCore = {
   modelAuth: {
     /** Resolve auth for a model. Only provider/model, optional cfg, and workspaceDir are used. */
     getApiKeyForModel: (params: {
-      model: import("openclaw/plugin-sdk/llm").Model<import("openclaw/plugin-sdk/llm").Api>;
-      cfg?: import("../../config/types.openclaw.js").OpenClawConfig;
+      model: import("marketingclaw/plugin-sdk/llm").Model<
+        import("marketingclaw/plugin-sdk/llm").Api
+      >;
+      cfg?: import("../../config/types.marketingclaw.js").MarketingClawConfig;
       workspaceDir?: string;
     }) => Promise<import("../../agents/model-auth-runtime-shared.js").ResolvedProviderAuth>;
     /** Resolve request-ready auth for a model, including provider runtime exchanges. */
     getRuntimeAuthForModel: (params: {
-      model: import("openclaw/plugin-sdk/llm").Model<import("openclaw/plugin-sdk/llm").Api>;
-      cfg?: import("../../config/types.openclaw.js").OpenClawConfig;
+      model: import("marketingclaw/plugin-sdk/llm").Model<
+        import("marketingclaw/plugin-sdk/llm").Api
+      >;
+      cfg?: import("../../config/types.marketingclaw.js").MarketingClawConfig;
       workspaceDir?: string;
     }) => Promise<import("./model-auth-types.js").ResolvedProviderRuntimeAuth>;
     /** Resolve auth for a provider by name. Only provider, optional cfg, and workspaceDir are used. */
     resolveApiKeyForProvider: (params: {
       provider: string;
-      cfg?: import("../../config/types.openclaw.js").OpenClawConfig;
+      cfg?: import("../../config/types.marketingclaw.js").MarketingClawConfig;
       workspaceDir?: string;
     }) => Promise<import("../../agents/model-auth-runtime-shared.js").ResolvedProviderAuth>;
   };

@@ -101,7 +101,7 @@ afterEach(() => {
 
 describe("WorktreesPage lifecycle", () => {
   it("clears stale records when a null-client gateway source is replaced", async () => {
-    const page = document.createElement("openclaw-worktrees-page") as WorktreesPageTestElement;
+    const page = document.createElement("marketingclaw-worktrees-page") as WorktreesPageTestElement;
     page.records = [
       {
         id: "stale",
@@ -137,7 +137,7 @@ describe("WorktreesPage lifecycle", () => {
         }),
     );
     const secondRequest = vi.fn(async () => ({ worktrees: [] }));
-    const page = document.createElement("openclaw-worktrees-page") as WorktreesPageTestElement;
+    const page = document.createElement("marketingclaw-worktrees-page") as WorktreesPageTestElement;
     page.context = contextWithGateway(
       gatewayWithClient({ request: firstRequest } as unknown as GatewayBrowserClient),
     );
@@ -169,7 +169,7 @@ describe("WorktreesPage lifecycle", () => {
       return Promise.resolve({ worktrees: [] });
     });
     const secondRequest = vi.fn(async () => ({ worktrees: [] }));
-    const page = document.createElement("openclaw-worktrees-page") as WorktreesPageTestElement;
+    const page = document.createElement("marketingclaw-worktrees-page") as WorktreesPageTestElement;
     page.context = contextWithGateway(
       gatewayWithClient({ request: firstRequest } as unknown as GatewayBrowserClient),
     );
@@ -209,7 +209,7 @@ describe("WorktreesPage lifecycle", () => {
     });
     const client = { request } as unknown as GatewayBrowserClient;
     const source = mutableGateway(client);
-    const page = document.createElement("openclaw-worktrees-page") as WorktreesPageTestElement;
+    const page = document.createElement("marketingclaw-worktrees-page") as WorktreesPageTestElement;
     page.context = contextWithGateway(source.gateway);
     document.body.append(page);
     await vi.waitFor(() => expect(request).toHaveBeenCalledWith("worktrees.list", {}));

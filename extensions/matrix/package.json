@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/matrix",
+  "name": "@marketingclaw/matrix",
   "version": "2026.6.11",
-  "description": "OpenClaw Matrix channel plugin for rooms and direct messages.",
+  "description": "MarketingClaw Matrix channel plugin for rooms and direct messages.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/promisingcoder/marketingclaw"
   },
   "type": "module",
   "dependencies": {
@@ -18,18 +18,18 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@marketingclaw/plugin-sdk": "workspace:*",
+    "marketingclaw": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.6.11"
+    "marketingclaw": ">=2026.6.11"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "marketingclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "marketingclaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -81,8 +81,8 @@
       }
     },
     "install": {
-      "clawhubSpec": "clawhub:@openclaw/matrix",
-      "npmSpec": "@openclaw/matrix",
+      "clawhubSpec": "clawhub:@marketingclaw/matrix",
+      "npmSpec": "@marketingclaw/matrix",
       "defaultChoice": "clawhub",
       "minHostVersion": ">=2026.4.10",
       "allowInvalidConfigRecovery": true
@@ -91,7 +91,7 @@
       "pluginApi": ">=2026.6.11"
     },
     "build": {
-      "openclawVersion": "2026.6.11"
+      "marketingclawVersion": "2026.6.11"
     },
     "release": {
       "publishToClawHub": true,

@@ -1,8 +1,8 @@
 {
-  "name": "@openclaw/oc-path",
+  "name": "@marketingclaw/oc-path",
   "version": "2026.6.11",
   "private": true,
-  "description": "OpenClaw oc:// workspace path plugin",
+  "description": "MarketingClaw oc:// workspace path plugin",
   "type": "module",
   "dependencies": {
     "commander": "15.0.0",
@@ -11,18 +11,18 @@
     "yaml": "2.9.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@marketingclaw/plugin-sdk": "workspace:*",
+    "marketingclaw": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.6.11"
+    "marketingclaw": ">=2026.6.11"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "marketingclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "marketingclaw": {
     "extensions": [
       "./index.ts"
     ]

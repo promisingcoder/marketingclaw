@@ -1,6 +1,6 @@
-package ai.openclaw.app.ui.chat
+package ai.marketingclaw.app.ui.chat
 
-import ai.openclaw.app.chat.ChatCommandEntry
+import ai.marketingclaw.app.chat.ChatCommandEntry
 import java.util.Locale
 
 internal fun slashCommandQuery(input: String): String? {

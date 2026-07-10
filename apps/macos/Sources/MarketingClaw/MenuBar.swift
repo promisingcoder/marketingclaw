@@ -8,11 +8,11 @@ import Security
 import SwiftUI
 
 @main
-struct OpenClawApp: App {
+struct MarketingClawApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var delegate
     @Environment(\.openWindow) private var openWindow
     @State private var state: AppState
-    private static let logger = Logger(subsystem: "ai.openclaw", category: "app")
+    private static let logger = Logger(subsystem: "ai.marketingclaw", category: "app")
     private let gatewayManager = GatewayProcessManager.shared
     private let controlChannel = ControlChannel.shared
     private let activityStore = WorkActivityStore.shared
@@ -32,7 +32,7 @@ struct OpenClawApp: App {
     }
 
     init() {
-        OpenClawLogging.bootstrapIfNeeded()
+        MarketingClawLogging.bootstrapIfNeeded()
         GatewayConnectivityCoordinator.shared.start()
 
         Self.applyAttachOnlyOverrideIfNeeded()
@@ -91,7 +91,7 @@ struct OpenClawApp: App {
             CLIInstallPrompter.shared.checkAndPromptIfNeeded(reason: "connection-mode")
         }
 
-        Window("OpenClaw Settings", id: SettingsWindowOpener.windowID) {
+        Window("MarketingClaw Settings", id: SettingsWindowOpener.windowID) {
             SettingsRootView(state: self.state, updater: self.delegate.updaterController)
                 .frame(width: SettingsTab.windowWidth, height: SettingsTab.windowHeight, alignment: .topLeading)
                 .environment(self.tailscaleService)
@@ -119,8 +119,8 @@ struct OpenClawApp: App {
         // leak into menu item validation and grey out app-level commands like Settings.
         self.statusItem?.button?.appearsDisabled = false
         self.statusItem?.button?.toolTip = self.state.voiceWakeMeterActive
-            ? "OpenClaw - Voice Wake live meter active"
-            : "OpenClaw"
+            ? "MarketingClaw - Voice Wake live meter active"
+            : "MarketingClaw"
     }
 
     private static func applyAttachOnlyOverrideIfNeeded() {
@@ -282,9 +282,9 @@ private struct SettingsWindowOpenRegistrar: View {
 
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
-    private static let dashboardURL = URL(string: "openclaw://dashboard")!
+    private static let dashboardURL = URL(string: "marketingclaw://dashboard")!
     private var state: AppState?
-    private let webChatAutoLogger = Logger(subsystem: "ai.openclaw", category: "Chat")
+    private let webChatAutoLogger = Logger(subsystem: "ai.marketingclaw", category: "Chat")
     var openDashboardAction: @MainActor () -> Void = { AppNavigationActions.openDashboard() }
     let updaterController: UpdaterProviding = makeUpdaterController()
 
@@ -406,7 +406,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         #if DEBUG
         // Screenshot/demo helper: show the pairing panel with sample requests.
-        if ProcessInfo.processInfo.environment["OPENCLAW_DEBUG_PAIRING_DEMO"] == "1" {
+        if ProcessInfo.processInfo.environment["MARKETINGCLAW_DEBUG_PAIRING_DEMO"] == "1" {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 DebugActions.showPairingPanelDemo()
             }

@@ -3,11 +3,11 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import type {
-  OpenClawConfig,
+  MarketingClawConfig,
   TelegramAccountConfig,
   TelegramExecApprovalConfig,
-} from "openclaw/plugin-sdk/config-contracts";
-import { saveSessionStore } from "openclaw/plugin-sdk/session-store-runtime";
+} from "marketingclaw/plugin-sdk/config-contracts";
+import { saveSessionStore } from "marketingclaw/plugin-sdk/session-store-runtime";
 import { afterEach, describe, expect, it } from "vitest";
 import {
   getTelegramExecApprovalApprovers,
@@ -34,15 +34,17 @@ afterEach(() => {
 });
 
 function createTempDir(): string {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-telegram-exec-approvals-"));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-telegram-exec-approvals-"));
   tempDirs.push(dir);
   return dir;
 }
 
 function buildConfig(
-  execApprovals?: NonNullable<NonNullable<OpenClawConfig["channels"]>["telegram"]>["execApprovals"],
-  channelOverrides?: Partial<NonNullable<NonNullable<OpenClawConfig["channels"]>["telegram"]>>,
-): OpenClawConfig {
+  execApprovals?: NonNullable<
+    NonNullable<MarketingClawConfig["channels"]>["telegram"]
+  >["execApprovals"],
+  channelOverrides?: Partial<NonNullable<NonNullable<MarketingClawConfig["channels"]>["telegram"]>>,
+): MarketingClawConfig {
   return {
     channels: {
       telegram: {
@@ -51,7 +53,7 @@ function buildConfig(
         execApprovals,
       },
     },
-  } as OpenClawConfig;
+  } as MarketingClawConfig;
 }
 
 function telegramAccount(
@@ -72,7 +74,7 @@ function buildMultiAccountTelegramConfig(params: {
   opsExecApprovals?: TelegramExecApprovalConfig;
   defaultOverrides?: Partial<TelegramAccountConfig>;
   opsOverrides?: Partial<TelegramAccountConfig>;
-}): OpenClawConfig {
+}): MarketingClawConfig {
   return {
     ...(params.sessionStorePath ? { session: { store: params.sessionStorePath } } : {}),
     channels: {
@@ -91,7 +93,7 @@ function buildMultiAccountTelegramConfig(params: {
         },
       },
     },
-  } as OpenClawConfig;
+  } as MarketingClawConfig;
 }
 
 function makeForeignChannelApprovalRequest(params: {
@@ -159,7 +161,7 @@ describe("telegram exec approvals", () => {
       commands: {
         ownerAllowFrom: ["telegram:12345", "tg:67890", "discord:ignored", "-100999"],
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(getTelegramExecApprovalApprovers({ cfg })).toEqual(["12345", "67890"]);
     expect(isTelegramExecApprovalClientEnabled({ cfg })).toBe(true);
@@ -173,7 +175,7 @@ describe("telegram exec approvals", () => {
       commands: {
         ownerAllowFrom: ["telegram:12345"],
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(cfg.channels?.telegram?.execApprovals?.approvers).toBeUndefined();
     expect(getTelegramExecApprovalApprovers({ cfg })).toEqual(["12345"]);
@@ -355,7 +357,7 @@ describe("telegram exec approvals", () => {
           targets: [{ channel: "telegram", to: "123", accountId: "ops" }],
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
     const request: TelegramExecApprovalRequest = {
       id: "req-target-account",
       request: {
@@ -395,7 +397,7 @@ describe("telegram exec approvals", () => {
           ],
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
     const request: TelegramExecApprovalRequest = {
       id: "req-mixed-target-account",
       request: {
@@ -464,7 +466,7 @@ describe("telegram exec approvals", () => {
           execApprovals: { enabled: true, approvers: ["123"], target: "dm" },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(shouldEnableTelegramExecApprovalButtons({ cfg, to: "123" })).toBe(true);
   });
@@ -478,7 +480,7 @@ describe("telegram exec approvals", () => {
           execApprovals: { enabled: true, approvers: ["123"], target: "dm" },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(shouldEnableTelegramExecApprovalButtons({ cfg, to: "123" })).toBe(false);
   });
@@ -486,11 +488,11 @@ describe("telegram exec approvals", () => {
   describe("isTelegramExecApprovalTargetRecipient", () => {
     function buildTargetConfig(
       targets: Array<{ channel: string; to: string; accountId?: string }>,
-    ): OpenClawConfig {
+    ): MarketingClawConfig {
       return {
         channels: { telegram: { botToken: "tok" } },
         approvals: { exec: { enabled: true, mode: "targets", targets } },
-      } as OpenClawConfig;
+      } as MarketingClawConfig;
     }
 
     it("accepts sender who is a DM target", () => {
@@ -567,7 +569,7 @@ describe("telegram exec approvals", () => {
             targets: [{ channel: "telegram", to: "12345" }],
           },
         },
-      } as OpenClawConfig;
+      } as MarketingClawConfig;
       expect(isTelegramExecApprovalTargetRecipient({ cfg, senderId: "12345" })).toBe(false);
     });
 
@@ -605,7 +607,7 @@ describe("telegram exec approvals", () => {
             targets: [{ channel: "telegram", to: "12345" }],
           },
         },
-      } as OpenClawConfig;
+      } as MarketingClawConfig;
       expect(isTelegramExecApprovalAuthorizedSender({ cfg, senderId: "12345" })).toBe(true);
     });
   });

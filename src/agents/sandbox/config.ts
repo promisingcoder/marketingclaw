@@ -3,9 +3,9 @@
  *
  * Merges global and agent settings into normalized Docker, SSH, browser, prune, scope, and tool-policy config.
  */
-import { resolveTimerTimeoutMs } from "@openclaw/normalization-core/number-coercion";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import { resolveTimerTimeoutMs } from "@marketingclaw/normalization-core/number-coercion";
+import { normalizeOptionalString } from "@marketingclaw/normalization-core/string-coerce";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import type { SandboxSshSettings } from "../../config/types.sandbox.js";
 import { normalizeSecretInputString } from "../../config/types.secrets.js";
 import { resolveAgentConfig } from "../agent-scope.js";
@@ -41,7 +41,7 @@ export const DANGEROUS_SANDBOX_DOCKER_BOOLEAN_KEYS = [
 ] as const;
 
 const DEFAULT_SANDBOX_SSH_COMMAND = "ssh";
-const DEFAULT_SANDBOX_SSH_WORKSPACE_ROOT = "/tmp/openclaw-sandboxes";
+const DEFAULT_SANDBOX_SSH_WORKSPACE_ROOT = "/tmp/marketingclaw-sandboxes";
 
 type DangerousSandboxDockerBooleanKey = (typeof DANGEROUS_SANDBOX_DOCKER_BOOLEAN_KEYS)[number];
 type DangerousSandboxDockerBooleans = Pick<SandboxDockerConfig, DangerousSandboxDockerBooleanKey>;
@@ -228,7 +228,7 @@ export function resolveSandboxSshConfig(params: {
 }
 
 export function resolveSandboxConfigForAgent(
-  cfg?: OpenClawConfig,
+  cfg?: MarketingClawConfig,
   agentId?: string,
 ): SandboxConfig {
   const agent = cfg?.agents?.defaults?.sandbox;

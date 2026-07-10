@@ -350,14 +350,14 @@ export function bootstrapApplication(): ApplicationRuntime {
       void router
         .navigate(routeId, context, { history: "push" }, routeLocation(routeId, options))
         .catch((error: unknown) => {
-          console.error("[openclaw] route navigation failed", error);
+          console.error("[marketingclaw] route navigation failed", error);
         });
     },
     replace: (routeId, options) => {
       void router
         .navigate(routeId, context, { history: "replace" }, routeLocation(routeId, options))
         .catch((error: unknown) => {
-          console.error("[openclaw] route replacement failed", error);
+          console.error("[marketingclaw] route replacement failed", error);
         });
     },
     preload: (routeId) => router.preloadRoute(routeId, context),

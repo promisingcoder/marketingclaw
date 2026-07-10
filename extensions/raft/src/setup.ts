@@ -1,13 +1,13 @@
+import type { ChannelPlugin } from "marketingclaw/plugin-sdk/core";
 // Raft plugin setup owns only the Raft CLI profile, never Raft credentials.
-import { createPatchedAccountSetupAdapter } from "openclaw/plugin-sdk/setup";
-import type { ChannelPlugin } from "openclaw/plugin-sdk/core";
+import { createPatchedAccountSetupAdapter } from "marketingclaw/plugin-sdk/setup";
 import {
   createDetectedBinaryStatus,
   formatDocsLink,
   setSetupChannelEnabled,
-} from "openclaw/plugin-sdk/setup";
-import { detectBinary } from "openclaw/plugin-sdk/setup-tools";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "marketingclaw/plugin-sdk/setup";
+import { detectBinary } from "marketingclaw/plugin-sdk/setup-tools";
+import { normalizeOptionalString } from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import {
   listRaftAccountIds,
   RAFT_CHANNEL_ID,
@@ -68,7 +68,8 @@ export const raftSetupPlugin: ChannelPlugin<ResolvedRaftAccount> = {
         accountId
           ? resolveRaftAccount({ cfg, accountId }).configured
           : listRaftAccountIds(cfg).some(
-              (resolvedAccountId) => resolveRaftAccount({ cfg, accountId: resolvedAccountId }).configured,
+              (resolvedAccountId) =>
+                resolveRaftAccount({ cfg, accountId: resolvedAccountId }).configured,
             ),
       resolveBinaryPath: () => "raft",
       detectBinary,

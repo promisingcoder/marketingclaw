@@ -1,4 +1,4 @@
-import OpenClawChatUI
+import MarketingClawChatUI
 import SwiftUI
 
 struct AboutSettings: View {
@@ -11,23 +11,23 @@ struct AboutSettings: View {
     var body: some View {
         VStack(spacing: 8) {
             Button {
-                if let url = URL(string: "https://github.com/openclaw/openclaw") {
+                if let url = URL(string: "https://github.com/promisingcoder/marketingclaw") {
                     NSWorkspace.shared.open(url)
                 }
             } label: {
-                // Hero treatment from openclaw.ai: coral silhouette glow at 10% of
+                // Hero treatment from marketingclaw.ai: coral silhouette glow at 10% of
                 // size, teal glow at 15% plus scale 1.1 on hover.
-                OpenClawMascotView()
+                MarketingClawMascotView()
                     .frame(width: 160, height: 160)
                     .shadow(
-                        color: OpenClawMascotView.heroGlowColor(
+                        color: MarketingClawMascotView.heroGlowColor(
                             for: self.colorScheme,
                             hovering: self.iconHover),
                         radius: self.iconHover ? 24 : 16)
                     .scaleEffect(self.iconHover ? 1.1 : 1.0)
             }
             .buttonStyle(.plain)
-            .accessibilityLabel("OpenClaw on GitHub")
+            .accessibilityLabel("MarketingClaw on GitHub")
             .focusable(false)
             .pointingHandCursor()
             .onHover { hover in
@@ -35,7 +35,7 @@ struct AboutSettings: View {
             }
 
             VStack(spacing: 3) {
-                Text("OpenClaw")
+                Text("MarketingClaw")
                     .font(.title3.bold())
                 Text("Version \(self.versionString)")
                     .foregroundStyle(.secondary)
@@ -53,12 +53,12 @@ struct AboutSettings: View {
 
             // Unified first-party link set shared with the iOS and Android About screens.
             VStack(alignment: .center, spacing: 6) {
-                AboutLinkRow(icon: "globe", title: "Website", url: "https://openclaw.ai")
-                AboutLinkRow(icon: "book", title: "Docs", url: "https://docs.openclaw.ai")
+                AboutLinkRow(icon: "globe", title: "Website", url: "https://marketingclaw.ai")
+                AboutLinkRow(icon: "book", title: "Docs", url: "https://docs.marketingclaw.ai")
                 AboutLinkRow(
                     icon: "chevron.left.slash.chevron.right",
                     title: "GitHub",
-                    url: "https://github.com/openclaw/openclaw")
+                    url: "https://github.com/promisingcoder/marketingclaw")
                 AboutLinkRow(
                     icon: "bubble.left.and.bubble.right",
                     title: "Discord",
@@ -87,7 +87,7 @@ struct AboutSettings: View {
                 }
             }
 
-            Text("© 2026 OpenClaw Foundation — MIT License.")
+            Text("© 2026 MarketingClaw Foundation — MIT License.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .padding(.top, 4)
@@ -118,8 +118,8 @@ struct AboutSettings: View {
     private var buildTimestamp: String? {
         guard
             let raw =
-            (Bundle.main.object(forInfoDictionaryKey: "OpenClawBuildTimestamp") as? String) ??
-            (Bundle.main.object(forInfoDictionaryKey: "OpenClawBuildTimestamp") as? String)
+            (Bundle.main.object(forInfoDictionaryKey: "MarketingClawBuildTimestamp") as? String) ??
+            (Bundle.main.object(forInfoDictionaryKey: "MarketingClawBuildTimestamp") as? String)
         else { return nil }
         let parser = ISO8601DateFormatter()
         parser.formatOptions = [.withInternetDateTime]
@@ -133,8 +133,8 @@ struct AboutSettings: View {
     }
 
     private var gitCommit: String {
-        (Bundle.main.object(forInfoDictionaryKey: "OpenClawGitCommit") as? String) ??
-            (Bundle.main.object(forInfoDictionaryKey: "OpenClawGitCommit") as? String) ??
+        (Bundle.main.object(forInfoDictionaryKey: "MarketingClawGitCommit") as? String) ??
+            (Bundle.main.object(forInfoDictionaryKey: "MarketingClawGitCommit") as? String) ??
             "unknown"
     }
 

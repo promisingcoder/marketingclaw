@@ -1,6 +1,6 @@
 import Foundation
-import OpenClawDiscovery
-import OpenClawKit
+import MarketingClawDiscovery
+import MarketingClawKit
 
 @MainActor
 enum GatewayDiscoverySelectionSupport {
@@ -25,15 +25,15 @@ enum GatewayDiscoverySelectionSupport {
         state.remoteTarget = GatewayDiscoveryHelpers.sshTarget(for: gateway) ?? ""
 
         if preferredTransport == .direct {
-            OpenClawConfigFile.setRemoteGatewayTransport(AppState.RemoteTransport.direct.rawValue)
+            MarketingClawConfigFile.setRemoteGatewayTransport(AppState.RemoteTransport.direct.rawValue)
             if !state.remoteUrl.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                OpenClawConfigFile.setRemoteGatewayUrlString(state.remoteUrl)
+                MarketingClawConfigFile.setRemoteGatewayUrlString(state.remoteUrl)
             } else {
-                OpenClawConfigFile.clearRemoteGatewayUrl()
+                MarketingClawConfigFile.clearRemoteGatewayUrl()
             }
         } else {
-            OpenClawConfigFile.setRemoteGatewayTransport(AppState.RemoteTransport.ssh.rawValue)
-            OpenClawConfigFile.setRemoteGatewayUrlString(state.remoteUrl)
+            MarketingClawConfigFile.setRemoteGatewayTransport(AppState.RemoteTransport.ssh.rawValue)
+            MarketingClawConfigFile.setRemoteGatewayUrlString(state.remoteUrl)
         }
     }
 

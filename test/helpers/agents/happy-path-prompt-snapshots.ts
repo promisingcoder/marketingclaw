@@ -1,7 +1,7 @@
 // Happy path prompt snapshot helper reads expected prompt snapshot files.
 import fs from "node:fs";
 import path from "node:path";
-import type { Model } from "openclaw/plugin-sdk/llm";
+import type { Model } from "marketingclaw/plugin-sdk/llm";
 import { resolveHeartbeatPromptForResponseTool } from "../../../src/auto-reply/heartbeat.js";
 import {
   buildDirectChatContext,
@@ -16,13 +16,13 @@ import { buildReplyPromptBodies } from "../../../src/auto-reply/reply/prompt-pre
 import type { TemplateContext } from "../../../src/auto-reply/templating.js";
 import { SILENT_REPLY_TOKEN } from "../../../src/auto-reply/tokens.js";
 import { normalizeChatType } from "../../../src/channels/chat-type.js";
-import type { OpenClawConfig } from "../../../src/config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../../src/config/types.marketingclaw.js";
 import type {
   AnyAgentTool,
   EmbeddedRunAttemptParams,
 } from "../../../src/plugin-sdk/agent-harness-runtime.js";
 import { normalizeAgentRuntimeTools } from "../../../src/plugin-sdk/agent-harness-runtime.js";
-import { createOpenClawCodingTools } from "../../../src/plugin-sdk/agent-harness.js";
+import { createMarketingClawCodingTools } from "../../../src/plugin-sdk/agent-harness.js";
 import { resolveRelativeBundledPluginPublicModuleId } from "../../../src/test-utils/bundled-plugin-public-surface.js";
 import {
   CODEX_MODEL_PROMPT_FIXTURE_DIR,
@@ -33,9 +33,9 @@ import {
 
 export { CODEX_MODEL_PROMPT_FIXTURE_DIR, CODEX_RUNTIME_HAPPY_PATH_PROMPT_SNAPSHOT_DIR };
 
-const WORKSPACE_DIR = "/tmp/openclaw-happy-path/workspace";
-const AGENT_DIR = "/tmp/openclaw-happy-path/agent";
-const SESSION_FILE = "/tmp/openclaw-happy-path/session.jsonl";
+const WORKSPACE_DIR = "/tmp/marketingclaw-happy-path/workspace";
+const AGENT_DIR = "/tmp/marketingclaw-happy-path/agent";
+const SESSION_FILE = "/tmp/marketingclaw-happy-path/session.jsonl";
 const MODEL_ID = "gpt-5.5";
 const CODEX_PROMPT_PERSONALITY = "pragmatic";
 const CODEX_MODEL_PROMPT_FIXTURE_PATH = path.join(
@@ -182,7 +182,7 @@ const CODEX_HEARTBEAT_CONTEXT_FILE = {
 } as const;
 
 const CODEX_WORKSPACE_BOOTSTRAP_PROMPT_CONTEXT = [
-  "OpenClaw loaded these user-editable workspace files for the current turn. Codex loads AGENTS.md natively. TOOLS.md is provided as inherited Codex developer instructions. SOUL.md, IDENTITY.md, and USER.md are provided as turn-scoped collaboration instructions so native Codex subagents do not inherit them. HEARTBEAT.md is handled by heartbeat collaboration-mode guidance. Those files are not repeated here.",
+  "MarketingClaw loaded these user-editable workspace files for the current turn. Codex loads AGENTS.md natively. TOOLS.md is provided as inherited Codex developer instructions. SOUL.md, IDENTITY.md, and USER.md are provided as turn-scoped collaboration instructions so native Codex subagents do not inherit them. HEARTBEAT.md is handled by heartbeat collaboration-mode guidance. Those files are not repeated here.",
   "",
   "# Project Context",
   "",
@@ -199,9 +199,9 @@ const CODEX_WORKSPACE_BOOTSTRAP_PROMPT_CONTEXT = [
   .trim();
 
 const CODEX_WORKSPACE_THREAD_DEVELOPER_INSTRUCTIONS = [
-  "## OpenClaw Workspace Instructions",
+  "## MarketingClaw Workspace Instructions",
   "",
-  "OpenClaw loaded these workspace instruction files from the active agent workspace. Internalize and follow them accordingly.",
+  "MarketingClaw loaded these workspace instruction files from the active agent workspace. Internalize and follow them accordingly.",
   "",
   ...CODEX_WORKSPACE_THREAD_DEVELOPER_CONTEXT_FILES.flatMap((file) => [
     `### ${file.path}`,
@@ -214,9 +214,9 @@ const CODEX_WORKSPACE_THREAD_DEVELOPER_INSTRUCTIONS = [
   .trim();
 
 const CODEX_WORKSPACE_TURN_SCOPED_DEVELOPER_INSTRUCTIONS = [
-  "## OpenClaw Agent Soul",
+  "## MarketingClaw Agent Soul",
   "",
-  "OpenClaw loaded these workspace instruction files from the active agent workspace. They are the canonical definitions of who you are, how you think and work, and the human you work alongside. Internalize and follow them accordingly.",
+  "MarketingClaw loaded these workspace instruction files from the active agent workspace. They are the canonical definitions of who you are, how you think and work, and the human you work alongside. Internalize and follow them accordingly.",
   "",
   ...CODEX_WORKSPACE_TURN_SCOPED_DEVELOPER_CONTEXT_FILES.flatMap((file) => [
     `### ${file.path}`,
@@ -229,7 +229,7 @@ const CODEX_WORKSPACE_TURN_SCOPED_DEVELOPER_INSTRUCTIONS = [
   .trim();
 
 const CODEX_HEARTBEAT_COLLABORATION_INSTRUCTIONS = [
-  "## OpenClaw Heartbeat Workspace",
+  "## MarketingClaw Heartbeat Workspace",
   "",
   "HEARTBEAT.md exists in the active agent workspace. Read it before proceeding with this heartbeat, then decide what action is appropriate.",
   "",
@@ -240,7 +240,7 @@ const CODEX_PROMPT_SNAPSHOT_THREAD_CONFIG = {
   "features.code_mode_only": false,
 };
 
-const baseConfig: OpenClawConfig = {
+const baseConfig: MarketingClawConfig = {
   messages: {
     groupChat: {
       visibleReplies: "message_tool",
@@ -273,7 +273,7 @@ const baseConfig: OpenClawConfig = {
   },
 };
 
-const dynamicToolsConfig: OpenClawConfig = {
+const dynamicToolsConfig: MarketingClawConfig = {
   ...baseConfig,
   plugins: {
     enabled: true,
@@ -408,7 +408,7 @@ function createDynamicTools(params: {
   ctx: TemplateContext;
   trigger: "user" | "heartbeat";
 }): CodexDynamicToolSpec[] {
-  const tools = createOpenClawCodingTools({
+  const tools = createMarketingClawCodingTools({
     agentId: "main",
     workspaceDir: WORKSPACE_DIR,
     agentDir: AGENT_DIR,
@@ -441,7 +441,7 @@ function createDynamicTools(params: {
       includeBaseCodingTools: false,
       includeShellTools: false,
       includeChannelTools: false,
-      includeOpenClawTools: true,
+      includeMarketingClawTools: true,
       includePluginTools: false,
     },
   });
@@ -491,10 +491,10 @@ function createScenarios(codexApi: CodexPromptSnapshotApi): PromptScenario[] {
     SenderId: "424242",
     SenderName: "Pash",
     SenderUsername: "pash",
-    GroupSubject: "OpenClaw maintainers",
+    GroupSubject: "MarketingClaw maintainers",
     GroupChannel: "#agent-sandbox",
-    GroupSpace: "OpenClaw",
-    ConversationLabel: "OpenClaw/#agent-sandbox",
+    GroupSpace: "MarketingClaw",
+    ConversationLabel: "MarketingClaw/#agent-sandbox",
     WasMentioned: true,
     InboundHistory: [
       {
@@ -503,10 +503,10 @@ function createScenarios(codexApi: CodexPromptSnapshotApi): PromptScenario[] {
       },
       {
         sender: "Pash",
-        body: "@OpenClaw please verify the Codex happy path too.",
+        body: "@MarketingClaw please verify the Codex happy path too.",
       },
     ],
-    Body: "@OpenClaw can you audit whether this prompt path has conflicting silence instructions?",
+    Body: "@MarketingClaw can you audit whether this prompt path has conflicting silence instructions?",
     BodyStripped: "can you audit whether this prompt path has conflicting silence instructions?",
   };
   const heartbeatCtx: TemplateContext = {
@@ -533,7 +533,7 @@ function createScenarios(codexApi: CodexPromptSnapshotApi): PromptScenario[] {
       title: "Telegram Direct Codex Message Tool Turn",
       notes: [
         "Default happy path: OpenAI model through the Codex harness/runtime, Telegram direct conversation, and message-tool-only visible replies.",
-        "A quiet turn is represented by not calling `message(action=send)`; the normal final assistant text is private to OpenClaw/Codex.",
+        "A quiet turn is represented by not calling `message(action=send)`; the normal final assistant text is private to MarketingClaw/Codex.",
       ],
       trigger: "user",
       ctx: telegramDirectCtx,
@@ -654,7 +654,7 @@ function renderModelBoundPromptLayers(params: {
     typeof params.codexSnapshot.threadStartParams.config.instructions === "string"
       ? params.codexSnapshot.threadStartParams.config.instructions
       : "";
-  const openClawDeveloperInstructions = params.codexSnapshot.developerInstructions;
+  const marketingClawDeveloperInstructions = params.codexSnapshot.developerInstructions;
   const codexCollaborationModeInstructions =
     typeof params.codexSnapshot.turnStartParams.collaborationMode?.settings
       ?.developer_instructions === "string"
@@ -665,7 +665,7 @@ function renderModelBoundPromptLayers(params: {
     codexModelInstructions,
     CODEX_YOLO_PERMISSION_INSTRUCTIONS,
     codexConfigInstructions,
-    openClawDeveloperInstructions,
+    marketingClawDeveloperInstructions,
     codexCollaborationModeInstructions,
     turnInputText,
   ]
@@ -676,7 +676,7 @@ function renderModelBoundPromptLayers(params: {
   return [
     "## Reconstructed Model-Bound Prompt Layers",
     "",
-    "This is the deterministic model-bound layer stack OpenClaw can snapshot for the Codex happy path. It uses a pinned Codex `gpt-5.5` prompt fixture generated from Codex's model catalog/cache shape, then adds the Codex permission developer text, Codex thread config instructions when present, OpenClaw developer instructions, turn-scoped collaboration-mode instructions when OpenClaw provides them, turn input with OpenClaw runtime context, and the OpenClaw dynamic tool catalog. Codex can still add runtime-owned context such as native workspace `AGENTS.md`, environment context, memories, app/plugin instructions, and built-in collaboration-mode instructions inside the Codex runtime.",
+    "This is the deterministic model-bound layer stack MarketingClaw can snapshot for the Codex happy path. It uses a pinned Codex `gpt-5.5` prompt fixture generated from Codex's model catalog/cache shape, then adds the Codex permission developer text, Codex thread config instructions when present, MarketingClaw developer instructions, turn-scoped collaboration-mode instructions when MarketingClaw provides them, turn input with MarketingClaw runtime context, and the MarketingClaw dynamic tool catalog. Codex can still add runtime-owned context such as native workspace `AGENTS.md`, environment context, memories, app/plugin instructions, and built-in collaboration-mode instructions inside the Codex runtime.",
     "",
     "### Layer Metadata",
     "",
@@ -692,10 +692,10 @@ function renderModelBoundPromptLayers(params: {
           approvalPolicy: "never",
           networkAccess: "enabled",
         },
-        openClawRuntime: {
+        marketingClawRuntime: {
           configInstructionsFrom: "extensions/codex app-server thread/start config.instructions",
           workspaceBootstrapContextFrom:
-            "extensions/codex app-server turn/start input OpenClaw runtime context",
+            "extensions/codex app-server turn/start input MarketingClaw runtime context",
           developerInstructionsFrom:
             "extensions/codex app-server thread/start developerInstructions",
           collaborationModeDeveloperInstructionsFrom:
@@ -718,7 +718,7 @@ function renderModelBoundPromptLayers(params: {
         codexModelInstructions: textStats(codexModelInstructions),
         codexPermissionDeveloperInstructions: textStats(CODEX_YOLO_PERMISSION_INSTRUCTIONS),
         codexWorkspaceBootstrapConfigInstructions: textStats(codexConfigInstructions),
-        openClawDeveloperInstructions: textStats(openClawDeveloperInstructions),
+        marketingClawDeveloperInstructions: textStats(marketingClawDeveloperInstructions),
         codexCollaborationModeDeveloperInstructions: textStats(codexCollaborationModeInstructions),
         userInputText: textStats(turnInputText),
         dynamicToolsJson: textStats(params.dynamicToolsJson),
@@ -739,9 +739,9 @@ function renderModelBoundPromptLayers(params: {
     "",
     markdownFence("text", codexConfigInstructions),
     "",
-    "### Developer: OpenClaw Runtime Instructions",
+    "### Developer: MarketingClaw Runtime Instructions",
     "",
-    markdownFence("text", openClawDeveloperInstructions),
+    markdownFence("text", marketingClawDeveloperInstructions),
     "",
     "### Developer: Codex Collaboration Mode Instructions",
     "",
@@ -774,19 +774,19 @@ function readCodexTurnInputText(turnStartParams: { input?: unknown }): string {
   return firstText?.text ?? "";
 }
 
-function buildCodexOpenClawRuntimeContext(): string {
+function buildCodexMarketingClawRuntimeContext(): string {
   return [
-    "OpenClaw runtime context for this turn:",
-    "Treat this OpenClaw-provided context as supporting project/user reference for the current request.",
+    "MarketingClaw runtime context for this turn:",
+    "Treat this MarketingClaw-provided context as supporting project/user reference for the current request.",
     "",
-    "## OpenClaw Workspace Context",
+    "## MarketingClaw Workspace Context",
     "",
     CODEX_WORKSPACE_BOOTSTRAP_PROMPT_CONTEXT,
   ].join("\n");
 }
 
-function prependCodexOpenClawRuntimeContext(prompt: string): string {
-  return [buildCodexOpenClawRuntimeContext(), "", "Current user request:", prompt].join("\n");
+function prependCodexMarketingClawRuntimeContext(prompt: string): string {
+  return [buildCodexMarketingClawRuntimeContext(), "", "Current user request:", prompt].join("\n");
 }
 
 function renderScenarioSnapshot(
@@ -798,7 +798,7 @@ function renderScenarioSnapshot(
     sessionKey: scenario.ctx.SessionKey ?? `agent:main:${scenario.id}`,
   });
   const appServer = codexApi.resolveCodexPromptSnapshotAppServerOptions();
-  const codexTurnPromptText = prependCodexOpenClawRuntimeContext(scenario.prompt);
+  const codexTurnPromptText = prependCodexMarketingClawRuntimeContext(scenario.prompt);
   const codexSnapshot = codexApi.buildCodexHarnessPromptSnapshot({
     attempt,
     cwd: WORKSPACE_DIR,
@@ -825,7 +825,7 @@ function renderScenarioSnapshot(
     "## Scope",
     "",
     ...scenario.notes.map((note) => `- ${note}`),
-    "- This captures the OpenClaw-owned Codex app-server inputs and reconstructs the stable Codex model/permission layers from committed Codex prompt fixtures.",
+    "- This captures the MarketingClaw-owned Codex app-server inputs and reconstructs the stable Codex model/permission layers from committed Codex prompt fixtures.",
     "- This also simulates Codex workspace bootstrap routing: `TOOLS.md` as inherited developer instructions, `SOUL.md`, `IDENTITY.md`, and `USER.md` as turn-scoped collaboration instructions, `MEMORY.md` in turn input, and `HEARTBEAT.md` as a heartbeat-only file pointer.",
     "",
     "## Scenario Metadata",
@@ -854,7 +854,7 @@ function renderScenarioSnapshot(
       }),
     ),
     "",
-    "## Effective OpenClaw Config",
+    "## Effective MarketingClaw Config",
     "",
     markdownFence("json", stableJson(baseConfig)),
     "",
@@ -894,17 +894,17 @@ function renderReadme(scenarios: PromptScenario[]): string {
     "- Codex harness default coverage for tool-only visible source replies.",
     "- Telegram direct chat, Discord group chat, and a heartbeat turn with `heartbeat_respond` available through searchable dynamic tools.",
     "",
-    "The Markdown files show selected app-server thread/turn params plus a reconstructed model-bound prompt layer stack: Codex `gpt-5.5` model instructions from a pinned Codex model catalog fixture, Codex permission developer instructions for the happy-path yolo profile, OpenClaw developer instructions, turn input with simulated OpenClaw workspace bootstrap runtime context, heartbeat collaboration-mode guidance when applicable, and references to the complete dynamic tool catalog.",
+    "The Markdown files show selected app-server thread/turn params plus a reconstructed model-bound prompt layer stack: Codex `gpt-5.5` model instructions from a pinned Codex model catalog fixture, Codex permission developer instructions for the happy-path yolo profile, MarketingClaw developer instructions, turn input with simulated MarketingClaw workspace bootstrap runtime context, heartbeat collaboration-mode guidance when applicable, and references to the complete dynamic tool catalog.",
     "",
-    "The workspace bootstrap simulation includes dummy workspace contents so prompt reviewers can see how OpenClaw routes stable profile files into Codex developer instructions, keeps `MEMORY.md` in turn input, and points heartbeat turns at `HEARTBEAT.md` without inlining it. `AGENTS.md` is intentionally not repeated here because Codex loads it natively.",
+    "The workspace bootstrap simulation includes dummy workspace contents so prompt reviewers can see how MarketingClaw routes stable profile files into Codex developer instructions, keeps `MEMORY.md` in turn input, and points heartbeat turns at `HEARTBEAT.md` without inlining it. `AGENTS.md` is intentionally not repeated here because Codex loads it natively.",
     "",
-    "The tool catalog is pinned to the canonical happy-path OpenClaw tools so optional locally installed plugin tools do not create fixture churn.",
+    "The tool catalog is pinned to the canonical happy-path MarketingClaw tools so optional locally installed plugin tools do not create fixture churn.",
     "",
     "The Codex model prompt fixture is generated from the same Codex model catalog/cache shape that the Codex runtime uses for remote model metadata. Regenerate it from Codex's runtime cache or, when present, a local Codex checkout with:",
     "",
     markdownFence("sh", "pnpm prompt:snapshots:sync-codex-model"),
     "",
-    "These snapshots are still not a byte-for-byte raw OpenAI request capture. Codex-owned native `AGENTS.md`, environment context, memories, app/plugin instructions, and built-in collaboration-mode instructions can be added inside the Codex runtime after OpenClaw sends thread and turn params.",
+    "These snapshots are still not a byte-for-byte raw OpenAI request capture. Codex-owned native `AGENTS.md`, environment context, memories, app/plugin instructions, and built-in collaboration-mode instructions can be added inside the Codex runtime after MarketingClaw sends thread and turn params.",
     "",
     "Regenerate with:",
     "",

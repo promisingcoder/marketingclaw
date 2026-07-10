@@ -1,5 +1,5 @@
 import Foundation
-import OpenClawProtocol
+import MarketingClawProtocol
 import SwiftUI
 
 extension CronJobEditor {

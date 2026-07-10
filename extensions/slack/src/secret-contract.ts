@@ -7,14 +7,14 @@ import {
   hasOwnProperty,
   type ResolverContext,
   type SecretDefaults,
-} from "openclaw/plugin-sdk/channel-secret-basic-runtime";
+} from "marketingclaw/plugin-sdk/channel-secret-basic-runtime";
 
-export const secretTargetRegistryEntries: import("openclaw/plugin-sdk/channel-secret-basic-runtime").SecretTargetRegistryEntry[] =
+export const secretTargetRegistryEntries: import("marketingclaw/plugin-sdk/channel-secret-basic-runtime").SecretTargetRegistryEntry[] =
   [
     {
       id: "channels.slack.accounts.*.appToken",
       targetType: "channels.slack.accounts.*.appToken",
-      configFile: "openclaw.json",
+      configFile: "marketingclaw.json",
       pathPattern: "channels.slack.accounts.*.appToken",
       secretShape: "secret_input",
       expectedResolvedValue: "string",
@@ -25,7 +25,7 @@ export const secretTargetRegistryEntries: import("openclaw/plugin-sdk/channel-se
     {
       id: "channels.slack.accounts.*.relay.authToken",
       targetType: "channels.slack.accounts.*.relay.authToken",
-      configFile: "openclaw.json",
+      configFile: "marketingclaw.json",
       pathPattern: "channels.slack.accounts.*.relay.authToken",
       secretShape: "secret_input",
       expectedResolvedValue: "string",
@@ -36,7 +36,7 @@ export const secretTargetRegistryEntries: import("openclaw/plugin-sdk/channel-se
     {
       id: "channels.slack.accounts.*.botToken",
       targetType: "channels.slack.accounts.*.botToken",
-      configFile: "openclaw.json",
+      configFile: "marketingclaw.json",
       pathPattern: "channels.slack.accounts.*.botToken",
       secretShape: "secret_input",
       expectedResolvedValue: "string",
@@ -47,7 +47,7 @@ export const secretTargetRegistryEntries: import("openclaw/plugin-sdk/channel-se
     {
       id: "channels.slack.accounts.*.signingSecret",
       targetType: "channels.slack.accounts.*.signingSecret",
-      configFile: "openclaw.json",
+      configFile: "marketingclaw.json",
       pathPattern: "channels.slack.accounts.*.signingSecret",
       secretShape: "secret_input",
       expectedResolvedValue: "string",
@@ -58,7 +58,7 @@ export const secretTargetRegistryEntries: import("openclaw/plugin-sdk/channel-se
     {
       id: "channels.slack.accounts.*.userToken",
       targetType: "channels.slack.accounts.*.userToken",
-      configFile: "openclaw.json",
+      configFile: "marketingclaw.json",
       pathPattern: "channels.slack.accounts.*.userToken",
       secretShape: "secret_input",
       expectedResolvedValue: "string",
@@ -69,7 +69,7 @@ export const secretTargetRegistryEntries: import("openclaw/plugin-sdk/channel-se
     {
       id: "channels.slack.appToken",
       targetType: "channels.slack.appToken",
-      configFile: "openclaw.json",
+      configFile: "marketingclaw.json",
       pathPattern: "channels.slack.appToken",
       secretShape: "secret_input",
       expectedResolvedValue: "string",
@@ -80,7 +80,7 @@ export const secretTargetRegistryEntries: import("openclaw/plugin-sdk/channel-se
     {
       id: "channels.slack.botToken",
       targetType: "channels.slack.botToken",
-      configFile: "openclaw.json",
+      configFile: "marketingclaw.json",
       pathPattern: "channels.slack.botToken",
       secretShape: "secret_input",
       expectedResolvedValue: "string",
@@ -91,7 +91,7 @@ export const secretTargetRegistryEntries: import("openclaw/plugin-sdk/channel-se
     {
       id: "channels.slack.relay.authToken",
       targetType: "channels.slack.relay.authToken",
-      configFile: "openclaw.json",
+      configFile: "marketingclaw.json",
       pathPattern: "channels.slack.relay.authToken",
       secretShape: "secret_input",
       expectedResolvedValue: "string",
@@ -102,7 +102,7 @@ export const secretTargetRegistryEntries: import("openclaw/plugin-sdk/channel-se
     {
       id: "channels.slack.signingSecret",
       targetType: "channels.slack.signingSecret",
-      configFile: "openclaw.json",
+      configFile: "marketingclaw.json",
       pathPattern: "channels.slack.signingSecret",
       secretShape: "secret_input",
       expectedResolvedValue: "string",
@@ -113,7 +113,7 @@ export const secretTargetRegistryEntries: import("openclaw/plugin-sdk/channel-se
     {
       id: "channels.slack.userToken",
       targetType: "channels.slack.userToken",
-      configFile: "openclaw.json",
+      configFile: "marketingclaw.json",
       pathPattern: "channels.slack.userToken",
       secretShape: "secret_input",
       expectedResolvedValue: "string",

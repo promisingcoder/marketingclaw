@@ -5,15 +5,15 @@ import {
   createChannelApprovalNativeRuntimeAdapter,
   type PendingApprovalView,
   resolvePreparedApprovalAccountId,
-} from "openclaw/plugin-sdk/approval-handler-runtime";
-import { buildChannelApprovalNativeTargetKey } from "openclaw/plugin-sdk/approval-native-runtime";
-import { buildApprovalReactionPendingContent } from "openclaw/plugin-sdk/approval-reaction-runtime";
-import type { ExecApprovalReplyDecision } from "openclaw/plugin-sdk/approval-reply-runtime";
+} from "marketingclaw/plugin-sdk/approval-handler-runtime";
+import { buildChannelApprovalNativeTargetKey } from "marketingclaw/plugin-sdk/approval-native-runtime";
+import { buildApprovalReactionPendingContent } from "marketingclaw/plugin-sdk/approval-reaction-runtime";
+import type { ExecApprovalReplyDecision } from "marketingclaw/plugin-sdk/approval-reply-runtime";
 import type {
   ExecApprovalRequest,
   PluginApprovalRequest,
-} from "openclaw/plugin-sdk/approval-runtime";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
+} from "marketingclaw/plugin-sdk/approval-runtime";
+import { createSubsystemLogger } from "marketingclaw/plugin-sdk/runtime-env";
 import {
   registerIMessageApprovalReactionTarget,
   unregisterIMessageApprovalReactionTarget,

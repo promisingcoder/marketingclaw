@@ -1,4 +1,4 @@
-package ai.openclaw.app.node
+package ai.marketingclaw.app.node
 
 import android.Manifest
 import android.app.Application

@@ -1,5 +1,5 @@
 // Matrix type declarations define plugin contracts.
-import type { MessageReceipt } from "openclaw/plugin-sdk/channel-outbound";
+import type { MessageReceipt } from "marketingclaw/plugin-sdk/channel-outbound";
 import type { CoreConfig } from "../../types.js";
 import { MATRIX_ANNOTATION_RELATION_TYPE, MATRIX_REACTION_EVENT_TYPE } from "../reaction-common.js";
 import type {
@@ -36,7 +36,8 @@ export const EventType = {
   RoomMessage: "m.room.message",
 } as const;
 
-export const MATRIX_OPENCLAW_FINALIZED_PREVIEW_KEY = "com.openclaw.finalized_preview" as const;
+export const MATRIX_MARKETINGCLAW_FINALIZED_PREVIEW_KEY =
+  "com.marketingclaw.finalized_preview" as const;
 
 export type MatrixDirectAccountData = Record<string, string[]>;
 

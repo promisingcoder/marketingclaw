@@ -3,9 +3,9 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 
-const repo = "openclaw/openclaw";
+const repo = "marketingclaw/marketingclaw";
 const commitAssociationQueryBatchSize = 20;
-const excludedHandles = new Set(["openclaw", "clawsweeper", "claude", "codex", "steipete"]);
+const excludedHandles = new Set(["marketingclaw", "clawsweeper", "claude", "codex", "steipete"]);
 const nonEditorialTypes = new Set([
   "build",
   "chore",
@@ -47,7 +47,7 @@ function fail(message) {
 
 function printUsage() {
   console.log(`Usage:
-  node .agents/skills/openclaw-changelog-update/scripts/verify-release-notes.mjs \\
+  node .agents/skills/marketingclaw-changelog-update/scripts/verify-release-notes.mjs \\
     --base <tag-or-sha> --target <tag-or-sha> --version <version> [options]
 
 Required:
@@ -224,7 +224,7 @@ function referencesIn(text) {
 function closingReferencesIn(text) {
   const references = [];
   for (const match of text.matchAll(
-    /\b(?:fix(?:es|ed)?|closes?|closed|resolves?|resolved)\s+(?:(?:openclaw\/openclaw)?#\d+)(?:\s*(?:,|and)\s*(?:(?:openclaw\/openclaw)?#\d+))*/gi,
+    /\b(?:fix(?:es|ed)?|closes?|closed|resolves?|resolved)\s+(?:(?:marketingclaw\/marketingclaw)?#\d+)(?:\s*(?:,|and)\s*(?:(?:marketingclaw\/marketingclaw)?#\d+))*/gi,
   )) {
     appendReferences(references, referencesIn(match[0]));
   }
@@ -678,7 +678,7 @@ function resolveAssociatedPullRequests(commitHashes, targetTimestamp) {
     const fields = chunk
       .map(
         (hash, offset) =>
-          `c${index + offset}: repository(owner: "openclaw", name: "openclaw") {
+          `c${index + offset}: repository(owner: "marketingclaw", name: "marketingclaw") {
             object(expression: ${JSON.stringify(hash)}) {
               ... on Commit {
                 associatedPullRequests(first: 100) {
@@ -704,7 +704,7 @@ function resolveAssociatedPullRequests(commitHashes, targetTimestamp) {
     const fields = chunk
       .map(
         (item, offset) =>
-          `c${offset}: repository(owner: "openclaw", name: "openclaw") {
+          `c${offset}: repository(owner: "marketingclaw", name: "marketingclaw") {
             object(expression: ${JSON.stringify(item.commitHash)}) {
               ... on Commit {
                 associatedPullRequests(first: 100, after: ${JSON.stringify(item.cursor)}) {
@@ -758,7 +758,7 @@ function resolveIssueRelationshipPages(nodes) {
           nodes { number }
           pageInfo { hasNextPage endCursor }
         }`;
-        return `n${offset}: repository(owner: "openclaw", name: "openclaw") {
+        return `n${offset}: repository(owner: "marketingclaw", name: "marketingclaw") {
           issueOrPullRequest(number: ${item.number}) {
             ... on ${item.type} {
               ${connection}
@@ -798,7 +798,7 @@ function resolveReferences(numbers) {
     const chunk = numbers.slice(index, index + 40);
     const fields = chunk
       .map(
-        (number) => `n${number}: repository(owner: "openclaw", name: "openclaw") {
+        (number) => `n${number}: repository(owner: "marketingclaw", name: "marketingclaw") {
           issueOrPullRequest(number: ${number}) {
             __typename
             ... on Issue {
@@ -865,7 +865,7 @@ function resolveDirectCommitAuthors(commits) {
     const fields = chunk
       .map(
         (commit, offset) =>
-          `c${index + offset}: repository(owner: "openclaw", name: "openclaw") {
+          `c${index + offset}: repository(owner: "marketingclaw", name: "marketingclaw") {
             object(expression: ${JSON.stringify(commit.hash)}) {
               ... on Commit {
                 author {
@@ -897,7 +897,7 @@ function resolveCommitCoauthors(commits) {
     const fields = chunk
       .map(
         (commit, offset) =>
-          `c${index + offset}: repository(owner: "openclaw", name: "openclaw") {
+          `c${index + offset}: repository(owner: "marketingclaw", name: "marketingclaw") {
             object(expression: ${JSON.stringify(commit.hash)}) {
               ... on Commit {
                 authors(first: 20) {

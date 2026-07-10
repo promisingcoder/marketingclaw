@@ -1,6 +1,6 @@
 // Firecrawl plugin module implements firecrawl client behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { readProviderJsonResponse } from "openclaw/plugin-sdk/provider-http";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import { readProviderJsonResponse } from "marketingclaw/plugin-sdk/provider-http";
 import {
   DEFAULT_CACHE_TTL_MINUTES,
   markdownToText,
@@ -12,16 +12,16 @@ import {
   withSelfHostedWebToolsEndpoint,
   withStrictWebToolsEndpoint,
   writeCache,
-} from "openclaw/plugin-sdk/provider-web-fetch";
-import { normalizeSecretInput } from "openclaw/plugin-sdk/secret-input";
-import { wrapExternalContent, wrapWebContent } from "openclaw/plugin-sdk/security-runtime";
+} from "marketingclaw/plugin-sdk/provider-web-fetch";
+import { normalizeSecretInput } from "marketingclaw/plugin-sdk/secret-input";
+import { wrapExternalContent, wrapWebContent } from "marketingclaw/plugin-sdk/security-runtime";
 import {
   SsrFBlockedError,
   isBlockedHostnameOrIp,
   isPrivateIpAddress,
   resolvePinnedHostnameWithPolicy,
   type LookupFn,
-} from "openclaw/plugin-sdk/ssrf-runtime";
+} from "marketingclaw/plugin-sdk/ssrf-runtime";
 import {
   DEFAULT_FIRECRAWL_BASE_URL,
   resolveFirecrawlApiKey,
@@ -73,7 +73,7 @@ async function readFirecrawlJsonResponse(
 }
 
 type FirecrawlSearchParams = {
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
   query: string;
   count?: number;
   timeoutSeconds?: number;
@@ -83,7 +83,7 @@ type FirecrawlSearchParams = {
 };
 
 type FirecrawlScrapeParams = {
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
   url: string;
   extractMode: "markdown" | "text";
   access?: "credential" | "keyless";

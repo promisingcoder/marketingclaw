@@ -6,7 +6,7 @@ read_when:
 title: "Camera capture"
 ---
 
-OpenClaw supports camera capture for agent workflows on paired **iOS**, **Android**, and **macOS** nodes: capture a photo (`jpg`) or a short video clip (`mp4`, with optional audio) via Gateway `node.invoke`.
+MarketingClaw supports camera capture for agent workflows on paired **iOS**, **Android**, and **macOS** nodes: capture a photo (`jpg`) or a short video clip (`mp4`, with optional audio) via Gateway `node.invoke`.
 
 All camera access is gated behind a user-controlled setting per platform.
 
@@ -52,10 +52,10 @@ Like `canvas.*`, the iOS node only allows `camera.*` commands in the **foregroun
 The easiest way to get media files is via the CLI helper, which writes decoded media to a temp file and prints the saved path.
 
 ```bash
-openclaw nodes camera snap --node <id>                 # default: both front + back (2 MEDIA lines)
-openclaw nodes camera snap --node <id> --facing front
-openclaw nodes camera clip --node <id> --duration 3000
-openclaw nodes camera clip --node <id> --no-audio
+marketingclaw nodes camera snap --node <id>                 # default: both front + back (2 MEDIA lines)
+marketingclaw nodes camera snap --node <id> --facing front
+marketingclaw nodes camera clip --node <id> --duration 3000
+marketingclaw nodes camera clip --node <id> --no-audio
 ```
 
 `nodes camera snap` defaults to `--facing both`, capturing both front and back to give the agent both views; pass `--device-id` with a single explicit facing (`both` is rejected when `--device-id` is set). Output files are temporary (in the OS temp directory) unless you build your own wrapper.
@@ -100,27 +100,27 @@ Like `canvas.*`, the Android node only allows `camera.*` commands in the **foreg
 
 The macOS companion app exposes a checkbox:
 
-- **Settings → General → Allow Camera** (`openclaw.cameraEnabled`).
+- **Settings → General → Allow Camera** (`marketingclaw.cameraEnabled`).
   - Default: **off**.
   - When off: camera requests return `CAMERA_DISABLED: enable Camera in Settings`.
 
 ### CLI helper (node invoke)
 
-Use the main `openclaw` CLI to invoke camera commands on the macOS node.
+Use the main `marketingclaw` CLI to invoke camera commands on the macOS node.
 
 ```bash
-openclaw nodes camera list --node <id>                     # list camera ids
-openclaw nodes camera snap --node <id>                     # prints saved path
-openclaw nodes camera snap --node <id> --max-width 1280
-openclaw nodes camera snap --node <id> --delay-ms 2000
-openclaw nodes camera snap --node <id> --device-id <id>
-openclaw nodes camera clip --node <id> --duration 10s       # prints saved path
-openclaw nodes camera clip --node <id> --duration-ms 3000   # prints saved path (legacy flag)
-openclaw nodes camera clip --node <id> --device-id <id>
-openclaw nodes camera clip --node <id> --no-audio
+marketingclaw nodes camera list --node <id>                     # list camera ids
+marketingclaw nodes camera snap --node <id>                     # prints saved path
+marketingclaw nodes camera snap --node <id> --max-width 1280
+marketingclaw nodes camera snap --node <id> --delay-ms 2000
+marketingclaw nodes camera snap --node <id> --device-id <id>
+marketingclaw nodes camera clip --node <id> --duration 10s       # prints saved path
+marketingclaw nodes camera clip --node <id> --duration-ms 3000   # prints saved path (legacy flag)
+marketingclaw nodes camera clip --node <id> --device-id <id>
+marketingclaw nodes camera clip --node <id> --no-audio
 ```
 
-- `openclaw nodes camera snap` defaults to `maxWidth=1600` unless overridden.
+- `marketingclaw nodes camera snap` defaults to `maxWidth=1600` unless overridden.
 - `camera.snap` waits `delayMs` (default 2000ms, clamped to `[0, 10000]`) after warm-up/exposure settle before capturing.
 - Photo payloads are recompressed to keep base64 under 5MB.
 
@@ -134,7 +134,7 @@ openclaw nodes camera clip --node <id> --no-audio
 For _screen_ video (not camera), use the macOS companion:
 
 ```bash
-openclaw nodes screen record --node <id> --duration 10s --fps 15   # prints saved path
+marketingclaw nodes screen record --node <id> --duration 10s --fps 15   # prints saved path
 ```
 
 Requires macOS **Screen Recording** permission (TCC).

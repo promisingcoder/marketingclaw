@@ -94,7 +94,7 @@ function verboseMessages(): string[] {
 
 async function resetMessageHookTestState() {
   await loadGetReplyRuntimeForTest();
-  delete process.env.OPENCLAW_TEST_FAST;
+  delete process.env.MARKETINGCLAW_TEST_FAST;
   mocks.applyMediaUnderstanding.mockReset();
   mocks.applyLinkUnderstanding.mockReset();
   mocks.createInternalHookEvent.mockReset();
@@ -330,7 +330,7 @@ describe("getReplyFromConfig message hooks", () => {
   it("stages remote iMessage media before media understanding", async () => {
     const order: string[] = [];
     const remotePath = "/Users/demo/Library/Messages/Attachments/ab/cd/photo.jpg";
-    const stagedPath = "/tmp/openclaw-remote-cache/photo.jpg";
+    const stagedPath = "/tmp/marketingclaw-remote-cache/photo.jpg";
     vi.mocked(stageSandboxMediaMock).mockImplementationOnce(async (params) => {
       order.push("stage");
       params.ctx.MediaPath = stagedPath;
@@ -409,7 +409,7 @@ describe("getReplyFromConfig message hooks", () => {
   });
 
   it("skips message hooks in fast test mode", async () => {
-    process.env.OPENCLAW_TEST_FAST = "1";
+    process.env.MARKETINGCLAW_TEST_FAST = "1";
 
     await getReplyFromConfig(buildCtx(), undefined, withFastReplyConfig({}));
 
@@ -508,7 +508,9 @@ describe("getReplyFromConfig message hooks", () => {
 
   it("continues dispatching when media understanding fails before reply routing", async () => {
     mocks.applyMediaUnderstanding.mockRejectedValueOnce(
-      new Error("Cannot find module '/tmp/openclaw/dist/media-understanding/apply.runtime-old.js'"),
+      new Error(
+        "Cannot find module '/tmp/marketingclaw/dist/media-understanding/apply.runtime-old.js'",
+      ),
     );
 
     const reply = await getReplyFromConfig(buildCtx(), undefined, withFastReplyConfig({}));
@@ -532,7 +534,9 @@ describe("getReplyFromConfig message hooks", () => {
 
   it("continues dispatching URL messages when link understanding fails before reply routing", async () => {
     mocks.applyLinkUnderstanding.mockRejectedValueOnce(
-      new Error("Cannot find module '/tmp/openclaw/dist/link-understanding/apply.runtime-old.js'"),
+      new Error(
+        "Cannot find module '/tmp/marketingclaw/dist/link-understanding/apply.runtime-old.js'",
+      ),
     );
 
     const reply = await getReplyFromConfig(

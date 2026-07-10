@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "name": "OpenClaw",
+  "name": "MarketingClaw",
   "description": "Self-hosted gateway that connects Discord, Google Chat, iMessage, Matrix, Microsoft Teams, Signal, Slack, Telegram, WhatsApp, Zalo, and more to AI coding agents. Run one Gateway process on your own machine and message your AI assistant from anywhere.",
   "theme": "mint",
   "icons": {
@@ -36,12 +36,12 @@
     "links": [
       {
         "label": "GitHub",
-        "href": "https://github.com/openclaw/openclaw",
+        "href": "https://github.com/promisingcoder/marketingclaw",
         "icon": "github"
       },
       {
         "label": "Releases",
-        "href": "https://github.com/openclaw/openclaw/releases",
+        "href": "https://github.com/promisingcoder/marketingclaw/releases",
         "icon": "package"
       },
       {
@@ -61,11 +61,11 @@
       "destination": "/channels/matrix-migration"
     },
     {
-      "source": "/concepts/openclaw-sdk",
+      "source": "/concepts/marketingclaw-sdk",
       "destination": "/gateway/external-apps"
     },
     {
-      "source": "/reference/openclaw-sdk-api-design",
+      "source": "/reference/marketingclaw-sdk-api-design",
       "destination": "/gateway/external-apps"
     },
     {
@@ -102,7 +102,7 @@
     },
     {
       "source": "/pi-dev",
-      "destination": "/openclaw-agent-runtime"
+      "destination": "/marketingclaw-agent-runtime"
     },
     {
       "source": "/providers/modelstudio",
@@ -325,7 +325,7 @@
       "destination": "/channels/zalo"
     },
     {
-      "source": "/channels/openclaw-zaloclawbot",
+      "source": "/channels/marketingclaw-zaloclawbot",
       "destination": "/channels/zaloclawbot"
     },
     {
@@ -422,15 +422,15 @@
     },
     {
       "source": "/clawd",
-      "destination": "/start/openclaw"
+      "destination": "/start/marketingclaw"
     },
     {
       "source": "/start/clawd",
-      "destination": "/start/openclaw"
+      "destination": "/start/marketingclaw"
     },
     {
       "source": "/start/clawd/",
-      "destination": "/start/openclaw"
+      "destination": "/start/marketingclaw"
     },
     {
       "source": "/start/pairing",
@@ -529,7 +529,7 @@
       "destination": "/channels/telegram"
     },
     {
-      "source": "/channels/openclaw-weixin",
+      "source": "/channels/marketingclaw-weixin",
       "destination": "/channels/wechat"
     },
     {
@@ -1033,7 +1033,7 @@
               {
                 "group": "Guides",
                 "pages": [
-                  "start/openclaw",
+                  "start/marketingclaw",
                   "start/wizard-cli-reference",
                   "start/wizard-cli-automation"
                 ]
@@ -1104,7 +1104,7 @@
                 "group": "Advanced setup",
                 "pages": [
                   "start/setup",
-                  "openclaw-agent-runtime"
+                  "marketingclaw-agent-runtime"
                 ]
               }
             ]
@@ -1899,7 +1899,7 @@
                   "reference/wizard",
                   "reference/token-use",
                   "reference/secretref-credential-surface",
-                  "reference/openclaw-ai",
+                  "reference/marketingclaw-ai",
                   "reference/prompt-caching",
                   "reference/api-usage-costs",
                   "reference/transcript-hygiene",

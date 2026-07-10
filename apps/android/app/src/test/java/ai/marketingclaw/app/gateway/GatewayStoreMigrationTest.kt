@@ -1,7 +1,7 @@
-package ai.openclaw.app.gateway
+package ai.marketingclaw.app.gateway
 
-import ai.openclaw.app.GatewayCredentials
-import ai.openclaw.app.SecurePrefs
+import ai.marketingclaw.app.GatewayCredentials
+import ai.marketingclaw.app.SecurePrefs
 import android.content.Context
 import android.content.SharedPreferences
 import org.junit.Assert.assertEquals
@@ -157,7 +157,7 @@ class GatewayStoreMigrationTest {
 
   private fun fixture(): Fixture {
     val context = RuntimeEnvironment.getApplication()
-    val plain = context.getSharedPreferences("openclaw.node", Context.MODE_PRIVATE)
+    val plain = context.getSharedPreferences("marketingclaw.node", Context.MODE_PRIVATE)
     plain.edit().clear().commit()
     val secure = context.getSharedPreferences("gateway-migration-${UUID.randomUUID()}", Context.MODE_PRIVATE)
     secure.edit().clear().commit()

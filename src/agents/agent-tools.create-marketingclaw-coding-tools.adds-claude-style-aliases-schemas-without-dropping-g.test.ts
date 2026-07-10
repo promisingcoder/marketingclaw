@@ -6,11 +6,11 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { AgentTool, AgentToolResult } from "openclaw/plugin-sdk/agent-core";
+import type { AgentTool, AgentToolResult } from "marketingclaw/plugin-sdk/agent-core";
 import { Type } from "typebox";
 import { describe, expect, it, vi } from "vitest";
 import * as windowsEncoding from "../infra/windows-encoding.js";
-import { createOpenClawReadTool, createSandboxedReadTool } from "./agent-tools.read.js";
+import { createMarketingClawReadTool, createSandboxedReadTool } from "./agent-tools.read.js";
 import { createHostSandboxFsBridge } from "./test-helpers/host-sandbox-fs-bridge.js";
 
 function extractToolText(result: unknown): string {
@@ -32,9 +32,9 @@ function extractToolText(result: unknown): string {
   return textBlock?.text ?? "";
 }
 
-describe("createOpenClawCodingTools read behavior", () => {
+describe("createMarketingClawCodingTools read behavior", () => {
   it("uses host decoding only for host-backed sandbox paths", async () => {
-    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-sbx-encoding-"));
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-sbx-encoding-"));
     await fs.writeFile(path.join(tmpDir, "notes.txt"), "hello", "utf8");
     const hostBridge = createHostSandboxFsBridge(tmpDir);
     const remoteBridge = {
@@ -62,8 +62,8 @@ describe("createOpenClawCodingTools read behavior", () => {
   });
 
   it("applies sandbox path guards to canonical path", async () => {
-    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-sbx-"));
-    const outsidePath = path.join(os.tmpdir(), "openclaw-outside.txt");
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-sbx-"));
+    const outsidePath = path.join(os.tmpdir(), "marketingclaw-outside.txt");
     await fs.writeFile(outsidePath, "outside", "utf8");
     try {
       const readTool = createSandboxedReadTool({
@@ -80,7 +80,7 @@ describe("createOpenClawCodingTools read behavior", () => {
   });
 
   it("auto-pages read output across chunks when context window budget allows", async () => {
-    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-read-autopage-"));
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-read-autopage-"));
     const filePath = path.join(tmpDir, "big.txt");
     const lines = Array.from(
       { length: 5000 },
@@ -105,7 +105,7 @@ describe("createOpenClawCodingTools read behavior", () => {
   });
 
   it("maps inbound media refs to sandbox-staged media for reads", async () => {
-    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-read-media-sbx-"));
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-read-media-sbx-"));
     const mediaId = "webchat-upload.txt";
     const mediaPath = path.join(tmpDir, "media", "inbound", mediaId);
     await fs.mkdir(path.dirname(mediaPath), { recursive: true });
@@ -125,7 +125,7 @@ describe("createOpenClawCodingTools read behavior", () => {
   });
 
   it("adds capped continuation guidance when aggregated read output reaches budget", async () => {
-    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-read-cap-"));
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-read-cap-"));
     const filePath = path.join(tmpDir, "huge.txt");
     const lines = Array.from(
       { length: 8000 },
@@ -148,7 +148,7 @@ describe("createOpenClawCodingTools read behavior", () => {
   });
 
   it("returns empty content for explicit offsets beyond EOF", async () => {
-    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-read-offset-eof-"));
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-read-offset-eof-"));
     await fs.writeFile(path.join(tmpDir, "notes.txt"), "one\ntwo\nthree", "utf8");
     try {
       const readTool = createSandboxedReadTool({
@@ -168,7 +168,7 @@ describe("createOpenClawCodingTools read behavior", () => {
   });
 
   it("returns empty content for adaptive offsets beyond EOF", async () => {
-    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-read-offset-adaptive-"));
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-read-offset-adaptive-"));
     await fs.writeFile(path.join(tmpDir, "notes.txt"), "one\ntwo\nthree\n", "utf8");
     try {
       const readTool = createSandboxedReadTool({
@@ -206,7 +206,7 @@ describe("createOpenClawCodingTools read behavior", () => {
       .fn()
       .mockResolvedValueOnce(readResult)
       .mockRejectedValueOnce(new Error("Offset 2 is beyond end of file (1 lines total)"));
-    const readTool = createOpenClawReadTool({
+    const readTool = createMarketingClawReadTool({
       name: "read",
       label: "read",
       description: "test read",
@@ -227,7 +227,7 @@ describe("createOpenClawCodingTools read behavior", () => {
   });
 
   it("keeps unrelated read failures loud", async () => {
-    const readTool = createOpenClawReadTool({
+    const readTool = createMarketingClawReadTool({
       name: "read",
       label: "read",
       description: "test read",
@@ -272,8 +272,8 @@ describe("createOpenClawCodingTools read behavior", () => {
       execute: vi.fn(async () => readResult),
     };
 
-    const wrapped = createOpenClawReadTool(
-      baseRead as unknown as Parameters<typeof createOpenClawReadTool>[0],
+    const wrapped = createMarketingClawReadTool(
+      baseRead as unknown as Parameters<typeof createMarketingClawReadTool>[0],
     );
     const result = await wrapped.execute("read-strip-1", { path: "demo.txt", limit: 1 });
 

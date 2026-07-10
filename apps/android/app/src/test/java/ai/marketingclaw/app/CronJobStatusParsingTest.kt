@@ -1,4 +1,4 @@
-package ai.openclaw.app
+package ai.marketingclaw.app
 
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject

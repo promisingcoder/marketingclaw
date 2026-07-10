@@ -19,7 +19,7 @@ vi.mock("node:fs", async (importOriginal) => {
   const actual = await importOriginal<typeof import("node:fs")>();
   const chmodSync: typeof actual.chmodSync = ((target: unknown, mode: unknown) => {
     chmodFailHook.calls += 1;
-    const isProbe = String(target).includes(".openclaw-chmod-probe-");
+    const isProbe = String(target).includes(".marketingclaw-chmod-probe-");
     if (chmodFailHook.error && (chmodFailHook.failProbe || !isProbe)) {
       throw chmodFailHook.error;
     }
@@ -30,11 +30,11 @@ vi.mock("node:fs", async (importOriginal) => {
 
 const fs = await import("node:fs");
 const {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-  repairOpenClawStateDatabaseSchema,
-  runOpenClawStateWriteTransaction,
-} = await import("./openclaw-state-db.js");
+  closeMarketingClawStateDatabaseForTest,
+  openMarketingClawStateDatabase,
+  repairMarketingClawStateDatabaseSchema,
+  runMarketingClawStateWriteTransaction,
+} = await import("./marketingclaw-state-db.js");
 
 function chmodError(code: string): Error {
   const err = new Error(`${code}: chmod failed`) as NodeJS.ErrnoException;
@@ -53,7 +53,7 @@ describe("state database permission hardening without chmod support", () => {
     chmodFailHook.error = undefined;
     chmodFailHook.calls = 0;
     chmodFailHook.failProbe = true;
-    closeOpenClawStateDatabaseForTest();
+    closeMarketingClawStateDatabaseForTest();
     if (stateDir) {
       fs.rmSync(stateDir, { recursive: true, force: true });
       stateDir = undefined;
@@ -61,10 +61,10 @@ describe("state database permission hardening without chmod support", () => {
   });
 
   it("opens the state database when chmodSync throws ENOTSUP", () => {
-    stateDir = fs.mkdtempSync(join(tmpdir(), "openclaw-state-chmod-"));
+    stateDir = fs.mkdtempSync(join(tmpdir(), "marketingclaw-state-chmod-"));
     chmodFailHook.error = enotsupError();
 
-    const database = openOpenClawStateDatabase({ env: { OPENCLAW_STATE_DIR: stateDir } });
+    const database = openMarketingClawStateDatabase({ env: { MARKETINGCLAW_STATE_DIR: stateDir } });
 
     expect(database.db.isOpen).toBe(true);
     // Hardening ran and failed; the failure must stay non-fatal.
@@ -72,33 +72,33 @@ describe("state database permission hardening without chmod support", () => {
   });
 
   it("rethrows EPERM when existing permissions are too broad", () => {
-    stateDir = fs.mkdtempSync(join(tmpdir(), "openclaw-state-chmod-"));
+    stateDir = fs.mkdtempSync(join(tmpdir(), "marketingclaw-state-chmod-"));
     fs.chmodSync(stateDir, 0o755);
     chmodFailHook.error = chmodError("EPERM");
     chmodFailHook.failProbe = false;
 
-    expect(() => openOpenClawStateDatabase({ env: { OPENCLAW_STATE_DIR: stateDir } })).toThrow(
-      /EPERM/,
-    );
+    expect(() =>
+      openMarketingClawStateDatabase({ env: { MARKETINGCLAW_STATE_DIR: stateDir } }),
+    ).toThrow(/EPERM/);
   });
 
   it("opens when EPERM leaves existing permissions restrictive", () => {
-    stateDir = fs.mkdtempSync(join(tmpdir(), "openclaw-state-chmod-"));
-    openOpenClawStateDatabase({ env: { OPENCLAW_STATE_DIR: stateDir } });
-    closeOpenClawStateDatabaseForTest();
+    stateDir = fs.mkdtempSync(join(tmpdir(), "marketingclaw-state-chmod-"));
+    openMarketingClawStateDatabase({ env: { MARKETINGCLAW_STATE_DIR: stateDir } });
+    closeMarketingClawStateDatabaseForTest();
     chmodFailHook.error = chmodError("EPERM");
 
-    const database = openOpenClawStateDatabase({ env: { OPENCLAW_STATE_DIR: stateDir } });
+    const database = openMarketingClawStateDatabase({ env: { MARKETINGCLAW_STATE_DIR: stateDir } });
 
     expect(database.db.isOpen).toBe(true);
   });
 
   it("opens when the filesystem probe also rejects chmod with EPERM", () => {
-    stateDir = fs.mkdtempSync(join(tmpdir(), "openclaw-state-chmod-"));
+    stateDir = fs.mkdtempSync(join(tmpdir(), "marketingclaw-state-chmod-"));
     fs.chmodSync(stateDir, 0o755);
     chmodFailHook.error = chmodError("EPERM");
 
-    const database = openOpenClawStateDatabase({ env: { OPENCLAW_STATE_DIR: stateDir } });
+    const database = openMarketingClawStateDatabase({ env: { MARKETINGCLAW_STATE_DIR: stateDir } });
 
     expect(database.db.isOpen).toBe(true);
   });
@@ -106,32 +106,32 @@ describe("state database permission hardening without chmod support", () => {
   it("rethrows unexpected chmod errors at open", () => {
     // EACCES is not in CHMOD_UNSUPPORTED_CODES: a real permission fault on a
     // POSIX filesystem must keep the credentials-adjacent hardening fatal.
-    stateDir = fs.mkdtempSync(join(tmpdir(), "openclaw-state-chmod-"));
+    stateDir = fs.mkdtempSync(join(tmpdir(), "marketingclaw-state-chmod-"));
     chmodFailHook.error = chmodError("EACCES");
 
-    expect(() => openOpenClawStateDatabase({ env: { OPENCLAW_STATE_DIR: stateDir } })).toThrow(
-      /EACCES/,
-    );
+    expect(() =>
+      openMarketingClawStateDatabase({ env: { MARKETINGCLAW_STATE_DIR: stateDir } }),
+    ).toThrow(/EACCES/);
   });
 
   it("repairs the schema when chmodSync throws ENOTSUP", () => {
-    stateDir = fs.mkdtempSync(join(tmpdir(), "openclaw-state-chmod-"));
-    openOpenClawStateDatabase({ env: { OPENCLAW_STATE_DIR: stateDir } });
-    closeOpenClawStateDatabaseForTest();
+    stateDir = fs.mkdtempSync(join(tmpdir(), "marketingclaw-state-chmod-"));
+    openMarketingClawStateDatabase({ env: { MARKETINGCLAW_STATE_DIR: stateDir } });
+    closeMarketingClawStateDatabaseForTest();
 
     chmodFailHook.error = enotsupError();
 
     expect(() =>
-      repairOpenClawStateDatabaseSchema({ env: { OPENCLAW_STATE_DIR: stateDir } }),
+      repairMarketingClawStateDatabaseSchema({ env: { MARKETINGCLAW_STATE_DIR: stateDir } }),
     ).not.toThrow();
   });
 
   it("commits write transactions when chmodSync throws ENOTSUP", () => {
-    stateDir = fs.mkdtempSync(join(tmpdir(), "openclaw-state-chmod-"));
+    stateDir = fs.mkdtempSync(join(tmpdir(), "marketingclaw-state-chmod-"));
     chmodFailHook.error = enotsupError();
-    const options = { env: { OPENCLAW_STATE_DIR: stateDir } };
+    const options = { env: { MARKETINGCLAW_STATE_DIR: stateDir } };
 
-    const result = runOpenClawStateWriteTransaction((database) => {
+    const result = runMarketingClawStateWriteTransaction((database) => {
       expect(database.db.isOpen).toBe(true);
       return "committed";
     }, options);

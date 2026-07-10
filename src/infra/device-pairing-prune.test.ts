@@ -11,7 +11,9 @@ import {
   type PairedDeviceApprovalKind,
 } from "./device-pairing.js";
 
-const suiteRootTracker = createSuiteTempRootTracker({ prefix: "openclaw-device-pairing-prune-" });
+const suiteRootTracker = createSuiteTempRootTracker({
+  prefix: "marketingclaw-device-pairing-prune-",
+});
 
 async function makeBaseDir(): Promise<string> {
   return await suiteRootTracker.make("case");

@@ -217,12 +217,12 @@ describe("agent harness user input helpers", () => {
             options: [{ label: "Fast" }, { label: "Deep" }],
           },
         ],
-        "repo: openclaw\nmode: 2",
+        "repo: marketingclaw\nmode: 2",
       ),
     ).toEqual({
       answers: {
         mode: { answers: ["Deep"] },
-        repo: { answers: ["openclaw"] },
+        repo: { answers: ["marketingclaw"] },
       },
     });
   });

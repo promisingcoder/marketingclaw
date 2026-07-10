@@ -1,6 +1,6 @@
-package ai.openclaw.app.ui
+package ai.marketingclaw.app.ui
 
-import ai.openclaw.app.MainViewModel
+import ai.marketingclaw.app.MainViewModel
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState

@@ -1,14 +1,14 @@
 ---
 summary: "ClickClack bot-token channel setup and target syntax"
 read_when:
-  - Connecting OpenClaw to a ClickClack workspace
+  - Connecting MarketingClaw to a ClickClack workspace
   - Testing ClickClack bot identities
 title: "ClickClack"
 ---
 
-ClickClack connects OpenClaw to a self-hosted ClickClack workspace through first-class ClickClack bot tokens.
+ClickClack connects MarketingClaw to a self-hosted ClickClack workspace through first-class ClickClack bot tokens.
 
-Use this when you want an OpenClaw agent to appear as a ClickClack bot user. ClickClack supports independent service bots and user-owned bots; user-owned bots keep an `owner_user_id` and receive only the token scopes you grant.
+Use this when you want an MarketingClaw agent to appear as a ClickClack bot user. ClickClack supports independent service bots and user-owned bots; user-owned bots keep an `owner_user_id` and receive only the token scopes you grant.
 
 ## Quick setup
 
@@ -17,15 +17,15 @@ Create a bot token on the ClickClack server:
 ```bash
 clickclack admin bot create \
   --workspace <workspace_id> \
-  --name "OpenClaw" \
-  --handle openclaw \
+  --name "MarketingClaw" \
+  --handle marketingclaw \
   --scopes bot:write \
   --plain
 ```
 
 For a user-owned bot, add `--owner <user_id>`.
 
-Configure OpenClaw:
+Configure MarketingClaw:
 
 ```json5
 {
@@ -45,7 +45,7 @@ Then run:
 
 ```bash
 export CLICKCLACK_BOT_TOKEN="ccb_..."
-openclaw gateway
+marketingclaw gateway
 ```
 
 An account counts as configured only when `baseUrl`, `token`, and `workspace` are all set. `workspace` accepts a workspace id (`wsp_...`), slug, or name; the gateway resolves it to the id at startup.
@@ -67,11 +67,11 @@ An account counts as configured only when `baseUrl`, `token`, and `workspace` ar
 | `reconnectMs`           | `1500`              | Realtime reconnect delay (100 to 60000).                                                |
 
 If `plugins.allow` is a non-empty restrictive list, explicitly selecting
-ClickClack in channel setup or running `openclaw plugins enable clickclack`
+ClickClack in channel setup or running `marketingclaw plugins enable clickclack`
 appends `clickclack` to that list. Onboarding installation uses the same
 explicit-selection behavior. These paths do not override `plugins.deny` or a
 global `plugins.enabled: false` setting. Direct
-`openclaw plugins install @openclaw/clickclack` follows the normal
+`marketingclaw plugins install @marketingclaw/clickclack` follows the normal
 plugin-install policy and also records ClickClack in an existing allowlist.
 
 ## Multiple bots
@@ -166,9 +166,9 @@ Explicit outbound targets may also carry the `clickclack:` or `cc:` provider pre
 Examples:
 
 ```bash
-openclaw message send --channel clickclack --target channel:general --message "hello"
-openclaw message send --channel clickclack --target dm:usr_123 --message "hello"
-openclaw message send --channel clickclack --target thread:msg_123 --message "following up"
+marketingclaw message send --channel clickclack --target channel:general --message "hello"
+marketingclaw message send --channel clickclack --target dm:usr_123 --message "hello"
+marketingclaw message send --channel clickclack --target thread:msg_123 --message "following up"
 ```
 
 ## Permissions
@@ -180,7 +180,7 @@ ClickClack token scopes are enforced by the ClickClack API.
 - `bot:admin`: `bot:write` plus channel creation.
 - `agent_activity:write`: durable agent activity rows (`agent_commentary` / `agent_tool`). Not inherited by `bot:write` or `bot:admin`; required only when `agentActivity: true` is set.
 
-OpenClaw only needs `bot:write` for normal agent chat. Add `agent_activity:write` when enabling [agent activity rows](#agent-activity-rows).
+MarketingClaw only needs `bot:write` for normal agent chat. Add `agent_activity:write` when enabling [agent activity rows](#agent-activity-rows).
 
 ## Troubleshooting
 

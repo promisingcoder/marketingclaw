@@ -1,4 +1,4 @@
-// Slack plugin entrypoint registers its OpenClaw integration.
+// Slack plugin entrypoint registers its MarketingClaw integration.
 export {
   listEnabledSlackAccounts,
   listSlackAccountIds,

@@ -1,11 +1,11 @@
-# OpenClaw Microsoft Teams
+# MarketingClaw Microsoft Teams
 
-Official OpenClaw channel plugin for Microsoft Teams bot conversations.
+Official MarketingClaw channel plugin for Microsoft Teams bot conversations.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugin add @openclaw/msteams
+marketingclaw plugin add @marketingclaw/msteams
 ```
 
-Configure the Teams bot credentials and trusted service URLs in OpenClaw, then connect the bot to the teams or chats where agents should operate.
+Configure the Teams bot credentials and trusted service URLs in MarketingClaw, then connect the bot to the teams or chats where agents should operate.

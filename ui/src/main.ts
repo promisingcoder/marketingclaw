@@ -9,10 +9,10 @@ type ViteImportMeta = ImportMeta & {
   };
 };
 
-declare const OPENCLAW_CONTROL_UI_BUILD_ID: string | undefined;
+declare const MARKETINGCLAW_CONTROL_UI_BUILD_ID: string | undefined;
 
 const isProd = (import.meta as ViteImportMeta).env?.PROD === true;
-const currentControlUiBuildId = OPENCLAW_CONTROL_UI_BUILD_ID || "dev";
+const currentControlUiBuildId = MARKETINGCLAW_CONTROL_UI_BUILD_ID || "dev";
 
 syncDocumentPublicAssetLinks();
 

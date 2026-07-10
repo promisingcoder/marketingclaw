@@ -1,5 +1,5 @@
 // Discord tests cover setup surface plugin behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import { createDiscordSetupWizardBase } from "./setup-core.js";
 
@@ -34,7 +34,7 @@ describe("discordSetupWizard.dmPolicy", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as MarketingClawConfig,
         "alerts",
       ),
     ).toBe("allowlist");
@@ -60,7 +60,7 @@ describe("discordSetupWizard.dmPolicy", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       "open",
       "alerts",
     );
@@ -89,7 +89,7 @@ describe("discordSetupWizard.status", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
     });
 
     expect(configured).toBe(false);
@@ -111,11 +111,11 @@ describe("discordSetupWizard.groupAccess", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       accountId: "default",
       resolved: [
         {
-          input: "OpenClaw/#triage",
+          input: "MarketingClaw/#triage",
           resolved: true,
           guildId: "guild-1",
           channelId: "channel-1",

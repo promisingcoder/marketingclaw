@@ -6,7 +6,7 @@ import type { RouteId } from "../../app-route-paths.ts";
 import { applicationContext, type ApplicationContext } from "../../app/context.ts";
 import { t } from "../../i18n/index.ts";
 import { resolveEmbedSandbox } from "../../lib/chat/tool-display.ts";
-import { OpenClawLightDomContentsElement } from "../../lit/openclaw-element.ts";
+import { MarketingClawLightDomContentsElement } from "../../lit/marketingclaw-element.ts";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
 import { pluginTabKey } from "./route.ts";
 
@@ -43,7 +43,7 @@ const BUNDLED_TAB_VIEWS: Record<string, () => Promise<BundledPluginTabView>> = {
   },
 };
 
-export class PluginPage extends OpenClawLightDomContentsElement {
+export class PluginPage extends MarketingClawLightDomContentsElement {
   @property({ attribute: false }) pluginId = "";
   @property({ attribute: false }) tabId = "";
 
@@ -181,6 +181,6 @@ export class PluginPage extends OpenClawLightDomContentsElement {
   }
 }
 
-if (!customElements.get("openclaw-plugin-page")) {
-  customElements.define("openclaw-plugin-page", PluginPage);
+if (!customElements.get("marketingclaw-plugin-page")) {
+  customElements.define("marketingclaw-plugin-page", PluginPage);
 }

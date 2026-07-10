@@ -21,7 +21,7 @@ minimumReleaseAgeExclude:
   - "hono"
   - "libopus-wasm@0.2.0"
   - "libsignal@6.0.0"
-  - "openclaw"
+  - "marketingclaw"
   - "protobufjs"
   - "vite"
   - "@cloudflare/workers-types"
@@ -139,7 +139,7 @@ allowBuilds:
   node-llama-cpp: false
   protobufjs: true
   tree-sitter-bash: false
-  openclaw: true
+  marketingclaw: true
   "@openclaw/proxyline": true
   clawpdf: true
   "@openclaw/crabline": true

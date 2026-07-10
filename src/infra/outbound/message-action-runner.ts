@@ -3,8 +3,8 @@
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
-import { resolveSendableOutboundReplyParts } from "openclaw/plugin-sdk/reply-payload";
+} from "@marketingclaw/normalization-core/string-coerce";
+import { resolveSendableOutboundReplyParts } from "marketingclaw/plugin-sdk/reply-payload";
 import { stripPlainTextToolCallBlocks } from "../../../packages/tool-call-repair/src/index.js";
 import { resolveSessionAgentId } from "../../agents/agent-scope.js";
 import { resolveAgentIdentity, resolveResponsePrefix } from "../../agents/identity.js";
@@ -26,7 +26,7 @@ import type {
   ChannelMessageActionName,
   ChannelThreadingToolContext,
 } from "../../channels/plugins/types.public.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import {
   hasInteractiveReplyBlocks,
   hasMessagePresentationBlocks,
@@ -115,7 +115,7 @@ const loadMessageActionGatewayRuntime = createLazyRuntimeModule(
 );
 
 export type RunMessageActionParams = {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   action: ChannelMessageActionName;
   params: Record<string, unknown>;
   defaultAccountId?: string;
@@ -275,7 +275,7 @@ function applyCrossContextMessageDecoration({
 }
 
 async function maybeApplyCrossContextMarker(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   channel: ChannelId;
   action: ChannelMessageActionName;
   target: string;
@@ -309,7 +309,7 @@ async function maybeApplyCrossContextMarker(params: {
 }
 
 async function resolveChannel(
-  cfg: OpenClawConfig,
+  cfg: MarketingClawConfig,
   params: Record<string, unknown>,
   toolContext?: { currentChannelProvider?: string },
 ) {
@@ -363,7 +363,7 @@ function inferPeerKindForAccountBinding(channel: ChannelId, target: string): Cha
 }
 
 function resolveTargetBoundAccountId(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   channel: ChannelId;
   args: Record<string, unknown>;
   agentId?: string;
@@ -399,7 +399,7 @@ function resolveTargetBoundAccountId(params: {
 }
 
 async function resolveActionTarget(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   channel: ChannelId;
   action: ChannelMessageActionName;
   args: Record<string, unknown>;
@@ -440,7 +440,7 @@ function sanitizeGroupTargetId(target: string): string {
 }
 
 async function resolveResolvedTargetOrThrow(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   channel: ChannelId;
   input: string;
   accountId?: string;
@@ -465,7 +465,7 @@ async function resolveResolvedTargetOrThrow(params: {
 }
 
 type ResolvedActionContext = {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   params: Record<string, unknown>;
   channel: ChannelId;
   mediaAccess: OutboundMediaAccess;
@@ -654,7 +654,7 @@ function applyImplicitSourceReplySendPolicy(
 }
 
 async function runGatewayPluginMessageActionOrNull(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   params: Record<string, unknown>;
   channel: ChannelId;
   action: ChannelMessageActionName;
@@ -897,7 +897,7 @@ function buildInternalSourceReplyToolResult(payload: {
 }
 
 async function buildSendPayloadParts(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   actionParams: Record<string, unknown>;
   input: RunMessageActionParams;
   channel?: ChannelId;

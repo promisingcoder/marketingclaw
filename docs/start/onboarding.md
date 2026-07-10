@@ -1,5 +1,5 @@
 ---
-summary: "First-run setup flow for OpenClaw (macOS app)"
+summary: "First-run setup flow for MarketingClaw (macOS app)"
 read_when:
   - Designing the macOS onboarding assistant
   - Implementing auth or identity setup
@@ -30,7 +30,7 @@ For CLI onboarding and a comparison of both paths, see [Onboarding Overview](/st
 
 Security trust model:
 
-- By default, OpenClaw is a personal agent: one trusted operator boundary.
+- By default, MarketingClaw is a personal agent: one trusted operator boundary.
 - Shared/multi-user setups need lock-down: split trust boundaries, keep tool access minimal, and follow [Security](/gateway/security).
 - Local onboarding defaults new configs to `tools.profile: "coding"` so fresh setups keep filesystem/runtime tools without the unrestricted `full` profile.
 - If hooks/webhooks or other untrusted content feeds are enabled, use a strong modern model tier and keep strict tool policy/sandboxing.
@@ -61,7 +61,7 @@ Where does the **Gateway** run?
 </Tip>
 </Step>
 <Step title="CLI">
-  Local setup installs the global `openclaw` CLI via npm, pnpm, or bun,
+  Local setup installs the global `marketingclaw` CLI via npm, pnpm, or bun,
   preferring npm first. Node remains the recommended runtime for the Gateway
   itself. Existing compatible installations are reused.
 </Step>
@@ -75,7 +75,7 @@ Where does the **Gateway** run?
 
 If nothing is found (or nothing works), the manual key/token picker loads the
 Gateway's active text-inference provider plugins instead of using a fixed app
-list. The selected provider supplies its starter model and config; OpenClaw
+list. The selected provider supplies its starter model and config; MarketingClaw
 verifies the credential with the same live test before storing its auth profile. Next
 remains locked until one backend has passed, so the first agent chat cannot
 start without working inference. The Crestodian chat stays available from this
@@ -85,7 +85,7 @@ Configure Later skips this step.
 </Step>
 <Step title="Permissions">
 
-<Frame caption="Choose what permissions do you want to give OpenClaw">
+<Frame caption="Choose what permissions do you want to give MarketingClaw">
 <img src="/assets/macos-onboarding/05-permissions.png" alt="" />
 </Frame>
 

@@ -3,9 +3,9 @@ import fsSync from "node:fs";
 import {
   createMessageReceiptFromOutboundResults,
   listMessageReceiptPlatformIds,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { sleep } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "marketingclaw/plugin-sdk/channel-outbound";
+import { logVerbose } from "marketingclaw/plugin-sdk/runtime-env";
+import { sleep } from "marketingclaw/plugin-sdk/text-utility-runtime";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { createAcceptedWhatsAppSendResult } from "../inbound/send-result.test-helper.js";
 import { createTestWebInboundMessage } from "../inbound/test-message.test-helper.js";
@@ -18,9 +18,9 @@ const hoisted = vi.hoisted(() => ({
   runFfmpeg: vi.fn(),
 }));
 
-vi.mock("openclaw/plugin-sdk/media-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/media-runtime")>(
-    "openclaw/plugin-sdk/media-runtime",
+vi.mock("marketingclaw/plugin-sdk/media-runtime", async () => {
+  const actual = await vi.importActual<typeof import("marketingclaw/plugin-sdk/media-runtime")>(
+    "marketingclaw/plugin-sdk/media-runtime",
   );
   return {
     ...actual,
@@ -28,9 +28,9 @@ vi.mock("openclaw/plugin-sdk/media-runtime", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/runtime-env", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/runtime-env")>(
-    "openclaw/plugin-sdk/runtime-env",
+vi.mock("marketingclaw/plugin-sdk/runtime-env", async () => {
+  const actual = await vi.importActual<typeof import("marketingclaw/plugin-sdk/runtime-env")>(
+    "marketingclaw/plugin-sdk/runtime-env",
   );
   return {
     ...actual,
@@ -39,10 +39,10 @@ vi.mock("openclaw/plugin-sdk/runtime-env", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/text-utility-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/text-utility-runtime")>(
-    "openclaw/plugin-sdk/text-utility-runtime",
-  );
+vi.mock("marketingclaw/plugin-sdk/text-utility-runtime", async () => {
+  const actual = await vi.importActual<
+    typeof import("marketingclaw/plugin-sdk/text-utility-runtime")
+  >("marketingclaw/plugin-sdk/text-utility-runtime");
   return {
     ...actual,
     sleep: vi.fn(async () => {}),

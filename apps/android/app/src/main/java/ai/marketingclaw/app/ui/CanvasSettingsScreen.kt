@@ -1,10 +1,10 @@
-package ai.openclaw.app.ui
+package ai.marketingclaw.app.ui
 
-import ai.openclaw.app.MainViewModel
-import ai.openclaw.app.ui.design.ClawPanel
-import ai.openclaw.app.ui.design.ClawPrimaryButton
-import ai.openclaw.app.ui.design.ClawSecondaryButton
-import ai.openclaw.app.ui.design.ClawTheme
+import ai.marketingclaw.app.MainViewModel
+import ai.marketingclaw.app.ui.design.ClawPanel
+import ai.marketingclaw.app.ui.design.ClawPrimaryButton
+import ai.marketingclaw.app.ui.design.ClawSecondaryButton
+import ai.marketingclaw.app.ui.design.ClawTheme
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -133,7 +133,7 @@ private fun CanvasStandbyPanel(isConnected: Boolean) {
       modifier = Modifier.padding(top = 18.dp),
     )
     Text(
-      text = if (isConnected) "Canvas output appears here when OpenClaw opens an app surface." else "Canvas output needs an active gateway connection.",
+      text = if (isConnected) "Canvas output appears here when MarketingClaw opens an app surface." else "Canvas output needs an active gateway connection.",
       style = ClawTheme.type.body,
       color = ClawTheme.colors.textMuted,
       modifier = Modifier.padding(top = 6.dp),

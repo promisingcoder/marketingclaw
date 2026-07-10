@@ -1,7 +1,10 @@
 import { EventEmitter } from "node:events";
 import { writeFileSync } from "node:fs";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { SpeechProviderConfig, SpeechSynthesisRequest } from "openclaw/plugin-sdk/speech-core";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import type {
+  SpeechProviderConfig,
+  SpeechSynthesisRequest,
+} from "marketingclaw/plugin-sdk/speech-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const spawnMock = vi.hoisted(() => vi.fn());
@@ -12,7 +15,7 @@ vi.mock("node:child_process", async (importOriginal) => ({
   spawn: spawnMock,
 }));
 
-vi.mock("openclaw/plugin-sdk/media-runtime", () => ({
+vi.mock("marketingclaw/plugin-sdk/media-runtime", () => ({
   runFfmpeg: runFfmpegMock,
 }));
 
@@ -37,7 +40,7 @@ function createMockChild(): MockChild {
   return child;
 }
 
-const TEST_CFG = {} as OpenClawConfig;
+const TEST_CFG = {} as MarketingClawConfig;
 const MIB = 1024 * 1024;
 
 type SpeechTarget = SpeechSynthesisRequest["target"];

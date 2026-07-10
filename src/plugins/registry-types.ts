@@ -39,25 +39,30 @@ type ImageGenerationProviderPlugin = import("./types.js").ImageGenerationProvide
 type MediaUnderstandingProviderPlugin = import("./types.js").MediaUnderstandingProviderPlugin;
 type TranscriptSourceProvider = import("./types.js").TranscriptSourceProvider;
 type MusicGenerationProviderPlugin = import("./types.js").MusicGenerationProviderPlugin;
-type OpenClawPluginCliCommandDescriptor = import("./types.js").OpenClawPluginCliCommandDescriptor;
-type OpenClawPluginCliRegistrar = import("./types.js").OpenClawPluginCliRegistrar;
-type OpenClawPluginCommandDefinition = import("./types.js").OpenClawPluginCommandDefinition;
+type MarketingClawPluginCliCommandDescriptor =
+  import("./types.js").MarketingClawPluginCliCommandDescriptor;
+type MarketingClawPluginCliRegistrar = import("./types.js").MarketingClawPluginCliRegistrar;
+type MarketingClawPluginCommandDefinition =
+  import("./types.js").MarketingClawPluginCommandDefinition;
 type PluginInteractiveHandlerRegistration =
   import("./types.js").PluginInteractiveHandlerRegistration;
-type OpenClawPluginGatewayRuntimeScopeSurface =
-  import("./types.js").OpenClawPluginGatewayRuntimeScopeSurface;
-type OpenClawGatewayDiscoveryService = import("./types.js").OpenClawGatewayDiscoveryService;
-type OpenClawPluginHttpRouteAuth = import("./types.js").OpenClawPluginHttpRouteAuth;
-type OpenClawPluginHttpRouteHandler = import("./types.js").OpenClawPluginHttpRouteHandler;
-type OpenClawPluginHttpRouteUpgradeHandler =
-  import("./types.js").OpenClawPluginHttpRouteUpgradeHandler;
-type OpenClawPluginHttpRouteMatch = import("./types.js").OpenClawPluginHttpRouteMatch;
-type OpenClawPluginHostedMediaResolver = import("./types.js").OpenClawPluginHostedMediaResolver;
-type OpenClawPluginReloadRegistration = import("./types.js").OpenClawPluginReloadRegistration;
-type OpenClawPluginSecurityAuditCollector =
-  import("./types.js").OpenClawPluginSecurityAuditCollector;
-type OpenClawPluginService = import("./types.js").OpenClawPluginService;
-type OpenClawPluginToolFactory = import("./types.js").OpenClawPluginToolFactory;
+type MarketingClawPluginGatewayRuntimeScopeSurface =
+  import("./types.js").MarketingClawPluginGatewayRuntimeScopeSurface;
+type MarketingClawGatewayDiscoveryService =
+  import("./types.js").MarketingClawGatewayDiscoveryService;
+type MarketingClawPluginHttpRouteAuth = import("./types.js").MarketingClawPluginHttpRouteAuth;
+type MarketingClawPluginHttpRouteHandler = import("./types.js").MarketingClawPluginHttpRouteHandler;
+type MarketingClawPluginHttpRouteUpgradeHandler =
+  import("./types.js").MarketingClawPluginHttpRouteUpgradeHandler;
+type MarketingClawPluginHttpRouteMatch = import("./types.js").MarketingClawPluginHttpRouteMatch;
+type MarketingClawPluginHostedMediaResolver =
+  import("./types.js").MarketingClawPluginHostedMediaResolver;
+type MarketingClawPluginReloadRegistration =
+  import("./types.js").MarketingClawPluginReloadRegistration;
+type MarketingClawPluginSecurityAuditCollector =
+  import("./types.js").MarketingClawPluginSecurityAuditCollector;
+type MarketingClawPluginService = import("./types.js").MarketingClawPluginService;
+type MarketingClawPluginToolFactory = import("./types.js").MarketingClawPluginToolFactory;
 type PluginConversationBindingResolvedEvent =
   import("./types.js").PluginConversationBindingResolvedEvent;
 type TypedPluginHookRegistration = import("./types.js").PluginHookRegistration;
@@ -78,7 +83,7 @@ type UnifiedModelCatalogProviderPlugin = import("./types.js").UnifiedModelCatalo
 export type PluginToolRegistration = {
   pluginId: string;
   pluginName?: string;
-  factory: OpenClawPluginToolFactory;
+  factory: MarketingClawPluginToolFactory;
   names: string[];
   declaredNames?: string[];
   optional: boolean;
@@ -89,10 +94,10 @@ export type PluginToolRegistration = {
 export type PluginCliRegistration = {
   pluginId: string;
   pluginName?: string;
-  register: OpenClawPluginCliRegistrar;
+  register: MarketingClawPluginCliRegistrar;
   parentPath: string[];
   commands: string[];
-  descriptors: OpenClawPluginCliCommandDescriptor[];
+  descriptors: MarketingClawPluginCliCommandDescriptor[];
   source: string;
   rootDir?: string;
 };
@@ -101,11 +106,11 @@ export type PluginCliRegistration = {
 export type PluginHttpRouteRegistration = {
   pluginId?: string;
   path: string;
-  handler: OpenClawPluginHttpRouteHandler;
-  handleUpgrade?: OpenClawPluginHttpRouteUpgradeHandler;
-  auth: OpenClawPluginHttpRouteAuth;
-  match: OpenClawPluginHttpRouteMatch;
-  gatewayRuntimeScopeSurface?: OpenClawPluginGatewayRuntimeScopeSurface;
+  handler: MarketingClawPluginHttpRouteHandler;
+  handleUpgrade?: MarketingClawPluginHttpRouteUpgradeHandler;
+  auth: MarketingClawPluginHttpRouteAuth;
+  match: MarketingClawPluginHttpRouteMatch;
+  gatewayRuntimeScopeSurface?: MarketingClawPluginGatewayRuntimeScopeSurface;
   gatewayMethodDispatchAllowed?: boolean;
   nodeCapability?: {
     surface: string;
@@ -117,7 +122,7 @@ export type PluginHttpRouteRegistration = {
 export type PluginHostedMediaResolverRegistration = {
   pluginId: string;
   pluginName?: string;
-  resolver: OpenClawPluginHostedMediaResolver;
+  resolver: MarketingClawPluginHostedMediaResolver;
   source: string;
   rootDir?: string;
 };
@@ -241,7 +246,7 @@ export type PluginHookRegistration = {
 export type PluginServiceRegistration = {
   pluginId: string;
   pluginName?: string;
-  service: OpenClawPluginService;
+  service: MarketingClawPluginService;
   source: string;
   origin: PluginOrigin;
   trustedOfficialInstall?: boolean;
@@ -251,7 +256,7 @@ export type PluginServiceRegistration = {
 export type PluginGatewayDiscoveryServiceRegistration = {
   pluginId: string;
   pluginName?: string;
-  service: OpenClawGatewayDiscoveryService;
+  service: MarketingClawGatewayDiscoveryService;
   source: string;
   rootDir?: string;
 };
@@ -259,7 +264,7 @@ export type PluginGatewayDiscoveryServiceRegistration = {
 export type PluginReloadRegistration = {
   pluginId: string;
   pluginName?: string;
-  registration: OpenClawPluginReloadRegistration;
+  registration: MarketingClawPluginReloadRegistration;
   source: string;
   rootDir?: string;
 };
@@ -267,7 +272,7 @@ export type PluginReloadRegistration = {
 export type PluginNodeHostCommandRegistration = {
   pluginId: string;
   pluginName?: string;
-  command: import("./types.js").OpenClawPluginNodeHostCommand;
+  command: import("./types.js").MarketingClawPluginNodeHostCommand;
   source: string;
   rootDir?: string;
 };
@@ -275,7 +280,7 @@ export type PluginNodeHostCommandRegistration = {
 export type PluginNodeInvokePolicyRegistration = {
   pluginId: string;
   pluginName?: string;
-  policy: import("./types.js").OpenClawPluginNodeInvokePolicy;
+  policy: import("./types.js").MarketingClawPluginNodeInvokePolicy;
   pluginConfig?: Record<string, unknown>;
   source: string;
   rootDir?: string;
@@ -284,7 +289,7 @@ export type PluginNodeInvokePolicyRegistration = {
 export type PluginSecurityAuditCollectorRegistration = {
   pluginId: string;
   pluginName?: string;
-  collector: OpenClawPluginSecurityAuditCollector;
+  collector: MarketingClawPluginSecurityAuditCollector;
   source: string;
   rootDir?: string;
 };
@@ -292,7 +297,7 @@ export type PluginSecurityAuditCollectorRegistration = {
 export type PluginCommandRegistration = {
   pluginId: string;
   pluginName?: string;
-  command: OpenClawPluginCommandDefinition;
+  command: MarketingClawPluginCommandDefinition;
   source: string;
   rootDir?: string;
 };
@@ -505,9 +510,11 @@ export type PluginRegistryParams = {
 };
 
 export type PluginRegistrationMode = import("./types.js").PluginRegistrationMode;
-export type OpenClawPluginNodeHostCommand = import("./types.js").OpenClawPluginNodeHostCommand;
-export type OpenClawPluginToolContext = import("./types.js").OpenClawPluginToolContext;
-export type OpenClawPluginHttpRouteParams = import("./types.js").OpenClawPluginHttpRouteParams;
-export type OpenClawPluginHookOptions = import("./types.js").OpenClawPluginHookOptions;
+export type MarketingClawPluginNodeHostCommand =
+  import("./types.js").MarketingClawPluginNodeHostCommand;
+export type MarketingClawPluginToolContext = import("./types.js").MarketingClawPluginToolContext;
+export type MarketingClawPluginHttpRouteParams =
+  import("./types.js").MarketingClawPluginHttpRouteParams;
+export type MarketingClawPluginHookOptions = import("./types.js").MarketingClawPluginHookOptions;
 export type PluginHookHandlerMap = import("./types.js").PluginHookHandlerMap;
-export type OpenClawPluginApi = import("./types.js").OpenClawPluginApi;
+export type MarketingClawPluginApi = import("./types.js").MarketingClawPluginApi;

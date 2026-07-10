@@ -5,7 +5,7 @@
   },
   "enabledByDefault": true,
   "name": "ACPX Runtime",
-  "description": "OpenClaw ACP runtime backend with plugin-owned session and transport management.",
+  "description": "MarketingClaw ACP runtime backend with plugin-owned session and transport management.",
   "skills": ["./skills"],
   "configSchema": {
     "type": "object",
@@ -34,7 +34,7 @@
       "pluginToolsMcpBridge": {
         "type": "boolean"
       },
-      "openClawToolsMcpBridge": {
+      "marketingClawToolsMcpBridge": {
         "type": "boolean"
       },
       "strictWindowsCmdWrapper": {
@@ -115,12 +115,12 @@
     },
     "pluginToolsMcpBridge": {
       "label": "Plugin Tools MCP Bridge",
-      "help": "Default off. When enabled, inject the built-in OpenClaw plugin-tools MCP server into embedded ACP sessions so ACP agents can call plugin-registered tools.",
+      "help": "Default off. When enabled, inject the built-in MarketingClaw plugin-tools MCP server into embedded ACP sessions so ACP agents can call plugin-registered tools.",
       "advanced": true
     },
-    "openClawToolsMcpBridge": {
-      "label": "OpenClaw Tools MCP Bridge",
-      "help": "Default off. When enabled, inject the built-in OpenClaw core-tools MCP server into embedded ACP sessions so ACP agents can call selected built-in tools such as cron.",
+    "marketingClawToolsMcpBridge": {
+      "label": "MarketingClaw Tools MCP Bridge",
+      "help": "Default off. When enabled, inject the built-in MarketingClaw core-tools MCP server into embedded ACP sessions so ACP agents can call selected built-in tools such as cron.",
       "advanced": true
     },
     "strictWindowsCmdWrapper": {
@@ -130,7 +130,7 @@
     },
     "timeoutSeconds": {
       "label": "Runtime Operation Timeout Seconds",
-      "help": "Timeout for embedded ACP runtime startup and control operations. ACP turns use OpenClaw agent/run timeouts.",
+      "help": "Timeout for embedded ACP runtime startup and control operations. ACP turns use MarketingClaw agent/run timeouts.",
       "advanced": true
     },
     "queueOwnerTtlSeconds": {

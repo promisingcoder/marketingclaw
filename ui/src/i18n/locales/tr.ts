@@ -145,18 +145,18 @@ export const tr: TranslationMap = {
     pairing: {
       button: "Mobil cihazı eşleştir",
       adminRequired: "Kurulum kodları oluşturmak için yönetici erişimi gerekir.",
-      title: "OpenClaw mobil",
+      title: "MarketingClaw mobil",
       subtitle: "Yeni bir telefonu bağlamak için mobil uygulamada bu QR kodunu tarayın.",
       generating: "Güvenli bir kurulum kodu oluşturuluyor…",
       failed: "Kurulum kodu oluşturulamadı.",
-      qrAlt: "OpenClaw mobil eşleştirme QR kodu",
+      qrAlt: "MarketingClaw mobil eşleştirme QR kodu",
       qrUnavailable: "QR kullanılamıyor. Bunun yerine kurulum kodunu kopyalayın.",
       copySetupCode: "Kurulum kodunu kopyala",
       newCode: "Yeni kod",
       showSetupCode: "Kurulum kodunu göster",
       pending: "İnceleme bekleyen cihaz istekleri: {count}",
       review: "İnceleme",
-      waiting: "Resmi OpenClaw mobil uygulamaları taramadan sonra otomatik olarak bağlanır.",
+      waiting: "Resmi MarketingClaw mobil uygulamaları taramadan sonra otomatik olarak bağlanır.",
       help: "Eşleştirme yardımı",
       manageDevices: "Cihazları yönet",
     },
@@ -183,7 +183,7 @@ export const tr: TranslationMap = {
   },
   worktrees: {
     title: "Yönetilen Worktree'ler",
-    subtitle: "OpenClaw tarafından sahip olunan yalıtılmış depo checkout'ları.",
+    subtitle: "MarketingClaw tarafından sahip olunan yalıtılmış depo checkout'ları.",
     cleanNow: "Şimdi temizle",
     name: "Ad",
     repo: "Depo",
@@ -559,7 +559,7 @@ export const tr: TranslationMap = {
       "Teklifleri canlı becerilere dönüşmeden önce gözden geçirin, iyileştirin ve uygulayın.",
     nodes: "Eşleştirilmiş cihazlar ve komutlar.",
     chat: "Hızlı müdahaleler için Gateway sohbeti.",
-    config: "openclaw.json dosyasını düzenleyin.",
+    config: "marketingclaw.json dosyasını düzenleyin.",
     profile: "Ajanınızın istatistikleri, serileri ve resifteki yaşamı.",
     communications: "Kanallar, mesajlar ve ses ayarları.",
     appearance: "Tema, UI ve kurulum sihirbazı ayarları.",
@@ -1080,7 +1080,7 @@ export const tr: TranslationMap = {
       metadataUpgradeSummary:
         "Bu cihaz zaten eşleştirilmiş, ancak meta veri değişikliği onay bekliyor.",
       mobileHint:
-        "Mobilde misiniz? Masaüstünüzde openclaw dashboard --no-open komutundan tam URL'yi (#token=... dahil) kopyalayın.",
+        "Mobilde misiniz? Masaüstünüzde marketingclaw dashboard --no-open komutundan tam URL'yi (#token=... dahil) kopyalayın.",
       docsTitle: "Cihaz eşleştirme belgeleri (yeni sekmede açılır)",
       docsLink: "Belgeler: Cihaz eşleştirme",
     },
@@ -1120,7 +1120,7 @@ export const tr: TranslationMap = {
       modelAuthAttentionExpiredTitle: "Model kimlik doğrulamasının süresi doldu",
       modelAuthAttentionExpiringTitle: "Model kimlik doğrulamasının süresi yakında dolacak",
       modelAuthAttentionExpiredDesc:
-        "{providers} — openclaw models auth ile yeniden kimlik doğrulayın",
+        "{providers} — marketingclaw models auth ile yeniden kimlik doğrulayın",
       modelAuthAttentionExpiringEntry: "{provider} ({when})",
     },
     attention: {
@@ -1574,9 +1574,9 @@ export const tr: TranslationMap = {
         summary:
           "Gateway erişilebilir, ancak bu tarayıcı bağlanmadan önce eşleşen bir token veya parola gerekir.",
         stepPaste:
-          "openclaw dashboard --no-open çıktısındaki tokenı yapıştırın veya yapılandırılmış parolayı girin.",
+          "marketingclaw dashboard --no-open çıktısındaki tokenı yapıştırın veya yapılandırılmış parolayı girin.",
         stepGenerate:
-          "Token yapılandırılmamışsa Gateway ana makinesinde openclaw doctor --generate-gateway-token çalıştırın.",
+          "Token yapılandırılmamışsa Gateway ana makinesinde marketingclaw doctor --generate-gateway-token çalıştırın.",
         stepConnect: "Kimlik bilgisini güncelledikten sonra Connect düğmesine tekrar tıklayın.",
       },
       authFailed: {
@@ -1584,7 +1584,7 @@ export const tr: TranslationMap = {
         summary:
           "Sağlanan kimlik bilgisi reddedildi. En yaygın neden eski bir token veya başka bir Gateway URL’sinden kopyalanmış tokendır.",
         stepDashboard:
-          "openclaw dashboard --no-open çalıştırın ve yeni URL’yi açın veya tokenını yapıştırın.",
+          "marketingclaw dashboard --no-open çalıştırın ve yeni URL’yi açın veya tokenını yapıştırın.",
         stepReplace:
           "Eski token/parola değerlerini değiştirin; başka bir Gateway URL’sinden tokenı yeniden kullanmayın.",
         stepMode:
@@ -1608,8 +1608,8 @@ export const tr: TranslationMap = {
           "Bu tarayıcının Control UI kullanabilmesi için Gateway hostundan tek seferlik onay gerekir.",
         upgradeSummary:
           "Bu tarayıcı zaten biliniyor, ancak istenen erişim değişti ve yeni onay gerekiyor.",
-        stepList: "Gateway hostunda openclaw devices list çalıştırın.",
-        stepApproveId: "Bu isteği onaylayın: openclaw devices approve {requestId}.",
+        stepList: "Gateway hostunda marketingclaw devices list çalıştırın.",
+        stepApproveId: "Bu isteği onaylayın: marketingclaw devices approve {requestId}.",
         stepApprove: "Bu listedeki bekleyen tarayıcı/cihaz isteğini onaylayın.",
         stepReconnect: "Onay tamamlandıktan sonra yeniden bağlanın.",
       },
@@ -1637,22 +1637,22 @@ export const tr: TranslationMap = {
         summary:
           "Sunulan Control UI ile çalışan Gateway desteklenen bağlantı protokolü konusunda uyuşmuyor.",
         stepDashboard:
-          "UI ve Gateway aynı kurulumdan gelsin diye sunulan dashboardı openclaw dashboard ile yeniden açın.",
+          "UI ve Gateway aynı kurulumdan gelsin diye sunulan dashboardı marketingclaw dashboard ile yeniden açın.",
         stepDevUi:
           "pnpm ui:dev kullanıyorsanız geliştirme UI’sini mevcut checkouta göre yeniden derleyin veya yeniden başlatın.",
         stepRestart:
-          "OpenClaw güncellemesinden sonra Gateway’i yeniden başlatın, böylece güncel protokolü sunsun.",
+          "MarketingClaw güncellemesinden sonra Gateway’i yeniden başlatın, böylece güncel protokolü sunsun.",
       },
       network: {
         title: "Bağlanılamadı",
         summary:
           "Tarayıcı Gateway bağlantısını tamamlayamadı. Kimlik bilgilerini yeniden denemeden önce hedefi ve taşıma yolunu kontrol edin.",
         stepGateway:
-          "openclaw status veya openclaw gateway run ile Gateway’in çalıştığını doğrulayın.",
+          "marketingclaw status veya marketingclaw gateway run ile Gateway’in çalıştığını doğrulayın.",
         stepUrl:
           "WebSocket URL’sini kontrol edin ve Gateway HTTPS/Tailscale Serve arkasındaysa wss:// kullanın.",
         stepDashboard:
-          "Geçerli URL ve auth ayrıntılarını yeniden kopyalamak için dashboardı openclaw dashboard --no-open ile yeniden açın.",
+          "Geçerli URL ve auth ayrıntılarını yeniden kopyalamak için dashboardı marketingclaw dashboard --no-open ile yeniden açın.",
       },
     },
   },

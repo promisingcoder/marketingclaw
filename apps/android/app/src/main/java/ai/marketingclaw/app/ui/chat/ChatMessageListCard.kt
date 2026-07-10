@@ -1,15 +1,15 @@
-package ai.openclaw.app.ui.chat
+package ai.marketingclaw.app.ui.chat
 
-import ai.openclaw.app.chat.ChatMessage
-import ai.openclaw.app.chat.ChatOutboxItem
-import ai.openclaw.app.chat.ChatPendingToolCall
-import ai.openclaw.app.chat.MessageSpeechState
-import ai.openclaw.app.ui.mobileBorder
-import ai.openclaw.app.ui.mobileCallout
-import ai.openclaw.app.ui.mobileCardSurface
-import ai.openclaw.app.ui.mobileHeadline
-import ai.openclaw.app.ui.mobileText
-import ai.openclaw.app.ui.mobileTextSecondary
+import ai.marketingclaw.app.chat.ChatMessage
+import ai.marketingclaw.app.chat.ChatOutboxItem
+import ai.marketingclaw.app.chat.ChatPendingToolCall
+import ai.marketingclaw.app.chat.MessageSpeechState
+import ai.marketingclaw.app.ui.mobileBorder
+import ai.marketingclaw.app.ui.mobileCallout
+import ai.marketingclaw.app.ui.mobileCardSurface
+import ai.marketingclaw.app.ui.mobileHeadline
+import ai.marketingclaw.app.ui.mobileText
+import ai.marketingclaw.app.ui.mobileTextSecondary
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column

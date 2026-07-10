@@ -1,5 +1,5 @@
-import OpenClawKit
-import OpenClawProtocol
+import MarketingClawKit
+import MarketingClawProtocol
 import SwiftUI
 
 extension AgentProTab {
@@ -8,7 +8,7 @@ extension AgentProTab {
             VStack(alignment: .leading, spacing: 12) {
                 HStack {
                     Text("Scheduler")
-                        .font(OpenClawType.headline)
+                        .font(MarketingClawType.headline)
                     Spacer()
                     ProValuePill(
                         value: self.overview?.cronStatus?.enabled == true ? "on" : "off",
@@ -23,13 +23,13 @@ extension AgentProTab {
                 }
                 if let cronActionStatusText {
                     Text(cronActionStatusText)
-                        .font(OpenClawType.caption2)
+                        .font(MarketingClawType.caption2)
                         .foregroundStyle(.secondary)
                         .lineLimit(2)
                 }
             }
         }
-        .padding(.horizontal, OpenClawProMetric.pagePadding)
+        .padding(.horizontal, MarketingClawProMetric.pagePadding)
     }
 
     var cronNextRunLabel: String {
@@ -57,7 +57,7 @@ extension AgentProTab {
                     }
                 }
             }
-            .padding(.horizontal, OpenClawProMetric.pagePadding)
+            .padding(.horizontal, MarketingClawProMetric.pagePadding)
         }
     }
 
@@ -80,17 +80,17 @@ extension AgentProTab {
         return HStack(alignment: .top, spacing: 12) {
             ProIconBadge(
                 systemName: job.enabled ? "clock.arrow.circlepath" : "pause.circle",
-                color: job.enabled ? OpenClawBrand.accent : .secondary)
+                color: job.enabled ? MarketingClawBrand.accent : .secondary)
             VStack(alignment: .leading, spacing: 4) {
                 Text(job.name)
-                    .font(OpenClawType.subheadSemiBold)
+                    .font(MarketingClawType.subheadSemiBold)
                     .lineLimit(1)
                 Text(self.cronJobDetail(job))
-                    .font(OpenClawType.caption)
+                    .font(MarketingClawType.caption)
                     .foregroundStyle(.secondary)
                     .lineLimit(2)
                 Text(self.cronScheduleSummary(job))
-                    .font(OpenClawType.caption2)
+                    .font(MarketingClawType.caption2)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
                 HStack(spacing: 8) {
@@ -98,7 +98,7 @@ extension AgentProTab {
                         Task { await self.runCronJob(job) }
                     } label: {
                         Label("Run", systemImage: "play.fill")
-                            .font(OpenClawType.captionSemiBold)
+                            .font(MarketingClawType.captionSemiBold)
                     }
                     .disabled(busy || !self.liveGatewayConnected)
 
@@ -106,7 +106,7 @@ extension AgentProTab {
                         Task { await self.setCronJob(job, enabled: !job.enabled) }
                     } label: {
                         Label(job.enabled ? "Pause" : "Enable", systemImage: job.enabled ? "pause.fill" : "checkmark")
-                            .font(OpenClawType.captionSemiBold)
+                            .font(MarketingClawType.captionSemiBold)
                     }
                     .disabled(busy || !self.liveGatewayConnected)
                 }
@@ -120,8 +120,8 @@ extension AgentProTab {
                     .controlSize(.small)
             } else {
                 Text(self.cronJobState(job))
-                    .font(OpenClawType.caption2SemiBold)
-                    .foregroundStyle(job.enabled ? OpenClawBrand.accent : .secondary)
+                    .font(MarketingClawType.caption2SemiBold)
+                    .foregroundStyle(job.enabled ? MarketingClawBrand.accent : .secondary)
                     .lineLimit(1)
             }
         }

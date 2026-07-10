@@ -94,10 +94,10 @@ function expectedTrashSourcePath(targetPath: string): string {
 
 describe("handleReset", () => {
   it("uses active profile paths for destructive reset targets", async () => {
-    const homeDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-reset-profile-"));
-    const profileStateDir = path.join(homeDir, ".openclaw-work");
-    const defaultStateDir = path.join(homeDir, ".openclaw");
-    const profileConfigPath = path.join(profileStateDir, "openclaw.json");
+    const homeDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-reset-profile-"));
+    const profileStateDir = path.join(homeDir, ".marketingclaw-work");
+    const defaultStateDir = path.join(homeDir, ".marketingclaw");
+    const profileConfigPath = path.join(profileStateDir, "marketingclaw.json");
     const profileCredentialsDir = path.join(profileStateDir, "credentials");
     const profileSessionsDir = path.join(profileStateDir, "agents", "main", "sessions");
     const workspaceDir = path.join(profileStateDir, "workspace");
@@ -111,7 +111,7 @@ describe("handleReset", () => {
     fs.writeFileSync(profileConfigPath, "{}\n");
     fs.writeFileSync(
       workspaceAttestationPath,
-      `openclaw-workspace-attestation:v1\n${new Date().toISOString()}\n`,
+      `marketingclaw-workspace-attestation:v1\n${new Date().toISOString()}\n`,
     );
 
     const runtime = { log: vi.fn() } as unknown as RuntimeEnv;
@@ -128,10 +128,10 @@ describe("handleReset", () => {
       await withEnvAsync(
         {
           HOME: homeDir,
-          OPENCLAW_HOME: homeDir,
-          OPENCLAW_PROFILE: "work",
-          OPENCLAW_STATE_DIR: profileStateDir,
-          OPENCLAW_CONFIG_PATH: profileConfigPath,
+          MARKETINGCLAW_HOME: homeDir,
+          MARKETINGCLAW_PROFILE: "work",
+          MARKETINGCLAW_STATE_DIR: profileStateDir,
+          MARKETINGCLAW_CONFIG_PATH: profileConfigPath,
         },
         async () => await handleReset("full", workspaceDir, runtime),
       );
@@ -145,9 +145,9 @@ describe("handleReset", () => {
   });
 
   it("does not trash an unowned sibling attestation path during full reset", async () => {
-    const homeDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-reset-profile-"));
-    const profileStateDir = path.join(homeDir, ".openclaw-work");
-    const profileConfigPath = path.join(profileStateDir, "openclaw.json");
+    const homeDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-reset-profile-"));
+    const profileStateDir = path.join(homeDir, ".marketingclaw-work");
+    const profileConfigPath = path.join(profileStateDir, "marketingclaw.json");
     const profileCredentialsDir = path.join(profileStateDir, "credentials");
     const profileSessionsDir = path.join(profileStateDir, "agents", "main", "sessions");
     const workspaceDir = path.join(profileStateDir, "workspace");
@@ -166,10 +166,10 @@ describe("handleReset", () => {
       await withEnvAsync(
         {
           HOME: homeDir,
-          OPENCLAW_HOME: homeDir,
-          OPENCLAW_PROFILE: "work",
-          OPENCLAW_STATE_DIR: profileStateDir,
-          OPENCLAW_CONFIG_PATH: profileConfigPath,
+          MARKETINGCLAW_HOME: homeDir,
+          MARKETINGCLAW_PROFILE: "work",
+          MARKETINGCLAW_STATE_DIR: profileStateDir,
+          MARKETINGCLAW_CONFIG_PATH: profileConfigPath,
         },
         async () => await handleReset("full", workspaceDir, runtime),
       );
@@ -184,9 +184,9 @@ describe("handleReset", () => {
   it.skipIf(process.platform === "win32")(
     "does not abort full reset for an unreadable legacy attestation path",
     async () => {
-      const homeDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-reset-profile-"));
-      const profileStateDir = path.join(homeDir, ".openclaw-work");
-      const profileConfigPath = path.join(profileStateDir, "openclaw.json");
+      const homeDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-reset-profile-"));
+      const profileStateDir = path.join(homeDir, ".marketingclaw-work");
+      const profileConfigPath = path.join(profileStateDir, "marketingclaw.json");
       const profileCredentialsDir = path.join(profileStateDir, "credentials");
       const profileSessionsDir = path.join(profileStateDir, "agents", "main", "sessions");
       const workspaceDir = path.join(profileStateDir, "workspace");
@@ -206,10 +206,10 @@ describe("handleReset", () => {
         await withEnvAsync(
           {
             HOME: homeDir,
-            OPENCLAW_HOME: homeDir,
-            OPENCLAW_PROFILE: "work",
-            OPENCLAW_STATE_DIR: profileStateDir,
-            OPENCLAW_CONFIG_PATH: profileConfigPath,
+            MARKETINGCLAW_HOME: homeDir,
+            MARKETINGCLAW_PROFILE: "work",
+            MARKETINGCLAW_STATE_DIR: profileStateDir,
+            MARKETINGCLAW_CONFIG_PATH: profileConfigPath,
           },
           async () => {
             await expect(handleReset("full", workspaceDir, runtime)).resolves.toBeUndefined();
@@ -228,7 +228,7 @@ describe("handleReset", () => {
 
 describe("moveToTrash", () => {
   it("uses fs-safe trash instead of resolving a PATH trash command", async () => {
-    const testRoot = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-trash-helper-"));
+    const testRoot = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-trash-helper-"));
     const targetPath = path.join(testRoot, "target");
     fs.mkdirSync(targetPath, { recursive: true });
     const runtime = { log: vi.fn() } as unknown as RuntimeEnv;
@@ -248,9 +248,9 @@ describe("moveToTrash", () => {
   });
 
   it("allows fs-safe trash to move a symlink whose target resolves outside the parent", async () => {
-    const testRoot = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-trash-symlink-"));
+    const testRoot = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-trash-symlink-"));
     const targetPath = path.join(testRoot, "target-link");
-    const outsideTarget = path.join(os.tmpdir(), "openclaw-trash-symlink-target");
+    const outsideTarget = path.join(os.tmpdir(), "marketingclaw-trash-symlink-target");
     fs.writeFileSync(targetPath, "link placeholder");
     vi.spyOn(fsPromises, "lstat").mockResolvedValue({
       isSymbolicLink: () => true,
@@ -272,11 +272,11 @@ describe("moveToTrash", () => {
   });
 
   it("canonicalizes a symlinked parent before calling fs-safe trash", async () => {
-    const testRoot = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-trash-parent-link-"));
+    const testRoot = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-trash-parent-link-"));
     const lexicalParent = path.join(testRoot, "state-link");
     const realParent = path.join(testRoot, "state-real");
-    const targetPath = path.join(lexicalParent, "openclaw.json");
-    const sourcePath = path.join(realParent, "openclaw.json");
+    const targetPath = path.join(lexicalParent, "marketingclaw.json");
+    const sourcePath = path.join(realParent, "marketingclaw.json");
     fs.mkdirSync(lexicalParent, { recursive: true });
     fs.writeFileSync(targetPath, "{}\n");
     vi.spyOn(fsPromises, "realpath").mockImplementation(async (candidate) =>

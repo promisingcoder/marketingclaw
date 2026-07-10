@@ -1,6 +1,6 @@
 import Foundation
-import OpenClawChatUI
-import OpenClawKit
+import MarketingClawChatUI
+import MarketingClawKit
 import Testing
 
 struct TalkWaveformMathTests {

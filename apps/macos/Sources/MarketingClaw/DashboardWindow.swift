@@ -2,7 +2,7 @@ import AppKit
 import Foundation
 import OSLog
 
-let dashboardWindowLogger = Logger(subsystem: "ai.openclaw", category: "DashboardWindow")
+let dashboardWindowLogger = Logger(subsystem: "ai.marketingclaw", category: "DashboardWindow")
 
 enum DashboardWindowLayout {
     static let windowSize = NSSize(width: 1240, height: 860)
@@ -11,7 +11,7 @@ enum DashboardWindowLayout {
     static let linkBrowserMinWidth: CGFloat = 320
     static let linkBrowserMaxWidth: CGFloat = 760
     static let linkBrowserPreferredFraction: CGFloat = 0.4
-    static let linkBrowserSplitAutosaveName = "OpenClawDashboardLinkBrowserSplit"
+    static let linkBrowserSplitAutosaveName = "MarketingClawDashboardLinkBrowserSplit"
 }
 
 enum DashboardLinkTarget: String, Equatable {

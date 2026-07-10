@@ -143,18 +143,18 @@ export const ko: TranslationMap = {
     pairing: {
       button: "모바일 기기 페어링",
       adminRequired: "설정 코드를 생성하려면 관리자 권한이 필요합니다.",
-      title: "OpenClaw 모바일",
+      title: "MarketingClaw 모바일",
       subtitle: "새 휴대폰을 연결하려면 모바일 앱에서 이 QR 코드를 스캔하세요.",
       generating: "보안 설정 코드를 생성하는 중…",
       failed: "설정 코드를 생성할 수 없습니다.",
-      qrAlt: "OpenClaw 모바일 페어링 QR 코드",
+      qrAlt: "MarketingClaw 모바일 페어링 QR 코드",
       qrUnavailable: "QR을 사용할 수 없습니다. 대신 설정 코드를 복사하세요.",
       copySetupCode: "설정 코드 복사",
       newCode: "새 코드",
       showSetupCode: "설정 코드 표시",
       pending: "검토 대기 중인 기기 요청: {count}",
       review: "검토",
-      waiting: "공식 OpenClaw 모바일 앱은 스캔 후 자동으로 연결됩니다.",
+      waiting: "공식 MarketingClaw 모바일 앱은 스캔 후 자동으로 연결됩니다.",
       help: "페어링 도움말",
       manageDevices: "기기 관리",
     },
@@ -180,7 +180,7 @@ export const ko: TranslationMap = {
   },
   worktrees: {
     title: "관리되는 Worktree",
-    subtitle: "OpenClaw가 소유한 격리된 저장소 체크아웃입니다.",
+    subtitle: "MarketingClaw가 소유한 격리된 저장소 체크아웃입니다.",
     cleanNow: "지금 정리",
     name: "이름",
     repo: "저장소",
@@ -553,7 +553,7 @@ export const ko: TranslationMap = {
     skillWorkshop: "제안이 실제 Skills가 되기 전에 검토하고, 다듬고, 적용하세요.",
     nodes: "페어링된 디바이스 및 명령.",
     chat: "빠른 개입을 위한 Gateway 채팅.",
-    config: "openclaw.json 편집.",
+    config: "marketingclaw.json 편집.",
     profile: "에이전트의 통계, 연속 기록, 산호초에서의 활동을 확인하세요.",
     communications: "채널, 메시지, 오디오 설정.",
     appearance: "테마, UI, 설정 마법사 설정.",
@@ -1071,7 +1071,7 @@ export const ko: TranslationMap = {
       metadataUpgradeSummary:
         "이 기기는 이미 페어링되어 있지만, 메타데이터 변경은 승인을 기다리고 있습니다.",
       mobileHint:
-        "모바일에서 사용 중이신가요? 데스크톱에서 openclaw dashboard --no-open으로 전체 URL(#token=... 포함)을 복사하세요.",
+        "모바일에서 사용 중이신가요? 데스크톱에서 marketingclaw dashboard --no-open으로 전체 URL(#token=... 포함)을 복사하세요.",
       docsTitle: "기기 페어링 문서(새 탭에서 열림)",
       docsLink: "문서: 기기 페어링",
     },
@@ -1109,7 +1109,7 @@ export const ko: TranslationMap = {
       modelAuthExpiresIn: "{when} 후 만료",
       modelAuthAttentionExpiredTitle: "모델 인증이 만료됨",
       modelAuthAttentionExpiringTitle: "모델 인증이 곧 만료됨",
-      modelAuthAttentionExpiredDesc: "{providers} — openclaw models auth로 다시 인증하세요",
+      modelAuthAttentionExpiredDesc: "{providers} — marketingclaw models auth로 다시 인증하세요",
       modelAuthAttentionExpiringEntry: "{provider} ({when})",
     },
     attention: {
@@ -1558,9 +1558,10 @@ export const ko: TranslationMap = {
         title: "인증 필요",
         summary:
           "Gateway에 연결할 수 있지만 이 브라우저가 연결되기 전에 일치하는 토큰 또는 비밀번호가 필요합니다.",
-        stepPaste: "openclaw dashboard --no-open의 토큰을 붙여넣거나 구성된 비밀번호를 입력하세요.",
+        stepPaste:
+          "marketingclaw dashboard --no-open의 토큰을 붙여넣거나 구성된 비밀번호를 입력하세요.",
         stepGenerate:
-          "토큰이 구성되어 있지 않으면 Gateway 호스트에서 openclaw doctor --generate-gateway-token을 실행하세요.",
+          "토큰이 구성되어 있지 않으면 Gateway 호스트에서 marketingclaw doctor --generate-gateway-token을 실행하세요.",
         stepConnect: "자격 증명을 업데이트한 뒤 Connect를 다시 클릭하세요.",
       },
       authFailed: {
@@ -1568,7 +1569,7 @@ export const ko: TranslationMap = {
         summary:
           "제공한 자격 증명이 거부되었습니다. 가장 흔한 원인은 오래된 토큰이거나 다른 Gateway URL에서 복사한 토큰입니다.",
         stepDashboard:
-          "openclaw dashboard --no-open을 실행하고 새 URL을 열거나 해당 토큰을 붙여넣으세요.",
+          "marketingclaw dashboard --no-open을 실행하고 새 URL을 열거나 해당 토큰을 붙여넣으세요.",
         stepReplace:
           "오래된 토큰/비밀번호 값을 교체하세요. 다른 Gateway URL의 토큰을 재사용하지 마세요.",
         stepMode:
@@ -1590,8 +1591,8 @@ export const ko: TranslationMap = {
         summary: "이 브라우저가 Control UI를 사용하려면 Gateway 호스트의 일회성 승인이 필요합니다.",
         upgradeSummary:
           "이 브라우저는 이미 알려져 있지만 요청한 액세스가 변경되어 새 승인이 필요합니다.",
-        stepList: "Gateway 호스트에서 openclaw devices list를 실행하세요.",
-        stepApproveId: "이 요청을 승인하세요: openclaw devices approve {requestId}.",
+        stepList: "Gateway 호스트에서 marketingclaw devices list를 실행하세요.",
+        stepApproveId: "이 요청을 승인하세요: marketingclaw devices approve {requestId}.",
         stepApprove: "해당 목록에서 대기 중인 브라우저/장치 요청을 승인하세요.",
         stepReconnect: "승인이 완료된 뒤 다시 연결하세요.",
       },
@@ -1618,22 +1619,22 @@ export const ko: TranslationMap = {
         summary:
           "제공된 Control UI와 실행 중인 Gateway가 지원되는 연결 프로토콜에 동의하지 않습니다.",
         stepDashboard:
-          "UI와 Gateway가 같은 설치에서 오도록 openclaw dashboard로 제공된 dashboard를 다시 여세요.",
+          "UI와 Gateway가 같은 설치에서 오도록 marketingclaw dashboard로 제공된 dashboard를 다시 여세요.",
         stepDevUi:
           "pnpm ui:dev를 사용하는 경우 현재 checkout 기준으로 개발 UI를 다시 빌드하거나 다시 시작하세요.",
         stepRestart:
-          "OpenClaw를 업데이트한 뒤 Gateway를 다시 시작하여 현재 프로토콜을 제공하게 하세요.",
+          "MarketingClaw를 업데이트한 뒤 Gateway를 다시 시작하여 현재 프로토콜을 제공하게 하세요.",
       },
       network: {
         title: "연결할 수 없음",
         summary:
           "브라우저가 Gateway 연결을 완료할 수 없습니다. 자격 증명을 다시 시도하기 전에 대상과 전송 방식을 확인하세요.",
         stepGateway:
-          "openclaw status 또는 openclaw gateway run으로 Gateway가 실행 중인지 확인하세요.",
+          "marketingclaw status 또는 marketingclaw gateway run으로 Gateway가 실행 중인지 확인하세요.",
         stepUrl:
           "WebSocket URL을 확인하고 Gateway가 HTTPS/Tailscale Serve 뒤에 있으면 wss://를 사용하세요.",
         stepDashboard:
-          "openclaw dashboard --no-open으로 dashboard를 다시 열어 현재 URL과 인증 세부 정보를 다시 복사하세요.",
+          "marketingclaw dashboard --no-open으로 dashboard를 다시 열어 현재 URL과 인증 세부 정보를 다시 복사하세요.",
       },
     },
   },

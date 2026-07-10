@@ -1,6 +1,6 @@
 // Verifies memory-search config resolution across providers, sync, and batching.
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { MarketingClawConfig } from "../config/config.js";
 import {
   clearEmbeddingProviders,
   listRegisteredEmbeddingProviders,
@@ -13,10 +13,10 @@ import {
   registerMemoryEmbeddingProvider,
 } from "../plugins/memory-embedding-providers.js";
 import { MAX_TIMER_TIMEOUT_MS } from "../shared/number-coercion.js";
-import { resolveOpenClawAgentSqlitePath } from "../state/openclaw-agent-db.paths.js";
+import { resolveMarketingClawAgentSqlitePath } from "../state/marketingclaw-agent-db.paths.js";
 import { resolveMemorySearchConfig, resolveMemorySearchSyncConfig } from "./memory-search.js";
 
-const asConfig = (cfg: OpenClawConfig): OpenClawConfig => ({
+const asConfig = (cfg: MarketingClawConfig): MarketingClawConfig => ({
   ...cfg,
   // Provider registries are supplied explicitly below; plugin loading belongs
   // to its integration tests and would turn these pure config cases into cold scans.
@@ -91,7 +91,7 @@ describe("memory search config", () => {
     restoreRegisteredEmbeddingProviders(registeredEmbeddingProvidersSnapshot);
   });
 
-  function configWithDefaultProvider(provider: string): OpenClawConfig {
+  function configWithDefaultProvider(provider: string): MarketingClawConfig {
     return asConfig({
       agents: {
         defaults: {
@@ -221,7 +221,9 @@ describe("memory search config", () => {
     expect(resolved?.provider).toBe("openai");
     expect(resolved?.model).toBe("text-embedding-3-small");
     expect(resolved?.fallback).toBe("none");
-    expect(resolved?.store.databasePath).toBe(resolveOpenClawAgentSqlitePath({ agentId: "main" }));
+    expect(resolved?.store.databasePath).toBe(
+      resolveMarketingClawAgentSqlitePath({ agentId: "main" }),
+    );
   });
 
   it("normalizes legacy auto provider config to openai", () => {

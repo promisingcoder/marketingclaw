@@ -80,7 +80,7 @@ describe("decodeStrictBase64", () => {
 describe("spawnSubagentDirect filename validation", () => {
   beforeEach(async () => {
     workspaceDirOverride = fs.mkdtempSync(
-      path.join(os.tmpdir(), `openclaw-subagent-attachments-${process.pid}-${Date.now()}-`),
+      path.join(os.tmpdir(), `marketingclaw-subagent-attachments-${process.pid}-${Date.now()}-`),
     );
     configOverride = createSubagentSpawnTestConfig(workspaceDirOverride);
     subagentSpawnModule.resetSubagentRegistryForTests();
@@ -173,7 +173,10 @@ describe("spawnSubagentDirect filename validation", () => {
 
   it("materializes attachments under explicit cwd when native subagent cwd is provided", async () => {
     const explicitWorkspaceDir = fs.mkdtempSync(
-      path.join(os.tmpdir(), `openclaw-subagent-cwd-attachments-${process.pid}-${Date.now()}-`),
+      path.join(
+        os.tmpdir(),
+        `marketingclaw-subagent-cwd-attachments-${process.pid}-${Date.now()}-`,
+      ),
     );
     try {
       const { spawnSubagentDirect } = subagentSpawnModule;
@@ -187,8 +190,16 @@ describe("spawnSubagentDirect filename validation", () => {
       );
 
       expect(result.status).toBe("accepted");
-      const explicitAttachmentsRoot = path.join(explicitWorkspaceDir, ".openclaw", "attachments");
-      const targetAttachmentsRoot = path.join(workspaceDirOverride, ".openclaw", "attachments");
+      const explicitAttachmentsRoot = path.join(
+        explicitWorkspaceDir,
+        ".marketingclaw",
+        "attachments",
+      );
+      const targetAttachmentsRoot = path.join(
+        workspaceDirOverride,
+        ".marketingclaw",
+        "attachments",
+      );
       expect(fs.existsSync(explicitAttachmentsRoot)).toBe(true);
       expect(fs.existsSync(targetAttachmentsRoot)).toBe(false);
     } finally {
@@ -198,7 +209,10 @@ describe("spawnSubagentDirect filename validation", () => {
 
   it("normalizes explicit cwd before materializing native subagent attachments", async () => {
     const homeDir = fs.mkdtempSync(
-      path.join(os.tmpdir(), `openclaw-subagent-home-attachments-${process.pid}-${Date.now()}-`),
+      path.join(
+        os.tmpdir(),
+        `marketingclaw-subagent-home-attachments-${process.pid}-${Date.now()}-`,
+      ),
     );
     const expectedCwd = path.join(homeDir, "task-repo");
     let persistedStore: Record<string, Record<string, unknown>> | undefined;
@@ -224,7 +238,7 @@ describe("spawnSubagentDirect filename validation", () => {
         );
 
         expect(result.status).toBe("accepted");
-        const attachmentsRoot = path.join(expectedCwd, ".openclaw", "attachments");
+        const attachmentsRoot = path.join(expectedCwd, ".marketingclaw", "attachments");
         expect(fs.existsSync(attachmentsRoot)).toBe(true);
         const childSessionKey = result.childSessionKey as string;
         expect(persistedStore?.[childSessionKey]?.spawnedCwd).toBe(expectedCwd);
@@ -269,7 +283,7 @@ describe("spawnSubagentDirect filename validation", () => {
 
     expect(result.status).toBe("error");
     expect(result.error).toContain("lineage patch failed");
-    const attachmentsRoot = path.join(workspaceDirOverride, ".openclaw", "attachments");
+    const attachmentsRoot = path.join(workspaceDirOverride, ".marketingclaw", "attachments");
     const retainedDirs = fs.existsSync(attachmentsRoot)
       ? fs.readdirSync(attachmentsRoot).filter((entry) => !entry.startsWith("."))
       : [];

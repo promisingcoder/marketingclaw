@@ -3,16 +3,16 @@
  *
  * Infers child completion from persisted session entries when registry updates arrive late.
  */
-import { asFiniteNumber } from "@openclaw/normalization-core/number-coercion";
+import { asFiniteNumber } from "@marketingclaw/normalization-core/number-coercion";
 import { getRuntimeConfig } from "../config/config.js";
-import { loadSessionEntry } from "../config/sessions/session-accessor.js";
 import {
   loadSessionStore,
   resolveAgentIdFromSessionKey,
   resolveStorePath,
   type SessionEntry,
 } from "../config/sessions.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { loadSessionEntry } from "../config/sessions/session-accessor.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import type { SubagentRunOutcome } from "./subagent-announce-output.js";
 import {
   SUBAGENT_ENDED_REASON_COMPLETE,
@@ -85,7 +85,7 @@ function findSessionEntryByKey(store: Record<string, SessionEntry>, sessionKey: 
 export function loadSubagentSessionEntry(params: {
   childSessionKey: string;
   storeCache?: SubagentSessionStoreCache;
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
 }): SessionEntry | undefined {
   const key = params.childSessionKey.trim();
   if (!key) {
@@ -105,7 +105,7 @@ export function loadSubagentSessionEntry(params: {
 /** Resolve a child session entry without depending on the file-backed store shape. */
 function loadSubagentSessionEntryForAccessor(params: {
   childSessionKey: string;
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
 }): SessionEntry | undefined {
   const key = params.childSessionKey.trim();
   if (!key) {
@@ -126,7 +126,7 @@ export function resolveSubagentRunOrphanReason(params: {
   entry: SubagentRunRecord;
   includeStaleUnended?: boolean;
   now?: number;
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
 }): SubagentRunOrphanReason | null {
   const childSessionKey = params.entry.childSessionKey?.trim();
   if (!childSessionKey) {
@@ -234,7 +234,7 @@ export function resolveSubagentSessionCompletion(params: {
   fallbackEndedAt: number;
   notBeforeMs?: number;
   storeCache?: SubagentSessionStoreCache;
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
 }): SubagentSessionCompletion | null {
   return resolveCompletionFromSessionEntry(
     loadSubagentSessionEntry({
@@ -252,7 +252,7 @@ export function resolveSubagentSessionStartedAt(params: {
   childSessionKey: string;
   notBeforeMs?: number;
   storeCache?: SubagentSessionStoreCache;
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
 }): number | undefined {
   const sessionEntry = loadSubagentSessionEntry({
     childSessionKey: params.childSessionKey,

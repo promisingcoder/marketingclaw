@@ -1,7 +1,8 @@
 ---
 name: discord
 description: "Discord message-tool ops: send/read/edit/delete, react, poll, pin, thread, search, presence, media/components."
-metadata: { "openclaw": { "emoji": "🎮", "requires": { "config": ["channels.discord.token"] } } }
+metadata:
+  { "marketingclaw": { "emoji": "🎮", "requires": { "config": ["channels.discord.token"] } } }
 allowed-tools: ["message"]
 ---
 
@@ -130,7 +131,7 @@ Presence, often gated:
   "action": "set-presence",
   "channel": "discord",
   "activityType": "playing",
-  "activityName": "OpenClaw",
+  "activityName": "MarketingClaw",
   "status": "online"
 }
 ```

@@ -1,11 +1,11 @@
 import Foundation
-import OpenClawKit
+import MarketingClawKit
 import OSLog
 
-private let outboxLogger = Logger(subsystem: "ai.openclaw", category: "OpenClawChatOutbox")
+private let outboxLogger = Logger(subsystem: "ai.marketingclaw", category: "MarketingClawChatOutbox")
 
 /// Display state for a transcript row backed by a durable outbox command.
-public enum OpenClawChatOutboxMessageState: Equatable, Sendable {
+public enum MarketingClawChatOutboxMessageState: Equatable, Sendable {
     case queued
     case sending
     case confirming
@@ -25,14 +25,14 @@ public enum OpenClawChatOutboxMessageState: Equatable, Sendable {
 /// are persisted (per gateway, alongside the transcript cache) and flushed
 /// strictly in createdAt order when health recovers. A gateway ACK only moves
 /// a row to awaiting-confirmation; canonical history owns durable completion.
-extension OpenClawChatViewModel {
+extension MarketingClawChatViewModel {
     struct OutboxDeliveryTarget: Hashable {
         let presentationSessionKey: String
         let deliverySessionKey: String
         let agentID: String?
     }
 
-    public func outboxState(for messageID: UUID) -> OpenClawChatOutboxMessageState? {
+    public func outboxState(for messageID: UUID) -> MarketingClawChatOutboxMessageState? {
         self.outboxStatesByMessageID[messageID]
     }
 
@@ -135,7 +135,7 @@ extension OpenClawChatViewModel {
     func enqueueOutboxCommand(
         text: String,
         draftInput: String,
-        draftAttachments: [OpenClawPendingAttachment] = [],
+        draftAttachments: [MarketingClawPendingAttachment] = [],
         session: SessionSnapshot) async
     {
         guard let outbox else { return }
@@ -151,7 +151,7 @@ extension OpenClawChatViewModel {
             self.errorText = "Reconnect to verify this message's delivery target before queueing."
             return
         }
-        let command = OpenClawChatOutboxCommand(
+        let command = MarketingClawChatOutboxCommand(
             id: UUID().uuidString,
             sessionKey: session.key,
             deliverySessionKey: deliverySessionKey,
@@ -159,7 +159,7 @@ extension OpenClawChatViewModel {
             agentID: agentID,
             text: text,
             attachments: draftAttachments.map {
-                OpenClawChatOutboxAttachment(
+                MarketingClawChatOutboxAttachment(
                     type: $0.type,
                     mimeType: $0.mimeType,
                     fileName: $0.fileName,
@@ -207,7 +207,7 @@ extension OpenClawChatViewModel {
               let deliverySessionKey = self.outboxDeliverySessionKey(for: session, agentID: agentID),
               let routingContract = self.outboxRoutingContract(for: session)
         else { return false }
-        let command = OpenClawChatOutboxCommand(
+        let command = MarketingClawChatOutboxCommand(
             id: runId,
             sessionKey: session.key,
             deliverySessionKey: deliverySessionKey,
@@ -219,7 +219,7 @@ extension OpenClawChatViewModel {
             status: deliveryIsAmbiguous ? .failed : .queued,
             retryCount: 0,
             lastError: deliveryIsAmbiguous
-                ? OpenClawChatSQLiteTranscriptCache.outboxUnconfirmedError
+                ? MarketingClawChatSQLiteTranscriptCache.outboxUnconfirmedError
                 : nil)
         guard await outbox.enqueueCommand(command) else { return false }
         guard self.isCurrentSession(session) else { return true }
@@ -277,14 +277,14 @@ extension OpenClawChatViewModel {
     /// Canonical history is the durable acceptance boundary. Any matching
     /// outbox row—including a delivery-unconfirmed row—is now safe to remove
     /// without replaying the user turn.
-    func confirmOutboxCommands(in messages: [OpenClawChatMessage]) {
+    func confirmOutboxCommands(in messages: [MarketingClawChatMessage]) {
         self.observeCanonicalOutboxMessageKeys(in: messages)
         Task { [weak self] in
             await self?.confirmOutboxCommandsNow(in: messages)
         }
     }
 
-    func confirmOutboxCommandsNow(in messages: [OpenClawChatMessage]) async {
+    func confirmOutboxCommandsNow(in messages: [MarketingClawChatMessage]) async {
         self.observeCanonicalOutboxMessageKeys(in: messages)
         guard let outbox else { return }
         let confirmedKeys = Set(messages.compactMap { Self.normalizedIdempotencyKey($0.idempotencyKey) })
@@ -309,10 +309,10 @@ extension OpenClawChatViewModel {
     }
 
     private func persistCanonicalOutboxEvidence(
-        _ message: OpenClawChatMessage,
-        for command: OpenClawChatOutboxCommand) async
+        _ message: MarketingClawChatMessage,
+        for command: MarketingClawChatOutboxCommand) async
     {
-        guard let transcriptCache = transcriptCache as? any OpenClawChatCanonicalTranscriptMerging else { return }
+        guard let transcriptCache = transcriptCache as? any MarketingClawChatCanonicalTranscriptMerging else { return }
         let sessionKey = command.sessionKey
         let cacheAgentID = Self.transcriptCacheAgentID(
             sessionKey: sessionKey,
@@ -334,7 +334,7 @@ extension OpenClawChatViewModel {
         await task.value
     }
 
-    private func observeCanonicalOutboxMessageKeys(in messages: [OpenClawChatMessage]) {
+    private func observeCanonicalOutboxMessageKeys(in messages: [MarketingClawChatMessage]) {
         let keys = Set(messages.compactMap(\.idempotencyKey))
         for key in keys.sorted() {
             self.canonicalOutboxMessageKeys.removeAll(where: { $0 == key })
@@ -349,7 +349,7 @@ extension OpenClawChatViewModel {
     /// Appends bubbles for commands in the current session, adopting rows
     /// that already carry the command's user idempotency key (cache pre-paint
     /// or an earlier restore), and refreshes their display states.
-    private func presentOutboxCommands(_ commands: [OpenClawChatOutboxCommand]) {
+    private func presentOutboxCommands(_ commands: [MarketingClawChatOutboxCommand]) {
         self.pruneOutboxMappings()
         guard !commands.isEmpty else { return }
         var next = self.messages
@@ -367,9 +367,9 @@ extension OpenClawChatViewModel {
         self.replaceMessages(next)
     }
 
-    private static func outboxUserMessage(for command: OpenClawChatOutboxCommand) -> OpenClawChatMessage {
+    private static func outboxUserMessage(for command: MarketingClawChatOutboxCommand) -> MarketingClawChatMessage {
         var content = [
-            OpenClawChatMessageContent(
+            MarketingClawChatMessageContent(
                 type: "text",
                 text: command.text,
                 mimeType: nil,
@@ -377,7 +377,7 @@ extension OpenClawChatViewModel {
                 content: nil),
         ]
         content.append(contentsOf: command.attachments.map { attachment in
-            OpenClawChatMessageContent(
+            MarketingClawChatMessageContent(
                 type: attachment.type,
                 text: nil,
                 mimeType: attachment.mimeType,
@@ -385,7 +385,7 @@ extension OpenClawChatViewModel {
                 durationSeconds: attachment.durationSeconds,
                 content: AnyCodable(attachment.data.base64EncodedString()))
         })
-        return OpenClawChatMessage(
+        return MarketingClawChatMessage(
             role: "user",
             content: content,
             // Message timestamps are milliseconds; outbox rows store seconds.
@@ -393,7 +393,7 @@ extension OpenClawChatViewModel {
             idempotencyKey: self.outboxUserIdempotencyKey(command.id))
     }
 
-    private func mapOutboxCommand(_ command: OpenClawChatOutboxCommand, to messageID: UUID) {
+    private func mapOutboxCommand(_ command: MarketingClawChatOutboxCommand, to messageID: UUID) {
         self.outboxCommandIDsByMessageID[messageID] = command.id
         self.outboxMessageIDsByCommandID[command.id] = messageID
         self.outboxStatesByMessageID[messageID] = Self.outboxDisplayState(for: command)
@@ -535,7 +535,7 @@ extension OpenClawChatViewModel {
                         sessionKey: next.sessionKey),
                     idempotencyKey: next.id,
                     attachments: next.attachments.map {
-                        OpenClawChatAttachmentPayload(
+                        MarketingClawChatAttachmentPayload(
                             type: $0.type,
                             mimeType: $0.mimeType,
                             fileName: $0.fileName,
@@ -575,7 +575,7 @@ extension OpenClawChatViewModel {
                     self.clearOutboxState(forCommandID: next.id)
                 }
                 confirmationTargets.insert(Self.deliveryTarget(for: next))
-            } catch is OpenClawChatTransportSendError {
+            } catch is MarketingClawChatTransportSendError {
                 // The transport proved this payload never reached its request
                 // channel, so it is safe to retry automatically.
                 await outbox.markCommandQueued(
@@ -595,7 +595,7 @@ extension OpenClawChatViewModel {
                 self.applyTransportHealth(false)
                 break
             } catch let error as GatewayResponseError {
-                if error.detailsReason == OpenClawChatSessionRoutingContract.changedErrorReason {
+                if error.detailsReason == MarketingClawChatSessionRoutingContract.changedErrorReason {
                     guard await self.parkOutboxCommandForChangedTarget(next, outbox: outbox) else { break }
                     continue
                 }
@@ -627,13 +627,13 @@ extension OpenClawChatViewModel {
         }
     }
 
-    private static func needsOutboxDeliveryReconciliation(_ command: OpenClawChatOutboxCommand) -> Bool {
+    private static func needsOutboxDeliveryReconciliation(_ command: MarketingClawChatOutboxCommand) -> Bool {
         command.status == .awaitingConfirmation ||
             (command.status == .failed &&
-                command.lastError == OpenClawChatSQLiteTranscriptCache.outboxUnconfirmedError)
+                command.lastError == MarketingClawChatSQLiteTranscriptCache.outboxUnconfirmedError)
     }
 
-    private static func deliveryTarget(for command: OpenClawChatOutboxCommand) -> OutboxDeliveryTarget {
+    private static func deliveryTarget(for command: MarketingClawChatOutboxCommand) -> OutboxDeliveryTarget {
         OutboxDeliveryTarget(
             presentationSessionKey: command.sessionKey,
             deliverySessionKey: command.deliverySessionKey,
@@ -641,17 +641,17 @@ extension OpenClawChatViewModel {
     }
 
     private func parkOutboxCommandWithUnconfirmedDelivery(
-        _ command: OpenClawChatOutboxCommand,
-        outbox: any OpenClawChatCommandOutbox) async -> OpenClawChatOutboxUpdateResult
+        _ command: MarketingClawChatOutboxCommand,
+        outbox: any MarketingClawChatCommandOutbox) async -> MarketingClawChatOutboxUpdateResult
     {
         let update = await outbox.markCommandFailedIfPresent(
             id: command.id,
             retryCount: command.retryCount,
-            lastError: OpenClawChatSQLiteTranscriptCache.outboxUnconfirmedError)
+            lastError: MarketingClawChatSQLiteTranscriptCache.outboxUnconfirmedError)
         switch update {
         case .updated:
             self.setOutboxState(
-                .failed(reason: OpenClawChatSQLiteTranscriptCache.outboxUnconfirmedError),
+                .failed(reason: MarketingClawChatSQLiteTranscriptCache.outboxUnconfirmedError),
                 forCommandID: command.id)
         case .missing, .confirmed:
             self.clearOutboxState(forCommandID: command.id)
@@ -662,13 +662,13 @@ extension OpenClawChatViewModel {
     }
 
     private func parkOutboxCommandForChangedTarget(
-        _ command: OpenClawChatOutboxCommand,
-        outbox: any OpenClawChatCommandOutbox) async -> Bool
+        _ command: MarketingClawChatOutboxCommand,
+        outbox: any MarketingClawChatCommandOutbox) async -> Bool
     {
         let update = await outbox.markCommandFailedIfPresent(
             id: command.id,
             retryCount: command.retryCount,
-            lastError: OpenClawChatSQLiteTranscriptCache.outboxChangedTargetError)
+            lastError: MarketingClawChatSQLiteTranscriptCache.outboxChangedTargetError)
         guard update != .unavailable else {
             self.applyTransportHealth(false)
             return false
@@ -686,8 +686,8 @@ extension OpenClawChatViewModel {
     /// and become terminally 'failed' after `maxOutboxSendAttempts`. Returns
     /// true when the flush pass may continue with younger commands.
     private func recordOutboxRejection(
-        of command: OpenClawChatOutboxCommand,
-        outbox: any OpenClawChatCommandOutbox,
+        of command: MarketingClawChatOutboxCommand,
+        outbox: any MarketingClawChatCommandOutbox,
         reason: String) async -> Bool
     {
         outboxLogger.error("outbox flush send rejected \(reason, privacy: .public)")
@@ -741,7 +741,7 @@ extension OpenClawChatViewModel {
 
     /// Appends a flushed background-session turn to that session's cached
     /// transcript so a cold offline reopen shows it before live history.
-    private func spliceSentCommandIntoCachedTranscript(_ command: OpenClawChatOutboxCommand) async {
+    private func spliceSentCommandIntoCachedTranscript(_ command: MarketingClawChatOutboxCommand) async {
         guard let transcriptCache else { return }
         let key = Self.outboxUserIdempotencyKey(command.id)
         let cacheAgentID = Self.transcriptCacheAgentID(
@@ -781,7 +781,7 @@ extension OpenClawChatViewModel {
 
     private func outboxRoutingContract(for session: SessionSnapshot) -> String? {
         if !self.transport.outboxRequiresSessionRoutingContract {
-            return OpenClawChatOutboxCommand.legacyUnboundRoutingContract
+            return MarketingClawChatOutboxCommand.legacyUnboundRoutingContract
         }
         let normalized = session.sessionRoutingContract?
             .trimmingCharacters(in: .whitespacesAndNewlines)
@@ -811,7 +811,7 @@ extension OpenClawChatViewModel {
     }
 
     private func commandMatchesTarget(
-        _ command: OpenClawChatOutboxCommand,
+        _ command: MarketingClawChatOutboxCommand,
         session: SessionSnapshot) -> Bool
     {
         guard command.sessionKey == session.key else { return false }
@@ -830,7 +830,7 @@ extension OpenClawChatViewModel {
         return commandAgentID == currentAgentID
     }
 
-    private func setOutboxState(_ state: OpenClawChatOutboxMessageState, forCommandID commandID: String) {
+    private func setOutboxState(_ state: MarketingClawChatOutboxMessageState, forCommandID commandID: String) {
         guard let messageID = self.outboxMessageIDsByCommandID[commandID] else { return }
         self.outboxStatesByMessageID[messageID] = state
     }
@@ -841,7 +841,7 @@ extension OpenClawChatViewModel {
         self.outboxStatesByMessageID.removeValue(forKey: messageID)
     }
 
-    func handleOutboxChange(_ change: OpenClawChatOutboxChange) {
+    func handleOutboxChange(_ change: MarketingClawChatOutboxChange) {
         // Invalidates every command snapshot that started loading before the
         // store mutation, including snapshots owned by another view model.
         self.outboxPresentationGeneration &+= 1
@@ -868,8 +868,8 @@ extension OpenClawChatViewModel {
         self.cancelingOutboxCommandIDs.remove(commandID)
     }
 
-    private static func outboxDisplayState(for command: OpenClawChatOutboxCommand)
-        -> OpenClawChatOutboxMessageState
+    private static func outboxDisplayState(for command: MarketingClawChatOutboxCommand)
+        -> MarketingClawChatOutboxMessageState
     {
         switch command.status {
         case .queued:

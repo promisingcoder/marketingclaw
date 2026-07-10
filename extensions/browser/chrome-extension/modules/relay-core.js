@@ -1,11 +1,11 @@
-// Pure helpers for the OpenClaw extension: pairing-string parsing, reconnect
+// Pure helpers for the MarketingClaw extension: pairing-string parsing, reconnect
 // backoff, and Chrome tab-group color mapping. No chrome.* usage here so the
 // repo's vitest suite can exercise the logic directly.
 
 /** Tab group shown to the user; membership == what the agent may touch. */
-export const OPENCLAW_TAB_GROUP_TITLE = "OpenClaw";
-export const EXTENSION_RELAY_PROTOCOL = "openclaw-extension-relay";
-const EXTENSION_RELAY_TOKEN_PROTOCOL_PREFIX = "openclaw-extension-token.";
+export const MARKETINGCLAW_TAB_GROUP_TITLE = "MarketingClaw";
+export const EXTENSION_RELAY_PROTOCOL = "marketingclaw-extension-relay";
+const EXTENSION_RELAY_TOKEN_PROTOCOL_PREFIX = "marketingclaw-extension-token.";
 
 const CHROME_GROUP_COLORS = {
   grey: [128, 128, 128],
@@ -20,7 +20,7 @@ const CHROME_GROUP_COLORS = {
 };
 
 /**
- * Parse a pairing string printed by `openclaw browser extension pair`.
+ * Parse a pairing string printed by `marketingclaw browser extension pair`.
  * Shape: ws://127.0.0.1:<port>/extension#<token>
  * Returns { relayUrl, token } or null when malformed.
  */

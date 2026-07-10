@@ -9,26 +9,26 @@ Manage sandbox runtimes for isolated agent execution: Docker containers, SSH tar
 
 ## Commands
 
-### `openclaw sandbox list`
+### `marketingclaw sandbox list`
 
 List sandbox runtimes with status, backend, config match, age, idle time, and associated session/agent.
 
 ```bash
-openclaw sandbox list
-openclaw sandbox list --browser  # browser containers only
-openclaw sandbox list --json
+marketingclaw sandbox list
+marketingclaw sandbox list --browser  # browser containers only
+marketingclaw sandbox list --json
 ```
 
-### `openclaw sandbox recreate`
+### `marketingclaw sandbox recreate`
 
 Remove sandbox runtimes to force recreation with current config. Runtimes are recreated automatically the next time the agent is used.
 
 ```bash
-openclaw sandbox recreate --all
-openclaw sandbox recreate --agent mybot        # includes agent:mybot:* sub-sessions
-openclaw sandbox recreate --session "agent:main:main"
-openclaw sandbox recreate --browser --all      # only browser containers
-openclaw sandbox recreate --all --force        # skip confirmation
+marketingclaw sandbox recreate --all
+marketingclaw sandbox recreate --agent mybot        # includes agent:mybot:* sub-sessions
+marketingclaw sandbox recreate --session "agent:main:main"
+marketingclaw sandbox recreate --browser --all      # only browser containers
+marketingclaw sandbox recreate --all --force        # skip confirmation
 ```
 
 Options:
@@ -43,38 +43,38 @@ Pass exactly one of `--all`, `--session`, or `--agent`.
 
 For `ssh` and OpenShell `remote`, recreate matters more than with Docker: the remote workspace is canonical after the initial seed, `recreate` deletes that canonical remote workspace for the selected scope, and the next run reseeds it from the current local workspace.
 
-### `openclaw sandbox explain`
+### `marketingclaw sandbox explain`
 
 Inspect the effective sandbox mode/scope/workspace access, sandbox tool policy, and elevated-tool gates (with fix-it config key paths).
 
 The report keeps `workspaceRoot` as the configured sandbox root and separately shows the effective host workspace, backend runtime workdir, and Docker mount table. For `workspaceAccess: "rw"`, the effective host workspace is the agent workspace rather than a directory below `workspaceRoot`.
 
 ```bash
-openclaw sandbox explain
-openclaw sandbox explain --session agent:main:main
-openclaw sandbox explain --agent work
-openclaw sandbox explain --json
+marketingclaw sandbox explain
+marketingclaw sandbox explain --session agent:main:main
+marketingclaw sandbox explain --agent work
+marketingclaw sandbox explain --json
 ```
 
 Unlike `recreate --session`, this accepts short session names (for example `main`) and expands them against the resolved agent.
 
 ## Why recreate is needed
 
-Updating sandbox config does not affect running containers: existing runtimes keep their old settings, and idle runtimes are only pruned after `prune.idleHours` (default 24h). Regularly used agents can keep stale runtimes alive indefinitely. `openclaw sandbox recreate` removes the old runtime so the next use rebuilds it from current config.
+Updating sandbox config does not affect running containers: existing runtimes keep their old settings, and idle runtimes are only pruned after `prune.idleHours` (default 24h). Regularly used agents can keep stale runtimes alive indefinitely. `marketingclaw sandbox recreate` removes the old runtime so the next use rebuilds it from current config.
 
 <Tip>
-Prefer `openclaw sandbox recreate` over manual backend-specific cleanup. It uses the Gateway's runtime registry and avoids mismatches when scope or session keys change.
+Prefer `marketingclaw sandbox recreate` over manual backend-specific cleanup. It uses the Gateway's runtime registry and avoids mismatches when scope or session keys change.
 </Tip>
 
 ## Common triggers
 
-| Change                                                                                                                                                         | Command                                                             |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| Docker image update (`agents.defaults.sandbox.docker.image`)                                                                                                   | `openclaw sandbox recreate --all`                                   |
-| Sandbox config (`agents.defaults.sandbox.*`)                                                                                                                   | `openclaw sandbox recreate --all`                                   |
-| SSH target/auth (`agents.defaults.sandbox.ssh.{target,workspaceRoot,identityFile,certificateFile,knownHostsFile,identityData,certificateData,knownHostsData}`) | `openclaw sandbox recreate --all`                                   |
-| OpenShell source/policy/mode (`plugins.entries.openshell.config.{from,mode,policy}`)                                                                           | `openclaw sandbox recreate --all`                                   |
-| `setupCommand`                                                                                                                                                 | `openclaw sandbox recreate --all` (or `--agent <id>` for one agent) |
+| Change                                                                                                                                                         | Command                                                                  |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Docker image update (`agents.defaults.sandbox.docker.image`)                                                                                                   | `marketingclaw sandbox recreate --all`                                   |
+| Sandbox config (`agents.defaults.sandbox.*`)                                                                                                                   | `marketingclaw sandbox recreate --all`                                   |
+| SSH target/auth (`agents.defaults.sandbox.ssh.{target,workspaceRoot,identityFile,certificateFile,knownHostsFile,identityData,certificateData,knownHostsData}`) | `marketingclaw sandbox recreate --all`                                   |
+| OpenShell source/policy/mode (`plugins.entries.openshell.config.{from,mode,policy}`)                                                                           | `marketingclaw sandbox recreate --all`                                   |
+| `setupCommand`                                                                                                                                                 | `marketingclaw sandbox recreate --all` (or `--agent <id>` for one agent) |
 
 <Note>
 Runtimes are automatically recreated when the agent is next used.
@@ -84,15 +84,15 @@ Runtimes are automatically recreated when the agent is next used.
 
 Sandbox runtime metadata lives in the shared SQLite state database. Older installs may have legacy registry files that regular reads no longer rewrite:
 
-- `~/.openclaw/sandbox/containers.json`
-- `~/.openclaw/sandbox/browsers.json`
-- one JSON shard per container/browser under `~/.openclaw/sandbox/containers/` or `~/.openclaw/sandbox/browsers/`
+- `~/.marketingclaw/sandbox/containers.json`
+- `~/.marketingclaw/sandbox/browsers.json`
+- one JSON shard per container/browser under `~/.marketingclaw/sandbox/containers/` or `~/.marketingclaw/sandbox/browsers/`
 
-Run `openclaw doctor --fix` to migrate valid legacy entries into SQLite. Invalid legacy files are quarantined so a corrupt old registry cannot hide current runtime entries.
+Run `marketingclaw doctor --fix` to migrate valid legacy entries into SQLite. Invalid legacy files are quarantined so a corrupt old registry cannot hide current runtime entries.
 
 ## Configuration
 
-Sandbox settings live in `~/.openclaw/openclaw.json` under `agents.defaults.sandbox` (per-agent overrides go in `agents.list[].sandbox`):
+Sandbox settings live in `~/.marketingclaw/marketingclaw.json` under `agents.defaults.sandbox` (per-agent overrides go in `agents.list[].sandbox`):
 
 ```jsonc
 {
@@ -103,8 +103,8 @@ Sandbox settings live in `~/.openclaw/openclaw.json` under `agents.defaults.sand
         "backend": "docker", // docker, ssh, openshell (plugin-provided)
         "scope": "agent", // session, agent, shared
         "docker": {
-          "image": "openclaw-sandbox:bookworm-slim",
-          "containerPrefix": "openclaw-sbx-",
+          "image": "marketingclaw-sandbox:bookworm-slim",
+          "containerPrefix": "marketingclaw-sbx-",
           // ... more Docker options
         },
         "prune": {

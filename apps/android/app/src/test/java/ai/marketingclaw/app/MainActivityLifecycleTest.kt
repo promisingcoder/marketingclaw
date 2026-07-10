@@ -1,4 +1,4 @@
-package ai.openclaw.app
+package ai.marketingclaw.app
 
 import android.content.Intent
 import org.junit.Assert.assertEquals

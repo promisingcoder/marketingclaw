@@ -1,15 +1,15 @@
 // Covers the promotions feed cache: refresh cadence, 304 revalidation,
 // sequence monotonicity, notified markers, and claim provenance.
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
+import type { DB as MarketingClawStateKyselyDatabase } from "../state/marketingclaw-state-db.generated.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  runOpenClawStateWriteTransaction,
-} from "../state/openclaw-state-db.js";
+  closeMarketingClawStateDatabaseForTest,
+  runMarketingClawStateWriteTransaction,
+} from "../state/marketingclaw-state-db.js";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../test-utils/openclaw-test-state.js";
+  createMarketingClawTestState,
+  type MarketingClawTestState,
+} from "../test-utils/marketingclaw-test-state.js";
 import { executeSqliteQuerySync, getNodeSqliteKysely } from "./kysely-sync.js";
 import {
   listLivePromotionEntries,
@@ -57,17 +57,17 @@ function feedResponse(body: unknown, init: { status?: number; etag?: string } = 
 }
 
 describe("promotions feed state", () => {
-  let testState: OpenClawTestState;
+  let testState: MarketingClawTestState;
 
   beforeEach(async () => {
-    testState = await createOpenClawTestState({
+    testState = await createMarketingClawTestState({
       layout: "state-only",
-      prefix: "openclaw-promotions-feed-",
+      prefix: "marketingclaw-promotions-feed-",
     });
   });
 
   afterEach(async () => {
-    closeOpenClawStateDatabaseForTest();
+    closeMarketingClawStateDatabaseForTest();
     await testState.cleanup();
   });
 
@@ -166,9 +166,11 @@ describe("promotions feed state", () => {
       .mockResolvedValueOnce(feedResponse(feedPayload(), { etag: '"v4"' }))
       .mockResolvedValueOnce(feedResponse(feedPayload({ sequence: 5 }), { etag: '"v5"' }));
     await maybeRefreshPromotionsFeed({ nowMs: NOW, fetchImpl });
-    runOpenClawStateWriteTransaction(({ db }) => {
+    runMarketingClawStateWriteTransaction(({ db }) => {
       const kysely =
-        getNodeSqliteKysely<Pick<OpenClawStateKyselyDatabase, "clawhub_promotions_feed_state">>(db);
+        getNodeSqliteKysely<
+          Pick<MarketingClawStateKyselyDatabase, "clawhub_promotions_feed_state">
+        >(db);
       executeSqliteQuerySync(
         db,
         kysely

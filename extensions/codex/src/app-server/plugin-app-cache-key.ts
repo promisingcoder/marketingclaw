@@ -4,8 +4,8 @@
  */
 import { createHash } from "node:crypto";
 import { createRequire } from "node:module";
-import { OPENCLAW_VERSION } from "openclaw/plugin-sdk/agent-harness-runtime";
-import { readPluginPackageVersion } from "openclaw/plugin-sdk/extension-shared";
+import { MARKETINGCLAW_VERSION } from "marketingclaw/plugin-sdk/agent-harness-runtime";
+import { readPluginPackageVersion } from "marketingclaw/plugin-sdk/extension-shared";
 import {
   buildCodexAppInventoryCacheKey,
   type CodexAppInventoryCacheKeyInput,
@@ -41,7 +41,7 @@ export function buildCodexPluginAppCacheKey(params: CodexPluginAppCacheKeyParams
       appServerVersion: params.appServerVersion ?? params.runtimeIdentity?.serverVersion,
       runtimeIdentity: params.runtimeIdentity,
     },
-    OPENCLAW_VERSION,
+    MARKETINGCLAW_VERSION,
     CODEX_PLUGIN_VERSION,
   );
 }
@@ -102,7 +102,7 @@ function fingerprintCodexPluginAppCacheCredentials(
     return null;
   }
   const hash = createHash("sha256");
-  hash.update("openclaw:codex:plugin-app-cache-credentials:v1");
+  hash.update("marketingclaw:codex:plugin-app-cache-credentials:v1");
   hash.update("\0");
   hash.update(authToken);
   for (const [key, value] of headers) {

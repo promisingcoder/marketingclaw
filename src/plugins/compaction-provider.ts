@@ -47,7 +47,9 @@ export type RegisteredCompactionProvider = {
 // Registry (process-global singleton)
 // ---------------------------------------------------------------------------
 
-const COMPACTION_PROVIDER_REGISTRY_STATE = Symbol.for("openclaw.compactionProviderRegistryState");
+const COMPACTION_PROVIDER_REGISTRY_STATE = Symbol.for(
+  "marketingclaw.compactionProviderRegistryState",
+);
 
 type CompactionProviderRegistryState = {
   providers: Map<string, RegisteredCompactionProvider>;

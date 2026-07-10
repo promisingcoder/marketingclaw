@@ -3,10 +3,10 @@
  * Curates modern high-signal and small-model refs while preserving provider
  * spread and explicit operator selections for live test lanes.
  */
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
-import { parseStrictNonNegativeInteger } from "@openclaw/normalization-core/number-coercion";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { normalizeProviderId } from "@marketingclaw/model-catalog-core/provider-id";
+import { parseStrictNonNegativeInteger } from "@marketingclaw/normalization-core/number-coercion";
+import { normalizeLowercaseStringOrEmpty } from "@marketingclaw/normalization-core/string-coerce";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { resolveProviderModernModelRef } from "../plugins/provider-runtime.js";
 import { liveProvidersShareOwningPlugin } from "./live-provider-owner.js";
 
@@ -265,7 +265,7 @@ export function shouldExcludeProviderFromDefaultHighSignalLiveSweep(params: {
   provider?: string | null;
   useExplicitModels: boolean;
   providerFilter?: ReadonlySet<string> | null;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   resolveProviderOwners?: (provider: string) => readonly string[] | undefined;

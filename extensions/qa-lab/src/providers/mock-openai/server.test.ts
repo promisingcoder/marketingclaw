@@ -134,12 +134,12 @@ function makeUserInput(text: string) {
 }
 
 const TEST_RUNTIME_CONTEXT_CARRIER = [
-  "OpenClaw runtime context for the immediately preceding user message.",
+  "MarketingClaw runtime context for the immediately preceding user message.",
   "This context is runtime-generated, not user-authored. Keep internal details private.",
   "",
-  "<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>",
+  "<<<BEGIN_MARKETINGCLAW_INTERNAL_CONTEXT>>>",
   "runtime metadata",
-  "<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+  "<<<END_MARKETINGCLAW_INTERNAL_CONTEXT>>>",
 ].join("\n");
 
 function makeDeveloperInput(text: string) {
@@ -165,26 +165,26 @@ const MESSAGE_TOOL = { type: "function", name: "message" } as const;
 const WHATSAPP_AGENT_REACT_PROMPT =
   "React to this WhatsApp message with thumbs up for QA action check WHATSAPP_QA_AGENT_REACT_TEST.";
 const WHATSAPP_GROUP_AGENT_REACT_PROMPT =
-  "openclawqa react to this WhatsApp group message with thumbs up for QA action check WHATSAPP_QA_GROUP_AGENT_REACT_TEST.";
+  "marketingclawqa react to this WhatsApp group message with thumbs up for QA action check WHATSAPP_QA_GROUP_AGENT_REACT_TEST.";
 const WHATSAPP_AGENT_UPLOAD_TOKEN = "WHATSAPP_QA_AGENT_UPLOAD_TEST";
 const WHATSAPP_GROUP_AGENT_UPLOAD_TOKEN = "WHATSAPP_QA_GROUP_AGENT_UPLOAD_TEST";
 const WHATSAPP_AGENT_UPLOAD_PROMPT =
   `Use the WhatsApp message tool upload-file action to send a PNG with caption ${WHATSAPP_AGENT_UPLOAD_TOKEN}. ` +
   "Do not send any visible text reply after the upload.";
 const WHATSAPP_GROUP_AGENT_UPLOAD_PROMPT =
-  `openclawqa use the WhatsApp message tool upload-file action to send a PNG with caption ${WHATSAPP_GROUP_AGENT_UPLOAD_TOKEN}. ` +
+  `marketingclawqa use the WhatsApp message tool upload-file action to send a PNG with caption ${WHATSAPP_GROUP_AGENT_UPLOAD_TOKEN}. ` +
   "Do not send any visible text reply after the upload.";
 const WHATSAPP_PENDING_HISTORY_QUIET_MARKER = "WHATSAPP_QA_PENDING_HISTORY_QUIET_TEST";
 const WHATSAPP_PENDING_HISTORY_CONTEXT_SENTINEL = "WHATSAPP_QA_PENDING_HISTORY_CONTEXT_ONLY_TEST";
 const WHATSAPP_PENDING_HISTORY_TRIGGER_MARKER = "WHATSAPP_QA_PENDING_HISTORY_TRIGGER_TEST";
 const WHATSAPP_PENDING_HISTORY_OK_MARKER = "WHATSAPP_QA_PENDING_HISTORY_OK_TEST";
 const WHATSAPP_PENDING_HISTORY_TRIGGER_PROMPT = [
-  "openclawqa pending history context check",
+  "marketingclawqa pending history context check",
   WHATSAPP_PENDING_HISTORY_TRIGGER_MARKER,
   `Return ${WHATSAPP_PENDING_HISTORY_OK_MARKER} only if prior group context contains ${WHATSAPP_PENDING_HISTORY_CONTEXT_SENTINEL}.`,
 ].join(" ");
 const WHATSAPP_BROADCAST_TOKEN = "WHATSAPP_QA_BROADCAST_TOKEN_TEST";
-const WHATSAPP_BROADCAST_PROMPT = `openclawqa broadcast fanout check ${WHATSAPP_BROADCAST_TOKEN}`;
+const WHATSAPP_BROADCAST_PROMPT = `marketingclawqa broadcast fanout check ${WHATSAPP_BROADCAST_TOKEN}`;
 const WHATSAPP_ACTIVATION_ALWAYS_MARKER = "WHATSAPP_QA_ACTIVATION_ALWAYS_TEST";
 const WHATSAPP_ACTIVATION_ALWAYS_PROMPT = `Group activation visible behavior marker ${WHATSAPP_ACTIVATION_ALWAYS_MARKER}`;
 const WHATSAPP_REPLY_TO_BOT_SEED_MARKER = "WHATSAPP_QA_REPLY_TO_BOT_SEED_TEST";
@@ -639,7 +639,7 @@ describe("qa mock openai server", () => {
         {
           type: "function_call_output",
           call_id: "call_mock_read_1",
-          output: JSON.stringify({ text: "QA mission: understand this OpenClaw repo." }),
+          output: JSON.stringify({ text: "QA mission: understand this MarketingClaw repo." }),
         },
       ],
     });
@@ -660,7 +660,7 @@ describe("qa mock openai server", () => {
         {
           type: "function_call_output",
           call_id: "call_mock_read_1",
-          output: JSON.stringify({ text: "QA mission: understand this OpenClaw repo." }),
+          output: JSON.stringify({ text: "QA mission: understand this MarketingClaw repo." }),
         },
       ],
     });
@@ -1382,9 +1382,10 @@ describe("qa mock openai server", () => {
       model: "gpt-5.5",
       input: [
         makeUserInput(
-          [historyContext, "openclawqa pending history context check without current trigger"].join(
-            "\n",
-          ),
+          [
+            historyContext,
+            "marketingclawqa pending history context check without current trigger",
+          ].join("\n"),
         ),
       ],
     });
@@ -1466,7 +1467,7 @@ describe("qa mock openai server", () => {
       input: [makeUserInput("Quoted implicit reply trigger marker WHATSAPP_QA_UNRELATED_TEST")],
     });
 
-    expect(WHATSAPP_REPLY_TO_BOT_TRIGGER_PROMPT).not.toMatch(/\bopenclawqa\b/iu);
+    expect(WHATSAPP_REPLY_TO_BOT_TRIGGER_PROMPT).not.toMatch(/\bmarketingclawqa\b/iu);
     expect(outputText(seedPayload)).toBe(WHATSAPP_REPLY_TO_BOT_SEED_MARKER);
     expect(outputText(triggerPayload)).toBe(WHATSAPP_REPLY_TO_BOT_TRIGGER_MARKER);
     expect(outputText(unrelatedPayload)).not.toBe(WHATSAPP_REPLY_TO_BOT_TRIGGER_MARKER);
@@ -1638,7 +1639,7 @@ describe("qa mock openai server", () => {
             content: [
               {
                 type: "input_text",
-                text: "Task: prepare a local OpenClaw PR readiness note.\nPending: wait for maintainer feedback before publishing.\nBlocked: publishing needs explicit user approval.\nDone: local evidence captured in personal-task-status.txt.\n",
+                text: "Task: prepare a local MarketingClaw PR readiness note.\nPending: wait for maintainer feedback before publishing.\nBlocked: publishing needs explicit user approval.\nDone: local evidence captured in personal-task-status.txt.\n",
               },
             ],
           },
@@ -2398,7 +2399,7 @@ describe("qa mock openai server", () => {
       body: JSON.stringify({
         stream: true,
         instructions:
-          "@openclaw Thread memory check: what is the hidden thread codename stored only in memory? Use memory tools first and reply only in this thread.",
+          "@marketingclaw Thread memory check: what is the hidden thread codename stored only in memory? Use memory tools first and reply only in this thread.",
         input: [
           {
             role: "user",
@@ -2425,7 +2426,7 @@ describe("qa mock openai server", () => {
       body: JSON.stringify({
         stream: false,
         instructions:
-          "@openclaw Thread memory check: what is the hidden thread codename stored only in memory? Use memory tools first and reply only in this thread.",
+          "@marketingclaw Thread memory check: what is the hidden thread codename stored only in memory? Use memory tools first and reply only in this thread.",
         input: [
           {
             type: "function_call_output",
@@ -2456,7 +2457,7 @@ describe("qa mock openai server", () => {
       body: JSON.stringify({
         stream: false,
         instructions:
-          "@openclaw Thread memory check: what is the hidden thread codename stored only in memory? Use memory tools first and reply only in this thread.",
+          "@marketingclaw Thread memory check: what is the hidden thread codename stored only in memory? Use memory tools first and reply only in this thread.",
         input: [
           {
             type: "function_call_output",
@@ -2493,7 +2494,7 @@ describe("qa mock openai server", () => {
               "Available tools include sessions_spawn.\n## /workspace/MEMORY.md\nThread-hidden codename: ORBIT-22.",
           },
           makeUserInput(
-            "@openclaw Thread memory check: what is the hidden thread codename stored only in memory? Use memory tools first and reply only in this thread.",
+            "@marketingclaw Thread memory check: what is the hidden thread codename stored only in memory? Use memory tools first and reply only in this thread.",
           ),
           {
             type: "function_call_output",
@@ -3838,7 +3839,7 @@ describe("qa mock openai server", () => {
 
     const response = await postResponses(server, {
       stream: false,
-      instructions: "Codex dynamic OpenClaw tools available in this turn: web_search.",
+      instructions: "Codex dynamic MarketingClaw tools available in this turn: web_search.",
       input: [
         makeUserInput(
           "tool search qa check target=web_search. Call exactly that tool once and then summarize.",
@@ -3850,7 +3851,7 @@ describe("qa mock openai server", () => {
     const toolPlanOutput = outputItem(await response.json());
     expect(toolPlanOutput.type).toBe("function_call");
     expect(toolPlanOutput.name).toBe("web_search");
-    expect(String(toolPlanOutput.arguments)).toContain("OpenClaw runtime parity fixed query");
+    expect(String(toolPlanOutput.arguments)).toContain("MarketingClaw runtime parity fixed query");
   });
 
   it("plans QA tool-search calls from explicit fixture targets even without Responses tools", async () => {
@@ -3889,8 +3890,8 @@ describe("qa mock openai server", () => {
             ok: true,
             value: {
               tool: {
-                id: `openclaw:tool-search-e2e-fixture:${targetTool}`,
-                source: "openclaw",
+                id: `marketingclaw:tool-search-e2e-fixture:${targetTool}`,
+                source: "marketingclaw",
                 sourceName: "tool-search-e2e-fixture",
                 name: targetTool,
                 description: "x".repeat(260),
@@ -3968,7 +3969,7 @@ describe("qa mock openai server", () => {
     const toolPlanOutput = outputItem(await response.json());
     expect(toolPlanOutput.type).toBe("function_call");
     expect(toolPlanOutput.name).toBe("web_search");
-    expect(String(toolPlanOutput.arguments)).toContain("OPENCLAW_QA_WEB_SEARCH_DENIED_INPUT");
+    expect(String(toolPlanOutput.arguments)).toContain("MARKETINGCLAW_QA_WEB_SEARCH_DENIED_INPUT");
   });
 
   it("plans QA subagent handoff calls even when Codex dynamic tools are not in body.tools", async () => {
@@ -4416,7 +4417,8 @@ describe("qa mock openai server", () => {
           },
           {
             type: "function_call_output",
-            output: "QA mission: Understand this OpenClaw repo from source + docs before acting.",
+            output:
+              "QA mission: Understand this MarketingClaw repo from source + docs before acting.",
           },
         ],
       }),
@@ -4516,7 +4518,7 @@ describe("qa mock openai server", () => {
       },
       body:
         '--qa\r\ncontent-disposition: form-data; name="file"; filename="upload.ogg"\r\n\r\n' +
-        "OPENCLAW_QA_GROUP_AUDIO_TRIGGER\r\n--qa--\r\n",
+        "MARKETINGCLAW_QA_GROUP_AUDIO_TRIGGER\r\n--qa--\r\n",
     });
     const quiet = await fetch(`${server.baseUrl}/v1/audio/transcriptions`, {
       method: "POST",
@@ -4528,7 +4530,7 @@ describe("qa mock openai server", () => {
 
     expect(triggered.status).toBe(200);
     await expect(triggered.json()).resolves.toEqual({
-      text: "openclawqa reply with only this exact marker after group audio preflight: WHATSAPP_QA_GROUP_AUDIO_TRANSCRIPT_OK",
+      text: "marketingclawqa reply with only this exact marker after group audio preflight: WHATSAPP_QA_GROUP_AUDIO_TRANSCRIPT_OK",
     });
     expect(quiet.status).toBe(200);
     await expect(quiet.json()).resolves.toEqual({
@@ -5164,7 +5166,8 @@ describe("qa mock openai server", () => {
         makeUserInput(QA_REASONING_ONLY_RECOVERY_PROMPT),
         {
           type: "function_call_output",
-          output: "QA mission: Understand this OpenClaw repo from source + docs before acting.",
+          output:
+            "QA mission: Understand this MarketingClaw repo from source + docs before acting.",
         },
       ],
     });
@@ -5186,7 +5189,8 @@ describe("qa mock openai server", () => {
         makeUserInput(QA_REASONING_ONLY_RETRY_INSTRUCTION),
         {
           type: "function_call_output",
-          output: "QA mission: Understand this OpenClaw repo from source + docs before acting.",
+          output:
+            "QA mission: Understand this MarketingClaw repo from source + docs before acting.",
         },
       ],
     });
@@ -5317,7 +5321,8 @@ describe("qa mock openai server", () => {
         makeUserInput(QA_EMPTY_RESPONSE_RECOVERY_PROMPT),
         {
           type: "function_call_output",
-          output: "QA mission: Understand this OpenClaw repo from source + docs before acting.",
+          output:
+            "QA mission: Understand this MarketingClaw repo from source + docs before acting.",
         },
       ],
     });
@@ -5335,7 +5340,8 @@ describe("qa mock openai server", () => {
         makeUserInput(QA_EMPTY_RESPONSE_RETRY_INSTRUCTION),
         {
           type: "function_call_output",
-          output: "QA mission: Understand this OpenClaw repo from source + docs before acting.",
+          output:
+            "QA mission: Understand this MarketingClaw repo from source + docs before acting.",
         },
       ],
     });
@@ -5360,7 +5366,8 @@ describe("qa mock openai server", () => {
         makeUserInput(QA_EMPTY_RESPONSE_EXHAUSTION_PROMPT),
         {
           type: "function_call_output",
-          output: "QA mission: Understand this OpenClaw repo from source + docs before acting.",
+          output:
+            "QA mission: Understand this MarketingClaw repo from source + docs before acting.",
         },
       ],
     });
@@ -5376,7 +5383,8 @@ describe("qa mock openai server", () => {
         makeUserInput(QA_EMPTY_RESPONSE_RETRY_INSTRUCTION),
         {
           type: "function_call_output",
-          output: "QA mission: Understand this OpenClaw repo from source + docs before acting.",
+          output:
+            "QA mission: Understand this MarketingClaw repo from source + docs before acting.",
         },
       ],
     });

@@ -1,16 +1,16 @@
 // Tavily helper module supports tavily tool config behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { OpenClawPluginToolContext } from "openclaw/plugin-sdk/plugin-entry";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-runtime";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import type { MarketingClawPluginToolContext } from "marketingclaw/plugin-sdk/plugin-entry";
+import type { MarketingClawPluginApi } from "marketingclaw/plugin-sdk/plugin-runtime";
 
 export type TavilyToolConfigContext = Pick<
-  OpenClawPluginToolContext,
+  MarketingClawPluginToolContext,
   "config" | "runtimeConfig" | "getRuntimeConfig"
 >;
 
 export function resolveTavilyToolConfig(
-  api: OpenClawPluginApi,
+  api: MarketingClawPluginApi,
   ctx?: TavilyToolConfigContext,
-): OpenClawConfig {
+): MarketingClawConfig {
   return ctx?.getRuntimeConfig?.() ?? ctx?.runtimeConfig ?? ctx?.config ?? api.config;
 }

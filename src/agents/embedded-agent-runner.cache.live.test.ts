@@ -2,10 +2,10 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { AssistantMessage, Message, Tool } from "openclaw/plugin-sdk/llm";
+import type { AssistantMessage, Message, Tool } from "marketingclaw/plugin-sdk/llm";
 import { Type } from "typebox";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { MarketingClawConfig } from "../config/config.js";
 import { deleteTestEnvValue, setTestEnvValue } from "../test-utils/env.js";
 import { runEmbeddedAgent } from "./embedded-agent-runner.js";
 import { compactEmbeddedAgentSessionDirect } from "./embedded-agent-runner/compact.runtime.js";
@@ -246,7 +246,7 @@ function buildEmbeddedRunnerConfig(
     modelAlias?: string;
     transport?: "sse" | "websocket";
   },
-): OpenClawConfig {
+): MarketingClawConfig {
   const provider = params.model.provider;
   const modelKey = `${provider}/${params.model.id}`;
   const providerBaseUrl =
@@ -769,32 +769,32 @@ async function runAnthropicImageCacheProbe(params: {
 
 describeCacheLive("embedded agent runner prompt caching (live)", () => {
   beforeAll(async () => {
-    liveRunnerRootDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-live-cache-"));
+    liveRunnerRootDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-live-cache-"));
     liveCacheTraceFile = path.join(liveRunnerRootDir, "cache-trace.jsonl");
     liveTestPngBase64 = (await fs.readFile(LIVE_TEST_PNG_URL)).toString("base64");
     previousCacheTraceEnv = {
-      enabled: process.env.OPENCLAW_CACHE_TRACE,
-      file: process.env.OPENCLAW_CACHE_TRACE_FILE,
-      messages: process.env.OPENCLAW_CACHE_TRACE_MESSAGES,
-      prompt: process.env.OPENCLAW_CACHE_TRACE_PROMPT,
-      system: process.env.OPENCLAW_CACHE_TRACE_SYSTEM,
+      enabled: process.env.MARKETINGCLAW_CACHE_TRACE,
+      file: process.env.MARKETINGCLAW_CACHE_TRACE_FILE,
+      messages: process.env.MARKETINGCLAW_CACHE_TRACE_MESSAGES,
+      prompt: process.env.MARKETINGCLAW_CACHE_TRACE_PROMPT,
+      system: process.env.MARKETINGCLAW_CACHE_TRACE_SYSTEM,
     };
-    setTestEnvValue("OPENCLAW_CACHE_TRACE", "1");
-    setTestEnvValue("OPENCLAW_CACHE_TRACE_FILE", liveCacheTraceFile);
-    setTestEnvValue("OPENCLAW_CACHE_TRACE_MESSAGES", "0");
-    setTestEnvValue("OPENCLAW_CACHE_TRACE_PROMPT", "0");
-    setTestEnvValue("OPENCLAW_CACHE_TRACE_SYSTEM", "0");
+    setTestEnvValue("MARKETINGCLAW_CACHE_TRACE", "1");
+    setTestEnvValue("MARKETINGCLAW_CACHE_TRACE_FILE", liveCacheTraceFile);
+    setTestEnvValue("MARKETINGCLAW_CACHE_TRACE_MESSAGES", "0");
+    setTestEnvValue("MARKETINGCLAW_CACHE_TRACE_PROMPT", "0");
+    setTestEnvValue("MARKETINGCLAW_CACHE_TRACE_SYSTEM", "0");
   }, 120_000);
 
   afterAll(async () => {
     if (previousCacheTraceEnv) {
       const restore = (
         key:
-          | "OPENCLAW_CACHE_TRACE"
-          | "OPENCLAW_CACHE_TRACE_FILE"
-          | "OPENCLAW_CACHE_TRACE_MESSAGES"
-          | "OPENCLAW_CACHE_TRACE_PROMPT"
-          | "OPENCLAW_CACHE_TRACE_SYSTEM",
+          | "MARKETINGCLAW_CACHE_TRACE"
+          | "MARKETINGCLAW_CACHE_TRACE_FILE"
+          | "MARKETINGCLAW_CACHE_TRACE_MESSAGES"
+          | "MARKETINGCLAW_CACHE_TRACE_PROMPT"
+          | "MARKETINGCLAW_CACHE_TRACE_SYSTEM",
         value: string | undefined,
       ) => {
         if (value === undefined) {
@@ -803,11 +803,11 @@ describeCacheLive("embedded agent runner prompt caching (live)", () => {
           setTestEnvValue(key, value);
         }
       };
-      restore("OPENCLAW_CACHE_TRACE", previousCacheTraceEnv.enabled);
-      restore("OPENCLAW_CACHE_TRACE_FILE", previousCacheTraceEnv.file);
-      restore("OPENCLAW_CACHE_TRACE_MESSAGES", previousCacheTraceEnv.messages);
-      restore("OPENCLAW_CACHE_TRACE_PROMPT", previousCacheTraceEnv.prompt);
-      restore("OPENCLAW_CACHE_TRACE_SYSTEM", previousCacheTraceEnv.system);
+      restore("MARKETINGCLAW_CACHE_TRACE", previousCacheTraceEnv.enabled);
+      restore("MARKETINGCLAW_CACHE_TRACE_FILE", previousCacheTraceEnv.file);
+      restore("MARKETINGCLAW_CACHE_TRACE_MESSAGES", previousCacheTraceEnv.messages);
+      restore("MARKETINGCLAW_CACHE_TRACE_PROMPT", previousCacheTraceEnv.prompt);
+      restore("MARKETINGCLAW_CACHE_TRACE_SYSTEM", previousCacheTraceEnv.system);
     }
     previousCacheTraceEnv = null;
     liveCacheTraceFile = undefined;
@@ -824,7 +824,7 @@ describeCacheLive("embedded agent runner prompt caching (live)", () => {
       fixture = await resolveLiveDirectModel({
         provider: "openai",
         api: "openai-responses",
-        envVar: "OPENCLAW_LIVE_OPENAI_CACHE_MODEL",
+        envVar: "MARKETINGCLAW_LIVE_OPENAI_CACHE_MODEL",
         preferredModelIds: ["gpt-5.5", "gpt-5.4-mini", "gpt-5.4"],
       });
       logLiveCache(`openai model=${fixture.model.provider}/${fixture.model.id}`);
@@ -1114,7 +1114,7 @@ describeCacheLive("embedded agent runner prompt caching (live)", () => {
       fixture = await resolveLiveDirectModel({
         provider: "anthropic",
         api: "anthropic-messages",
-        envVar: "OPENCLAW_LIVE_ANTHROPIC_CACHE_MODEL",
+        envVar: "MARKETINGCLAW_LIVE_ANTHROPIC_CACHE_MODEL",
         preferredModelIds: ["claude-sonnet-4-6", "claude-sonnet-4-6", "claude-haiku-3-5"],
       });
       logLiveCache(`anthropic model=${fixture.model.provider}/${fixture.model.id}`);

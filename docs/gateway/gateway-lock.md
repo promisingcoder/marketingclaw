@@ -49,7 +49,7 @@ On shutdown, the gateway closes the HTTP/WebSocket server and removes the lock f
 
 ## Operational notes
 
-- If the port is occupied by a different, non-gateway process, the error is the same; free the port or choose another with `openclaw gateway --port <port>`.
+- If the port is occupied by a different, non-gateway process, the error is the same; free the port or choose another with `marketingclaw gateway --port <port>`.
 - Under a service supervisor, a new gateway process that hits either error above first probes `/healthz` on the existing process. If that process is healthy, the new process leaves it in control instead of failing. On systemd, it exits with code `78`; the unit's `RestartPreventExitStatus=78` stops `Restart=always` from looping on a lock or `EADDRINUSE` conflict. If the existing process never becomes healthy, the health-probe retry is time-bounded and startup then fails with the lock error above instead of looping forever.
 - The macOS app keeps its own lightweight PID guard before spawning the gateway; the file lock and socket bind above are the actual runtime enforcement.
 

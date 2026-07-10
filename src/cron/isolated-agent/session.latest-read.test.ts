@@ -13,7 +13,7 @@ const SESSION_KEY = "agent:main:cron:job-1";
 const tempDirs: string[] = [];
 
 function createStoreFile(sessionId: string): string {
-  const dir = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-cron-latest-")));
+  const dir = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-cron-latest-")));
   tempDirs.push(dir);
   const storePath = path.join(dir, "sessions.json");
   fs.writeFileSync(storePath, serializeStore(sessionId), "utf-8");
@@ -35,7 +35,7 @@ afterEach(() => {
 });
 
 it("reads the latest persisted row past a still-current cached store snapshot", () => {
-  vi.stubEnv("OPENCLAW_SESSION_CACHE_TTL_MS", "45000");
+  vi.stubEnv("MARKETINGCLAW_SESSION_CACHE_TTL_MS", "45000");
   clearSessionStoreCacheForTest();
   const storePath = createStoreFile("sess-one");
   // A whole-second mtime round-trips exactly through utimes/stat, so the

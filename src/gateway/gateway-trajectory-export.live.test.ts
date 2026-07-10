@@ -5,7 +5,7 @@ import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import type { EventFrame } from "../../packages/gateway-protocol/src/index.js";
 import { isLiveTestEnabled } from "../agents/live-test-helpers.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { MarketingClawConfig } from "../config/config.js";
 import { setTestEnvValue } from "../test-utils/env.js";
 import { GatewayClient } from "./client.js";
 import {
@@ -18,10 +18,10 @@ import { restoreLiveEnv, snapshotLiveEnv, type LiveEnvSnapshot } from "./live-en
 import { extractPayloadText } from "./test-helpers.agent-results.js";
 
 const LIVE = isLiveTestEnabled();
-const CODEX_HARNESS_LIVE = process.env.OPENCLAW_LIVE_CODEX_HARNESS === "1";
-const CODEX_HARNESS_DEBUG = process.env.OPENCLAW_LIVE_CODEX_HARNESS_DEBUG === "1";
+const CODEX_HARNESS_LIVE = process.env.MARKETINGCLAW_LIVE_CODEX_HARNESS === "1";
+const CODEX_HARNESS_DEBUG = process.env.MARKETINGCLAW_LIVE_CODEX_HARNESS_DEBUG === "1";
 const CODEX_HARNESS_AUTH_MODE =
-  process.env.OPENCLAW_LIVE_CODEX_HARNESS_AUTH === "api-key" ? "api-key" : "codex-auth";
+  process.env.MARKETINGCLAW_LIVE_CODEX_HARNESS_AUTH === "api-key" ? "api-key" : "codex-auth";
 const describeLive = LIVE && CODEX_HARNESS_LIVE ? describe : describe.skip;
 const LIVE_TIMEOUT_MS = 420_000;
 const GATEWAY_CONNECT_TIMEOUT_MS = 60_000;
@@ -63,7 +63,7 @@ function logLiveStep(step: string, details?: Record<string, unknown>): void {
 }
 
 function snapshotEnv(): LiveEnvSnapshot {
-  return snapshotLiveEnv(["OPENCLAW_TRAJECTORY", "OPENCLAW_TRAJECTORY_DIR"]);
+  return snapshotLiveEnv(["MARKETINGCLAW_TRAJECTORY", "MARKETINGCLAW_TRAJECTORY_DIR"]);
 }
 
 function restoreEnv(snapshot: LiveEnvSnapshot): void {
@@ -98,7 +98,7 @@ async function writeLiveGatewayConfig(params: {
   token: string;
   workspace: string;
 }): Promise<void> {
-  const cfg: OpenClawConfig = {
+  const cfg: MarketingClawConfig = {
     gateway: {
       mode: "local",
       port: params.port,
@@ -441,7 +441,9 @@ describeLive("gateway live trajectory export", () => {
       const { startGatewayServer } = await import("./server.js");
 
       const previousEnv = snapshotEnv();
-      const tempDir = await fs.mkdtemp(path.join(process.cwd(), ".tmp-openclaw-trajectory-live-"));
+      const tempDir = await fs.mkdtemp(
+        path.join(process.cwd(), ".tmp-marketingclaw-trajectory-live-"),
+      );
       cleanup.push(async () => {
         restoreEnv(previousEnv);
         clearRuntimeConfigSnapshot();
@@ -451,13 +453,13 @@ describeLive("gateway live trajectory export", () => {
       const stateDir = path.join(tempDir, "state");
       const trajectoryDir = path.join(tempDir, "runtime-traces");
       const { workspaceDir } = await createBootstrapWorkspace(tempDir);
-      const configPath = path.join(tempDir, "openclaw.json");
+      const configPath = path.join(tempDir, "marketingclaw.json");
       const token = `test-${randomUUID()}`;
       const port = await getFreeGatewayPort();
-      const modelKey = process.env.OPENCLAW_LIVE_CODEX_HARNESS_MODEL ?? DEFAULT_CODEX_MODEL;
+      const modelKey = process.env.MARKETINGCLAW_LIVE_CODEX_HARNESS_MODEL ?? DEFAULT_CODEX_MODEL;
 
       clearRuntimeConfigSnapshot();
-      process.env.OPENCLAW_AGENT_RUNTIME = "codex";
+      process.env.MARKETINGCLAW_AGENT_RUNTIME = "codex";
       // API-key CI lanes intentionally pass OPENAI_API_KEY through to the Codex
       // app-server harness; only stored Codex-auth runs should clear OpenAI env.
       if (CODEX_HARNESS_AUTH_MODE !== "api-key") {
@@ -466,16 +468,16 @@ describeLive("gateway live trajectory export", () => {
       } else if (!process.env.OPENAI_BASE_URL?.trim()) {
         delete process.env.OPENAI_BASE_URL;
       }
-      setTestEnvValue("OPENCLAW_CONFIG_PATH", configPath);
-      process.env.OPENCLAW_GATEWAY_TOKEN = token;
-      process.env.OPENCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
-      process.env.OPENCLAW_SKIP_CANVAS_HOST = "1";
-      process.env.OPENCLAW_SKIP_CHANNELS = "1";
-      process.env.OPENCLAW_SKIP_CRON = "1";
-      process.env.OPENCLAW_SKIP_GMAIL_WATCHER = "1";
-      setTestEnvValue("OPENCLAW_STATE_DIR", stateDir);
-      process.env.OPENCLAW_TRAJECTORY = "1";
-      process.env.OPENCLAW_TRAJECTORY_DIR = trajectoryDir;
+      setTestEnvValue("MARKETINGCLAW_CONFIG_PATH", configPath);
+      process.env.MARKETINGCLAW_GATEWAY_TOKEN = token;
+      process.env.MARKETINGCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
+      process.env.MARKETINGCLAW_SKIP_CANVAS_HOST = "1";
+      process.env.MARKETINGCLAW_SKIP_CHANNELS = "1";
+      process.env.MARKETINGCLAW_SKIP_CRON = "1";
+      process.env.MARKETINGCLAW_SKIP_GMAIL_WATCHER = "1";
+      setTestEnvValue("MARKETINGCLAW_STATE_DIR", stateDir);
+      process.env.MARKETINGCLAW_TRAJECTORY = "1";
+      process.env.MARKETINGCLAW_TRAJECTORY_DIR = trajectoryDir;
 
       await fs.mkdir(stateDir, { recursive: true });
       await fs.mkdir(trajectoryDir, { recursive: true });
@@ -521,7 +523,7 @@ describeLive("gateway live trajectory export", () => {
       logLiveStep("runtime-traces", { trajectoryDir, files: trajectoryFiles });
       expect(trajectoryFiles.length).toBeGreaterThan(0);
 
-      const bundleDir = path.join(workspaceDir, ".openclaw", "trajectory-exports", "bundle");
+      const bundleDir = path.join(workspaceDir, ".marketingclaw", "trajectory-exports", "bundle");
       const beforeExport = new Set(await listDirectoryNames(tempDir));
       const exportRunId = `chat-export-${randomUUID()}`;
       const exportEventStartIndex = gatewayEvents.length;

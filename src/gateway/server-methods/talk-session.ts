@@ -3,7 +3,7 @@
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@marketingclaw/normalization-core/string-coerce";
 import {
   ErrorCodes,
   errorShape,

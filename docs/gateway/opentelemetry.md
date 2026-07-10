@@ -1,13 +1,13 @@
 ---
-summary: "Export OpenClaw diagnostics to OpenTelemetry collectors or stdout JSONL via the diagnostics-otel plugin"
+summary: "Export MarketingClaw diagnostics to OpenTelemetry collectors or stdout JSONL via the diagnostics-otel plugin"
 title: "OpenTelemetry export"
 read_when:
-  - You want to send OpenClaw model usage, message flow, or session metrics to an OpenTelemetry collector
+  - You want to send MarketingClaw model usage, message flow, or session metrics to an OpenTelemetry collector
   - You are wiring traces, metrics, or logs into Grafana, Datadog, Honeycomb, New Relic, Tempo, or another OTLP backend
   - You need the exact metric names, span names, or attribute shapes to build dashboards or alerts
 ---
 
-OpenClaw exports diagnostics through the official `diagnostics-otel` plugin
+MarketingClaw exports diagnostics through the official `diagnostics-otel` plugin
 using **OTLP/HTTP (protobuf)**. Logs can also be written as stdout JSONL for
 container and sandbox log pipelines. Any collector or backend that accepts
 OTLP/HTTP works without code changes. For local file logs, see
@@ -19,7 +19,7 @@ OTLP/HTTP works without code changes. For local file logs, see
 - **`diagnostics-otel`** subscribes to those events and exports them as
   OpenTelemetry **metrics**, **traces**, and **logs** over OTLP/HTTP, and can
   mirror log records to stdout JSONL.
-- **Provider calls** receive a W3C `traceparent` header from OpenClaw's
+- **Provider calls** receive a W3C `traceparent` header from MarketingClaw's
   trusted model-call span context when the provider transport accepts custom
   headers. Plugin-emitted trace context is not propagated.
 - Exporters attach only when both the diagnostics surface and the plugin are
@@ -28,7 +28,7 @@ OTLP/HTTP works without code changes. For local file logs, see
 ## Quick start
 
 ```bash
-openclaw plugins install clawhub:@openclaw/diagnostics-otel
+marketingclaw plugins install clawhub:@marketingclaw/diagnostics-otel
 ```
 
 ```json5
@@ -45,7 +45,7 @@ openclaw plugins install clawhub:@openclaw/diagnostics-otel
       enabled: true,
       endpoint: "http://otel-collector:4318",
       protocol: "http/protobuf",
-      serviceName: "openclaw-gateway",
+      serviceName: "marketingclaw-gateway",
       traces: true,
       metrics: true,
       logs: true,
@@ -56,7 +56,7 @@ openclaw plugins install clawhub:@openclaw/diagnostics-otel
 }
 ```
 
-Or enable the plugin from the CLI: `openclaw plugins enable diagnostics-otel`.
+Or enable the plugin from the CLI: `marketingclaw plugins enable diagnostics-otel`.
 
 <Note>
 `protocol` supports `http/protobuf` only. Since `traces` and `metrics` default to enabled, any other value (including `grpc`) aborts the entire diagnostics-otel subscription with an `unsupported protocol` warning - this also stops stdout log export. Explicitly set `traces: false` and `metrics: false` if you only want `logsExporter: "stdout"` with a non-OTLP protocol value.
@@ -89,7 +89,7 @@ stdout, or `both` for both.
       metricsEndpoint: "http://otel-collector:4318/v1/metrics",
       logsEndpoint: "http://otel-collector:4318/v1/logs",
       protocol: "http/protobuf", // grpc disables OTLP export
-      serviceName: "openclaw-gateway", // unset falls back to OTEL_SERVICE_NAME, then "openclaw"
+      serviceName: "marketingclaw-gateway", // unset falls back to OTEL_SERVICE_NAME, then "marketingclaw"
       headers: { "x-collector-token": "..." },
       traces: true,
       metrics: true,
@@ -117,10 +117,10 @@ stdout, or `both` for both.
 | ----------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OTEL_EXPORTER_OTLP_ENDPOINT`                                                                                     | Fallback for `diagnostics.otel.endpoint` when the config key is unset.                                                                                                                                                                                                                                         |
 | `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` / `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT` / `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT` | Signal-specific endpoint fallbacks used when the matching `diagnostics.otel.*Endpoint` config key is unset. Signal-specific config wins over signal-specific env, which wins over the shared endpoint.                                                                                                         |
-| `OTEL_SERVICE_NAME`                                                                                               | Fallback for `diagnostics.otel.serviceName` when the config key is unset. Default service name is `openclaw`.                                                                                                                                                                                                  |
+| `OTEL_SERVICE_NAME`                                                                                               | Fallback for `diagnostics.otel.serviceName` when the config key is unset. Default service name is `marketingclaw`.                                                                                                                                                                                             |
 | `OTEL_EXPORTER_OTLP_PROTOCOL`                                                                                     | Fallback for the wire protocol when `diagnostics.otel.protocol` is unset. Only `http/protobuf` enables export.                                                                                                                                                                                                 |
 | `OTEL_SEMCONV_STABILITY_OPT_IN`                                                                                   | Set to `gen_ai_latest_experimental` to emit the latest GenAI inference span shape: `{gen_ai.operation.name} {gen_ai.request.model}` span names, `CLIENT` span kind, and `gen_ai.provider.name` instead of the legacy `gen_ai.system`. GenAI metrics always use bounded, low-cardinality attributes regardless. |
-| `OPENCLAW_OTEL_PRELOADED`                                                                                         | Set to `1` when another preload or host process already registered the global OpenTelemetry SDK. The plugin then skips its own NodeSDK lifecycle but still wires diagnostic listeners and honors `traces`/`metrics`/`logs`.                                                                                    |
+| `MARKETINGCLAW_OTEL_PRELOADED`                                                                                    | Set to `1` when another preload or host process already registered the global OpenTelemetry SDK. The plugin then skips its own NodeSDK lifecycle but still wires diagnostic listeners and honors `traces`/`metrics`/`logs`.                                                                                    |
 
 ## Privacy and content capture
 
@@ -139,7 +139,7 @@ transcripts, audio payloads, session ids, turn ids, call ids, room ids, or
 handoff tokens.
 
 Outbound model requests may include a W3C `traceparent` header generated only
-from OpenClaw-owned diagnostic trace context for the active model call.
+from MarketingClaw-owned diagnostic trace context for the active model call.
 Existing caller-supplied `traceparent` headers are replaced, so plugins or
 custom provider options cannot spoof cross-service trace ancestry.
 
@@ -155,17 +155,17 @@ system-prompt text. Each subkey is independent:
 - `toolDefinitions` - model tool names, descriptions, and schemas.
 
 When any subkey is enabled, model and tool spans get bounded, redacted
-`openclaw.content.*` attributes for that class only.
+`marketingclaw.content.*` attributes for that class only.
 
 <Note>
 Boolean `captureContent: true` enables `inputMessages`, `outputMessages`, `toolInputs`, `toolOutputs`, `toolDefinitions`, and OTLP log bodies together, but **not** `systemPrompt` - set `captureContent.systemPrompt: true` explicitly if you also need the assembled system prompt.
 </Note>
 
 `toolInputs`/`toolOutputs` content is captured for the built-in agent
-runtime's tool executions (`openclaw.content.tool_input` and
+runtime's tool executions (`marketingclaw.content.tool_input` and
 `gen_ai.tool.call.arguments` on completed/error spans;
-`openclaw.content.tool_output` and `gen_ai.tool.call.result` on completed
-spans). The `openclaw.content.*` names remain the stable OpenClaw attribute
+`marketingclaw.content.tool_output` and `gen_ai.tool.call.result` on completed
+spans). The `marketingclaw.content.*` names remain the stable MarketingClaw attribute
 names; the `gen_ai.tool.call.*` copies mirror them for semconv-native viewers.
 External harness tool calls (Codex, Claude CLI) emit
 `tool.execution.*` spans without content payloads. Captured content travels on a
@@ -196,9 +196,9 @@ bus.
   scope inherit the request trace by default, while agent run and model-call
   spans are created as children so provider `traceparent` headers stay on the
   same trace.
-- **Model-call correlation:** `openclaw.model.call` spans include safe prompt
+- **Model-call correlation:** `marketingclaw.model.call` spans include safe prompt
   component sizes by default and per-call token attributes when the provider
-  result exposes usage. `openclaw.model.usage` remains the run-level
+  result exposes usage. `marketingclaw.model.usage` remains the run-level
   accounting span for aggregate cost, context, and channel dashboards, and
   stays on the same diagnostic trace when the emitting runtime has trusted
   trace context.
@@ -207,64 +207,64 @@ bus.
 
 ### Model usage
 
-- `openclaw.tokens` (counter, attrs: `openclaw.token`, `openclaw.channel`, `openclaw.provider`, `openclaw.model`, `openclaw.agent`)
-- `openclaw.cost.usd` (counter, attrs: `openclaw.channel`, `openclaw.provider`, `openclaw.model`)
-- `openclaw.run.duration_ms` (histogram, attrs: `openclaw.channel`, `openclaw.provider`, `openclaw.model`)
-- `openclaw.context.tokens` (histogram, attrs: `openclaw.context`, `openclaw.channel`, `openclaw.provider`, `openclaw.model`)
+- `marketingclaw.tokens` (counter, attrs: `marketingclaw.token`, `marketingclaw.channel`, `marketingclaw.provider`, `marketingclaw.model`, `marketingclaw.agent`)
+- `marketingclaw.cost.usd` (counter, attrs: `marketingclaw.channel`, `marketingclaw.provider`, `marketingclaw.model`)
+- `marketingclaw.run.duration_ms` (histogram, attrs: `marketingclaw.channel`, `marketingclaw.provider`, `marketingclaw.model`)
+- `marketingclaw.context.tokens` (histogram, attrs: `marketingclaw.context`, `marketingclaw.channel`, `marketingclaw.provider`, `marketingclaw.model`)
 - `gen_ai.client.token.usage` (histogram, GenAI semantic-conventions metric, attrs: `gen_ai.token.type` = `input`/`output`, `gen_ai.provider.name`, `gen_ai.operation.name`, `gen_ai.request.model`)
 - `gen_ai.client.operation.duration` (histogram, seconds, GenAI semantic-conventions metric, attrs: `gen_ai.provider.name`, `gen_ai.operation.name`, `gen_ai.request.model`, optional `error.type`)
-- `openclaw.model_call.duration_ms` (histogram, attrs: `openclaw.provider`, `openclaw.model`, `openclaw.api`, `openclaw.transport`, plus `openclaw.errorCategory` and `openclaw.failureKind` on classified errors)
-- `openclaw.model_call.request_bytes` (histogram, UTF-8 byte size of the final model request payload; no raw payload content)
-- `openclaw.model_call.response_bytes` (histogram, UTF-8 byte size of streamed response chunk payloads; high-frequency text, thinking, and tool-call deltas count only incremental `delta` bytes; no raw response content)
-- `openclaw.model_call.time_to_first_byte_ms` (histogram, elapsed time before the first streamed response event)
-- `openclaw.model.failover` (counter, attrs: `openclaw.provider`, `openclaw.model`, `openclaw.failover.to_provider`, `openclaw.failover.to_model`, `openclaw.failover.reason`, `openclaw.failover.suspended`, `openclaw.lane`)
-- `openclaw.skill.used` (counter, attrs: `openclaw.skill.name`, `openclaw.skill.source`, `openclaw.skill.activation`, optional `openclaw.agent`, optional `openclaw.toolName`)
+- `marketingclaw.model_call.duration_ms` (histogram, attrs: `marketingclaw.provider`, `marketingclaw.model`, `marketingclaw.api`, `marketingclaw.transport`, plus `marketingclaw.errorCategory` and `marketingclaw.failureKind` on classified errors)
+- `marketingclaw.model_call.request_bytes` (histogram, UTF-8 byte size of the final model request payload; no raw payload content)
+- `marketingclaw.model_call.response_bytes` (histogram, UTF-8 byte size of streamed response chunk payloads; high-frequency text, thinking, and tool-call deltas count only incremental `delta` bytes; no raw response content)
+- `marketingclaw.model_call.time_to_first_byte_ms` (histogram, elapsed time before the first streamed response event)
+- `marketingclaw.model.failover` (counter, attrs: `marketingclaw.provider`, `marketingclaw.model`, `marketingclaw.failover.to_provider`, `marketingclaw.failover.to_model`, `marketingclaw.failover.reason`, `marketingclaw.failover.suspended`, `marketingclaw.lane`)
+- `marketingclaw.skill.used` (counter, attrs: `marketingclaw.skill.name`, `marketingclaw.skill.source`, `marketingclaw.skill.activation`, optional `marketingclaw.agent`, optional `marketingclaw.toolName`)
 
 ### Message flow
 
-- `openclaw.webhook.received` (counter, attrs: `openclaw.channel`, `openclaw.webhook`)
-- `openclaw.webhook.error` (counter, attrs: `openclaw.channel`, `openclaw.webhook`)
-- `openclaw.webhook.duration_ms` (histogram, attrs: `openclaw.channel`, `openclaw.webhook`)
-- `openclaw.message.queued` (counter, attrs: `openclaw.channel`, `openclaw.source`)
-- `openclaw.message.received` (counter, attrs: `openclaw.channel`, `openclaw.source`)
-- `openclaw.message.dispatch.started` (counter, attrs: `openclaw.channel`, `openclaw.source`)
-- `openclaw.message.dispatch.completed` (counter, attrs: `openclaw.channel`, `openclaw.outcome`, `openclaw.reason`, `openclaw.source`)
-- `openclaw.message.dispatch.duration_ms` (histogram, attrs: `openclaw.channel`, `openclaw.outcome`, `openclaw.reason`, `openclaw.source`)
-- `openclaw.message.processed` (counter, attrs: `openclaw.channel`, `openclaw.outcome`)
-- `openclaw.message.duration_ms` (histogram, attrs: `openclaw.channel`, `openclaw.outcome`)
-- `openclaw.message.delivery.started` (counter, attrs: `openclaw.channel`, `openclaw.delivery.kind`)
-- `openclaw.message.delivery.duration_ms` (histogram, attrs: `openclaw.channel`, `openclaw.delivery.kind`, `openclaw.outcome`, `openclaw.errorCategory`)
+- `marketingclaw.webhook.received` (counter, attrs: `marketingclaw.channel`, `marketingclaw.webhook`)
+- `marketingclaw.webhook.error` (counter, attrs: `marketingclaw.channel`, `marketingclaw.webhook`)
+- `marketingclaw.webhook.duration_ms` (histogram, attrs: `marketingclaw.channel`, `marketingclaw.webhook`)
+- `marketingclaw.message.queued` (counter, attrs: `marketingclaw.channel`, `marketingclaw.source`)
+- `marketingclaw.message.received` (counter, attrs: `marketingclaw.channel`, `marketingclaw.source`)
+- `marketingclaw.message.dispatch.started` (counter, attrs: `marketingclaw.channel`, `marketingclaw.source`)
+- `marketingclaw.message.dispatch.completed` (counter, attrs: `marketingclaw.channel`, `marketingclaw.outcome`, `marketingclaw.reason`, `marketingclaw.source`)
+- `marketingclaw.message.dispatch.duration_ms` (histogram, attrs: `marketingclaw.channel`, `marketingclaw.outcome`, `marketingclaw.reason`, `marketingclaw.source`)
+- `marketingclaw.message.processed` (counter, attrs: `marketingclaw.channel`, `marketingclaw.outcome`)
+- `marketingclaw.message.duration_ms` (histogram, attrs: `marketingclaw.channel`, `marketingclaw.outcome`)
+- `marketingclaw.message.delivery.started` (counter, attrs: `marketingclaw.channel`, `marketingclaw.delivery.kind`)
+- `marketingclaw.message.delivery.duration_ms` (histogram, attrs: `marketingclaw.channel`, `marketingclaw.delivery.kind`, `marketingclaw.outcome`, `marketingclaw.errorCategory`)
 
 ### Talk
 
-- `openclaw.talk.event` (counter, attrs: `openclaw.talk.event_type`, `openclaw.talk.mode`, `openclaw.talk.transport`, `openclaw.talk.brain`, `openclaw.talk.provider`)
-- `openclaw.talk.event.duration_ms` (histogram, attrs: same as `openclaw.talk.event`; emitted when a Talk event reports duration)
-- `openclaw.talk.audio.bytes` (histogram, attrs: same as `openclaw.talk.event`; emitted for Talk audio frame events that report byte length)
+- `marketingclaw.talk.event` (counter, attrs: `marketingclaw.talk.event_type`, `marketingclaw.talk.mode`, `marketingclaw.talk.transport`, `marketingclaw.talk.brain`, `marketingclaw.talk.provider`)
+- `marketingclaw.talk.event.duration_ms` (histogram, attrs: same as `marketingclaw.talk.event`; emitted when a Talk event reports duration)
+- `marketingclaw.talk.audio.bytes` (histogram, attrs: same as `marketingclaw.talk.event`; emitted for Talk audio frame events that report byte length)
 
 ### Queues and sessions
 
-- `openclaw.queue.lane.enqueue` (counter, attrs: `openclaw.lane`)
-- `openclaw.queue.lane.dequeue` (counter, attrs: `openclaw.lane`)
-- `openclaw.queue.depth` (histogram, attrs: `openclaw.lane` or `openclaw.channel=heartbeat`)
-- `openclaw.queue.wait_ms` (histogram, attrs: `openclaw.lane`)
-- `openclaw.session.state` (counter, attrs: `openclaw.state`, `openclaw.reason`)
-- `openclaw.session.stuck` (counter, attrs: `openclaw.state`; emitted for recoverable stale session bookkeeping)
-- `openclaw.session.stuck_age_ms` (histogram, attrs: `openclaw.state`; emitted for recoverable stale session bookkeeping)
-- `openclaw.session.turn.created` (counter, attrs: `openclaw.agent`, `openclaw.channel`, `openclaw.trigger`)
-- `openclaw.session.recovery.requested` (counter, attrs: `openclaw.state`, `openclaw.action`, `openclaw.active_work_kind`, `openclaw.reason`)
-- `openclaw.session.recovery.completed` (counter, attrs: `openclaw.state`, `openclaw.action`, `openclaw.status`, `openclaw.active_work_kind`, `openclaw.reason`)
-- `openclaw.session.recovery.age_ms` (histogram, attrs: same as the matching recovery counter)
-- `openclaw.run.attempt` (counter, attrs: `openclaw.attempt`)
+- `marketingclaw.queue.lane.enqueue` (counter, attrs: `marketingclaw.lane`)
+- `marketingclaw.queue.lane.dequeue` (counter, attrs: `marketingclaw.lane`)
+- `marketingclaw.queue.depth` (histogram, attrs: `marketingclaw.lane` or `marketingclaw.channel=heartbeat`)
+- `marketingclaw.queue.wait_ms` (histogram, attrs: `marketingclaw.lane`)
+- `marketingclaw.session.state` (counter, attrs: `marketingclaw.state`, `marketingclaw.reason`)
+- `marketingclaw.session.stuck` (counter, attrs: `marketingclaw.state`; emitted for recoverable stale session bookkeeping)
+- `marketingclaw.session.stuck_age_ms` (histogram, attrs: `marketingclaw.state`; emitted for recoverable stale session bookkeeping)
+- `marketingclaw.session.turn.created` (counter, attrs: `marketingclaw.agent`, `marketingclaw.channel`, `marketingclaw.trigger`)
+- `marketingclaw.session.recovery.requested` (counter, attrs: `marketingclaw.state`, `marketingclaw.action`, `marketingclaw.active_work_kind`, `marketingclaw.reason`)
+- `marketingclaw.session.recovery.completed` (counter, attrs: `marketingclaw.state`, `marketingclaw.action`, `marketingclaw.status`, `marketingclaw.active_work_kind`, `marketingclaw.reason`)
+- `marketingclaw.session.recovery.age_ms` (histogram, attrs: same as the matching recovery counter)
+- `marketingclaw.run.attempt` (counter, attrs: `marketingclaw.attempt`)
 
 ### Session liveness telemetry
 
 `diagnostics.stuckSessionWarnMs` is the no-progress age threshold for session
 liveness diagnostics. A `processing` session does not age toward this
-threshold while OpenClaw observes reply, tool, status, block, or ACP runtime
+threshold while MarketingClaw observes reply, tool, status, block, or ACP runtime
 progress. Typing keepalives do not count as progress, so a silent model or
 harness can still be detected.
 
-OpenClaw classifies sessions by the work it can still observe:
+MarketingClaw classifies sessions by the work it can still observe:
 
 - `session.long_running`: active embedded work, model calls, or tool calls
   are still making progress. Owned model calls that stay silent past
@@ -289,8 +289,8 @@ Recovery emits structured `session.recovery.requested` and
 only after a mutating recovery outcome (`aborted` or `released`) and only if
 the same processing generation is still current.
 
-Only `session.stuck` emits the `openclaw.session.stuck` counter, the
-`openclaw.session.stuck_age_ms` histogram, and the `openclaw.session.stuck`
+Only `session.stuck` emits the `marketingclaw.session.stuck` counter, the
+`marketingclaw.session.stuck_age_ms` histogram, and the `marketingclaw.session.stuck`
 span. Repeated `session.stuck` diagnostics back off while the session remains
 unchanged, so dashboards should alert on sustained increases rather than
 every heartbeat tick. For the config knob and defaults, see
@@ -298,81 +298,81 @@ every heartbeat tick. For the config knob and defaults, see
 
 Liveness warnings also emit:
 
-- `openclaw.liveness.warning` (counter, attrs: `openclaw.liveness.reason`)
-- `openclaw.liveness.event_loop_delay_p99_ms` (histogram, attrs: `openclaw.liveness.reason`)
-- `openclaw.liveness.event_loop_delay_max_ms` (histogram, attrs: `openclaw.liveness.reason`)
-- `openclaw.liveness.event_loop_utilization` (histogram, attrs: `openclaw.liveness.reason`)
-- `openclaw.liveness.cpu_core_ratio` (histogram, attrs: `openclaw.liveness.reason`)
+- `marketingclaw.liveness.warning` (counter, attrs: `marketingclaw.liveness.reason`)
+- `marketingclaw.liveness.event_loop_delay_p99_ms` (histogram, attrs: `marketingclaw.liveness.reason`)
+- `marketingclaw.liveness.event_loop_delay_max_ms` (histogram, attrs: `marketingclaw.liveness.reason`)
+- `marketingclaw.liveness.event_loop_utilization` (histogram, attrs: `marketingclaw.liveness.reason`)
+- `marketingclaw.liveness.cpu_core_ratio` (histogram, attrs: `marketingclaw.liveness.reason`)
 
 ### Harness lifecycle
 
-- `openclaw.harness.duration_ms` (histogram, attrs: `openclaw.harness.id`, `openclaw.harness.plugin`, `openclaw.outcome`, `openclaw.harness.phase` on errors)
+- `marketingclaw.harness.duration_ms` (histogram, attrs: `marketingclaw.harness.id`, `marketingclaw.harness.plugin`, `marketingclaw.outcome`, `marketingclaw.harness.phase` on errors)
 
 ### Tool execution and loop detection
 
-- `openclaw.tool.execution.duration_ms` (histogram, attrs: `gen_ai.tool.name`, `openclaw.toolName`, `openclaw.tool.source`, `openclaw.tool.owner`, `openclaw.tool.params.kind`, plus `openclaw.errorCategory` on errors)
-- `openclaw.tool.execution.blocked` (counter, attrs: `gen_ai.tool.name`, `openclaw.toolName`, `openclaw.tool.source`, `openclaw.tool.owner`, `openclaw.tool.params.kind`, `openclaw.deniedReason`)
-- `openclaw.tool.loop` (counter, attrs: `openclaw.toolName`, `openclaw.loop.level`, `openclaw.loop.action`, `openclaw.loop.detector`, `openclaw.loop.count`, optional `openclaw.loop.paired_tool`; emitted when a repetitive tool-call loop is detected)
+- `marketingclaw.tool.execution.duration_ms` (histogram, attrs: `gen_ai.tool.name`, `marketingclaw.toolName`, `marketingclaw.tool.source`, `marketingclaw.tool.owner`, `marketingclaw.tool.params.kind`, plus `marketingclaw.errorCategory` on errors)
+- `marketingclaw.tool.execution.blocked` (counter, attrs: `gen_ai.tool.name`, `marketingclaw.toolName`, `marketingclaw.tool.source`, `marketingclaw.tool.owner`, `marketingclaw.tool.params.kind`, `marketingclaw.deniedReason`)
+- `marketingclaw.tool.loop` (counter, attrs: `marketingclaw.toolName`, `marketingclaw.loop.level`, `marketingclaw.loop.action`, `marketingclaw.loop.detector`, `marketingclaw.loop.count`, optional `marketingclaw.loop.paired_tool`; emitted when a repetitive tool-call loop is detected)
 
 ### Exec
 
-- `openclaw.exec.duration_ms` (histogram, attrs: `openclaw.exec.target`, `openclaw.exec.mode`, `openclaw.outcome`, `openclaw.failureKind`)
+- `marketingclaw.exec.duration_ms` (histogram, attrs: `marketingclaw.exec.target`, `marketingclaw.exec.mode`, `marketingclaw.outcome`, `marketingclaw.failureKind`)
 
 ### Diagnostics internals (memory, payloads, exporter health)
 
-- `openclaw.payload.large` (counter, attrs: `openclaw.payload.surface`, `openclaw.payload.action`, `openclaw.channel`, `openclaw.plugin`, `openclaw.reason`)
-- `openclaw.payload.large_bytes` (histogram, attrs: same as `openclaw.payload.large`)
-- `openclaw.memory.rss_bytes` / `openclaw.memory.heap_used_bytes` / `openclaw.memory.heap_total_bytes` / `openclaw.memory.external_bytes` / `openclaw.memory.array_buffers_bytes` (histograms, no attrs; process memory samples)
-- `openclaw.memory.pressure` (counter, attrs: `openclaw.memory.level`, `openclaw.memory.reason`)
-- `openclaw.diagnostic.async_queue.dropped` (counter, attrs: `openclaw.diagnostic.async_queue.drop_class`; internal diagnostic-queue backpressure drops)
-- `openclaw.telemetry.exporter.events` (counter, attrs: `openclaw.exporter`, `openclaw.signal`, `openclaw.status`, optional `openclaw.reason`, optional `openclaw.errorCategory`; exporter lifecycle/failure self-telemetry)
+- `marketingclaw.payload.large` (counter, attrs: `marketingclaw.payload.surface`, `marketingclaw.payload.action`, `marketingclaw.channel`, `marketingclaw.plugin`, `marketingclaw.reason`)
+- `marketingclaw.payload.large_bytes` (histogram, attrs: same as `marketingclaw.payload.large`)
+- `marketingclaw.memory.rss_bytes` / `marketingclaw.memory.heap_used_bytes` / `marketingclaw.memory.heap_total_bytes` / `marketingclaw.memory.external_bytes` / `marketingclaw.memory.array_buffers_bytes` (histograms, no attrs; process memory samples)
+- `marketingclaw.memory.pressure` (counter, attrs: `marketingclaw.memory.level`, `marketingclaw.memory.reason`)
+- `marketingclaw.diagnostic.async_queue.dropped` (counter, attrs: `marketingclaw.diagnostic.async_queue.drop_class`; internal diagnostic-queue backpressure drops)
+- `marketingclaw.telemetry.exporter.events` (counter, attrs: `marketingclaw.exporter`, `marketingclaw.signal`, `marketingclaw.status`, optional `marketingclaw.reason`, optional `marketingclaw.errorCategory`; exporter lifecycle/failure self-telemetry)
 
 ## Exported spans
 
-- `openclaw.model.usage`
-  - `openclaw.channel`, `openclaw.provider`, `openclaw.model`
-  - `openclaw.tokens.*` (input/output/cache_read/cache_write/total)
+- `marketingclaw.model.usage`
+  - `marketingclaw.channel`, `marketingclaw.provider`, `marketingclaw.model`
+  - `marketingclaw.tokens.*` (input/output/cache_read/cache_write/total)
   - `gen_ai.system` by default, or `gen_ai.provider.name` when the latest GenAI semantic conventions are opted in
   - `gen_ai.request.model`, `gen_ai.operation.name`, `gen_ai.usage.*`
-- `openclaw.run`
-  - `openclaw.outcome`, `openclaw.channel`, `openclaw.provider`, `openclaw.model`, `openclaw.errorCategory`
-- `openclaw.model.call`
+- `marketingclaw.run`
+  - `marketingclaw.outcome`, `marketingclaw.channel`, `marketingclaw.provider`, `marketingclaw.model`, `marketingclaw.errorCategory`
+- `marketingclaw.model.call`
   - `gen_ai.system` by default, or `gen_ai.provider.name` when the latest GenAI semantic conventions are opted in
-  - `gen_ai.request.model`, `gen_ai.operation.name`, `openclaw.provider`, `openclaw.model`, `openclaw.api`, `openclaw.transport`
-  - `openclaw.errorCategory`, `error.type`, and optional `openclaw.failureKind` on errors
-  - `openclaw.model_call.request_bytes`, `openclaw.model_call.response_bytes`, `openclaw.model_call.time_to_first_byte_ms`
-  - `openclaw.model_call.prompt.input_messages_count`, `openclaw.model_call.prompt.input_messages_chars`, `openclaw.model_call.prompt.system_prompt_chars`, `openclaw.model_call.prompt.tool_definitions_count`, `openclaw.model_call.prompt.tool_definitions_chars`, `openclaw.model_call.prompt.total_chars` (safe component sizes only, no prompt text)
-  - `openclaw.model_call.usage.*` and `gen_ai.usage.*` when the model-call result carries provider usage for that individual call
-  - Span event `openclaw.provider.request` with attribute `openclaw.upstreamRequestIdHash` (bounded, hash-based) when the upstream provider result exposes a request id; raw ids are never exported
-  - With `OTEL_SEMCONV_STABILITY_OPT_IN=gen_ai_latest_experimental`, model-call spans use the latest GenAI inference span name `{gen_ai.operation.name} {gen_ai.request.model}` and `CLIENT` span kind instead of `openclaw.model.call`.
-- `openclaw.harness.run`
-  - `openclaw.harness.id`, `openclaw.harness.plugin`, `openclaw.outcome`, `openclaw.provider`, `openclaw.model`, `openclaw.channel`
-  - On completion: `openclaw.harness.result_classification`, `openclaw.harness.yield_detected`, `openclaw.harness.items.started`, `openclaw.harness.items.completed`, `openclaw.harness.items.active`
-  - On error: `openclaw.harness.phase`, `openclaw.errorCategory`, optional `openclaw.harness.cleanup_failed`
-- `openclaw.tool.execution`
-  - `gen_ai.tool.name`, `gen_ai.operation.name` (`execute_tool`), `openclaw.toolName`, `openclaw.tool.source`, optional `gen_ai.tool.call.id`, `openclaw.tool.owner`, `openclaw.tool.params.*`
-  - Optional `openclaw.errorCategory`/`openclaw.errorCode` on errors, `openclaw.deniedReason` and `openclaw.outcome=blocked` when denied by policy or sandbox
-- `openclaw.exec`
-  - `openclaw.exec.target`, `openclaw.exec.mode`, `openclaw.outcome`, `openclaw.failureKind`, `openclaw.exec.command_length`, `openclaw.exec.exit_code`, `openclaw.exec.exit_signal`, `openclaw.exec.timed_out`
-- `openclaw.webhook.processed`
-  - `openclaw.channel`, `openclaw.webhook`
-- `openclaw.webhook.error`
-  - `openclaw.channel`, `openclaw.webhook`, `openclaw.error`
-- `openclaw.message.processed`
-  - `openclaw.channel`, `openclaw.outcome`, `openclaw.reason`
-- `openclaw.message.delivery`
-  - `openclaw.channel`, `openclaw.delivery.kind`, `openclaw.outcome`, `openclaw.errorCategory`, `openclaw.delivery.result_count`
-- `openclaw.session.stuck`
-  - `openclaw.state`, `openclaw.ageMs`, `openclaw.queueDepth`
-- `openclaw.context.assembled`
-  - `openclaw.prompt.size`, `openclaw.history.size`, `openclaw.context.tokens`, `openclaw.errorCategory` (no prompt, history, response, or session-key content)
-- `openclaw.tool.loop`
-  - `openclaw.toolName`, `openclaw.loop.level`, `openclaw.loop.action`, `openclaw.loop.detector`, `openclaw.loop.count`, optional `openclaw.loop.paired_tool` (no loop messages, params, or tool output)
-- `openclaw.memory.pressure`
-  - `openclaw.memory.level`, `openclaw.memory.reason`, `openclaw.memory.rss_bytes`, `openclaw.memory.heap_used_bytes`, `openclaw.memory.heap_total_bytes`, `openclaw.memory.external_bytes`, `openclaw.memory.array_buffers_bytes`, optional `openclaw.memory.threshold_bytes`/`openclaw.memory.rss_growth_bytes`/`openclaw.memory.window_ms`
+  - `gen_ai.request.model`, `gen_ai.operation.name`, `marketingclaw.provider`, `marketingclaw.model`, `marketingclaw.api`, `marketingclaw.transport`
+  - `marketingclaw.errorCategory`, `error.type`, and optional `marketingclaw.failureKind` on errors
+  - `marketingclaw.model_call.request_bytes`, `marketingclaw.model_call.response_bytes`, `marketingclaw.model_call.time_to_first_byte_ms`
+  - `marketingclaw.model_call.prompt.input_messages_count`, `marketingclaw.model_call.prompt.input_messages_chars`, `marketingclaw.model_call.prompt.system_prompt_chars`, `marketingclaw.model_call.prompt.tool_definitions_count`, `marketingclaw.model_call.prompt.tool_definitions_chars`, `marketingclaw.model_call.prompt.total_chars` (safe component sizes only, no prompt text)
+  - `marketingclaw.model_call.usage.*` and `gen_ai.usage.*` when the model-call result carries provider usage for that individual call
+  - Span event `marketingclaw.provider.request` with attribute `marketingclaw.upstreamRequestIdHash` (bounded, hash-based) when the upstream provider result exposes a request id; raw ids are never exported
+  - With `OTEL_SEMCONV_STABILITY_OPT_IN=gen_ai_latest_experimental`, model-call spans use the latest GenAI inference span name `{gen_ai.operation.name} {gen_ai.request.model}` and `CLIENT` span kind instead of `marketingclaw.model.call`.
+- `marketingclaw.harness.run`
+  - `marketingclaw.harness.id`, `marketingclaw.harness.plugin`, `marketingclaw.outcome`, `marketingclaw.provider`, `marketingclaw.model`, `marketingclaw.channel`
+  - On completion: `marketingclaw.harness.result_classification`, `marketingclaw.harness.yield_detected`, `marketingclaw.harness.items.started`, `marketingclaw.harness.items.completed`, `marketingclaw.harness.items.active`
+  - On error: `marketingclaw.harness.phase`, `marketingclaw.errorCategory`, optional `marketingclaw.harness.cleanup_failed`
+- `marketingclaw.tool.execution`
+  - `gen_ai.tool.name`, `gen_ai.operation.name` (`execute_tool`), `marketingclaw.toolName`, `marketingclaw.tool.source`, optional `gen_ai.tool.call.id`, `marketingclaw.tool.owner`, `marketingclaw.tool.params.*`
+  - Optional `marketingclaw.errorCategory`/`marketingclaw.errorCode` on errors, `marketingclaw.deniedReason` and `marketingclaw.outcome=blocked` when denied by policy or sandbox
+- `marketingclaw.exec`
+  - `marketingclaw.exec.target`, `marketingclaw.exec.mode`, `marketingclaw.outcome`, `marketingclaw.failureKind`, `marketingclaw.exec.command_length`, `marketingclaw.exec.exit_code`, `marketingclaw.exec.exit_signal`, `marketingclaw.exec.timed_out`
+- `marketingclaw.webhook.processed`
+  - `marketingclaw.channel`, `marketingclaw.webhook`
+- `marketingclaw.webhook.error`
+  - `marketingclaw.channel`, `marketingclaw.webhook`, `marketingclaw.error`
+- `marketingclaw.message.processed`
+  - `marketingclaw.channel`, `marketingclaw.outcome`, `marketingclaw.reason`
+- `marketingclaw.message.delivery`
+  - `marketingclaw.channel`, `marketingclaw.delivery.kind`, `marketingclaw.outcome`, `marketingclaw.errorCategory`, `marketingclaw.delivery.result_count`
+- `marketingclaw.session.stuck`
+  - `marketingclaw.state`, `marketingclaw.ageMs`, `marketingclaw.queueDepth`
+- `marketingclaw.context.assembled`
+  - `marketingclaw.prompt.size`, `marketingclaw.history.size`, `marketingclaw.context.tokens`, `marketingclaw.errorCategory` (no prompt, history, response, or session-key content)
+- `marketingclaw.tool.loop`
+  - `marketingclaw.toolName`, `marketingclaw.loop.level`, `marketingclaw.loop.action`, `marketingclaw.loop.detector`, `marketingclaw.loop.count`, optional `marketingclaw.loop.paired_tool` (no loop messages, params, or tool output)
+- `marketingclaw.memory.pressure`
+  - `marketingclaw.memory.level`, `marketingclaw.memory.reason`, `marketingclaw.memory.rss_bytes`, `marketingclaw.memory.heap_used_bytes`, `marketingclaw.memory.heap_total_bytes`, `marketingclaw.memory.external_bytes`, `marketingclaw.memory.array_buffers_bytes`, optional `marketingclaw.memory.threshold_bytes`/`marketingclaw.memory.rss_growth_bytes`/`marketingclaw.memory.window_ms`
 
 When content capture is explicitly enabled, model and tool spans can also
-include bounded, redacted `openclaw.content.*` attributes for the specific
+include bounded, redacted `marketingclaw.content.*` attributes for the specific
 content classes you opted into.
 
 ## Diagnostic event catalog
@@ -445,7 +445,7 @@ flags. Flags are case-insensitive and support wildcards (`telegram.*` or
 Or as a one-off env override:
 
 ```bash
-OPENCLAW_DIAGNOSTICS=telegram.http,telegram.payload openclaw gateway
+MARKETINGCLAW_DIAGNOSTICS=telegram.http,telegram.payload marketingclaw gateway
 ```
 
 Flag output goes to the standard log file (`logging.file`) and is still
@@ -461,7 +461,7 @@ redacted by `logging.redactSensitive`. Full guide:
 ```
 
 Or leave `diagnostics-otel` out of `plugins.allow`, or run
-`openclaw plugins disable diagnostics-otel`.
+`marketingclaw plugins disable diagnostics-otel`.
 
 ## Related
 

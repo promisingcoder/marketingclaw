@@ -14,20 +14,20 @@ private final class WatchNotificationPresentationDelegate: NSObject, UNUserNotif
 }
 
 @main
-struct OpenClawWatchApp: App {
+struct MarketingClawWatchApp: App {
     @Environment(\.scenePhase) private var scenePhase
     @State private var inboxStore = WatchInboxStore(
-        requestNotificationAuthorization: !OpenClawWatchApp.isScreenshotMode)
+        requestNotificationAuthorization: !MarketingClawWatchApp.isScreenshotMode)
     @State private var directNode = WatchDirectNode()
     @State private var notificationDelegate = WatchNotificationPresentationDelegate()
     @State private var receiver: WatchConnectivityReceiver?
     @State private var execApprovalRefreshTask: Task<Void, Never>?
 
-    private static let screenshotModeDefaultsKey = "openclaw.watch.screenshotMode"
+    private static let screenshotModeDefaultsKey = "marketingclaw.watch.screenshotMode"
     private static let isScreenshotMode = ProcessInfo.processInfo.arguments.contains(
-        "--openclaw-watch-screenshot-mode")
-        || ProcessInfo.processInfo.environment["OPENCLAW_WATCH_SCREENSHOT_MODE"] == "1"
-        || UserDefaults.standard.bool(forKey: OpenClawWatchApp.screenshotModeDefaultsKey)
+        "--marketingclaw-watch-screenshot-mode")
+        || ProcessInfo.processInfo.environment["MARKETINGCLAW_WATCH_SCREENSHOT_MODE"] == "1"
+        || UserDefaults.standard.bool(forKey: MarketingClawWatchApp.screenshotModeDefaultsKey)
 
     var body: some Scene {
         WindowGroup {
@@ -71,7 +71,7 @@ struct OpenClawWatchApp: App {
                 })
                 .task {
                     UNUserNotificationCenter.current().delegate = self.notificationDelegate
-                    if OpenClawWatchApp.isScreenshotMode {
+                    if MarketingClawWatchApp.isScreenshotMode {
                         self.inboxStore.configureScreenshotFixture()
                         return
                     }

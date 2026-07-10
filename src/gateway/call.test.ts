@@ -4,7 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { MarketingClawConfig } from "../config/config.js";
 import type { DeviceIdentity } from "../infra/device-identity.js";
 import { createEmptyPluginRegistry } from "../plugins/registry-empty.js";
 import { setActivePluginRegistry } from "../plugins/runtime.js";
@@ -275,9 +275,9 @@ function resetGatewayCallMocks() {
   closeReason = "";
   helloMethods = ["health", "secrets.resolve"];
   connectError = null;
-  const loadConfigForTests = getRuntimeConfig as unknown as () => OpenClawConfig;
+  const loadConfigForTests = getRuntimeConfig as unknown as () => MarketingClawConfig;
   const resolveGatewayPortForTests = resolveGatewayPort as unknown as (
-    cfg?: OpenClawConfig,
+    cfg?: MarketingClawConfig,
     env?: NodeJS.ProcessEnv,
   ) => number;
   testing.setDepsForTests({
@@ -325,22 +325,22 @@ function makeRemotePasswordGatewayConfig(remotePassword: string, localPassword =
 
 describe("callGateway url resolution", () => {
   const envSnapshot = captureEnv([
-    "OPENCLAW_ALLOW_INSECURE_PRIVATE_WS",
-    "OPENCLAW_CONFIG_PATH",
-    "OPENCLAW_GATEWAY_PORT",
-    "OPENCLAW_GATEWAY_URL",
-    "OPENCLAW_GATEWAY_TOKEN",
-    "OPENCLAW_STATE_DIR",
+    "MARKETINGCLAW_ALLOW_INSECURE_PRIVATE_WS",
+    "MARKETINGCLAW_CONFIG_PATH",
+    "MARKETINGCLAW_GATEWAY_PORT",
+    "MARKETINGCLAW_GATEWAY_URL",
+    "MARKETINGCLAW_GATEWAY_TOKEN",
+    "MARKETINGCLAW_STATE_DIR",
   ]);
 
   beforeEach(() => {
     envSnapshot.restore();
-    deleteTestEnvValue("OPENCLAW_ALLOW_INSECURE_PRIVATE_WS");
-    deleteTestEnvValue("OPENCLAW_CONFIG_PATH");
-    deleteTestEnvValue("OPENCLAW_GATEWAY_PORT");
-    deleteTestEnvValue("OPENCLAW_GATEWAY_URL");
-    deleteTestEnvValue("OPENCLAW_GATEWAY_TOKEN");
-    deleteTestEnvValue("OPENCLAW_STATE_DIR");
+    deleteTestEnvValue("MARKETINGCLAW_ALLOW_INSECURE_PRIVATE_WS");
+    deleteTestEnvValue("MARKETINGCLAW_CONFIG_PATH");
+    deleteTestEnvValue("MARKETINGCLAW_GATEWAY_PORT");
+    deleteTestEnvValue("MARKETINGCLAW_GATEWAY_URL");
+    deleteTestEnvValue("MARKETINGCLAW_GATEWAY_TOKEN");
+    deleteTestEnvValue("MARKETINGCLAW_STATE_DIR");
     resetGatewayCallMocks();
   });
 
@@ -521,7 +521,7 @@ describe("callGateway url resolution", () => {
     getRuntimeConfig.mockReturnValue({
       gateway: {
         mode: "remote",
-        remote: { url: "wss://openclaw.example.test" },
+        remote: { url: "wss://marketingclaw.example.test" },
         auth: { mode: "token", allowTailscale: true },
       },
     });
@@ -529,7 +529,7 @@ describe("callGateway url resolution", () => {
 
     await callGateway({ method: "sessions.list" });
 
-    expect(lastClientOptions?.url).toBe("wss://openclaw.example.test");
+    expect(lastClientOptions?.url).toBe("wss://marketingclaw.example.test");
     expect(lastClientOptions?.token).toBeUndefined();
     expect(lastClientOptions?.password).toBeUndefined();
   });
@@ -538,7 +538,7 @@ describe("callGateway url resolution", () => {
     getRuntimeConfig.mockReturnValue({
       gateway: {
         mode: "remote",
-        remote: { url: "wss://openclaw.example.test" },
+        remote: { url: "wss://marketingclaw.example.test" },
         auth: { mode: "token" },
         tailscale: { mode: "serve" },
       },
@@ -547,7 +547,7 @@ describe("callGateway url resolution", () => {
 
     await callGateway({ method: "sessions.list" });
 
-    expect(lastClientOptions?.url).toBe("wss://openclaw.example.test");
+    expect(lastClientOptions?.url).toBe("wss://marketingclaw.example.test");
     expect(lastClientOptions?.token).toBeUndefined();
     expect(lastClientOptions?.password).toBeUndefined();
   });
@@ -572,7 +572,7 @@ describe("callGateway url resolution", () => {
       gateway: { mode: "local", bind: "loopback", auth: { mode: "none" } },
     });
     setGatewayNetworkDefaults();
-    process.env.OPENCLAW_GATEWAY_TOKEN = "inactive-env-token";
+    process.env.MARKETINGCLAW_GATEWAY_TOKEN = "inactive-env-token";
 
     await callGatewayCli({ method: "health" });
 
@@ -625,14 +625,14 @@ describe("callGateway url resolution", () => {
     expect(lastClientOptions?.deviceIdentity).toBeNull();
   });
 
-  it("uses OPENCLAW_GATEWAY_URL env override in remote mode when remote URL is missing", async () => {
+  it("uses MARKETINGCLAW_GATEWAY_URL env override in remote mode when remote URL is missing", async () => {
     getRuntimeConfig.mockReturnValue({
       gateway: { mode: "remote", bind: "loopback", remote: {} },
     });
     resolveGatewayPort.mockReturnValue(18789);
     pickPrimaryTailnetIPv4.mockReturnValue(undefined);
-    process.env.OPENCLAW_GATEWAY_URL = "wss://gateway-in-container.internal:9443/ws";
-    process.env.OPENCLAW_GATEWAY_TOKEN = "env-token";
+    process.env.MARKETINGCLAW_GATEWAY_URL = "wss://gateway-in-container.internal:9443/ws";
+    process.env.MARKETINGCLAW_GATEWAY_TOKEN = "env-token";
 
     await callGateway({
       method: "health",
@@ -649,12 +649,12 @@ describe("callGateway url resolution", () => {
     });
     resolveGatewayPort.mockImplementation((_config?: unknown, env?: unknown) => {
       const candidateEnv = env as NodeJS.ProcessEnv | undefined;
-      return Number(candidateEnv?.OPENCLAW_GATEWAY_PORT ?? 18789);
+      return Number(candidateEnv?.MARKETINGCLAW_GATEWAY_PORT ?? 18789);
     });
     pickPrimaryTailnetIPv4.mockReturnValue(undefined);
-    process.env.OPENCLAW_GATEWAY_URL = "wss://gateway-in-container.internal:9443/ws";
-    process.env.OPENCLAW_GATEWAY_PORT = "19001";
-    process.env.OPENCLAW_GATEWAY_TOKEN = "env-token";
+    process.env.MARKETINGCLAW_GATEWAY_URL = "wss://gateway-in-container.internal:9443/ws";
+    process.env.MARKETINGCLAW_GATEWAY_PORT = "19001";
+    process.env.MARKETINGCLAW_GATEWAY_TOKEN = "env-token";
 
     await callGateway({
       method: "health",
@@ -680,11 +680,11 @@ describe("callGateway url resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as MarketingClawConfig);
     resolveGatewayPort.mockReturnValue(18789);
     pickPrimaryTailnetIPv4.mockReturnValue(undefined);
-    process.env.OPENCLAW_GATEWAY_URL = "wss://gateway-in-container.internal:9443/ws";
-    process.env.OPENCLAW_GATEWAY_TOKEN = "env-token";
+    process.env.MARKETINGCLAW_GATEWAY_URL = "wss://gateway-in-container.internal:9443/ws";
+    process.env.MARKETINGCLAW_GATEWAY_TOKEN = "env-token";
 
     await callGateway({
       method: "health",
@@ -707,8 +707,8 @@ describe("callGateway url resolution", () => {
     });
     setGatewayNetworkDefaults(18789);
     pickPrimaryTailnetIPv4.mockReturnValue(undefined);
-    process.env.OPENCLAW_GATEWAY_URL = "wss://gateway-in-container.internal:9443/ws";
-    process.env.OPENCLAW_GATEWAY_TOKEN = "env-token";
+    process.env.MARKETINGCLAW_GATEWAY_URL = "wss://gateway-in-container.internal:9443/ws";
+    process.env.MARKETINGCLAW_GATEWAY_TOKEN = "env-token";
 
     await callGateway({
       method: "health",
@@ -865,7 +865,7 @@ describe("callGateway url resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as MarketingClawConfig);
     setGatewayNetworkDefaults();
 
     await callGatewayCli({ method: "node.list", useStoredDeviceAuth: true });
@@ -1141,7 +1141,7 @@ describe("buildGatewayConnectionDetails", () => {
         tls: { enabled: true },
         handshakeTimeoutMs: 4321,
       },
-    } satisfies OpenClawConfig;
+    } satisfies MarketingClawConfig;
     resolveGatewayPort.mockReturnValue(18800);
     testing.setDepsForTests({
       getRuntimeConfig: () => config,
@@ -1166,21 +1166,21 @@ describe("buildGatewayConnectionDetails", () => {
         mode: "local",
         bind: "loopback",
       },
-    } satisfies OpenClawConfig;
+    } satisfies MarketingClawConfig;
     resolveGatewayPort.mockImplementation((_config?: unknown, env?: unknown) => {
       const candidateEnv = env as NodeJS.ProcessEnv | undefined;
-      return Number(candidateEnv?.OPENCLAW_GATEWAY_PORT ?? 18789);
+      return Number(candidateEnv?.MARKETINGCLAW_GATEWAY_PORT ?? 18789);
     });
     testing.setDepsForTests({
       getRuntimeConfig: () => config,
       resolveGatewayPort: (_config?: unknown, env?: NodeJS.ProcessEnv) =>
-        Number(env?.OPENCLAW_GATEWAY_PORT ?? 18789),
+        Number(env?.MARKETINGCLAW_GATEWAY_PORT ?? 18789),
     });
-    const prevUrl = process.env.OPENCLAW_GATEWAY_URL;
-    const prevPort = process.env.OPENCLAW_GATEWAY_PORT;
+    const prevUrl = process.env.MARKETINGCLAW_GATEWAY_URL;
+    const prevPort = process.env.MARKETINGCLAW_GATEWAY_PORT;
     try {
-      process.env.OPENCLAW_GATEWAY_URL = "wss://env-gateway.example/ws";
-      process.env.OPENCLAW_GATEWAY_PORT = "19001";
+      process.env.MARKETINGCLAW_GATEWAY_URL = "wss://env-gateway.example/ws";
+      process.env.MARKETINGCLAW_GATEWAY_PORT = "19001";
 
       const details = await buildGatewayProbeConnectionDetails({
         config,
@@ -1191,14 +1191,14 @@ describe("buildGatewayConnectionDetails", () => {
       expect(details.urlSource).toBe("local loopback");
     } finally {
       if (prevUrl === undefined) {
-        delete process.env.OPENCLAW_GATEWAY_URL;
+        delete process.env.MARKETINGCLAW_GATEWAY_URL;
       } else {
-        process.env.OPENCLAW_GATEWAY_URL = prevUrl;
+        process.env.MARKETINGCLAW_GATEWAY_URL = prevUrl;
       }
       if (prevPort === undefined) {
-        delete process.env.OPENCLAW_GATEWAY_PORT;
+        delete process.env.MARKETINGCLAW_GATEWAY_PORT;
       } else {
-        process.env.OPENCLAW_GATEWAY_PORT = prevPort;
+        process.env.MARKETINGCLAW_GATEWAY_PORT = prevPort;
       }
     }
   });
@@ -1279,24 +1279,24 @@ describe("buildGatewayConnectionDetails", () => {
     expect(details.remoteFallbackNote).toBeUndefined();
   });
 
-  it("uses env OPENCLAW_GATEWAY_URL when set", () => {
+  it("uses env MARKETINGCLAW_GATEWAY_URL when set", () => {
     getRuntimeConfig.mockReturnValue({ gateway: { mode: "local", bind: "loopback" } });
     resolveGatewayPort.mockReturnValue(18800);
     pickPrimaryTailnetIPv4.mockReturnValue(undefined);
-    const prevUrl = process.env.OPENCLAW_GATEWAY_URL;
+    const prevUrl = process.env.MARKETINGCLAW_GATEWAY_URL;
     try {
-      process.env.OPENCLAW_GATEWAY_URL = "wss://browser-gateway.local:9443/ws";
+      process.env.MARKETINGCLAW_GATEWAY_URL = "wss://browser-gateway.local:9443/ws";
 
       const details = buildGatewayConnectionDetails();
 
       expect(details.url).toBe("wss://browser-gateway.local:9443/ws");
-      expect(details.urlSource).toBe("env OPENCLAW_GATEWAY_URL");
+      expect(details.urlSource).toBe("env MARKETINGCLAW_GATEWAY_URL");
       expect(details.bindDetail).toBeUndefined();
     } finally {
       if (prevUrl === undefined) {
-        delete process.env.OPENCLAW_GATEWAY_URL;
+        delete process.env.MARKETINGCLAW_GATEWAY_URL;
       } else {
-        process.env.OPENCLAW_GATEWAY_URL = prevUrl;
+        process.env.MARKETINGCLAW_GATEWAY_URL = prevUrl;
       }
     }
   });
@@ -1305,14 +1305,14 @@ describe("buildGatewayConnectionDetails", () => {
     getRuntimeConfig.mockReturnValue({ gateway: { mode: "local", bind: "loopback" } });
     resolveGatewayPort.mockImplementation((_config?: unknown, env?: unknown) => {
       const candidateEnv = env as NodeJS.ProcessEnv | undefined;
-      return Number(candidateEnv?.OPENCLAW_GATEWAY_PORT ?? 18789);
+      return Number(candidateEnv?.MARKETINGCLAW_GATEWAY_PORT ?? 18789);
     });
     pickPrimaryTailnetIPv4.mockReturnValue(undefined);
-    const prevUrl = process.env.OPENCLAW_GATEWAY_URL;
-    const prevPort = process.env.OPENCLAW_GATEWAY_PORT;
+    const prevUrl = process.env.MARKETINGCLAW_GATEWAY_URL;
+    const prevPort = process.env.MARKETINGCLAW_GATEWAY_PORT;
     try {
-      process.env.OPENCLAW_GATEWAY_URL = "wss://browser-gateway.local:9443/ws";
-      process.env.OPENCLAW_GATEWAY_PORT = "19001";
+      process.env.MARKETINGCLAW_GATEWAY_URL = "wss://browser-gateway.local:9443/ws";
+      process.env.MARKETINGCLAW_GATEWAY_PORT = "19001";
 
       const details = buildGatewayConnectionDetails({ localPortOverride: 19082 });
 
@@ -1321,22 +1321,22 @@ describe("buildGatewayConnectionDetails", () => {
       expect(details.bindDetail).toBe("Bind: loopback");
     } finally {
       if (prevUrl === undefined) {
-        delete process.env.OPENCLAW_GATEWAY_URL;
+        delete process.env.MARKETINGCLAW_GATEWAY_URL;
       } else {
-        process.env.OPENCLAW_GATEWAY_URL = prevUrl;
+        process.env.MARKETINGCLAW_GATEWAY_URL = prevUrl;
       }
       if (prevPort === undefined) {
-        delete process.env.OPENCLAW_GATEWAY_PORT;
+        delete process.env.MARKETINGCLAW_GATEWAY_PORT;
       } else {
-        process.env.OPENCLAW_GATEWAY_PORT = prevPort;
+        process.env.MARKETINGCLAW_GATEWAY_PORT = prevPort;
       }
     }
   });
 
   it("falls back to the default config loader when test deps drift", () => {
-    const tempStateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-gateway-call-"));
-    setTestEnvValue("OPENCLAW_STATE_DIR", tempStateDir);
-    setTestEnvValue("OPENCLAW_CONFIG_PATH", path.join(tempStateDir, "missing-config.json"));
+    const tempStateDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-gateway-call-"));
+    setTestEnvValue("MARKETINGCLAW_STATE_DIR", tempStateDir);
+    setTestEnvValue("MARKETINGCLAW_CONFIG_PATH", path.join(tempStateDir, "missing-config.json"));
     try {
       getRuntimeConfig.mockReturnValue({ gateway: { mode: "local", bind: "loopback" } });
       resolveGatewayPort.mockReturnValue(18800);
@@ -1376,7 +1376,7 @@ describe("buildGatewayConnectionDetails", () => {
     expect((thrown as Error).message).toContain("plaintext ws://");
     expect((thrown as Error).message).toContain("wss://");
     expect((thrown as Error).message).toContain("Tailscale Serve/Funnel");
-    expect((thrown as Error).message).toContain("openclaw doctor --fix");
+    expect((thrown as Error).message).toContain("marketingclaw doctor --fix");
   });
 
   it("redacts credential-bearing target URLs from insecure ws:// errors", () => {
@@ -1417,20 +1417,20 @@ describe("buildGatewayConnectionDetails", () => {
     expect(details.urlSource).toBe("config gateway.remote.url");
   });
 
-  it("allows ws:// hostname remote URLs when OPENCLAW_ALLOW_INSECURE_PRIVATE_WS=1", () => {
-    process.env.OPENCLAW_ALLOW_INSECURE_PRIVATE_WS = "1";
+  it("allows ws:// hostname remote URLs when MARKETINGCLAW_ALLOW_INSECURE_PRIVATE_WS=1", () => {
+    process.env.MARKETINGCLAW_ALLOW_INSECURE_PRIVATE_WS = "1";
     getRuntimeConfig.mockReturnValue({
       gateway: {
         mode: "remote",
         bind: "loopback",
-        remote: { url: "ws://openclaw-gateway.ai:18789" },
+        remote: { url: "ws://marketingclaw-gateway.ai:18789" },
       },
     });
     resolveGatewayPort.mockReturnValue(18789);
 
     const details = buildGatewayConnectionDetails();
 
-    expect(details.url).toBe("ws://openclaw-gateway.ai:18789");
+    expect(details.url).toBe("ws://marketingclaw-gateway.ai:18789");
     expect(details.urlSource).toBe("config gateway.remote.url");
   });
 
@@ -1657,7 +1657,7 @@ describe("callGateway error details", () => {
       "Connection dropped without a close frame (retry; check network and gateway load)",
     );
     expect(message).not.toContain("crashed or was terminated unexpectedly");
-    expect(message).toContain("Run `openclaw doctor`");
+    expect(message).toContain("Run `marketingclaw doctor`");
   });
 
   it("formats typed request errors for CLI JSON output", () => {
@@ -1772,9 +1772,9 @@ describe("callGateway error details", () => {
   });
 
   it("keeps the default wrapper timeout aligned with env handshake timeout", async () => {
-    const envSnapshot = captureEnv(["OPENCLAW_HANDSHAKE_TIMEOUT_MS"]);
+    const envSnapshot = captureEnv(["MARKETINGCLAW_HANDSHAKE_TIMEOUT_MS"]);
     try {
-      process.env.OPENCLAW_HANDSHAKE_TIMEOUT_MS = "30000";
+      process.env.MARKETINGCLAW_HANDSHAKE_TIMEOUT_MS = "30000";
       startMode = "silent";
       setLocalLoopbackGatewayConfig();
 
@@ -1873,11 +1873,11 @@ describe("callGateway error details", () => {
           stop() {},
           async stopAndWait() {},
         }) as never,
-      getRuntimeConfig: getRuntimeConfig as unknown as () => OpenClawConfig,
+      getRuntimeConfig: getRuntimeConfig as unknown as () => MarketingClawConfig,
       loadOrCreateDeviceIdentity: () => deviceIdentityState.value,
       loadDeviceAuthToken: loadDeviceAuthTokenMock,
       resolveGatewayPort: resolveGatewayPort as unknown as (
-        cfg?: OpenClawConfig,
+        cfg?: MarketingClawConfig,
         env?: NodeJS.ProcessEnv,
       ) => number,
     });
@@ -1971,11 +1971,11 @@ describe("callGateway error details", () => {
             stopStarted = true;
           },
         }) as never,
-      getRuntimeConfig: getRuntimeConfig as unknown as () => OpenClawConfig,
+      getRuntimeConfig: getRuntimeConfig as unknown as () => MarketingClawConfig,
       loadOrCreateDeviceIdentity: () => deviceIdentityState.value,
       loadDeviceAuthToken: loadDeviceAuthTokenMock,
       resolveGatewayPort: resolveGatewayPort as unknown as (
-        cfg?: OpenClawConfig,
+        cfg?: MarketingClawConfig,
         env?: NodeJS.ProcessEnv,
       ) => number,
     });
@@ -2036,11 +2036,11 @@ describe("callGateway error details", () => {
             stopStarted = true;
           },
         }) as never,
-      getRuntimeConfig: getRuntimeConfig as unknown as () => OpenClawConfig,
+      getRuntimeConfig: getRuntimeConfig as unknown as () => MarketingClawConfig,
       loadOrCreateDeviceIdentity: () => deviceIdentityState.value,
       loadDeviceAuthToken: loadDeviceAuthTokenMock,
       resolveGatewayPort: resolveGatewayPort as unknown as (
-        cfg?: OpenClawConfig,
+        cfg?: MarketingClawConfig,
         env?: NodeJS.ProcessEnv,
       ) => number,
     });
@@ -2122,11 +2122,11 @@ describe("callGateway error details", () => {
             });
           },
         }) as never,
-      getRuntimeConfig: getRuntimeConfig as unknown as () => OpenClawConfig,
+      getRuntimeConfig: getRuntimeConfig as unknown as () => MarketingClawConfig,
       loadOrCreateDeviceIdentity: () => deviceIdentityState.value,
       loadDeviceAuthToken: loadDeviceAuthTokenMock,
       resolveGatewayPort: resolveGatewayPort as unknown as (
-        cfg?: OpenClawConfig,
+        cfg?: MarketingClawConfig,
         env?: NodeJS.ProcessEnv,
       ) => number,
     });
@@ -2184,11 +2184,11 @@ describe("callGateway error details", () => {
             });
           },
         }) as never,
-      getRuntimeConfig: getRuntimeConfig as unknown as () => OpenClawConfig,
+      getRuntimeConfig: getRuntimeConfig as unknown as () => MarketingClawConfig,
       loadOrCreateDeviceIdentity: () => deviceIdentityState.value,
       loadDeviceAuthToken: loadDeviceAuthTokenMock,
       resolveGatewayPort: resolveGatewayPort as unknown as (
-        cfg?: OpenClawConfig,
+        cfg?: MarketingClawConfig,
         env?: NodeJS.ProcessEnv,
       ) => number,
     });
@@ -2238,14 +2238,14 @@ describe("callGateway url override auth requirements", () => {
 
   beforeEach(() => {
     envSnapshot = captureEnv([
-      "OPENCLAW_GATEWAY_TOKEN",
-      "OPENCLAW_GATEWAY_PASSWORD",
-      "OPENCLAW_GATEWAY_URL",
+      "MARKETINGCLAW_GATEWAY_TOKEN",
+      "MARKETINGCLAW_GATEWAY_PASSWORD",
+      "MARKETINGCLAW_GATEWAY_URL",
     ]);
     resetGatewayCallMocks();
-    delete process.env.OPENCLAW_GATEWAY_TOKEN;
-    delete process.env.OPENCLAW_GATEWAY_PASSWORD;
-    delete process.env.OPENCLAW_GATEWAY_URL;
+    delete process.env.MARKETINGCLAW_GATEWAY_TOKEN;
+    delete process.env.MARKETINGCLAW_GATEWAY_PASSWORD;
+    delete process.env.MARKETINGCLAW_GATEWAY_URL;
     setGatewayNetworkDefaults(18789);
   });
 
@@ -2254,8 +2254,8 @@ describe("callGateway url override auth requirements", () => {
   });
 
   it("throws when url override is set without explicit credentials", async () => {
-    process.env.OPENCLAW_GATEWAY_TOKEN = "env-token";
-    process.env.OPENCLAW_GATEWAY_PASSWORD = "env-password";
+    process.env.MARKETINGCLAW_GATEWAY_TOKEN = "env-token";
+    process.env.MARKETINGCLAW_GATEWAY_PASSWORD = "env-password";
     getRuntimeConfig.mockReturnValue({
       gateway: {
         mode: "local",
@@ -2269,7 +2269,7 @@ describe("callGateway url override auth requirements", () => {
   });
 
   it("throws when env URL override is set without env credentials", async () => {
-    process.env.OPENCLAW_GATEWAY_URL = "wss://override.example/ws";
+    process.env.MARKETINGCLAW_GATEWAY_URL = "wss://override.example/ws";
     getRuntimeConfig.mockReturnValue({
       gateway: {
         mode: "local",
@@ -2278,7 +2278,7 @@ describe("callGateway url override auth requirements", () => {
     });
 
     await expect(callGateway({ method: "health" })).rejects.toThrow(
-      /OPENCLAW_GATEWAY_TOKEN or OPENCLAW_GATEWAY_PASSWORD/i,
+      /MARKETINGCLAW_GATEWAY_TOKEN or MARKETINGCLAW_GATEWAY_PASSWORD/i,
     );
   });
 });
@@ -2289,7 +2289,7 @@ describe("callGateway password resolution", () => {
     {
       label: "password",
       authKey: "password", // pragma: allowlist secret
-      envKey: "OPENCLAW_GATEWAY_PASSWORD",
+      envKey: "MARKETINGCLAW_GATEWAY_PASSWORD",
       envValue: "from-env",
       configValue: "from-config",
       explicitValue: "explicit-password",
@@ -2297,7 +2297,7 @@ describe("callGateway password resolution", () => {
     {
       label: "token",
       authKey: "token", // pragma: allowlist secret
-      envKey: "OPENCLAW_GATEWAY_TOKEN",
+      envKey: "MARKETINGCLAW_GATEWAY_TOKEN",
       envValue: "env-token",
       configValue: "local-token",
       explicitValue: "explicit-token",
@@ -2306,16 +2306,16 @@ describe("callGateway password resolution", () => {
 
   beforeEach(() => {
     envSnapshot = captureEnv([
-      "OPENCLAW_GATEWAY_PASSWORD",
-      "OPENCLAW_GATEWAY_TOKEN",
+      "MARKETINGCLAW_GATEWAY_PASSWORD",
+      "MARKETINGCLAW_GATEWAY_TOKEN",
       "LOCAL_REMOTE_FALLBACK_TOKEN",
       "LOCAL_REF_PASSWORD",
       "REMOTE_REF_TOKEN",
       "REMOTE_REF_PASSWORD",
     ]);
     resetGatewayCallMocks();
-    delete process.env.OPENCLAW_GATEWAY_PASSWORD;
-    delete process.env.OPENCLAW_GATEWAY_TOKEN;
+    delete process.env.MARKETINGCLAW_GATEWAY_PASSWORD;
+    delete process.env.MARKETINGCLAW_GATEWAY_TOKEN;
     delete process.env.LOCAL_REMOTE_FALLBACK_TOKEN;
     delete process.env.LOCAL_REF_PASSWORD;
     delete process.env.REMOTE_REF_TOKEN;
@@ -2366,7 +2366,7 @@ describe("callGateway password resolution", () => {
     },
   ])("$label", async ({ envPassword, config, expectedPassword }) => {
     if (envPassword !== undefined) {
-      process.env.OPENCLAW_GATEWAY_PASSWORD = envPassword;
+      process.env.MARKETINGCLAW_GATEWAY_PASSWORD = envPassword;
     }
     getRuntimeConfig.mockReturnValue(config);
 
@@ -2391,7 +2391,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as MarketingClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -2399,7 +2399,7 @@ describe("callGateway password resolution", () => {
   });
 
   it("does not resolve local password ref when env password takes precedence", async () => {
-    process.env.OPENCLAW_GATEWAY_PASSWORD = "from-env";
+    process.env.MARKETINGCLAW_GATEWAY_PASSWORD = "from-env";
     getRuntimeConfig.mockReturnValue({
       gateway: {
         mode: "local",
@@ -2414,7 +2414,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as MarketingClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -2437,7 +2437,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as MarketingClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -2460,7 +2460,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as MarketingClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -2487,7 +2487,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as MarketingClawConfig);
 
     await expect(callGateway({ method: "health" })).rejects.toThrow("gateway.auth.token");
   });
@@ -2507,7 +2507,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as MarketingClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -2531,7 +2531,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as MarketingClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -2554,7 +2554,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as MarketingClawConfig);
 
     await expect(callGateway({ method: "health" })).rejects.toThrow("gateway.auth.password");
   });
@@ -2578,7 +2578,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as MarketingClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -2602,7 +2602,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as MarketingClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -2626,7 +2626,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as MarketingClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -2650,7 +2650,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as MarketingClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -2676,7 +2676,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as MarketingClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -2701,7 +2701,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as MarketingClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -2726,7 +2726,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as MarketingClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -2751,7 +2751,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as MarketingClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -2776,7 +2776,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as MarketingClawConfig);
 
     await callGateway({ method: "health" });
 

@@ -1,6 +1,6 @@
 // Diagnostic logger tests cover event emission, metrics, and support output.
 import fs from "node:fs";
-import { importFreshModule } from "openclaw/plugin-sdk/test-fixtures";
+import { importFreshModule } from "marketingclaw/plugin-sdk/test-fixtures";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   emitDiagnosticEvent,
@@ -397,7 +397,7 @@ describe("stuck session diagnostics threshold", () => {
 
   it("threads session files from heartbeat state into stuck-session recovery", () => {
     const recoverStuckSession = vi.fn();
-    const sessionFile = "/tmp/openclaw-heartbeat-session.jsonl";
+    const sessionFile = "/tmp/marketingclaw-heartbeat-session.jsonl";
 
     startDiagnosticHeartbeat(
       {
@@ -1172,7 +1172,7 @@ describe("stuck session diagnostics threshold", () => {
     logSessionStateChange({
       sessionId: "s1",
       sessionKey: "main",
-      sessionFile: "/tmp/openclaw-active-abort-session.jsonl",
+      sessionFile: "/tmp/marketingclaw-active-abort-session.jsonl",
       state: "processing",
     });
     markDiagnosticEmbeddedRunStarted({ sessionId: "s1", sessionKey: "main" });
@@ -1184,7 +1184,7 @@ describe("stuck session diagnostics threshold", () => {
       {
         sessionId: "s1",
         sessionKey: "main",
-        sessionFile: "/tmp/openclaw-active-abort-session.jsonl",
+        sessionFile: "/tmp/marketingclaw-active-abort-session.jsonl",
         queueDepth: 0,
         allowActiveAbort: true,
       },

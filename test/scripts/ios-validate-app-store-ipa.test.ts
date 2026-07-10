@@ -168,7 +168,7 @@ async function writeIpaFixture(root: string): Promise<string> {
   }
 
   addTree(path.join(root, "Payload"), "Payload");
-  const ipaPath = path.join(root, "OpenClaw.ipa");
+  const ipaPath = path.join(root, "MarketingClaw.ipa");
   const buffer = await zip.generateAsync({ type: "nodebuffer", compression: "DEFLATE" });
   writeFileSync(ipaPath, buffer);
   return ipaPath;
@@ -186,17 +186,17 @@ async function writeValidFixture(
 }> {
   const binDir = path.join(root, "bin");
   const payloadDir = path.join(root, "Payload");
-  const appDir = path.join(payloadDir, "OpenClaw.app");
+  const appDir = path.join(payloadDir, "MarketingClaw.app");
   const fixturesDir = path.join(root, "fixtures");
   mkdirSync(appDir, { recursive: true });
   mkdirSync(binDir, { recursive: true });
   mkdirSync(fixturesDir, { recursive: true });
 
   const infoBody = [
-    plistString("CFBundleIdentifier", "ai.openclawfoundation.app"),
-    plistString("OpenClawPushMode", options.pushMode ?? "appStore"),
-    plistString("OpenClawPushRelayBaseURL", ""),
-    options.legacyKey ? plistString("OpenClawPushRelayProfile", "production") : "",
+    plistString("CFBundleIdentifier", "ai.marketingclaw.app"),
+    plistString("MarketingClawPushMode", options.pushMode ?? "appStore"),
+    plistString("MarketingClawPushRelayBaseURL", ""),
+    options.legacyKey ? plistString("MarketingClawPushRelayProfile", "production") : "",
   ].join("");
   writeFileSync(path.join(appDir, "Info.plist"), plist(infoBody), "utf8");
   writeFileSync(path.join(appDir, "embedded.mobileprovision"), "fixture profile", "utf8");
@@ -206,13 +206,11 @@ async function writeValidFixture(
     entitlementsPath,
     plist(
       [
-        plistString("application-identifier", "FWJYW4S8P8.ai.openclawfoundation.app"),
+        plistString("application-identifier", "FWJYW4S8P8.ai.marketingclaw.app"),
         plistString("com.apple.developer.team-identifier", "FWJYW4S8P8"),
         plistString("aps-environment", "production"),
         plistString("com.apple.developer.devicecheck.appattest-environment", "production"),
-        plistArray("com.apple.security.application-groups", [
-          "group.ai.openclawfoundation.app.shared",
-        ]),
+        plistArray("com.apple.security.application-groups", ["group.ai.marketingclaw.app.shared"]),
       ].join(""),
     ),
     "utf8",
@@ -223,16 +221,16 @@ async function writeValidFixture(
     profilePath,
     plist(
       [
-        plistString("Name", "OpenClaw App Store ai.openclawfoundation.app"),
+        plistString("Name", "MarketingClaw App Store ai.marketingclaw.app"),
         plistArray("TeamIdentifier", ["FWJYW4S8P8"]),
         plistDict(
           "Entitlements",
           [
-            plistString("application-identifier", "FWJYW4S8P8.ai.openclawfoundation.app"),
+            plistString("application-identifier", "FWJYW4S8P8.ai.marketingclaw.app"),
             plistString("aps-environment", "production"),
             plistArray("com.apple.developer.devicecheck.appattest-environment", ["production"]),
             plistArray("com.apple.security.application-groups", [
-              "group.ai.openclawfoundation.app.shared",
+              "group.ai.marketingclaw.app.shared",
             ]),
           ].join(""),
         ),
@@ -303,7 +301,7 @@ describe("scripts/ios-validate-app-store-ipa.sh", () => {
   });
 
   it("accepts an App Store IPA with appStore mode and production entitlements", async () => {
-    const root = mkdtempSync(path.join(os.tmpdir(), "openclaw-ios-ipa-"));
+    const root = mkdtempSync(path.join(os.tmpdir(), "marketingclaw-ios-ipa-"));
     tempDirs.push(root);
     const fixture = await writeValidFixture(root);
 
@@ -314,7 +312,7 @@ describe("scripts/ios-validate-app-store-ipa.sh", () => {
   });
 
   it("rejects an IPA that was exported with a non-App-Store push mode", async () => {
-    const root = mkdtempSync(path.join(os.tmpdir(), "openclaw-ios-ipa-"));
+    const root = mkdtempSync(path.join(os.tmpdir(), "marketingclaw-ios-ipa-"));
     tempDirs.push(root);
     const fixture = await writeValidFixture(root, { pushMode: "localProduction" });
 
@@ -325,7 +323,7 @@ describe("scripts/ios-validate-app-store-ipa.sh", () => {
   });
 
   it("rejects legacy independently selectable production push keys", async () => {
-    const root = mkdtempSync(path.join(os.tmpdir(), "openclaw-ios-ipa-"));
+    const root = mkdtempSync(path.join(os.tmpdir(), "marketingclaw-ios-ipa-"));
     tempDirs.push(root);
     const fixture = await writeValidFixture(root, { legacyKey: true });
 

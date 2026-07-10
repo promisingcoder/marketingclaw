@@ -1,7 +1,7 @@
 import CryptoKit
 import Foundation
 import Testing
-@testable import OpenClawKit
+@testable import MarketingClawKit
 
 @Suite("DeviceAuthPayload")
 struct DeviceAuthPayloadTests {
@@ -10,7 +10,7 @@ struct DeviceAuthPayloadTests {
         let signedAtMs: Int64 = 1_800_000_000_000
         let payload = GatewayDeviceAuthPayload.buildConnectCompatibilityPayload(
             deviceId: "dev-1",
-            clientId: "openclaw-macos",
+            clientId: "marketingclaw-macos",
             clientMode: "ui",
             role: "operator",
             scopes: ["operator.admin", "operator.read"],
@@ -19,7 +19,7 @@ struct DeviceAuthPayloadTests {
             nonce: "nonce-abc")
         #expect(
             payload
-                == "v2|dev-1|openclaw-macos|ui|operator|operator.admin,operator.read|1800000000000|tok-123|nonce-abc")
+                == "v2|dev-1|marketingclaw-macos|ui|operator|operator.admin,operator.read|1800000000000|tok-123|nonce-abc")
     }
 
     @Test
@@ -27,7 +27,7 @@ struct DeviceAuthPayloadTests {
         let signedAtMs: Int64 = 1_800_000_000_000
         let payload = GatewayDeviceAuthPayload.buildV3(
             deviceId: "dev-1",
-            clientId: "openclaw-macos",
+            clientId: "marketingclaw-macos",
             clientMode: "ui",
             role: "operator",
             scopes: ["operator.admin", "operator.read"],
@@ -39,7 +39,7 @@ struct DeviceAuthPayloadTests {
         #expect(
             payload
                 ==
-                "v3|dev-1|openclaw-macos|ui|operator|operator.admin,operator.read|1800000000000|tok-123|nonce-abc|ios|iphone")
+                "v3|dev-1|marketingclaw-macos|ui|operator|operator.admin,operator.read|1800000000000|tok-123|nonce-abc|ios|iphone")
     }
 
     @Test
@@ -52,7 +52,7 @@ struct DeviceAuthPayloadTests {
         let signedAtMs: Int64 = 1_800_000_000_000
         let payload = GatewayDeviceAuthPayload.buildV3(
             deviceId: identity.deviceId,
-            clientId: "openclaw-watchos",
+            clientId: "marketingclaw-watchos",
             clientMode: "node",
             role: "node",
             scopes: [],

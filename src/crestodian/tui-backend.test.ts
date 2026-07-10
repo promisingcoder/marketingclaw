@@ -1,7 +1,7 @@
 // Crestodian TUI backend tests cover rescue status integration with the TUI backend.
 import { describe, expect, it, vi } from "vitest";
-import type { CrestodianOperation } from "./operations.js";
 import type { RuntimeEnv } from "../runtime.js";
+import type { CrestodianOperation } from "./operations.js";
 import type { CrestodianOverview } from "./overview.js";
 import { runCrestodianTui } from "./tui-backend.js";
 
@@ -9,7 +9,7 @@ const overview: CrestodianOverview = {
   defaultAgentId: "main",
   defaultModel: "openai/gpt-5.5",
   agents: [{ id: "main", isDefault: true, model: "openai/gpt-5.5" }],
-  config: { path: "/tmp/openclaw.json", exists: true, valid: true, issues: [], hash: null },
+  config: { path: "/tmp/marketingclaw.json", exists: true, valid: true, issues: [], hash: null },
   tools: {
     codex: { command: "codex", found: false, error: "not found" },
     claude: { command: "claude", found: false, error: "not found" },
@@ -23,8 +23,8 @@ const overview: CrestodianOverview = {
     error: "offline",
   },
   references: {
-    docsUrl: "https://docs.openclaw.ai",
-    sourceUrl: "https://github.com/openclaw/openclaw",
+    docsUrl: "https://docs.marketingclaw.ai",
+    sourceUrl: "https://github.com/promisingcoder/marketingclaw",
   },
 };
 
@@ -70,7 +70,7 @@ describe("runCrestodianTui", () => {
     expect(options.session).toBe("agent:crestodian:main");
     expect(options.historyLimit).toBe(200);
     expect(options.config).toEqual({});
-    expect(options.title).toBe("openclaw crestodian");
+    expect(options.title).toBe("marketingclaw crestodian");
     if (!options.backend || typeof options.backend !== "object") {
       throw new Error("expected crestodian TUI backend");
     }
@@ -373,5 +373,4 @@ describe("runCrestodianTui", () => {
       expect(events).toEqual(["disposed", expected]);
     }
   });
-
 });

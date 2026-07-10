@@ -1,4 +1,4 @@
-package ai.openclaw.app.gateway
+package ai.marketingclaw.app.gateway
 
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement

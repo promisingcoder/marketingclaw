@@ -5,14 +5,14 @@ import { setPluginToolMeta } from "../plugins/tools.js";
 
 const mocks = vi.hoisted(() => ({
   createBundleMcpToolRuntime: vi.fn(),
-  createOpenClawCodingTools: vi.fn(),
+  createMarketingClawCodingTools: vi.fn(),
   disposeBundleRuntime: vi.fn(),
   loadModelCatalog: vi.fn(async (): Promise<Array<Record<string, unknown>>> => []),
   normalizeProviderToolSchemasWithPlugin: vi.fn(),
   buildGatewayProbeConnectionDetails: vi.fn(),
   probeGatewayStatus: vi.fn(),
   readGatewayServiceState: vi.fn(),
-  resolveGatewayService: vi.fn(() => ({ label: "openclaw-gateway" })),
+  resolveGatewayService: vi.fn(() => ({ label: "marketingclaw-gateway" })),
   resolvePluginProviders: vi.fn((): Array<Record<string, unknown>> => []),
   resolveDefaultModelForAgent: vi.fn(() => ({ provider: "openai", model: "gpt-5.5" })),
 }));
@@ -36,7 +36,7 @@ vi.mock("../agents/agent-bundle-mcp-tools.js", () => ({
 }));
 
 vi.mock("../agents/agent-tools.js", () => ({
-  createOpenClawCodingTools: mocks.createOpenClawCodingTools,
+  createMarketingClawCodingTools: mocks.createMarketingClawCodingTools,
 }));
 
 vi.mock("../gateway/call.js", () => ({
@@ -90,7 +90,7 @@ function bundleMcpTool(name: string, parameters: unknown): AnyAgentTool {
 
 describe("doctor runtime tool schema checks", () => {
   beforeEach(() => {
-    mocks.createOpenClawCodingTools.mockReset().mockReturnValue([]);
+    mocks.createMarketingClawCodingTools.mockReset().mockReturnValue([]);
     mocks.createBundleMcpToolRuntime.mockReset().mockReturnValue({
       tools: [],
       dispose: mocks.disposeBundleRuntime,
@@ -112,7 +112,10 @@ describe("doctor runtime tool schema checks", () => {
       loaded: true,
       running: true,
       env: {},
-      command: { programArguments: ["openclaw", "gateway"], sourcePath: "/tmp/gateway.service" },
+      command: {
+        programArguments: ["marketingclaw", "gateway"],
+        sourcePath: "/tmp/gateway.service",
+      },
       runtime: { status: "running" },
     });
     mocks.resolveGatewayService.mockClear();
@@ -165,7 +168,7 @@ describe("doctor runtime tool schema checks", () => {
         compat: { supportsTools: true },
       },
     ]);
-    mocks.createOpenClawCodingTools.mockReturnValueOnce([
+    mocks.createMarketingClawCodingTools.mockReturnValueOnce([
       tool("healthy", { type: "object", properties: {} }),
     ]);
 
@@ -195,7 +198,7 @@ describe("doctor runtime tool schema checks", () => {
         compat: { supportsTools: true },
       },
     ]);
-    mocks.createOpenClawCodingTools.mockReturnValueOnce([
+    mocks.createMarketingClawCodingTools.mockReturnValueOnce([
       tool("healthy", { type: "object", properties: {} }),
     ]);
 
@@ -343,7 +346,7 @@ describe("doctor runtime tool schema checks", () => {
   });
 
   it("reports unsupported schemas exposed only to a non-default configured agent", async () => {
-    mocks.createOpenClawCodingTools.mockImplementation((options) =>
+    mocks.createMarketingClawCodingTools.mockImplementation((options) =>
       options?.agentId === "worker"
         ? [tool("fuzzplugin_move_angles", { type: "array", items: { type: "number" } })]
         : [tool("healthy", { type: "object", properties: {} })],
@@ -369,10 +372,10 @@ describe("doctor runtime tool schema checks", () => {
       fixHint:
         "Disable or update the offending plugin/tool so its parameters are a JSON object schema, then rerun doctor.",
     });
-    expect(mocks.createOpenClawCodingTools).toHaveBeenCalledWith(
+    expect(mocks.createMarketingClawCodingTools).toHaveBeenCalledWith(
       expect.objectContaining({ agentId: "main", toolPolicyAuditLogLevel: "debug" }),
     );
-    expect(mocks.createOpenClawCodingTools).toHaveBeenCalledWith(
+    expect(mocks.createMarketingClawCodingTools).toHaveBeenCalledWith(
       expect.objectContaining({ agentId: "worker", toolPolicyAuditLogLevel: "debug" }),
     );
     expect(mocks.createBundleMcpToolRuntime).toHaveBeenCalledTimes(1);
@@ -380,7 +383,7 @@ describe("doctor runtime tool schema checks", () => {
   });
 
   it("skips ACP-only agents because they do not use embedded tool projection", async () => {
-    mocks.createOpenClawCodingTools.mockImplementation((options) =>
+    mocks.createMarketingClawCodingTools.mockImplementation((options) =>
       options?.agentId === "acp-worker"
         ? [tool("fuzzplugin_move_angles", { type: "array", items: { type: "number" } })]
         : [tool("healthy", { type: "object", properties: {} })],
@@ -408,8 +411,8 @@ describe("doctor runtime tool schema checks", () => {
         },
       }),
     ).resolves.toEqual([]);
-    expect(mocks.createOpenClawCodingTools).toHaveBeenCalledTimes(1);
-    expect(mocks.createOpenClawCodingTools).toHaveBeenCalledWith(
+    expect(mocks.createMarketingClawCodingTools).toHaveBeenCalledTimes(1);
+    expect(mocks.createMarketingClawCodingTools).toHaveBeenCalledWith(
       expect.objectContaining({ agentId: "main" }),
     );
     expect(mocks.createBundleMcpToolRuntime).toHaveBeenCalledTimes(1);
@@ -419,7 +422,7 @@ describe("doctor runtime tool schema checks", () => {
   });
 
   it("loads bundled MCP runtime once per distinct agent workspace", async () => {
-    mocks.createOpenClawCodingTools.mockReturnValue([]);
+    mocks.createMarketingClawCodingTools.mockReturnValue([]);
     mocks.createBundleMcpToolRuntime.mockImplementation(
       async (options: { workspaceDir: string }) => ({
         tools: options.workspaceDir.includes("worker")
@@ -554,10 +557,13 @@ describe("doctor gateway runtime checks", () => {
       loaded: true,
       running: true,
       env: {},
-      command: { programArguments: ["openclaw", "gateway"], sourcePath: "/tmp/gateway.service" },
+      command: {
+        programArguments: ["marketingclaw", "gateway"],
+        sourcePath: "/tmp/gateway.service",
+      },
       runtime: { status: "running" },
     });
-    mocks.resolveGatewayService.mockReset().mockReturnValue({ label: "openclaw-gateway" });
+    mocks.resolveGatewayService.mockReset().mockReturnValue({ label: "marketingclaw-gateway" });
   });
 
   it("reports unreachable gateway health probes", async () => {
@@ -575,7 +581,7 @@ describe("doctor gateway runtime checks", () => {
       path: "gateway.mode",
       target: "http://127.0.0.1:5829",
       fixHint:
-        "Start the Gateway service or run `openclaw doctor --fix` for service repair prompts.",
+        "Start the Gateway service or run `marketingclaw doctor --fix` for service repair prompts.",
     });
   });
 
@@ -620,8 +626,8 @@ describe("doctor gateway runtime checks", () => {
       severity: "warning",
       message: "Gateway service is not installed.",
       path: "gateway.mode",
-      target: "openclaw-gateway",
-      fixHint: "Run `openclaw doctor --fix` or `openclaw gateway install` to install it.",
+      target: "marketingclaw-gateway",
+      fixHint: "Run `marketingclaw doctor --fix` or `marketingclaw gateway install` to install it.",
     });
   });
 

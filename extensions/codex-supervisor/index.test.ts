@@ -1,5 +1,5 @@
 // Codex Supervisor tests cover index plugin behavior.
-import { createCapturedPluginRegistration } from "openclaw/plugin-sdk/plugin-test-runtime";
+import { createCapturedPluginRegistration } from "marketingclaw/plugin-sdk/plugin-test-runtime";
 import { describe, expect, it, vi } from "vitest";
 import entry from "./index.js";
 

@@ -1,12 +1,12 @@
-# OpenClaw Groq Provider
+# MarketingClaw Groq Provider
 
-Official OpenClaw provider plugin for Groq.
+Official MarketingClaw provider plugin for Groq.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugins install @openclaw/groq-provider
-openclaw gateway restart
+marketingclaw plugins install @marketingclaw/groq-provider
+marketingclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/groq> for setup and configuration.
+See <https://docs.marketingclaw.ai/providers/groq> for setup and configuration.

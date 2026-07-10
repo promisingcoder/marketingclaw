@@ -8,7 +8,7 @@ import { afterEach, describe, expect, it } from "vitest";
 const tempDirs: string[] = [];
 
 function makeTempDir(): string {
-  const dir = mkdtempSync(path.join(tmpdir(), "openclaw-docker-e2e-observability-"));
+  const dir = mkdtempSync(path.join(tmpdir(), "marketingclaw-docker-e2e-observability-"));
   tempDirs.push(dir);
   return dir;
 }
@@ -58,13 +58,10 @@ describe("Docker E2E observability", () => {
     "scripts/e2e/mcp-channels-docker.sh",
     "scripts/e2e/cron-cli-docker.sh",
     "scripts/e2e/cron-mcp-cleanup-docker.sh",
-  ])(
-    "prints successful MCP client proof logs from %s",
-    (scriptPath) => {
-      const result = runSuccessTail(scriptPath);
+  ])("prints successful MCP client proof logs from %s", (scriptPath) => {
+    const result = runSuccessTail(scriptPath);
 
-      expect(result.status, result.stderr).toBe(0);
-      expect(result.stdout.trim().split("\n")).toEqual(["LOG:client proof log", "OK"]);
-    },
-  );
+    expect(result.status, result.stderr).toBe(0);
+    expect(result.stdout.trim().split("\n")).toEqual(["LOG:client proof log", "OK"]);
+  });
 });

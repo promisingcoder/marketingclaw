@@ -10,7 +10,7 @@ import {
   isCliProvider,
 } from "../agents/model-selection.js";
 import { resolveAgentModelPrimaryValue } from "../config/model-input.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 
 type SessionDisplayModelRow = {
   key: string;
@@ -42,7 +42,7 @@ function parseModelRef(raw: string, defaultProvider: string): SessionDisplayMode
 }
 
 function resolveAgentPrimaryModel(
-  cfg: OpenClawConfig,
+  cfg: MarketingClawConfig,
   agentId: string | undefined,
 ): string | undefined {
   if (!agentId) {
@@ -73,7 +73,10 @@ function normalizeStoredOverrideModel(params: {
   };
 }
 
-function resolveDefaultModelRef(cfg: OpenClawConfig, agentId?: string): SessionDisplayModelRef {
+function resolveDefaultModelRef(
+  cfg: MarketingClawConfig,
+  agentId?: string,
+): SessionDisplayModelRef {
   const primary =
     resolveAgentPrimaryModel(cfg, agentId) ??
     resolveAgentModelPrimaryValue(cfg.agents?.defaults?.model) ??
@@ -83,7 +86,7 @@ function resolveDefaultModelRef(cfg: OpenClawConfig, agentId?: string): SessionD
 
 /** Resolves default display values for a session table scoped to an agent. */
 export function resolveSessionDisplayDefaults(
-  cfg: OpenClawConfig,
+  cfg: MarketingClawConfig,
   agentId?: string,
 ): SessionDisplayDefaults {
   return {
@@ -92,7 +95,7 @@ export function resolveSessionDisplayDefaults(
 }
 
 function normalizeCliRuntimeDisplayRef(
-  cfg: OpenClawConfig,
+  cfg: MarketingClawConfig,
   ref: SessionDisplayModelRef,
   defaultRef: SessionDisplayModelRef,
 ): SessionDisplayModelRef {
@@ -128,7 +131,7 @@ function normalizeCliRuntimeDisplayRef(
 
 /** Resolves only the model id to show for a session row. */
 export function resolveSessionDisplayModel(
-  cfg: OpenClawConfig,
+  cfg: MarketingClawConfig,
   row: SessionDisplayModelRow,
 ): string {
   return resolveSessionDisplayModelRef(cfg, row).model;
@@ -136,7 +139,7 @@ export function resolveSessionDisplayModel(
 
 /** Resolves provider/model display metadata for a session row. */
 export function resolveSessionDisplayModelRef(
-  cfg: OpenClawConfig,
+  cfg: MarketingClawConfig,
   row: SessionDisplayModelRow,
 ): SessionDisplayModelRef {
   const agentId = row.key.startsWith("agent:") ? row.key.split(":")[1] : undefined;

@@ -6,7 +6,7 @@ import { resolve } from "node:path";
 const pkgRoot = resolve(import.meta.dirname, "..");
 
 const { readResponseWithLimit } = await import(`${pkgRoot}/src/infra/http-body.ts`).catch(
-  () => import("openclaw/plugin-sdk/response-limit-runtime"),
+  () => import("marketingclaw/plugin-sdk/response-limit-runtime"),
 );
 
 const CAP = 1 * 1024 * 1024; // 1 MiB proof cap

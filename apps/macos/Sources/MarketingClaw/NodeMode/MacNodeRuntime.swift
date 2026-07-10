@@ -1,7 +1,7 @@
 import AppKit
 import Foundation
-import OpenClawIPC
-import OpenClawKit
+import MarketingClawIPC
+import MarketingClawKit
 
 actor MacNodeRuntime {
     private static let maxGatewayPayloadBytes = 25 * 1024 * 1024
@@ -10,7 +10,7 @@ actor MacNodeRuntime {
     private let makeMainActorServices: () async -> any MacNodeRuntimeMainActorServices
     private let browserProxyRequest: @Sendable (String?) async throws -> String
     /// Injectable so tests can pin the gate instead of racing on process-global
-    /// OPENCLAW_CONFIG_PATH; config parsing is covered by OpenClawConfigFileTests.
+    /// MARKETINGCLAW_CONFIG_PATH; config parsing is covered by MarketingClawConfigFileTests.
     private let browserControlEnabled: @Sendable () -> Bool
     // Injectable so tests pin the gate instead of racing on process-global UserDefaults.
     private let computerControlEnabled: @Sendable () -> Bool
@@ -30,7 +30,7 @@ actor MacNodeRuntime {
             try await MacNodeBrowserProxy.shared.request(paramsJSON: paramsJSON)
         },
         browserControlEnabled: @escaping @Sendable () -> Bool = {
-            OpenClawConfigFile.browserControlEnabled()
+            MarketingClawConfigFile.browserControlEnabled()
         },
         computerControlEnabled: @escaping @Sendable () -> Bool = {
             MacNodeRuntime.computerControlEnabledDefault()
@@ -40,7 +40,7 @@ actor MacNodeRuntime {
         },
         refreshCanvasSurfaceUrl: @escaping @Sendable () async -> String? = { nil },
         codexThreadCatalogEnabled: @escaping @Sendable () -> Bool = {
-            OpenClawConfigFile.explicitlyEnabledPlugin(
+            MarketingClawConfigFile.explicitlyEnabledPlugin(
                 MacNodeCodexThreadCatalogContract.pluginId)
         },
         codexThreadListRequest: @escaping @Sendable (String?) async throws -> String = { paramsJSON in
@@ -73,45 +73,45 @@ actor MacNodeRuntime {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(
+                error: MarketingClawNodeError(
                     code: .unavailable,
                     message: "CANVAS_DISABLED: enable Canvas in Settings"))
         }
         do {
             switch command {
-            case OpenClawCanvasCommand.present.rawValue,
-                 OpenClawCanvasCommand.hide.rawValue,
-                 OpenClawCanvasCommand.navigate.rawValue,
-                 OpenClawCanvasCommand.evalJS.rawValue,
-                 OpenClawCanvasCommand.snapshot.rawValue:
+            case MarketingClawCanvasCommand.present.rawValue,
+                 MarketingClawCanvasCommand.hide.rawValue,
+                 MarketingClawCanvasCommand.navigate.rawValue,
+                 MarketingClawCanvasCommand.evalJS.rawValue,
+                 MarketingClawCanvasCommand.snapshot.rawValue:
                 return try await self.handleCanvasInvoke(req)
-            case OpenClawCanvasA2UICommand.reset.rawValue,
-                 OpenClawCanvasA2UICommand.push.rawValue,
-                 OpenClawCanvasA2UICommand.pushJSONL.rawValue:
+            case MarketingClawCanvasA2UICommand.reset.rawValue,
+                 MarketingClawCanvasA2UICommand.push.rawValue,
+                 MarketingClawCanvasA2UICommand.pushJSONL.rawValue:
                 return try await self.handleA2UIInvoke(req)
-            case OpenClawBrowserCommand.proxy.rawValue:
+            case MarketingClawBrowserCommand.proxy.rawValue:
                 return try await self.handleBrowserProxyInvoke(req)
-            case OpenClawCameraCommand.snap.rawValue,
-                 OpenClawCameraCommand.clip.rawValue,
-                 OpenClawCameraCommand.list.rawValue:
+            case MarketingClawCameraCommand.snap.rawValue,
+                 MarketingClawCameraCommand.clip.rawValue,
+                 MarketingClawCameraCommand.list.rawValue:
                 return try await self.handleCameraInvoke(req)
-            case OpenClawLocationCommand.get.rawValue:
+            case MarketingClawLocationCommand.get.rawValue:
                 return try await self.handleLocationInvoke(req)
             case MacNodeScreenCommand.snapshot.rawValue:
                 return try await self.handleScreenSnapshotInvoke(req)
             case MacNodeScreenCommand.record.rawValue:
                 return try await self.handleScreenRecordInvoke(req)
-            case OpenClawComputerCommand.act.rawValue:
+            case MarketingClawComputerCommand.act.rawValue:
                 return try await self.handleComputerActInvoke(req)
-            case OpenClawSystemCommand.run.rawValue:
+            case MarketingClawSystemCommand.run.rawValue:
                 return try await self.handleSystemRun(req)
-            case OpenClawSystemCommand.which.rawValue:
+            case MarketingClawSystemCommand.which.rawValue:
                 return try await self.handleSystemWhich(req)
-            case OpenClawSystemCommand.notify.rawValue:
+            case MarketingClawSystemCommand.notify.rawValue:
                 return try await self.handleSystemNotify(req)
-            case OpenClawSystemCommand.execApprovalsGet.rawValue:
+            case MarketingClawSystemCommand.execApprovalsGet.rawValue:
                 return try await self.handleSystemExecApprovalsGet(req)
-            case OpenClawSystemCommand.execApprovalsSet.rawValue:
+            case MarketingClawSystemCommand.execApprovalsSet.rawValue:
                 return try await self.handleSystemExecApprovalsSet(req)
             case MacNodeCodexThreadCatalogContract.listCommand:
                 guard self.codexThreadCatalogEnabled() else {
@@ -141,9 +141,9 @@ actor MacNodeRuntime {
 
     private func handleCanvasInvoke(_ req: BridgeInvokeRequest) async throws -> BridgeInvokeResponse {
         switch req.command {
-        case OpenClawCanvasCommand.present.rawValue:
-            let params = (try? Self.decodeParams(OpenClawCanvasPresentParams.self, from: req.paramsJSON)) ??
-                OpenClawCanvasPresentParams()
+        case MarketingClawCanvasCommand.present.rawValue:
+            let params = (try? Self.decodeParams(MarketingClawCanvasPresentParams.self, from: req.paramsJSON)) ??
+                MarketingClawCanvasPresentParams()
             let urlTrimmed = params.url?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
             let url = urlTrimmed.isEmpty ? nil : urlTrimmed
             let placement = params.placement.map {
@@ -157,29 +157,29 @@ actor MacNodeRuntime {
                     placement: placement)
             }
             return BridgeInvokeResponse(id: req.id, ok: true)
-        case OpenClawCanvasCommand.hide.rawValue:
+        case MarketingClawCanvasCommand.hide.rawValue:
             let sessionKey = self.mainSessionKey
             await MainActor.run {
                 CanvasManager.shared.hide(sessionKey: sessionKey)
             }
             return BridgeInvokeResponse(id: req.id, ok: true)
-        case OpenClawCanvasCommand.navigate.rawValue:
-            let params = try Self.decodeParams(OpenClawCanvasNavigateParams.self, from: req.paramsJSON)
+        case MarketingClawCanvasCommand.navigate.rawValue:
+            let params = try Self.decodeParams(MarketingClawCanvasNavigateParams.self, from: req.paramsJSON)
             let sessionKey = self.mainSessionKey
             try await MainActor.run {
                 _ = try CanvasManager.shared.show(sessionKey: sessionKey, path: params.url)
             }
             return BridgeInvokeResponse(id: req.id, ok: true)
-        case OpenClawCanvasCommand.evalJS.rawValue:
-            let params = try Self.decodeParams(OpenClawCanvasEvalParams.self, from: req.paramsJSON)
+        case MarketingClawCanvasCommand.evalJS.rawValue:
+            let params = try Self.decodeParams(MarketingClawCanvasEvalParams.self, from: req.paramsJSON)
             let sessionKey = self.mainSessionKey
             let result = try await CanvasManager.shared.eval(
                 sessionKey: sessionKey,
                 javaScript: params.javaScript)
             let payload = try Self.encodePayload(["result": result] as [String: String])
             return BridgeInvokeResponse(id: req.id, ok: true, payloadJSON: payload)
-        case OpenClawCanvasCommand.snapshot.rawValue:
-            let params = try? Self.decodeParams(OpenClawCanvasSnapshotParams.self, from: req.paramsJSON)
+        case MarketingClawCanvasCommand.snapshot.rawValue:
+            let params = try? Self.decodeParams(MarketingClawCanvasSnapshotParams.self, from: req.paramsJSON)
             let format = params?.format ?? .jpeg
             let maxWidth: Int? = {
                 if let raw = params?.maxWidth, raw > 0 {
@@ -216,10 +216,10 @@ actor MacNodeRuntime {
 
     private func handleA2UIInvoke(_ req: BridgeInvokeRequest) async throws -> BridgeInvokeResponse {
         switch req.command {
-        case OpenClawCanvasA2UICommand.reset.rawValue:
+        case MarketingClawCanvasA2UICommand.reset.rawValue:
             try await self.handleA2UIReset(req)
-        case OpenClawCanvasA2UICommand.push.rawValue,
-             OpenClawCanvasA2UICommand.pushJSONL.rawValue:
+        case MarketingClawCanvasA2UICommand.push.rawValue,
+             MarketingClawCanvasA2UICommand.pushJSONL.rawValue:
             try await self.handleA2UIPush(req)
         default:
             Self.errorResponse(req, code: .invalidRequest, message: "INVALID_REQUEST: unknown command")
@@ -231,7 +231,7 @@ actor MacNodeRuntime {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(
+                error: MarketingClawNodeError(
                     code: .unavailable,
                     message: "BROWSER_DISABLED: enable Browser in Settings"))
         }
@@ -244,14 +244,14 @@ actor MacNodeRuntime {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(
+                error: MarketingClawNodeError(
                     code: .unavailable,
                     message: "CAMERA_DISABLED: enable Camera in Settings"))
         }
         switch req.command {
-        case OpenClawCameraCommand.snap.rawValue:
-            let params = (try? Self.decodeParams(OpenClawCameraSnapParams.self, from: req.paramsJSON)) ??
-                OpenClawCameraSnapParams()
+        case MarketingClawCameraCommand.snap.rawValue:
+            let params = (try? Self.decodeParams(MarketingClawCameraSnapParams.self, from: req.paramsJSON)) ??
+                MarketingClawCameraSnapParams()
             let delayMs = min(10000, max(0, params.delayMs ?? 2000))
             let res = try await self.cameraCapture.snap(
                 facing: CameraFacing(rawValue: params.facing?.rawValue ?? "") ?? .front,
@@ -271,9 +271,9 @@ actor MacNodeRuntime {
                 width: Int(res.size.width),
                 height: Int(res.size.height)))
             return BridgeInvokeResponse(id: req.id, ok: true, payloadJSON: payload)
-        case OpenClawCameraCommand.clip.rawValue:
-            let params = (try? Self.decodeParams(OpenClawCameraClipParams.self, from: req.paramsJSON)) ??
-                OpenClawCameraClipParams()
+        case MarketingClawCameraCommand.clip.rawValue:
+            let params = (try? Self.decodeParams(MarketingClawCameraClipParams.self, from: req.paramsJSON)) ??
+                MarketingClawCameraClipParams()
             let res = try await self.cameraCapture.clip(
                 facing: CameraFacing(rawValue: params.facing?.rawValue ?? "") ?? .front,
                 durationMs: params.durationMs,
@@ -294,7 +294,7 @@ actor MacNodeRuntime {
                 durationMs: res.durationMs,
                 hasAudio: res.hasAudio))
             return BridgeInvokeResponse(id: req.id, ok: true, payloadJSON: payload)
-        case OpenClawCameraCommand.list.rawValue:
+        case MarketingClawCameraCommand.list.rawValue:
             let devices = await self.cameraCapture.listDevices()
             let payload = try Self.encodePayload(["devices": devices])
             return BridgeInvokeResponse(id: req.id, ok: true, payloadJSON: payload)
@@ -309,12 +309,12 @@ actor MacNodeRuntime {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(
+                error: MarketingClawNodeError(
                     code: .unavailable,
                     message: "LOCATION_DISABLED: enable Location in Settings"))
         }
-        let params = (try? Self.decodeParams(OpenClawLocationGetParams.self, from: req.paramsJSON)) ??
-            OpenClawLocationGetParams()
+        let params = (try? Self.decodeParams(MarketingClawLocationGetParams.self, from: req.paramsJSON)) ??
+            MarketingClawLocationGetParams()
         let desired = params.desiredAccuracy ??
             (Self.locationPreciseEnabled() ? .precise : .balanced)
         let services = await self.mainActorServices()
@@ -331,7 +331,7 @@ actor MacNodeRuntime {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(
+                error: MarketingClawNodeError(
                     code: .unavailable,
                     message: "LOCATION_PERMISSION_REQUIRED: grant Location permission"))
         }
@@ -341,7 +341,7 @@ actor MacNodeRuntime {
                 maxAgeMs: params.maxAgeMs,
                 timeoutMs: params.timeoutMs)
             let isPrecise = await services.locationAccuracyAuthorization() == .fullAccuracy
-            let payload = OpenClawLocationPayload(
+            let payload = MarketingClawLocationPayload(
                 lat: location.coordinate.latitude,
                 lon: location.coordinate.longitude,
                 accuracyMeters: location.horizontalAccuracy,
@@ -357,14 +357,14 @@ actor MacNodeRuntime {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(
+                error: MarketingClawNodeError(
                     code: .unavailable,
                     message: "LOCATION_TIMEOUT: no fix in time"))
         } catch {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(
+                error: MarketingClawNodeError(
                     code: .unavailable,
                     message: "LOCATION_UNAVAILABLE: \(error.localizedDescription)"))
         }
@@ -375,13 +375,13 @@ actor MacNodeRuntime {
             return BridgeInvokeResponse(
                 id: req.id,
                 ok: false,
-                error: OpenClawNodeError(
+                error: MarketingClawNodeError(
                     code: .unavailable,
                     message: "COMPUTER_DISABLED: enable Computer Control in Settings"))
         }
-        let params: OpenClawComputerActParams
+        let params: MarketingClawComputerActParams
         do {
-            params = try Self.decodeParams(OpenClawComputerActParams.self, from: req.paramsJSON)
+            params = try Self.decodeParams(MarketingClawComputerActParams.self, from: req.paramsJSON)
         } catch {
             return Self.errorResponse(
                 req,
@@ -399,7 +399,7 @@ actor MacNodeRuntime {
                 return Self.errorResponse(
                     req,
                     code: .unavailable,
-                    message: "ACCESSIBILITY_REQUIRED: grant Accessibility permission to OpenClaw")
+                    message: "ACCESSIBILITY_REQUIRED: grant Accessibility permission to MarketingClaw")
             case .noDisplays, .invalidScreenIndex, .missingCoordinate, .coordinateOutOfBounds,
                  .invalidReferenceWidth, .missingKeys, .emptyText, .invalidScroll, .invalidModifier:
                 return Self.errorResponse(
@@ -467,7 +467,7 @@ actor MacNodeRuntime {
         }
         let services = await self.mainActorServices()
         let capturedAtMs = Int64(Date().timeIntervalSince1970 * 1000)
-        let res: (data: Data, format: OpenClawScreenSnapshotFormat, width: Int, height: Int)
+        let res: (data: Data, format: MarketingClawScreenSnapshotFormat, width: Int, height: Int)
         do {
             res = try await services.snapshotScreen(
                 screenIndex: params.screenIndex,
@@ -549,8 +549,8 @@ actor MacNodeRuntime {
         let sessionKey = self.mainSessionKey
         let json = try await CanvasManager.shared.eval(sessionKey: sessionKey, javaScript: """
         (() => {
-          const host = globalThis.openclawA2UI;
-          if (!host) return JSON.stringify({ ok: false, error: "missing openclawA2UI" });
+          const host = globalThis.marketingclawA2UI;
+          if (!host) return JSON.stringify({ ok: false, error: "missing marketingclawA2UI" });
           return JSON.stringify(host.reset());
         })()
         """)
@@ -559,28 +559,28 @@ actor MacNodeRuntime {
 
     private func handleA2UIPush(_ req: BridgeInvokeRequest) async throws -> BridgeInvokeResponse {
         let command = req.command
-        let messages: [OpenClawKit.AnyCodable]
-        if command == OpenClawCanvasA2UICommand.pushJSONL.rawValue {
-            let params = try Self.decodeParams(OpenClawCanvasA2UIPushJSONLParams.self, from: req.paramsJSON)
-            messages = try OpenClawCanvasA2UIJSONL.decodeMessagesFromJSONL(params.jsonl)
+        let messages: [MarketingClawKit.AnyCodable]
+        if command == MarketingClawCanvasA2UICommand.pushJSONL.rawValue {
+            let params = try Self.decodeParams(MarketingClawCanvasA2UIPushJSONLParams.self, from: req.paramsJSON)
+            messages = try MarketingClawCanvasA2UIJSONL.decodeMessagesFromJSONL(params.jsonl)
         } else {
             do {
-                let params = try Self.decodeParams(OpenClawCanvasA2UIPushParams.self, from: req.paramsJSON)
+                let params = try Self.decodeParams(MarketingClawCanvasA2UIPushParams.self, from: req.paramsJSON)
                 messages = params.messages
             } catch {
-                let params = try Self.decodeParams(OpenClawCanvasA2UIPushJSONLParams.self, from: req.paramsJSON)
-                messages = try OpenClawCanvasA2UIJSONL.decodeMessagesFromJSONL(params.jsonl)
+                let params = try Self.decodeParams(MarketingClawCanvasA2UIPushJSONLParams.self, from: req.paramsJSON)
+                messages = try MarketingClawCanvasA2UIJSONL.decodeMessagesFromJSONL(params.jsonl)
             }
         }
 
         try await self.ensureA2UIHost()
 
-        let messagesJSON = try OpenClawCanvasA2UIJSONL.encodeMessagesJSONArray(messages)
+        let messagesJSON = try MarketingClawCanvasA2UIJSONL.encodeMessagesJSONArray(messages)
         let js = """
         (() => {
           try {
-            const host = globalThis.openclawA2UI;
-            if (!host) return JSON.stringify({ ok: false, error: "missing openclawA2UI" });
+            const host = globalThis.marketingclawA2UI;
+            if (!host) return JSON.stringify({ ok: false, error: "missing marketingclawA2UI" });
             const messages = \(messagesJSON);
             return JSON.stringify(host.applyMessages(messages));
           } catch (e) {
@@ -631,7 +631,7 @@ actor MacNodeRuntime {
         guard let raw else { return nil }
         let trimmed = raw.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty, let baseUrl = URL(string: trimmed) else { return nil }
-        return baseUrl.appendingPathComponent("__openclaw__/a2ui/").absoluteString + "?platform=macos"
+        return baseUrl.appendingPathComponent("__marketingclaw__/a2ui/").absoluteString + "?platform=macos"
     }
 
     func resolveA2UIHostUrlWithCapabilityRefresh(forceRefresh: Bool = false) async -> String? {
@@ -649,7 +649,7 @@ actor MacNodeRuntime {
                 let sessionKey = self.mainSessionKey
                 let ready = try await CanvasManager.shared.eval(sessionKey: sessionKey, javaScript: """
                 (() => {
-                  const host = globalThis.openclawA2UI;
+                  const host = globalThis.marketingclawA2UI;
                   return String(Boolean(host));
                 })()
                 """)
@@ -667,7 +667,7 @@ actor MacNodeRuntime {
     }
 
     private func handleSystemRun(_ req: BridgeInvokeRequest) async throws -> BridgeInvokeResponse {
-        let params = try Self.decodeParams(OpenClawSystemRunParams.self, from: req.paramsJSON)
+        let params = try Self.decodeParams(MarketingClawSystemRunParams.self, from: req.paramsJSON)
         let command = params.command
         guard !command.isEmpty else {
             return Self.errorResponse(req, code: .invalidRequest, message: "INVALID_REQUEST: command required")
@@ -784,7 +784,7 @@ actor MacNodeRuntime {
     }
 
     private func handleSystemWhich(_ req: BridgeInvokeRequest) async throws -> BridgeInvokeResponse {
-        let params = try Self.decodeParams(OpenClawSystemWhichParams.self, from: req.paramsJSON)
+        let params = try Self.decodeParams(MarketingClawSystemWhichParams.self, from: req.paramsJSON)
         let bins = params.bins
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
             .filter { !$0.isEmpty }
@@ -830,7 +830,7 @@ actor MacNodeRuntime {
 
     private func resolveSystemRunApproval(
         req: BridgeInvokeRequest,
-        params: OpenClawSystemRunParams,
+        params: MarketingClawSystemRunParams,
         context: ExecRunContext) async -> ExecApprovalOutcome
     {
         let requiresAsk = ExecApprovalHelpers.requiresAsk(
@@ -1000,7 +1000,7 @@ actor MacNodeRuntime {
     }
 
     private func handleSystemNotify(_ req: BridgeInvokeRequest) async throws -> BridgeInvokeResponse {
-        let params = try Self.decodeParams(OpenClawSystemNotifyParams.self, from: req.paramsJSON)
+        let params = try Self.decodeParams(MarketingClawSystemNotifyParams.self, from: req.paramsJSON)
         let title = params.title.trimmingCharacters(in: .whitespacesAndNewlines)
         let body = params.body.trimmingCharacters(in: .whitespacesAndNewlines)
         if title.isEmpty, body.isEmpty {
@@ -1105,7 +1105,7 @@ extension MacNodeRuntime {
 
     private func executeSystemRun(
         req: BridgeInvokeRequest,
-        params: OpenClawSystemRunParams,
+        params: MarketingClawSystemRunParams,
         command: [String],
         env: [String: String],
         sessionKey: String,
@@ -1225,9 +1225,9 @@ extension MacNodeRuntime {
         UserDefaults.standard.object(forKey: computerControlEnabledKey) as? Bool ?? false
     }
 
-    private nonisolated static func locationMode() -> OpenClawLocationMode {
+    private nonisolated static func locationMode() -> MarketingClawLocationMode {
         let raw = UserDefaults.standard.string(forKey: locationModeKey) ?? "off"
-        return OpenClawLocationMode(rawValue: raw) ?? .off
+        return MarketingClawLocationMode(rawValue: raw) ?? .off
     }
 
     private nonisolated static func locationPreciseEnabled() -> Bool {
@@ -1239,18 +1239,18 @@ extension MacNodeRuntime {
 
     private static func errorResponse(
         _ req: BridgeInvokeRequest,
-        code: OpenClawNodeErrorCode,
+        code: MarketingClawNodeErrorCode,
         message: String) -> BridgeInvokeResponse
     {
         BridgeInvokeResponse(
             id: req.id,
             ok: false,
-            error: OpenClawNodeError(code: code, message: message))
+            error: MarketingClawNodeError(code: code, message: message))
     }
 
     private static func encodeCanvasSnapshot(
         image: NSImage,
-        format: OpenClawCanvasSnapshotFormat,
+        format: MarketingClawCanvasSnapshotFormat,
         maxWidth: Int?,
         quality: Double) throws -> Data
     {

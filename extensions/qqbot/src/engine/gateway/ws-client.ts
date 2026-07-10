@@ -1,6 +1,6 @@
 // Qqbot plugin module implements ws client behavior.
 import type { Agent } from "node:http";
-import { resolveAmbientNodeProxyAgent } from "openclaw/plugin-sdk/extension-shared";
+import { resolveAmbientNodeProxyAgent } from "marketingclaw/plugin-sdk/extension-shared";
 import WebSocket from "ws";
 
 interface QQWSClientOptions {

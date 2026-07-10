@@ -6,10 +6,10 @@ import {
   clearRuntimeAuthProfileStoreSnapshots,
   replaceRuntimeAuthProfileStoreSnapshots,
 } from "../../agents/auth-profiles.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import { createDeferred } from "../../test-utils/deferred.js";
 import { withEnvAsync } from "../../test-utils/env.js";
-import { withOpenClawTestState } from "../../test-utils/openclaw-test-state.js";
+import { withMarketingClawTestState } from "../../test-utils/marketingclaw-test-state.js";
 import { expectGatewayErrorResponse } from "./gateway-response.test-helpers.js";
 import { modelsHandlers } from "./models.js";
 import type { RespondFn } from "./types.js";
@@ -43,7 +43,7 @@ function createDemoOAuthStore(params: { access: string; expires: number }) {
 function requestModelsList(params: {
   view: "configured" | "all";
   respond?: ReturnType<typeof vi.fn>;
-  runtimeConfig?: OpenClawConfig;
+  runtimeConfig?: MarketingClawConfig;
   loadGatewayModelCatalog: () => Promise<Array<Record<string, unknown>>>;
   reqId?: string;
 }) {
@@ -60,7 +60,7 @@ function requestModelsList(params: {
     client: null,
     isWebchatConnect: () => false,
     context: {
-      getRuntimeConfig: () => params.runtimeConfig ?? ({} as OpenClawConfig),
+      getRuntimeConfig: () => params.runtimeConfig ?? ({} as MarketingClawConfig),
       loadGatewayModelCatalog: params.loadGatewayModelCatalog,
       logGateway: {
         debug: vi.fn(),
@@ -84,7 +84,7 @@ describe("models.list", () => {
             },
           },
         },
-      } as unknown as OpenClawConfig;
+      } as unknown as MarketingClawConfig;
 
       vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
       try {
@@ -136,7 +136,7 @@ describe("models.list", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
 
     vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
     try {
@@ -249,7 +249,7 @@ describe("models.list", () => {
           vllm: { apiKey: "test-key" },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
 
     const loadConfiguredCatalog = vi.fn(() => Promise.resolve(catalog));
     const { request: configuredRequest, respond: configuredRespond } = requestModelsList({
@@ -298,10 +298,10 @@ describe("models.list", () => {
   });
 
   it("marks legacy OpenAI Codex aliases available through ChatGPT OAuth", async () => {
-    await withOpenClawTestState(
+    await withMarketingClawTestState(
       {
         layout: "state-only",
-        prefix: "openclaw-models-list-codex-alias-",
+        prefix: "marketingclaw-models-list-codex-alias-",
         agentEnv: "main",
       },
       async (state) => {
@@ -355,10 +355,10 @@ describe("models.list", () => {
 
   it("marks catalog models available through their configured CLI runtime", async () => {
     await withEnvAsync({ ANTHROPIC_API_KEY: undefined }, async () => {
-      await withOpenClawTestState(
+      await withMarketingClawTestState(
         {
           layout: "state-only",
-          prefix: "openclaw-models-list-cli-runtime-",
+          prefix: "marketingclaw-models-list-cli-runtime-",
           agentEnv: "main",
         },
         async (state) => {
@@ -385,7 +385,7 @@ describe("models.list", () => {
                 },
               },
             },
-          } as unknown as OpenClawConfig;
+          } as unknown as MarketingClawConfig;
           const { request, respond } = requestModelsList({
             view: "all",
             runtimeConfig,
@@ -442,7 +442,7 @@ describe("models.list", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
 
     const { request, respond } = requestModelsList({
       view: "all",
@@ -478,7 +478,7 @@ describe("models.list", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
 
     const { request, respond } = requestModelsList({
       view: "all",
@@ -500,10 +500,10 @@ describe("models.list", () => {
   });
 
   it("does not mark catalog rows available from expired OAuth profiles", async () => {
-    await withOpenClawTestState(
+    await withMarketingClawTestState(
       {
         layout: "state-only",
-        prefix: "openclaw-models-list-expired-profile-",
+        prefix: "marketingclaw-models-list-expired-profile-",
         agentEnv: "main",
       },
       async (state) => {
@@ -542,10 +542,10 @@ describe("models.list", () => {
   });
 
   it("uses refreshed persisted OAuth when the runtime auth snapshot is stale", async () => {
-    await withOpenClawTestState(
+    await withMarketingClawTestState(
       {
         layout: "state-only",
-        prefix: "openclaw-models-list-stale-runtime-profile-",
+        prefix: "marketingclaw-models-list-stale-runtime-profile-",
         agentEnv: "main",
       },
       async (state) => {
@@ -600,10 +600,10 @@ describe("models.list", () => {
   });
 
   it("marks env SecretRef-backed auth profiles available", async () => {
-    await withOpenClawTestState(
+    await withMarketingClawTestState(
       {
         layout: "state-only",
-        prefix: "openclaw-models-list-env-profile-",
+        prefix: "marketingclaw-models-list-env-profile-",
         agentEnv: "main",
         env: {
           DEMO_PROVIDER_TOKEN: "test-token",
@@ -654,10 +654,10 @@ describe("models.list", () => {
   });
 
   it("keeps non-env SecretRef-backed auth profile availability unknown", async () => {
-    await withOpenClawTestState(
+    await withMarketingClawTestState(
       {
         layout: "state-only",
-        prefix: "openclaw-models-list-file-profile-",
+        prefix: "marketingclaw-models-list-file-profile-",
         agentEnv: "main",
       },
       async (state) => {
@@ -716,13 +716,13 @@ describe("models.list", () => {
       },
       { name: "managed-marker", apiKey: "secretref-managed" },
     ] as const) {
-      await withOpenClawTestState(
+      await withMarketingClawTestState(
         {
           layout: "state-only",
-          prefix: `openclaw-models-list-provider-${fixture.name}-profile-`,
+          prefix: `marketingclaw-models-list-provider-${fixture.name}-profile-`,
           agentEnv: "main",
           env: {
-            OPENCLAW_TEST_PROFILE_API_KEY: "test-token",
+            MARKETINGCLAW_TEST_PROFILE_API_KEY: "test-token",
             VLLM_API_KEY: undefined,
           },
         },
@@ -736,7 +736,7 @@ describe("models.list", () => {
                 keyRef: {
                   source: "env",
                   provider: "default",
-                  id: "OPENCLAW_TEST_PROFILE_API_KEY",
+                  id: "MARKETINGCLAW_TEST_PROFILE_API_KEY",
                 },
               },
             },
@@ -757,7 +757,7 @@ describe("models.list", () => {
                 },
               },
             },
-          } as unknown as OpenClawConfig;
+          } as unknown as MarketingClawConfig;
 
           const { request, respond } = requestModelsList({
             view: "all",

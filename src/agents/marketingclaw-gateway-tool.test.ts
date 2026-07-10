@@ -1,4 +1,4 @@
-// Verifies OpenClaw gateway tool schema, restart signaling, and config mutations.
+// Verifies MarketingClaw gateway tool schema, restart signaling, and config mutations.
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -306,11 +306,11 @@ describe("gateway tool", () => {
       );
     const sigusr1Handler = vi.fn();
     process.on("SIGUSR1", sigusr1Handler);
-    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-test-"));
+    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-test-"));
 
     try {
       await withEnvAsync(
-        { OPENCLAW_STATE_DIR: stateDir, OPENCLAW_PROFILE: "isolated" },
+        { MARKETINGCLAW_STATE_DIR: stateDir, MARKETINGCLAW_PROFILE: "isolated" },
         async () => {
           const tool = requireGatewayTool();
 
@@ -336,7 +336,7 @@ describe("gateway tool", () => {
           const sentinel = await readRestartSentinel();
           expect(sentinel?.payload.kind).toBe("restart");
           expect(sentinel?.payload.doctorHint).toBe(
-            "Recommended follow-up: run openclaw --profile isolated doctor --non-interactive in a terminal or approvals-capable OpenClaw surface.",
+            "Recommended follow-up: run marketingclaw --profile isolated doctor --non-interactive in a terminal or approvals-capable MarketingClaw surface.",
           );
         },
       );
@@ -366,7 +366,7 @@ describe("gateway tool", () => {
       if (method === "config.apply") {
         return {
           ok: true,
-          path: "/tmp/openclaw.json",
+          path: "/tmp/marketingclaw.json",
           config: { agents: { defaults: { reasoningDefault: "medium" } } },
           restart: { ok: true, config: "nested field preserved" },
         };
@@ -387,7 +387,7 @@ describe("gateway tool", () => {
       ok: true,
       result: {
         ok: true,
-        path: "/tmp/openclaw.json",
+        path: "/tmp/marketingclaw.json",
         restart: { ok: true, config: "nested field preserved" },
       },
     });
@@ -418,7 +418,7 @@ describe("gateway tool", () => {
         return {
           ok: true,
           noop: true,
-          path: "/tmp/openclaw.json",
+          path: "/tmp/marketingclaw.json",
           config: { channels: { telegram: { groups: {} } } },
         };
       }
@@ -439,7 +439,7 @@ describe("gateway tool", () => {
       result: {
         ok: true,
         noop: true,
-        path: "/tmp/openclaw.json",
+        path: "/tmp/marketingclaw.json",
       },
     });
     expectConfigMutationCall({
@@ -544,7 +544,7 @@ describe("gateway tool", () => {
                     allowedValueFlags: ["-c"],
                   },
                 },
-                safeBinTrustedDirs: ["/tmp/openclaw-bin"],
+                safeBinTrustedDirs: ["/tmp/marketingclaw-bin"],
                 strictInlineEval: true,
               },
             },
@@ -564,7 +564,7 @@ describe("gateway tool", () => {
               allowedValueFlags: ["-c"],
             },
           },
-          safeBinTrustedDirs: ["/tmp/openclaw-bin"],
+          safeBinTrustedDirs: ["/tmp/marketingclaw-bin"],
           strictInlineEval: true,
         },
       },
@@ -681,7 +681,7 @@ describe("gateway tool", () => {
     await expect(
       tool.execute("call-protected-safe-bin-trust-apply", {
         action: "config.apply",
-        raw: '{ tools: { exec: { ask: "on-miss", security: "allowlist", safeBinTrustedDirs: ["/tmp/openclaw-bin"] } } }',
+        raw: '{ tools: { exec: { ask: "on-miss", security: "allowlist", safeBinTrustedDirs: ["/tmp/marketingclaw-bin"] } } }',
       }),
     ).rejects.toThrow(
       "gateway config.apply cannot change protected config paths: tools.exec.safeBinTrustedDirs",

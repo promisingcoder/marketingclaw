@@ -1,5 +1,5 @@
 ---
-summary: "Adds Volcengine, Volcengine Plan model provider support to OpenClaw."
+summary: "Adds Volcengine, Volcengine Plan model provider support to MarketingClaw."
 read_when:
   - You are installing, configuring, or auditing the volcengine plugin
 title: "Volcengine plugin"
@@ -7,12 +7,12 @@ title: "Volcengine plugin"
 
 # Volcengine plugin
 
-Adds Volcengine, Volcengine Plan model provider support to OpenClaw.
+Adds Volcengine, Volcengine Plan model provider support to MarketingClaw.
 
 ## Distribution
 
-- Package: `@openclaw/volcengine-provider`
-- Install route: included in OpenClaw
+- Package: `@marketingclaw/volcengine-provider`
+- Install route: included in MarketingClaw
 
 ## Surface
 

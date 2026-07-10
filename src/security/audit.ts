@@ -1,22 +1,22 @@
 // Orchestrates security audit collection and report formatting.
 import fs from "node:fs/promises";
 import path from "node:path";
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
-import { asNullableRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeProviderId } from "@marketingclaw/model-catalog-core/provider-id";
+import { asNullableRecord } from "@marketingclaw/normalization-core/record-coerce";
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
-import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
+} from "@marketingclaw/normalization-core/string-coerce";
+import { normalizeStringEntries } from "@marketingclaw/normalization-core/string-normalization";
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../agents/agent-scope.js";
 import { resolveExecDefaults } from "../agents/exec-defaults.js";
 import { resolveSandboxConfigForAgent } from "../agents/sandbox/config.js";
 import type { ChannelPlugin } from "../channels/plugins/types.plugin.js";
-import type { ConfigFileSnapshot, OpenClawConfig } from "../config/config.js";
+import type { ConfigFileSnapshot, MarketingClawConfig } from "../config/config.js";
 import { resolveConfigPath, resolveStateDir } from "../config/paths.js";
 import type { CliBackendConfig } from "../config/types.agent-defaults.js";
 import type { GatewayAuthConfig } from "../config/types.gateway.js";
-import type { SecurityAuditSuppression } from "../config/types.openclaw.js";
+import type { SecurityAuditSuppression } from "../config/types.marketingclaw.js";
 import {
   canMaterializeGatewayAuthSecretRefsWithoutExec,
   materializeGatewayAuthSecretRefs,
@@ -90,8 +90,8 @@ export type {
 } from "./audit.types.js";
 
 export type SecurityAuditOptions = {
-  config: OpenClawConfig;
-  sourceConfig?: OpenClawConfig;
+  config: MarketingClawConfig;
+  sourceConfig?: MarketingClawConfig;
   env?: NodeJS.ProcessEnv;
   platform?: NodeJS.Platform;
   deep?: boolean;
@@ -126,8 +126,8 @@ export type SecurityAuditOptions = {
 };
 
 export type AuditExecutionContext = {
-  cfg: OpenClawConfig;
-  sourceConfig: OpenClawConfig;
+  cfg: MarketingClawConfig;
+  sourceConfig: MarketingClawConfig;
   env: NodeJS.ProcessEnv;
   platform: NodeJS.Platform;
   includeFilesystem: boolean;
@@ -247,15 +247,17 @@ function normalizeSuppressionText(value: string | undefined): string {
 }
 
 async function materializeAuditGatewayAuthRefs(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   env: NodeJS.ProcessEnv;
-}): Promise<OpenClawConfig> {
+}): Promise<MarketingClawConfig> {
   const materializeParams = {
     cfg: params.cfg,
     env: params.env,
     mode: params.cfg.gateway?.auth?.mode,
-    hasTokenCandidate: Boolean(normalizeOptionalString(params.env.OPENCLAW_GATEWAY_TOKEN)),
-    hasPasswordCandidate: Boolean(normalizeOptionalString(params.env.OPENCLAW_GATEWAY_PASSWORD)),
+    hasTokenCandidate: Boolean(normalizeOptionalString(params.env.MARKETINGCLAW_GATEWAY_TOKEN)),
+    hasPasswordCandidate: Boolean(
+      normalizeOptionalString(params.env.MARKETINGCLAW_GATEWAY_PASSWORD),
+    ),
   };
   if (!canMaterializeGatewayAuthSecretRefsWithoutExec(materializeParams)) {
     return params.cfg;
@@ -267,7 +269,7 @@ async function materializeAuditGatewayAuthRefs(params: {
   }
 }
 
-function shouldMaterializeHooksGatewayAuthRefs(cfg: OpenClawConfig): boolean {
+function shouldMaterializeHooksGatewayAuthRefs(cfg: MarketingClawConfig): boolean {
   return cfg.hooks?.enabled === true && Boolean(normalizeOptionalString(cfg.hooks.token));
 }
 
@@ -367,7 +369,7 @@ export async function collectFilesystemFindings(params: {
         checkId: "fs.state_dir.perms_world_writable",
         severity: "critical",
         title: "State dir is world-writable",
-        detail: `${formatPermissionDetail(params.stateDir, stateDirPerms)}; other users can write into your OpenClaw state.`,
+        detail: `${formatPermissionDetail(params.stateDir, stateDirPerms)}; other users can write into your MarketingClaw state.`,
         remediation: formatPermissionRemediation({
           targetPath: params.stateDir,
           perms: stateDirPerms,
@@ -381,7 +383,7 @@ export async function collectFilesystemFindings(params: {
         checkId: "fs.state_dir.perms_group_writable",
         severity: "warn",
         title: "State dir is group-writable",
-        detail: `${formatPermissionDetail(params.stateDir, stateDirPerms)}; group users can write into your OpenClaw state.`,
+        detail: `${formatPermissionDetail(params.stateDir, stateDirPerms)}; group users can write into your MarketingClaw state.`,
         remediation: formatPermissionRemediation({
           targetPath: params.stateDir,
           perms: stateDirPerms,
@@ -471,8 +473,8 @@ export async function collectFilesystemFindings(params: {
 }
 
 export function collectGatewayConfigFindings(
-  cfg: OpenClawConfig,
-  sourceConfig: OpenClawConfig,
+  cfg: MarketingClawConfig,
+  sourceConfig: MarketingClawConfig,
   env: NodeJS.ProcessEnv,
   options: { gatewayAuthOverride?: SecurityAuditGatewayAuthOverride } = {},
 ): SecurityAuditFinding[] {
@@ -574,7 +576,7 @@ export async function collectPluginSecurityAuditFindings(
   return collectorResults.flat();
 }
 
-export function collectLoggingFindings(cfg: OpenClawConfig): SecurityAuditFinding[] {
+export function collectLoggingFindings(cfg: MarketingClawConfig): SecurityAuditFinding[] {
   const redact = cfg.logging?.redactSensitive;
   if (redact !== "off") {
     return [];
@@ -590,7 +592,7 @@ export function collectLoggingFindings(cfg: OpenClawConfig): SecurityAuditFindin
   ];
 }
 
-export function collectElevatedFindings(cfg: OpenClawConfig): SecurityAuditFinding[] {
+export function collectElevatedFindings(cfg: MarketingClawConfig): SecurityAuditFinding[] {
   const findings: SecurityAuditFinding[] = [];
   const enabled = cfg.tools?.elevated?.enabled;
   const allowFrom = cfg.tools?.elevated?.allowFrom ?? {};
@@ -708,7 +710,7 @@ function findClaudeCliBackendConfig(
   return undefined;
 }
 
-function collectYoloExecScopeIds(cfg: OpenClawConfig, approvals: ExecApprovalsFile): string[] {
+function collectYoloExecScopeIds(cfg: MarketingClawConfig, approvals: ExecApprovalsFile): string[] {
   const agents = Array.isArray(cfg.agents?.list) ? cfg.agents.list : [];
   return [
     { id: DEFAULT_AGENT_ID },
@@ -740,7 +742,7 @@ function collectYoloExecScopeIds(cfg: OpenClawConfig, approvals: ExecApprovalsFi
     .map((entry) => entry.id);
 }
 
-export function collectExecRuntimeFindings(cfg: OpenClawConfig): SecurityAuditFinding[] {
+export function collectExecRuntimeFindings(cfg: MarketingClawConfig): SecurityAuditFinding[] {
   const findings: SecurityAuditFinding[] = [];
   const globalExecHost = cfg.tools?.exec?.host;
   const globalStrictInlineEval = cfg.tools?.exec?.strictInlineEval === true;
@@ -837,9 +839,9 @@ export function collectExecRuntimeFindings(cfg: OpenClawConfig): SecurityAuditFi
       checkId: "agents.claude_cli.permission_mode_overridden_by_yolo",
       severity: "warn",
       title: "Claude permission mode is ignored under YOLO exec",
-      detail: `claude-cli sets ${claudePermissionModeHits.map((hit) => `${hit.argSet}=${hit.mode}`).join(", ")}, but OpenClaw exec is YOLO for: ${yoloExecScopeIds.join(", ")}. Managed Claude live sessions use --permission-mode bypassPermissions.`,
+      detail: `claude-cli sets ${claudePermissionModeHits.map((hit) => `${hit.argSet}=${hit.mode}`).join(", ")}, but MarketingClaw exec is YOLO for: ${yoloExecScopeIds.join(", ")}. Managed Claude live sessions use --permission-mode bypassPermissions.`,
       remediation:
-        "Restrict OpenClaw tools.exec.security/tools.exec.ask, or remove the Claude --permission-mode override.",
+        "Restrict MarketingClaw tools.exec.security/tools.exec.ask, or remove the Claude --permission-mode override.",
     });
   }
 
@@ -1064,7 +1066,7 @@ function formatNamesPreview(names: readonly string[]): string {
   return `${visible.join(", ")}${suffix}`;
 }
 
-function listConfiguredMcpServerNames(cfg: OpenClawConfig): string[] {
+function listConfiguredMcpServerNames(cfg: MarketingClawConfig): string[] {
   return Object.entries(cfg.mcp?.servers ?? {})
     .filter(([, server]) => server?.enabled !== false)
     .map(([name]) => name)
@@ -1096,7 +1098,9 @@ function hasOwnSkillsAllowlist(entry: object | undefined): boolean {
   return Boolean(entry && Object.hasOwn(entry, "skills"));
 }
 
-function collectAgentSkillMcpBoundaryScopes(cfg: OpenClawConfig): AgentSkillMcpBoundaryScope[] {
+function collectAgentSkillMcpBoundaryScopes(
+  cfg: MarketingClawConfig,
+): AgentSkillMcpBoundaryScope[] {
   const agents = Array.isArray(cfg.agents?.list) ? cfg.agents.list : [];
   const defaultsHaveSkillAllowlist = hasOwnSkillsAllowlist(cfg.agents?.defaults);
   const candidates = [
@@ -1154,7 +1158,7 @@ function collectAgentSkillMcpBoundaryScopes(cfg: OpenClawConfig): AgentSkillMcpB
 }
 
 async function collectAgentSkillMcpBoundaryFindings(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   stateDir: string;
 }): Promise<SecurityAuditFinding[]> {
   const sources: McpServerSourceSummary[] = [];
@@ -1192,7 +1196,7 @@ async function collectAgentSkillMcpBoundaryFindings(params: {
         `\nMCP server registries visible to the gateway configuration/state:\n${sources
           .map((source) => `- ${source.label}: ${formatNamesPreview(source.names)}`)
           .join("\n")}\n` +
-        "agents.*.skills filters OpenClaw skill visibility and snapshots; it is not a shell-time authorization boundary. " +
+        "agents.*.skills filters MarketingClaw skill visibility and snapshots; it is not a shell-time authorization boundary. " +
         "A host exec process can run external MCP clients or read a global mcporter registry unless sandbox, filesystem, network, or MCP credential boundaries block it.",
       remediation:
         'For agents that need per-agent MCP isolation, set their exec policy to security="deny" or a tight allowlist, run them in sandbox/container/OS-user isolation where the global MCP registry is not readable, split sensitive MCP servers into a separate gateway/trust boundary, or require per-agent MCP credentials at the server layer.',
@@ -1200,7 +1204,7 @@ async function collectAgentSkillMcpBoundaryFindings(params: {
   ];
 }
 
-function collectOpenExecSurfacePaths(cfg: OpenClawConfig): string[] {
+function collectOpenExecSurfacePaths(cfg: MarketingClawConfig): string[] {
   const channels = asNullableRecord(cfg.channels);
   if (!channels) {
     return [];
@@ -1268,7 +1272,7 @@ function collectInterpreterAllowlistHits(params: {
 }
 
 async function maybeProbeGateway(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   env: NodeJS.ProcessEnv;
   timeoutMs: number;
   probe: ProbeGatewayFn;

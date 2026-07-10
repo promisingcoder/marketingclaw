@@ -3,7 +3,7 @@
  * combines explicit policy, configured models, defaults, and runtime
  * auth-backed availability.
  */
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import type { ModelCatalogEntry } from "./model-catalog.js";
 import { createProviderAuthChecker } from "./model-provider-auth.js";
 import {
@@ -84,7 +84,7 @@ function sortModelCatalogEntries(entries: ModelCatalogEntry[]): ModelCatalogEntr
  * policy, configured models, and providers with usable auth.
  */
 export async function resolveVisibleModelCatalog(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   catalog: ModelCatalogEntry[];
   defaultProvider: string;
   defaultModel?: string;

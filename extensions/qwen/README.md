@@ -1,12 +1,12 @@
-# OpenClaw Qwen Cloud Provider
+# MarketingClaw Qwen Cloud Provider
 
-Official OpenClaw provider plugin for Qwen Cloud.
+Official MarketingClaw provider plugin for Qwen Cloud.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugins install @openclaw/qwen-provider
-openclaw gateway restart
+marketingclaw plugins install @marketingclaw/qwen-provider
+marketingclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/qwen> for setup and configuration.
+See <https://docs.marketingclaw.ai/providers/qwen> for setup and configuration.

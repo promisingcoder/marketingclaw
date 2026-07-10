@@ -5,19 +5,16 @@ const ssrfMocks = vi.hoisted(() => ({
   resolvePinnedHostnameWithPolicy: vi.fn(),
 }));
 
-vi.mock("openclaw/plugin-sdk/ssrf-runtime", () => ({
+vi.mock("marketingclaw/plugin-sdk/ssrf-runtime", () => ({
   resolvePinnedHostnameWithPolicy: ssrfMocks.resolvePinnedHostnameWithPolicy,
 }));
 
 afterAll(() => {
-  vi.doUnmock("openclaw/plugin-sdk/ssrf-runtime");
+  vi.doUnmock("marketingclaw/plugin-sdk/ssrf-runtime");
   vi.resetModules();
 });
 
-import {
-  resolveLineOutboundMedia,
-  validateLineMediaUrl,
-} from "./outbound-media.js";
+import { resolveLineOutboundMedia, validateLineMediaUrl } from "./outbound-media.js";
 
 describe("validateLineMediaUrl", () => {
   beforeEach(() => {

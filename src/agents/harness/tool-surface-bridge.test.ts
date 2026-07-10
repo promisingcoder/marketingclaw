@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import { createStubTool } from "../test-helpers/agent-tool-stubs.js";
 import {
   testing,
@@ -14,7 +14,7 @@ function tools(names: string[]) {
   return names.map(createStubTool);
 }
 
-function createRuntime(config: OpenClawConfig) {
+function createRuntime(config: MarketingClawConfig) {
   return createAgentHarnessToolSurfaceRuntime({
     config,
     executeTool: async () => ({ content: [], details: {} }),
@@ -24,7 +24,7 @@ function createRuntime(config: OpenClawConfig) {
 
 describe("createAgentHarnessToolSurfaceRuntime", () => {
   it("filters raw SDK tools but does not refilter prepared constructor output", () => {
-    const config: OpenClawConfig = {
+    const config: MarketingClawConfig = {
       agents: { defaults: { experimental: { localModelLean: true } } },
       tools: { alsoAllow: ["image_generate"], toolSearch: { enabled: false } },
     };
@@ -44,7 +44,7 @@ describe("createAgentHarnessToolSurfaceRuntime", () => {
   });
 
   it("keeps exec direct in lean structured Tool Search mode", () => {
-    const config: OpenClawConfig = {
+    const config: MarketingClawConfig = {
       agents: { defaults: { experimental: { localModelLean: true } } },
     };
     const runtime = createRuntime(config);
@@ -73,7 +73,7 @@ describe("createAgentHarnessToolSurfaceRuntime", () => {
   it("preserves explicit code-mode compaction for lean runs", () => {
     testing.setToolSearchCodeModeSupportedForTest(true);
     try {
-      const config: OpenClawConfig = {
+      const config: MarketingClawConfig = {
         agents: { defaults: { experimental: { localModelLean: true } } },
         tools: { toolSearch: { mode: "code" } },
       };

@@ -1,7 +1,7 @@
 import Foundation
 
-extension OpenClawChatViewModel {
-    nonisolated static func chatContextUsageFraction(for session: OpenClawChatSessionEntry?) -> Double? {
+extension MarketingClawChatViewModel {
+    nonisolated static func chatContextUsageFraction(for session: MarketingClawChatSessionEntry?) -> Double? {
         guard session?.totalTokensFresh != false,
               let totalTokens = session?.totalTokens,
               totalTokens >= 0,
@@ -25,13 +25,13 @@ extension OpenClawChatViewModel {
         self.contextUsageFraction = Self.chatContextUsageFraction(for: currentSession)
     }
 
-    public var sessionChoices: [OpenClawChatSessionEntry] {
+    public var sessionChoices: [MarketingClawChatSessionEntry] {
         let now = Date().timeIntervalSince1970 * 1000
         let cutoff = now - (24 * 60 * 60 * 1000)
-        let sorted = OpenClawChatSessionListOrganizer.organize(sessions)
+        let sorted = MarketingClawChatSessionListOrganizer.organize(sessions)
         let mainSessionKey = resolvedMainSessionKey
 
-        var result: [OpenClawChatSessionEntry] = []
+        var result: [MarketingClawChatSessionEntry] = []
         var included = Set<String>()
 
         // Always show the resolved main session first, even if it hasn't been updated recently.

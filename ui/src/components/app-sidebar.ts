@@ -70,7 +70,7 @@ import {
   resolveSessionAgentFilterOptions,
 } from "../lib/sessions/session-options.ts";
 import { normalizeOptionalString } from "../lib/string-coerce.ts";
-import { OpenClawLightDomContentsElement } from "../lit/openclaw-element.ts";
+import { MarketingClawLightDomContentsElement } from "../lit/marketingclaw-element.ts";
 import { SubscriptionsController } from "../lit/subscriptions-controller.ts";
 import { getSafeLocalStorage } from "../local-storage.ts";
 import { pluginTabKey, pluginTabSearch } from "../pages/plugin/route.ts";
@@ -110,9 +110,9 @@ type SidebarSessionGroupDropTarget = {
   position: "before" | "after";
 };
 
-const SIDEBAR_SESSION_GROUPING_STORAGE_KEY = "openclaw:sidebar:sessions:grouping";
+const SIDEBAR_SESSION_GROUPING_STORAGE_KEY = "marketingclaw:sidebar:sessions:grouping";
 const SIDEBAR_SESSION_COLLAPSED_SECTIONS_STORAGE_KEY =
-  "openclaw:sidebar:sessions:collapsed-sections";
+  "marketingclaw:sidebar:sessions:collapsed-sections";
 
 const PALETTE_SHORTCUT = /Mac|iP(hone|ad|od)/i.test(globalThis.navigator?.platform ?? "")
   ? "⌘K"
@@ -165,7 +165,7 @@ function shouldHandleNavigationClick(event: MouseEvent): boolean {
   );
 }
 
-class AppSidebar extends OpenClawLightDomContentsElement {
+class AppSidebar extends MarketingClawLightDomContentsElement {
   @property({ attribute: false }) basePath = "";
   @property({ attribute: false }) activeRouteId?: NavigationRouteId;
   @property({ attribute: false }) activePluginTabId = "";
@@ -312,11 +312,13 @@ class AppSidebar extends OpenClawLightDomContentsElement {
             alt=""
             aria-hidden="true"
           />
-          ${this.collapsed ? nothing : html`<span class="sidebar-brand__title">OpenClaw</span>`}
+          ${this.collapsed
+            ? nothing
+            : html`<span class="sidebar-brand__title">MarketingClaw</span>`}
         </div>
         <div class="sidebar-brand__actions">
           ${this.renderSearch()}
-          <openclaw-tooltip .content=${collapseTooltip}>
+          <marketingclaw-tooltip .content=${collapseTooltip}>
             <button
               class="sidebar-brand__icon"
               type="button"
@@ -326,7 +328,7 @@ class AppSidebar extends OpenClawLightDomContentsElement {
             >
               ${this.collapsed ? icons.panelLeftOpen : icons.panelLeftClose}
             </button>
-          </openclaw-tooltip>
+          </marketingclaw-tooltip>
         </div>
       </div>
     `;
@@ -975,7 +977,7 @@ class AppSidebar extends OpenClawLightDomContentsElement {
       }),
     );
     return html`
-      <openclaw-session-menu
+      <marketingclaw-session-menu
         .session=${{
           key: session.key,
           label: session.label,
@@ -1029,7 +1031,7 @@ class AppSidebar extends OpenClawLightDomContentsElement {
               break;
           }
         }}
-      ></openclaw-session-menu>
+      ></marketingclaw-session-menu>
     `;
   }
 
@@ -1196,7 +1198,7 @@ class AppSidebar extends OpenClawLightDomContentsElement {
       </a>
     `;
     return this.collapsed
-      ? html`<openclaw-tooltip .content=${label}>${link}</openclaw-tooltip>`
+      ? html`<marketingclaw-tooltip .content=${label}>${link}</marketingclaw-tooltip>`
       : link;
   }
 
@@ -1231,7 +1233,7 @@ class AppSidebar extends OpenClawLightDomContentsElement {
       </a>
     `;
     return this.collapsed
-      ? html`<openclaw-tooltip .content=${tab.label}>${link}</openclaw-tooltip>`
+      ? html`<marketingclaw-tooltip .content=${tab.label}>${link}</marketingclaw-tooltip>`
       : link;
   }
 
@@ -1521,8 +1523,8 @@ class AppSidebar extends OpenClawLightDomContentsElement {
     return html`
       <section class="sidebar-sessions ${this.collapsed ? "sidebar-sessions--collapsed" : ""}">
         ${this.collapsed
-          ? html`<openclaw-tooltip .content=${newSessionTitle}
-              >${newSessionControl}</openclaw-tooltip
+          ? html`<marketingclaw-tooltip .content=${newSessionTitle}
+              >${newSessionControl}</marketingclaw-tooltip
             >`
           : newSessionControl}
         ${this.collapsed
@@ -1612,7 +1614,7 @@ class AppSidebar extends OpenClawLightDomContentsElement {
   private renderSearch() {
     const tooltip = `${t("chat.openCommandPalette")} (${PALETTE_SHORTCUT})`;
     return html`
-      <openclaw-tooltip .content=${tooltip}>
+      <marketingclaw-tooltip .content=${tooltip}>
         <button
           type="button"
           class="sidebar-brand__icon sidebar-search"
@@ -1622,7 +1624,7 @@ class AppSidebar extends OpenClawLightDomContentsElement {
         >
           ${icons.search}
         </button>
-      </openclaw-tooltip>
+      </marketingclaw-tooltip>
     `;
   }
 
@@ -1705,12 +1707,12 @@ class AppSidebar extends OpenClawLightDomContentsElement {
             ${this.renderSessions()}
           </div>
           <div class="sidebar-shell__footer">
-            <openclaw-lobster-pet
+            <marketingclaw-lobster-pet
               .seed=${lobsterPetSeed(this.sessionKey)}
               .mode=${resolveLobsterPetMode(this.connected, this.sessionsResult?.sessions)}
-            ></openclaw-lobster-pet>
+            ></marketingclaw-lobster-pet>
             <div class="sidebar-footer-bar">
-              <openclaw-tooltip .content=${gatewayStatus}>
+              <marketingclaw-tooltip .content=${gatewayStatus}>
                 <span
                   class="sidebar-status__dot ${this.connected
                     ? "sidebar-connection-status--online"
@@ -1719,9 +1721,9 @@ class AppSidebar extends OpenClawLightDomContentsElement {
                   aria-live="polite"
                   aria-label=${gatewayStatus}
                 ></span>
-              </openclaw-tooltip>
+              </marketingclaw-tooltip>
               <span class="sidebar-footer-bar__spacer"></span>
-              <openclaw-tooltip .content=${titleForRoute("config")}>
+              <marketingclaw-tooltip .content=${titleForRoute("config")}>
                 <a
                   href=${pathForRoute("config", this.basePath)}
                   class="sidebar-footer-icon ${settingsActive ? "sidebar-footer-icon--active" : ""}"
@@ -1742,21 +1744,21 @@ class AppSidebar extends OpenClawLightDomContentsElement {
                 >
                   ${icons.settings}
                 </a>
-              </openclaw-tooltip>
-              <openclaw-tooltip
+              </marketingclaw-tooltip>
+              <marketingclaw-tooltip
                 .content=${t("chat.docsOpensInNewTab", { label: t("common.docs") })}
               >
                 <a
                   class="sidebar-footer-icon"
-                  href="https://docs.openclaw.ai"
+                  href="https://docs.marketingclaw.ai"
                   target=${EXTERNAL_LINK_TARGET}
                   rel=${buildExternalLinkRel()}
                   aria-label=${t("common.docs")}
                 >
                   ${icons.book}
                 </a>
-              </openclaw-tooltip>
-              <openclaw-tooltip
+              </marketingclaw-tooltip>
+              <marketingclaw-tooltip
                 .content=${this.canPairDevice
                   ? t("nodes.pairing.button")
                   : t("nodes.pairing.adminRequired")}
@@ -1770,9 +1772,11 @@ class AppSidebar extends OpenClawLightDomContentsElement {
                 >
                   ${icons.smartphone}
                 </button>
-              </openclaw-tooltip>
+              </marketingclaw-tooltip>
               <span class="sidebar-mode-switch">
-                <openclaw-theme-mode-toggle .mode=${this.themeMode}></openclaw-theme-mode-toggle>
+                <marketingclaw-theme-mode-toggle
+                  .mode=${this.themeMode}
+                ></marketingclaw-theme-mode-toggle>
               </span>
             </div>
           </div>
@@ -1784,6 +1788,6 @@ class AppSidebar extends OpenClawLightDomContentsElement {
   }
 }
 
-if (!customElements.get("openclaw-app-sidebar")) {
-  customElements.define("openclaw-app-sidebar", AppSidebar);
+if (!customElements.get("marketingclaw-app-sidebar")) {
+  customElements.define("marketingclaw-app-sidebar", AppSidebar);
 }

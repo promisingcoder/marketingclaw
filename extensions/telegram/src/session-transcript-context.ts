@@ -1,7 +1,7 @@
 import {
   readRecentUserAssistantTextForSession,
   type SessionRecentConversationText,
-} from "openclaw/plugin-sdk/session-store-runtime";
+} from "marketingclaw/plugin-sdk/session-store-runtime";
 
 type TelegramSessionTranscriptPromptMessage = {
   message_id?: string;
@@ -23,7 +23,7 @@ type BuildTelegramSessionTranscriptPromptMessagesParams = {
 function toSessionTranscriptPromptMessage(
   entry: SessionRecentConversationText,
 ): TelegramSessionTranscriptPromptMessage {
-  const sender = entry.role === "assistant" ? "OpenClaw" : "User";
+  const sender = entry.role === "assistant" ? "MarketingClaw" : "User";
   return {
     ...(entry.id ? { message_id: `session:${entry.id}` } : {}),
     sender: entry.sourceChannel ? `${sender} (${entry.sourceChannel})` : sender,

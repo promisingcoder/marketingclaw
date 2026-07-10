@@ -5,10 +5,10 @@ import fsSync from "node:fs";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { CURRENT_SESSION_VERSION, SessionManager } from "openclaw/plugin-sdk/agent-sessions";
-import type { AssistantMessage } from "openclaw/plugin-sdk/llm";
+import { CURRENT_SESSION_VERSION, SessionManager } from "marketingclaw/plugin-sdk/agent-sessions";
+import type { AssistantMessage } from "marketingclaw/plugin-sdk/llm";
 import { afterEach, describe, expect, test, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import {
   captureCompactionCheckpointSnapshotAsync,
   cleanupCompactionCheckpointSnapshot,
@@ -82,11 +82,11 @@ async function makeTempSessionStore(prefix: string, sessionId = TEST_SESSION_ID)
   };
 }
 
-function checkpointConfig(storePath: string): OpenClawConfig {
+function checkpointConfig(storePath: string): MarketingClawConfig {
   return {
     session: { store: storePath },
     agents: { list: [{ id: MAIN_AGENT_ID, default: true }] },
-  } as OpenClawConfig;
+  } as MarketingClawConfig;
 }
 
 async function writeSessionStore(
@@ -182,7 +182,7 @@ describe("session-compaction-checkpoints", () => {
   });
 
   test("async capture stores pre-compaction identity without copying the transcript", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-checkpoint-async-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-checkpoint-async-"));
     tempDirs.push(dir);
 
     const session = SessionManager.create(dir, dir);
@@ -235,7 +235,9 @@ describe("session-compaction-checkpoints", () => {
   });
 
   test("async capture derives session metadata without synchronous SessionManager.open", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-checkpoint-async-metadata-"));
+    const dir = await fs.mkdtemp(
+      path.join(os.tmpdir(), "marketingclaw-checkpoint-async-metadata-"),
+    );
     tempDirs.push(dir);
 
     const session = SessionManager.create(dir, dir);
@@ -284,7 +286,7 @@ describe("session-compaction-checkpoints", () => {
   });
 
   test("async capture follows terminal leaf controls instead of their inactive parent", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-checkpoint-leaf-control-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-checkpoint-leaf-control-"));
     tempDirs.push(dir);
     const sessionFile = path.join(dir, "session.jsonl");
     await fs.writeFile(
@@ -371,7 +373,7 @@ describe("session-compaction-checkpoints", () => {
   });
 
   test("async leaf scans ignore controls with dangling references", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-checkpoint-invalid-leaf-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-checkpoint-invalid-leaf-"));
     tempDirs.push(dir);
     const sessionFile = path.join(dir, "session.jsonl");
     await fs.writeFile(
@@ -419,7 +421,9 @@ describe("session-compaction-checkpoints", () => {
   });
 
   test("async capture scans bounded metadata without copying oversized transcripts", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-checkpoint-async-oversized-"));
+    const dir = await fs.mkdtemp(
+      path.join(os.tmpdir(), "marketingclaw-checkpoint-async-oversized-"),
+    );
     tempDirs.push(dir);
 
     const session = SessionManager.create(dir, dir);
@@ -458,7 +462,7 @@ describe("session-compaction-checkpoints", () => {
   });
 
   test("bounded capture falls back to a forkable raw tail when the leaf target is older", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-checkpoint-bounded-leaf-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-checkpoint-bounded-leaf-"));
     tempDirs.push(dir);
     const sessionFile = path.join(dir, "session.jsonl");
     await fs.writeFile(
@@ -526,7 +530,7 @@ describe("session-compaction-checkpoints", () => {
   });
 
   test("async fork creates a checkpoint branch transcript without SessionManager sync reads", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-checkpoint-fork-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-checkpoint-fork-"));
     tempDirs.push(dir);
 
     const session = SessionManager.create(dir, dir);
@@ -595,7 +599,7 @@ describe("session-compaction-checkpoints", () => {
   });
 
   test("async fork truncates mutable checkpoint sources at the stored leaf", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-checkpoint-fork-leaf-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-checkpoint-fork-leaf-"));
     tempDirs.push(dir);
 
     const session = SessionManager.create(dir, dir);
@@ -634,7 +638,7 @@ describe("session-compaction-checkpoints", () => {
   });
 
   test("file-backed checkpoint store branches active state and restores source management state", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-checkpoint-store-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-checkpoint-store-"));
     tempDirs.push(dir);
 
     const session = SessionManager.create(dir, dir);
@@ -725,7 +729,7 @@ describe("session-compaction-checkpoints", () => {
   });
 
   test("async fork migrates legacy checkpoint snapshots before writing a current header", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-checkpoint-legacy-fork-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-checkpoint-legacy-fork-"));
     tempDirs.push(dir);
 
     const legacySessionFile = path.join(dir, "legacy.jsonl");
@@ -812,7 +816,7 @@ describe("session-compaction-checkpoints", () => {
   });
 
   test("async fork skips JSON-valid garbage transcript entries", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-checkpoint-garbage-fork-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-checkpoint-garbage-fork-"));
     tempDirs.push(dir);
 
     const sourceFile = path.join(dir, "garbage.jsonl");
@@ -881,7 +885,7 @@ describe("session-compaction-checkpoints", () => {
 
   test("persist stores codex-style checkpoint metadata and trims old legacy snapshot files", async () => {
     const { dir, storePath, sessionId, sessionKey, now } = await makeTempSessionStore(
-      "openclaw-checkpoint-trim-",
+      "marketingclaw-checkpoint-trim-",
     );
     const existingCheckpoints = await createLegacyCheckpointFixtures({
       dir,
@@ -926,7 +930,7 @@ describe("session-compaction-checkpoints", () => {
 
   test("persist skips codex-style checkpoints without a stable post-compaction leaf", async () => {
     const { storePath, sessionId, sessionKey, now } = await makeTempSessionStore(
-      "openclaw-checkpoint-no-leaf-",
+      "marketingclaw-checkpoint-no-leaf-",
     );
     await writeSessionStore(storePath, sessionKey, {
       sessionId,
@@ -950,7 +954,7 @@ describe("session-compaction-checkpoints", () => {
 
   test("persist skips malformed session rows without synthesizing a session id", async () => {
     const { storePath, sessionId, sessionKey, now } = await makeTempSessionStore(
-      "openclaw-checkpoint-malformed-row-",
+      "marketingclaw-checkpoint-malformed-row-",
     );
     await writeSessionStore(storePath, sessionKey, {
       sessionId: "",
@@ -981,7 +985,7 @@ describe("session-compaction-checkpoints", () => {
 
   test("persist trims retained checkpoint snapshots by total byte budget", async () => {
     const { dir, storePath, sessionId, sessionKey, now } = await makeTempSessionStore(
-      "openclaw-checkpoint-byte-trim-",
+      "marketingclaw-checkpoint-byte-trim-",
     );
     const checkpointSize = Math.floor(MAX_COMPACTION_CHECKPOINT_RETAINED_BYTES_PER_SESSION / 6);
     const existingCheckpoints = await createLegacyCheckpointFixtures({

@@ -1,4 +1,4 @@
-// Covers the hosted OpenClaw marketplace feed entries command.
+// Covers the hosted MarketingClaw marketplace feed entries command.
 import { mkdtemp, readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -42,7 +42,7 @@ vi.mock("../plugins/official-external-plugin-catalog.js", async (importOriginal)
 });
 
 async function createTimelinePath(): Promise<string> {
-  const dir = await mkdtemp(path.join(tmpdir(), "openclaw-marketplace-entries-"));
+  const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-marketplace-entries-"));
   return path.join(dir, "timeline.jsonl");
 }
 
@@ -72,7 +72,7 @@ describe("plugins marketplace entries", () => {
   it("lists entries from the configured marketplace feed as JSON", async () => {
     const config = {
       marketplaces: {
-        feeds: { acme: { url: "https://packages.acme.example/openclaw/feed" } },
+        feeds: { acme: { url: "https://packages.acme.example/marketingclaw/feed" } },
         sources: { "acme-npm": { type: "npm" as const } },
       },
     };
@@ -89,7 +89,7 @@ describe("plugins marketplace entries", () => {
           install: {
             candidates: [{ sourceRef: "acme-npm", package: "@acme/calendar", version: "1.2.3" }],
           },
-          openclaw: {
+          marketingclaw: {
             plugin: { id: "acme-calendar", label: "Acme Calendar" },
           },
         },
@@ -102,14 +102,14 @@ describe("plugins marketplace entries", () => {
         entries: [],
       },
       metadata: {
-        url: "https://packages.acme.example/openclaw/feed",
+        url: "https://packages.acme.example/marketingclaw/feed",
         status: 200,
         checksum: "feed-sha",
       },
       snapshot: {
         body: "{}",
         metadata: {
-          url: "https://packages.acme.example/openclaw/feed",
+          url: "https://packages.acme.example/marketingclaw/feed",
           status: 200,
           checksum: "feed-sha",
         },
@@ -187,12 +187,12 @@ describe("plugins marketplace entries", () => {
       source: "bundled-fallback",
       entries: [
         {
-          name: "@openclaw/acpx",
-          openclaw: {
+          name: "@marketingclaw/acpx",
+          marketingclaw: {
             plugin: { id: "acpx", label: "ACP" },
             install: {
-              clawhubSpec: "clawhub:@openclaw/acpx",
-              npmSpec: "@openclaw/acpx",
+              clawhubSpec: "clawhub:@marketingclaw/acpx",
+              npmSpec: "@marketingclaw/acpx",
               defaultChoice: "npm",
             },
           },
@@ -207,23 +207,23 @@ describe("plugins marketplace entries", () => {
     const output = mocks.defaultRuntime.log.mock.calls.map(([value]) => String(value)).join("\n");
     expect(output).toContain("bundled fallback");
     expect(output).toContain("acpx");
-    expect(output).toContain("@openclaw/acpx");
-    expect(output).not.toContain("clawhub:@openclaw/acpx");
+    expect(output).toContain("@marketingclaw/acpx");
+    expect(output).not.toContain("clawhub:@marketingclaw/acpx");
     expect(output).toContain("hosted catalog feed offline mode");
     expect(mocks.defaultRuntime.exit).not.toHaveBeenCalled();
   });
 
   it("emits bounded diagnostics for feed entry listing", async () => {
     const timelinePath = await createTimelinePath();
-    vi.stubEnv("OPENCLAW_DIAGNOSTICS", "1");
-    vi.stubEnv("OPENCLAW_DIAGNOSTICS_TIMELINE_PATH", timelinePath);
+    vi.stubEnv("MARKETINGCLAW_DIAGNOSTICS", "1");
+    vi.stubEnv("MARKETINGCLAW_DIAGNOSTICS_TIMELINE_PATH", timelinePath);
     mocks.getRuntimeConfig.mockReturnValue({});
     mocks.loadConfiguredHostedOfficialExternalPluginCatalogEntries.mockResolvedValue({
       source: "hosted-snapshot",
       entries: [
         {
           name: "@acme/calendar",
-          openclaw: { plugin: { id: "acme-calendar", label: "Acme Calendar" } },
+          marketingclaw: { plugin: { id: "acme-calendar", label: "Acme Calendar" } },
         },
       ],
       feed: {
@@ -234,14 +234,14 @@ describe("plugins marketplace entries", () => {
         entries: [],
       },
       metadata: {
-        url: "https://user:secret@packages.acme.example/openclaw/feed?token=leak#frag",
+        url: "https://user:secret@packages.acme.example/marketingclaw/feed?token=leak#frag",
         status: 200,
         checksum: "feed-sha",
       },
       snapshot: {
         body: "{}",
         metadata: {
-          url: "https://user:secret@packages.acme.example/openclaw/feed?token=leak#frag",
+          url: "https://user:secret@packages.acme.example/marketingclaw/feed?token=leak#frag",
           status: 200,
           checksum: "feed-sha",
         },

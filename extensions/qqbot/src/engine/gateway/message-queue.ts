@@ -1,5 +1,5 @@
 // Qqbot plugin module implements message queue behavior.
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+import { truncateUtf16Safe } from "marketingclaw/plugin-sdk/text-utility-runtime";
 import { formatErrorMessage } from "../utils/format.js";
 
 const DEFAULT_GLOBAL_QUEUE_SIZE = 1000;

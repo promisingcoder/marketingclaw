@@ -9,22 +9,25 @@ import type {
   WAMessageKey,
   WASocket,
 } from "baileys";
-import { recordChannelActivity } from "openclaw/plugin-sdk/channel-activity-runtime";
+import { recordChannelActivity } from "marketingclaw/plugin-sdk/channel-activity-runtime";
 import {
   formatInboundMediaUnavailableText,
   formatLocationText,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { createInboundDebouncer } from "openclaw/plugin-sdk/channel-inbound-debounce";
-import { collectErrorGraphCandidates, formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { getChildLogger } from "openclaw/plugin-sdk/logging-core";
+} from "marketingclaw/plugin-sdk/channel-inbound";
+import { createInboundDebouncer } from "marketingclaw/plugin-sdk/channel-inbound-debounce";
+import {
+  collectErrorGraphCandidates,
+  formatErrorMessage,
+} from "marketingclaw/plugin-sdk/error-runtime";
+import { getChildLogger } from "marketingclaw/plugin-sdk/logging-core";
 import {
   asDateTimestampMs,
   parseStrictFiniteNumber,
   resolveExpiresAtMsFromDurationMs,
-} from "openclaw/plugin-sdk/number-runtime";
-import { defaultRuntime } from "openclaw/plugin-sdk/runtime-env";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
-import { uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "marketingclaw/plugin-sdk/number-runtime";
+import { defaultRuntime } from "marketingclaw/plugin-sdk/runtime-env";
+import { createSubsystemLogger } from "marketingclaw/plugin-sdk/runtime-env";
+import { uniqueStrings } from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import { maybeResolveWhatsAppApprovalReaction } from "../approval-reactions.js";
 import { readWebSelfIdentityForDecision, WhatsAppAuthUnstableError } from "../auth-store.js";
 import { getRegisteredWhatsAppConnectionController } from "../connection-controller-registry.js";
@@ -32,7 +35,7 @@ import { getPrimaryIdentityId, identitiesOverlap, resolveComparableIdentity } fr
 import { addWhatsAppImagePreviewFields } from "../image-preview.js";
 import { cacheInboundMessageMeta } from "../quoted-message.js";
 import { DEFAULT_RECONNECT_POLICY, computeBackoff, sleepWithAbort } from "../reconnect.js";
-import type { OpenClawConfig } from "../runtime-api.js";
+import type { MarketingClawConfig } from "../runtime-api.js";
 import { createWaSocket, formatError, getStatusCode, waitForWaConnection } from "../session.js";
 import {
   createWhatsAppSocketOperationTimeoutAdapter,
@@ -325,8 +328,8 @@ type AppendReplyWindow = {
 };
 
 type MonitorWebInboxOptions = {
-  cfg: OpenClawConfig;
-  loadConfig?: () => OpenClawConfig;
+  cfg: MarketingClawConfig;
+  loadConfig?: () => MarketingClawConfig;
   socketTiming?: Required<WhatsAppSocketTimingOptions>;
   verbose: boolean;
   accountId: string;

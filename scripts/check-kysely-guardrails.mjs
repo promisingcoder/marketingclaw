@@ -41,8 +41,8 @@ const rawSqliteAllowPathGroups = {
     "src/infra/sqlite-transaction.ts",
     "src/infra/sqlite-user-version.ts",
     "src/infra/sqlite-wal.ts",
-    "src/state/openclaw-agent-db.ts",
-    "src/state/openclaw-state-db.ts",
+    "src/state/marketingclaw-agent-db.ts",
+    "src/state/marketingclaw-state-db.ts",
     "src/state/sqlite-schema-shape.test-support.ts",
   ],
   "backup snapshot maintenance": ["src/commands/backup-verify.ts", "src/infra/backup-create.ts"],
@@ -155,7 +155,7 @@ function collectImports(sourceFile) {
       source.endsWith("node-sqlite.js") ||
       source.endsWith("sqlite-transaction.js") ||
       source.endsWith("sqlite-wal.js") ||
-      source.endsWith("openclaw-state-db.js")
+      source.endsWith("marketingclaw-state-db.js")
     ) {
       hasSqliteContext = true;
     }

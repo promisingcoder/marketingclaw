@@ -319,7 +319,7 @@ function operationForAction(params: Record<string, unknown>): CrestodianOperatio
   }
 }
 
-/** Validate openclaw.json after a write so the agent can fix mistakes in-loop. */
+/** Validate marketingclaw.json after a write so the agent can fix mistakes in-loop. */
 async function verifyConfigAfterToolWrite(): Promise<string | null> {
   try {
     const { readConfigFileSnapshot } = await import("../../config/config.js");
@@ -345,7 +345,7 @@ export function createCrestodianTool(options: CrestodianToolOptions): AnyAgentTo
     name: "crestodian",
     label: "Crestodian",
     description: [
-      "Ring-zero OpenClaw setup and repair. Read actions (status/models/agents/channels/channel_info/config_get/config_schema/gateway_status/plugin_search/validate_config/doctor/audit) run immediately.",
+      "Ring-zero MarketingClaw setup and repair. Read actions (status/models/agents/channels/channel_info/config_get/config_schema/gateway_status/plugin_search/validate_config/doctor/audit) run immediately.",
       "connect_channel(channel) starts guided channel setup in this chat; configure_model_provider starts masked provider/default-model setup; open_agent hands off to the normal agent; open_setup hands off to a menu wizard. All run immediately.",
       "Mutating actions (setup/set_default_model/config_set/config_set_ref/create_agent/gateway_*/plugin_install/plugin_uninstall/doctor_fix) REQUIRE approved=true, which you may only set after the user clearly agreed to that exact change in this conversation.",
       "Before writing an unfamiliar config path, call config_schema for it — the schema is the source of truth. Secrets go through config_set_ref (env var), never plaintext echoes.",

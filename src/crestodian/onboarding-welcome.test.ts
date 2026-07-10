@@ -20,7 +20,7 @@ vi.mock("../config/config.js", async (importOriginal) => ({
   readConfigFileSnapshot: vi.fn(async () => ({
     exists: true,
     valid: true,
-    path: "/tmp/openclaw.json",
+    path: "/tmp/marketingclaw.json",
     hash: "hash",
     config: {},
     sourceConfig: mocks.sourceConfig,
@@ -42,7 +42,7 @@ describe("buildOnboardingWelcome", () => {
     const engine = {
       loadOverview: vi.fn(async () => ({
         config: {
-          path: "/tmp/openclaw.json",
+          path: "/tmp/marketingclaw.json",
           exists: true,
           valid: true,
           issues: [],
@@ -67,7 +67,7 @@ describe("buildOnboardingWelcome", () => {
     const engine = {
       loadOverview: vi.fn(async () => ({
         config: {
-          path: "/tmp/openclaw.json",
+          path: "/tmp/marketingclaw.json",
           exists: true,
           valid: true,
           issues: [],
@@ -98,7 +98,7 @@ describe("buildOnboardingWelcome", () => {
       engine: {
         loadOverview: vi.fn(async () => ({
           config: {
-            path: "/tmp/openclaw.json",
+            path: "/tmp/marketingclaw.json",
             exists: true,
             valid: true,
             issues: [],

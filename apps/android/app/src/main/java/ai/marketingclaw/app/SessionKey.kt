@@ -1,4 +1,4 @@
-package ai.openclaw.app
+package ai.marketingclaw.app
 
 /** Normalizes blank gateway session keys to the legacy main session alias. */
 internal fun normalizeMainKey(raw: String?): String {

@@ -1,7 +1,7 @@
-package ai.openclaw.app.node
+package ai.marketingclaw.app.node
 
-import ai.openclaw.app.gateway.GatewaySession
-import ai.openclaw.app.hasPhotoReadPermission
+import ai.marketingclaw.app.gateway.GatewaySession
+import ai.marketingclaw.app.hasPhotoReadPermission
 import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.Context

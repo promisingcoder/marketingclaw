@@ -1,6 +1,6 @@
 // Verifies sessions_spawn thinking defaults, overrides, and inheritance.
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { MarketingClawConfig } from "../config/config.js";
 import { resolveSubagentThinkingOverride } from "./subagent-spawn-thinking.js";
 
 type ThinkingLevel = "high" | "medium" | "low" | "off";
@@ -12,7 +12,7 @@ function expectResolvedThinkingPlan(input: {
   callerThinkingRaw?: string;
   requesterAgentConfig?: unknown;
   targetAgentConfig?: unknown;
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
 }) {
   // Assert both the effective override and initial session patch in one place.
   const cfg =
@@ -20,7 +20,7 @@ function expectResolvedThinkingPlan(input: {
     ({
       session: { mainKey: "main", scope: "per-sender" },
       agents: { defaults: { subagents: { thinking: "high" } } },
-    } as OpenClawConfig);
+    } as MarketingClawConfig);
 
   const plan = resolveSubagentThinkingOverride({
     cfg,
@@ -73,7 +73,7 @@ describe("sessions_spawn thinking defaults", () => {
       cfg: {
         session: { mainKey: "main", scope: "per-sender" },
         agents: { defaults: {} },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       callerThinkingRaw: "medium",
       expected: "medium",
       expectedOverride: null,
@@ -92,7 +92,7 @@ describe("sessions_spawn thinking defaults", () => {
       cfg: {
         session: { mainKey: "main", scope: "per-sender" },
         agents: { defaults: {} },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       callerThinkingRaw: "off",
       expected: "off",
       expectedOverride: null,

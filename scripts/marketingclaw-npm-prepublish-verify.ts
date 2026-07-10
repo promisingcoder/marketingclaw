@@ -1,5 +1,5 @@
 #!/usr/bin/env -S node --import tsx
-// Openclaw Npm Prepublish Verify script supports OpenClaw repository automation.
+// Marketingclaw Npm Prepublish Verify script supports MarketingClaw repository automation.
 
 import { mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -12,15 +12,15 @@ import {
   collectInstalledPackageErrors,
   normalizeInstalledBinaryVersion,
   resolveInstalledBinaryCommandInvocation,
-} from "./openclaw-npm-postpublish-verify.ts";
-import { resolveNpmCommandInvocation } from "./openclaw-npm-release-check.ts";
+} from "./marketingclaw-npm-postpublish-verify.ts";
+import { resolveNpmCommandInvocation } from "./marketingclaw-npm-release-check.ts";
 import { buildCmdExeCommandLine, resolveWindowsCmdExePath } from "./windows-cmd-helpers.mjs";
 
 type InstalledPackageJson = {
   version?: string;
 };
 
-type OpenClawNpmPrepublishVerifyArgs =
+type MarketingClawNpmPrepublishVerifyArgs =
   | {
       expectedVersion?: string;
       dependencyTarballPaths: string[];
@@ -34,28 +34,28 @@ type OpenClawNpmPrepublishVerifyArgs =
       tarballPath: "";
     };
 
-export function openClawNpmPrepublishVerifyUsage(): string {
-  return "Usage: node --import tsx scripts/openclaw-npm-prepublish-verify.ts <tarball.tgz> [expected-version] [dependency.tgz ...]";
+export function marketingClawNpmPrepublishVerifyUsage(): string {
+  return "Usage: node --import tsx scripts/marketingclaw-npm-prepublish-verify.ts <tarball.tgz> [expected-version] [dependency.tgz ...]";
 }
 
-export function parseOpenClawNpmPrepublishVerifyArgs(
+export function parseMarketingClawNpmPrepublishVerifyArgs(
   argv: readonly string[],
-): OpenClawNpmPrepublishVerifyArgs {
+): MarketingClawNpmPrepublishVerifyArgs {
   const args = argv[0] === "--" ? argv.slice(1) : argv;
   const tarballPath = args[0]?.trim() ?? "";
   if (tarballPath === "--help" || tarballPath === "-h") {
     return { dependencyTarballPaths: [], help: true, tarballPath: "" };
   }
   if (!tarballPath) {
-    throw new Error(openClawNpmPrepublishVerifyUsage());
+    throw new Error(marketingClawNpmPrepublishVerifyUsage());
   }
   if (tarballPath.startsWith("-")) {
-    throw new Error(`Unknown openclaw npm prepublish verifier option: ${tarballPath}`);
+    throw new Error(`Unknown marketingclaw npm prepublish verifier option: ${tarballPath}`);
   }
 
   const expectedVersion = args[1]?.trim();
   if (expectedVersion?.startsWith("-")) {
-    throw new Error(`Unknown openclaw npm prepublish verifier option: ${expectedVersion}`);
+    throw new Error(`Unknown marketingclaw npm prepublish verifier option: ${expectedVersion}`);
   }
   const dependencyTarballPaths = args.slice(2).map((value) => value.trim());
   const invalidDependency = dependencyTarballPaths.find(
@@ -86,13 +86,13 @@ function npmExec(args: string[], cwd: string): string {
 }
 
 function main(argv = process.argv.slice(2)): void {
-  const args = parseOpenClawNpmPrepublishVerifyArgs(argv);
+  const args = parseMarketingClawNpmPrepublishVerifyArgs(argv);
   if (args.help) {
-    console.log(openClawNpmPrepublishVerifyUsage());
+    console.log(marketingClawNpmPrepublishVerifyUsage());
     return;
   }
 
-  const workingDir = mkdtempSync(join(tmpdir(), "openclaw-prepublish-"));
+  const workingDir = mkdtempSync(join(tmpdir(), "marketingclaw-prepublish-"));
   const prefixDir = join(workingDir, "prefix");
   try {
     let binaryInvocation: NpmVerifyCommandInvocation;
@@ -105,8 +105,8 @@ function main(argv = process.argv.slice(2)): void {
           {
             private: true,
             dependencies: {
-              "@openclaw/ai": pathToFileURL(realpathSync(args.dependencyTarballPaths[0])).href,
-              openclaw: pathToFileURL(realpathSync(args.tarballPath)).href,
+              "@marketingclaw/ai": pathToFileURL(realpathSync(args.dependencyTarballPaths[0])).href,
+              marketingclaw: pathToFileURL(realpathSync(args.tarballPath)).href,
             },
           },
           null,
@@ -114,12 +114,12 @@ function main(argv = process.argv.slice(2)): void {
         )}\n`,
       );
       npmExec(["install", "--prefix", prefixDir, "--no-fund", "--no-audit"], workingDir);
-      packageRoot = join(prefixDir, "node_modules", "openclaw");
+      packageRoot = join(prefixDir, "node_modules", "marketingclaw");
       const binaryPath = join(
         prefixDir,
         "node_modules",
         ".bin",
-        process.platform === "win32" ? "openclaw.cmd" : "openclaw",
+        process.platform === "win32" ? "marketingclaw.cmd" : "marketingclaw",
       );
       binaryInvocation =
         process.platform === "win32"
@@ -144,7 +144,7 @@ function main(argv = process.argv.slice(2)): void {
         workingDir,
       );
       const globalRoot = npmExec(["root", "-g", "--prefix", prefixDir], workingDir);
-      packageRoot = join(globalRoot, "openclaw");
+      packageRoot = join(globalRoot, "marketingclaw");
       binaryInvocation = resolveInstalledBinaryCommandInvocation(prefixDir, ["--version"]);
     }
     const pkg = JSON.parse(
@@ -159,7 +159,7 @@ function main(argv = process.argv.slice(2)): void {
     const installedBinaryVersion = runNpmVerifyCommand(binaryInvocation, workingDir);
     if (normalizeInstalledBinaryVersion(installedBinaryVersion) !== resolvedExpectedVersion) {
       errors.push(
-        `installed openclaw binary version mismatch: expected ${resolvedExpectedVersion}, found ${installedBinaryVersion || "<missing>"}.`,
+        `installed marketingclaw binary version mismatch: expected ${resolvedExpectedVersion}, found ${installedBinaryVersion || "<missing>"}.`,
       );
     }
     if (errors.length === 0) {
@@ -169,7 +169,7 @@ function main(argv = process.argv.slice(2)): void {
       throw new Error(`prepared tarball install failed:\n- ${errors.join("\n- ")}`);
     }
     console.log(
-      `openclaw-npm-prepublish-verify: prepared tarball install OK (${resolvedExpectedVersion}).`,
+      `marketingclaw-npm-prepublish-verify: prepared tarball install OK (${resolvedExpectedVersion}).`,
     );
   } finally {
     rmSync(workingDir, { force: true, recursive: true });
@@ -181,7 +181,7 @@ if (entrypoint !== null && import.meta.url === entrypoint) {
   try {
     main();
   } catch (error) {
-    console.error(`openclaw-npm-prepublish-verify: ${formatErrorMessage(error)}`);
+    console.error(`marketingclaw-npm-prepublish-verify: ${formatErrorMessage(error)}`);
     process.exitCode = 1;
   }
 }

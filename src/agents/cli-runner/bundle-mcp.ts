@@ -7,7 +7,7 @@ import os from "node:os";
 import path from "node:path";
 import { applyMergePatch } from "../../config/merge-patch.js";
 import type { CliBackendConfig } from "../../config/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import { tryReadJson } from "../../infra/json-files.js";
 import { extractMcpServerMap, type BundleMcpConfig } from "../../plugins/bundle-mcp.js";
 import type { CliBundleMcpMode } from "../../plugins/types.js";
@@ -53,28 +53,28 @@ function sortJsonValue(value: unknown): unknown {
   );
 }
 
-function normalizeOpenClawLoopbackUrl(value: string): string {
+function normalizeMarketingClawLoopbackUrl(value: string): string {
   const match =
     /^(http:\/\/(?:127\.0\.0\.1|localhost|\[::1\])):\d+(\/mcp)$/.exec(value.trim()) ?? undefined;
   if (!match) {
     return value;
   }
-  return `${match[1]}:<openclaw-loopback>${match[2]}`;
+  return `${match[1]}:<marketingclaw-loopback>${match[2]}`;
 }
 
 function canonicalizeBundleMcpConfigForResume(config: BundleMcpConfig): BundleMcpConfig {
-  // The OpenClaw loopback MCP port changes across runs. Replace it before
+  // The MarketingClaw loopback MCP port changes across runs. Replace it before
   // hashing so resume compatibility tracks config shape, not ephemeral ports.
   const canonicalServers = Object.fromEntries(
     Object.entries(config.mcpServers).map(([name, server]) => {
-      if (name !== "openclaw" || typeof server.url !== "string") {
+      if (name !== "marketingclaw" || typeof server.url !== "string") {
         return [name, sortJsonValue(server)];
       }
       return [
         name,
         sortJsonValue({
           ...server,
-          url: normalizeOpenClawLoopbackUrl(server.url),
+          url: normalizeMarketingClawLoopbackUrl(server.url),
         }),
       ];
     }),
@@ -84,25 +84,31 @@ function canonicalizeBundleMcpConfigForResume(config: BundleMcpConfig): BundleMc
   };
 }
 
-const OPENCLAW_MCP_ENV_TEMPLATE_PATTERN = /\$\{(OPENCLAW_MCP_[A-Z0-9_]+)\}/g;
+const MARKETINGCLAW_MCP_ENV_TEMPLATE_PATTERN = /\$\{(MARKETINGCLAW_MCP_[A-Z0-9_]+)\}/g;
 
-function resolveOpenClawMcpEnvTemplates(value: unknown, env?: Record<string, string>): unknown {
+function resolveMarketingClawMcpEnvTemplates(
+  value: unknown,
+  env?: Record<string, string>,
+): unknown {
   if (!env) {
     return value;
   }
   if (typeof value === "string") {
-    return value.replace(OPENCLAW_MCP_ENV_TEMPLATE_PATTERN, (match, name: string) => {
+    return value.replace(MARKETINGCLAW_MCP_ENV_TEMPLATE_PATTERN, (match, name: string) => {
       return Object.hasOwn(env, name) ? env[name] : match;
     });
   }
   if (Array.isArray(value)) {
-    return value.map((entry) => resolveOpenClawMcpEnvTemplates(entry, env));
+    return value.map((entry) => resolveMarketingClawMcpEnvTemplates(entry, env));
   }
   if (!isRecord(value)) {
     return value;
   }
   return Object.fromEntries(
-    Object.entries(value).map(([key, entry]) => [key, resolveOpenClawMcpEnvTemplates(entry, env)]),
+    Object.entries(value).map(([key, entry]) => [
+      key,
+      resolveMarketingClawMcpEnvTemplates(entry, env),
+    ]),
   );
 }
 
@@ -148,9 +154,9 @@ async function prepareModeSpecificBundleMcpConfig(params: {
     };
   }
 
-  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-cli-mcp-"));
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-cli-mcp-"));
   const mcpConfigPath = path.join(tempDir, "mcp.json");
-  const runtimeConfig = resolveOpenClawMcpEnvTemplates(
+  const runtimeConfig = resolveMarketingClawMcpEnvTemplates(
     params.mergedConfig,
     params.env,
   ) as BundleMcpConfig;
@@ -180,12 +186,12 @@ export async function prepareCliBundleMcpConfig(params: {
   mode?: CliBundleMcpMode;
   backend: CliBackendConfig;
   workspaceDir: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   additionalConfig?: BundleMcpConfig;
   /**
    * Serve exactly these servers, skipping user/plugin/additional merges.
    * Ring-zero Crestodian runs use this so the CLI harness sees only the
-   * crestodian MCP server instead of the normal openclaw tool surface.
+   * crestodian MCP server instead of the normal marketingclaw tool surface.
    */
   exclusiveConfig?: BundleMcpConfig;
   env?: Record<string, string>;
@@ -277,7 +283,7 @@ export async function prepareCliBundleMcpCaptureAttempt(params: {
   return {
     env: {
       ...params.env,
-      OPENCLAW_MCP_CLI_CAPTURE_KEY: params.captureKey,
+      MARKETINGCLAW_MCP_CLI_CAPTURE_KEY: params.captureKey,
     },
   };
 }

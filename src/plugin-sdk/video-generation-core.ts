@@ -18,7 +18,7 @@ export type {
   VideoGenerationSourceAsset,
   VideoGenerationTransformCapabilities,
 } from "../video-generation/types.js";
-export type { OpenClawConfig } from "../config/types.openclaw.js";
+export type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 
 export { describeFailoverError, isFailoverError } from "../agents/failover-error.js";
 export {

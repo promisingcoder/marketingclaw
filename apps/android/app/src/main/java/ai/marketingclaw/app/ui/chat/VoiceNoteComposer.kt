@@ -1,13 +1,13 @@
-package ai.openclaw.app.ui.chat
+package ai.marketingclaw.app.ui.chat
 
-import ai.openclaw.app.MainViewModel
-import ai.openclaw.app.chat.AndroidVoiceNoteRecordingEngine
-import ai.openclaw.app.chat.ChatMessageContent
-import ai.openclaw.app.chat.VoiceNoteRecorderController
-import ai.openclaw.app.chat.VoiceNoteRecorderState
-import ai.openclaw.app.ui.design.ClawTheme
-import ai.openclaw.app.ui.design.TalkWaveform
-import ai.openclaw.app.ui.design.TalkWaveformPhase
+import ai.marketingclaw.app.MainViewModel
+import ai.marketingclaw.app.chat.AndroidVoiceNoteRecordingEngine
+import ai.marketingclaw.app.chat.ChatMessageContent
+import ai.marketingclaw.app.chat.VoiceNoteRecorderController
+import ai.marketingclaw.app.chat.VoiceNoteRecorderState
+import ai.marketingclaw.app.ui.design.ClawTheme
+import ai.marketingclaw.app.ui.design.TalkWaveform
+import ai.marketingclaw.app.ui.design.TalkWaveformPhase
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

@@ -2,13 +2,13 @@ import { html, nothing } from "lit";
 import { property } from "lit/decorators.js";
 import { controlUiPublicAssetPath } from "../app/public-assets.ts";
 import { t } from "../i18n/index.ts";
-import { OpenClawLightDomContentsElement } from "../lit/openclaw-element.ts";
+import { MarketingClawLightDomContentsElement } from "../lit/marketingclaw-element.ts";
 import { icons } from "./icons.ts";
 import "./tooltip.ts";
 
 /** Narrow-viewport header: drawer toggle, brand, and command-palette search.
  * Desktop hides it entirely (layout.css) — the sidebar owns navigation there. */
-class AppTopbar extends OpenClawLightDomContentsElement {
+class AppTopbar extends MarketingClawLightDomContentsElement {
   @property({ attribute: false }) navDrawerOpen = false;
   @property({ attribute: false }) onboarding = false;
   @property({ attribute: false }) basePath = "";
@@ -25,7 +25,7 @@ class AppTopbar extends OpenClawLightDomContentsElement {
         aria-hidden=${this.onboarding ? "true" : nothing}
       >
         <div class="topnav-shell">
-          <openclaw-tooltip .content=${drawerLabel}>
+          <marketingclaw-tooltip .content=${drawerLabel}>
             <button
               type="button"
               class="topbar-icon-btn topbar-nav-toggle"
@@ -36,20 +36,20 @@ class AppTopbar extends OpenClawLightDomContentsElement {
             >
               <span class="nav-collapse-toggle__icon" aria-hidden="true">${icons.menu}</span>
             </button>
-          </openclaw-tooltip>
+          </marketingclaw-tooltip>
           <div class="topnav-shell__content">
-            <div class="topbar-brand" aria-label="OpenClaw">
+            <div class="topbar-brand" aria-label="MarketingClaw">
               <img
                 class="topbar-brand__logo"
                 src=${controlUiPublicAssetPath("apple-touch-icon.png", this.basePath)}
                 alt=""
                 aria-hidden="true"
               />
-              <span class="topbar-brand__title">OpenClaw</span>
+              <span class="topbar-brand__title">MarketingClaw</span>
             </div>
           </div>
           <div class="topnav-shell__actions">
-            <openclaw-tooltip .content=${t("chat.commandPaletteTitle")}>
+            <marketingclaw-tooltip .content=${t("chat.commandPaletteTitle")}>
               <button
                 class="topbar-search"
                 ?disabled=${this.searchDisabled || !this.onOpenPalette}
@@ -58,7 +58,7 @@ class AppTopbar extends OpenClawLightDomContentsElement {
               >
                 ${icons.search}
               </button>
-            </openclaw-tooltip>
+            </marketingclaw-tooltip>
           </div>
         </div>
       </header>
@@ -66,6 +66,6 @@ class AppTopbar extends OpenClawLightDomContentsElement {
   }
 }
 
-if (!customElements.get("openclaw-app-topbar")) {
-  customElements.define("openclaw-app-topbar", AppTopbar);
+if (!customElements.get("marketingclaw-app-topbar")) {
+  customElements.define("marketingclaw-app-topbar", AppTopbar);
 }

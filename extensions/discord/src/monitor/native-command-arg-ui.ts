@@ -10,8 +10,8 @@ import {
   type CommandArgDefinition,
   type CommandArgValues,
   type CommandArgs,
-} from "openclaw/plugin-sdk/command-auth-native";
-import { chunkItems } from "openclaw/plugin-sdk/text-chunking";
+} from "marketingclaw/plugin-sdk/command-auth-native";
+import { chunkItems } from "marketingclaw/plugin-sdk/text-chunking";
 import {
   Button,
   Row,

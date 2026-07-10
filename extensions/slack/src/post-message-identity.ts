@@ -1,10 +1,10 @@
 // Slack plugin module implements best-effort custom identity fallback for chat.postMessage.
 import type { ChatPostMessageArguments } from "@slack/web-api";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
+import { logVerbose } from "marketingclaw/plugin-sdk/runtime-env";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import type { SlackBasePostMessagePayload } from "./post-message-payload.js";
 
 export type SlackPostMessageIdentity = {

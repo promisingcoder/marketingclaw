@@ -1,23 +1,23 @@
 /**
  * Implements sandboxed HTTP requests for Codex native tools by routing network
- * access through the active OpenClaw sandbox backend.
+ * access through the active MarketingClaw sandbox backend.
  */
 import { spawn, type ChildProcessWithoutNullStreams } from "node:child_process";
-import { embeddedAgentLog } from "openclaw/plugin-sdk/agent-harness-runtime";
-import type { SandboxContext } from "openclaw/plugin-sdk/sandbox";
-import { SsrFBlockedError, isBlockedHostnameOrIp } from "openclaw/plugin-sdk/ssrf-runtime";
+import { embeddedAgentLog } from "marketingclaw/plugin-sdk/agent-harness-runtime";
+import type { SandboxContext } from "marketingclaw/plugin-sdk/sandbox";
+import { SsrFBlockedError, isBlockedHostnameOrIp } from "marketingclaw/plugin-sdk/ssrf-runtime";
 import type { WebSocket } from "ws";
 import type { JsonObject, JsonValue } from "../protocol.js";
 import { readHttpHeaders, requireNumber, requireObject, requireString } from "./json-rpc.js";
 import { requireBackend } from "./runtime.js";
-import type { HttpHeader, OpenClawExecServer } from "./types.js";
+import type { HttpHeader, MarketingClawExecServer } from "./types.js";
 
 /** Maximum JSON-line size accepted from the streaming HTTP helper process. */
 export const SANDBOX_HTTP_STREAM_LINE_MAX_CHARS = 256 * 1024;
 
 /** Handles one sandbox HTTP JSON-RPC request, optionally streaming response body deltas. */
 export async function httpRequest(
-  execServer: OpenClawExecServer,
+  execServer: MarketingClawExecServer,
   socket: WebSocket,
   params: JsonValue | undefined,
 ): Promise<JsonObject> {
@@ -75,7 +75,7 @@ function assertSandboxHttpRequestTargetAllowed(url: string): void {
 }
 
 async function runSandboxHttpRequest(
-  execServer: OpenClawExecServer,
+  execServer: MarketingClawExecServer,
   params: SandboxHttpRequest,
 ): Promise<JsonObject & { status: number; headers: HttpHeader[]; bodyBase64: string }> {
   const backend = requireBackend(execServer);
@@ -104,7 +104,7 @@ async function runSandboxHttpRequest(
 }
 
 async function runStreamingSandboxHttpRequest(
-  execServer: OpenClawExecServer,
+  execServer: MarketingClawExecServer,
   socket: WebSocket,
   requestId: string,
   params: SandboxHttpRequest,
@@ -118,7 +118,7 @@ async function runStreamingSandboxHttpRequest(
   });
   const [command, ...args] = execSpec.argv;
   if (!command) {
-    throw new Error("OpenClaw sandbox HTTP exec spec did not provide a command.");
+    throw new Error("MarketingClaw sandbox HTTP exec spec did not provide a command.");
   }
 
   const child = spawn(command, args, {
@@ -253,7 +253,7 @@ function readStreamingSandboxHttpResponse(params: {
 }
 
 export const SANDBOX_HTTP_REQUEST_SCRIPT = String.raw`
-tmp=$(mktemp "$TMPDIR/openclaw-http.XXXXXX.py" 2>/dev/null || mktemp "/tmp/openclaw-http.XXXXXX.py") || exit 1
+tmp=$(mktemp "$TMPDIR/marketingclaw-http.XXXXXX.py" 2>/dev/null || mktemp "/tmp/marketingclaw-http.XXXXXX.py") || exit 1
 trap 'rm -f "$tmp"' EXIT
 cat > "$tmp" <<'PY'
 import base64

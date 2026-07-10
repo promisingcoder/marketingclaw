@@ -4,7 +4,7 @@ import Foundation
 import UIKit
 #endif
 
-public struct OpenClawChatHaptics: Sendable {
+public struct MarketingClawChatHaptics: Sendable {
     public enum Event: Sendable, Equatable {
         case messageSent
         case runCompleted

@@ -15,7 +15,7 @@ final class TalkMLXSpeechSynthesizer {
     static let shared = TalkMLXSpeechSynthesizer()
     static let defaultModelRepo = "mlx-community/Soprano-80M-bf16"
 
-    private let logger = Logger(subsystem: "ai.openclaw", category: "talk.mlx")
+    private let logger = Logger(subsystem: "ai.marketingclaw", category: "talk.mlx")
     private var currentToken = UUID()
     private var currentProcess: Process?
 
@@ -40,7 +40,7 @@ final class TalkMLXSpeechSynthesizer {
         self.currentToken = token
 
         let tempDir = FileManager.default.temporaryDirectory
-            .appendingPathComponent("openclaw-mlx-tts-\(token.uuidString)", isDirectory: true)
+            .appendingPathComponent("marketingclaw-mlx-tts-\(token.uuidString)", isDirectory: true)
         try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: tempDir) }
 
@@ -105,7 +105,7 @@ final class TalkMLXSpeechSynthesizer {
 
     private static func helperInvocation() -> HelperInvocation {
         let fileManager = FileManager.default
-        if let override = ProcessInfo.processInfo.environment["OPENCLAW_MLX_TTS_BIN"], !override.isEmpty {
+        if let override = ProcessInfo.processInfo.environment["MARKETINGCLAW_MLX_TTS_BIN"], !override.isEmpty {
             return HelperInvocation(
                 executableURL: URL(fileURLWithPath: override),
                 argumentPrefix: [],
@@ -113,7 +113,7 @@ final class TalkMLXSpeechSynthesizer {
         }
 
         if let executableDir = Bundle.main.executableURL?.deletingLastPathComponent() {
-            let bundled = executableDir.appendingPathComponent("openclaw-mlx-tts")
+            let bundled = executableDir.appendingPathComponent("marketingclaw-mlx-tts")
             if fileManager.isExecutableFile(atPath: bundled.path) {
                 return HelperInvocation(
                     executableURL: bundled,
@@ -124,8 +124,8 @@ final class TalkMLXSpeechSynthesizer {
 
         return HelperInvocation(
             executableURL: URL(fileURLWithPath: "/usr/bin/env"),
-            argumentPrefix: ["openclaw-mlx-tts"],
-            displayName: "openclaw-mlx-tts")
+            argumentPrefix: ["marketingclaw-mlx-tts"],
+            displayName: "marketingclaw-mlx-tts")
     }
 
     private static func resolvedModelRepo(_ modelRepo: String?) -> String {

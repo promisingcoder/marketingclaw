@@ -5,11 +5,11 @@ import path from "node:path";
 import {
   createPluginStateKeyedStoreForTests,
   resetPluginStateStoreForTests,
-} from "openclaw/plugin-sdk/plugin-state-test-runtime";
+} from "marketingclaw/plugin-sdk/plugin-state-test-runtime";
 import type {
   OpenKeyedStoreOptions,
   PluginDoctorStateMigrationContext,
-} from "openclaw/plugin-sdk/runtime-doctor";
+} from "marketingclaw/plugin-sdk/runtime-doctor";
 import { afterEach, describe, expect, it } from "vitest";
 import {
   legacyConfigRules,
@@ -43,7 +43,7 @@ describe("codex doctor contract", () => {
   it("reports the retired dynamic tools profile config key", () => {
     expect(
       legacyConfigRules[0]?.match({
-        codexDynamicToolsProfile: "openclaw-compat",
+        codexDynamicToolsProfile: "marketingclaw-compat",
         codexDynamicToolsLoading: "direct",
       }),
     ).toBe(true);
@@ -103,7 +103,7 @@ describe("codex doctor contract", () => {
           codex: {
             enabled: true,
             config: {
-              codexDynamicToolsProfile: "openclaw-compat",
+              codexDynamicToolsProfile: "marketingclaw-compat",
               codexDynamicToolsLoading: "direct",
               codexDynamicToolsExclude: ["custom_tool"],
               appServer: { mode: "guardian" },
@@ -127,8 +127,8 @@ describe("codex doctor contract", () => {
   });
 
   it("imports and archives shipped binding sidecars", async () => {
-    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-doctor-"));
-    const env = { ...process.env, OPENCLAW_STATE_DIR: stateDir };
+    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-codex-doctor-"));
+    const env = { ...process.env, MARKETINGCLAW_STATE_DIR: stateDir };
     const sessionsDir = path.join(stateDir, "agents", "main", "sessions");
     const transcriptPath = path.join(sessionsDir, "session-current.jsonl");
     const sidecarPath = `${transcriptPath}.codex-app-server.json`;
@@ -232,8 +232,8 @@ describe("codex doctor contract", () => {
   });
 
   it("reports unresolved-owner binding sidecars as notices after importing conversation binding", async () => {
-    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-doctor-"));
-    const env = { ...process.env, OPENCLAW_STATE_DIR: stateDir };
+    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-codex-doctor-"));
+    const env = { ...process.env, MARKETINGCLAW_STATE_DIR: stateDir };
     const sessionsDir = path.join(stateDir, "agents", "main", "sessions");
     const transcriptPath = path.join(sessionsDir, "orphan.jsonl");
     const sidecarPath = `${transcriptPath}.codex-app-server.json`;
@@ -294,7 +294,7 @@ describe("codex doctor contract", () => {
   });
 
   it("does not scan above stateDir when a session store sits at its parent", async () => {
-    const outerDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-doctor-outer-"));
+    const outerDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-codex-doctor-outer-"));
     const stateDir = path.join(outerDir, "state");
     await fs.mkdir(stateDir, { recursive: true });
     const strayDir = path.join(outerDir, "unrelated");
@@ -304,7 +304,7 @@ describe("codex doctor contract", () => {
       JSON.stringify({ schemaVersion: 2, threadId: "thread-foreign" }),
       "utf8",
     );
-    const env = { ...process.env, OPENCLAW_STATE_DIR: stateDir };
+    const env = { ...process.env, MARKETINGCLAW_STATE_DIR: stateDir };
     const params = {
       // The store dir is exactly the parent of stateDir; doctor must treat it
       // as an external store (indexed reads only), not a scannable state root.
@@ -331,7 +331,7 @@ describe("codex doctor contract", () => {
           codex: {
             enabled: true,
             config: {
-              codexDynamicToolsProfile: "openclaw-compat",
+              codexDynamicToolsProfile: "marketingclaw-compat",
               codexPlugins: {
                 enabled: true,
                 allow_destructive_actions: "on-request",

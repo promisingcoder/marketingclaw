@@ -1,6 +1,6 @@
 /** Prepares secrets runtime snapshots from config, auth stores, plugins, and env. */
 import { isDeepStrictEqual } from "node:util";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { uniqueStrings } from "@marketingclaw/normalization-core/string-normalization";
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../agents/agent-scope-config.js";
 import {
   clearRuntimeAuthProfileStoreSnapshots,
@@ -8,7 +8,7 @@ import {
   loadAuthProfileStoreWithoutExternalProfiles,
 } from "../agents/auth-profiles.js";
 import type { AuthProfileStore } from "../agents/auth-profiles/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { registerSecretValueForRedaction } from "../logging/secret-redaction-registry.js";
 import type { PluginManifestRegistry } from "../plugins/manifest-registry.js";
 import type { PluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.js";
@@ -52,7 +52,7 @@ const loadRuntimePrepareHelpers = createLazyRuntimeModule(
 );
 
 async function resolveLoadablePluginOrigins(params: {
-  config: OpenClawConfig;
+  config: MarketingClawConfig;
   env: NodeJS.ProcessEnv;
   pluginMetadataSnapshot?: Pick<PluginMetadataSnapshot, "plugins">;
 }): Promise<ReadonlyMap<string, PluginOrigin>> {
@@ -72,7 +72,7 @@ async function resolveLoadablePluginOrigins(params: {
   return listPluginOriginsFromMetadataSnapshot(snapshot);
 }
 
-function hasConfiguredPluginEntries(config: OpenClawConfig): boolean {
+function hasConfiguredPluginEntries(config: MarketingClawConfig): boolean {
   const entries = config.plugins?.entries;
   return (
     Boolean(entries) &&
@@ -82,7 +82,7 @@ function hasConfiguredPluginEntries(config: OpenClawConfig): boolean {
   );
 }
 
-function hasConfiguredChannelEntries(config: OpenClawConfig): boolean {
+function hasConfiguredChannelEntries(config: MarketingClawConfig): boolean {
   const channels = config.channels;
   return (
     Boolean(channels) &&
@@ -92,7 +92,7 @@ function hasConfiguredChannelEntries(config: OpenClawConfig): boolean {
   );
 }
 
-function hasConfiguredPluginIntegrationSecretProviders(config: OpenClawConfig): boolean {
+function hasConfiguredPluginIntegrationSecretProviders(config: MarketingClawConfig): boolean {
   const providers = config.secrets?.providers;
   if (!providers || typeof providers !== "object" || Array.isArray(providers)) {
     return false;
@@ -105,7 +105,7 @@ function hasConfiguredPluginIntegrationSecretProviders(config: OpenClawConfig): 
   );
 }
 
-function shouldLoadPluginMetadataForSecrets(config: OpenClawConfig): boolean {
+function shouldLoadPluginMetadataForSecrets(config: MarketingClawConfig): boolean {
   return (
     hasConfiguredPluginEntries(config) ||
     hasConfiguredChannelEntries(config) ||
@@ -115,7 +115,7 @@ function shouldLoadPluginMetadataForSecrets(config: OpenClawConfig): boolean {
 
 /** Prepares a secrets runtime snapshot and records refresh context for later activation. */
 export async function prepareSecretsRuntimeSnapshot(params: {
-  config: OpenClawConfig;
+  config: MarketingClawConfig;
   env?: NodeJS.ProcessEnv;
   agentDirs?: string[];
   includeAuthStoreRefs?: boolean;
@@ -268,7 +268,7 @@ export function activateSecretsRuntimeSnapshot(snapshot: PreparedSecretsRuntimeS
     } satisfies SecretsRuntimeRefreshContext);
   const coercePreflightSnapshot = (
     value: unknown,
-    sourceConfig: OpenClawConfig,
+    sourceConfig: MarketingClawConfig,
   ): PreparedSecretsRuntimeSnapshot | null => {
     if (!value || typeof value !== "object") {
       return null;

@@ -1,6 +1,6 @@
-package ai.openclaw.app.node
+package ai.marketingclaw.app.node
 
-import ai.openclaw.app.LocationMode
+import ai.marketingclaw.app.LocationMode
 import android.content.Context
 import android.location.LocationManager
 import kotlinx.coroutines.test.runTest

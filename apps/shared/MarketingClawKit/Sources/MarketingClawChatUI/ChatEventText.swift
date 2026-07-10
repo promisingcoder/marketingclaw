@@ -1,7 +1,7 @@
-import OpenClawKit
+import MarketingClawKit
 
-public enum OpenClawChatEventText {
-    public static func assistantText(from event: OpenClawChatEventPayload) -> String? {
+public enum MarketingClawChatEventText {
+    public static func assistantText(from event: MarketingClawChatEventPayload) -> String? {
         self.assistantText(fromMessage: event.message)
     }
 

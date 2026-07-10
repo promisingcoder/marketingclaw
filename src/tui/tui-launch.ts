@@ -90,7 +90,9 @@ export async function launchTuiCli(
     launchOptions.gatewayUrl || launchOptions.authSource
       ? {
           ...process.env,
-          ...(launchOptions.gatewayUrl ? { OPENCLAW_GATEWAY_URL: launchOptions.gatewayUrl } : {}),
+          ...(launchOptions.gatewayUrl
+            ? { MARKETINGCLAW_GATEWAY_URL: launchOptions.gatewayUrl }
+            : {}),
           ...(launchOptions.authSource === "config"
             ? { [TUI_SETUP_AUTH_SOURCE_ENV]: TUI_SETUP_AUTH_SOURCE_CONFIG }
             : {}),

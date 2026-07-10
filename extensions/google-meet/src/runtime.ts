@@ -1,11 +1,14 @@
 // Google Meet plugin module implements runtime behavior.
 import { randomUUID } from "node:crypto";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import type { PluginRuntime, RuntimeLogger } from "openclaw/plugin-sdk/plugin-runtime";
-import { normalizeAgentId } from "openclaw/plugin-sdk/routing";
-import { sleep } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeOptionalString, uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "marketingclaw/plugin-sdk/error-runtime";
+import type { PluginRuntime, RuntimeLogger } from "marketingclaw/plugin-sdk/plugin-runtime";
+import { normalizeAgentId } from "marketingclaw/plugin-sdk/routing";
+import { sleep } from "marketingclaw/plugin-sdk/runtime-env";
+import {
+  normalizeOptionalString,
+  uniqueStrings,
+} from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import type {
   GoogleMeetConfig,
   GoogleMeetMode,
@@ -204,7 +207,7 @@ function evaluateSpeechReadiness(session: GoogleMeetSession): {
       reason: health.manualActionReason ?? "browser-unverified",
       message:
         health.manualActionMessage ??
-        "Resolve the Google Meet browser prompt before asking OpenClaw to speak.",
+        "Resolve the Google Meet browser prompt before asking MarketingClaw to speak.",
     };
   }
   if (health?.inCall === true) {
@@ -212,7 +215,8 @@ function evaluateSpeechReadiness(session: GoogleMeetSession): {
       return {
         ready: false,
         reason: "meet-microphone-muted",
-        message: "Turn on the OpenClaw Google Meet microphone before asking OpenClaw to speak.",
+        message:
+          "Turn on the MarketingClaw Google Meet microphone before asking MarketingClaw to speak.",
       };
     }
     if (session.chrome.audioBridge) {
@@ -267,7 +271,7 @@ export class GoogleMeetRuntime {
   constructor(
     private readonly params: {
       config: GoogleMeetConfig;
-      fullConfig: OpenClawConfig;
+      fullConfig: MarketingClawConfig;
       runtime: PluginRuntime;
       logger: RuntimeLogger;
     },
@@ -552,7 +556,7 @@ export class GoogleMeetRuntime {
             : prefixDtmfWait(rawDtmfSequence, this.params.config.voiceCall.dtmfDelayMs);
         const hasExplicitDelegatedAgent = Boolean(
           normalizeOptionalString(request.agentId) ||
-            normalizeOptionalString(this.params.config.realtime.agentId),
+          normalizeOptionalString(this.params.config.realtime.agentId),
         );
         const delegatedAgentId = hasExplicitDelegatedAgent ? agentId : undefined;
         const voiceCallResult = this.params.config.voiceCall.enabled
@@ -766,8 +770,7 @@ export class GoogleMeetRuntime {
       mode,
       message: request.message ?? "Say exactly: Google Meet speech test complete.",
     });
-    const startOutputBytes =
-      existingSession?.id === result.session.id ? existingOutputBytes : 0;
+    const startOutputBytes = existingSession?.id === result.session.id ? existingOutputBytes : 0;
     let health = result.session.chrome?.health;
     const shouldWaitForOutput =
       result.spoken === true &&

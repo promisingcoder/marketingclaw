@@ -5,7 +5,7 @@ import OSLog
 @MainActor
 final class CLIInstallPrompter {
     static let shared = CLIInstallPrompter()
-    private let logger = Logger(subsystem: "ai.openclaw", category: "cli.prompt")
+    private let logger = Logger(subsystem: "ai.marketingclaw", category: "cli.prompt")
     private var isPrompting = false
 
     func checkAndPromptIfNeeded(reason: String) {
@@ -30,7 +30,7 @@ final class CLIInstallPrompter {
         UserDefaults.standard.set(version, forKey: cliInstallPromptedVersionKey)
 
         let alert = NSAlert()
-        alert.messageText = "Install OpenClaw CLI?"
+        alert.messageText = "Install MarketingClaw CLI?"
         alert.informativeText = "Local mode needs the CLI so launchd can run the gateway."
         alert.addButton(withTitle: "Install CLI")
         alert.addButton(withTitle: "Not now")
@@ -55,15 +55,15 @@ final class CLIInstallPrompter {
             await status.set(message)
         }
         if installed {
-            await status.set("Starting OpenClaw Gateway…")
+            await status.set("Starting MarketingClaw Gateway…")
             let activation = await CLIInstaller.activateLocalGateway()
             let message = switch activation {
             case .ready:
-                "OpenClaw Gateway is ready."
+                "MarketingClaw Gateway is ready."
             case .deferred:
-                "OpenClaw is installed. The Gateway will start when This Mac is active and resumed."
+                "MarketingClaw is installed. The Gateway will start when This Mac is active and resumed."
             case .failed:
-                "OpenClaw was installed, but the Gateway did not start. Open Settings to retry."
+                "MarketingClaw was installed, but the Gateway did not start. Open Settings to retry."
             }
             await status.set(message)
         }
@@ -79,7 +79,7 @@ final class CLIInstallPrompter {
         SettingsTabRouter.request(tab)
         SettingsWindowOpener.shared.open()
         DispatchQueue.main.async {
-            NotificationCenter.default.post(name: .openclawSelectSettingsTab, object: tab)
+            NotificationCenter.default.post(name: .marketingclawSelectSettingsTab, object: tab)
         }
     }
 

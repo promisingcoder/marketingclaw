@@ -315,7 +315,7 @@ private struct WatchControlSurfaceView: View {
                 label: self.directNode.isConnected ? "Direct" : "Setup",
                 title: self.directNode.endpointText ?? "Enable from iPhone",
                 subtitle: self.directNode.isConfigured
-                    ? "Uses Wi-Fi or cellular while OpenClaw is active"
+                    ? "Uses Wi-Fi or cellular while MarketingClaw is active"
                     : "Open iPhone Settings → Apple Watch",
                 accessory: self.directNode.isConnected ? "Online" : "Offline")
 
@@ -530,7 +530,7 @@ private struct WatchControlSurfaceView: View {
         case "system":
             "System"
         default:
-            "OpenClaw"
+            "MarketingClaw"
         }
     }
 
@@ -671,7 +671,7 @@ private struct WatchClawAvatar: View {
                 .minimumScaleFactor(0.6)
                 .lineLimit(1)
         } else {
-            Image("OpenClawIcon")
+            Image("MarketingClawIcon")
                 .resizable()
                 .scaledToFit()
         }
@@ -957,7 +957,7 @@ private struct WatchActionCard: View {
     var body: some View {
         Button(action: self.action) {
             WatchStackCard(
-                label: "OpenClaw",
+                label: "MarketingClaw",
                 title: self.title,
                 subtitle: self.subtitle,
                 badge: nil)
@@ -1051,7 +1051,7 @@ private struct WatchChatBubble: View {
         case "system":
             "System"
         default:
-            "OpenClaw"
+            "MarketingClaw"
         }
     }
 }
@@ -1251,7 +1251,7 @@ private struct WatchChatComposer: View {
                     onSubmit: self.onSendMessage)
             } label: {
                 HStack(spacing: 5) {
-                    Text("Message OpenClaw")
+                    Text("Message MarketingClaw")
                         .font(WatchClawType.body(size: 12, weight: .semibold))
                         .foregroundStyle(.secondary)
                         .lineLimit(1)

@@ -5,7 +5,7 @@
  */
 import type { ChatType } from "../channels/chat-type.js";
 import { normalizeChatType } from "../channels/chat-type.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import type { SkillSnapshot } from "../skills/types.js";
 import { INTERNAL_MESSAGE_CHANNEL } from "../utils/message-channel-constants.js";
 import { normalizeMessageChannel } from "../utils/message-channel-core.js";
@@ -35,7 +35,7 @@ import { resolveWorkspaceRoot } from "./workspace-dir.js";
 export type ConversationCapabilityScope = "direct" | "shared" | "unknown";
 
 export type ConversationCapabilityProfileParams = {
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   sessionKey?: string;
   /** Live conversation key when a sandbox/policy key is used for tool filtering. */
   runSessionKey?: string;

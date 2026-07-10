@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 import Testing
-@testable import OpenClawChatUI
+@testable import MarketingClawChatUI
 
 struct ChatInlineMathTests {
     @Test func `basic span splits from prose`() {

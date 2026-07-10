@@ -4,7 +4,7 @@ import Foundation
 // session defaults, and free-form user aliases all feed the picker; this
 // extension owns collapsing them into the canonical option list.
 
-extension OpenClawChatViewModel {
+extension MarketingClawChatViewModel {
     /// `agent-command.ts` throws for explicit unsupported levels, so hidden controls must send `off`.
     var effectiveThinkingLevelForSend: String {
         self.effectiveThinkingLevelForSend(self.thinkingLevel)
@@ -41,8 +41,8 @@ extension OpenClawChatViewModel {
     }
 
     private func thinkingPickerIsAvailable(
-        for session: OpenClawChatSessionEntry?,
-        modelChoice: OpenClawChatModelChoice?) -> Bool
+        for session: MarketingClawChatSessionEntry?,
+        modelChoice: MarketingClawChatModelChoice?) -> Bool
     {
         let resolved = self.resolvedThinkingLevelOptions(for: session)
         let gatewayAllowsOnlyOff = resolved.isGatewayMetadata &&
@@ -51,12 +51,12 @@ extension OpenClawChatViewModel {
     }
 
     private struct ThinkingLevelOptionsResolution {
-        let options: [OpenClawChatThinkingLevelOption]
+        let options: [MarketingClawChatThinkingLevelOption]
         let isGatewayMetadata: Bool
     }
 
     private func resolvedThinkingLevelOptions(
-        for currentSession: OpenClawChatSessionEntry?) -> ThinkingLevelOptionsResolution
+        for currentSession: MarketingClawChatSessionEntry?) -> ThinkingLevelOptionsResolution
     {
         if let levels = Self.normalizedThinkingLevelOptions(currentSession?.thinkingLevels), !levels.isEmpty {
             return ThinkingLevelOptionsResolution(options: levels, isGatewayMetadata: true)
@@ -88,7 +88,7 @@ extension OpenClawChatViewModel {
     }
 
     private func selectedModelChoice(
-        for currentSession: OpenClawChatSessionEntry?) -> OpenClawChatModelChoice?
+        for currentSession: MarketingClawChatSessionEntry?) -> MarketingClawChatModelChoice?
     {
         if self.modelSelectionID != Self.defaultModelSelectionID {
             return self.modelChoices.first(where: { $0.selectionID == self.modelSelectionID })
@@ -98,7 +98,7 @@ extension OpenClawChatViewModel {
     }
 
     private func sessionModelChoice(
-        for currentSession: OpenClawChatSessionEntry?) -> OpenClawChatModelChoice?
+        for currentSession: MarketingClawChatSessionEntry?) -> MarketingClawChatModelChoice?
     {
         if Self.normalizedModelID(currentSession?.model) != nil {
             return self.modelChoice(modelID: currentSession?.model, provider: currentSession?.modelProvider)
@@ -106,7 +106,7 @@ extension OpenClawChatViewModel {
         return self.modelChoice(modelID: self.sessionDefaults?.model, provider: self.sessionDefaults?.modelProvider)
     }
 
-    private func modelChoice(modelID: String?, provider: String?) -> OpenClawChatModelChoice? {
+    private func modelChoice(modelID: String?, provider: String?) -> MarketingClawChatModelChoice? {
         guard let modelID = Self.normalizedModelID(modelID) else { return nil }
         let provider = provider?.trimmingCharacters(in: .whitespacesAndNewlines)
         if let provider, !provider.isEmpty {
@@ -129,8 +129,8 @@ extension OpenClawChatViewModel {
     }
 
     private static func sessionModelMatchesDefaults(
-        _ session: OpenClawChatSessionEntry,
-        defaults: OpenClawChatSessionsDefaults?) -> Bool
+        _ session: MarketingClawChatSessionEntry,
+        defaults: MarketingClawChatSessionsDefaults?) -> Bool
     {
         let providerMatches = session.modelProvider == nil || session.modelProvider == defaults?.modelProvider
         let modelMatches = session.model == nil || session.model == defaults?.model
@@ -138,39 +138,39 @@ extension OpenClawChatViewModel {
     }
 
     private static func normalizedThinkingLevelOptions(
-        _ levels: [OpenClawChatThinkingLevelOption]?) -> [OpenClawChatThinkingLevelOption]?
+        _ levels: [MarketingClawChatThinkingLevelOption]?) -> [MarketingClawChatThinkingLevelOption]?
     {
         guard let levels else { return nil }
         return Self.dedupedThinkingOptions(
             levels.compactMap { level in
                 guard let id = Self.normalizedThinkingLevel(level.id) else { return nil }
                 let label = level.label.trimmingCharacters(in: .whitespacesAndNewlines)
-                return OpenClawChatThinkingLevelOption(id: id, label: label.isEmpty ? id : label)
+                return MarketingClawChatThinkingLevelOption(id: id, label: label.isEmpty ? id : label)
             })
     }
 
-    private static func thinkingOptions(from labels: [String]?) -> [OpenClawChatThinkingLevelOption]? {
+    private static func thinkingOptions(from labels: [String]?) -> [MarketingClawChatThinkingLevelOption]? {
         guard let labels else { return nil }
         return Self.dedupedThinkingOptions(
             labels.compactMap { label in
                 guard let id = Self.normalizedThinkingLevel(label) else { return nil }
                 let trimmed = label.trimmingCharacters(in: .whitespacesAndNewlines)
-                return OpenClawChatThinkingLevelOption(id: id, label: trimmed.isEmpty ? id : trimmed)
+                return MarketingClawChatThinkingLevelOption(id: id, label: trimmed.isEmpty ? id : trimmed)
             })
     }
 
     static func withCurrentThinkingOption(
-        _ options: [OpenClawChatThinkingLevelOption],
-        current: String) -> [OpenClawChatThinkingLevelOption]
+        _ options: [MarketingClawChatThinkingLevelOption],
+        current: String) -> [MarketingClawChatThinkingLevelOption]
     {
         guard !options.contains(where: { $0.id == current }) else { return options }
-        return options + [OpenClawChatThinkingLevelOption(id: current, label: current)]
+        return options + [MarketingClawChatThinkingLevelOption(id: current, label: current)]
     }
 
     private static func dedupedThinkingOptions(
-        _ options: [OpenClawChatThinkingLevelOption]) -> [OpenClawChatThinkingLevelOption]
+        _ options: [MarketingClawChatThinkingLevelOption]) -> [MarketingClawChatThinkingLevelOption]
     {
-        var result: [OpenClawChatThinkingLevelOption] = []
+        var result: [MarketingClawChatThinkingLevelOption] = []
         var seen = Set<String>()
         for option in options {
             guard !option.id.isEmpty, !seen.contains(option.id) else { continue }

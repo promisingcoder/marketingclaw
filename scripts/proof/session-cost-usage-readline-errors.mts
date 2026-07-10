@@ -15,7 +15,7 @@ import { fileURLToPath } from "node:url";
 const repoRoot = path.dirname(path.dirname(path.dirname(fileURLToPath(import.meta.url))));
 const { loadSessionLogs } = await import(path.join(repoRoot, "src/infra/session-cost-usage.js"));
 
-const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-proof-session-cost-"));
+const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-proof-session-cost-"));
 const sessionsDir = path.join(tmpDir, "agents", "main", "sessions");
 await fs.mkdir(sessionsDir, { recursive: true });
 

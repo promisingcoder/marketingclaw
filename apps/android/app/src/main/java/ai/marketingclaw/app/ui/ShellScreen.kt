@@ -1,34 +1,34 @@
-package ai.openclaw.app.ui
+package ai.marketingclaw.app.ui
 
-import ai.openclaw.app.BuildConfig
-import ai.openclaw.app.GatewayAgentSummary
-import ai.openclaw.app.GatewayChannelsSummary
-import ai.openclaw.app.GatewayConnectionDisplay
-import ai.openclaw.app.GatewayConnectionProblem
-import ai.openclaw.app.GatewayDreamingSummary
-import ai.openclaw.app.GatewayNodeApprovalState
-import ai.openclaw.app.GatewayNodesDevicesSummary
-import ai.openclaw.app.GatewaySkillSummary
-import ai.openclaw.app.GatewaySkillWorkshopSummary
-import ai.openclaw.app.HomeDestination
-import ai.openclaw.app.MainViewModel
-import ai.openclaw.app.NodeRuntime
-import ai.openclaw.app.R
-import ai.openclaw.app.chat.ChatSessionEntry
-import ai.openclaw.app.currentAppLanguage
-import ai.openclaw.app.ui.chat.ChatScreen
-import ai.openclaw.app.ui.design.ClawBottomNav
-import ai.openclaw.app.ui.design.ClawDesignTheme
-import ai.openclaw.app.ui.design.ClawEmptyState
-import ai.openclaw.app.ui.design.ClawNavItem
-import ai.openclaw.app.ui.design.ClawPanel
-import ai.openclaw.app.ui.design.ClawPlainIconButton
-import ai.openclaw.app.ui.design.ClawPrimaryButton
-import ai.openclaw.app.ui.design.ClawScaffold
-import ai.openclaw.app.ui.design.ClawSecondaryButton
-import ai.openclaw.app.ui.design.ClawStatus
-import ai.openclaw.app.ui.design.ClawTheme
-import ai.openclaw.app.ui.design.OpenClawMascot
+import ai.marketingclaw.app.BuildConfig
+import ai.marketingclaw.app.GatewayAgentSummary
+import ai.marketingclaw.app.GatewayChannelsSummary
+import ai.marketingclaw.app.GatewayConnectionDisplay
+import ai.marketingclaw.app.GatewayConnectionProblem
+import ai.marketingclaw.app.GatewayDreamingSummary
+import ai.marketingclaw.app.GatewayNodeApprovalState
+import ai.marketingclaw.app.GatewayNodesDevicesSummary
+import ai.marketingclaw.app.GatewaySkillSummary
+import ai.marketingclaw.app.GatewaySkillWorkshopSummary
+import ai.marketingclaw.app.HomeDestination
+import ai.marketingclaw.app.MainViewModel
+import ai.marketingclaw.app.NodeRuntime
+import ai.marketingclaw.app.R
+import ai.marketingclaw.app.chat.ChatSessionEntry
+import ai.marketingclaw.app.currentAppLanguage
+import ai.marketingclaw.app.ui.chat.ChatScreen
+import ai.marketingclaw.app.ui.design.ClawBottomNav
+import ai.marketingclaw.app.ui.design.ClawDesignTheme
+import ai.marketingclaw.app.ui.design.ClawEmptyState
+import ai.marketingclaw.app.ui.design.ClawNavItem
+import ai.marketingclaw.app.ui.design.ClawPanel
+import ai.marketingclaw.app.ui.design.ClawPlainIconButton
+import ai.marketingclaw.app.ui.design.ClawPrimaryButton
+import ai.marketingclaw.app.ui.design.ClawScaffold
+import ai.marketingclaw.app.ui.design.ClawSecondaryButton
+import ai.marketingclaw.app.ui.design.ClawStatus
+import ai.marketingclaw.app.ui.design.ClawTheme
+import ai.marketingclaw.app.ui.design.MarketingClawMascot
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -148,7 +148,7 @@ fun ShellScreen(
 ) {
   val appearanceThemeMode by viewModel.appearanceThemeMode.collectAsState()
   val shellDark = appearanceThemeMode.isDark(systemDark = isSystemInDarkTheme())
-  OpenClawSystemBarAppearance(lightAppearance = !shellDark)
+  MarketingClawSystemBarAppearance(lightAppearance = !shellDark)
   ClawDesignTheme(dark = shellDark) {
     val nav = rememberSaveable(saver = ShellNavigation.Saver) { ShellNavigation() }
     var commandOpen by rememberSaveable { mutableStateOf(false) }
@@ -481,7 +481,7 @@ private fun OverviewScreen(
           item {
             ClawEmptyState(
               title = "No recent sessions",
-              body = "Start a chat and your active OpenClaw conversations will appear here.",
+              body = "Start a chat and your active MarketingClaw conversations will appear here.",
               action = { ClawPrimaryButton(text = "Start Chat", onClick = { onSelectTab(Tab.Chat) }) },
             )
           }
@@ -526,9 +526,9 @@ private fun OverviewHeader(
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.spacedBy(10.dp),
   ) {
-    OpenClawMascot(modifier = Modifier.size(25.dp), tint = ClawTheme.colors.text)
+    MarketingClawMascot(modifier = Modifier.size(25.dp), tint = ClawTheme.colors.text)
     Text(
-      text = "OpenClaw",
+      text = "MarketingClaw",
       style = ClawTheme.type.title.copy(fontSize = 17.sp, lineHeight = 21.sp),
       color = ClawTheme.colors.text,
       modifier = Modifier.weight(1f),
@@ -1038,7 +1038,7 @@ internal fun overviewAgentName(
   defaultAgentId: String?,
 ): String {
   val agent = overviewAgent(agents = agents, defaultAgentId = defaultAgentId)
-  return agent?.name?.takeIf { it.isNotBlank() } ?: agent?.id?.takeIf { it.isNotBlank() } ?: "OpenClaw"
+  return agent?.name?.takeIf { it.isNotBlank() } ?: agent?.id?.takeIf { it.isNotBlank() } ?: "MarketingClaw"
 }
 
 internal fun overviewAgentBadgeText(
@@ -1052,7 +1052,7 @@ internal fun overviewAgentBadgeText(
     ?.takeIf { it.isNotEmpty() }
     ?.let { return it }
   if (agent == null) return "OC"
-  val source = agent.name?.takeIf { it.isNotBlank() } ?: agent.id.takeIf { it.isNotBlank() } ?: "OpenClaw"
+  val source = agent.name?.takeIf { it.isNotBlank() } ?: agent.id.takeIf { it.isNotBlank() } ?: "MarketingClaw"
   return agentInitials(source)
 }
 
@@ -1134,7 +1134,7 @@ internal fun sessionSourceLabel(
     } else {
       normalized
     }
-  if (!scopedKey.contains(':') && !scopedKey.contains('#')) return "OpenClaw"
+  if (!scopedKey.contains(':') && !scopedKey.contains('#')) return "MarketingClaw"
   val source = scopedKey.substringBefore(':').substringBefore('#').lowercase()
   val channelLabel =
     channelsSummary.channels
@@ -1143,7 +1143,7 @@ internal fun sessionSourceLabel(
       }?.label
       ?.takeIf { it.isNotBlank() }
   if (channelLabel != null) return channelLabel
-  return sessionSourceLabels[source] ?: "OpenClaw"
+  return sessionSourceLabels[source] ?: "MarketingClaw"
 }
 
 internal data class HomeAttentionRow(
@@ -1498,7 +1498,7 @@ private fun SettingsShellScreen(
       }
 
       item {
-        ProfilePanel(displayName = displayName.ifBlank { "OpenClaw" }, onClick = { onRouteChange(SettingsRoute.Profile) })
+        ProfilePanel(displayName = displayName.ifBlank { "MarketingClaw" }, onClick = { onRouteChange(SettingsRoute.Profile) })
       }
 
       val settingsRows =
@@ -1583,7 +1583,7 @@ private fun SettingsShellScreen(
           horizontalAlignment = Alignment.CenterHorizontally,
           verticalArrangement = Arrangement.spacedBy(3.dp),
         ) {
-          Text(text = "OpenClaw ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})", style = ClawTheme.type.caption.copy(fontSize = 12.5.sp, lineHeight = 16.sp), color = ClawTheme.colors.textMuted)
+          Text(text = "MarketingClaw ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})", style = ClawTheme.type.caption.copy(fontSize = 12.5.sp, lineHeight = 16.sp), color = ClawTheme.colors.textMuted)
           Row(horizontalArrangement = Arrangement.spacedBy(5.dp), verticalAlignment = Alignment.CenterVertically) {
             Text(
               text = if (isConnected) "All systems operational" else "Gateway not connected",
@@ -1827,7 +1827,7 @@ private fun ProfilePanel(
       }
       Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
         Text(text = displayName, style = ClawTheme.type.section, color = ClawTheme.colors.text, maxLines = 1)
-        Text(text = "OpenClaw mobile", style = ClawTheme.type.caption.copy(fontSize = 12.5.sp, lineHeight = 16.sp), color = ClawTheme.colors.textMuted, maxLines = 1)
+        Text(text = "MarketingClaw mobile", style = ClawTheme.type.caption.copy(fontSize = 12.5.sp, lineHeight = 16.sp), color = ClawTheme.colors.textMuted, maxLines = 1)
       }
       Icon(
         imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,

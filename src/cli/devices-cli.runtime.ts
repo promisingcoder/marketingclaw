@@ -3,8 +3,8 @@ import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
   normalizeStringifiedOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+} from "@marketingclaw/normalization-core/string-coerce";
+import { uniqueStrings } from "@marketingclaw/normalization-core/string-normalization";
 import {
   GATEWAY_CLIENT_MODES,
   GATEWAY_CLIENT_NAMES,
@@ -161,7 +161,7 @@ function isPendingNodeApprovalState(
 }
 
 function buildNodeApproveCommand(opts: DevicesRpcOpts, requestId: string): string {
-  const args = ["openclaw", "nodes", "approve", requestId];
+  const args = ["marketingclaw", "nodes", "approve", requestId];
   const timeout = normalizeOptionalString(opts.timeout);
   if (timeout && timeout !== String(DEFAULT_DEVICES_TIMEOUT_MS)) {
     args.push("--timeout", timeout);
@@ -362,7 +362,7 @@ function buildFallbackStateMismatchError(details: ConnectPairingRequiredDetails)
       details.requestId
         ? `${FALLBACK_STATE_MISMATCH_MESSAGE} Missing requestId: ${details.requestId}.`
         : FALLBACK_STATE_MISMATCH_MESSAGE,
-      "The running gateway is probably using a different OPENCLAW_PROFILE or OPENCLAW_STATE_DIR than this CLI.",
+      "The running gateway is probably using a different MARKETINGCLAW_PROFILE or MARKETINGCLAW_STATE_DIR than this CLI.",
       "Rerun with the same profile/state-dir as the gateway, or pass --token/--password so the CLI can approve through the gateway.",
     ].join("\n"),
   );
@@ -824,7 +824,7 @@ function lookupPairedDevice(
 }
 
 function buildExplicitApproveCommand(opts: DevicesRpcOpts, requestId: string): string {
-  const args = ["openclaw", "devices", "approve", requestId];
+  const args = ["marketingclaw", "devices", "approve", requestId];
   const url = normalizeOptionalString(opts.url);
   if (url) {
     args.push("--url", url);
@@ -862,7 +862,7 @@ function resolveRequiredDeviceRole(
     return { deviceId, role };
   }
   defaultRuntime.error(
-    `--device and --role are required. Run ${formatCliCommand("openclaw devices list")} to choose a paired device.`,
+    `--device and --role are required. Run ${formatCliCommand("marketingclaw devices list")} to choose a paired device.`,
   );
   defaultRuntime.exit(1);
   return null;
@@ -966,7 +966,7 @@ export async function runDevicesRemoveCommand(
   const trimmed = deviceId.trim();
   if (!trimmed) {
     defaultRuntime.error(
-      `deviceId is required. Run ${formatCliCommand("openclaw devices list")} to choose a paired device.`,
+      `deviceId is required. Run ${formatCliCommand("marketingclaw devices list")} to choose a paired device.`,
     );
     defaultRuntime.exit(1);
     return;
@@ -1094,7 +1094,7 @@ export async function runDevicesApproveCommand(
         break;
       case "re-approval":
         defaultRuntime.log(
-          "  Note:   Already paired. Approval-bound device details changed, so OpenClaw created a fresh request instead of silently reusing the old approval.",
+          "  Note:   Already paired. Approval-bound device details changed, so MarketingClaw created a fresh request instead of silently reusing the old approval.",
         );
         break;
       case "new-pairing":
@@ -1123,7 +1123,7 @@ export async function runDevicesApproveCommand(
   }
   if (!result) {
     defaultRuntime.error(
-      `No pending device request matches ${sanitizeForLog(resolvedRequestId)}. Run ${formatCliCommand("openclaw devices list")} and retry with the current request ID.`,
+      `No pending device request matches ${sanitizeForLog(resolvedRequestId)}. Run ${formatCliCommand("marketingclaw devices list")} and retry with the current request ID.`,
     );
     const nodeApprovalNotices = await findQueryPendingNodeApprovalNotices(opts, resolvedRequestId);
     for (const notice of nodeApprovalNotices) {

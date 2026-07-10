@@ -1,7 +1,7 @@
-package ai.openclaw.app
+package ai.marketingclaw.app
 
-import ai.openclaw.app.gateway.GatewayConnectErrorDetails
-import ai.openclaw.app.gateway.GatewaySession
+import ai.marketingclaw.app.gateway.GatewayConnectErrorDetails
+import ai.marketingclaw.app.gateway.GatewaySession
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import org.junit.Assert.assertEquals

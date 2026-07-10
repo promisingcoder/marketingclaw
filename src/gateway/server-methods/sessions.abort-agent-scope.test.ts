@@ -177,7 +177,7 @@ describe("sessions.abort agent scope", () => {
     listSessionsFromStoreAsyncMock.mockResolvedValue({ sessions: [] });
     loadCombinedSessionStoreForGatewayMock.mockReset();
     loadCombinedSessionStoreForGatewayMock.mockReturnValue({
-      storePath: "/tmp/openclaw-sessions.json",
+      storePath: "/tmp/marketingclaw-sessions.json",
       store: {},
     });
     loadSessionEntryMock.mockClear();
@@ -210,7 +210,7 @@ describe("sessions.abort agent scope", () => {
       extra: { loadGatewayModelCatalog: vi.fn().mockResolvedValue([]) },
     });
     listSessionsFromStoreAsyncMock.mockResolvedValue({
-      sessions: [{ key: "agent:main:openclaw-weixin:direct:user", sessionId: "sess-weixin" }],
+      sessions: [{ key: "agent:main:marketingclaw-weixin:direct:user", sessionId: "sess-weixin" }],
     });
     isEmbeddedAgentRunActiveMock.mockImplementation(
       (sessionId: string) => sessionId === "sess-weixin",
@@ -228,7 +228,7 @@ describe("sessions.abort agent scope", () => {
       expect.objectContaining({
         sessions: [
           expect.objectContaining({
-            key: "agent:main:openclaw-weixin:direct:user",
+            key: "agent:main:marketingclaw-weixin:direct:user",
             sessionId: "sess-weixin",
             hasActiveRun: true,
           }),

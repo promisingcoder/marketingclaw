@@ -1,5 +1,5 @@
 import Foundation
-import OpenClawProtocol
+import MarketingClawProtocol
 import OSLog
 
 private struct NodeInvokeRequestPayload: Codable {
@@ -55,7 +55,7 @@ public enum GatewayNodeSessionRequestError: Error, Sendable {
 }
 
 public actor GatewayNodeSession {
-    private let logger = Logger(subsystem: "ai.openclaw", category: "node.gateway")
+    private let logger = Logger(subsystem: "ai.marketingclaw", category: "node.gateway")
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
     private static let defaultInvokeTimeoutMs = 30000
@@ -82,7 +82,7 @@ public actor GatewayNodeSession {
         timeoutMs: Int?,
         onInvoke: @escaping @Sendable (BridgeInvokeRequest) async -> BridgeInvokeResponse) async -> BridgeInvokeResponse
     {
-        let timeoutLogger = Logger(subsystem: "ai.openclaw", category: "node.gateway")
+        let timeoutLogger = Logger(subsystem: "ai.marketingclaw", category: "node.gateway")
         let timeout: Int = {
             if let timeoutMs { return max(0, timeoutMs) }
             return Self.defaultInvokeTimeoutMs
@@ -143,7 +143,7 @@ public actor GatewayNodeSession {
                 latch.resume(BridgeInvokeResponse(
                     id: request.id,
                     ok: false,
-                    error: OpenClawNodeError(
+                    error: MarketingClawNodeError(
                         code: .unavailable,
                         message: "node invoke timed out")))
             }
@@ -616,7 +616,7 @@ public actor GatewayNodeSession {
         await self.sendInvokeResult(request: request, response: response, channel: channel)
     }
 
-    private func decodeInvokeRequest(from payload: OpenClawProtocol.AnyCodable) throws -> NodeInvokeRequestPayload {
+    private func decodeInvokeRequest(from payload: MarketingClawProtocol.AnyCodable) throws -> NodeInvokeRequestPayload {
         do {
             let data = try encoder.encode(payload)
             return try self.decoder.decode(NodeInvokeRequestPayload.self, from: data)

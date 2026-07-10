@@ -3,11 +3,11 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
+import type { DB as MarketingClawStateKyselyDatabase } from "../state/marketingclaw-state-db.generated.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-} from "../state/openclaw-state-db.js";
+  closeMarketingClawStateDatabaseForTest,
+  openMarketingClawStateDatabase,
+} from "../state/marketingclaw-state-db.js";
 import {
   GATEWAY_BOOT_LIFECYCLE_RETENTION_MS,
   GATEWAY_BOOT_LOOP_UNCLEAN_THRESHOLD,
@@ -21,16 +21,19 @@ import {
 } from "./gateway-boot-lifecycle.js";
 import { executeSqliteQuerySync, getNodeSqliteKysely } from "./kysely-sync.js";
 
-type GatewayBootLifecycleTestDatabase = Pick<OpenClawStateKyselyDatabase, "gateway_boot_lifecycle">;
+type GatewayBootLifecycleTestDatabase = Pick<
+  MarketingClawStateKyselyDatabase,
+  "gateway_boot_lifecycle"
+>;
 
 afterEach(() => {
-  closeOpenClawStateDatabaseForTest();
+  closeMarketingClawStateDatabaseForTest();
 });
 
 function createLifecycleDb() {
-  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-gateway-boot-"));
-  const env = { OPENCLAW_STATE_DIR: stateDir } as NodeJS.ProcessEnv;
-  const { db } = openOpenClawStateDatabase({ env });
+  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-gateway-boot-"));
+  const env = { MARKETINGCLAW_STATE_DIR: stateDir } as NodeJS.ProcessEnv;
+  const { db } = openMarketingClawStateDatabase({ env });
   const kysely = getNodeSqliteKysely<GatewayBootLifecycleTestDatabase>(db);
   return { env, db, kysely };
 }

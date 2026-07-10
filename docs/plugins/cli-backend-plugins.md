@@ -5,10 +5,10 @@ sidebarTitle: "CLI backend plugins"
 read_when:
   - You are building a local AI CLI backend plugin
   - You want to register a backend for model refs such as acme-cli/model
-  - You need to map a third-party CLI into OpenClaw's text fallback runner
+  - You need to map a third-party CLI into MarketingClaw's text fallback runner
 ---
 
-CLI backend plugins let OpenClaw call a local AI CLI as a text inference
+CLI backend plugins let MarketingClaw call a local AI CLI as a text inference
 backend. The backend appears as a provider prefix in model refs:
 
 ```text
@@ -30,11 +30,11 @@ providers are unavailable.
 
 A CLI backend plugin has three contracts:
 
-| Contract             | File                   | Purpose                                                   |
-| -------------------- | ---------------------- | --------------------------------------------------------- |
-| Package entry        | `package.json`         | Points OpenClaw at the plugin runtime module              |
-| Manifest ownership   | `openclaw.plugin.json` | Declares the backend id before runtime loads              |
-| Runtime registration | `index.ts`             | Calls `api.registerCliBackend(...)` with command defaults |
+| Contract             | File                        | Purpose                                                   |
+| -------------------- | --------------------------- | --------------------------------------------------------- |
+| Package entry        | `package.json`              | Points MarketingClaw at the plugin runtime module         |
+| Manifest ownership   | `marketingclaw.plugin.json` | Declares the backend id before runtime loads              |
+| Runtime registration | `index.ts`                  | Calls `api.registerCliBackend(...)` with command defaults |
 
 The manifest is discovery metadata: it does not execute the CLI or register
 runtime behavior. Runtime behavior starts when the plugin entry calls
@@ -46,22 +46,22 @@ runtime behavior. Runtime behavior starts when the plugin entry calls
   <Step title="Create package metadata">
     ```json package.json
     {
-      "name": "@acme/openclaw-acme-cli",
+      "name": "@acme/marketingclaw-acme-cli",
       "version": "1.0.0",
       "type": "module",
-      "openclaw": {
+      "marketingclaw": {
         "extensions": ["./index.ts"],
         "compat": {
           "pluginApi": ">=2026.3.24-beta.2",
           "minGatewayVersion": "2026.3.24-beta.2"
         },
         "build": {
-          "openclawVersion": "2026.3.24-beta.2",
+          "marketingclawVersion": "2026.3.24-beta.2",
           "pluginSdkVersion": "2026.3.24-beta.2"
         }
       },
       "dependencies": {
-        "openclaw": "^2026.3.24"
+        "marketingclaw": "^2026.3.24"
       },
       "devDependencies": {
         "typescript": "^5.9.0"
@@ -70,17 +70,17 @@ runtime behavior. Runtime behavior starts when the plugin entry calls
     ```
 
     Published packages must ship built JavaScript runtime files. If your source
-    entry is `./src/index.ts`, add `openclaw.runtimeExtensions` pointing at the
+    entry is `./src/index.ts`, add `marketingclaw.runtimeExtensions` pointing at the
     built JavaScript peer. See [Entry points](/plugins/sdk-entrypoints).
 
   </Step>
 
   <Step title="Declare backend ownership">
-    ```json openclaw.plugin.json
+    ```json marketingclaw.plugin.json
     {
       "id": "acme-cli",
       "name": "Acme CLI",
-      "description": "Run Acme's local AI CLI through OpenClaw",
+      "description": "Run Acme's local AI CLI through MarketingClaw",
       "cliBackends": ["acme-cli"],
       "setup": {
         "cliBackends": ["acme-cli"],
@@ -96,7 +96,7 @@ runtime behavior. Runtime behavior starts when the plugin entry calls
     }
     ```
 
-    `cliBackends` is the runtime ownership list; it lets OpenClaw auto-load the
+    `cliBackends` is the runtime ownership list; it lets MarketingClaw auto-load the
     plugin when config or model selection mentions `acme-cli/...`.
 
     `setup.cliBackends` is the descriptor-first setup surface. Add it when
@@ -108,12 +108,12 @@ runtime behavior. Runtime behavior starts when the plugin entry calls
 
   <Step title="Register the backend">
     ```typescript index.ts
-    import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
+    import { definePluginEntry } from "marketingclaw/plugin-sdk/plugin-entry";
     import {
       CLI_FRESH_WATCHDOG_DEFAULTS,
       CLI_RESUME_WATCHDOG_DEFAULTS,
       type CliBackendPlugin,
-    } from "openclaw/plugin-sdk/cli-backend";
+    } from "marketingclaw/plugin-sdk/cli-backend";
 
     function buildAcmeCliBackend(): CliBackendPlugin {
       return {
@@ -154,7 +154,7 @@ runtime behavior. Runtime behavior starts when the plugin entry calls
     export default definePluginEntry({
       id: "acme-cli",
       name: "Acme CLI",
-      description: "Run Acme's local AI CLI through OpenClaw",
+      description: "Run Acme's local AI CLI through MarketingClaw",
       register(api) {
         api.registerCliBackend(buildAcmeCliBackend());
       },
@@ -170,7 +170,7 @@ runtime behavior. Runtime behavior starts when the plugin entry calls
 
 ## Config shape
 
-`CliBackendConfig` describes how OpenClaw should launch and parse the CLI:
+`CliBackendConfig` describes how MarketingClaw should launch and parse the CLI:
 
 | Field                                                     | Use                                                                               |
 | --------------------------------------------------------- | --------------------------------------------------------------------------------- |
@@ -184,10 +184,10 @@ runtime behavior. Runtime behavior starts when the plugin entry calls
 | `maxPromptArgChars`                                       | Max prompt length for `arg` mode before falling back to stdin                     |
 | `env` / `clearEnv`                                        | Extra env vars to inject, or names to strip before launch                         |
 | `modelArg`                                                | Flag used before the model id                                                     |
-| `modelAliases`                                            | Map OpenClaw model ids to CLI-native ids                                          |
+| `modelAliases`                                            | Map MarketingClaw model ids to CLI-native ids                                     |
 | `sessionArg` / `sessionArgs`                              | How to pass a session id                                                          |
 | `sessionMode`                                             | `always`, `existing`, or `none`                                                   |
-| `sessionIdFields`                                         | JSON fields OpenClaw reads from CLI output                                        |
+| `sessionIdFields`                                         | JSON fields MarketingClaw reads from CLI output                                   |
 | `systemPromptArg` / `systemPromptFileArg`                 | System prompt transport                                                           |
 | `systemPromptFileConfigArg` / `systemPromptFileConfigKey` | Config-override transport for a system prompt file (for example `-c`)             |
 | `systemPromptMode`                                        | `append` or `replace`                                                             |
@@ -213,12 +213,12 @@ only for behavior that really belongs to the backend.
 | `prepareExecution(ctx)`            | Create temporary auth or config bridges before launch                       |
 | `transformSystemPrompt(ctx)`       | Apply a final CLI-specific system prompt transform                          |
 | `textTransforms`                   | Bidirectional prompt/output replacements                                    |
-| `defaultAuthProfileId`             | Prefer a specific OpenClaw auth profile                                     |
+| `defaultAuthProfileId`             | Prefer a specific MarketingClaw auth profile                                |
 | `authEpochMode`                    | Decide how auth changes invalidate stored CLI sessions                      |
 | `nativeToolMode`                   | Declare whether the CLI has always-on native tools                          |
 | `sideQuestionToolMode`             | Declare disabled native tools for `/btw` side questions                     |
-| `bundleMcp` / `bundleMcpMode`      | Opt into OpenClaw's loopback MCP tool bridge                                |
-| `ownsNativeCompaction`             | Backend owns its own compaction - OpenClaw defers                           |
+| `bundleMcp` / `bundleMcpMode`      | Opt into MarketingClaw's loopback MCP tool bridge                           |
+| `ownsNativeCompaction`             | Backend owns its own compaction - MarketingClaw defers                      |
 
 Keep these hooks provider-owned. Do not add CLI-specific branches to core when
 a backend hook can express the behavior.
@@ -228,20 +228,20 @@ ephemeral `/btw` calls. Use it when the CLI needs different one-shot flags,
 such as disabling native tools, session persistence, or resume behavior for
 BTW. If a backend normally has `nativeToolMode: "always-on"` but its
 side-question argv reliably disables those tools, also set
-`sideQuestionToolMode: "disabled"`; otherwise OpenClaw fails closed when BTW
+`sideQuestionToolMode: "disabled"`; otherwise MarketingClaw fails closed when BTW
 requires a no-tools CLI run.
 
-### `ownsNativeCompaction`: opting out of OpenClaw compaction
+### `ownsNativeCompaction`: opting out of MarketingClaw compaction
 
 If your backend runs an agent that compacts its **own** transcript, set
-`ownsNativeCompaction: true` so OpenClaw's safeguard summarizer never runs
+`ownsNativeCompaction: true` so MarketingClaw's safeguard summarizer never runs
 against its sessions - the CLI compaction lifecycle returns a no-op and the
 turn proceeds. `claude-cli` declares it because Claude Code compacts
 internally with no harness endpoint. Native-harness sessions such as Codex
 keep routing to their harness compaction endpoint instead.
 
 **Only declare it when all of the following hold**, or a deferred
-over-budget session can stay over budget or go stale (OpenClaw no longer
+over-budget session can stay over budget or go stale (MarketingClaw no longer
 rescues it):
 
 - the backend reliably compacts or bounds its own transcript as it nears its
@@ -253,7 +253,7 @@ rescues it):
 
 ## MCP tool bridge
 
-CLI backends do not receive OpenClaw tools by default. If the CLI can consume
+CLI backends do not receive MarketingClaw tools by default. If the CLI can consume
 an MCP configuration, opt in explicitly:
 
 ```typescript
@@ -279,7 +279,7 @@ Supported bridge modes:
 
 Only enable the bridge when the CLI can actually consume it. If the CLI has
 its own built-in tool layer that cannot be disabled, set `nativeToolMode:
-"always-on"` so OpenClaw can fail closed when a caller requires no native
+"always-on"` so MarketingClaw can fail closed when a caller requires no native
 tools.
 
 ## User configuration
@@ -323,8 +323,8 @@ pnpm test extensions/acme-cli
 For local or installed plugins, verify discovery and one real model run:
 
 ```bash
-openclaw plugins inspect acme-cli --runtime --json
-openclaw agent --message "reply exactly: backend ok" --model acme-cli/acme-large
+marketingclaw plugins inspect acme-cli --runtime --json
+marketingclaw agent --message "reply exactly: backend ok" --model acme-cli/acme-large
 ```
 
 If the backend supports images or MCP, add a live smoke that proves those
@@ -333,8 +333,8 @@ MCP, or session-resume behavior.
 
 ## Checklist
 
-<Check>`package.json` has `openclaw.extensions` and built runtime entries for published packages</Check>
-<Check>`openclaw.plugin.json` declares `cliBackends` and intentional `activation.onStartup`</Check>
+<Check>`package.json` has `marketingclaw.extensions` and built runtime entries for published packages</Check>
+<Check>`marketingclaw.plugin.json` declares `cliBackends` and intentional `activation.onStartup`</Check>
 <Check>`setup.cliBackends` is present when setup/model discovery should see the backend cold</Check>
 <Check>`api.registerCliBackend(...)` uses the same backend id as the manifest</Check>
 <Check>User overrides under `agents.defaults.cliBackends.<id>` still win</Check>

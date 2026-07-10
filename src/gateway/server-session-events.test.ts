@@ -15,7 +15,7 @@ vi.mock("./chat-display-projection.js", () => ({
   projectChatDisplayMessage: (message: unknown) => message,
 }));
 vi.mock("./session-utils.js", () => ({
-  attachOpenClawTranscriptMeta: (message: unknown) => message,
+  attachMarketingClawTranscriptMeta: (message: unknown) => message,
   loadGatewaySessionRow: () => sessionRow,
   loadSessionEntry: () => ({ entry: undefined, storePath: "" }),
   readSessionMessageCountAsync: vi.fn(),
@@ -115,7 +115,7 @@ describe("createTranscriptUpdateBroadcastHandler", () => {
       }),
     ).resolves.toMatchObject({
       message: {
-        __openclaw: {
+        __marketingclaw: {
           id: "message-1",
           idempotencyKey: "client-turn-3",
           seq: 1,
@@ -129,7 +129,7 @@ describe("createTranscriptUpdateBroadcastHandler", () => {
       emitAssistantTranscriptUpdate(false, {
         role: "user",
         content: [{ type: "text", text: "Owner turn" }],
-        __openclaw: { senderIsOwner: true },
+        __marketingclaw: { senderIsOwner: true },
       }),
     ).resolves.toMatchObject({
       senderIsOwner: true,

@@ -1,12 +1,12 @@
 // Tests /learn prompt rewriting, defaults, standards, and availability gating.
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import { DEFAULT_LEARN_REQUEST } from "../../skills/workshop/learn-prompt.js";
 import { INTERNAL_MESSAGE_CHANNEL } from "../../utils/message-channel.js";
 import { handleLearnCommand } from "./commands-learn.js";
 import type { HandleCommandsParams } from "./commands-types.js";
 
-const DEFAULT_TEST_MODELS: NonNullable<OpenClawConfig["models"]> = {
+const DEFAULT_TEST_MODELS: NonNullable<MarketingClawConfig["models"]> = {
   providers: {
     openai: {
       baseUrl: "https://api.openai.com/v1",
@@ -28,7 +28,7 @@ const DEFAULT_TEST_MODELS: NonNullable<OpenClawConfig["models"]> = {
 
 function buildLearnParams(
   commandBodyNormalized: string,
-  cfg: OpenClawConfig = {},
+  cfg: MarketingClawConfig = {},
 ): HandleCommandsParams {
   return {
     cfg: { ...cfg, models: cfg.models ?? DEFAULT_TEST_MODELS },

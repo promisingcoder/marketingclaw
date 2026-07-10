@@ -1,4 +1,4 @@
-// Package Artifact script supports OpenClaw repository automation.
+// Package Artifact script supports MarketingClaw repository automation.
 import { randomUUID } from "node:crypto";
 import { copyFile, mkdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -40,27 +40,29 @@ function resolveNpmPackTarballFilename(value: unknown): string {
   return filename;
 }
 
-export function resolveOpenClawRegistryVersion(specOrAlias: string): string {
+export function resolveMarketingClawRegistryVersion(specOrAlias: string): string {
   const rawValue = specOrAlias.trim();
-  const value = rawValue.startsWith("openclaw@") ? rawValue.slice("openclaw@".length) : rawValue;
+  const value = rawValue.startsWith("marketingclaw@")
+    ? rawValue.slice("marketingclaw@".length)
+    : rawValue;
   if (!value) {
     return "";
   }
   if (value === "latest" || value === "beta" || /^\d/.test(value)) {
-    return npmViewVersion(`openclaw@${value}`);
+    return npmViewVersion(`marketingclaw@${value}`);
   }
   const betaMatch = /^beta(\d+)$/u.exec(value);
   if (betaMatch) {
     const betaSuffix = `-beta.${betaMatch[1]}`;
     const versions = JSON.parse(
-      run("npm", ["view", "openclaw", "versions", "--json"], { quiet: true }).stdout,
+      run("npm", ["view", "marketingclaw", "versions", "--json"], { quiet: true }).stdout,
     ) as string[];
     const match = versions
       .filter((version) => version.endsWith(betaSuffix))
       .toSorted((a, b) => a.localeCompare(b, undefined, { numeric: true }))
       .at(-1);
     if (!match) {
-      die(`no openclaw registry version found for alias ${value}`);
+      die(`no marketingclaw registry version found for alias ${value}`);
     }
     return match;
   }
@@ -125,7 +127,7 @@ async function ensureCurrentBuildUnlocked(input: {
   }
 }
 
-export async function packOpenClaw(input: {
+export async function packMarketingClaw(input: {
   destination: string;
   packageSpec?: string;
   requireControlUi?: boolean;
@@ -153,36 +155,39 @@ export async function packOpenClaw(input: {
     return { path: tgzPath, version };
   }
 
-  return await withPackageLock(path.join(tmpdir(), "openclaw-parallels-build.lock"), async () => {
-    await ensureCurrentBuildUnlocked({
-      checkDirty: true,
-      requireControlUi: input.requireControlUi,
-    });
-    run("node", [
-      "--import",
-      "tsx",
-      "--input-type=module",
-      "--eval",
-      "import { writePackageDistInventory } from './src/infra/package-dist-inventory.ts'; await writePackageDistInventory(process.cwd());",
-    ]);
-    const shortHead = run("git", ["rev-parse", "--short", "HEAD"], { quiet: true }).stdout.trim();
-    const output = run(
-      "npm",
-      ["pack", "--ignore-scripts", "--json", "--pack-destination", input.destination],
-      {
-        quiet: true,
-      },
-    ).stdout;
-    const packed = resolveNpmPackTarballFilename(JSON.parse(output).at(-1)?.filename);
-    const tgzPath = path.join(input.destination, `openclaw-main-${shortHead}.tgz`);
-    await copyFile(path.join(input.destination, packed), tgzPath);
-    const buildCommit = await packageBuildCommitFromTgz(tgzPath);
-    if (!buildCommit) {
-      die(`failed to read packed build commit from ${tgzPath}`);
-    }
-    say(`Packed ${tgzPath}`);
-    return { buildCommit, buildCommitShort: buildCommit.slice(0, 7), path: tgzPath };
-  });
+  return await withPackageLock(
+    path.join(tmpdir(), "marketingclaw-parallels-build.lock"),
+    async () => {
+      await ensureCurrentBuildUnlocked({
+        checkDirty: true,
+        requireControlUi: input.requireControlUi,
+      });
+      run("node", [
+        "--import",
+        "tsx",
+        "--input-type=module",
+        "--eval",
+        "import { writePackageDistInventory } from './src/infra/package-dist-inventory.ts'; await writePackageDistInventory(process.cwd());",
+      ]);
+      const shortHead = run("git", ["rev-parse", "--short", "HEAD"], { quiet: true }).stdout.trim();
+      const output = run(
+        "npm",
+        ["pack", "--ignore-scripts", "--json", "--pack-destination", input.destination],
+        {
+          quiet: true,
+        },
+      ).stdout;
+      const packed = resolveNpmPackTarballFilename(JSON.parse(output).at(-1)?.filename);
+      const tgzPath = path.join(input.destination, `marketingclaw-main-${shortHead}.tgz`);
+      await copyFile(path.join(input.destination, packed), tgzPath);
+      const buildCommit = await packageBuildCommitFromTgz(tgzPath);
+      if (!buildCommit) {
+        die(`failed to read packed build commit from ${tgzPath}`);
+      }
+      say(`Packed ${tgzPath}`);
+      return { buildCommit, buildCommitShort: buildCommit.slice(0, 7), path: tgzPath };
+    },
+  );
 }
 
 async function withPackageLock<T>(lockDir: string, fn: () => Promise<T>): Promise<T> {
@@ -200,8 +205,14 @@ async function acquirePackageLock(
   ownerToken: string,
   params: { writeOwner?: (lockDir: string, ownerToken: string) => Promise<void> } = {},
 ): Promise<void> {
-  const timeoutMs = readPositiveIntEnv("OPENCLAW_PARALLELS_PACKAGE_LOCK_TIMEOUT_MS", 30 * 60_000);
-  const staleMs = readPositiveIntEnv("OPENCLAW_PARALLELS_PACKAGE_LOCK_STALE_MS", 2 * 60 * 60_000);
+  const timeoutMs = readPositiveIntEnv(
+    "MARKETINGCLAW_PARALLELS_PACKAGE_LOCK_TIMEOUT_MS",
+    30 * 60_000,
+  );
+  const staleMs = readPositiveIntEnv(
+    "MARKETINGCLAW_PARALLELS_PACKAGE_LOCK_STALE_MS",
+    2 * 60 * 60_000,
+  );
   const startedAt = Date.now();
   let waitAnnouncementBudget = 1;
   const consumeWaitAnnouncement = () => waitAnnouncementBudget-- > 0;

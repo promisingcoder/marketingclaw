@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 
 vi.mock("../model-fallback.js", () => ({
   runWithModelFallback: vi.fn(async (params: Record<string, unknown>) => ({
@@ -25,7 +25,7 @@ const baseParams = {
   workspaceDir: "/tmp",
 };
 
-function configWithFallbacks(fallbacks: string[]): OpenClawConfig {
+function configWithFallbacks(fallbacks: string[]): MarketingClawConfig {
   return {
     agents: {
       defaults: {
@@ -35,7 +35,7 @@ function configWithFallbacks(fallbacks: string[]): OpenClawConfig {
         },
       },
     },
-  } as OpenClawConfig;
+  } as MarketingClawConfig;
 }
 
 describe("compactEmbeddedAgentSessionDirect abortSignal threading", () => {

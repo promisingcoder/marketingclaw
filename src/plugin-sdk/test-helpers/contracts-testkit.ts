@@ -2,13 +2,13 @@
  * Core plugin SDK contract-test fixture builders and registration helpers.
  */
 import type { PluginRegistryParams } from "../../plugins/registry-types.js";
-import type { OpenClawPluginApi } from "../plugin-entry.js";
+import type { MarketingClawPluginApi } from "../plugin-entry.js";
 import {
   createPluginRecord,
   createPluginRegistry,
   registerProviderPlugins as registerProviders,
   requireRegisteredProvider as requireProvider,
-  type OpenClawConfig,
+  type MarketingClawConfig,
   type PluginRecord,
   type PluginRuntime,
 } from "../testing.js";
@@ -19,7 +19,7 @@ export { registerProviders, requireProvider, uniqueSortedStrings };
 
 /** Creates a minimal plugin registry fixture with quiet logger defaults. */
 export function createPluginRegistryFixture(
-  config = {} as OpenClawConfig,
+  config = {} as MarketingClawConfig,
   params: { hostServices?: PluginRegistryParams["hostServices"] } = {},
 ) {
   return {
@@ -40,9 +40,9 @@ export function createPluginRegistryFixture(
 /** Registers one plugin record against a registry fixture and invokes its register hook. */
 export function registerTestPlugin(params: {
   registry: ReturnType<typeof createPluginRegistry>;
-  config: OpenClawConfig;
+  config: MarketingClawConfig;
   record: PluginRecord;
-  register(api: OpenClawPluginApi): void;
+  register(api: MarketingClawPluginApi): void;
 }) {
   params.registry.registry.plugins.push(params.record);
   params.register(
@@ -55,13 +55,13 @@ export function registerTestPlugin(params: {
 /** Registers a virtual plugin record for tests that do not need a real package path. */
 export function registerVirtualTestPlugin(params: {
   registry: ReturnType<typeof createPluginRegistry>;
-  config: OpenClawConfig;
+  config: MarketingClawConfig;
   id: string;
   name: string;
   source?: string;
   kind?: PluginRecord["kind"];
   contracts?: PluginRecord["contracts"];
-  register(this: void, api: OpenClawPluginApi): void;
+  register(this: void, api: MarketingClawPluginApi): void;
 }) {
   registerTestPlugin({
     registry: params.registry,

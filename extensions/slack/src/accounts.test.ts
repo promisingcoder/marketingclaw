@@ -1,5 +1,5 @@
 // Slack tests cover accounts plugin behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import {
   listEnabledSlackAccounts,
@@ -53,7 +53,7 @@ describe("resolveSlackOperationToken", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       accountId: "work",
     });
 
@@ -101,7 +101,7 @@ describe("resolveSlackAccount allowFrom precedence", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(listSlackAccountIds(cfg)).toEqual(["default", "work"]);
     expect(resolveDefaultSlackAccountId(cfg)).toBe("default");
@@ -122,7 +122,7 @@ describe("resolveSlackAccount allowFrom precedence", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(listSlackAccountIds(cfg)).toEqual(["work"]);
     expect(resolveDefaultSlackAccountId(cfg)).toBe("work");
@@ -298,7 +298,7 @@ describe("resolveSlackAccount allowFrom precedence", () => {
             },
           },
         },
-      } as unknown as OpenClawConfig,
+      } as unknown as MarketingClawConfig,
       accountId: "work",
     });
 
@@ -360,7 +360,7 @@ describe("resolveSlackAccount allowFrom precedence", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies MarketingClawConfig;
 
     expect(resolveSlackAccountAllowFrom({ cfg, accountId: "work" })).toEqual(["account-legacy"]);
   });
@@ -378,7 +378,7 @@ describe("resolveSlackAccount allowFrom precedence", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
 
     expect(resolveSlackAccountAllowFrom({ cfg, accountId: "work" })).toEqual(["12345"]);
   });
@@ -397,7 +397,7 @@ describe("resolveSlackAccount allowFrom precedence", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies MarketingClawConfig;
 
     expect(resolveSlackAccountDmPolicy({ cfg, accountId: "work" })).toBe("allowlist");
   });
@@ -418,7 +418,7 @@ describe("resolveSlackAccount allowFrom precedence", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies MarketingClawConfig;
 
     expect(resolveSlackAccountDmPolicy({ cfg, accountId: "work" })).toBe("allowlist");
     expect(resolveSlackAccountAllowFrom({ cfg, accountId: "work" })).toEqual(["U123"]);
@@ -438,7 +438,7 @@ describe("resolveSlackAccount active secret surfaces", () => {
         },
       },
     },
-  } as unknown as OpenClawConfig;
+  } as unknown as MarketingClawConfig;
 
   it("throws when an enabled account still has an unresolved active bot token SecretRef", () => {
     expect(() =>
@@ -465,7 +465,7 @@ describe("resolveSlackAccount active secret surfaces", () => {
             },
           },
         },
-      } as unknown as OpenClawConfig,
+      } as unknown as MarketingClawConfig,
       accountId: "default",
     });
 
@@ -494,7 +494,7 @@ describe("resolveSlackAccount active secret surfaces", () => {
             },
           },
         },
-      } as unknown as OpenClawConfig,
+      } as unknown as MarketingClawConfig,
       accountId: "default",
     });
 
@@ -519,7 +519,7 @@ describe("resolveSlackAccount active secret surfaces", () => {
               },
             },
           },
-        } as unknown as OpenClawConfig,
+        } as unknown as MarketingClawConfig,
         accountId: "default",
       }),
     ).toThrowError(/channels\.slack\.accounts\.default\.appToken/);

@@ -1,6 +1,6 @@
-package ai.openclaw.app.gateway
+package ai.marketingclaw.app.gateway
 
-import ai.openclaw.app.SecurePrefs
+import ai.marketingclaw.app.SecurePrefs
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

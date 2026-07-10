@@ -1,4 +1,4 @@
-// Android Version script supports OpenClaw repository automation.
+// Android Version script supports MarketingClaw repository automation.
 import { resolveAndroidVersion } from "./lib/android-version.ts";
 import { parseVersionQueryArgs } from "./lib/version-script-args.ts";
 
@@ -29,8 +29,8 @@ function main(argv = process.argv.slice(2)): number {
   if (options.format === "shell") {
     process.stdout.write(
       [
-        `OPENCLAW_ANDROID_VERSION_NAME=${version.canonicalVersion}`,
-        `OPENCLAW_ANDROID_VERSION_CODE=${version.versionCode}`,
+        `MARKETINGCLAW_ANDROID_VERSION_NAME=${version.canonicalVersion}`,
+        `MARKETINGCLAW_ANDROID_VERSION_CODE=${version.versionCode}`,
       ].join("\n") + "\n",
     );
   } else {

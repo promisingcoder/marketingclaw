@@ -1,9 +1,9 @@
 // Qqbot plugin module implements group tool policy behavior.
-import type { ChannelGroupContext } from "openclaw/plugin-sdk/channel-contract";
+import type { ChannelGroupContext } from "marketingclaw/plugin-sdk/channel-contract";
 import {
   resolveChannelGroupToolsPolicy,
   type GroupToolPolicyConfig,
-} from "openclaw/plugin-sdk/channel-policy";
+} from "marketingclaw/plugin-sdk/channel-policy";
 
 export function resolveQQBotGroupToolPolicy(
   params: ChannelGroupContext,

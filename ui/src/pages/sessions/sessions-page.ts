@@ -34,12 +34,12 @@ import {
 } from "../../lib/sessions/session-key.ts";
 import { normalizeOptionalString } from "../../lib/string-coerce.ts";
 import { captureSessionToWorkboard } from "../../lib/workboard/index.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { MarketingClawLightDomElement } from "../../lit/marketingclaw-element.ts";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
 import { getSafeLocalStorage } from "../../local-storage.ts";
 import { renderSessions, type SessionsProps } from "./view.ts";
 
-const GROUP_BY_STORAGE_KEY = "openclaw:sessions:group-by";
+const GROUP_BY_STORAGE_KEY = "marketingclaw:sessions:group-by";
 
 function loadStoredGroupBy(): SessionsGroupBy {
   return normalizeSessionsGroupBy(getSafeLocalStorage()?.getItem(GROUP_BY_STORAGE_KEY));
@@ -69,7 +69,7 @@ function parseFilterInteger(value: string): number | undefined {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
 }
 
-class SessionsPage extends OpenClawLightDomElement {
+class SessionsPage extends MarketingClawLightDomElement {
   @consume({ context: applicationContext, subscribe: true })
   private context?: ApplicationContext;
 
@@ -917,7 +917,7 @@ class SessionsPage extends OpenClawLightDomElement {
       }),
     );
     return html`
-      <openclaw-session-menu
+      <marketingclaw-session-menu
         .session=${{
           key: row.key,
           label: normalizeOptionalString(row.label) ?? row.key,
@@ -978,7 +978,7 @@ class SessionsPage extends OpenClawLightDomElement {
               break;
           }
         }}
-      ></openclaw-session-menu>
+      ></marketingclaw-session-menu>
     `;
   }
 
@@ -1116,6 +1116,6 @@ class SessionsPage extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-sessions-page")) {
-  customElements.define("openclaw-sessions-page", SessionsPage);
+if (!customElements.get("marketingclaw-sessions-page")) {
+  customElements.define("marketingclaw-sessions-page", SessionsPage);
 }

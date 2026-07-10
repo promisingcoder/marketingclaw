@@ -1,5 +1,5 @@
 import Observation
-import OpenClawProtocol
+import MarketingClawProtocol
 import SwiftUI
 
 struct SkillsSettings: View {
@@ -345,15 +345,15 @@ private struct SkillRow: View {
 
     private var sourceLabel: String {
         switch self.skill.source {
-        case "openclaw-bundled":
+        case "marketingclaw-bundled":
             "Bundled"
-        case "openclaw-managed":
+        case "marketingclaw-managed":
             "Managed"
-        case "openclaw-workspace":
+        case "marketingclaw-workspace":
             "Workspace"
-        case "openclaw-extra":
+        case "marketingclaw-extra":
             "Extra"
-        case "openclaw-plugin":
+        case "marketingclaw-plugin":
             "Plugin"
         default:
             self.skill.source
@@ -599,7 +599,7 @@ private struct EnvEditorView: View {
             }
             SecureField(self.editor.envKey, text: self.$value)
                 .textFieldStyle(.roundedBorder)
-            Text("Saved to openclaw.json under skills.entries.\(self.editor.skillKey)")
+            Text("Saved to marketingclaw.json under skills.entries.\(self.editor.skillKey)")
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
             HStack {
@@ -717,12 +717,12 @@ final class SkillsSettingsModel {
                     _ = try await GatewayConnection.shared.skillsUpdate(
                         skillKey: skillKey,
                         apiKey: value)
-                    self.statusMessage = "Saved API key — stored in openclaw.json (skills.entries.\(skillKey))"
+                    self.statusMessage = "Saved API key — stored in marketingclaw.json (skills.entries.\(skillKey))"
                 } else {
                     _ = try await GatewayConnection.shared.skillsUpdate(
                         skillKey: skillKey,
                         env: [envKey: value])
-                    self.statusMessage = "Saved \(envKey) — stored in openclaw.json (skills.entries.\(skillKey).env)"
+                    self.statusMessage = "Saved \(envKey) — stored in marketingclaw.json (skills.entries.\(skillKey).env)"
                 }
             } catch {
                 self.statusMessage = error.localizedDescription
@@ -751,7 +751,7 @@ extension SkillsSettings {
         let skill = SkillStatus(
             name: "Test Skill",
             description: "Test description",
-            source: "openclaw-bundled",
+            source: "marketingclaw-bundled",
             filePath: "/tmp/skills/test",
             baseDir: "/tmp/skills",
             skillKey: "test",

@@ -1,14 +1,14 @@
-package ai.openclaw.app.ui
+package ai.marketingclaw.app.ui
 
-import ai.openclaw.app.GatewayWorkspaceEntry
-import ai.openclaw.app.GatewayWorkspaceFile
-import ai.openclaw.app.MainViewModel
-import ai.openclaw.app.ui.chat.ChatCodeBlock
-import ai.openclaw.app.ui.chat.rememberBase64ImageState
-import ai.openclaw.app.ui.design.ClawEmptyState
-import ai.openclaw.app.ui.design.ClawPlainIconButton
-import ai.openclaw.app.ui.design.ClawScaffold
-import ai.openclaw.app.ui.design.ClawTheme
+import ai.marketingclaw.app.GatewayWorkspaceEntry
+import ai.marketingclaw.app.GatewayWorkspaceFile
+import ai.marketingclaw.app.MainViewModel
+import ai.marketingclaw.app.ui.chat.ChatCodeBlock
+import ai.marketingclaw.app.ui.chat.rememberBase64ImageState
+import ai.marketingclaw.app.ui.design.ClawEmptyState
+import ai.marketingclaw.app.ui.design.ClawPlainIconButton
+import ai.marketingclaw.app.ui.design.ClawScaffold
+import ai.marketingclaw.app.ui.design.ClawTheme
 import android.content.Context
 import android.content.Intent
 import android.text.format.Formatter

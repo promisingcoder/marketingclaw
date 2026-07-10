@@ -1,9 +1,9 @@
 import {
   buildExecAutoReviewInputForShellCommand,
   reviewExecRequestWithConfiguredModel,
-} from "openclaw/plugin-sdk/agent-harness-exec-review-runtime";
+} from "marketingclaw/plugin-sdk/agent-harness-exec-review-runtime";
 /**
- * Bridges Codex app-server approval requests into OpenClaw policy hooks and
+ * Bridges Codex app-server approval requests into MarketingClaw policy hooks and
  * plugin approval UX.
  */
 import {
@@ -18,14 +18,14 @@ import {
   type NativeHookRelayProcessResponse,
   type NativeHookRelayRegistrationHandle,
   runBeforeToolCallHook,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import { normalizeAgentId } from "openclaw/plugin-sdk/routing";
-import { normalizeTrimmedStringList } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { sliceUtf16Safe, truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "marketingclaw/plugin-sdk/agent-harness-runtime";
+import { normalizeAgentId } from "marketingclaw/plugin-sdk/routing";
+import { normalizeTrimmedStringList } from "marketingclaw/plugin-sdk/string-coerce-runtime";
+import { sliceUtf16Safe, truncateUtf16Safe } from "marketingclaw/plugin-sdk/text-utility-runtime";
 import { formatCodexDisplayText } from "../command-formatters.js";
 import {
   isTrustedCodexModelBackedOpenAIProvider,
-  type OpenClawExecPolicyForCodexAppServer,
+  type MarketingClawExecPolicyForCodexAppServer,
 } from "./config.js";
 import { resolveCodexToolAbortTerminalReason } from "./dynamic-tool-execution.js";
 import {
@@ -84,7 +84,7 @@ export async function handleCodexAppServerApprovalRequest(params: {
     NativeHookRelayRegistrationHandle,
     "allowedEvents" | "generation" | "relayId"
   >;
-  execPolicy?: Pick<OpenClawExecPolicyForCodexAppServer, "mode">;
+  execPolicy?: Pick<MarketingClawExecPolicyForCodexAppServer, "mode">;
   execReviewerAgentId?: string;
   internalExecAutoReview?: boolean;
   autoApprove?: boolean;
@@ -109,7 +109,7 @@ export async function handleCodexAppServerApprovalRequest(params: {
   });
 
   try {
-    const policyOutcome = await runOpenClawToolPolicyForApprovalRequest({
+    const policyOutcome = await runMarketingClawToolPolicyForApprovalRequest({
       method: params.method,
       requestParams,
       paramsForRun: params.paramsForRun,
@@ -178,7 +178,7 @@ export async function handleCodexAppServerApprovalRequest(params: {
       });
       return buildApprovalResponse(params.method, context.requestParams, autoReviewOutcome.outcome);
     }
-    // Native hook/model policy did not decide; fall back to the OpenClaw
+    // Native hook/model policy did not decide; fall back to the MarketingClaw
     // approval route so user-facing runs still get an approval prompt.
     const requestResult = await requestPluginApproval({
       paramsForRun: params.paramsForRun,
@@ -299,7 +299,7 @@ function recordNativeToolFailureDisposition(
   }
 }
 
-/** Converts an OpenClaw approval outcome into the app-server method response. */
+/** Converts an MarketingClaw approval outcome into the app-server method response. */
 export function buildApprovalResponse(
   method: string,
   requestParams: JsonObject | undefined,
@@ -473,7 +473,7 @@ async function runInternalExecAutoReviewForApprovalRequest(params: {
   }
   return {
     outcome: "approved-once",
-    reason: `Codex app-server command approval granted by OpenClaw exec auto-reviewer: ${formatCodexDisplayText(
+    reason: `Codex app-server command approval granted by MarketingClaw exec auto-reviewer: ${formatCodexDisplayText(
       decision.rationale,
     )}`,
   };
@@ -664,7 +664,7 @@ function readUnknownRecord(value: unknown): Record<string, unknown> | undefined 
     : undefined;
 }
 
-async function runOpenClawToolPolicyForApprovalRequest(params: {
+async function runMarketingClawToolPolicyForApprovalRequest(params: {
   method: string;
   requestParams: JsonObject | undefined;
   paramsForRun: EmbeddedRunAttemptParams;
@@ -675,7 +675,7 @@ async function runOpenClawToolPolicyForApprovalRequest(params: {
   >;
   signal?: AbortSignal;
 }): Promise<ApprovalPolicyOutcome | undefined> {
-  const policyRequest = buildOpenClawToolPolicyRequest(params.method, params.requestParams);
+  const policyRequest = buildMarketingClawToolPolicyRequest(params.method, params.requestParams);
   if (!policyRequest) {
     return undefined;
   }
@@ -744,7 +744,7 @@ async function runOpenClawToolPolicyForApprovalRequest(params: {
     return {
       outcome: "denied",
       reason:
-        "OpenClaw tool policy rewrote Codex app-server approval params; refusing original request.",
+        "MarketingClaw tool policy rewrote Codex app-server approval params; refusing original request.",
     };
   }
   if (outcome.approvalResolution) {
@@ -867,7 +867,7 @@ async function runNativeRelayToolPolicyForApprovalRequest(params: {
     return {
       handled: true,
       blocked: true,
-      reason: `OpenClaw native hook relay unavailable for Codex app-server approval: ${formatCodexDisplayText(
+      reason: `MarketingClaw native hook relay unavailable for Codex app-server approval: ${formatCodexDisplayText(
         formatErrorMessage(error),
       )}`,
       failureDisposition: "failed",
@@ -888,7 +888,7 @@ function buildNativeRelayPreToolUsePayload(params: {
   const turnId = readString(params.requestParams, "turnId");
   return {
     hook_event_name: "PreToolUse",
-    openclaw_approval_mode: "report",
+    marketingclaw_approval_mode: "report",
     tool_name: "exec_command",
     ...(params.context.itemId ? { tool_use_id: params.context.itemId } : {}),
     ...(params.cwd ? { cwd: params.cwd } : {}),
@@ -914,7 +914,7 @@ function readNativeRelayPreToolUseDecision(response: NativeHookRelayProcessRespo
       reason:
         sanitizeRelayDecisionReason(response?.stderr) ||
         sanitizeRelayDecisionReason(response?.stdout) ||
-        "OpenClaw native hook relay failed for Codex app-server approval.",
+        "MarketingClaw native hook relay failed for Codex app-server approval.",
       failureDisposition: response?.failureDisposition ?? "failed",
     };
   }
@@ -929,7 +929,7 @@ function readNativeRelayPreToolUseDecision(response: NativeHookRelayProcessRespo
       blocked: true,
       reason:
         readString(output, "permissionDecisionReason") ||
-        "OpenClaw native hook policy denied Codex app-server approval.",
+        "MarketingClaw native hook policy denied Codex app-server approval.",
       ...(response.failureDisposition ? { failureDisposition: response.failureDisposition } : {}),
     };
   }
@@ -938,8 +938,8 @@ function readNativeRelayPreToolUseDecision(response: NativeHookRelayProcessRespo
   return {
     blocked: true,
     reason: output
-      ? "OpenClaw native hook relay returned a non-deny Codex app-server approval decision."
-      : "OpenClaw native hook relay returned an unreadable Codex app-server approval result.",
+      ? "MarketingClaw native hook relay returned a non-deny Codex app-server approval decision."
+      : "MarketingClaw native hook relay returned an unreadable Codex app-server approval result.",
     failureDisposition: "failed",
   };
 }
@@ -958,7 +958,7 @@ function sanitizeRelayDecisionReason(value: string | undefined): string | undefi
   return preview.text;
 }
 
-function buildOpenClawToolPolicyRequest(
+function buildMarketingClawToolPolicyRequest(
   method: string,
   requestParams: JsonObject | undefined,
 ): { toolName: string; params: JsonObject } | undefined {
@@ -1073,7 +1073,7 @@ function requestedPermissions(requestParams: JsonObject | undefined): JsonObject
 function unsupportedApprovalResponse(): JsonValue {
   return {
     decision: "decline",
-    reason: "OpenClaw codex app-server bridge does not grant native approvals yet.",
+    reason: "MarketingClaw codex app-server bridge does not grant native approvals yet.",
   };
 }
 

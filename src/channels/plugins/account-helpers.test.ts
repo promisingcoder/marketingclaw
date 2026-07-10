@@ -1,6 +1,6 @@
 // Account helper tests cover channel account normalization and lookup helpers.
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { MarketingClawConfig } from "../../config/config.js";
 import { normalizeAccountId } from "../../routing/session-key.js";
 import {
   createAccountListHelpers,
@@ -15,16 +15,19 @@ import {
 const { listConfiguredAccountIds, listAccountIds, resolveDefaultAccountId } =
   createAccountListHelpers("testchannel");
 
-function cfg(accounts?: Record<string, unknown> | null, defaultAccount?: string): OpenClawConfig {
+function cfg(
+  accounts?: Record<string, unknown> | null,
+  defaultAccount?: string,
+): MarketingClawConfig {
   if (accounts === null) {
     return {
       channels: {
         testchannel: defaultAccount ? { defaultAccount } : {},
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
   }
   if (accounts === undefined && !defaultAccount) {
-    return {} as unknown as OpenClawConfig;
+    return {} as unknown as MarketingClawConfig;
   }
   return {
     channels: {
@@ -33,18 +36,18 @@ function cfg(accounts?: Record<string, unknown> | null, defaultAccount?: string)
         ...(defaultAccount ? { defaultAccount } : {}),
       },
     },
-  } as unknown as OpenClawConfig;
+  } as unknown as MarketingClawConfig;
 }
 
 function expectResolvedAccountIdsCase(params: {
-  resolve: (cfg: OpenClawConfig) => string[];
-  input: OpenClawConfig;
+  resolve: (cfg: MarketingClawConfig) => string[];
+  input: MarketingClawConfig;
   expected: string[];
 }) {
   expect(params.resolve(params.input)).toEqual(params.expected);
 }
 
-function expectResolvedDefaultAccountCase(input: OpenClawConfig, expected: string) {
+function expectResolvedDefaultAccountCase(input: MarketingClawConfig, expected: string) {
   expect(resolveDefaultAccountId(input)).toBe(expected);
 }
 
@@ -53,7 +56,7 @@ describe("createAccountListHelpers", () => {
     it.each([
       {
         name: "returns empty for missing config",
-        input: {} as OpenClawConfig,
+        input: {} as MarketingClawConfig,
       },
       {
         name: "returns empty when no accounts key",
@@ -103,7 +106,7 @@ describe("createAccountListHelpers", () => {
     it.each([
       {
         name: 'returns ["default"] for empty config',
-        input: {} as OpenClawConfig,
+        input: {} as MarketingClawConfig,
         expected: ["default"],
       },
       {
@@ -137,7 +140,7 @@ describe("createAccountListHelpers", () => {
               accounts: { work: {} },
             },
           },
-        } as unknown as OpenClawConfig),
+        } as unknown as MarketingClawConfig),
       ).toEqual(["default", "work"]);
     });
 
@@ -189,7 +192,7 @@ describe("createAccountListHelpers", () => {
       },
       {
         name: 'returns "default" for empty config',
-        input: {} as OpenClawConfig,
+        input: {} as MarketingClawConfig,
         expected: "default",
       },
     ])("$name", ({ input, expected }) => {

@@ -1,5 +1,5 @@
 // Slack tests cover message tools plugin behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import { createSlackActions } from "./channel-actions.js";
 import { listSlackMessageActions } from "./message-actions.js";
@@ -99,7 +99,7 @@ describe("Slack message tools", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(listSlackMessageActions(cfg)).toEqual([
       "send",
@@ -154,7 +154,7 @@ describe("Slack message tools", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(listSlackMessageActions(cfg, "default")).toEqual(["send"]);
     expect(listSlackMessageActions(cfg, "work")).toEqual([
@@ -240,7 +240,7 @@ describe("Slack message tools", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
     });
 
     const schemas = Array.isArray(discovery.schema)
@@ -305,7 +305,7 @@ describe("Slack message tools", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
     });
 
     expect(discovery.actions).toEqual(["send"]);

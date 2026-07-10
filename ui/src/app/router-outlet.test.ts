@@ -31,7 +31,7 @@ function deferred<T>(): Deferred<T> {
 }
 
 function createOutlet(router: TestRouter, context: TestContext): RouterOutletElement {
-  const outlet = document.createElement("openclaw-router-outlet") as RouterOutletElement;
+  const outlet = document.createElement("marketingclaw-router-outlet") as RouterOutletElement;
   outlet.router = router;
   outlet.retryContext = context;
   document.body.append(outlet);
@@ -49,7 +49,7 @@ afterEach(() => {
   document.body.replaceChildren();
 });
 
-describe("openclaw-router-outlet", () => {
+describe("marketingclaw-router-outlet", () => {
   it("renders route data through the public custom-element boundary", async () => {
     const context = { label: "loaded" };
     const router = createRouter<RouteId, TestContext, TestModule, TestData>({

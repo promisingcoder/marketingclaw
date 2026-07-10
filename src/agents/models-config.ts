@@ -9,7 +9,7 @@ import {
   getRuntimeConfig,
   getRuntimeConfigSourceSnapshot,
   projectConfigOntoRuntimeSourceSnapshot,
-  type OpenClawConfig,
+  type MarketingClawConfig,
 } from "../config/config.js";
 import { createConfigRuntimeEnv } from "../config/env-vars.js";
 import { privateFileStore } from "../infra/private-file-store.js";
@@ -29,7 +29,7 @@ import {
   type ModelsJsonReadyResult,
   type ModelsJsonReadyState,
 } from "./models-config-state.js";
-import { planOpenClawModelsJson } from "./models-config.plan.js";
+import { planMarketingClawModelsJson } from "./models-config.plan.js";
 import {
   decodePluginModelCatalogRelativePathPluginId,
   isGeneratedPluginModelCatalog,
@@ -41,12 +41,12 @@ import { stableStringify } from "./stable-stringify.js";
 
 export { resetModelsJsonReadyCacheForTest } from "./models-config-state.js";
 
-type PreparedOpenClawModelsJsonSource = ModelsJsonReadyResult & {
+type PreparedMarketingClawModelsJsonSource = ModelsJsonReadyResult & {
   fingerprint: string;
   workspaceDir?: string;
 };
 
-type EnsureOpenClawModelsJsonOptions = {
+type EnsureMarketingClawModelsJsonOptions = {
   pluginMetadataSnapshot?: Pick<PluginMetadataSnapshot, "index" | "manifestRegistry" | "owners">;
   workspaceDir?: string;
   providerDiscoveryProviderIds?: readonly string[];
@@ -76,8 +76,8 @@ async function readPluginCatalogMtimes(agentDir: string): Promise<Array<[string,
 }
 
 async function buildModelsJsonFingerprint(params: {
-  config: OpenClawConfig;
-  sourceConfigForSecrets: OpenClawConfig;
+  config: MarketingClawConfig;
+  sourceConfigForSecrets: MarketingClawConfig;
   agentDir: string;
   workspaceDir?: string;
   pluginMetadataSnapshot?: Pick<PluginMetadataSnapshot, "index">;
@@ -260,9 +260,9 @@ async function writePluginCatalogsForModelsJson(params: {
   return wrote || removedStale;
 }
 
-function resolveModelsConfigInput(config?: OpenClawConfig): {
-  config: OpenClawConfig;
-  sourceConfigForSecrets: OpenClawConfig;
+function resolveModelsConfigInput(config?: MarketingClawConfig): {
+  config: MarketingClawConfig;
+  sourceConfigForSecrets: MarketingClawConfig;
 } {
   const runtimeSource = getRuntimeConfigSourceSnapshot();
   if (!config) {
@@ -289,7 +289,7 @@ function resolveModelsConfigInput(config?: OpenClawConfig): {
 
 /** Builds the canonical source freshness fingerprint for generated model catalogs. */
 export async function buildModelsJsonSourceFingerprint(
-  config?: OpenClawConfig,
+  config?: MarketingClawConfig,
   agentDirOverride?: string,
   options: {
     pluginMetadataSnapshot?: Pick<PluginMetadataSnapshot, "index" | "manifestRegistry" | "owners">;
@@ -344,11 +344,11 @@ async function withModelsJsonWriteLock<T>(targetPath: string, run: () => Promise
 }
 
 /** Ensures models.json and plugin catalog sidecars are current for an agent. */
-export async function prepareOpenClawModelsJsonSource(
-  config?: OpenClawConfig,
+export async function prepareMarketingClawModelsJsonSource(
+  config?: MarketingClawConfig,
   agentDirOverride?: string,
-  options: EnsureOpenClawModelsJsonOptions = {},
-): Promise<PreparedOpenClawModelsJsonSource> {
+  options: EnsureMarketingClawModelsJsonOptions = {},
+): Promise<PreparedMarketingClawModelsJsonSource> {
   const resolved = resolveModelsConfigInput(config);
   const cfg = resolved.config;
   const sourceFingerprint = await buildModelsJsonSourceFingerprint(
@@ -390,7 +390,7 @@ export async function prepareOpenClawModelsJsonSource(
       existingParsed: existingModelsFile.parsed,
       ...(pluginMetadataSnapshot ? { pluginMetadataSnapshot } : {}),
     });
-    const plan = await planOpenClawModelsJson({
+    const plan = await planMarketingClawModelsJson({
       cfg,
       sourceConfigForSecrets: resolved.sourceConfigForSecrets,
       agentDir,
@@ -481,11 +481,11 @@ export async function prepareOpenClawModelsJsonSource(
 }
 
 /** Ensures models.json and plugin catalog sidecars are current for an agent. */
-export async function ensureOpenClawModelsJson(
-  config?: OpenClawConfig,
+export async function ensureMarketingClawModelsJson(
+  config?: MarketingClawConfig,
   agentDirOverride?: string,
-  options: EnsureOpenClawModelsJsonOptions = {},
+  options: EnsureMarketingClawModelsJsonOptions = {},
 ): Promise<ModelsJsonReadyResult> {
-  const prepared = await prepareOpenClawModelsJsonSource(config, agentDirOverride, options);
+  const prepared = await prepareMarketingClawModelsJsonSource(config, agentDirOverride, options);
   return { agentDir: prepared.agentDir, wrote: prepared.wrote };
 }

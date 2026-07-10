@@ -113,7 +113,7 @@ vi.mock("../../utils/message-channel.js", () => ({
   normalizeMessageChannel: (value: string) => value.trim().toLowerCase(),
 }));
 
-import type { OpenClawConfig } from "../../config/config.js";
+import type { MarketingClawConfig } from "../../config/config.js";
 let resolveAgentDeliveryPlan: typeof import("./agent-delivery.js").resolveAgentDeliveryPlan;
 let resolveAgentDeliveryPlanWithSessionRoute: typeof import("./agent-delivery.js").resolveAgentDeliveryPlanWithSessionRoute;
 let resolveAgentExplicitRecipientSession: typeof import("./agent-delivery.js").resolveAgentExplicitRecipientSession;
@@ -244,7 +244,7 @@ describe("agent delivery helpers", () => {
     });
 
     const resolved = resolveAgentOutboundTarget({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       plan,
       targetMode: "implicit",
     });
@@ -269,7 +269,7 @@ describe("agent delivery helpers", () => {
 
     mocks.resolveOutboundTarget.mockClear();
     const resolved = resolveAgentOutboundTarget({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       plan,
       targetMode: "explicit",
       validateExplicitTarget: false,
@@ -299,7 +299,7 @@ describe("agent delivery helpers", () => {
     });
 
     const plan = await resolveAgentDeliveryPlanWithSessionRoute({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       agentId: "agent",
       currentSessionKey: "agent:main",
       sessionEntry: {
@@ -351,7 +351,7 @@ describe("agent delivery helpers", () => {
     });
 
     const result = await resolveAgentExplicitRecipientSession({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       agentId: "ops",
       channel: "whatsapp",
       to: "120363040000000000@g.us",
@@ -404,7 +404,7 @@ describe("agent delivery helpers", () => {
             session: { dmScope: "per-channel-peer" },
           },
         ],
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       agentId: "ops",
       channel: "signal",
       to: "+15551234567",
@@ -435,7 +435,7 @@ describe("agent delivery helpers", () => {
     });
 
     const result = await resolveAgentExplicitRecipientSession({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       agentId: "main",
       channel: "provider",
       to: "@ambiguous",
@@ -461,7 +461,7 @@ describe("agent delivery helpers", () => {
     });
 
     const result = await resolveAgentExplicitRecipientSession({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       agentId: "ops",
       channel: "signal",
       to: "username:alice.01",
@@ -500,7 +500,7 @@ describe("agent delivery helpers", () => {
             session: { dmScope: "per-channel-peer" },
           },
         ],
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       agentId: "ops",
       channel: "signal",
       to: "username:alice.01",
@@ -526,7 +526,7 @@ describe("agent delivery helpers", () => {
     });
 
     const result = await resolveAgentExplicitRecipientSession({
-      cfg: { session: { mainKey: "work" } } as OpenClawConfig,
+      cfg: { session: { mainKey: "work" } } as MarketingClawConfig,
       agentId: "ops",
       channel: "signal",
       to: "username:alice.01",
@@ -551,7 +551,7 @@ describe("agent delivery helpers", () => {
     });
 
     const result = await resolveAgentExplicitRecipientSession({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       agentId: "main",
       channel: "provider",
       to: "user-1",
@@ -581,7 +581,7 @@ describe("agent delivery helpers", () => {
     });
 
     const result = await resolveAgentExplicitRecipientSession({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       agentId: "ops",
       channel: "synology-chat",
       to: "42",
@@ -623,7 +623,7 @@ describe("agent delivery helpers", () => {
     });
 
     const result = await resolveAgentExplicitRecipientSession({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       agentId: "ops",
       channel: "synology-chat",
       to: "42",
@@ -652,7 +652,7 @@ describe("agent delivery helpers", () => {
     });
 
     const result = await resolveAgentExplicitRecipientSession({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       agentId: "ops",
       channel: "synology-chat",
       to: "42",
@@ -672,7 +672,7 @@ describe("agent delivery helpers", () => {
     mocks.resolveOutboundSessionRoute.mockResolvedValueOnce(null);
 
     const result = await resolveAgentExplicitRecipientSession({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       agentId: "ops",
       channel: "provider",
       to: "missing",
@@ -702,7 +702,7 @@ describe("agent delivery helpers", () => {
     });
 
     const result = await resolveAgentExplicitRecipientSession({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       agentId: "ops",
       channel: "whatsapp",
       to: "+15551234567",
@@ -737,7 +737,7 @@ describe("agent delivery helpers", () => {
     });
 
     const plan = await resolveAgentDeliveryPlanWithSessionRoute({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       agentId: "agent",
       sessionEntry: undefined,
       requestedChannel: "workspace",
@@ -777,7 +777,7 @@ describe("agent delivery helpers", () => {
     });
 
     const plan = await resolveAgentDeliveryPlanWithSessionRoute({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       agentId: "agent",
       currentSessionKey: "agent:main",
       sessionEntry: undefined,
@@ -834,7 +834,7 @@ describe("agent delivery helpers", () => {
     });
 
     const plan = await resolveAgentDeliveryPlanWithSessionRoute({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       agentId: "agent",
       sessionEntry: undefined,
       requestedChannel: "telegram",
@@ -878,7 +878,7 @@ describe("agent delivery helpers", () => {
     mocks.resolveOutboundSessionRoute.mockResolvedValueOnce(null);
 
     const plan = await resolveAgentDeliveryPlanWithSessionRoute({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       agentId: "agent",
       currentSessionKey: "agent:main",
       sessionEntry: undefined,
@@ -914,7 +914,7 @@ describe("agent delivery helpers", () => {
     const targetResolutionError = new Error('reserved target "current"');
 
     const resolved = resolveAgentOutboundTarget({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       plan: {
         baseDelivery: { mode: "explicit" },
         resolvedChannel: "workspace",
@@ -942,7 +942,7 @@ describe("agent delivery helpers", () => {
     mocks.resolveOutboundSessionRoute.mockRejectedValueOnce(new Error("route lookup failed"));
 
     const plan = await resolveAgentDeliveryPlanWithSessionRoute({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       agentId: "agent",
       sessionEntry: undefined,
       requestedChannel: "workspace",
@@ -961,7 +961,7 @@ describe("agent delivery helpers", () => {
     });
 
     const plan = await resolveAgentDeliveryPlanWithSessionRoute({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       agentId: "agent",
       sessionEntry: undefined,
       requestedChannel: "workspace",
@@ -993,7 +993,7 @@ describe("agent delivery helpers", () => {
     });
 
     const plan = await resolveAgentDeliveryPlanWithSessionRoute({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       agentId: "agent",
       sessionEntry: {
         sessionId: "s-thread",

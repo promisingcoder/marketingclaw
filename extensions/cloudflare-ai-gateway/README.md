@@ -1,12 +1,12 @@
-# OpenClaw Cloudflare AI Gateway Provider
+# MarketingClaw Cloudflare AI Gateway Provider
 
-Official OpenClaw provider plugin for Cloudflare AI Gateway.
+Official MarketingClaw provider plugin for Cloudflare AI Gateway.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugins install @openclaw/cloudflare-ai-gateway-provider
-openclaw gateway restart
+marketingclaw plugins install @marketingclaw/cloudflare-ai-gateway-provider
+marketingclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/cloudflare-ai-gateway> for setup and configuration.
+See <https://docs.marketingclaw.ai/providers/cloudflare-ai-gateway> for setup and configuration.

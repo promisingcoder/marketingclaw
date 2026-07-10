@@ -10,7 +10,7 @@ import {
   isSourceCheckoutRoot,
   isDirectPostinstallInvocation,
   MAX_INSTALLED_DIST_SCAN_ENTRIES,
-  pruneOpenClawCompileCache,
+  pruneMarketingClawCompileCache,
   pruneInstalledPackageDist,
   pruneLegacyPluginRuntimeDepsState,
   pruneBundledPluginSourceNodeModules,
@@ -82,15 +82,16 @@ describe("bundled plugin postinstall", () => {
 
     expect(
       isDirectPostinstallInvocation({
-        entryPath: "/var/folders/tmp/openclaw/scripts/postinstall-bundled-plugins.mjs",
-        modulePath: "/private/var/folders/tmp/openclaw/scripts/postinstall-bundled-plugins.mjs",
+        entryPath: "/var/folders/tmp/marketingclaw/scripts/postinstall-bundled-plugins.mjs",
+        modulePath:
+          "/private/var/folders/tmp/marketingclaw/scripts/postinstall-bundled-plugins.mjs",
         realpathSync,
       }),
     ).toBe(true);
   });
 
   it("prunes Node versioned compile cache dirs during package postinstall", () => {
-    const configuredBase = path.join("/tmp", "openclaw-cache");
+    const configuredBase = path.join("/tmp", "marketingclaw-cache");
     const defaultBase = path.join(tmpdir(), "node-compile-cache");
     const removed: string[] = [];
     const existsSync = vi.fn((value: string) => value === configuredBase || value === defaultBase);
@@ -98,7 +99,7 @@ describe("bundled plugin postinstall", () => {
       if (value === configuredBase) {
         return [
           { name: "v22.13.1-x64-efe9a9df-1001", isDirectory: () => true },
-          { name: "openclaw", isDirectory: () => true },
+          { name: "marketingclaw", isDirectory: () => true },
           { name: "README", isDirectory: () => false },
         ];
       }
@@ -111,7 +112,7 @@ describe("bundled plugin postinstall", () => {
       removed.push(value);
     });
 
-    pruneOpenClawCompileCache({
+    pruneMarketingClawCompileCache({
       env: { NODE_COMPILE_CACHE: configuredBase },
       existsSync,
       readdirSync,
@@ -123,7 +124,7 @@ describe("bundled plugin postinstall", () => {
       path.join(configuredBase, "v22.13.1-x64-efe9a9df-1001"),
       path.join(defaultBase, "v24.14.1-x64-efe9a9df-1001"),
     ]);
-    expect(removed).not.toContain(path.join(configuredBase, "openclaw"));
+    expect(removed).not.toContain(path.join(configuredBase, "marketingclaw"));
     for (const cacheDir of removed) {
       expect(rmSync).toHaveBeenCalledWith(cacheDir, {
         recursive: true,
@@ -135,7 +136,7 @@ describe("bundled plugin postinstall", () => {
   });
 
   it("keeps pruning sibling compile cache dirs after one removal fails", () => {
-    const configuredBase = path.join("/tmp", "openclaw-cache");
+    const configuredBase = path.join("/tmp", "marketingclaw-cache");
     const attempted: string[] = [];
     const warn = vi.fn();
     const firstCacheDir = path.join(configuredBase, "v22.13.1-x64-efe9a9df-1001");
@@ -147,7 +148,7 @@ describe("bundled plugin postinstall", () => {
       }
     });
 
-    pruneOpenClawCompileCache({
+    pruneMarketingClawCompileCache({
       env: { NODE_COMPILE_CACHE: configuredBase },
       existsSync: vi.fn((value: string) => value === configuredBase),
       readdirSync: vi.fn(() => [
@@ -160,12 +161,12 @@ describe("bundled plugin postinstall", () => {
 
     expect(attempted).toEqual([firstCacheDir, secondCacheDir]);
     expect(warn).toHaveBeenCalledWith(
-      "[postinstall] could not prune OpenClaw compile cache: Error: locked",
+      "[postinstall] could not prune MarketingClaw compile cache: Error: locked",
     );
   });
 
   it("does not warn when compile-cache pruning hits EACCES or EPERM (shared caches)", () => {
-    const base = path.join("/tmp", "openclaw-shared-compile-cache");
+    const base = path.join("/tmp", "marketingclaw-shared-compile-cache");
     const dirA = path.join(base, "v22.13.1-x64-efe9a9df-1001");
     const dirB = path.join(base, "v22.13.1-x64-efe9a9df-1002");
     const warn = vi.fn();
@@ -180,7 +181,7 @@ describe("bundled plugin postinstall", () => {
       }
     });
 
-    pruneOpenClawCompileCache({
+    pruneMarketingClawCompileCache({
       env: { NODE_COMPILE_CACHE: base },
       existsSync: vi.fn((value: string) => value === base),
       readdirSync: vi.fn(() => [
@@ -196,12 +197,12 @@ describe("bundled plugin postinstall", () => {
   });
 
   it("does not warn when the compile-cache base directory cannot be listed (EACCES)", () => {
-    const base = path.join("/tmp", "openclaw-compile-cache-no-list");
+    const base = path.join("/tmp", "marketingclaw-compile-cache-no-list");
     const warn = vi.fn();
     const rmSync = vi.fn();
     const err = Object.assign(new Error(`EACCES: ${base}`), { code: "EACCES" });
 
-    pruneOpenClawCompileCache({
+    pruneMarketingClawCompileCache({
       env: { NODE_COMPILE_CACHE: base },
       existsSync: vi.fn(() => true),
       readdirSync: vi.fn(() => {
@@ -216,7 +217,7 @@ describe("bundled plugin postinstall", () => {
   });
 
   it("patches the Baileys upload helper dispatcher guard", async () => {
-    const packageRoot = await createTempDirAsync("openclaw-baileys-postinstall-");
+    const packageRoot = await createTempDirAsync("marketingclaw-baileys-postinstall-");
     const mediaFile = await writeBaileysMediaFile(
       packageRoot,
       [
@@ -261,7 +262,7 @@ describe("bundled plugin postinstall", () => {
   });
 
   it("recognizes already patched Baileys upload helpers", async () => {
-    const packageRoot = await createTempDirAsync("openclaw-baileys-postinstall-");
+    const packageRoot = await createTempDirAsync("marketingclaw-baileys-postinstall-");
     await writeBaileysMediaFile(
       packageRoot,
       [
@@ -294,7 +295,7 @@ describe("bundled plugin postinstall", () => {
   });
 
   it("recognizes Baileys upload helpers with a prepared dispatcher", async () => {
-    const packageRoot = await createTempDirAsync("openclaw-baileys-postinstall-");
+    const packageRoot = await createTempDirAsync("marketingclaw-baileys-postinstall-");
     await writeBaileysMediaFile(
       packageRoot,
       [
@@ -346,7 +347,7 @@ describe("bundled plugin postinstall", () => {
   });
 
   it("prunes source-checkout bundled plugin node_modules", async () => {
-    const packageRoot = await createTempDirAsync("openclaw-source-checkout-");
+    const packageRoot = await createTempDirAsync("marketingclaw-source-checkout-");
     const extensionsDir = path.join(packageRoot, "extensions");
     await fs.mkdir(path.join(packageRoot, ".git"), { recursive: true });
     await fs.mkdir(path.join(packageRoot, "src"), { recursive: true });
@@ -371,7 +372,7 @@ describe("bundled plugin postinstall", () => {
   });
 
   it("keeps source-checkout prune non-fatal", async () => {
-    const packageRoot = await createTempDirAsync("openclaw-source-checkout-prune-error-");
+    const packageRoot = await createTempDirAsync("marketingclaw-source-checkout-prune-error-");
     const extensionsDir = path.join(packageRoot, "extensions");
     await fs.mkdir(path.join(packageRoot, ".git"), { recursive: true });
     await fs.mkdir(path.join(packageRoot, "src"), { recursive: true });
@@ -396,9 +397,9 @@ describe("bundled plugin postinstall", () => {
   });
 
   it("does not prune user-state legacy runtime deps during source-checkout postinstall", async () => {
-    const packageRoot = await createTempDirAsync("openclaw-source-checkout-state-skip-");
-    const home = await createTempDirAsync("openclaw-source-checkout-home-");
-    const legacyRuntimeRoot = path.join(home, ".openclaw", "plugin-runtime-deps");
+    const packageRoot = await createTempDirAsync("marketingclaw-source-checkout-state-skip-");
+    const home = await createTempDirAsync("marketingclaw-source-checkout-home-");
+    const legacyRuntimeRoot = path.join(home, ".marketingclaw", "plugin-runtime-deps");
     await fs.mkdir(path.join(packageRoot, ".git"), { recursive: true });
     await fs.mkdir(path.join(packageRoot, "src"), { recursive: true });
     await fs.mkdir(path.join(packageRoot, "extensions"), { recursive: true });
@@ -415,7 +416,7 @@ describe("bundled plugin postinstall", () => {
   });
 
   it("honors disable env before source-checkout pruning", async () => {
-    const packageRoot = await createTempDirAsync("openclaw-source-checkout-disabled-");
+    const packageRoot = await createTempDirAsync("marketingclaw-source-checkout-disabled-");
     const extensionsDir = path.join(packageRoot, "extensions");
     await fs.mkdir(path.join(packageRoot, ".git"), { recursive: true });
     await fs.mkdir(path.join(packageRoot, "src"), { recursive: true });
@@ -423,7 +424,7 @@ describe("bundled plugin postinstall", () => {
     await fs.writeFile(path.join(extensionsDir, "acpx", "package.json"), "{}\n");
 
     runBundledPluginPostinstall({
-      env: { OPENCLAW_DISABLE_BUNDLED_PLUGIN_POSTINSTALL: "1" },
+      env: { MARKETINGCLAW_DISABLE_BUNDLED_PLUGIN_POSTINSTALL: "1" },
       packageRoot,
       log: { log: vi.fn(), warn: vi.fn() },
     });
@@ -432,7 +433,7 @@ describe("bundled plugin postinstall", () => {
   });
 
   it("migrates the plugin registry during postinstall from built dist contracts", async () => {
-    const packageRoot = await createTempDirAsync("openclaw-postinstall-registry-");
+    const packageRoot = await createTempDirAsync("marketingclaw-postinstall-registry-");
     const log = { log: vi.fn(), warn: vi.fn() };
     const migratePluginRegistryForInstall = vi.fn(async () => ({
       status: "migrated",
@@ -459,7 +460,7 @@ describe("bundled plugin postinstall", () => {
         ),
       ),
       importModule,
-      env: { OPENCLAW_HOME: "/tmp/home" },
+      env: { MARKETINGCLAW_HOME: "/tmp/home" },
       log,
     });
 
@@ -474,7 +475,7 @@ describe("bundled plugin postinstall", () => {
       status: "migrated",
     });
     expect(migratePluginRegistryForInstall).toHaveBeenCalledWith({
-      env: { OPENCLAW_HOME: "/tmp/home" },
+      env: { MARKETINGCLAW_HOME: "/tmp/home" },
       packageRoot,
     });
     expect(log.log).toHaveBeenCalledWith(
@@ -488,7 +489,7 @@ describe("bundled plugin postinstall", () => {
       status: "skip-existing",
       migrated: false,
       preflight: {
-        deprecationWarnings: ["OPENCLAW_FORCE_PLUGIN_REGISTRY_MIGRATION is deprecated"],
+        deprecationWarnings: ["MARKETINGCLAW_FORCE_PLUGIN_REGISTRY_MIGRATION is deprecated"],
       },
     }));
     const importModule = vi.fn(async () => ({ migratePluginRegistryForInstall }));
@@ -501,7 +502,7 @@ describe("bundled plugin postinstall", () => {
     });
 
     expect(warn).toHaveBeenCalledWith(
-      "[postinstall] OPENCLAW_FORCE_PLUGIN_REGISTRY_MIGRATION is deprecated",
+      "[postinstall] MARKETINGCLAW_FORCE_PLUGIN_REGISTRY_MIGRATION is deprecated",
     );
   });
 
@@ -528,7 +529,7 @@ describe("bundled plugin postinstall", () => {
     await expect(
       runPluginRegistryPostinstallMigration({
         packageRoot: "/pkg",
-        env: { OPENCLAW_DISABLE_PLUGIN_REGISTRY_MIGRATION: "1" },
+        env: { MARKETINGCLAW_DISABLE_PLUGIN_REGISTRY_MIGRATION: "1" },
         existsSync: vi.fn(() => true),
         importModule,
         log: { log: vi.fn(), warn: vi.fn() },
@@ -552,7 +553,7 @@ describe("bundled plugin postinstall", () => {
     await expect(
       runPluginRegistryPostinstallMigration({
         packageRoot: "/pkg",
-        env: { OPENCLAW_DISABLE_PLUGIN_REGISTRY_MIGRATION: "0" },
+        env: { MARKETINGCLAW_DISABLE_PLUGIN_REGISTRY_MIGRATION: "0" },
         existsSync: vi.fn(() => true),
         importModule,
         log: { log: vi.fn(), warn: vi.fn() },
@@ -564,13 +565,13 @@ describe("bundled plugin postinstall", () => {
     });
     expect(importModule).toHaveBeenCalledOnce();
     expect(migratePluginRegistryForInstall).toHaveBeenCalledWith({
-      env: { OPENCLAW_DISABLE_PLUGIN_REGISTRY_MIGRATION: "0" },
+      env: { MARKETINGCLAW_DISABLE_PLUGIN_REGISTRY_MIGRATION: "0" },
       packageRoot: "/pkg",
     });
   });
 
   it("prunes stale dist files from packaged installs", async () => {
-    const packageRoot = await createTempDirAsync("openclaw-packaged-install-");
+    const packageRoot = await createTempDirAsync("marketingclaw-packaged-install-");
     const currentFile = path.join(packageRoot, "dist", "channel-BOa4MfoC.js");
     const staleFile = path.join(packageRoot, "dist", "channel-CJUAgRQR.js");
     await fs.mkdir(path.dirname(currentFile), { recursive: true });
@@ -590,7 +591,7 @@ describe("bundled plugin postinstall", () => {
   });
 
   it("omits unpacked plugin-sdk test helpers from the package dist inventory", async () => {
-    const packageRoot = await createTempDirAsync("openclaw-packaged-inventory-");
+    const packageRoot = await createTempDirAsync("marketingclaw-packaged-inventory-");
     const runtimeFile = path.join(packageRoot, "dist", "plugin-sdk", "runtime.js");
     const testHelperFile = path.join(packageRoot, "dist", "plugin-sdk", "testing.js");
     const nestedTestHelperFile = path.join(
@@ -618,19 +619,19 @@ describe("bundled plugin postinstall", () => {
   });
 
   it("prunes legacy plugin runtime deps state during packaged postinstall", async () => {
-    const prefix = await createTempDirAsync("openclaw-packaged-prefix-");
-    const packageRoot = path.join(prefix, "lib", "node_modules", "openclaw");
+    const prefix = await createTempDirAsync("marketingclaw-packaged-prefix-");
+    const packageRoot = path.join(prefix, "lib", "node_modules", "marketingclaw");
     const nodeModulesRoot = path.dirname(packageRoot);
-    const home = await createTempDirAsync("openclaw-packaged-home-");
+    const home = await createTempDirAsync("marketingclaw-packaged-home-");
     const stateOverride = path.join(home, "custom-state");
     const systemState = path.join(home, "system-state");
-    const defaultLegacyRoot = path.join(home, ".openclaw", "plugin-runtime-deps");
+    const defaultLegacyRoot = path.join(home, ".marketingclaw", "plugin-runtime-deps");
     const oldBrandLegacyRoot = path.join(home, ".clawdbot", "plugin-runtime-deps");
     const overrideLegacyRoot = path.join(stateOverride, "plugin-runtime-deps");
     const systemLegacyRoot = path.join(systemState, "plugin-runtime-deps");
     const thirdPartyNodeModules = path.join(
       home,
-      ".openclaw",
+      ".marketingclaw",
       "extensions",
       "lossless-claw",
       "node_modules",
@@ -638,7 +639,7 @@ describe("bundled plugin postinstall", () => {
     const currentFile = path.join(packageRoot, "dist", "entry.js");
     const legacySymlinkTarget = path.join(
       defaultLegacyRoot,
-      "openclaw-2026.4.29-slack",
+      "marketingclaw-2026.4.29-slack",
       "node_modules",
       "@slack",
       "web-api",
@@ -667,7 +668,7 @@ describe("bundled plugin postinstall", () => {
     runBundledPluginPostinstall({
       env: {
         HOME: home,
-        OPENCLAW_STATE_DIR: stateOverride,
+        MARKETINGCLAW_STATE_DIR: stateOverride,
         STATE_DIRECTORY: systemState,
       },
       packageRoot,
@@ -693,14 +694,14 @@ describe("bundled plugin postinstall", () => {
   });
 
   it("prunes global plugin-runtime symlinks before deleting their legacy targets", async () => {
-    const prefix = await createTempDirAsync("openclaw-packaged-prefix-");
-    const home = await createTempDirAsync("openclaw-packaged-home-");
-    const packageRoot = path.join(prefix, "lib", "node_modules", "openclaw");
+    const prefix = await createTempDirAsync("marketingclaw-packaged-prefix-");
+    const home = await createTempDirAsync("marketingclaw-packaged-home-");
+    const packageRoot = path.join(prefix, "lib", "node_modules", "marketingclaw");
     const nodeModulesRoot = path.dirname(packageRoot);
-    const legacyRuntimeRoot = path.join(home, ".openclaw", "plugin-runtime-deps");
+    const legacyRuntimeRoot = path.join(home, ".marketingclaw", "plugin-runtime-deps");
     const legacyTarget = path.join(
       legacyRuntimeRoot,
-      "openclaw-2026.4.29-slack",
+      "marketingclaw-2026.4.29-slack",
       "node_modules",
       "@slack",
       "web-api",
@@ -751,33 +752,33 @@ describe("bundled plugin postinstall", () => {
     );
     expect(warn).toHaveBeenNthCalledWith(
       2,
-      "[postinstall] could not prune legacy plugin runtime deps /home/alice/.openclaw/plugin-runtime-deps: Error: locked",
+      "[postinstall] could not prune legacy plugin runtime deps /home/alice/.marketingclaw/plugin-runtime-deps: Error: locked",
     );
   });
 
-  it("resolves legacy plugin runtime deps roots from OpenClaw state env", () => {
+  it("resolves legacy plugin runtime deps roots from MarketingClaw state env", () => {
     expect(
       collectLegacyPluginRuntimeDepsStateRoots({
         env: {
           HOME: "/users/alice",
-          OPENCLAW_HOME: "/srv/openclaw-home",
-          OPENCLAW_CONFIG_PATH: "~/profile/openclaw.json",
-          OPENCLAW_STATE_DIR: "~/state",
-          STATE_DIRECTORY: "/var/lib/openclaw",
+          MARKETINGCLAW_HOME: "/srv/marketingclaw-home",
+          MARKETINGCLAW_CONFIG_PATH: "~/profile/marketingclaw.json",
+          MARKETINGCLAW_STATE_DIR: "~/state",
+          STATE_DIRECTORY: "/var/lib/marketingclaw",
         },
         homedir: () => "/users/alice",
       }),
     ).toEqual([
-      "/srv/openclaw-home/.clawdbot/plugin-runtime-deps",
-      "/srv/openclaw-home/.openclaw/plugin-runtime-deps",
-      "/srv/openclaw-home/profile/plugin-runtime-deps",
-      "/srv/openclaw-home/state/plugin-runtime-deps",
-      "/var/lib/openclaw/plugin-runtime-deps",
+      "/srv/marketingclaw-home/.clawdbot/plugin-runtime-deps",
+      "/srv/marketingclaw-home/.marketingclaw/plugin-runtime-deps",
+      "/srv/marketingclaw-home/profile/plugin-runtime-deps",
+      "/srv/marketingclaw-home/state/plugin-runtime-deps",
+      "/var/lib/marketingclaw/plugin-runtime-deps",
     ]);
   });
 
   it("keeps imported dist chunks even when inventory is stale", async () => {
-    const packageRoot = await createTempDirAsync("openclaw-packaged-install-import-");
+    const packageRoot = await createTempDirAsync("marketingclaw-packaged-install-import-");
     const entryFile = path.join(packageRoot, "dist", "cli", "run-main.js");
     const importedChunk = path.join(packageRoot, "dist", "memory-state-CcqRgDZU.js");
     const staleFile = path.join(packageRoot, "dist", "memory-state-old.js");
@@ -799,7 +800,7 @@ describe("bundled plugin postinstall", () => {
   });
 
   it("does not abort dist pruning when a listed chunk disappears before import expansion", async () => {
-    const packageRoot = await createTempDirAsync("openclaw-packaged-install-missing-chunk-");
+    const packageRoot = await createTempDirAsync("marketingclaw-packaged-install-missing-chunk-");
     const entryFile = path.join(packageRoot, "dist", "control-ui", "assets", "instances.js");
     const staleFile = path.join(packageRoot, "dist", "stale.js");
     await fs.mkdir(path.dirname(entryFile), { recursive: true });
@@ -827,7 +828,7 @@ describe("bundled plugin postinstall", () => {
   });
 
   it("prunes stale private QA files without restoring compat sidecars", async () => {
-    const packageRoot = await createTempDirAsync("openclaw-packaged-install-qa-compat-");
+    const packageRoot = await createTempDirAsync("marketingclaw-packaged-install-qa-compat-");
     const currentFile = path.join(packageRoot, "dist", "entry.js");
     const stalePackage = path.join(packageRoot, "dist", "extensions", "qa-lab", "package.json");
     const staleManifest = path.join(
@@ -835,7 +836,7 @@ describe("bundled plugin postinstall", () => {
       "dist",
       "extensions",
       "qa-lab",
-      "openclaw.plugin.json",
+      "marketingclaw.plugin.json",
     );
     await fs.mkdir(path.dirname(stalePackage), { recursive: true });
     await fs.writeFile(currentFile, "export {};\n");
@@ -857,7 +858,7 @@ describe("bundled plugin postinstall", () => {
       path.join(packageRoot, "dist", "extensions", "qa-channel", "package.json"),
     );
     await expectPathMissing(
-      path.join(packageRoot, "dist", "extensions", "qa-channel", "openclaw.plugin.json"),
+      path.join(packageRoot, "dist", "extensions", "qa-channel", "marketingclaw.plugin.json"),
     );
     await expectPathMissing(
       path.join(packageRoot, "dist", "extensions", "qa-lab", "runtime-api.js"),
@@ -865,7 +866,9 @@ describe("bundled plugin postinstall", () => {
   });
 
   it("keeps packaged postinstall non-fatal when the dist inventory is missing", async () => {
-    const packageRoot = await createTempDirAsync("openclaw-packaged-install-missing-inventory-");
+    const packageRoot = await createTempDirAsync(
+      "marketingclaw-packaged-install-missing-inventory-",
+    );
     const staleFile = path.join(packageRoot, "dist", "channel-CJUAgRQR.js");
     await fs.mkdir(path.dirname(staleFile), { recursive: true });
     await fs.writeFile(staleFile, "export {};\n");
@@ -885,7 +888,9 @@ describe("bundled plugin postinstall", () => {
   });
 
   it("keeps packaged postinstall non-fatal when the dist inventory is invalid", async () => {
-    const packageRoot = await createTempDirAsync("openclaw-packaged-install-invalid-inventory-");
+    const packageRoot = await createTempDirAsync(
+      "marketingclaw-packaged-install-invalid-inventory-",
+    );
     const currentFile = path.join(packageRoot, "dist", "channel-BOa4MfoC.js");
     const inventoryPath = path.join(packageRoot, "dist", "postinstall-inventory.json");
     await fs.mkdir(path.dirname(currentFile), { recursive: true });
@@ -993,7 +998,7 @@ describe("bundled plugin postinstall", () => {
     );
     // One budget spans all three prune walks, and npm upgrades scan old+new
     // content-hashed dist files (~24k entries as of 2026.6.x). A cap without
-    // several-x headroom fails `npm install -g openclaw` for upgrading users.
+    // several-x headroom fails `npm install -g marketingclaw` for upgrading users.
     expect(MAX_INSTALLED_DIST_SCAN_ENTRIES).toBeGreaterThanOrEqual(100_000);
   });
 
@@ -1075,7 +1080,7 @@ describe("bundled plugin postinstall", () => {
   });
 
   it("prunes sibling empty dist directories after closing parent scans", async () => {
-    const packageRoot = await createTempDirAsync("openclaw-packaged-install-empty-dirs-");
+    const packageRoot = await createTempDirAsync("marketingclaw-packaged-install-empty-dirs-");
     const firstEmptyDir = path.join(packageRoot, "dist", "empty-a");
     const secondEmptyDir = path.join(packageRoot, "dist", "empty-b");
     await fs.mkdir(firstEmptyDir, { recursive: true });
@@ -1094,7 +1099,7 @@ describe("bundled plugin postinstall", () => {
   });
 
   it("prunes stale bundled plugin dependency debris from packaged dist", async () => {
-    const packageRoot = await createTempDirAsync("openclaw-packaged-install-dist-prune-");
+    const packageRoot = await createTempDirAsync("marketingclaw-packaged-install-dist-prune-");
     const staleFile = path.join(packageRoot, "dist", "stale-runtime.js");
     const packageJson = path.join(packageRoot, "dist", "extensions", "slack", "package.json");
     const binDir = path.join(packageRoot, "dist", "extensions", "slack", "node_modules", ".bin");
@@ -1112,7 +1117,7 @@ describe("bundled plugin postinstall", () => {
       "dist",
       "extensions",
       "slack",
-      ".openclaw-install-stage",
+      ".marketingclaw-install-stage",
       "node_modules",
       "typebox",
       "build",
@@ -1124,7 +1129,7 @@ describe("bundled plugin postinstall", () => {
       "dist",
       "extensions",
       "slack",
-      ".openclaw-install-stage-retry",
+      ".marketingclaw-install-stage-retry",
       "node_modules",
       "typebox",
       "build",
@@ -1191,13 +1196,13 @@ describe("bundled plugin postinstall", () => {
   });
 
   it("prunes only bundled plugin package node_modules in source checkouts", async () => {
-    const packageRoot = await createTempDirAsync("openclaw-source-prune-");
+    const packageRoot = await createTempDirAsync("marketingclaw-source-prune-");
     const extensionsDir = path.join(packageRoot, "extensions");
     await fs.mkdir(path.join(extensionsDir, "acpx", "node_modules"), { recursive: true });
     await fs.mkdir(path.join(extensionsDir, "fixtures", "node_modules"), { recursive: true });
     await fs.writeFile(
       path.join(extensionsDir, "acpx", "package.json"),
-      JSON.stringify({ name: "@openclaw/acpx" }),
+      JSON.stringify({ name: "@marketingclaw/acpx" }),
     );
 
     pruneBundledPluginSourceNodeModules({ extensionsDir });

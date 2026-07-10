@@ -62,16 +62,16 @@ afterEach(() => {
 
 describe("resolveConfigOpenCommand", () => {
   it("uses open on macOS", () => {
-    expect(resolveConfigOpenCommand("/tmp/openclaw.json", "darwin")).toEqual({
+    expect(resolveConfigOpenCommand("/tmp/marketingclaw.json", "darwin")).toEqual({
       command: "open",
-      args: ["/tmp/openclaw.json"],
+      args: ["/tmp/marketingclaw.json"],
     });
   });
 
   it("uses xdg-open on Linux", () => {
-    expect(resolveConfigOpenCommand("/tmp/openclaw.json", "linux")).toEqual({
+    expect(resolveConfigOpenCommand("/tmp/marketingclaw.json", "linux")).toEqual({
       command: "xdg-open",
-      args: ["/tmp/openclaw.json"],
+      args: ["/tmp/marketingclaw.json"],
     });
   });
 
@@ -90,29 +90,32 @@ describe("resolveConfigOpenCommand", () => {
 
 describe("config.openFile", () => {
   it("opens the configured file without shell interpolation", async () => {
-    await withEnvAsync({ OPENCLAW_CONFIG_PATH: "/tmp/config $(touch pwned).json" }, async () => {
-      execFileMock.mockImplementation((...args: unknown[]) => {
-        expect(["open", "xdg-open", "powershell.exe"]).toContain(args[0]);
-        expect(args[1]).toEqual(["/tmp/config $(touch pwned).json"]);
-        invokeExecFileCallback(args, null);
-        return {} as never;
-      });
+    await withEnvAsync(
+      { MARKETINGCLAW_CONFIG_PATH: "/tmp/config $(touch pwned).json" },
+      async () => {
+        execFileMock.mockImplementation((...args: unknown[]) => {
+          expect(["open", "xdg-open", "powershell.exe"]).toContain(args[0]);
+          expect(args[1]).toEqual(["/tmp/config $(touch pwned).json"]);
+          invokeExecFileCallback(args, null);
+          return {} as never;
+        });
 
-      const { respond } = await invokeConfigOpenFile();
+        const { respond } = await invokeConfigOpenFile();
 
-      expect(respond).toHaveBeenCalledWith(
-        true,
-        {
-          ok: true,
-          path: "/tmp/config $(touch pwned).json",
-        },
-        undefined,
-      );
-    });
+        expect(respond).toHaveBeenCalledWith(
+          true,
+          {
+            ok: true,
+            path: "/tmp/config $(touch pwned).json",
+          },
+          undefined,
+        );
+      },
+    );
   });
 
   it("returns a detailed error and logs details when the opener fails", async () => {
-    await withEnvAsync({ OPENCLAW_CONFIG_PATH: "/tmp/config.json" }, async () => {
+    await withEnvAsync({ MARKETINGCLAW_CONFIG_PATH: "/tmp/config.json" }, async () => {
       mockExecFileError(Object.assign(new Error("spawn xdg-open ENOENT"), { code: "ENOENT" }));
 
       const { respond, logGateway } = await invokeConfigOpenFile();
@@ -134,7 +137,7 @@ describe("config.openFile", () => {
 
   it("does not split surrogate pairs when truncating the failed config path", async () => {
     const pathPrefix = `/tmp/${"a".repeat(111)}`;
-    await withEnvAsync({ OPENCLAW_CONFIG_PATH: `${pathPrefix}😀tail.json` }, async () => {
+    await withEnvAsync({ MARKETINGCLAW_CONFIG_PATH: `${pathPrefix}😀tail.json` }, async () => {
       mockExecFileError(new Error("open failed"));
 
       const { logGateway } = await invokeConfigOpenFile();
@@ -146,7 +149,7 @@ describe("config.openFile", () => {
   });
 
   it("returns actionable headless environment error when xdg-open reports no method available", async () => {
-    await withEnvAsync({ OPENCLAW_CONFIG_PATH: "/tmp/config.json" }, async () => {
+    await withEnvAsync({ MARKETINGCLAW_CONFIG_PATH: "/tmp/config.json" }, async () => {
       mockExecFileError(new Error("xdg-open: no method available for opening '/tmp/config.json'"));
 
       const { respond, logGateway } = await invokeConfigOpenFile();

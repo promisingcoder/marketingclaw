@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/line",
+  "name": "@marketingclaw/line",
   "version": "2026.6.11",
-  "description": "OpenClaw LINE channel plugin for LINE Bot API chats.",
+  "description": "MarketingClaw LINE channel plugin for LINE Bot API chats.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/promisingcoder/marketingclaw"
   },
   "type": "module",
   "dependencies": {
@@ -12,18 +12,18 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@marketingclaw/plugin-sdk": "workspace:*",
+    "marketingclaw": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.6.11"
+    "marketingclaw": ">=2026.6.11"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "marketingclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "marketingclaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -41,7 +41,7 @@
       "quickstartAllowFrom": true
     },
     "install": {
-      "npmSpec": "@openclaw/line",
+      "npmSpec": "@marketingclaw/line",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.10"
     },
@@ -49,7 +49,7 @@
       "pluginApi": ">=2026.6.11"
     },
     "build": {
-      "openclawVersion": "2026.6.11"
+      "marketingclawVersion": "2026.6.11"
     },
     "release": {
       "publishToClawHub": true,

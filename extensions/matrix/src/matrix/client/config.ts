@@ -1,14 +1,14 @@
 // Matrix helper module supports config behavior.
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import { resolveOptionalIntegerOption } from "openclaw/plugin-sdk/number-runtime";
-import { requireRuntimeConfig } from "openclaw/plugin-sdk/plugin-config-runtime";
-import { retryAsync } from "openclaw/plugin-sdk/retry-runtime";
+import { formatErrorMessage } from "marketingclaw/plugin-sdk/error-runtime";
+import { createLazyRuntimeModule } from "marketingclaw/plugin-sdk/lazy-runtime";
+import { resolveOptionalIntegerOption } from "marketingclaw/plugin-sdk/number-runtime";
+import { requireRuntimeConfig } from "marketingclaw/plugin-sdk/plugin-config-runtime";
+import { retryAsync } from "marketingclaw/plugin-sdk/retry-runtime";
 import {
   coerceSecretRef,
   normalizeResolvedSecretInputString,
-} from "openclaw/plugin-sdk/secret-input-runtime";
-import type { PinnedDispatcherPolicy } from "openclaw/plugin-sdk/ssrf-dispatcher";
+} from "marketingclaw/plugin-sdk/secret-input-runtime";
+import type { PinnedDispatcherPolicy } from "marketingclaw/plugin-sdk/ssrf-dispatcher";
 import {
   requiresExplicitMatrixDefaultAccount,
   resolveMatrixDefaultOrOnlyAccountId,
@@ -719,7 +719,7 @@ export async function resolveMatrixAuth(params?: {
       identifier: { type: "m.id.user", user: resolved.userId },
       password,
       device_id: resolved.deviceId,
-      initial_device_display_name: resolved.deviceName ?? "OpenClaw Gateway",
+      initial_device_display_name: resolved.deviceName ?? "MarketingClaw Gateway",
     })) as {
       access_token?: string;
       user_id?: string;

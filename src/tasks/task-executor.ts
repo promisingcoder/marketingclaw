@@ -1,5 +1,5 @@
 // Executes task records through configured runtimes and updates registry state.
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import type {
   DetachedRunningTaskCreateParams,
@@ -465,7 +465,7 @@ export function runTaskInFlowForOwner(
 }
 
 export async function cancelFlowById(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   flowId: string;
 }): Promise<CancelFlowResult> {
   const flow = getTaskFlowById(params.flowId);
@@ -574,7 +574,7 @@ export async function cancelFlowById(params: {
 }
 
 export async function cancelFlowByIdForOwner(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   flowId: string;
   callerOwnerKey: string;
 }): Promise<CancelFlowResult> {
@@ -595,7 +595,10 @@ export async function cancelFlowByIdForOwner(params: {
   });
 }
 
-export async function cancelDetachedTaskRunById(params: { cfg: OpenClawConfig; taskId: string }) {
+export async function cancelDetachedTaskRunById(params: {
+  cfg: MarketingClawConfig;
+  taskId: string;
+}) {
   const task = getTaskById(params.taskId);
   if (!task) {
     return cancelTaskById(params);

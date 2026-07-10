@@ -1,8 +1,8 @@
 // Browser tests cover client fetch.loopback auth plugin behavior.
-import { MAX_TIMER_TIMEOUT_MS } from "openclaw/plugin-sdk/number-runtime";
+import { MAX_TIMER_TIMEOUT_MS } from "marketingclaw/plugin-sdk/number-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import "../test-support/browser-security.mock.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { MarketingClawConfig } from "../config/config.js";
 import type { BrowserControlAuth } from "./control-auth.js";
 import type { BrowserDispatchResponse } from "./routes/dispatcher.js";
 
@@ -10,9 +10,9 @@ type BridgeAuth = NonNullable<
   ReturnType<typeof import("./bridge-auth-registry.js").getBridgeAuthForPort>
 >;
 
-vi.mock("openclaw/plugin-sdk/ssrf-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/ssrf-runtime")>(
-    "openclaw/plugin-sdk/ssrf-runtime",
+vi.mock("marketingclaw/plugin-sdk/ssrf-runtime", async () => {
+  const actual = await vi.importActual<typeof import("marketingclaw/plugin-sdk/ssrf-runtime")>(
+    "marketingclaw/plugin-sdk/ssrf-runtime",
   );
   return {
     ...actual,
@@ -36,7 +36,7 @@ function okDispatchResponse(): BrowserDispatchResponse {
 }
 
 const mocks = vi.hoisted(() => ({
-  loadConfig: vi.fn<() => OpenClawConfig>(() => ({
+  loadConfig: vi.fn<() => MarketingClawConfig>(() => ({
     gateway: {
       auth: {
         token: "loopback-token",
@@ -136,7 +136,7 @@ describe("fetchBrowserJson loopback auth", () => {
     ]) {
       vi.stubEnv(key, "");
     }
-    vi.stubEnv("OPENCLAW_GATEWAY_TOKEN", "loopback-token");
+    vi.stubEnv("MARKETINGCLAW_GATEWAY_TOKEN", "loopback-token");
     mocks.loadConfig.mockClear();
     mocks.loadConfig.mockReturnValue({
       gateway: {
@@ -230,8 +230,11 @@ describe("fetchBrowserJson loopback auth", () => {
     mocks.dispatch.mockRejectedValueOnce(new Error("Chrome CDP handshake timeout"));
 
     await expectThrownBrowserFetchError(() => fetchBrowserJson<{ ok: boolean }>("/tabs"), {
-      contains: ["Chrome CDP handshake timeout", "Restart the OpenClaw gateway"],
-      omits: ["Can't reach the OpenClaw browser control service", "Do NOT retry the browser tool"],
+      contains: ["Chrome CDP handshake timeout", "Restart the MarketingClaw gateway"],
+      omits: [
+        "Can't reach the MarketingClaw browser control service",
+        "Do NOT retry the browser tool",
+      ],
     });
   });
 
@@ -239,7 +242,7 @@ describe("fetchBrowserJson loopback auth", () => {
     mocks.dispatch.mockRejectedValueOnce(new DOMException("operation aborted", "AbortError"));
 
     await expectThrownBrowserFetchError(() => fetchBrowserJson<{ ok: boolean }>("/tabs"), {
-      contains: ["operation aborted", "Restart the OpenClaw gateway"],
+      contains: ["operation aborted", "Restart the MarketingClaw gateway"],
       omits: ["Do NOT retry the browser tool"],
     });
   });
@@ -265,10 +268,10 @@ describe("fetchBrowserJson loopback auth", () => {
       {
         contains: [
           "Chrome CDP handshake timeout",
-          "browser profile is external to OpenClaw",
-          "Restarting the OpenClaw gateway will not launch it",
+          "browser profile is external to MarketingClaw",
+          "Restarting the MarketingClaw gateway will not launch it",
         ],
-        omits: ["Restart the OpenClaw gateway", "Do NOT retry the browser tool"],
+        omits: ["Restart the MarketingClaw gateway", "Do NOT retry the browser tool"],
       },
     );
   });
@@ -291,10 +294,10 @@ describe("fetchBrowserJson loopback auth", () => {
     await expectThrownBrowserFetchError(() => fetchBrowserJson<{ ok: boolean }>("/tabs"), {
       contains: [
         "operation aborted",
-        "browser profile is external to OpenClaw",
-        "Restarting the OpenClaw gateway will not launch it",
+        "browser profile is external to MarketingClaw",
+        "Restarting the MarketingClaw gateway will not launch it",
       ],
-      omits: ["Restart the OpenClaw gateway", "Do NOT retry the browser tool"],
+      omits: ["Restart the MarketingClaw gateway", "Do NOT retry the browser tool"],
     });
   });
 
@@ -317,10 +320,10 @@ describe("fetchBrowserJson loopback auth", () => {
       {
         contains: [
           "timed out",
-          "browser profile is external to OpenClaw",
-          "Restarting the OpenClaw gateway will not launch it",
+          "browser profile is external to MarketingClaw",
+          "Restarting the MarketingClaw gateway will not launch it",
         ],
-        omits: ["Restart the OpenClaw gateway", "Do NOT retry the browser tool"],
+        omits: ["Restart the MarketingClaw gateway", "Do NOT retry the browser tool"],
       },
     );
   });
@@ -328,9 +331,9 @@ describe("fetchBrowserJson loopback auth", () => {
   it("keeps restart-gateway guidance for managed local dispatcher timeouts", async () => {
     mocks.loadConfig.mockReturnValue({
       browser: {
-        defaultProfile: "openclaw",
+        defaultProfile: "marketingclaw",
         profiles: {
-          openclaw: {
+          marketingclaw: {
             cdpPort: 18800,
             color: "#FF4500",
           },
@@ -340,10 +343,10 @@ describe("fetchBrowserJson loopback auth", () => {
     mocks.dispatch.mockRejectedValueOnce(new Error("Chrome CDP handshake timeout"));
 
     await expectThrownBrowserFetchError(
-      () => fetchBrowserJson<{ ok: boolean }>("/tabs?profile=openclaw"),
+      () => fetchBrowserJson<{ ok: boolean }>("/tabs?profile=marketingclaw"),
       {
-        contains: ["Chrome CDP handshake timeout", "Restart the OpenClaw gateway"],
-        omits: ["browser profile is external to OpenClaw", "Do NOT retry the browser tool"],
+        contains: ["Chrome CDP handshake timeout", "Restart the MarketingClaw gateway"],
+        omits: ["browser profile is external to MarketingClaw", "Do NOT retry the browser tool"],
       },
     );
   });
@@ -357,8 +360,8 @@ describe("fetchBrowserJson loopback auth", () => {
     await expectThrownBrowserFetchError(
       () => fetchBrowserJson<{ ok: boolean }>("/tabs?profile=manual"),
       {
-        contains: ["Chrome CDP handshake timeout", "Restart the OpenClaw gateway"],
-        omits: ["browser profile is external to OpenClaw", "Do NOT retry the browser tool"],
+        contains: ["Chrome CDP handshake timeout", "Restart the MarketingClaw gateway"],
+        omits: ["browser profile is external to MarketingClaw", "Do NOT retry the browser tool"],
       },
     );
   });
@@ -366,9 +369,9 @@ describe("fetchBrowserJson loopback auth", () => {
   it("keeps restart-gateway guidance for unknown dispatcher profiles", async () => {
     mocks.loadConfig.mockReturnValue({
       browser: {
-        defaultProfile: "openclaw",
+        defaultProfile: "marketingclaw",
         profiles: {
-          openclaw: {
+          marketingclaw: {
             cdpPort: 18800,
             color: "#FF4500",
           },
@@ -380,8 +383,8 @@ describe("fetchBrowserJson loopback auth", () => {
     await expectThrownBrowserFetchError(
       () => fetchBrowserJson<{ ok: boolean }>("/tabs?profile=missing"),
       {
-        contains: ["Chrome CDP handshake timeout", "Restart the OpenClaw gateway"],
-        omits: ["browser profile is external to OpenClaw", "Do NOT retry the browser tool"],
+        contains: ["Chrome CDP handshake timeout", "Restart the MarketingClaw gateway"],
+        omits: ["browser profile is external to MarketingClaw", "Do NOT retry the browser tool"],
       },
     );
   });
@@ -404,10 +407,10 @@ describe("fetchBrowserJson loopback auth", () => {
     await expectThrownBrowserFetchError(() => fetchBrowserJson<{ ok: boolean }>("/tabs"), {
       contains: [
         "Chrome CDP handshake timeout",
-        "browser profile is external to OpenClaw",
-        "Restarting the OpenClaw gateway will not launch it",
+        "browser profile is external to MarketingClaw",
+        "Restarting the MarketingClaw gateway will not launch it",
       ],
-      omits: ["Restart the OpenClaw gateway", "Do NOT retry the browser tool"],
+      omits: ["Restart the MarketingClaw gateway", "Do NOT retry the browser tool"],
     });
   });
 
@@ -432,10 +435,10 @@ describe("fetchBrowserJson loopback auth", () => {
       {
         contains: [
           "Chrome CDP connection refused",
-          "browser profile is external to OpenClaw",
+          "browser profile is external to MarketingClaw",
           "Do NOT retry the browser tool",
         ],
-        omits: ["Restart the OpenClaw gateway"],
+        omits: ["Restart the MarketingClaw gateway"],
       },
     );
   });
@@ -445,7 +448,7 @@ describe("fetchBrowserJson loopback auth", () => {
 
     await expectThrownBrowserFetchError(() => fetchBrowserJson<{ ok: boolean }>("/tabs"), {
       contains: ["Chrome CDP connection refused", "Do NOT retry the browser tool"],
-      omits: ["Can't reach the OpenClaw browser control service"],
+      omits: ["Can't reach the MarketingClaw browser control service"],
     });
   });
 
@@ -456,7 +459,7 @@ describe("fetchBrowserJson loopback auth", () => {
         error: "display required",
         reason: "no_display_for_headed_profile",
         details: {
-          profile: "openclaw",
+          profile: "marketingclaw",
           requestedHeadless: false,
           headlessSource: "request",
           displayPresent: false,
@@ -473,7 +476,7 @@ describe("fetchBrowserJson loopback auth", () => {
       message: "display required",
       reason: "no_display_for_headed_profile",
       details: {
-        profile: "openclaw",
+        profile: "marketingclaw",
         requestedHeadless: false,
         headlessSource: "request",
         displayPresent: false,
@@ -569,7 +572,7 @@ describe("fetchBrowserJson loopback auth", () => {
       () => fetchBrowserJson<{ ok: boolean }>("http://example.com/"),
       {
         contains: [
-          "Can't reach the OpenClaw browser control service",
+          "Can't reach the MarketingClaw browser control service",
           "Do NOT retry the browser tool",
         ],
       },

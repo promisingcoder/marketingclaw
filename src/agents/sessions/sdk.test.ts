@@ -218,7 +218,7 @@ describe("AgentSession queued user turns", () => {
       message: {
         role: "user",
         content: "visible group prompt",
-        __openclaw: { senderId: "user-42", senderName: "Ada" },
+        __marketingclaw: { senderId: "user-42", senderName: "Ada" },
       },
       recorder,
     });
@@ -252,13 +252,13 @@ describe("createAgentSession attribution headers", () => {
     });
 
     expect(providerOptions.headers).toMatchObject({
-      "HTTP-Referer": "https://openclaw.ai",
-      "X-OpenRouter-Title": "OpenClaw",
+      "HTTP-Referer": "https://marketingclaw.ai",
+      "X-OpenRouter-Title": "MarketingClaw",
       "X-OpenRouter-Categories": "cli-agent",
     });
     expect(endpointOptions.headers).toMatchObject({
-      "HTTP-Referer": "https://openclaw.ai",
-      "X-OpenRouter-Title": "OpenClaw",
+      "HTTP-Referer": "https://marketingclaw.ai",
+      "X-OpenRouter-Title": "MarketingClaw",
       "X-OpenRouter-Categories": "cli-agent",
     });
   });
@@ -275,8 +275,8 @@ describe("createAgentSession attribution headers", () => {
       baseUrl: "https://gateway.ai.cloudflare.com/v1/account/gateway/openai",
     });
 
-    expect(providerOptions.headers).toMatchObject({ "User-Agent": "openclaw" });
-    expect(endpointOptions.headers).toMatchObject({ "User-Agent": "openclaw" });
+    expect(providerOptions.headers).toMatchObject({ "User-Agent": "marketingclaw" });
+    expect(endpointOptions.headers).toMatchObject({ "User-Agent": "marketingclaw" });
   });
 });
 
@@ -389,7 +389,7 @@ describe("createAgentSession tool defaults", () => {
       settingsManager: SettingsManager.inMemory(),
       modelRegistry: ModelRegistry.inMemory(AuthStorage.inMemory()),
     });
-    const systemPrompt = "You are a personal assistant running inside OpenClaw.";
+    const systemPrompt = "You are a personal assistant running inside MarketingClaw.";
 
     session.setBaseSystemPrompt(systemPrompt);
     session.setActiveToolsByName(["bash", "custom_lookup"]);

@@ -1,9 +1,9 @@
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-// Xai plugin entrypoint registers its OpenClaw integration.
-import { defineSingleProviderPluginEntry } from "openclaw/plugin-sdk/provider-entry";
-import { OPENAI_COMPATIBLE_REPLAY_HOOKS } from "openclaw/plugin-sdk/provider-model-shared";
-import { defaultToolStreamExtraParams } from "openclaw/plugin-sdk/provider-stream-shared";
-import { jsonResult } from "openclaw/plugin-sdk/provider-web-search";
+import { createLazyRuntimeModule } from "marketingclaw/plugin-sdk/lazy-runtime";
+// Xai plugin entrypoint registers its MarketingClaw integration.
+import { defineSingleProviderPluginEntry } from "marketingclaw/plugin-sdk/provider-entry";
+import { OPENAI_COMPATIBLE_REPLAY_HOOKS } from "marketingclaw/plugin-sdk/provider-model-shared";
+import { defaultToolStreamExtraParams } from "marketingclaw/plugin-sdk/provider-stream-shared";
+import { jsonResult } from "marketingclaw/plugin-sdk/provider-web-search";
 import {
   applyXaiRuntimeModelCompat,
   buildXaiImageGenerationProvider,
@@ -175,7 +175,7 @@ export default defineSingleProviderPluginEntry({
         const auth = ctx.resolveProviderAuth(PROVIDER_ID);
         try {
           const { resolveApiKeyForProvider } =
-            await import("openclaw/plugin-sdk/provider-auth-runtime");
+            await import("marketingclaw/plugin-sdk/provider-auth-runtime");
           const runtimeAuth = await resolveApiKeyForProvider({
             provider: PROVIDER_ID,
             cfg: ctx.config,

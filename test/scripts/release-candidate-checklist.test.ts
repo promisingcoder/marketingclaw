@@ -19,15 +19,15 @@ function jsonResponse(body: unknown, init: ResponseInit = {}): Response {
 }
 
 async function withGithubApiTimeoutEnv<T>(value: string, fn: () => Promise<T>): Promise<T> {
-  const previous = process.env.OPENCLAW_RELEASE_CANDIDATE_GITHUB_API_TIMEOUT_MS;
-  process.env.OPENCLAW_RELEASE_CANDIDATE_GITHUB_API_TIMEOUT_MS = value;
+  const previous = process.env.MARKETINGCLAW_RELEASE_CANDIDATE_GITHUB_API_TIMEOUT_MS;
+  process.env.MARKETINGCLAW_RELEASE_CANDIDATE_GITHUB_API_TIMEOUT_MS = value;
   try {
     return await fn();
   } finally {
     if (previous === undefined) {
-      delete process.env.OPENCLAW_RELEASE_CANDIDATE_GITHUB_API_TIMEOUT_MS;
+      delete process.env.MARKETINGCLAW_RELEASE_CANDIDATE_GITHUB_API_TIMEOUT_MS;
     } else {
-      process.env.OPENCLAW_RELEASE_CANDIDATE_GITHUB_API_TIMEOUT_MS = previous;
+      process.env.MARKETINGCLAW_RELEASE_CANDIDATE_GITHUB_API_TIMEOUT_MS = previous;
     }
   }
 }
@@ -51,16 +51,16 @@ describe("release candidate checklist", () => {
   });
 
   it("runs Parallels against the exact prepared candidate tarball", () => {
-    expect(candidateParallelsArgs(".artifacts/preflight/openclaw.tgz")).toEqual([
+    expect(candidateParallelsArgs(".artifacts/preflight/marketingclaw.tgz")).toEqual([
       "test:parallels:npm-update",
       "--",
       "--target-tarball",
-      ".artifacts/preflight/openclaw.tgz",
+      ".artifacts/preflight/marketingclaw.tgz",
       "--json",
     ]);
     expect(
       candidateParallelsShellCommand(
-        ".artifacts/preflight/openclaw candidate.tgz",
+        ".artifacts/preflight/marketingclaw candidate.tgz",
         "/opt/homebrew/bin/gtimeout",
       ),
     ).toContain(
@@ -68,22 +68,22 @@ describe("release candidate checklist", () => {
     );
     expect(
       candidateParallelsShellCommand(
-        ".artifacts/preflight/openclaw candidate.tgz",
+        ".artifacts/preflight/marketingclaw candidate.tgz",
         "/opt/homebrew/bin/gtimeout",
-        [".artifacts/preflight/openclaw-ai candidate.tgz"],
+        [".artifacts/preflight/marketingclaw-ai candidate.tgz"],
       ),
-    ).toContain("'--target-tarball' '.artifacts/preflight/openclaw candidate.tgz'");
+    ).toContain("'--target-tarball' '.artifacts/preflight/marketingclaw candidate.tgz'");
     expect(
-      candidateParallelsArgs(".artifacts/preflight/openclaw.tgz", [
-        ".artifacts/preflight/openclaw-ai.tgz",
+      candidateParallelsArgs(".artifacts/preflight/marketingclaw.tgz", [
+        ".artifacts/preflight/marketingclaw-ai.tgz",
       ]),
     ).toEqual([
       "test:parallels:npm-update",
       "--",
       "--target-tarball",
-      ".artifacts/preflight/openclaw.tgz",
+      ".artifacts/preflight/marketingclaw.tgz",
       "--dependency-tarball",
-      ".artifacts/preflight/openclaw-ai.tgz",
+      ".artifacts/preflight/marketingclaw-ai.tgz",
       "--json",
     ]);
   });
@@ -93,13 +93,13 @@ describe("release candidate checklist", () => {
       releaseTag: "v2026.7.1-beta.3",
       releaseSha: "candidate-sha",
       npmDistTag: "beta",
-      tarballName: "openclaw-2026.7.1-beta.3.tgz",
+      tarballName: "marketingclaw-2026.7.1-beta.3.tgz",
       tarballSha256: "root-sha",
       dependencyTarballs: [
         {
-          packageName: "@openclaw/ai",
+          packageName: "@marketingclaw/ai",
           packageVersion: "2026.7.1-beta.3",
-          tarballName: "openclaw-ai-2026.7.1-beta.3.tgz",
+          tarballName: "marketingclaw-ai-2026.7.1-beta.3.tgz",
           tarballSha256: "ai-sha",
         },
       ],
@@ -121,7 +121,7 @@ describe("release candidate checklist", () => {
           dependencyTarballs: [
             {
               ...manifest.dependencyTarballs[0],
-              tarballName: "../openclaw-ai.tgz",
+              tarballName: "../marketingclaw-ai.tgz",
             },
           ],
         },
@@ -151,7 +151,7 @@ describe("release candidate checklist", () => {
     const duplicateCases = [
       duplicateOption("--tag", "v2026.5.14-beta.3", "v2026.5.14-beta.4", []),
       duplicateOption("--workflow-ref", "release/a", "release/b"),
-      duplicateOption("--repo", "openclaw/openclaw", "fork/openclaw"),
+      duplicateOption("--repo", "marketingclaw/marketingclaw", "fork/marketingclaw"),
       duplicateOption("--full-release-run", "111", "222"),
       duplicateOption("--npm-preflight-run", "111", "222"),
       duplicateOption("--windows-node-tag", "v0.6.3", "v0.6.4"),
@@ -293,25 +293,25 @@ describe("release candidate checklist", () => {
       ]),
       workflowRef: "release/2026.5.14",
       windowsNodeInstallerDigests: JSON.stringify({
-        "OpenClawCompanion-Setup-x64.exe": `sha256:${"a".repeat(64)}`,
-        "OpenClawCompanion-Setup-arm64.exe": `sha256:${"b".repeat(64)}`,
+        "MarketingClawCompanion-Setup-x64.exe": `sha256:${"a".repeat(64)}`,
+        "MarketingClawCompanion-Setup-arm64.exe": `sha256:${"b".repeat(64)}`,
       }),
     };
 
     expect(buildPublishCommand(options)).toContain("'windows_node_tag=v0.6.3'");
     expect(buildPublishCommand(options)).toContain(
-      `'windows_node_installer_digests={"OpenClawCompanion-Setup-x64.exe":"sha256:${"a".repeat(64)}","OpenClawCompanion-Setup-arm64.exe":"sha256:${"b".repeat(64)}"}'`,
+      `'windows_node_installer_digests={"MarketingClawCompanion-Setup-x64.exe":"sha256:${"a".repeat(64)}","MarketingClawCompanion-Setup-arm64.exe":"sha256:${"b".repeat(64)}"}'`,
     );
   });
 
   it("validates the stable Windows source release and immutable installer digests", async () => {
     const assets = [
       {
-        name: "OpenClawCompanion-Setup-x64.exe",
+        name: "MarketingClawCompanion-Setup-x64.exe",
         digest: `sha256:${"a".repeat(64)}`,
       },
       {
-        name: "OpenClawCompanion-Setup-arm64.exe",
+        name: "MarketingClawCompanion-Setup-arm64.exe",
         digest: `sha256:${"b".repeat(64)}`,
       },
     ];
@@ -344,35 +344,35 @@ describe("release candidate checklist", () => {
     [{ tag_name: "v0.6.4" }, "Windows source release tag mismatch: expected v0.6.3, got v0.6.4"],
     [
       { assets: [] },
-      "must contain exactly one required asset OpenClawCompanion-Setup-x64.exe; found 0",
+      "must contain exactly one required asset MarketingClawCompanion-Setup-x64.exe; found 0",
     ],
     [
       {
         assets: [
           {
-            name: "OpenClawCompanion-Setup-x64.exe",
+            name: "MarketingClawCompanion-Setup-x64.exe",
             digest: `sha256:${"a".repeat(64)}`,
           },
           {
-            name: "OpenClawCompanion-Setup-x64.exe",
+            name: "MarketingClawCompanion-Setup-x64.exe",
             digest: `sha256:${"c".repeat(64)}`,
           },
           {
-            name: "OpenClawCompanion-Setup-arm64.exe",
+            name: "MarketingClawCompanion-Setup-arm64.exe",
             digest: `sha256:${"b".repeat(64)}`,
           },
         ],
       },
-      "must contain exactly one required asset OpenClawCompanion-Setup-x64.exe; found 2",
+      "must contain exactly one required asset MarketingClawCompanion-Setup-x64.exe; found 2",
     ],
     [
       {
         assets: [
-          { name: "OpenClawCompanion-Setup-x64.exe", digest: "" },
-          { name: "OpenClawCompanion-Setup-arm64.exe", digest: `sha256:${"b".repeat(64)}` },
+          { name: "MarketingClawCompanion-Setup-x64.exe", digest: "" },
+          { name: "MarketingClawCompanion-Setup-arm64.exe", digest: `sha256:${"b".repeat(64)}` },
         ],
       },
-      "asset OpenClawCompanion-Setup-x64.exe is missing its SHA-256 digest",
+      "asset MarketingClawCompanion-Setup-x64.exe is missing its SHA-256 digest",
     ],
   ])("rejects an invalid stable Windows source release", async (override, message) => {
     const fetchImpl = vi.fn(async () => {
@@ -383,11 +383,11 @@ describe("release candidate checklist", () => {
         html_url: "https://github.com/openclaw/openclaw-windows-node/releases/tag/v0.6.3",
         assets: [
           {
-            name: "OpenClawCompanion-Setup-x64.exe",
+            name: "MarketingClawCompanion-Setup-x64.exe",
             digest: `sha256:${"a".repeat(64)}`,
           },
           {
-            name: "OpenClawCompanion-Setup-arm64.exe",
+            name: "MarketingClawCompanion-Setup-arm64.exe",
             digest: `sha256:${"b".repeat(64)}`,
           },
         ],
@@ -438,15 +438,17 @@ describe("release candidate checklist", () => {
         "--plugin-publish-scope",
         "selected",
         "--plugins",
-        "@openclaw/diffs",
+        "@marketingclaw/diffs",
       ]),
-    ).toThrow("release candidates publish OpenClaw with --plugin-publish-scope all-publishable");
+    ).toThrow(
+      "release candidates publish MarketingClaw with --plugin-publish-scope all-publishable",
+    );
   });
 
   it("extracts a workflow run id from gh dispatch output", () => {
     expect(
       parseRunIdFromDispatchOutput(
-        "https://github.com/openclaw/openclaw/actions/runs/25922042055\n",
+        "https://github.com/promisingcoder/marketingclaw/actions/runs/25922042055\n",
       ),
     ).toBe("25922042055");
   });
@@ -463,11 +465,11 @@ describe("release candidate checklist", () => {
   it("falls back to a single compatible artifact from the same run", () => {
     expect(
       resolveArtifactName(
-        [{ name: "openclaw-npm-preflight-dba00", expired: false }],
-        "openclaw-npm-preflight-v2026.5.16-beta.2",
-        "openclaw-npm-preflight-",
+        [{ name: "marketingclaw-npm-preflight-dba00", expired: false }],
+        "marketingclaw-npm-preflight-v2026.5.16-beta.2",
+        "marketingclaw-npm-preflight-",
       ),
-    ).toBe("openclaw-npm-preflight-dba00");
+    ).toBe("marketingclaw-npm-preflight-dba00");
   });
 
   it("bounds GitHub API requests with a timeout signal", async () => {
@@ -482,14 +484,14 @@ describe("release candidate checklist", () => {
     });
 
     await expect(
-      githubApi("repos/openclaw/openclaw/actions/runs", {
+      githubApi("repos/marketingclaw/marketingclaw/actions/runs", {
         fetchImpl,
         timeoutMs: 1234,
         token: "test-token",
       }),
     ).resolves.toEqual({ workflow_runs: [] });
     expect(fetchImpl).toHaveBeenCalledWith(
-      "https://api.github.com/repos/openclaw/openclaw/actions/runs",
+      "https://api.github.com/repos/marketingclaw/marketingclaw/actions/runs",
       expect.objectContaining({
         signal: expect.any(AbortSignal),
       }),
@@ -504,7 +506,7 @@ describe("release candidate checklist", () => {
 
     await withGithubApiTimeoutEnv("2500", async () => {
       await expect(
-        githubApi("repos/openclaw/openclaw/actions/runs", {
+        githubApi("repos/marketingclaw/marketingclaw/actions/runs", {
           fetchImpl,
           token: "test-token",
         }),
@@ -520,12 +522,12 @@ describe("release candidate checklist", () => {
 
       await withGithubApiTimeoutEnv(raw, async () => {
         await expect(
-          githubApi("repos/openclaw/openclaw/actions/runs", {
+          githubApi("repos/marketingclaw/marketingclaw/actions/runs", {
             fetchImpl,
             token: "test-token",
           }),
         ).rejects.toThrow(
-          "OPENCLAW_RELEASE_CANDIDATE_GITHUB_API_TIMEOUT_MS must be a positive integer",
+          "MARKETINGCLAW_RELEASE_CANDIDATE_GITHUB_API_TIMEOUT_MS must be a positive integer",
         );
       });
       expect(fetchImpl).not.toHaveBeenCalled();
@@ -541,14 +543,14 @@ describe("release candidate checklist", () => {
     });
 
     await expect(
-      githubApi("repos/openclaw/openclaw/actions/runs", {
+      githubApi("repos/marketingclaw/marketingclaw/actions/runs", {
         fetchImpl,
         maxBodyBytes: 64,
         timeoutMs: 1234,
         token: "test-token",
       }),
     ).rejects.toThrow(
-      "GitHub API repos/openclaw/openclaw/actions/runs response body exceeded 64 bytes",
+      "GitHub API repos/marketingclaw/marketingclaw/actions/runs response body exceeded 64 bytes",
     );
   });
 
@@ -560,12 +562,14 @@ describe("release candidate checklist", () => {
     });
 
     await expect(
-      githubApi("repos/openclaw/openclaw/actions/runs", {
+      githubApi("repos/marketingclaw/marketingclaw/actions/runs", {
         fetchImpl,
         timeoutMs: 25,
         token: "test-token",
       }),
-    ).rejects.toThrow("GitHub API repos/openclaw/openclaw/actions/runs timed out after 25ms");
+    ).rejects.toThrow(
+      "GitHub API repos/marketingclaw/marketingclaw/actions/runs timed out after 25ms",
+    );
   });
 
   it("includes the GitHub API path when a request times out", async () => {
@@ -574,13 +578,13 @@ describe("release candidate checklist", () => {
     });
 
     await expect(
-      githubApi("repos/openclaw/openclaw/actions/runs/123/jobs", {
+      githubApi("repos/marketingclaw/marketingclaw/actions/runs/123/jobs", {
         fetchImpl,
         timeoutMs: 5,
         token: "test-token",
       }),
     ).rejects.toThrow(
-      "GitHub API repos/openclaw/openclaw/actions/runs/123/jobs timed out after 5ms",
+      "GitHub API repos/marketingclaw/marketingclaw/actions/runs/123/jobs timed out after 5ms",
     );
   });
 });

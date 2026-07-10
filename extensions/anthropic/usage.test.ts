@@ -6,8 +6,8 @@ import {
   resolveAnthropicUsageAuth,
 } from "./usage.js";
 
-vi.mock("openclaw/plugin-sdk/provider-auth", async (importActual) => {
-  const actual = await importActual<typeof import("openclaw/plugin-sdk/provider-auth")>();
+vi.mock("marketingclaw/plugin-sdk/provider-auth", async (importActual) => {
+  const actual = await importActual<typeof import("marketingclaw/plugin-sdk/provider-auth")>();
   return {
     ...actual,
     readClaudeCliCredentialsCached: vi.fn(() => ({
@@ -120,7 +120,7 @@ describe("Anthropic provider usage", () => {
       resolveOAuthToken: async () => ({ token: "oauth-token" }),
     });
     expect(result).toEqual({
-      token: 'openclaw:anthropic-admin:v1:{"token":"sk-ant-admin-explicit"}',
+      token: 'marketingclaw:anthropic-admin:v1:{"token":"sk-ant-admin-explicit"}',
     });
   });
 
@@ -133,7 +133,7 @@ describe("Anthropic provider usage", () => {
       resolveOAuthToken: async () => null,
     });
     expect(result).toEqual({
-      token: 'openclaw:anthropic-admin:v1:{"token":"sk-ant-admin-profile"}',
+      token: 'marketingclaw:anthropic-admin:v1:{"token":"sk-ant-admin-profile"}',
     });
   });
 
@@ -150,7 +150,7 @@ describe("Anthropic provider usage", () => {
       resolveOAuthToken: async () => ({ token: "oauth-token" }),
     });
     expect(result).toEqual({
-      token: 'openclaw:anthropic-admin:v1:{"token":"sk-ant-admin-billing"}',
+      token: 'marketingclaw:anthropic-admin:v1:{"token":"sk-ant-admin-billing"}',
     });
   });
 

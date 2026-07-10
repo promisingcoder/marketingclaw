@@ -1,4 +1,4 @@
-package ai.openclaw.app
+package ai.marketingclaw.app
 
 /**
  * Persisted location capture mode advertised to the gateway.

@@ -29,8 +29,8 @@ describe("release wrapper scripts", () => {
     }
   });
 
-  it("loads the OpenClaw ClawHub plan CLI and validates required arguments before planning", () => {
-    const result = runTsxScript("scripts/openclaw-release-clawhub-plan.ts", [
+  it("loads the MarketingClaw ClawHub plan CLI and validates required arguments before planning", () => {
+    const result = runTsxScript("scripts/marketingclaw-release-clawhub-plan.ts", [
       "--release-tag",
       "v2026.6.21-beta.1",
       "--release-publish-run-id",

@@ -19,11 +19,11 @@ read_positive_int_env() {
 }
 
 BUN_BIN="${BUN_BIN:-bun}"
-HOST_BUILD="${OPENCLAW_BUN_GLOBAL_SMOKE_HOST_BUILD:-1}"
-DIST_IMAGE="${OPENCLAW_BUN_GLOBAL_SMOKE_DIST_IMAGE:-}"
-PACKAGE_TGZ="${OPENCLAW_BUN_GLOBAL_SMOKE_PACKAGE_TGZ:-}"
-COMMAND_TIMEOUT_MS="$(read_positive_int_env OPENCLAW_BUN_GLOBAL_SMOKE_TIMEOUT_MS 180000)"
-DOCKER_COMMAND_TIMEOUT="${DOCKER_COMMAND_TIMEOUT:-${OPENCLAW_BUN_GLOBAL_SMOKE_DOCKER_COMMAND_TIMEOUT:-600s}}"
+HOST_BUILD="${MARKETINGCLAW_BUN_GLOBAL_SMOKE_HOST_BUILD:-1}"
+DIST_IMAGE="${MARKETINGCLAW_BUN_GLOBAL_SMOKE_DIST_IMAGE:-}"
+PACKAGE_TGZ="${MARKETINGCLAW_BUN_GLOBAL_SMOKE_PACKAGE_TGZ:-}"
+COMMAND_TIMEOUT_MS="$(read_positive_int_env MARKETINGCLAW_BUN_GLOBAL_SMOKE_TIMEOUT_MS 180000)"
+DOCKER_COMMAND_TIMEOUT="${DOCKER_COMMAND_TIMEOUT:-${MARKETINGCLAW_BUN_GLOBAL_SMOKE_DOCKER_COMMAND_TIMEOUT:-600s}}"
 AI_PACKAGE_TGZ=""
 SMOKE_DIR=""
 PACK_DIR=""
@@ -44,16 +44,16 @@ prepare_ai_candidate() {
   local root_manifest
 
   if [ -z "$PACK_DIR" ]; then
-    PACK_DIR="$(mktemp -d "${TMPDIR:-/tmp}/openclaw-bun-pack.XXXXXX")"
+    PACK_DIR="$(mktemp -d "${TMPDIR:-/tmp}/marketingclaw-bun-pack.XXXXXX")"
   fi
-  echo "==> Extract bundled candidate @openclaw/ai package"
+  echo "==> Extract bundled candidate @marketingclaw/ai package"
   ai_package_dir="$PACK_DIR/ai-candidate"
   mkdir -p "$ai_package_dir"
   tar -xzf "$PACKAGE_TGZ" \
     -C "$ai_package_dir" \
     --strip-components=4 \
-    package/node_modules/@openclaw/ai
-  root_manifest="$PACK_DIR/openclaw-package.json"
+    package/node_modules/@marketingclaw/ai
+  root_manifest="$PACK_DIR/marketingclaw-package.json"
   ai_manifest="$ai_package_dir/package.json"
   tar -xOf "$PACKAGE_TGZ" package/package.json >"$root_manifest"
   node scripts/e2e/lib/bun-global-install/assertions.mjs \
@@ -62,9 +62,9 @@ prepare_ai_candidate() {
     "$ai_manifest" \
     >/dev/null
   npm pack --ignore-scripts --silent --pack-destination "$PACK_DIR" "$ai_package_dir" >/dev/null
-  ai_tarballs=("$PACK_DIR"/openclaw-ai-*.tgz)
+  ai_tarballs=("$PACK_DIR"/marketingclaw-ai-*.tgz)
   if [ "${#ai_tarballs[@]}" -ne 1 ] || [ ! -f "${ai_tarballs[0]}" ]; then
-    echo "expected one packed @openclaw/ai candidate in $PACK_DIR" >&2
+    echo "expected one packed @marketingclaw/ai candidate in $PACK_DIR" >&2
     exit 1
   fi
   AI_PACKAGE_TGZ="${ai_tarballs[0]}"
@@ -138,7 +138,7 @@ restore_dist_from_image() {
     return 1
   fi
   if ! docker_e2e_docker_cmd cp \
-    "${container_id}:/app/node_modules/@openclaw/ai/dist" \
+    "${container_id}:/app/node_modules/@marketingclaw/ai/dist" \
     "$temp_dir/ai-dist"; then
     cleanup_restore_dist
     return 1
@@ -188,7 +188,7 @@ restore_dist_from_image() {
 resolve_package_tgz() {
   if [ -n "$PACKAGE_TGZ" ]; then
     if [ ! -f "$PACKAGE_TGZ" ]; then
-      echo "OPENCLAW_BUN_GLOBAL_SMOKE_PACKAGE_TGZ does not exist: $PACKAGE_TGZ" >&2
+      echo "MARKETINGCLAW_BUN_GLOBAL_SMOKE_PACKAGE_TGZ does not exist: $PACKAGE_TGZ" >&2
       exit 1
     fi
     PACKAGE_TGZ="$(cd "$(dirname "$PACKAGE_TGZ")" && pwd)/$(basename "$PACKAGE_TGZ")"
@@ -201,25 +201,25 @@ resolve_package_tgz() {
     echo "==> Build host package artifacts"
     pnpm build
   else
-    echo "==> Skipping host build (OPENCLAW_BUN_GLOBAL_SMOKE_HOST_BUILD=0)"
+    echo "==> Skipping host build (MARKETINGCLAW_BUN_GLOBAL_SMOKE_HOST_BUILD=0)"
   fi
 
   if [ ! -d "$ROOT_DIR/dist" ]; then
-    echo "dist/ is missing; run pnpm build or set OPENCLAW_BUN_GLOBAL_SMOKE_DIST_IMAGE" >&2
+    echo "dist/ is missing; run pnpm build or set MARKETINGCLAW_BUN_GLOBAL_SMOKE_DIST_IMAGE" >&2
     exit 1
   fi
 
-  PACK_DIR="$(mktemp -d "${TMPDIR:-/tmp}/openclaw-bun-pack.XXXXXX")"
+  PACK_DIR="$(mktemp -d "${TMPDIR:-/tmp}/marketingclaw-bun-pack.XXXXXX")"
 
-  echo "==> Pack OpenClaw tarball"
+  echo "==> Pack MarketingClaw tarball"
   PACKAGE_TGZ="$(
-    node scripts/package-openclaw-for-docker.mjs \
+    node scripts/package-marketingclaw-for-docker.mjs \
       --skip-build \
       --output-dir "$PACK_DIR" \
-      --output-name openclaw-current.tgz
+      --output-name marketingclaw-current.tgz
   )"
   if [ -z "$PACKAGE_TGZ" ] || [ ! -f "$PACKAGE_TGZ" ]; then
-    echo "missing packed OpenClaw tarball" >&2
+    echo "missing packed MarketingClaw tarball" >&2
     exit 1
   fi
 }
@@ -236,19 +236,19 @@ main() {
   prepare_ai_candidate
 
   local bun_path
-  local openclaw_bin
+  local marketingclaw_bin
   bun_path="$(command -v "$BUN_BIN")"
-  SMOKE_DIR="$(mktemp -d "${TMPDIR:-/tmp}/openclaw-bun-global.XXXXXX")"
+  SMOKE_DIR="$(mktemp -d "${TMPDIR:-/tmp}/marketingclaw-bun-global.XXXXXX")"
 
   export HOME="$SMOKE_DIR/home"
   export BUN_INSTALL="$HOME/.bun"
   export XDG_CACHE_HOME="$SMOKE_DIR/cache"
-  export OPENCLAW_NO_ONBOARD=1
-  export OPENCLAW_DISABLE_UPDATE_CHECK=1
+  export MARKETINGCLAW_NO_ONBOARD=1
+  export MARKETINGCLAW_DISABLE_UPDATE_CHECK=1
   export NO_COLOR=1
   mkdir -p "$HOME" "$BUN_INSTALL/bin" "$BUN_INSTALL/install/global" "$XDG_CACHE_HOME"
   export PATH="$BUN_INSTALL/bin:$(dirname "$(command -v node)"):$PATH"
-  # Release publishes @openclaw/ai first. Bun 1.3.14 ignores bundled deps in
+  # Release publishes @marketingclaw/ai first. Bun 1.3.14 ignores bundled deps in
   # local tarballs, so resolve that one package from the exact candidate bytes.
   node --input-type=module - \
     "$BUN_INSTALL/install/global/package.json" \
@@ -258,32 +258,32 @@ import fs from "node:fs";
 const [, , packageJsonPath, aiPackageTarball] = process.argv;
 fs.writeFileSync(
   packageJsonPath,
-  `${JSON.stringify({ private: true, overrides: { "@openclaw/ai": `file:${aiPackageTarball}` } })}\n`,
+  `${JSON.stringify({ private: true, overrides: { "@marketingclaw/ai": `file:${aiPackageTarball}` } })}\n`,
 );
 NODE
 
   echo "==> Bun version"
   "$bun_path" --version
 
-  echo "==> Bun global install packed OpenClaw"
+  echo "==> Bun global install packed MarketingClaw"
   "$bun_path" install -g "$PACKAGE_TGZ" --no-progress
 
-  openclaw_bin="$BUN_INSTALL/bin/openclaw"
-  if [ ! -x "$openclaw_bin" ]; then
-    openclaw_bin="$(command -v openclaw || true)"
+  marketingclaw_bin="$BUN_INSTALL/bin/marketingclaw"
+  if [ ! -x "$marketingclaw_bin" ]; then
+    marketingclaw_bin="$(command -v marketingclaw || true)"
   fi
-  if [ -z "$openclaw_bin" ] || [ ! -x "$openclaw_bin" ]; then
-    echo "Bun global install did not create an executable openclaw binary" >&2
+  if [ -z "$marketingclaw_bin" ] || [ ! -x "$marketingclaw_bin" ]; then
+    echo "Bun global install did not create an executable marketingclaw binary" >&2
     exit 1
   fi
 
-  echo "==> OpenClaw version through Bun global install"
-  run_with_timeout "$COMMAND_TIMEOUT_MS" "$openclaw_bin" --version
+  echo "==> MarketingClaw version through Bun global install"
+  run_with_timeout "$COMMAND_TIMEOUT_MS" "$marketingclaw_bin" --version
 
-  echo "==> OpenClaw image providers through Bun global install"
+  echo "==> MarketingClaw image providers through Bun global install"
   local providers_json
-  providers_json="$(run_with_timeout "$COMMAND_TIMEOUT_MS" "$openclaw_bin" infer image providers --json)"
-  OPENCLAW_IMAGE_PROVIDERS_JSON="$providers_json" node scripts/e2e/lib/bun-global-install/assertions.mjs assert-image-providers
+  providers_json="$(run_with_timeout "$COMMAND_TIMEOUT_MS" "$marketingclaw_bin" infer image providers --json)"
+  MARKETINGCLAW_IMAGE_PROVIDERS_JSON="$providers_json" node scripts/e2e/lib/bun-global-install/assertions.mjs assert-image-providers
 }
 
 main "$@"

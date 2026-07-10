@@ -101,7 +101,7 @@ describe("ci workflow guards", () => {
     );
     expect(validationStep.run).toContain("release_gate must run from the branch at target_ref");
     expect(readFileSync(".github/workflows/ci.yml", "utf8")).toContain(
-      "OPENCLAW_CI_RUN_ANDROID: ${{ github.event_name == 'workflow_dispatch' && (inputs.release_gate || inputs.include_android) && 'true' || steps.changed_scope.outputs.run_android || 'false' }}",
+      "MARKETINGCLAW_CI_RUN_ANDROID: ${{ github.event_name == 'workflow_dispatch' && (inputs.release_gate || inputs.include_android) && 'true' || steps.changed_scope.outputs.run_android || 'false' }}",
     );
 
     for (const [jobName, job] of Object.entries(workflow.jobs)) {
@@ -211,12 +211,12 @@ describe("ci workflow guards", () => {
 
     expect(admission["runs-on"]).toBe("ubuntu-24.04");
     expect(admission.steps[0].if).toContain("github.ref == 'refs/heads/main'");
-    expect(admission.steps[0].run).toContain('sleep "${OPENCLAW_MAIN_CI_DEBOUNCE_SECONDS}"');
-    expect(admission.env.OPENCLAW_MAIN_CI_DEBOUNCE_SECONDS).toBe("90");
+    expect(admission.steps[0].run).toContain('sleep "${MARKETINGCLAW_MAIN_CI_DEBOUNCE_SECONDS}"');
+    expect(admission.env.MARKETINGCLAW_MAIN_CI_DEBOUNCE_SECONDS).toBe("90");
     expect(workflow.jobs.preflight.needs).toContain("runner-admission");
     expect(workflow.jobs["security-fast"].needs).toContain("runner-admission");
     expect(source).toContain(
-      "cancel-in-progress: ${{ github.event_name == 'pull_request' || (github.event_name == 'push' && github.repository == 'openclaw/openclaw' && github.ref == 'refs/heads/main') }}",
+      "cancel-in-progress: ${{ github.event_name == 'pull_request' || (github.event_name == 'push' && github.repository == 'marketingclaw/marketingclaw' && github.ref == 'refs/heads/main') }}",
     );
   });
 
@@ -553,11 +553,11 @@ describe("ci workflow guards", () => {
         "cache-dependency-path": "scripts/docs-i18n/go.sum",
       },
     });
-    expect(runStep.env.OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS).toBe("300000");
-    expect(runStep.env.OPENCLAW_VITEST_NO_OUTPUT_RETRY).toBe("1");
-    expect(runStep.env.OPENCLAW_TEST_PROJECTS_PARALLEL).toBe("2");
-    expect(runStep.env.OPENCLAW_NODE_TEST_ENV_JSON).toBe("${{ toJson(matrix.env) }}");
-    expect(runStep.run).toContain("env: JSON.parse(process.env.OPENCLAW_NODE_TEST_ENV_JSON");
+    expect(runStep.env.MARKETINGCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS).toBe("300000");
+    expect(runStep.env.MARKETINGCLAW_VITEST_NO_OUTPUT_RETRY).toBe("1");
+    expect(runStep.env.MARKETINGCLAW_TEST_PROJECTS_PARALLEL).toBe("2");
+    expect(runStep.env.MARKETINGCLAW_NODE_TEST_ENV_JSON).toBe("${{ toJson(matrix.env) }}");
+    expect(runStep.run).toContain("env: JSON.parse(process.env.MARKETINGCLAW_NODE_TEST_ENV_JSON");
     expect(runStep.run).toContain('if (plan.env && typeof plan.env === "object"');
     expect(runStep.run).toContain("childEnv[key] = value");
   });
@@ -674,8 +674,8 @@ describe("ci workflow guards", () => {
     expect(smokeRunStep.run).not.toContain("--allow-failures");
     expect(smokeRunStep.run).toContain("qa_exit_code=0");
     expect(smokeRunStep.run).toContain('exit "$qa_exit_code"');
-    expect(smokeRunStep.run).toContain("scripts/package-openclaw-for-docker.mjs");
-    expect(smokeRunStep.run).toContain("OPENCLAW_CURRENT_PACKAGE_TGZ");
+    expect(smokeRunStep.run).toContain("scripts/package-marketingclaw-for-docker.mjs");
+    expect(smokeRunStep.run).toContain("MARKETINGCLAW_CURRENT_PACKAGE_TGZ");
     expect(smokeRunStep.run).toContain("--max-old-space-size=16384");
     expect(smokeRunStep.run).not.toContain("scripts/build-all.mjs qaRuntime");
     expect(smokeRunStep.run).not.toContain("OPENAI_API_KEY");

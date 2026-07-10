@@ -288,7 +288,7 @@ describe("runCronIsolatedAgentTurn — cron model override forwarding (#58065)",
       reseedReceipt: {
         version: 1 as const,
         promptHash: "a".repeat(64),
-        localSessionId: "openclaw-session",
+        localSessionId: "marketingclaw-session",
         userTurnDisposition: "persisted" as const,
       },
     };

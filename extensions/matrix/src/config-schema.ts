@@ -1,5 +1,5 @@
 // Matrix helper module supports config schema behavior.
-import { buildChannelConfigSchema } from "openclaw/plugin-sdk/channel-config-primitives";
+import { buildChannelConfigSchema } from "marketingclaw/plugin-sdk/channel-config-primitives";
 import {
   AllowFromListSchema,
   buildNestedDmConfigSchema,
@@ -8,8 +8,8 @@ import {
   MarkdownConfigSchema,
   MentionPatternsPolicySchema,
   ToolPolicySchema,
-} from "openclaw/plugin-sdk/channel-config-schema";
-import { buildSecretInputSchema } from "openclaw/plugin-sdk/secret-input";
+} from "marketingclaw/plugin-sdk/channel-config-schema";
+import { buildSecretInputSchema } from "marketingclaw/plugin-sdk/secret-input";
 import { z } from "zod";
 import { matrixChannelConfigUiHints } from "./config-ui-hints.js";
 

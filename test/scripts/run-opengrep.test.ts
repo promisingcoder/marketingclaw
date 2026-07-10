@@ -29,7 +29,7 @@ function copyRunOpengrepFiles(repo: string): void {
 
 describe("run-opengrep.sh", () => {
   it("validates the rulepack when only OpenGrep rulepack files changed", () => {
-    const repo = createTempDir("openclaw-run-opengrep-");
+    const repo = createTempDir("marketingclaw-run-opengrep-");
     git(repo, "init", "-q");
     git(repo, "config", "user.email", "test@example.com");
     git(repo, "config", "user.name", "Test User");
@@ -59,7 +59,7 @@ describe("run-opengrep.sh", () => {
       env: {
         ...process.env,
         PATH: `${binDir}${path.delimiter}${process.env.PATH ?? ""}`,
-        OPENCLAW_OPENGREP_BASE_REF: "HEAD",
+        MARKETINGCLAW_OPENGREP_BASE_REF: "HEAD",
       },
       encoding: "utf8",
     });
@@ -69,7 +69,7 @@ describe("run-opengrep.sh", () => {
   });
 
   it("writes empty SARIF when a changed scan has no first-party paths", () => {
-    const repo = createTempDir("openclaw-run-opengrep-empty-sarif-");
+    const repo = createTempDir("marketingclaw-run-opengrep-empty-sarif-");
     git(repo, "init", "-q");
     git(repo, "config", "user.email", "test@example.com");
     git(repo, "config", "user.name", "Test User");
@@ -80,7 +80,10 @@ describe("run-opengrep.sh", () => {
     git(repo, "add", ".");
     git(repo, "commit", "-qm", "initial");
 
-    fs.appendFileSync(path.join(repo, ".github/actions/ensure-base-commit/action.yml"), "# changed\n");
+    fs.appendFileSync(
+      path.join(repo, ".github/actions/ensure-base-commit/action.yml"),
+      "# changed\n",
+    );
     const argsPath = path.join(repo, "opengrep-args.txt");
     const binDir = path.join(repo, "bin");
     fs.mkdirSync(binDir);
@@ -100,7 +103,7 @@ describe("run-opengrep.sh", () => {
       env: {
         ...process.env,
         PATH: `${binDir}${path.delimiter}${process.env.PATH ?? ""}`,
-        OPENCLAW_OPENGREP_BASE_REF: "HEAD",
+        MARKETINGCLAW_OPENGREP_BASE_REF: "HEAD",
       },
       encoding: "utf8",
     });
@@ -116,7 +119,7 @@ describe("run-opengrep.sh", () => {
   });
 
   it("scans PR files instead of main-only files when the payload base is stale", () => {
-    const repo = createTempDir("openclaw-run-opengrep-merge-");
+    const repo = createTempDir("marketingclaw-run-opengrep-merge-");
     git(repo, "init", "-q", "--initial-branch=main");
     git(repo, "config", "user.email", "test@example.com");
     git(repo, "config", "user.name", "Test User");
@@ -158,8 +161,8 @@ describe("run-opengrep.sh", () => {
       env: {
         ...process.env,
         PATH: `${binDir}${path.delimiter}${process.env.PATH ?? ""}`,
-        OPENCLAW_OPENGREP_BASE_REF: `${staleBase}...HEAD`,
-        OPENCLAW_OPENGREP_MERGE_HEAD_FIRST_PARENT: "1",
+        MARKETINGCLAW_OPENGREP_BASE_REF: `${staleBase}...HEAD`,
+        MARKETINGCLAW_OPENGREP_MERGE_HEAD_FIRST_PARENT: "1",
       },
       encoding: "utf8",
     });

@@ -1,8 +1,8 @@
-package ai.openclaw.app.ui.chat
+package ai.marketingclaw.app.ui.chat
 
-import ai.openclaw.app.chat.ChatMessage
-import ai.openclaw.app.chat.ChatMessageContent
-import ai.openclaw.app.chat.ChatPendingToolCall
+import ai.marketingclaw.app.chat.ChatMessage
+import ai.marketingclaw.app.chat.ChatMessageContent
+import ai.marketingclaw.app.chat.ChatPendingToolCall
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

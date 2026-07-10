@@ -1,9 +1,9 @@
 import AppKit
 import Foundation
-import OpenClawKit
+import MarketingClawKit
 import OSLog
 
-private let dashboardManagerLogger = Logger(subsystem: "ai.openclaw", category: "DashboardManager")
+private let dashboardManagerLogger = Logger(subsystem: "ai.marketingclaw", category: "DashboardManager")
 
 @MainActor
 final class DashboardManager {
@@ -155,7 +155,7 @@ final class DashboardManager {
     }
 
     private func immediateDashboardConfig(mode: AppState.ConnectionMode) -> GatewayConnection.Config? {
-        let root = OpenClawConfigFile.loadDict()
+        let root = MarketingClawConfigFile.loadDict()
         let resolution = GatewayRemoteConfig.resolveTransportResolution(root: root)
         if mode == .remote,
            resolution.transport == .direct,

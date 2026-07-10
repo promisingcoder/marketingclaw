@@ -1,9 +1,9 @@
-package ai.openclaw.app.voice
+package ai.marketingclaw.app.voice
 
-import ai.openclaw.app.gateway.DeviceAuthEntry
-import ai.openclaw.app.gateway.DeviceAuthTokenStore
-import ai.openclaw.app.gateway.DeviceIdentityStore
-import ai.openclaw.app.gateway.GatewaySession
+import ai.marketingclaw.app.gateway.DeviceAuthEntry
+import ai.marketingclaw.app.gateway.DeviceAuthTokenStore
+import ai.marketingclaw.app.gateway.DeviceIdentityStore
+import ai.marketingclaw.app.gateway.GatewaySession
 import android.Manifest
 import android.content.ComponentName
 import android.content.IntentFilter

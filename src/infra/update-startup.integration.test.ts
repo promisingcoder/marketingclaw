@@ -1,18 +1,19 @@
 // Proves startup update discovery through the real extended-stable registry resolver.
 import http from "node:http";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeMarketingClawStateDatabaseForTest } from "../state/marketingclaw-state-db.js";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../test-utils/openclaw-test-state.js";
+  createMarketingClawTestState,
+  type MarketingClawTestState,
+} from "../test-utils/marketingclaw-test-state.js";
 import type { UpdateCheckResult } from "./update-check.js";
 
-vi.mock("./openclaw-root.js", async () => {
-  const actual = await vi.importActual<typeof import("./openclaw-root.js")>("./openclaw-root.js");
+vi.mock("./marketingclaw-root.js", async () => {
+  const actual =
+    await vi.importActual<typeof import("./marketingclaw-root.js")>("./marketingclaw-root.js");
   return {
     ...actual,
-    resolveOpenClawPackageRoot: vi.fn(async () => "/opt/openclaw"),
+    resolveMarketingClawPackageRoot: vi.fn(async () => "/opt/marketingclaw"),
   };
 });
 
@@ -20,11 +21,14 @@ vi.mock("./update-check.js", async () => {
   const actual = await vi.importActual<typeof import("./update-check.js")>("./update-check.js");
   return {
     ...actual,
-    checkUpdateStatus: vi.fn(async () => ({
-      root: "/opt/openclaw",
-      installKind: "package",
-      packageManager: "npm",
-    }) satisfies UpdateCheckResult),
+    checkUpdateStatus: vi.fn(
+      async () =>
+        ({
+          root: "/opt/marketingclaw",
+          installKind: "package",
+          packageManager: "npm",
+        }) satisfies UpdateCheckResult,
+    ),
   };
 });
 
@@ -33,18 +37,18 @@ vi.mock("../version.js", () => ({
 }));
 
 describe("extended-stable startup update integration", () => {
-  let testState: OpenClawTestState;
+  let testState: MarketingClawTestState;
   let server: http.Server | undefined;
 
   beforeEach(async () => {
     server = undefined;
-    testState = await createOpenClawTestState({
+    testState = await createMarketingClawTestState({
       layout: "state-only",
-      prefix: "openclaw-update-startup-integration-",
+      prefix: "marketingclaw-update-startup-integration-",
       env: {
         NODE_ENV: "test",
         NPM_CONFIG_REGISTRY: undefined,
-        OPENCLAW_UPDATE_PACKAGE_SPEC: undefined,
+        MARKETINGCLAW_UPDATE_PACKAGE_SPEC: undefined,
         VITEST: undefined,
       },
     });
@@ -57,7 +61,7 @@ describe("extended-stable startup update integration", () => {
         activeServer.close((error) => (error ? reject(error) : resolve()));
       });
     }
-    closeOpenClawStateDatabaseForTest();
+    closeMarketingClawStateDatabaseForTest();
     await testState.cleanup();
   });
 
@@ -76,7 +80,7 @@ describe("extended-stable startup update integration", () => {
     if (!address || typeof address === "string") {
       throw new Error("expected loopback registry address");
     }
-    process.env.OPENCLAW_UPDATE_PACKAGE_SPEC = "openclaw";
+    process.env.MARKETINGCLAW_UPDATE_PACKAGE_SPEC = "marketingclaw";
     process.env.NPM_CONFIG_REGISTRY = `http://127.0.0.1:${address.port}/`;
 
     const { runGatewayUpdateCheck, resetUpdateAvailableStateForTest } =
@@ -95,14 +99,14 @@ describe("extended-stable startup update integration", () => {
       runAutoUpdate,
     });
 
-    expect(requests).toEqual(["/openclaw/extended-stable", "/openclaw/2.0.0"]);
+    expect(requests).toEqual(["/marketingclaw/extended-stable", "/marketingclaw/2.0.0"]);
     expect(onUpdateAvailableChange).toHaveBeenCalledWith({
       currentVersion: "1.0.0",
       latestVersion: "2.0.0",
       channel: "extended-stable",
     });
     expect(log.info).toHaveBeenCalledWith(
-      "update available (extended-stable): v2.0.0 (current v1.0.0). Run: openclaw update",
+      "update available (extended-stable): v2.0.0 (current v1.0.0). Run: marketingclaw update",
     );
     expect(runAutoUpdate).not.toHaveBeenCalled();
   });

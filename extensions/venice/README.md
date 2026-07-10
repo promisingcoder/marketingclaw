@@ -1,13 +1,13 @@
-# Venice OpenClaw provider
+# Venice MarketingClaw provider
 
-Official OpenClaw provider plugin for Venice.
+Official MarketingClaw provider plugin for Venice.
 
 ## Install
 
 ```sh
-openclaw plugins install @openclaw/venice-provider
+marketingclaw plugins install @marketingclaw/venice-provider
 ```
 
 ## Docs
 
-See `docs/providers/venice.md` in the OpenClaw repository, or the published docs at `https://docs.openclaw.ai/providers/venice`.
+See `docs/providers/venice.md` in the MarketingClaw repository, or the published docs at `https://docs.marketingclaw.ai/providers/venice`.

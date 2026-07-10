@@ -1,7 +1,7 @@
 /**
  * Runs compaction hooks and post-compaction side effects for embedded sessions.
  */
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import { createInternalHookEvent, triggerInternalHook } from "../../hooks/internal-hooks.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import { getGlobalHookRunner } from "../../plugins/hook-runner-global.js";
@@ -12,7 +12,9 @@ import { resolveMemorySearchConfig } from "../memory-search.js";
 import type { AgentMessage } from "../runtime/index.js";
 import { log } from "./logger.js";
 
-function resolvePostCompactionIndexSyncMode(config?: OpenClawConfig): "off" | "async" | "await" {
+function resolvePostCompactionIndexSyncMode(
+  config?: MarketingClawConfig,
+): "off" | "async" | "await" {
   const mode = config?.agents?.defaults?.compaction?.postIndexSync;
   if (mode === "off" || mode === "async" || mode === "await") {
     return mode;
@@ -21,7 +23,7 @@ function resolvePostCompactionIndexSyncMode(config?: OpenClawConfig): "off" | "a
 }
 
 async function runPostCompactionSessionMemorySync(params: {
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   sessionKey?: string;
   agentId?: string;
   sessionFile: string;
@@ -63,7 +65,7 @@ async function runPostCompactionSessionMemorySync(params: {
 }
 
 function syncPostCompactionSessionMemory(params: {
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   sessionKey?: string;
   agentId?: string;
   sessionFile: string;
@@ -89,7 +91,7 @@ function syncPostCompactionSessionMemory(params: {
 
 /** Emits post-compaction transcript and memory-index side effects for a compacted session file. */
 export async function runPostCompactionSideEffects(params: {
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   sessionKey?: string;
   agentId?: string;
   sessionFile: string;

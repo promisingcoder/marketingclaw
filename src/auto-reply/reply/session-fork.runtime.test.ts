@@ -20,7 +20,7 @@ afterEach(async () => {
 
 describe("resolveParentForkTokenCountRuntime", () => {
   it("falls back to recent transcript usage when cached totals are stale", async () => {
-    const root = await makeRoot("openclaw-parent-fork-token-estimate-");
+    const root = await makeRoot("marketingclaw-parent-fork-token-estimate-");
     const sessionsDir = path.join(root, "sessions");
     await fs.mkdir(sessionsDir);
 
@@ -77,7 +77,7 @@ describe("resolveParentForkTokenCountRuntime", () => {
   });
 
   it("falls back to a conservative byte estimate when stale parent transcript has no usage", async () => {
-    const root = await makeRoot("openclaw-parent-fork-byte-estimate-");
+    const root = await makeRoot("marketingclaw-parent-fork-byte-estimate-");
     const sessionsDir = path.join(root, "sessions");
     await fs.mkdir(sessionsDir);
 
@@ -121,7 +121,7 @@ describe("resolveParentForkTokenCountRuntime", () => {
   });
 
   it("uses the latest usage snapshot instead of tail aggregates for parent fork checks", async () => {
-    const root = await makeRoot("openclaw-parent-fork-latest-usage-");
+    const root = await makeRoot("marketingclaw-parent-fork-latest-usage-");
     const sessionsDir = path.join(root, "sessions");
     await fs.mkdir(sessionsDir);
 
@@ -174,7 +174,7 @@ describe("resolveParentForkTokenCountRuntime", () => {
   });
 
   it("does not reconstruct parent context from billing buckets when context is unavailable", async () => {
-    const root = await makeRoot("openclaw-parent-fork-unavailable-context-");
+    const root = await makeRoot("marketingclaw-parent-fork-unavailable-context-");
     const sessionsDir = path.join(root, "sessions");
     await fs.mkdir(sessionsDir);
 
@@ -225,7 +225,7 @@ describe("resolveParentForkTokenCountRuntime", () => {
   });
 
   it("uses the exact final-iteration total when context usage is available", async () => {
-    const root = await makeRoot("openclaw-parent-fork-exact-context-");
+    const root = await makeRoot("marketingclaw-parent-fork-exact-context-");
     const sessionsDir = path.join(root, "sessions");
     await fs.mkdir(sessionsDir);
 
@@ -307,7 +307,7 @@ describe("resolveParentForkTokenCountRuntime", () => {
   });
 
   it("adds only post-usage transcript pressure to an exact context snapshot", async () => {
-    const root = await makeRoot("openclaw-parent-fork-post-usage-tail-");
+    const root = await makeRoot("marketingclaw-parent-fork-post-usage-tail-");
     const sessionsDir = path.join(root, "sessions");
     await fs.mkdir(sessionsDir);
 

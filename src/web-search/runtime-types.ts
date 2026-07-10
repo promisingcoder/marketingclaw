@@ -1,13 +1,11 @@
 // Web search runtime types describe search provider factories and dependencies.
-import type { OpenClawConfig } from "../config/types.openclaw.js";
-import type {
-  PluginWebSearchProviderEntry,
-} from "../plugins/web-provider-types.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
+import type { PluginWebSearchProviderEntry } from "../plugins/web-provider-types.js";
 import type { RuntimeWebSearchMetadata } from "../secrets/runtime-web-tools.types.js";
 
 // Shared web_search runtime contracts. Keep these in a types-only module so
 // provider registries and callers can import them without loading runtime code.
-type WebSearchConfig = NonNullable<OpenClawConfig["tools"]>["web"] extends infer Web
+type WebSearchConfig = NonNullable<MarketingClawConfig["tools"]>["web"] extends infer Web
   ? Web extends { search?: infer Search }
     ? Search
     : undefined
@@ -15,7 +13,7 @@ type WebSearchConfig = NonNullable<OpenClawConfig["tools"]>["web"] extends infer
 
 /** Provider/tool resolution inputs for web_search. */
 export type ResolveWebSearchDefinitionParams = {
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   agentDir?: string;
   sandboxed?: boolean;
   runtimeWebSearch?: RuntimeWebSearchMetadata;
@@ -38,7 +36,7 @@ export type RunWebSearchResult = {
 
 /** List-provider query parameters. */
 export type ListWebSearchProvidersParams = {
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
 };
 
 export type RuntimeWebSearchProviderEntry = PluginWebSearchProviderEntry;

@@ -4,7 +4,11 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, expectTypeOf, it } from "vitest";
 import { buildPluginSdkPackageExports } from "../../plugin-sdk/entrypoints.js";
-import type { ClawdbotConfig, OpenClawConfig, OpenClawSchemaType } from "../../plugin-sdk/index.js";
+import type {
+  ClawdbotConfig,
+  MarketingClawConfig,
+  MarketingClawSchemaType,
+} from "../../plugin-sdk/index.js";
 
 const pluginSdkIndexPath = fileURLToPath(new URL("../../plugin-sdk/index.ts", import.meta.url));
 
@@ -112,8 +116,8 @@ describe("plugin-sdk exports", () => {
   });
 
   it("keeps deprecated root config type aliases aligned", () => {
-    expectTypeOf<ClawdbotConfig>().toEqualTypeOf<OpenClawConfig>();
-    expectTypeOf<OpenClawSchemaType>().toEqualTypeOf<OpenClawConfig>();
+    expectTypeOf<ClawdbotConfig>().toEqualTypeOf<MarketingClawConfig>();
+    expectTypeOf<MarketingClawSchemaType>().toEqualTypeOf<MarketingClawConfig>();
   });
 
   it("keeps package.json plugin-sdk exports synced with the manifest", async () => {

@@ -6,7 +6,7 @@ import { SessionManager } from "../../agents/sessions/session-manager.js";
 import type { MsgContext } from "../../auto-reply/templating.js";
 import { onSessionTranscriptUpdate } from "../../sessions/transcript-events.js";
 import { createCanonicalFixtureSkill } from "../../skills/test-support/test-helpers.js";
-import type { OpenClawConfig } from "../types.openclaw.js";
+import type { MarketingClawConfig } from "../types.marketingclaw.js";
 import {
   applyRestartRecoveryLifecycle,
   appendTranscriptMessage,
@@ -56,7 +56,7 @@ describe("session accessor file-backed seam", () => {
   let transcriptPath: string;
 
   beforeEach(() => {
-    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-session-accessor-"));
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-session-accessor-"));
     storePath = path.join(tempDir, "sessions.json");
     transcriptPath = path.join(tempDir, "session.jsonl");
   });
@@ -498,7 +498,7 @@ describe("session accessor file-backed seam", () => {
           { id: "ops", workspace: path.join(tempDir, "ops") },
         ],
       },
-    } satisfies OpenClawConfig;
+    } satisfies MarketingClawConfig;
     const now = Date.now();
     fs.writeFileSync(
       storePath,
@@ -1382,14 +1382,14 @@ describe("session accessor file-backed seam", () => {
 
   it("updates the freshest matching session entry across discovered agent stores", async () => {
     const stateDir = path.join(tempDir, "state");
-    const env = { ...process.env, OPENCLAW_STATE_DIR: stateDir };
+    const env = { ...process.env, MARKETINGCLAW_STATE_DIR: stateDir };
     const cfg = {
       session: {
         mainKey: "main",
         store: path.join(stateDir, "agents", "{agentId}", "sessions", "sessions.json"),
       },
       agents: { list: [{ id: "retired-agent", default: true }] },
-    } satisfies OpenClawConfig;
+    } satisfies MarketingClawConfig;
     const configuredStorePath = path.join(
       stateDir,
       "agents",

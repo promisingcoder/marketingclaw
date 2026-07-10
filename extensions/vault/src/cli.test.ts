@@ -62,7 +62,7 @@ describe("vault CLI setup plan", () => {
     ]);
   });
 
-  it("generates targets for arbitrary known openclaw secret targets", () => {
+  it("generates targets for arbitrary known marketingclaw secret targets", () => {
     const plan = testing.buildPlan({
       providerAlias: "vault",
       providerConfig: testing.buildProviderConfig(),

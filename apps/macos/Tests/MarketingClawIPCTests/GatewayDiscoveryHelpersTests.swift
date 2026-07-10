@@ -1,7 +1,7 @@
 import Foundation
-import OpenClawDiscovery
+import MarketingClawDiscovery
 import Testing
-@testable import OpenClaw
+@testable import MarketingClaw
 
 struct GatewayDiscoveryHelpersTests {
     private func makeGateway(
@@ -22,7 +22,7 @@ struct GatewayDiscoveryHelpersTests {
             sshPort: sshPort,
             gatewayPort: gatewayPort,
             gatewayTls: gatewayTls,
-            cliPath: "/tmp/openclaw",
+            cliPath: "/tmp/marketingclaw",
             stableID: UUID().uuidString,
             debugID: UUID().uuidString,
             isLocal: false)

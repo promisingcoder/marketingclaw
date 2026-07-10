@@ -13,11 +13,11 @@ import {
   resolveSandboxSkillRuntimeInputs,
 } from "./sandbox-skills.js";
 
-const hostSkillPath = "/usr/lib/node_modules/openclaw/skills/demo/SKILL.md";
-const hostSkillBaseDir = "/usr/lib/node_modules/openclaw/skills/demo";
+const hostSkillPath = "/usr/lib/node_modules/marketingclaw/skills/demo/SKILL.md";
+const hostSkillBaseDir = "/usr/lib/node_modules/marketingclaw/skills/demo";
 const snapshot: SkillSnapshot = {
   prompt:
-    "<available_skills><skill><location>/usr/lib/node_modules/openclaw/skills/demo/SKILL.md</location></skill></available_skills>",
+    "<available_skills><skill><location>/usr/lib/node_modules/marketingclaw/skills/demo/SKILL.md</location></skill></available_skills>",
   skills: [{ name: "demo" }],
   resolvedSkills: [
     {
@@ -25,9 +25,9 @@ const snapshot: SkillSnapshot = {
       description: "Demo skill",
       filePath: hostSkillPath,
       baseDir: hostSkillBaseDir,
-      source: "openclaw-bundled",
+      source: "marketingclaw-bundled",
       sourceInfo: createSyntheticSourceInfo(hostSkillPath, {
-        source: "openclaw-bundled",
+        source: "marketingclaw-bundled",
         baseDir: hostSkillBaseDir,
       }),
       disableModelInvocation: false,
@@ -75,7 +75,7 @@ describe("resolveSandboxSkillRuntimeInputs", () => {
     ).toEqual({
       skillsEligibility,
       skillsSnapshot: undefined,
-      skillsPromptWorkspaceDir: "/workspace/.openclaw/sandbox-skills",
+      skillsPromptWorkspaceDir: "/workspace/.marketingclaw/sandbox-skills",
       skillsWorkspaceDir: "/state/sandbox-skills",
       workspaceOnly: true,
     });
@@ -108,11 +108,11 @@ describe("resolveSandboxSkillRuntimeInputs", () => {
           },
         ],
         skillsWorkspaceDir: "/state/sandbox-skills",
-        skillsPromptWorkspaceDir: "/workspace/.openclaw/sandbox-skills",
+        skillsPromptWorkspaceDir: "/workspace/.marketingclaw/sandbox-skills",
       }),
     ).toEqual([
       {
-        readPath: "/workspace/.openclaw/sandbox-skills/skills/demo/SKILL.md",
+        readPath: "/workspace/.marketingclaw/sandbox-skills/skills/demo/SKILL.md",
         skillFile: "/agent-workspace/skills/demo/SKILL.md",
         skillName: "demo",
         skillSource: "workspace",
@@ -121,7 +121,7 @@ describe("resolveSandboxSkillRuntimeInputs", () => {
   });
 
   it("rebuilds sandbox prompts from materialized skill paths", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-sandbox-skills-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-sandbox-skills-"));
     try {
       const effectiveWorkspace = path.join(root, "workspace");
       const materializedWorkspace = path.join(root, "state", "sandbox-skills");
@@ -133,7 +133,7 @@ describe("resolveSandboxSkillRuntimeInputs", () => {
           "---",
           "name: demo",
           "description: Demo skill",
-          'openclaw: {"requires":{"anyBins":["sandboxbin"]}}',
+          'marketingclaw: {"requires":{"anyBins":["sandboxbin"]}}',
           "---",
           "# Demo",
           "",
@@ -184,7 +184,7 @@ describe("resolveSandboxSkillRuntimeInputs", () => {
         eligibility: skillsEligibilityForRun,
       });
 
-      expect(prompt).toContain("/workspace/.openclaw/sandbox-skills/skills/demo/SKILL.md");
+      expect(prompt).toContain("/workspace/.marketingclaw/sandbox-skills/skills/demo/SKILL.md");
       expect(prompt.replaceAll("\\", "/")).not.toContain(
         materializedWorkspace.replaceAll("\\", "/"),
       );
@@ -197,7 +197,7 @@ describe("resolveSandboxSkillRuntimeInputs", () => {
   });
 
   it("preserves remote eligibility when rebuilding sandbox prompts", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-sandbox-skills-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-sandbox-skills-"));
     try {
       const skillDir = path.join(root, "skills", "macskill");
       await fs.mkdir(skillDir, { recursive: true });
@@ -207,7 +207,7 @@ describe("resolveSandboxSkillRuntimeInputs", () => {
           "---",
           "name: macskill",
           "description: Mac-only remote skill",
-          'openclaw: {"os":["darwin"]}',
+          'marketingclaw: {"os":["darwin"]}',
           "---",
           "# Mac Skill",
           "",

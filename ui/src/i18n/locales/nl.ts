@@ -144,18 +144,18 @@ export const nl: TranslationMap = {
     pairing: {
       button: "Mobiel apparaat koppelen",
       adminRequired: "Beheerderstoegang is vereist om installatiecodes te maken.",
-      title: "OpenClaw mobiel",
+      title: "MarketingClaw mobiel",
       subtitle: "Scan deze QR-code in de mobiele app om een nieuwe telefoon te verbinden.",
       generating: "Een veilige installatiecode maken…",
       failed: "Kan geen installatiecode maken.",
-      qrAlt: "QR-code voor koppeling met OpenClaw mobiel",
+      qrAlt: "QR-code voor koppeling met MarketingClaw mobiel",
       qrUnavailable: "QR niet beschikbaar. Kopieer in plaats daarvan de installatiecode.",
       copySetupCode: "Installatiecode kopiëren",
       newCode: "Nieuwe code",
       showSetupCode: "Installatiecode weergeven",
       pending: "Apparaatverzoeken die wachten op beoordeling: {count}",
       review: "Beoordeling",
-      waiting: "Officiële mobiele OpenClaw-apps verbinden automatisch na het scannen.",
+      waiting: "Officiële mobiele MarketingClaw-apps verbinden automatisch na het scannen.",
       help: "Hulp bij koppelen",
       manageDevices: "Apparaten beheren",
     },
@@ -183,7 +183,7 @@ export const nl: TranslationMap = {
   },
   worktrees: {
     title: "Beheerde worktrees",
-    subtitle: "Geïsoleerde repository-checkouts beheerd door OpenClaw.",
+    subtitle: "Geïsoleerde repository-checkouts beheerd door MarketingClaw.",
     cleanNow: "Nu opschonen",
     name: "Naam",
     repo: "Repository",
@@ -558,7 +558,7 @@ export const nl: TranslationMap = {
     skillWorkshop: "Bekijk, verfijn en pas voorstellen toe voordat ze live Skills worden.",
     nodes: "Gekoppelde apparaten en commando's.",
     chat: "Gateway-chat voor snelle interventies.",
-    config: "Bewerk openclaw.json.",
+    config: "Bewerk marketingclaw.json.",
     profile: "De statistieken, reeksen en het leven in het rif van je agent.",
     communications: "Kanalen, berichten en audio-instellingen.",
     appearance: "Thema, UI en instellingen voor de installatiewizard.",
@@ -1079,7 +1079,7 @@ export const nl: TranslationMap = {
       metadataUpgradeSummary:
         "Dit apparaat is al gekoppeld, maar de metadatawijziging wacht op goedkeuring.",
       mobileHint:
-        "Op mobiel? Kopieer de volledige URL (inclusief #token=...) vanuit openclaw dashboard --no-open op je desktop.",
+        "Op mobiel? Kopieer de volledige URL (inclusief #token=...) vanuit marketingclaw dashboard --no-open op je desktop.",
       docsTitle: "Docs voor apparaatkoppeling (opent in nieuw tabblad)",
       docsLink: "Docs: Apparaatkoppeling",
     },
@@ -1117,7 +1117,8 @@ export const nl: TranslationMap = {
       modelAuthExpiresIn: "verloopt {when}",
       modelAuthAttentionExpiredTitle: "Model-auth verlopen",
       modelAuthAttentionExpiringTitle: "Model-auth verloopt binnenkort",
-      modelAuthAttentionExpiredDesc: "{providers} — authenticeer opnieuw met openclaw models auth",
+      modelAuthAttentionExpiredDesc:
+        "{providers} — authenticeer opnieuw met marketingclaw models auth",
       modelAuthAttentionExpiringEntry: "{provider} ({when})",
     },
     attention: {
@@ -1572,9 +1573,9 @@ export const nl: TranslationMap = {
         summary:
           "De Gateway is bereikbaar, maar heeft een overeenkomend token of wachtwoord nodig voordat deze browser kan verbinden.",
         stepPaste:
-          "Plak het token uit openclaw dashboard --no-open of voer het geconfigureerde wachtwoord in.",
+          "Plak het token uit marketingclaw dashboard --no-open of voer het geconfigureerde wachtwoord in.",
         stepGenerate:
-          "Als er geen token is geconfigureerd, voer dan openclaw doctor --generate-gateway-token uit op de Gateway-host.",
+          "Als er geen token is geconfigureerd, voer dan marketingclaw doctor --generate-gateway-token uit op de Gateway-host.",
         stepConnect: "Klik opnieuw op Connect nadat je de referentie hebt bijgewerkt.",
       },
       authFailed: {
@@ -1582,7 +1583,7 @@ export const nl: TranslationMap = {
         summary:
           "De opgegeven referentie is geweigerd. De meest voorkomende oorzaak is een verlopen token of een token dat van een andere Gateway-URL is gekopieerd.",
         stepDashboard:
-          "Voer openclaw dashboard --no-open uit en open de nieuwe URL of plak het token.",
+          "Voer marketingclaw dashboard --no-open uit en open de nieuwe URL of plak het token.",
         stepReplace:
           "Vervang verlopen token-/wachtwoordwaarden; hergebruik geen token van een andere Gateway-URL.",
         stepMode:
@@ -1606,8 +1607,8 @@ export const nl: TranslationMap = {
           "Deze browser heeft een eenmalige goedkeuring van de Gateway-host nodig voordat Control UI kan worden gebruikt.",
         upgradeSummary:
           "Deze browser is al bekend, maar de gevraagde toegang is gewijzigd en vereist nieuwe goedkeuring.",
-        stepList: "Voer openclaw devices list uit op de Gateway-host.",
-        stepApproveId: "Keur deze aanvraag goed: openclaw devices approve {requestId}.",
+        stepList: "Voer marketingclaw devices list uit op de Gateway-host.",
+        stepApproveId: "Keur deze aanvraag goed: marketingclaw devices approve {requestId}.",
         stepApprove: "Keur de openstaande browser-/apparaat aanvraag uit die lijst goed.",
         stepReconnect: "Verbind opnieuw nadat de goedkeuring is voltooid.",
       },
@@ -1636,21 +1637,22 @@ export const nl: TranslationMap = {
         summary:
           "De geserveerde Control UI en de draaiende Gateway zijn het niet eens over het ondersteunde verbindingsprotocol.",
         stepDashboard:
-          "Open het geserveerde dashboard opnieuw met openclaw dashboard zodat UI en Gateway uit dezelfde installatie komen.",
+          "Open het geserveerde dashboard opnieuw met marketingclaw dashboard zodat UI en Gateway uit dezelfde installatie komen.",
         stepDevUi:
           "Als je pnpm ui:dev gebruikt, bouw of herstart de dev-UI tegen de huidige checkout.",
         stepRestart:
-          "Herstart de Gateway na het bijwerken van OpenClaw zodat het huidige protocol wordt geserveerd.",
+          "Herstart de Gateway na het bijwerken van MarketingClaw zodat het huidige protocol wordt geserveerd.",
       },
       network: {
         title: "Kan niet verbinden",
         summary:
           "De browser kon de Gateway-verbinding niet voltooien. Controleer doel en transport voordat je referenties opnieuw probeert.",
-        stepGateway: "Bevestig dat de Gateway draait met openclaw status of openclaw gateway run.",
+        stepGateway:
+          "Bevestig dat de Gateway draait met marketingclaw status of marketingclaw gateway run.",
         stepUrl:
           "Controleer de WebSocket-URL en gebruik wss:// wanneer de Gateway achter HTTPS/Tailscale Serve staat.",
         stepDashboard:
-          "Open het dashboard opnieuw met openclaw dashboard --no-open om de huidige URL en authdetails opnieuw te kopiëren.",
+          "Open het dashboard opnieuw met marketingclaw dashboard --no-open om de huidige URL en authdetails opnieuw te kopiëren.",
       },
     },
   },

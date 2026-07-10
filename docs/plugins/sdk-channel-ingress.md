@@ -14,8 +14,8 @@ generic policy: DM/group allowlists, pairing-store DM entries, route gates,
 command gates, event auth, mention activation, redacted diagnostics, and
 admission.
 
-Use `openclaw/plugin-sdk/channel-ingress-runtime` for new receive paths. The
-older `openclaw/plugin-sdk/channel-ingress` subpath stays exported as a
+Use `marketingclaw/plugin-sdk/channel-ingress-runtime` for new receive paths. The
+older `marketingclaw/plugin-sdk/channel-ingress` subpath stays exported as a
 deprecated compatibility facade for third-party plugins.
 
 ## Runtime resolver
@@ -24,7 +24,7 @@ deprecated compatibility facade for third-party plugins.
 import {
   defineStableChannelIngressIdentity,
   resolveChannelMessageIngress,
-} from "openclaw/plugin-sdk/channel-ingress-runtime";
+} from "marketingclaw/plugin-sdk/channel-ingress-runtime";
 
 const identity = defineStableChannelIngressIdentity({
   key: "platform-user-id",

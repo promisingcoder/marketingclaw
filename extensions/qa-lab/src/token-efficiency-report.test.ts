@@ -38,13 +38,13 @@ function makeCell(
 
 function makeRuntimeParity(
   scenarioId: string,
-  openclaw: RuntimeParityCell,
+  marketingclaw: RuntimeParityCell,
   codex: RuntimeParityCell,
 ): RuntimeParityResult {
   return {
     scenarioId,
     drift: "none",
-    cells: { openclaw, codex },
+    cells: { marketingclaw, codex },
   };
 }
 
@@ -57,7 +57,7 @@ function makeLiveSummary(runtimeParity: RuntimeParityResult[]): TokenEfficiencyS
     })),
     run: {
       providerMode: "live-frontier",
-      runtimePair: ["openclaw", "codex"],
+      runtimePair: ["marketingclaw", "codex"],
     },
   };
 }
@@ -69,7 +69,7 @@ describe("token efficiency report", () => {
       summary: makeLiveSummary([
         makeRuntimeParity(
           "codex-savings",
-          makeCell("openclaw", { inputTokens: 120, outputTokens: 80, totalTokens: 200 }),
+          makeCell("marketingclaw", { inputTokens: 120, outputTokens: 80, totalTokens: 200 }),
           makeCell("codex", { inputTokens: 60, outputTokens: 40, totalTokens: 100 }),
         ),
       ]),
@@ -91,10 +91,11 @@ describe("token efficiency report", () => {
       summary: makeLiveSummary([
         makeRuntimeParity(
           "runtime-tool-fs-read",
-          makeCell("openclaw", { inputTokens: 72_000, outputTokens: 381, totalTokens: 72_381 }, [
-            makeToolCall("fs.read"),
-            makeToolCall("fs.read"),
-          ]),
+          makeCell(
+            "marketingclaw",
+            { inputTokens: 72_000, outputTokens: 381, totalTokens: 72_381 },
+            [makeToolCall("fs.read"), makeToolCall("fs.read")],
+          ),
           makeCell(
             "codex",
             { inputTokens: 118_000, outputTokens: 1_489, totalTokens: 119_489 },
@@ -121,7 +122,7 @@ describe("token efficiency report", () => {
       summary: makeLiveSummary([
         makeRuntimeParity(
           "missing-live-usage",
-          makeCell("openclaw", { inputTokens: 0, outputTokens: 0, totalTokens: 0 }),
+          makeCell("marketingclaw", { inputTokens: 0, outputTokens: 0, totalTokens: 0 }),
           makeCell("codex", { inputTokens: 0, outputTokens: 0, totalTokens: 0 }),
         ),
       ]),
@@ -129,7 +130,7 @@ describe("token efficiency report", () => {
 
     expect(report.pass).toBe(false);
     expect(report.failures).toEqual([
-      "missing-live-usage openclaw live usage totalTokens=0",
+      "missing-live-usage marketingclaw live usage totalTokens=0",
       "missing-live-usage codex live usage totalTokens=0",
     ]);
   });
@@ -139,7 +140,7 @@ describe("token efficiency report", () => {
       summary: makeLiveSummary([
         makeRuntimeParity(
           "fractional-live-usage",
-          makeCell("openclaw", { inputTokens: 100.5, outputTokens: 0, totalTokens: 100.5 }),
+          makeCell("marketingclaw", { inputTokens: 100.5, outputTokens: 0, totalTokens: 100.5 }),
           makeCell("codex", { inputTokens: 101, outputTokens: 0, totalTokens: 101 }),
         ),
       ]),
@@ -147,8 +148,8 @@ describe("token efficiency report", () => {
 
     expect(report.pass).toBe(false);
     expect(report.failures).toEqual([
-      "fractional-live-usage openclaw live usage inputTokens must be a non-negative integer",
-      "fractional-live-usage openclaw live usage totalTokens must be a non-negative integer",
+      "fractional-live-usage marketingclaw live usage inputTokens must be a non-negative integer",
+      "fractional-live-usage marketingclaw live usage totalTokens must be a non-negative integer",
     ]);
   });
 
@@ -174,7 +175,7 @@ describe("token efficiency report", () => {
         scenarios: [],
         run: {
           providerMode: "mock-openai",
-          runtimePair: ["openclaw", "codex"],
+          runtimePair: ["marketingclaw", "codex"],
         },
       },
     });
@@ -193,14 +194,14 @@ describe("token efficiency report", () => {
             status: "pass",
             runtimeParity: makeRuntimeParity(
               "mock-regression",
-              makeCell("openclaw", { inputTokens: 100, outputTokens: 0, totalTokens: 100 }),
+              makeCell("marketingclaw", { inputTokens: 100, outputTokens: 0, totalTokens: 100 }),
               makeCell("codex", { inputTokens: 130, outputTokens: 0, totalTokens: 130 }),
             ),
           },
         ],
         run: {
           providerMode: "mock-openai",
-          runtimePair: ["openclaw", "codex"],
+          runtimePair: ["marketingclaw", "codex"],
         },
       },
     });
@@ -221,12 +222,12 @@ describe("token efficiency report", () => {
       summary: makeLiveSummary([
         makeRuntimeParity(
           "codex-savings",
-          makeCell("openclaw", { inputTokens: 100, outputTokens: 100, totalTokens: 200 }),
+          makeCell("marketingclaw", { inputTokens: 100, outputTokens: 100, totalTokens: 200 }),
           makeCell("codex", { inputTokens: 50, outputTokens: 50, totalTokens: 100 }),
         ),
         makeRuntimeParity(
           "codex-regression",
-          makeCell("openclaw", { inputTokens: 100, outputTokens: 0, totalTokens: 100 }),
+          makeCell("marketingclaw", { inputTokens: 100, outputTokens: 0, totalTokens: 100 }),
           makeCell("codex", { inputTokens: 130, outputTokens: 0, totalTokens: 130 }),
         ),
       ]),

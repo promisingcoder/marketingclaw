@@ -668,7 +668,7 @@ describe("tool-loop-detection", () => {
 
     it("keeps changing empty-output exec failures below the global no-progress breaker", () => {
       const state = createState();
-      const params = { command: "openclaw flaky-helper" };
+      const params = { command: "marketingclaw flaky-helper" };
 
       for (let index = 0; index < GLOBAL_CIRCUIT_BREAKER_THRESHOLD; index += 1) {
         recordSuccessfulCall(
@@ -1226,7 +1226,7 @@ describe("tool-loop-detection", () => {
               accountId: "default",
               direction: "outbound",
               conversation: { id: "loop-room", chatType: "channel" },
-              senderId: "openclaw",
+              senderId: "marketingclaw",
               text: "hello",
               timestamp: 1_800_000_000_000 + i,
             },
@@ -1264,5 +1264,4 @@ describe("tool-loop-detection", () => {
       expect(loopResult.stuck && loopResult.level).not.toBe("critical");
     });
   });
-
 });

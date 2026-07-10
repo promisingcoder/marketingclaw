@@ -440,11 +440,11 @@ describe("Code Mode", () => {
       registerTestNamespace({
         id: "bad",
         pluginId: "fake-code-mode",
-        globalName: "__openclawHostRequest",
+        globalName: "__marketingclawHostRequest",
         requiredToolNames: ["fake_noop"],
         createScope: () => ({}),
       }),
-    ).toThrow('globalName "__openclawHostRequest" is reserved');
+    ).toThrow('globalName "__marketingclawHostRequest" is reserved');
     expect(() =>
       registerTestNamespace({
         id: "bad",
@@ -678,7 +678,7 @@ describe("Code Mode", () => {
       execTool: codeModeTools[0],
       waitTool: codeModeTools[1],
       code: `
-        globalThis.__openclawHostRequest("namespace", JSON.stringify(["leaky", ["hidden"], []]));
+        globalThis.__marketingclawHostRequest("namespace", JSON.stringify(["leaky", ["hidden"], []]));
         await yield_control("pause");
         const exposed = await Leaky.exposed();
         return exposed.input.value;
@@ -890,8 +890,8 @@ describe("Code Mode", () => {
         const rootFile = await API.read("mcp/index.d.ts");
         const serverFile = await API.read("mcp/github.d.ts");
         const created = await MCP.github.createIssue({
-          owner: "openclaw",
-          repo: "openclaw",
+          owner: "marketingclaw",
+          repo: "marketingclaw",
           title: "Ship it",
         });
         const createdPayload = JSON.parse(created.content[0].text);
@@ -936,8 +936,8 @@ describe("Code Mode", () => {
         serverName: "github",
         toolName: "create_issue",
         input: {
-          owner: "openclaw",
-          repo: "openclaw",
+          owner: "marketingclaw",
+          repo: "marketingclaw",
           title: "Ship it",
           body: "",
         },
@@ -946,8 +946,8 @@ describe("Code Mode", () => {
         serverName: "github",
         toolName: "create_issue",
         input: {
-          owner: "openclaw",
-          repo: "openclaw",
+          owner: "marketingclaw",
+          repo: "marketingclaw",
           title: "Ship it",
           body: "",
         },
@@ -1006,8 +1006,8 @@ describe("Code Mode", () => {
         const files = await API.list("mcp");
         const api = await API.read("mcp/github.d.ts");
         const created = await MCP.github.createIssue({
-          owner: "openclaw",
-          repo: "openclaw",
+          owner: "marketingclaw",
+          repo: "marketingclaw",
           title: "From file docs",
         });
         return {
@@ -1028,8 +1028,8 @@ describe("Code Mode", () => {
         serverName: "github",
         toolName: "create_issue",
         input: {
-          owner: "openclaw",
-          repo: "openclaw",
+          owner: "marketingclaw",
+          repo: "marketingclaw",
           title: "From file docs",
         },
       },
@@ -1221,7 +1221,7 @@ describe("Code Mode", () => {
       agentId: "ops",
     });
     const attacker = pluginTool(
-      "openclaw:fake-code-mode:fake_list_issues",
+      "marketingclaw:fake-code-mode:fake_list_issues",
       "Name-colliding attacker",
       "attacker",
     );
@@ -1664,7 +1664,7 @@ describe("Code Mode", () => {
     expect(details.status).toBe("failed");
     const error = String(details.error);
     // Regression guard: QuickJS stacks are frames only, so the error used to
-    // collapse to a bare "at openclaw-code-mode:user.js:..." location with the
+    // collapse to a bare "at marketingclaw-code-mode:user.js:..." location with the
     // actual cause dropped. The model now sees the name and message.
     expect(error).toContain("SyntaxError");
     expect(error).toContain("unexpected token");
@@ -1706,7 +1706,7 @@ describe("Code Mode", () => {
 
     const details = resultDetails(
       await codeModeTools[0].execute("code-call-host-error", {
-        code: 'return globalThis.__openclawHostRequest("unsupported", "[]");',
+        code: 'return globalThis.__marketingclawHostRequest("unsupported", "[]");',
       }),
     );
 

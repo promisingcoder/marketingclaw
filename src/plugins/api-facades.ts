@@ -1,14 +1,17 @@
 // Builds plugin API facades exposed to bundled and external plugins.
-import type { OpenClawPluginApi } from "./types.js";
+import type { MarketingClawPluginApi } from "./types.js";
 
 type PluginApiFacadeFields = Pick<
-  OpenClawPluginApi,
+  MarketingClawPluginApi,
   "agent" | "lifecycle" | "runContext" | "session"
 >;
 /** Plugin API shape without nested facade namespaces attached. */
-export type OpenClawPluginApiWithoutFacades = Omit<OpenClawPluginApi, keyof PluginApiFacadeFields>;
+export type MarketingClawPluginApiWithoutFacades = Omit<
+  MarketingClawPluginApi,
+  keyof PluginApiFacadeFields
+>;
 type PluginApiFacadeSource = Pick<
-  OpenClawPluginApi,
+  MarketingClawPluginApi,
   | "clearRunContext"
   | "emitAgentEvent"
   | "enqueueNextTurnInjection"

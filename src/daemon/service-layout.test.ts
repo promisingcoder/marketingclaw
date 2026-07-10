@@ -7,18 +7,18 @@ describe("resolveGatewayServiceEntrypoint", () => {
     expect(
       resolveGatewayServiceEntrypoint({
         programArguments: ["node", "dist/index.js", "gateway", "run"],
-        workingDirectory: "/repo/openclaw",
+        workingDirectory: "/repo/marketingclaw",
       }),
-    ).toBe(path.join("/repo/openclaw", "dist", "index.js"));
+    ).toBe(path.join("/repo/marketingclaw", "dist", "index.js"));
   });
 
   it("resolves Windows service entrypoints with Windows path semantics", () => {
     expect(
       resolveGatewayServiceEntrypoint({
         programArguments: ["node.exe", "dist\\index.js", "gateway", "run"],
-        workingDirectory: "C:\\openclaw",
+        workingDirectory: "C:\\marketingclaw",
       }),
-    ).toBe("C:\\openclaw\\dist\\index.js");
+    ).toBe("C:\\marketingclaw\\dist\\index.js");
   });
 
   it("rejects a relative entrypoint without an absolute service working directory", () => {

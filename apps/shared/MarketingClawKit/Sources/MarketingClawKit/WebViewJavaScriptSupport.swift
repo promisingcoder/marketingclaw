@@ -13,7 +13,7 @@ public enum WebViewJavaScriptSupport {
         let js = """
         (() => {
           try {
-            const api = globalThis.__openclaw;
+            const api = globalThis.__marketingclaw;
             if (!api) return;
             if (typeof api.setDebugStatusEnabled === 'function') {
               api.setDebugStatusEnabled(\(enabled ? "true" : "false"));

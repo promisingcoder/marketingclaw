@@ -1,9 +1,9 @@
 // Msteams plugin module implements graph thread behavior.
-import { pruneMapToMaxSize } from "openclaw/plugin-sdk/collection-runtime";
+import { pruneMapToMaxSize } from "marketingclaw/plugin-sdk/collection-runtime";
 import {
   asDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,
-} from "openclaw/plugin-sdk/number-runtime";
+} from "marketingclaw/plugin-sdk/number-runtime";
 import { fetchGraphJson, type GraphResponse } from "./graph.js";
 
 export type GraphThreadMessage = {

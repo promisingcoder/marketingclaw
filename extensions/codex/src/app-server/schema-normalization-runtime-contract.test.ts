@@ -2,12 +2,12 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { EmbeddedRunAttemptParams } from "openclaw/plugin-sdk/agent-harness";
+import type { EmbeddedRunAttemptParams } from "marketingclaw/plugin-sdk/agent-harness";
 import {
   createParameterFreeTool,
   createPermissiveTool,
   normalizedParameterFreeSchema,
-} from "openclaw/plugin-sdk/agent-runtime-test-contracts";
+} from "marketingclaw/plugin-sdk/agent-runtime-test-contracts";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CodexThreadStartParams } from "./protocol.js";
 import { testCodexAppServerBindingStore } from "./session-binding.test-helpers.js";
@@ -98,7 +98,7 @@ function threadStartResult(threadId = "thread-1", serviceTier: string | null = n
 
 describe("Codex app-server dynamic tool schema boundary contract", () => {
   beforeEach(async () => {
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-schema-contract-"));
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-codex-schema-contract-"));
   });
 
   afterEach(async () => {
@@ -151,10 +151,10 @@ describe("Codex app-server dynamic tool schema boundary contract", () => {
     expect(startPayload?.approvalPolicy).toBe("never");
     expect(startPayload?.approvalsReviewer).toBe("user");
     expect(startPayload?.sandbox).toBe("workspace-write");
-    expect(startPayload?.serviceName).toBe("OpenClaw");
+    expect(startPayload?.serviceName).toBe("MarketingClaw");
     expect(startPayload?.experimentalRawEvents).toBe(true);
     expect(typeof startPayload?.developerInstructions).toBe("string");
-    expect(startPayload?.developerInstructions).toContain("OpenClaw");
+    expect(startPayload?.developerInstructions).toContain("MarketingClaw");
   });
 
   it("accepts Codex app-server priority service tier responses", async () => {

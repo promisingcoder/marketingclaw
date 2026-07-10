@@ -1,5 +1,5 @@
 #!/usr/bin/env -S node --import tsx
-// Release Check script supports OpenClaw repository automation.
+// Release Check script supports MarketingClaw repository automation.
 
 import { execFileSync } from "node:child_process";
 import {
@@ -46,11 +46,11 @@ import {
   runInstalledWorkspaceBootstrapSmoke,
   WORKSPACE_TEMPLATE_PACK_PATHS,
 } from "./lib/workspace-bootstrap-smoke.mjs";
-import { resolveNpmRunner } from "./npm-runner.mjs";
 import {
   collectInstalledPackageErrors,
   normalizeInstalledBinaryVersion,
-} from "./openclaw-npm-postpublish-verify.ts";
+} from "./marketingclaw-npm-postpublish-verify.ts";
+import { resolveNpmRunner } from "./npm-runner.mjs";
 import { resolvePnpmRunner } from "./pnpm-runner.mjs";
 import { listStaticExtensionAssetOutputs } from "./runtime-postbuild.mjs";
 import { buildCmdExeCommandLine, resolveWindowsCmdExePath } from "./windows-cmd-helpers.mjs";
@@ -59,7 +59,7 @@ export { collectBundledExtensionManifestErrors } from "./lib/bundled-extension-m
 export { packageNameFromSpecifier } from "./lib/plugin-package-dependencies.mjs";
 
 export const RELEASE_CHECK_LOCAL_PACKAGE_TARBALL_DIR_ENV =
-  "OPENCLAW_RELEASE_CHECK_LOCAL_PACKAGE_TARBALL_DIR";
+  "MARKETINGCLAW_RELEASE_CHECK_LOCAL_PACKAGE_TARBALL_DIR";
 
 // Inlined from the removed scripts/sparkle-build.ts (Sparkle updater packaging
 // was pruned on fork); appcast build-floor validation below still needs it.
@@ -219,7 +219,7 @@ const requiredPathGroups = [
 const forbiddenPrefixes = [
   ...LOCAL_BUILD_METADATA_DIST_PATHS,
   "dist-runtime/",
-  "dist/OpenClaw.app/",
+  "dist/MarketingClaw.app/",
   "dist/extensions/qa-channel/",
   "dist/extensions/qa-lab/",
   "dist/plugin-sdk/extensions/qa-channel/",
@@ -264,11 +264,11 @@ const DEFAULT_RELEASE_CHECK_COMMAND_TIMEOUT_MS = 5 * 60 * 1000;
 const DEFAULT_RELEASE_CHECK_COMMAND_MAX_BUFFER_BYTES = 100 * 1024 * 1024;
 export const MAX_CRITICAL_PLUGIN_SDK_ENTRYPOINT_BYTES = 2 * 1024 * 1024;
 const CRITICAL_PLUGIN_SDK_SIZE_CHECK_SPECIFIERS = [
-  "openclaw/plugin-sdk/core",
-  "openclaw/plugin-sdk/provider-entry",
-  "openclaw/plugin-sdk/runtime",
+  "marketingclaw/plugin-sdk/core",
+  "marketingclaw/plugin-sdk/provider-entry",
+  "marketingclaw/plugin-sdk/runtime",
 ] as const;
-const CRITICAL_PLUGIN_SDK_IMPORT_SMOKE_SPECIFIERS = ["openclaw/plugin-sdk/core"] as const;
+const CRITICAL_PLUGIN_SDK_IMPORT_SMOKE_SPECIFIERS = ["marketingclaw/plugin-sdk/core"] as const;
 export const PACKED_CLI_SMOKE_COMMANDS = [
   ["--help"],
   ["onboard", "--help"],
@@ -327,7 +327,7 @@ export function runReleaseCheckCommand(
     maxBuffer:
       options.maxBuffer ??
       positiveEnvInt(
-        "OPENCLAW_RELEASE_CHECK_COMMAND_MAX_BUFFER_BYTES",
+        "MARKETINGCLAW_RELEASE_CHECK_COMMAND_MAX_BUFFER_BYTES",
         DEFAULT_RELEASE_CHECK_COMMAND_MAX_BUFFER_BYTES,
       ),
     shell: invocation.shell ?? options.shell,
@@ -335,7 +335,7 @@ export function runReleaseCheckCommand(
     timeout:
       options.timeoutMs ??
       positiveEnvInt(
-        "OPENCLAW_RELEASE_CHECK_COMMAND_TIMEOUT_MS",
+        "MARKETINGCLAW_RELEASE_CHECK_COMMAND_TIMEOUT_MS",
         DEFAULT_RELEASE_CHECK_COMMAND_TIMEOUT_MS,
       ),
     windowsVerbatimArguments: invocation.windowsVerbatimArguments,
@@ -574,14 +574,14 @@ export function writePackedTarballInstallManifest(
 ): void {
   if (localPackageTarballs.length > 1) {
     throw new Error(
-      `release-check: packed install accepts at most one @openclaw/ai tarball; found ${localPackageTarballs.length}.`,
+      `release-check: packed install accepts at most one @marketingclaw/ai tarball; found ${localPackageTarballs.length}.`,
     );
   }
   const dependencies: Record<string, string> = {
-    openclaw: pathToFileURL(tarballPath).href,
+    marketingclaw: pathToFileURL(tarballPath).href,
   };
   if (localPackageTarballs[0]) {
-    dependencies["@openclaw/ai"] = pathToFileURL(localPackageTarballs[0]).href;
+    dependencies["@marketingclaw/ai"] = pathToFileURL(localPackageTarballs[0]).href;
   }
   mkdirSync(prefixDir, { recursive: true });
   writeFileSync(
@@ -619,7 +619,7 @@ export function resolvePackedInstalledBinaryPath(
     prefixDir,
     "node_modules",
     ".bin",
-    platform === "win32" ? "openclaw.cmd" : "openclaw",
+    platform === "win32" ? "marketingclaw.cmd" : "marketingclaw",
   );
 }
 
@@ -642,7 +642,7 @@ export function createPackedBundledPluginPostinstallEnv(
 ): NodeJS.ProcessEnv {
   return {
     ...env,
-    OPENCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK: "1",
+    MARKETINGCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK: "1",
   };
 }
 
@@ -685,10 +685,10 @@ export function createPackedCliSmokeEnv(
     AWS_EC2_METADATA_DISABLED: "true",
     AWS_SHARED_CREDENTIALS_FILE: homeDir ? join(homeDir, ".aws", "credentials") : undefined,
     AWS_CONFIG_FILE: homeDir ? join(homeDir, ".aws", "config") : undefined,
-    OPENCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK: "1",
-    OPENCLAW_NO_ONBOARD: "1",
-    OPENCLAW_SERVICE_REPAIR_POLICY: "external",
-    OPENCLAW_SUPPRESS_NOTES: "1",
+    MARKETINGCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK: "1",
+    MARKETINGCLAW_NO_ONBOARD: "1",
+    MARKETINGCLAW_SERVICE_REPAIR_POLICY: "external",
+    MARKETINGCLAW_SUPPRESS_NOTES: "1",
     ...overrides,
   };
 }
@@ -700,8 +700,8 @@ export function createPackedCompletionSmokeEnv(
   return {
     ...env,
     ...overrides,
-    OPENCLAW_SUPPRESS_NOTES: "1",
-    OPENCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK: "1",
+    MARKETINGCLAW_SUPPRESS_NOTES: "1",
+    MARKETINGCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK: "1",
     [COMPLETION_SKIP_PLUGIN_COMMANDS_ENV]: "1",
   };
 }
@@ -738,7 +738,7 @@ export function collectPackedInstalledPackageVerificationErrors(params: {
     normalizeInstalledBinaryVersion(params.installedBinaryVersion) !== params.expectedVersion
   ) {
     errors.push(
-      `installed openclaw binary version mismatch: expected ${params.expectedVersion}, found ${params.installedBinaryVersion || "<missing>"}.`,
+      `installed marketingclaw binary version mismatch: expected ${params.expectedVersion}, found ${params.installedBinaryVersion || "<missing>"}.`,
     );
   }
   const rootAliasPath = join(params.packageRoot, "dist", "plugin-sdk", "root-alias.cjs");
@@ -790,17 +790,17 @@ export function createPackedPluginSdkTypescriptSmokeProject(params: {
   aiPackageSpec?: string;
 }): void {
   const dependencies: Record<string, string> = {
-    openclaw: params.packageSpec,
+    marketingclaw: params.packageSpec,
   };
   if (params.aiPackageSpec) {
-    dependencies["@openclaw/ai"] = params.aiPackageSpec;
+    dependencies["@marketingclaw/ai"] = params.aiPackageSpec;
   }
   mkdirSync(join(params.consumerDir, "src"), { recursive: true });
   writeFileSync(
     join(params.consumerDir, "package.json"),
     `${JSON.stringify(
       {
-        name: "openclaw-plugin-sdk-type-smoke",
+        name: "marketingclaw-plugin-sdk-type-smoke",
         private: true,
         type: "module",
         dependencies,
@@ -852,10 +852,10 @@ function runPackedPluginSdkTypescriptSmoke(
     stdio: "inherit",
   });
 
-  const installedOpenClawRoot = join(consumerDir, "node_modules", "openclaw");
+  const installedMarketingClawRoot = join(consumerDir, "node_modules", "marketingclaw");
   const tscPath = [
     join(consumerDir, "node_modules", "typescript", "bin", "tsc"),
-    join(installedOpenClawRoot, "node_modules", "typescript", "bin", "tsc"),
+    join(installedMarketingClawRoot, "node_modules", "typescript", "bin", "tsc"),
   ].find((candidate) => existsSync(candidate));
   if (!tscPath) {
     throw new Error("release-check: packed plugin SDK TypeScript smoke could not find tsc.");
@@ -870,8 +870,8 @@ function runPackedPluginSdkTypescriptSmoke(
 }
 
 export function writePackedBundledPluginActivationConfig(homeDir: string): void {
-  const configPath = join(homeDir, ".openclaw", "openclaw.json");
-  mkdirSync(join(homeDir, ".openclaw"), { recursive: true });
+  const configPath = join(homeDir, ".marketingclaw", "marketingclaw.json");
+  mkdirSync(join(homeDir, ".marketingclaw"), { recursive: true });
   writeFileSync(
     configPath,
     `${JSON.stringify(
@@ -889,7 +889,7 @@ export function writePackedBundledPluginActivationConfig(homeDir: string): void 
         models: {
           providers: {
             openai: {
-              apiKey: "sk-openclaw-release-check",
+              apiKey: "sk-marketingclaw-release-check",
               baseUrl: "https://api.openai.com/v1",
               models: [],
             },
@@ -916,14 +916,14 @@ function runPackedBundledPluginActivationSmoke(packageRoot: string, tmpRoot: str
   mkdirSync(homeDir, { recursive: true });
   const env = createPackedCliSmokeEnv(process.env, {
     HOME: homeDir,
-    OPENAI_API_KEY: "sk-openclaw-release-check",
+    OPENAI_API_KEY: "sk-marketingclaw-release-check",
   });
 
   writePackedBundledPluginActivationConfig(homeDir);
   runReleaseCheckCommand(
     {
       command: process.execPath,
-      args: [join(packageRoot, "openclaw.mjs"), ...PACKED_BUNDLED_RUNTIME_DEPS_REPAIR_ARGS],
+      args: [join(packageRoot, "marketingclaw.mjs"), ...PACKED_BUNDLED_RUNTIME_DEPS_REPAIR_ARGS],
     },
     {
       cwd: packageRoot,
@@ -932,7 +932,10 @@ function runPackedBundledPluginActivationSmoke(packageRoot: string, tmpRoot: str
     },
   );
   runReleaseCheckCommand(
-    { command: process.execPath, args: [join(packageRoot, "openclaw.mjs"), "plugins", "doctor"] },
+    {
+      command: process.execPath,
+      args: [join(packageRoot, "marketingclaw.mjs"), "plugins", "doctor"],
+    },
     {
       cwd: packageRoot,
       stdio: "inherit",
@@ -978,8 +981,8 @@ function runPackedCliSmoke(params: {
   const binaryPath = resolvePackedInstalledBinaryPath(params.prefixDir);
   const env = createPackedCliSmokeEnv(process.env, {
     HOME: params.homeDir,
-    OPENCLAW_STATE_DIR: params.stateDir,
-    OPENAI_API_KEY: "sk-openclaw-release-check",
+    MARKETINGCLAW_STATE_DIR: params.stateDir,
+    OPENAI_API_KEY: "sk-marketingclaw-release-check",
   });
   const windowsRoot = env.SystemRoot ?? env.WINDIR ?? "C:\\Windows";
   const trustedCmdPath = join(windowsRoot, "System32", "cmd.exe");
@@ -1013,7 +1016,7 @@ function runPackedCliSmoke(params: {
 }
 
 function runPackedBundledChannelEntrySmoke(): void {
-  const tmpRoot = mkdtempSync(join(tmpdir(), "openclaw-release-pack-smoke-"));
+  const tmpRoot = mkdtempSync(join(tmpdir(), "marketingclaw-release-pack-smoke-"));
   try {
     const expectedVersion = (
       JSON.parse(readFileSync(resolve("package.json"), "utf8")) as {
@@ -1032,7 +1035,7 @@ function runPackedBundledChannelEntrySmoke(): void {
     const localPackageTarballs = resolveReleaseCheckLocalPackageTarballs();
     installPackedTarball(prefixDir, tarballPath, tmpRoot, localPackageTarballs);
 
-    const packageRoot = join(prefixDir, "node_modules", "openclaw");
+    const packageRoot = join(prefixDir, "node_modules", "marketingclaw");
     verifyPackedInstalledPackage({
       expectedVersion,
       packageRoot,
@@ -1065,7 +1068,7 @@ function runPackedBundledChannelEntrySmoke(): void {
         stdio: "inherit",
         env: {
           ...process.env,
-          OPENCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK: "1",
+          MARKETINGCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK: "1",
         },
       },
     );
@@ -1073,14 +1076,14 @@ function runPackedBundledChannelEntrySmoke(): void {
     runReleaseCheckCommand(
       {
         command: process.execPath,
-        args: [join(packageRoot, "openclaw.mjs"), ...PACKED_COMPLETION_SMOKE_ARGS],
+        args: [join(packageRoot, "marketingclaw.mjs"), ...PACKED_COMPLETION_SMOKE_ARGS],
       },
       {
         cwd: packageRoot,
         stdio: "inherit",
         env: createPackedCompletionSmokeEnv(process.env, {
           HOME: homeDir,
-          OPENCLAW_STATE_DIR: stateDir,
+          MARKETINGCLAW_STATE_DIR: stateDir,
         }),
       },
     );
@@ -1137,8 +1140,8 @@ export function collectForbiddenPackPaths(paths: Iterable<string>): string[] {
       (path) =>
         isLegacyPluginDependencyInstallStagePath(path) ||
         forbiddenPrefixes.some((prefix) => path.startsWith(prefix)) ||
-        /(^|\/)\.openclaw-runtime-deps-[^/]+(\/|$)/u.test(path) ||
-        path.endsWith("/.openclaw-runtime-deps-stamp.json") ||
+        /(^|\/)\.marketingclaw-runtime-deps-[^/]+(\/|$)/u.test(path) ||
+        path.endsWith("/.marketingclaw-runtime-deps-stamp.json") ||
         path.includes("node_modules/"),
     )
     .toSorted((left, right) => left.localeCompare(right));
@@ -1254,7 +1257,7 @@ function checkAppcastSparkleVersions() {
   }
 }
 
-// Critical functions that channel extension plugins import from openclaw/plugin-sdk.
+// Critical functions that channel extension plugins import from marketingclaw/plugin-sdk.
 // If any are missing from the compiled output, plugins crash at runtime (#27569).
 const requiredPluginSdkExports = [
   "isDangerousNameMatchingEnabled",
@@ -1335,7 +1338,7 @@ async function checkPluginSdkExports() {
 export function collectCriticalPluginSdkEntrypointSizeErrors(rootDir = process.cwd()): string[] {
   const errors: string[] = [];
   for (const specifier of CRITICAL_PLUGIN_SDK_SIZE_CHECK_SPECIFIERS) {
-    const subpath = specifier.slice("openclaw/plugin-sdk/".length);
+    const subpath = specifier.slice("marketingclaw/plugin-sdk/".length);
     const relativePath = `dist/plugin-sdk/${subpath}.js`;
     const filePath = resolve(rootDir, relativePath);
     if (!existsSync(filePath)) {

@@ -10,18 +10,18 @@ export type {
   ChannelPlugin,
   ChatType,
   HistoryEntry,
-  OpenClawConfig,
-  OpenClawPluginApi,
+  MarketingClawConfig,
+  MarketingClawPluginApi,
   PluginRuntime,
-} from "openclaw/plugin-sdk/core";
-export type { RuntimeEnv } from "openclaw/plugin-sdk/runtime";
-export type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
-export type { ModelsProviderData } from "openclaw/plugin-sdk/models-provider-runtime";
+} from "marketingclaw/plugin-sdk/core";
+export type { RuntimeEnv } from "marketingclaw/plugin-sdk/runtime";
+export type { ReplyPayload } from "marketingclaw/plugin-sdk/reply-runtime";
+export type { ModelsProviderData } from "marketingclaw/plugin-sdk/models-provider-runtime";
 export type {
   BlockStreamingCoalesceConfig,
   DmPolicy,
   GroupPolicy,
-} from "openclaw/plugin-sdk/config-contracts";
+} from "marketingclaw/plugin-sdk/config-contracts";
 export {
   DEFAULT_ACCOUNT_ID,
   buildChannelConfigSchema,
@@ -29,32 +29,32 @@ export {
   parseStrictPositiveInteger,
   resolveClientIp,
   isTrustedProxyAddress,
-} from "openclaw/plugin-sdk/core";
-export { buildComputedAccountStatusSnapshot } from "openclaw/plugin-sdk/channel-status";
-export { createAccountStatusSink } from "openclaw/plugin-sdk/channel-outbound";
-export { buildAgentMediaPayload } from "openclaw/plugin-sdk/agent-media-payload";
+} from "marketingclaw/plugin-sdk/core";
+export { buildComputedAccountStatusSnapshot } from "marketingclaw/plugin-sdk/channel-status";
+export { createAccountStatusSink } from "marketingclaw/plugin-sdk/channel-outbound";
+export { buildAgentMediaPayload } from "marketingclaw/plugin-sdk/agent-media-payload";
 export {
   listSkillCommandsForAgents,
   resolveControlCommandGate,
   resolveStoredModelOverride,
-} from "openclaw/plugin-sdk/command-auth-native";
-export { buildModelsProviderData } from "openclaw/plugin-sdk/models-provider-runtime";
+} from "marketingclaw/plugin-sdk/command-auth-native";
+export { buildModelsProviderData } from "marketingclaw/plugin-sdk/models-provider-runtime";
 export {
   GROUP_POLICY_BLOCKED_LABEL,
   resolveAllowlistProviderRuntimeGroupPolicy,
   resolveDefaultGroupPolicy,
   warnMissingProviderGroupPolicyFallbackOnce,
-} from "openclaw/plugin-sdk/runtime-group-policy";
-export { isDangerousNameMatchingEnabled } from "openclaw/plugin-sdk/dangerous-name-runtime";
-export { resolveStorePath } from "openclaw/plugin-sdk/session-store-runtime";
-export { formatInboundFromLabel } from "openclaw/plugin-sdk/channel-inbound";
-export { logInboundDrop } from "openclaw/plugin-sdk/channel-inbound";
-export { createChannelPairingController } from "openclaw/plugin-sdk/channel-pairing";
-export { createChannelMessageReplyPipeline } from "openclaw/plugin-sdk/channel-outbound";
-export { logTypingFailure } from "openclaw/plugin-sdk/channel-feedback";
-export { loadOutboundMediaFromUrl } from "openclaw/plugin-sdk/outbound-media";
-export { rawDataToString } from "openclaw/plugin-sdk/webhook-ingress";
-export { chunkTextForOutbound } from "openclaw/plugin-sdk/text-chunking";
+} from "marketingclaw/plugin-sdk/runtime-group-policy";
+export { isDangerousNameMatchingEnabled } from "marketingclaw/plugin-sdk/dangerous-name-runtime";
+export { resolveStorePath } from "marketingclaw/plugin-sdk/session-store-runtime";
+export { formatInboundFromLabel } from "marketingclaw/plugin-sdk/channel-inbound";
+export { logInboundDrop } from "marketingclaw/plugin-sdk/channel-inbound";
+export { createChannelPairingController } from "marketingclaw/plugin-sdk/channel-pairing";
+export { createChannelMessageReplyPipeline } from "marketingclaw/plugin-sdk/channel-outbound";
+export { logTypingFailure } from "marketingclaw/plugin-sdk/channel-feedback";
+export { loadOutboundMediaFromUrl } from "marketingclaw/plugin-sdk/outbound-media";
+export { rawDataToString } from "marketingclaw/plugin-sdk/webhook-ingress";
+export { chunkTextForOutbound } from "marketingclaw/plugin-sdk/text-chunking";
 // Legacy map-helper exports stay for older plugin consumers. New message-turn
 // code should use createChannelHistoryWindow.
 export {
@@ -63,22 +63,22 @@ export {
   buildPendingHistoryContextFromMap,
   clearHistoryEntriesIfEnabled,
   recordPendingHistoryEntryIfEnabled,
-} from "openclaw/plugin-sdk/reply-history";
-export { normalizeAccountId, resolveThreadSessionKeys } from "openclaw/plugin-sdk/routing";
-export { resolveAllowlistMatchSimple } from "openclaw/plugin-sdk/allow-from";
-export { registerPluginHttpRoute } from "openclaw/plugin-sdk/webhook-targets";
+} from "marketingclaw/plugin-sdk/reply-history";
+export { normalizeAccountId, resolveThreadSessionKeys } from "marketingclaw/plugin-sdk/routing";
+export { resolveAllowlistMatchSimple } from "marketingclaw/plugin-sdk/allow-from";
+export { registerPluginHttpRoute } from "marketingclaw/plugin-sdk/webhook-targets";
 export {
   isRequestBodyLimitError,
   readRequestBodyWithLimit,
-} from "openclaw/plugin-sdk/webhook-ingress";
+} from "marketingclaw/plugin-sdk/webhook-ingress";
 export {
   applyAccountNameToChannelSection,
   applySetupAccountConfigPatch,
   migrateBaseNameToDefaultAccount,
-} from "openclaw/plugin-sdk/setup";
+} from "marketingclaw/plugin-sdk/setup";
 export {
   getAgentScopedMediaLocalRoots,
   resolveChannelMediaMaxBytes,
-} from "openclaw/plugin-sdk/media-runtime";
-export { normalizeProviderId } from "openclaw/plugin-sdk/provider-model-shared";
+} from "marketingclaw/plugin-sdk/media-runtime";
+export { normalizeProviderId } from "marketingclaw/plugin-sdk/provider-model-shared";
 export { setMattermostRuntime } from "./src/runtime.js";

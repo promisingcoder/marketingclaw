@@ -4,10 +4,10 @@ import {
   type ProviderAuthMethod,
   type ProviderResolveDynamicModelContext,
   type ProviderRuntimeModel,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { createProviderApiKeyAuthMethod } from "openclaw/plugin-sdk/provider-auth-api-key";
-import { buildProviderReplayFamilyHooks } from "openclaw/plugin-sdk/provider-model-shared";
-import { buildProviderToolCompatFamilyHooks } from "openclaw/plugin-sdk/provider-tools";
+} from "marketingclaw/plugin-sdk/plugin-entry";
+import { createProviderApiKeyAuthMethod } from "marketingclaw/plugin-sdk/provider-auth-api-key";
+import { buildProviderReplayFamilyHooks } from "marketingclaw/plugin-sdk/provider-model-shared";
+import { buildProviderToolCompatFamilyHooks } from "marketingclaw/plugin-sdk/provider-tools";
 import {
   buildClawRouterProviderConfig,
   normalizeClawRouterApiBaseUrl,
@@ -45,7 +45,7 @@ function buildApiKeyAuth(): ProviderAuthMethod {
     noteTitle: "ClawRouter",
     noteMessage: [
       "Use the proxy key issued by your ClawRouter administrator.",
-      "OpenClaw discovers only the models granted to that key.",
+      "MarketingClaw discovers only the models granted to that key.",
     ].join("\n"),
     wizard: {
       choiceId: "clawrouter-api-key",
@@ -129,7 +129,7 @@ export default definePluginEntry({
           if (!discoveryApiKey) {
             try {
               const { resolveApiKeyForProvider } =
-                await import("openclaw/plugin-sdk/provider-auth-runtime");
+                await import("marketingclaw/plugin-sdk/provider-auth-runtime");
               discoveryApiKey = (
                 await resolveApiKeyForProvider({
                   provider: PROVIDER_ID,
@@ -161,7 +161,7 @@ export default definePluginEntry({
         const scope = dynamicModelScope(ctx);
         dynamicModels.delete(scope);
         const { resolveApiKeyForProvider } =
-          await import("openclaw/plugin-sdk/provider-auth-runtime");
+          await import("marketingclaw/plugin-sdk/provider-auth-runtime");
         const apiKey = (
           await resolveApiKeyForProvider({
             provider: PROVIDER_ID,

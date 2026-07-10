@@ -1,9 +1,9 @@
 import Foundation
-import OpenClawChatUI
-import OpenClawKit
-import OpenClawProtocol
+import MarketingClawChatUI
+import MarketingClawKit
+import MarketingClawProtocol
 import Testing
-@testable import OpenClaw
+@testable import MarketingClaw
 
 struct IOSGatewayChatTransportTests {
     private func object(from json: String) throws -> [String: Any] {
@@ -45,23 +45,23 @@ struct IOSGatewayChatTransportTests {
     }
 
     @Test func `live routing guard permits an identity still loading`() {
-        #expect(OpenClawChatSessionRoutingContract.expectedValue(
+        #expect(MarketingClawChatSessionRoutingContract.expectedValue(
             nil,
             serverSupportsGuard: true) == nil)
-        #expect(OpenClawChatSessionRoutingContract.expectedValue(
+        #expect(MarketingClawChatSessionRoutingContract.expectedValue(
             " per-sender|main|reviewer ",
             serverSupportsGuard: true) == "per-sender|main|reviewer")
-        #expect(OpenClawChatSessionRoutingContract.expectedValue(
+        #expect(MarketingClawChatSessionRoutingContract.expectedValue(
             "per-sender|main|reviewer",
             serverSupportsGuard: false) == nil)
     }
 
     @Test func `routing contract round trips a delimited legacy main key`() throws {
-        let contract = try #require(OpenClawChatSessionRoutingContract.make(
+        let contract = try #require(MarketingClawChatSessionRoutingContract.make(
             scope: "per-sender",
             mainKey: "team|primary",
             defaultAgentID: "main"))
-        let components = try #require(OpenClawChatSessionRoutingContract.parse(contract))
+        let components = try #require(MarketingClawChatSessionRoutingContract.parse(contract))
         #expect(components.scope == "per-sender")
         #expect(components.mainKey == "team|primary")
         #expect(components.defaultAgentID == "main")
@@ -290,7 +290,7 @@ struct IOSGatewayChatTransportTests {
                 idempotencyKey: "guarded-idempotency",
                 attachments: [])
             Issue.record("Expected guarded sendMessage to fail before dispatch")
-        } catch is OpenClawChatTransportSendError {
+        } catch is MarketingClawChatTransportSendError {
             // Expected: a missing route never reached chat.send.
         } catch {
             Issue.record("Expected a typed pre-dispatch failure, got \(error)")
@@ -392,9 +392,9 @@ struct LocalFixtureChatTransportTests {
             idempotencyKey: "fixture-run",
             attachments: [])
         let history = try await transport.requestHistory(sessionKey: "main")
-        let decoded = try #require(history.messages).compactMap { payload -> OpenClawChatMessage? in
+        let decoded = try #require(history.messages).compactMap { payload -> MarketingClawChatMessage? in
             guard let data = try? JSONEncoder().encode(payload) else { return nil }
-            return try? JSONDecoder().decode(OpenClawChatMessage.self, from: data)
+            return try? JSONDecoder().decode(MarketingClawChatMessage.self, from: data)
         }
 
         #expect(decoded.last(where: { $0.role == "user" })?.idempotencyKey == "fixture-run:user")

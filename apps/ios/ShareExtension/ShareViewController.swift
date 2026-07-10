@@ -1,5 +1,5 @@
 import Foundation
-import OpenClawKit
+import MarketingClawKit
 import os
 import UIKit
 import UniformTypeIdentifiers
@@ -17,7 +17,7 @@ final class ShareViewController: UIViewController {
         var attachments: [ShareAttachment]
     }
 
-    private let logger = Logger(subsystem: "ai.openclawfoundation.app", category: "ShareExtension")
+    private let logger = Logger(subsystem: "ai.marketingclaw.app", category: "ShareExtension")
     private var statusLabel: UILabel?
     private let draftTextView = UITextView()
     private let sendButton = UIButton(type: .system)
@@ -50,7 +50,7 @@ final class ShareViewController: UIViewController {
 
         self.sendButton.translatesAutoresizingMaskIntoConstraints = false
         self.sendButton.setTitle(
-            NSLocalizedString("Send to OpenClaw", comment: "Share extension send action"),
+            NSLocalizedString("Send to MarketingClaw", comment: "Share extension send action"),
             for: .normal)
         self.sendButton.titleLabel?.font = .preferredFont(forTextStyle: .headline)
         self.sendButton.addTarget(self, action: #selector(self.handleSendTap), for: .touchUpInside)
@@ -138,13 +138,13 @@ final class ShareViewController: UIViewController {
             self.sendButton.isEnabled = false
             self.cancelButton.isEnabled = false
         }
-        self.showStatus(NSLocalizedString("Sending to OpenClaw gateway…", comment: "Share extension sending status"))
+        self.showStatus(NSLocalizedString("Sending to MarketingClaw gateway…", comment: "Share extension sending status"))
         ShareGatewayRelaySettings.saveLastEvent("Sending to gateway…")
         do {
             try await self.sendMessageToGateway(trimmed, attachments: self.pendingAttachments)
             ShareGatewayRelaySettings.saveLastEvent(
                 "Sent to gateway (\(trimmed.count) chars, \(self.pendingAttachments.count) attachment(s)).")
-            self.showStatus(NSLocalizedString("Sent to OpenClaw.", comment: "Share extension success status"))
+            self.showStatus(NSLocalizedString("Sent to MarketingClaw.", comment: "Share extension success status"))
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) {
                 self.extensionContext?.completeRequest(returningItems: nil)
             }
@@ -166,17 +166,17 @@ final class ShareViewController: UIViewController {
     private func sendMessageToGateway(_ message: String, attachments: [ShareAttachment]) async throws {
         guard let config = ShareGatewayRelaySettings.loadConfigDiscardingUnscopedDeviceAuth() else {
             throw NSError(
-                domain: "OpenClawShare",
+                domain: "MarketingClawShare",
                 code: 10,
                 userInfo: [
                     NSLocalizedDescriptionKey: NSLocalizedString(
-                        "OpenClaw is not connected to a gateway yet.",
+                        "MarketingClaw is not connected to a gateway yet.",
                         comment: "Share extension missing gateway error"),
                 ])
         }
         guard let url = URL(string: config.gatewayURLString) else {
             throw NSError(
-                domain: "OpenClawShare",
+                domain: "MarketingClawShare",
                 code: 11,
                 userInfo: [
                     NSLocalizedDescriptionKey: NSLocalizedString(
@@ -198,7 +198,7 @@ final class ShareViewController: UIViewController {
                 permissions: [:],
                 clientId: clientId,
                 clientMode: "node",
-                clientDisplayName: "OpenClaw Share",
+                clientDisplayName: "MarketingClaw Share",
                 deviceIdentityProfile: .shareExtension,
                 includeDeviceIdentity: true,
                 allowStoredDeviceAuth: config.gatewayStableID != nil,
@@ -211,7 +211,7 @@ final class ShareViewController: UIViewController {
                 token: config.token,
                 bootstrapToken: nil,
                 password: config.password,
-                connectOptions: makeOptions("openclaw-ios"),
+                connectOptions: makeOptions("marketingclaw-ios"),
                 sessionBox: nil,
                 onConnected: {},
                 onDisconnected: { _ in },
@@ -219,7 +219,7 @@ final class ShareViewController: UIViewController {
                     BridgeInvokeResponse(
                         id: req.id,
                         ok: false,
-                        error: OpenClawNodeError(
+                        error: MarketingClawNodeError(
                             code: .invalidRequest,
                             message: "share extension does not support node invoke"))
                 })
@@ -239,7 +239,7 @@ final class ShareViewController: UIViewController {
                     BridgeInvokeResponse(
                         id: req.id,
                         ok: false,
-                        error: OpenClawNodeError(
+                        error: MarketingClawNodeError(
                             code: .invalidRequest,
                             message: "share extension does not support node invoke"))
                 })
@@ -278,7 +278,7 @@ final class ShareViewController: UIViewController {
         let data = try JSONEncoder().encode(params)
         guard let json = String(data: data, encoding: .utf8) else {
             throw NSError(
-                domain: "OpenClawShare",
+                domain: "MarketingClawShare",
                 code: 12,
                 userInfo: [NSLocalizedDescriptionKey: "Failed to encode chat payload."])
         }
@@ -289,7 +289,7 @@ final class ShareViewController: UIViewController {
         let eventData = try JSONEncoder().encode(NodeEventParams(event: "agent.request", payloadJSON: json))
         guard let nodeEventParams = String(data: eventData, encoding: .utf8) else {
             throw NSError(
-                domain: "OpenClawShare",
+                domain: "MarketingClawShare",
                 code: 13,
                 userInfo: [NSLocalizedDescriptionKey: "Failed to encode node event payload."])
         }

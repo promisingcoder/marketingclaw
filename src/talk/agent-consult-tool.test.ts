@@ -1,6 +1,5 @@
 // Agent consult tool tests cover tool payload validation for consult requests.
 import { describe, expect, it } from "vitest";
-import type { RealtimeVoiceTool } from "./provider-types.js";
 import {
   buildRealtimeVoiceAgentConsultChatMessage,
   buildRealtimeVoiceAgentConsultPrompt,
@@ -12,6 +11,7 @@ import {
   resolveRealtimeVoiceAgentConsultTools,
   resolveRealtimeVoiceAgentConsultToolsAllow,
 } from "./agent-consult-tool.js";
+import type { RealtimeVoiceTool } from "./provider-types.js";
 
 describe("realtime voice agent consult tool", () => {
   it("normalizes shared tool arguments for browser chat forwarding", () => {
@@ -61,7 +61,7 @@ describe("realtime voice agent consult tool", () => {
     expect(prompt).toBe(
       [
         "Live voice request from the participant during a private Google Meet.",
-        "Act as the configured OpenClaw agent on behalf of this user. Use available tools when the request asks you to do work.",
+        "Act as the configured MarketingClaw agent on behalf of this user. Use available tools when the request asks you to do work.",
         "When finished, return only the concise result the realtime voice agent should speak back.",
         "Do not include markdown, tool logs, or private reasoning. Include citations only when the spoken answer needs them.",
         "Recent voice transcript for context:\nParticipant: Can you check the repo?\nAgent: I'll verify.",

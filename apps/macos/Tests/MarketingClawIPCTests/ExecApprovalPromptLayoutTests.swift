@@ -1,6 +1,6 @@
 import AppKit
 import Testing
-@testable import OpenClaw
+@testable import MarketingClaw
 
 @Suite(.serialized)
 @MainActor
@@ -9,7 +9,7 @@ struct ExecApprovalPromptLayoutTests {
         let decisions = ExecApprovalsPromptPresenter.allowedPromptDecisions(
             ExecApprovalPromptRequest(
                 command: "/bin/sh -lc pwd",
-                cwd: "/Users/example/projects/openclaw",
+                cwd: "/Users/example/projects/marketingclaw",
                 host: "node",
                 security: "full",
                 ask: "on-miss",
@@ -25,7 +25,7 @@ struct ExecApprovalPromptLayoutTests {
         let decisions = ExecApprovalsPromptPresenter.allowedPromptDecisions(
             ExecApprovalPromptRequest(
                 command: "/bin/sh -lc pwd",
-                cwd: "/Users/example/projects/openclaw",
+                cwd: "/Users/example/projects/marketingclaw",
                 host: "node",
                 security: "full",
                 ask: "always",
@@ -40,7 +40,7 @@ struct ExecApprovalPromptLayoutTests {
         let decisions = ExecApprovalsPromptPresenter.allowedPromptDecisions(
             ExecApprovalPromptRequest(
                 command: "/bin/sh -lc pwd",
-                cwd: "/Users/example/projects/openclaw",
+                cwd: "/Users/example/projects/marketingclaw",
                 host: "node",
                 security: "full",
                 ask: "on-miss",
@@ -55,7 +55,7 @@ struct ExecApprovalPromptLayoutTests {
         let decisions = ExecApprovalsPromptPresenter.allowedPromptDecisions(
             ExecApprovalPromptRequest(
                 command: "/bin/sh -lc pwd",
-                cwd: "/Users/example/projects/openclaw",
+                cwd: "/Users/example/projects/marketingclaw",
                 host: "node",
                 security: "full",
                 agentId: "main",
@@ -69,7 +69,7 @@ struct ExecApprovalPromptLayoutTests {
         let decisions = ExecApprovalsPromptPresenter.allowedPromptDecisions(
             ExecApprovalPromptRequest(
                 command: "/bin/sh -lc pwd",
-                cwd: "/Users/example/projects/openclaw",
+                cwd: "/Users/example/projects/marketingclaw",
                 host: "node",
                 security: "full",
                 ask: "unexpected",
@@ -126,7 +126,7 @@ struct ExecApprovalPromptLayoutTests {
         let accessory = ExecApprovalsPromptPresenter.buildAccessoryView(
             ExecApprovalPromptRequest(
                 command: "/bin/sh -lc \"hostname; uptime; echo '---'\"",
-                cwd: "/Users/example/projects/openclaw",
+                cwd: "/Users/example/projects/marketingclaw",
                 host: "node",
                 security: "allowlist",
                 ask: "on-miss",

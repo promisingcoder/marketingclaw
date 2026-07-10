@@ -1,13 +1,13 @@
-# Moonshot OpenClaw provider
+# Moonshot MarketingClaw provider
 
-Official OpenClaw provider plugin for Moonshot.
+Official MarketingClaw provider plugin for Moonshot.
 
 ## Install
 
 ```sh
-openclaw plugins install @openclaw/moonshot-provider
+marketingclaw plugins install @marketingclaw/moonshot-provider
 ```
 
 ## Docs
 
-See `docs/providers/moonshot.md` in the OpenClaw repository, or the published docs at `https://docs.openclaw.ai/providers/moonshot`.
+See `docs/providers/moonshot.md` in the MarketingClaw repository, or the published docs at `https://docs.marketingclaw.ai/providers/moonshot`.

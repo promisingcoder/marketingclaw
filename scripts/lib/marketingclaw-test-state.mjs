@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Creates isolated OpenClaw test HOME/state directories and shell snippets.
+// Creates isolated MarketingClaw test HOME/state directories and shell snippets.
 import { randomBytes } from "node:crypto";
 import fs from "node:fs/promises";
 import os from "node:os";
@@ -20,9 +20,9 @@ const SCENARIOS = new Set([
 
 function usage() {
   return `Usage:
-  node scripts/lib/openclaw-test-state.mjs -- create [--label <name>] [--scenario <name>] [--env-file <path>] [--json]
-  node scripts/lib/openclaw-test-state.mjs shell [--label <name>] [--scenario <name>]
-  node scripts/lib/openclaw-test-state.mjs shell-function
+  node scripts/lib/marketingclaw-test-state.mjs -- create [--label <name>] [--scenario <name>] [--env-file <path>] [--json]
+  node scripts/lib/marketingclaw-test-state.mjs shell [--label <name>] [--scenario <name>]
+  node scripts/lib/marketingclaw-test-state.mjs shell-function
 
 Scenarios: ${[...SCENARIOS].join(", ")}
 `;
@@ -149,7 +149,7 @@ function scenarioConfig(scenario, options = {}) {
         ],
       },
       skills: {
-        allowBundled: ["memory", "openclaw-testing"],
+        allowBundled: ["memory", "marketingclaw-testing"],
         limits: {
           maxSkillsInPrompt: 8,
           maxSkillsPromptChars: 30000,
@@ -224,7 +224,7 @@ function scenarioConfig(scenario, options = {}) {
         port: Number(options.port || 18789),
         auth: {
           mode: "token",
-          token: options.token || "openclaw-test-token",
+          token: options.token || "marketingclaw-test-token",
         },
         controlUi: {
           enabled: false,
@@ -238,7 +238,7 @@ function scenarioConfig(scenario, options = {}) {
 function scenarioEnv(scenario) {
   if (scenario === "external-service") {
     return {
-      OPENCLAW_SERVICE_REPAIR_POLICY: "external",
+      MARKETINGCLAW_SERVICE_REPAIR_POLICY: "external",
     };
   }
   return {};
@@ -260,18 +260,18 @@ function generateAuthProfileSecretKey() {
 
 function renderAuthProfileSecretKeyExport() {
   return [
-    'OPENCLAW_AUTH_PROFILE_SECRET_KEY_FILE="$OPENCLAW_TEST_STATE_HOME/.openclaw-test-auth-profile-secret-key"',
-    'if [ -s "$OPENCLAW_AUTH_PROFILE_SECRET_KEY_FILE" ]; then',
-    '  OPENCLAW_AUTH_PROFILE_SECRET_KEY="$(cat "$OPENCLAW_AUTH_PROFILE_SECRET_KEY_FILE")"',
+    'MARKETINGCLAW_AUTH_PROFILE_SECRET_KEY_FILE="$MARKETINGCLAW_TEST_STATE_HOME/.marketingclaw-test-auth-profile-secret-key"',
+    'if [ -s "$MARKETINGCLAW_AUTH_PROFILE_SECRET_KEY_FILE" ]; then',
+    '  MARKETINGCLAW_AUTH_PROFILE_SECRET_KEY="$(cat "$MARKETINGCLAW_AUTH_PROFILE_SECRET_KEY_FILE")"',
     "else",
-    '  OPENCLAW_AUTH_PROFILE_SECRET_KEY="$(od -An -N 32 -tx1 /dev/urandom | tr -d " \\n")"',
-    '  ( umask 077; printf "%s\\n" "$OPENCLAW_AUTH_PROFILE_SECRET_KEY" > "$OPENCLAW_AUTH_PROFILE_SECRET_KEY_FILE" )',
+    '  MARKETINGCLAW_AUTH_PROFILE_SECRET_KEY="$(od -An -N 32 -tx1 /dev/urandom | tr -d " \\n")"',
+    '  ( umask 077; printf "%s\\n" "$MARKETINGCLAW_AUTH_PROFILE_SECRET_KEY" > "$MARKETINGCLAW_AUTH_PROFILE_SECRET_KEY_FILE" )',
     "fi",
-    'if [ -z "$OPENCLAW_AUTH_PROFILE_SECRET_KEY" ]; then',
-    '  echo "failed to generate OPENCLAW_AUTH_PROFILE_SECRET_KEY" >&2',
+    'if [ -z "$MARKETINGCLAW_AUTH_PROFILE_SECRET_KEY" ]; then',
+    '  echo "failed to generate MARKETINGCLAW_AUTH_PROFILE_SECRET_KEY" >&2',
     "  return 1 2>/dev/null || exit 1",
     "fi",
-    "export OPENCLAW_AUTH_PROFILE_SECRET_KEY",
+    "export MARKETINGCLAW_AUTH_PROFILE_SECRET_KEY",
   ];
 }
 
@@ -281,9 +281,9 @@ function renderConfigWrite(configPathExpression, config) {
   }
   const json = JSON.stringify(config, null, 2);
   return [
-    `cat > ${configPathExpression} <<'OPENCLAW_TEST_STATE_JSON'`,
+    `cat > ${configPathExpression} <<'MARKETINGCLAW_TEST_STATE_JSON'`,
     json,
-    "OPENCLAW_TEST_STATE_JSON",
+    "MARKETINGCLAW_TEST_STATE_JSON",
   ].join("\n");
 }
 
@@ -295,17 +295,17 @@ function buildCreatePlan(options = {}) {
   }
   const root = options.root;
   const home = path.join(root, "home");
-  const stateDir = path.join(home, ".openclaw");
-  const configPath = path.join(stateDir, "openclaw.json");
+  const stateDir = path.join(home, ".marketingclaw");
+  const configPath = path.join(stateDir, "marketingclaw.json");
   const workspaceDir = path.join(home, "workspace");
   const config = scenarioConfig(scenario, options);
   const env = {
     HOME: home,
     USERPROFILE: home,
-    OPENCLAW_HOME: home,
-    OPENCLAW_STATE_DIR: stateDir,
-    OPENCLAW_CONFIG_PATH: configPath,
-    OPENCLAW_AUTH_PROFILE_SECRET_KEY: generateAuthProfileSecretKey(),
+    MARKETINGCLAW_HOME: home,
+    MARKETINGCLAW_STATE_DIR: stateDir,
+    MARKETINGCLAW_CONFIG_PATH: configPath,
+    MARKETINGCLAW_AUTH_PROFILE_SECRET_KEY: generateAuthProfileSecretKey(),
     ...scenarioEnv(scenario),
   };
   return {
@@ -322,10 +322,10 @@ function buildCreatePlan(options = {}) {
   };
 }
 
-/** Create an isolated OpenClaw test state directory and optional scenario config. */
+/** Create an isolated MarketingClaw test state directory and optional scenario config. */
 export async function createState(options = {}) {
   const label = normalizeLabel(options.label);
-  const root = await fs.mkdtemp(path.join(os.tmpdir(), `openclaw-${label}-`));
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), `marketingclaw-${label}-`));
   const plan = buildCreatePlan({ ...options, root });
   await fs.mkdir(plan.stateDir, { recursive: true });
   await fs.mkdir(plan.workspaceDir, { recursive: true });
@@ -340,95 +340,95 @@ function renderEnvFile(plan) {
   return `${renderExports(plan.env)}\n`;
 }
 
-/** Render shell commands that create and export an isolated OpenClaw test state. */
+/** Render shell commands that create and export an isolated MarketingClaw test state. */
 function renderShellSnippet(options = {}) {
   const label = normalizeLabel(options.label);
   const scenario = requireScenario(options.scenario);
   const config = scenarioConfig(scenario, options);
   const env = scenarioEnv(scenario);
-  const homeTemplate = `openclaw-${label}-${scenario}-home.XXXXXX`;
+  const homeTemplate = `marketingclaw-${label}-${scenario}-home.XXXXXX`;
   const lines = [
-    'OPENCLAW_TEST_STATE_TMP_ROOT="${OPENCLAW_TEST_STATE_TMPDIR:-${TMPDIR:-/tmp}}"',
-    'OPENCLAW_TEST_STATE_TMP_ROOT="${OPENCLAW_TEST_STATE_TMP_ROOT%/}"',
-    '[ -n "$OPENCLAW_TEST_STATE_TMP_ROOT" ] || OPENCLAW_TEST_STATE_TMP_ROOT="/tmp"',
-    "export OPENCLAW_TEST_STATE_TMP_ROOT",
-    'mkdir -p "$OPENCLAW_TEST_STATE_TMP_ROOT"',
-    `OPENCLAW_TEST_STATE_HOME="$(mktemp -d "$OPENCLAW_TEST_STATE_TMP_ROOT/${homeTemplate}")"`,
-    'export HOME="$OPENCLAW_TEST_STATE_HOME"',
-    'export USERPROFILE="$OPENCLAW_TEST_STATE_HOME"',
-    'export OPENCLAW_HOME="$OPENCLAW_TEST_STATE_HOME"',
-    'export OPENCLAW_STATE_DIR="$OPENCLAW_TEST_STATE_HOME/.openclaw"',
-    'export OPENCLAW_CONFIG_PATH="$OPENCLAW_STATE_DIR/openclaw.json"',
+    'MARKETINGCLAW_TEST_STATE_TMP_ROOT="${MARKETINGCLAW_TEST_STATE_TMPDIR:-${TMPDIR:-/tmp}}"',
+    'MARKETINGCLAW_TEST_STATE_TMP_ROOT="${MARKETINGCLAW_TEST_STATE_TMP_ROOT%/}"',
+    '[ -n "$MARKETINGCLAW_TEST_STATE_TMP_ROOT" ] || MARKETINGCLAW_TEST_STATE_TMP_ROOT="/tmp"',
+    "export MARKETINGCLAW_TEST_STATE_TMP_ROOT",
+    'mkdir -p "$MARKETINGCLAW_TEST_STATE_TMP_ROOT"',
+    `MARKETINGCLAW_TEST_STATE_HOME="$(mktemp -d "$MARKETINGCLAW_TEST_STATE_TMP_ROOT/${homeTemplate}")"`,
+    'export HOME="$MARKETINGCLAW_TEST_STATE_HOME"',
+    'export USERPROFILE="$MARKETINGCLAW_TEST_STATE_HOME"',
+    'export MARKETINGCLAW_HOME="$MARKETINGCLAW_TEST_STATE_HOME"',
+    'export MARKETINGCLAW_STATE_DIR="$MARKETINGCLAW_TEST_STATE_HOME/.marketingclaw"',
+    'export MARKETINGCLAW_CONFIG_PATH="$MARKETINGCLAW_STATE_DIR/marketingclaw.json"',
     ...renderAuthProfileSecretKeyExport(),
-    'export OPENCLAW_TEST_WORKSPACE_DIR="$OPENCLAW_TEST_STATE_HOME/workspace"',
-    'mkdir -p "$OPENCLAW_STATE_DIR" "$OPENCLAW_TEST_WORKSPACE_DIR"',
+    'export MARKETINGCLAW_TEST_WORKSPACE_DIR="$MARKETINGCLAW_TEST_STATE_HOME/workspace"',
+    'mkdir -p "$MARKETINGCLAW_STATE_DIR" "$MARKETINGCLAW_TEST_WORKSPACE_DIR"',
   ];
   for (const [key, value] of Object.entries(env)) {
     lines.push(`export ${key}=${shellQuote(value)}`);
   }
-  const configWrite = renderConfigWrite('"$OPENCLAW_CONFIG_PATH"', config);
+  const configWrite = renderConfigWrite('"$MARKETINGCLAW_CONFIG_PATH"', config);
   if (configWrite) {
     lines.push(configWrite);
   }
   return `${lines.join("\n")}\n`;
 }
 
-/** Render a reusable shell function for creating isolated OpenClaw test state. */
+/** Render a reusable shell function for creating isolated MarketingClaw test state. */
 function renderShellFunction() {
-  return `openclaw_test_state_create() {
+  return `marketingclaw_test_state_create() {
   local raw_label="\${1:-state}"
   local label="$raw_label"
   local scenario="\${2:-empty}"
   case "$scenario" in
     empty|minimal|update-stable|upgrade-survivor|gateway-loopback|external-service) ;;
     *)
-      echo "unknown OpenClaw test-state scenario: $scenario" >&2
+      echo "unknown MarketingClaw test-state scenario: $scenario" >&2
       return 1
       ;;
   esac
   case "$raw_label" in
     /*)
-      OPENCLAW_TEST_STATE_HOME="$raw_label"
-      mkdir -p "$OPENCLAW_TEST_STATE_HOME"
+      MARKETINGCLAW_TEST_STATE_HOME="$raw_label"
+      mkdir -p "$MARKETINGCLAW_TEST_STATE_HOME"
       ;;
     *)
       label="$(printf "%s" "$label" | tr -cs "A-Za-z0-9_.-" "-" | sed -e "s/^-*//" -e "s/-*$//")"
       [ -n "$label" ] || label="state"
-      local tmp_root="\${OPENCLAW_TEST_STATE_TMPDIR:-\${TMPDIR:-/tmp}}"
+      local tmp_root="\${MARKETINGCLAW_TEST_STATE_TMPDIR:-\${TMPDIR:-/tmp}}"
       tmp_root="\${tmp_root%/}"
       [ -n "$tmp_root" ] || tmp_root="/tmp"
       mkdir -p "$tmp_root"
-      OPENCLAW_TEST_STATE_HOME="$(mktemp -d "$tmp_root/openclaw-$label-$scenario-home.XXXXXX")"
+      MARKETINGCLAW_TEST_STATE_HOME="$(mktemp -d "$tmp_root/marketingclaw-$label-$scenario-home.XXXXXX")"
       ;;
   esac
-  export HOME="$OPENCLAW_TEST_STATE_HOME"
-  export USERPROFILE="$OPENCLAW_TEST_STATE_HOME"
-  export OPENCLAW_HOME="$OPENCLAW_TEST_STATE_HOME"
-  export OPENCLAW_STATE_DIR="$OPENCLAW_TEST_STATE_HOME/.openclaw"
-  export OPENCLAW_CONFIG_PATH="$OPENCLAW_STATE_DIR/openclaw.json"
+  export HOME="$MARKETINGCLAW_TEST_STATE_HOME"
+  export USERPROFILE="$MARKETINGCLAW_TEST_STATE_HOME"
+  export MARKETINGCLAW_HOME="$MARKETINGCLAW_TEST_STATE_HOME"
+  export MARKETINGCLAW_STATE_DIR="$MARKETINGCLAW_TEST_STATE_HOME/.marketingclaw"
+  export MARKETINGCLAW_CONFIG_PATH="$MARKETINGCLAW_STATE_DIR/marketingclaw.json"
   ${renderAuthProfileSecretKeyExport().join("\n  ")}
-  export OPENCLAW_TEST_WORKSPACE_DIR="$OPENCLAW_TEST_STATE_HOME/workspace"
-  unset OPENCLAW_AGENT_DIR
-  unset OPENCLAW_SERVICE_REPAIR_POLICY
-  mkdir -p "$OPENCLAW_STATE_DIR" "$OPENCLAW_TEST_WORKSPACE_DIR"
+  export MARKETINGCLAW_TEST_WORKSPACE_DIR="$MARKETINGCLAW_TEST_STATE_HOME/workspace"
+  unset MARKETINGCLAW_AGENT_DIR
+  unset MARKETINGCLAW_SERVICE_REPAIR_POLICY
+  mkdir -p "$MARKETINGCLAW_STATE_DIR" "$MARKETINGCLAW_TEST_WORKSPACE_DIR"
   case "$scenario" in
     minimal)
-      cat > "$OPENCLAW_CONFIG_PATH" <<'OPENCLAW_TEST_STATE_JSON'
+      cat > "$MARKETINGCLAW_CONFIG_PATH" <<'MARKETINGCLAW_TEST_STATE_JSON'
 {}
-OPENCLAW_TEST_STATE_JSON
+MARKETINGCLAW_TEST_STATE_JSON
       ;;
     update-stable)
-      cat > "$OPENCLAW_CONFIG_PATH" <<'OPENCLAW_TEST_STATE_JSON'
+      cat > "$MARKETINGCLAW_CONFIG_PATH" <<'MARKETINGCLAW_TEST_STATE_JSON'
 {
   "update": {
     "channel": "stable"
   },
   "plugins": {}
 }
-OPENCLAW_TEST_STATE_JSON
+MARKETINGCLAW_TEST_STATE_JSON
       ;;
     upgrade-survivor)
-      cat > "$OPENCLAW_CONFIG_PATH" <<'OPENCLAW_TEST_STATE_JSON'
+      cat > "$MARKETINGCLAW_CONFIG_PATH" <<'MARKETINGCLAW_TEST_STATE_JSON'
 {
   "update": {
     "channel": "stable"
@@ -502,7 +502,7 @@ OPENCLAW_TEST_STATE_JSON
   "skills": {
     "allowBundled": [
       "memory",
-      "openclaw-testing"
+      "marketingclaw-testing"
     ],
     "limits": {
       "maxSkillsInPrompt": 8,
@@ -600,29 +600,29 @@ OPENCLAW_TEST_STATE_JSON
     }
   }
 }
-OPENCLAW_TEST_STATE_JSON
+MARKETINGCLAW_TEST_STATE_JSON
       ;;
     gateway-loopback)
-      cat > "$OPENCLAW_CONFIG_PATH" <<'OPENCLAW_TEST_STATE_JSON'
+      cat > "$MARKETINGCLAW_CONFIG_PATH" <<'MARKETINGCLAW_TEST_STATE_JSON'
 {
   "gateway": {
     "port": 18789,
     "auth": {
       "mode": "token",
-      "token": "openclaw-test-token"
+      "token": "marketingclaw-test-token"
     },
     "controlUi": {
       "enabled": false
     }
   }
 }
-OPENCLAW_TEST_STATE_JSON
+MARKETINGCLAW_TEST_STATE_JSON
       ;;
     external-service)
-      export OPENCLAW_SERVICE_REPAIR_POLICY="external"
-      cat > "$OPENCLAW_CONFIG_PATH" <<'OPENCLAW_TEST_STATE_JSON'
+      export MARKETINGCLAW_SERVICE_REPAIR_POLICY="external"
+      cat > "$MARKETINGCLAW_CONFIG_PATH" <<'MARKETINGCLAW_TEST_STATE_JSON'
 {}
-OPENCLAW_TEST_STATE_JSON
+MARKETINGCLAW_TEST_STATE_JSON
       ;;
   esac
 }

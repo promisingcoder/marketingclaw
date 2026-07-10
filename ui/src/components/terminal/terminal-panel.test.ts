@@ -50,9 +50,9 @@ vi.mock("./terminal-runtime.ts", () => {
   return { createIsolatedGhosttyTerminal: createGhosttyTerminalMock };
 });
 
-import { OpenClawTerminalPanel } from "./terminal-panel.ts";
+import { MarketingClawTerminalPanel } from "./terminal-panel.ts";
 
-describe("OpenClawTerminalPanel", () => {
+describe("MarketingClawTerminalPanel", () => {
   beforeEach(async () => {
     await i18n.setLocale("en");
   });
@@ -96,7 +96,9 @@ describe("OpenClawTerminalPanel", () => {
       },
       addEventListener: () => () => {},
     };
-    const panel = document.createElement("openclaw-terminal-panel") as OpenClawTerminalPanel;
+    const panel = document.createElement(
+      "marketingclaw-terminal-panel",
+    ) as MarketingClawTerminalPanel;
     panel.client = client;
     panel.agentId = "ops";
     panel.available = true;
@@ -112,7 +114,7 @@ describe("OpenClawTerminalPanel", () => {
     });
     expect(createOptions?.terminalOptions?.fontFamily).toContain("MesloLGLDZ Nerd Font Mono");
     expect(getComputedStyle(createOptions!.parent).caretColor).toBe("rgba(0, 0, 0, 0)");
-    const styles = (OpenClawTerminalPanel.styles as { cssText: string }).cssText;
+    const styles = (MarketingClawTerminalPanel.styles as { cssText: string }).cssText;
     expect(styles).toMatch(/\.tp-new\s*\{[^}]*align-self:\s*center/u);
     await vi.waitFor(() => {
       expect(requests).toContainEqual({
@@ -164,7 +166,9 @@ describe("OpenClawTerminalPanel", () => {
       },
       addEventListener: () => () => {},
     };
-    const panel = document.createElement("openclaw-terminal-panel") as OpenClawTerminalPanel;
+    const panel = document.createElement(
+      "marketingclaw-terminal-panel",
+    ) as MarketingClawTerminalPanel;
     panel.client = client;
     panel.available = true;
     panel.fullscreen = true;
@@ -233,7 +237,9 @@ describe("OpenClawTerminalPanel", () => {
         };
       },
     };
-    const panel = document.createElement("openclaw-terminal-panel") as OpenClawTerminalPanel;
+    const panel = document.createElement(
+      "marketingclaw-terminal-panel",
+    ) as MarketingClawTerminalPanel;
     panel.client = client;
     panel.available = true;
     document.body.append(panel);
@@ -259,7 +265,7 @@ describe("OpenClawTerminalPanel", () => {
       });
     });
     expect(controllers[0].dispose).toHaveBeenCalledOnce();
-    expect(sessionStorage.getItem("openclaw.terminal.sessions.v1")).toBe("[]");
+    expect(sessionStorage.getItem("marketingclaw.terminal.sessions.v1")).toBe("[]");
 
     panel.toggle();
     await vi.waitFor(() => {
@@ -296,14 +302,16 @@ describe("OpenClawTerminalPanel", () => {
       },
       addEventListener: () => () => {},
     };
-    const panel = document.createElement("openclaw-terminal-panel") as OpenClawTerminalPanel;
+    const panel = document.createElement(
+      "marketingclaw-terminal-panel",
+    ) as MarketingClawTerminalPanel;
     panel.client = oldClient;
     panel.available = true;
     document.body.append(panel);
     panel.toggle();
 
     await vi.waitFor(() => {
-      expect(sessionStorage.getItem("openclaw.terminal.sessions.v1")).toContain("old-session");
+      expect(sessionStorage.getItem("marketingclaw.terminal.sessions.v1")).toContain("old-session");
     });
     panel.client = newClient;
     await panel.updateComplete;
@@ -332,7 +340,9 @@ describe("OpenClawTerminalPanel", () => {
       },
       addEventListener: () => () => {},
     };
-    const panel = document.createElement("openclaw-terminal-panel") as OpenClawTerminalPanel;
+    const panel = document.createElement(
+      "marketingclaw-terminal-panel",
+    ) as MarketingClawTerminalPanel;
     panel.client = client;
     panel.available = true;
     document.body.append(panel);
@@ -367,7 +377,9 @@ describe("OpenClawTerminalPanel", () => {
         (method === "terminal.open" ? terminalOpenResult("session-1") : {}) as T,
       addEventListener: () => () => {},
     };
-    const panel = document.createElement("openclaw-terminal-panel") as OpenClawTerminalPanel;
+    const panel = document.createElement(
+      "marketingclaw-terminal-panel",
+    ) as MarketingClawTerminalPanel;
     panel.client = client;
     panel.available = true;
     document.body.append(panel);
@@ -389,7 +401,9 @@ describe("OpenClawTerminalPanel", () => {
   });
 
   it("removes a tab host even when controller disposal throws", () => {
-    const panel = document.createElement("openclaw-terminal-panel") as OpenClawTerminalPanel;
+    const panel = document.createElement(
+      "marketingclaw-terminal-panel",
+    ) as MarketingClawTerminalPanel;
     const host = document.createElement("div");
     document.body.append(host);
     const dispose = vi.fn(() => {
@@ -419,13 +433,15 @@ describe("OpenClawTerminalPanel", () => {
         };
       },
     };
-    const panel = document.createElement("openclaw-terminal-panel") as OpenClawTerminalPanel;
+    const panel = document.createElement(
+      "marketingclaw-terminal-panel",
+    ) as MarketingClawTerminalPanel;
     panel.client = client;
     panel.available = true;
     document.body.append(panel);
     panel.toggle();
     await vi.waitFor(() => {
-      expect(sessionStorage.getItem("openclaw.terminal.sessions.v1")).toContain("session-1");
+      expect(sessionStorage.getItem("marketingclaw.terminal.sessions.v1")).toContain("session-1");
     });
 
     listener?.({

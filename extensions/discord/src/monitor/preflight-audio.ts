@@ -1,9 +1,9 @@
 // Discord plugin module implements preflight audio behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import { getFileExtension } from "openclaw/plugin-sdk/media-mime";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import { createLazyRuntimeModule } from "marketingclaw/plugin-sdk/lazy-runtime";
+import { getFileExtension } from "marketingclaw/plugin-sdk/media-mime";
+import { logVerbose } from "marketingclaw/plugin-sdk/runtime-env";
+import { normalizeOptionalString } from "marketingclaw/plugin-sdk/string-coerce-runtime";
 
 const loadDiscordPreflightAudioRuntime = createLazyRuntimeModule(
   () => import("./preflight-audio.runtime.js"),
@@ -63,7 +63,7 @@ export async function resolveDiscordPreflightAudioMentionContext(params: {
   isDirectMessage: boolean;
   shouldRequireMention: boolean;
   mentionRegexes: RegExp[];
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   abortSignal?: AbortSignal;
 }): Promise<{
   hasAudioAttachment: boolean;

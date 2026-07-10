@@ -8,12 +8,12 @@ import { accessSync, constants as fsConstants } from "node:fs";
 import * as net from "node:net";
 import * as os from "node:os";
 import * as path from "node:path";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+import { isRecord } from "marketingclaw/plugin-sdk/string-coerce-runtime";
+import { truncateUtf16Safe } from "marketingclaw/plugin-sdk/text-utility-runtime";
 import {
   materializeWindowsSpawnProgram,
   resolveWindowsSpawnProgram,
-} from "openclaw/plugin-sdk/windows-spawn";
+} from "marketingclaw/plugin-sdk/windows-spawn";
 import WebSocket from "ws";
 import type { CodexJsonRpcConnection, CodexSupervisorEndpoint } from "./types.js";
 
@@ -54,7 +54,7 @@ export function resolveCodexSupervisorStdioSpawnInvocation(
   runtime: CodexSupervisorSpawnRuntime = DEFAULT_SPAWN_RUNTIME,
 ): { command: string; args: string[]; shell?: boolean; windowsHide?: boolean } {
   // The bundled supervisor consumes an installed Codex app/CLI; owning the
-  // managed package here would make every OpenClaw install download Codex.
+  // managed package here would make every MarketingClaw install download Codex.
   const command =
     endpoint.command ??
     (runtime.platform === "darwin" && runtime.isExecutable(MACOS_DESKTOP_CODEX_COMMAND)
@@ -99,7 +99,7 @@ export function resolveSafeApprovalResult(method: string): Record<string, unknow
       contentItems: [
         {
           type: "inputText",
-          text: "OpenClaw Codex supervisor did not register a handler for this app-server tool call.",
+          text: "MarketingClaw Codex supervisor did not register a handler for this app-server tool call.",
         },
       ],
       success: false,
@@ -117,7 +117,7 @@ export function resolveSafeApprovalResult(method: string): Record<string, unknow
   if (method.endsWith("/requestApproval")) {
     return {
       decision: "decline",
-      reason: "OpenClaw Codex supervisor does not grant native approvals.",
+      reason: "MarketingClaw Codex supervisor does not grant native approvals.",
     };
   }
   if (method === "item/tool/requestUserInput") {
@@ -139,8 +139,8 @@ abstract class BaseCodexJsonRpcConnection implements CodexJsonRpcConnection {
   async initialize(): Promise<void> {
     await this.request("initialize", {
       clientInfo: {
-        name: "openclaw-codex-supervisor",
-        title: "OpenClaw Codex Supervisor",
+        name: "marketingclaw-codex-supervisor",
+        title: "MarketingClaw Codex Supervisor",
         version: "0.1.0",
       },
       capabilities: {
@@ -195,7 +195,7 @@ abstract class BaseCodexJsonRpcConnection implements CodexJsonRpcConnection {
                 id,
                 error: {
                   code: -32601,
-                  message: `OpenClaw Codex supervisor cannot handle app-server request: ${method}`,
+                  message: `MarketingClaw Codex supervisor cannot handle app-server request: ${method}`,
                 },
               }
             : { id, result },

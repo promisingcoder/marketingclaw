@@ -183,7 +183,7 @@ describe("irc client readiness timeout", () => {
           tls: false,
           nick: "bot",
           username: "bot",
-          realname: "OpenClaw Bot",
+          realname: "MarketingClaw Bot",
           connectTimeoutMs: 50,
         }),
       ).rejects.toThrow(/IRC connect/);
@@ -216,14 +216,14 @@ describe("irc client fallback nick", () => {
     expect(nick).toMatch(/^mybot_\d*$/);
   });
 
-  it("falls back to openclaw when nick consists entirely of special characters", () => {
+  it("falls back to marketingclaw when nick consists entirely of special characters", () => {
     const nick = buildFallbackNick("!!!");
-    expect(nick).toMatch(/^openclaw_\d*$/);
+    expect(nick).toMatch(/^marketingclaw_\d*$/);
   });
 
-  it("falls back to openclaw when nick is empty after sanitization", () => {
+  it("falls back to marketingclaw when nick is empty after sanitization", () => {
     const nick = buildFallbackNick("");
-    expect(nick).toMatch(/^openclaw_\d*$/);
+    expect(nick).toMatch(/^marketingclaw_\d*$/);
   });
 
   it("truncates long nicks to max 30 chars", () => {
@@ -245,7 +245,7 @@ async function collectPrivmsgBodies(
     tls: false,
     nick: "bot",
     username: "bot",
-    realname: "OpenClaw Bot",
+    realname: "MarketingClaw Bot",
     connectTimeoutMs: 5000,
     messageChunkMaxChars,
   });

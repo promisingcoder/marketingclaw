@@ -9,7 +9,7 @@ import {
 
 function createLink(href: string, label = "GitHub item") {
   const provider = document.createElement(
-    "openclaw-github-link-hovercard-provider",
+    "marketingclaw-github-link-hovercard-provider",
   ) as GitHubLinkHovercardProvider;
   const anchor = document.createElement("a");
   anchor.href = href;
@@ -38,29 +38,40 @@ describe("parseGitHubIssueOrPullRequestLink", () => {
   it("parses issue and pull request links with trailing paths", () => {
     expect(
       parseGitHubIssueOrPullRequestLink(
-        "https://github.com/openclaw/openclaw/issues/99815#issuecomment-1",
+        "https://github.com/promisingcoder/marketingclaw/issues/99815#issuecomment-1",
       ),
-    ).toMatchObject({ kind: "issue", number: 99815, owner: "openclaw", repo: "openclaw" });
+    ).toMatchObject({
+      kind: "issue",
+      number: 99815,
+      owner: "marketingclaw",
+      repo: "marketingclaw",
+    });
     expect(
-      parseGitHubIssueOrPullRequestLink("https://github.com/openclaw/openclaw/pull/99816/files"),
-    ).toMatchObject({ kind: "pull", number: 99816, owner: "openclaw", repo: "openclaw" });
+      parseGitHubIssueOrPullRequestLink(
+        "https://github.com/promisingcoder/marketingclaw/pull/99816/files",
+      ),
+    ).toMatchObject({ kind: "pull", number: 99816, owner: "marketingclaw", repo: "marketingclaw" });
   });
 
   it("rejects non-item, non-HTTPS, credentialed, and non-GitHub links", () => {
-    expect(parseGitHubIssueOrPullRequestLink("https://github.com/openclaw/openclaw")).toBeNull();
     expect(
-      parseGitHubIssueOrPullRequestLink("http://github.com/openclaw/openclaw/issues/1"),
+      parseGitHubIssueOrPullRequestLink("https://github.com/promisingcoder/marketingclaw"),
     ).toBeNull();
     expect(
-      parseGitHubIssueOrPullRequestLink("https://user@github.com/openclaw/openclaw/issues/1"),
+      parseGitHubIssueOrPullRequestLink("http://github.com/promisingcoder/marketingclaw/issues/1"),
     ).toBeNull();
     expect(
-      parseGitHubIssueOrPullRequestLink("https://example.com/openclaw/openclaw/issues/1"),
+      parseGitHubIssueOrPullRequestLink(
+        "https://user@github.com/promisingcoder/marketingclaw/issues/1",
+      ),
+    ).toBeNull();
+    expect(
+      parseGitHubIssueOrPullRequestLink("https://example.com/marketingclaw/marketingclaw/issues/1"),
     ).toBeNull();
   });
 });
 
-describe("openclaw-github-link-hovercard-provider", () => {
+describe("marketingclaw-github-link-hovercard-provider", () => {
   beforeEach(() => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-07-05T10:00:00Z"));
@@ -86,13 +97,13 @@ describe("openclaw-github-link-hovercard-provider", () => {
       login: "steipete",
       mergedAt: "2026-07-04T09:53:52Z",
       number: 99816,
-      owner: "OpenClaw",
-      repo: "OpenClaw",
+      owner: "MarketingClaw",
+      repo: "MarketingClaw",
       state: "closed",
       title: "fix(agents): derive conversation scope from trusted group facts",
       updatedAt: "2026-07-05T09:55:00Z",
     });
-    const href = "https://github.com/openclaw/openclaw/pull/99816";
+    const href = "https://github.com/promisingcoder/marketingclaw/pull/99816";
     const { anchor, provider } = createLink(href, "#99816");
     provider.client = { request } as unknown as GatewayBrowserClient;
 
@@ -100,7 +111,7 @@ describe("openclaw-github-link-hovercard-provider", () => {
 
     const card = document.querySelector<HTMLElement>(".github-link-hovercard");
     expect(card?.textContent).toContain("Merged");
-    expect(card?.textContent).toContain("openclaw/openclaw #99816");
+    expect(card?.textContent).toContain("marketingclaw/marketingclaw #99816");
     expect(card?.textContent).toContain(
       "fix(agents): derive conversation scope from trusted group facts",
     );
@@ -114,8 +125,8 @@ describe("openclaw-github-link-hovercard-provider", () => {
     expect(request).toHaveBeenCalledWith("controlUi.githubPreview", {
       kind: "pull",
       number: 99816,
-      owner: "openclaw",
-      repo: "openclaw",
+      owner: "marketingclaw",
+      repo: "marketingclaw",
     });
 
     leave(anchor);
@@ -132,15 +143,15 @@ describe("openclaw-github-link-hovercard-provider", () => {
       kind: "issue",
       login: "octocat",
       number: 99815,
-      owner: "openclaw",
-      repo: "openclaw",
+      owner: "marketingclaw",
+      repo: "marketingclaw",
       state: "open",
       stateReason: null,
       title: "Keep hover previews compact",
       updatedAt: "2026-07-05T09:55:00Z",
     });
     const { anchor, provider } = createLink(
-      "https://github.com/openclaw/openclaw/issues/99815",
+      "https://github.com/promisingcoder/marketingclaw/issues/99815",
       "#99815",
     );
     provider.client = { request } as unknown as GatewayBrowserClient;
@@ -156,14 +167,20 @@ describe("openclaw-github-link-hovercard-provider", () => {
 
   it("ignores unsupported GitHub links and shows a quiet unavailable state", async () => {
     const request = vi.fn().mockRejectedValue(new Error("Not Found"));
-    const unsupportedLink = createLink("https://github.com/openclaw/openclaw", "repository");
+    const unsupportedLink = createLink(
+      "https://github.com/promisingcoder/marketingclaw",
+      "repository",
+    );
     unsupportedLink.provider.client = { request } as unknown as GatewayBrowserClient;
 
     await hover(unsupportedLink.anchor);
     expect(request).not.toHaveBeenCalled();
     expect(document.querySelector(".github-link-hovercard")).toBeNull();
 
-    const missingLink = createLink("https://github.com/openclaw/openclaw/issues/999999", "missing");
+    const missingLink = createLink(
+      "https://github.com/promisingcoder/marketingclaw/issues/999999",
+      "missing",
+    );
     missingLink.provider.client = { request } as unknown as GatewayBrowserClient;
     await hover(missingLink.anchor);
     expect(document.querySelector(".github-link-hovercard")?.textContent).toContain(
@@ -173,7 +190,9 @@ describe("openclaw-github-link-hovercard-provider", () => {
 
   it("preserves an existing description when hover ends before opening", async () => {
     const request = vi.fn();
-    const { anchor, provider } = createLink("https://github.com/openclaw/openclaw/issues/99815");
+    const { anchor, provider } = createLink(
+      "https://github.com/promisingcoder/marketingclaw/issues/99815",
+    );
     provider.client = { request } as unknown as GatewayBrowserClient;
     anchor.setAttribute("aria-describedby", "existing-description");
 

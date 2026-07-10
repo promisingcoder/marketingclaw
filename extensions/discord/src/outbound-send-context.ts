@@ -4,10 +4,10 @@ import {
   resolveOutboundSendDep,
   type OutboundSendDeps,
   type ReplyToResolution,
-} from "openclaw/plugin-sdk/channel-outbound";
-import type { OpenClawConfig, ReplyToMode } from "openclaw/plugin-sdk/config-contracts";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import { normalizeOptionalStringifiedId } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "marketingclaw/plugin-sdk/channel-outbound";
+import type { MarketingClawConfig, ReplyToMode } from "marketingclaw/plugin-sdk/config-contracts";
+import { createLazyRuntimeModule } from "marketingclaw/plugin-sdk/lazy-runtime";
+import { normalizeOptionalStringifiedId } from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import { resolveDiscordReplyReference } from "./reply-reference.js";
 
 type DiscordSendRuntime = typeof import("./send.js");
@@ -50,7 +50,7 @@ export function resolveDiscordFormattingOptions(ctx: {
 }
 
 export async function createDiscordPayloadSendContext(ctx: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   to: string;
   accountId?: string | null;
   deps?: OutboundSendDeps;

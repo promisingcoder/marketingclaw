@@ -1,8 +1,8 @@
 /** SQLite-backed ACP session metadata storage keyed through session-store entries. */
 import type { DatabaseSync } from "node:sqlite";
-import { safeParseJson } from "@openclaw/normalization-core";
-import { asOptionalRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { safeParseJson } from "@marketingclaw/normalization-core";
+import { asOptionalRecord } from "@marketingclaw/normalization-core/record-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@marketingclaw/normalization-core/string-coerce";
 import type { Insertable, Selectable } from "kysely";
 import { getRuntimeConfig } from "../../config/config.js";
 import { resolveStorePath } from "../../config/sessions/paths.js";
@@ -18,23 +18,23 @@ import {
   type SessionAcpMeta,
   type SessionEntry,
 } from "../../config/sessions/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import {
   executeSqliteQuerySync,
   executeSqliteQueryTakeFirstSync,
   getNodeSqliteKysely,
 } from "../../infra/kysely-sync.js";
 import { parseAgentSessionKey } from "../../routing/session-key.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../../state/openclaw-state-db.generated.js";
+import type { DB as MarketingClawStateKyselyDatabase } from "../../state/marketingclaw-state-db.generated.js";
 import {
-  openOpenClawStateDatabase,
-  type OpenClawStateDatabaseOptions,
-  runOpenClawStateWriteTransaction,
-} from "../../state/openclaw-state-db.js";
+  openMarketingClawStateDatabase,
+  type MarketingClawStateDatabaseOptions,
+  runMarketingClawStateWriteTransaction,
+} from "../../state/marketingclaw-state-db.js";
 
 /** ACP metadata joined with its legacy session-store row and config context. */
 export type AcpSessionStoreEntry = {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   storePath: string;
   sessionKey: string;
   storeSessionKey: string;
@@ -44,8 +44,8 @@ export type AcpSessionStoreEntry = {
 };
 
 // ACP metadata lives in SQLite but is keyed through the legacy JSON session store.
-type AcpSessionsTable = OpenClawStateKyselyDatabase["acp_sessions"];
-type AcpSessionMetaDatabase = Pick<OpenClawStateKyselyDatabase, "acp_sessions">;
+type AcpSessionsTable = MarketingClawStateKyselyDatabase["acp_sessions"];
+type AcpSessionMetaDatabase = Pick<MarketingClawStateKyselyDatabase, "acp_sessions">;
 type AcpSessionRow = Selectable<AcpSessionsTable>;
 
 function resolveStoreSessionKey(
@@ -74,9 +74,9 @@ function resolveStoreSessionKey(
 /** Resolves the session store path that owns an ACP session key. */
 export function resolveSessionStorePathForAcp(params: {
   sessionKey: string;
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
   env?: NodeJS.ProcessEnv;
-}): { cfg: OpenClawConfig; storePath: string } {
+}): { cfg: MarketingClawConfig; storePath: string } {
   const cfg = params.cfg ?? getRuntimeConfig();
   const parsed = parseAgentSessionKey(params.sessionKey);
   const storePath = resolveStorePath(cfg.session?.store, {
@@ -156,7 +156,7 @@ function acpSessionRowMatchesEntry(
 
 export function readAcpSessionMeta(params: {
   sessionKey: string;
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
   env?: NodeJS.ProcessEnv;
   databasePath?: string;
 }): SessionAcpMeta | undefined {
@@ -170,7 +170,7 @@ export function readAcpSessionMeta(params: {
     env: params.env,
     clone: false,
   });
-  const database = openOpenClawStateDatabase({
+  const database = openMarketingClawStateDatabase({
     env: params.env,
     path: params.databasePath,
   });
@@ -191,7 +191,7 @@ export function readAcpSessionMetaForEntry(params: {
   if (!sessionKey) {
     return undefined;
   }
-  const database = openOpenClawStateDatabase({
+  const database = openMarketingClawStateDatabase({
     env: params.env,
     path: params.databasePath,
   });
@@ -202,8 +202,8 @@ export function readAcpSessionMetaForEntry(params: {
   return rowToAcpSessionMeta(row);
 }
 
-function selectAcpSessionRows(options: OpenClawStateDatabaseOptions = {}): AcpSessionRow[] {
-  const database = openOpenClawStateDatabase(options);
+function selectAcpSessionRows(options: MarketingClawStateDatabaseOptions = {}): AcpSessionRow[] {
+  const database = openMarketingClawStateDatabase(options);
   return executeSqliteQuerySync(
     database.db,
     getAcpSessionKysely(database.db)
@@ -232,7 +232,7 @@ export function writeAcpSessionMetaForMigration(params: {
     meta: params.meta,
     updatedAt: params.now?.() ?? Date.now(),
   });
-  runOpenClawStateWriteTransaction(
+  runMarketingClawStateWriteTransaction(
     (database) => {
       upsertAcpSessionMetaRow(database.db, row);
     },
@@ -254,7 +254,7 @@ export function repairAcpSessionMetaKeyForMigration(params: {
   }
 
   let repaired = false;
-  runOpenClawStateWriteTransaction(
+  runMarketingClawStateWriteTransaction(
     (database) => {
       const currentRow = selectAcpSessionRow(database.db, sessionKey);
       if (currentRow && acpSessionRowMatchesEntry(currentRow, params.entry)) {
@@ -344,11 +344,11 @@ function upsertAcpSessionMetaRow(db: DatabaseSync, row: Insertable<AcpSessionsTa
 
 function readSessionEntryFromStore(params: {
   sessionKey: string;
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
   env?: NodeJS.ProcessEnv;
   clone?: boolean;
 }): {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   storePath: string;
   storeSessionKey: string;
   entry?: SessionEntry;
@@ -379,7 +379,7 @@ function readSessionEntryFromStore(params: {
 
 export function readAcpSessionEntry(params: {
   sessionKey: string;
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
   clone?: boolean;
   env?: NodeJS.ProcessEnv;
   databasePath?: string;
@@ -389,7 +389,7 @@ export function readAcpSessionEntry(params: {
     return null;
   }
   const storeEntry = readSessionEntryFromStore(params);
-  const database = openOpenClawStateDatabase({
+  const database = openMarketingClawStateDatabase({
     env: params.env,
     path: params.databasePath,
   });
@@ -408,7 +408,7 @@ export function readAcpSessionEntry(params: {
 }
 
 export async function listAcpSessionEntries(params: {
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
   env?: NodeJS.ProcessEnv;
   clone?: boolean;
   databasePath?: string;
@@ -474,7 +474,7 @@ function sessionStoreUpdateOptions(params: {
 
 export async function upsertAcpSessionMeta(params: {
   sessionKey: string;
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
   env?: NodeJS.ProcessEnv;
   databasePath?: string;
   now?: () => number;
@@ -501,7 +501,7 @@ export async function upsertAcpSessionMeta(params: {
   let nextMeta: SessionAcpMeta | null | undefined;
   let preparedEntry: SessionEntry | undefined;
   const updatedAt = params.now?.() ?? Date.now();
-  runOpenClawStateWriteTransaction(
+  runMarketingClawStateWriteTransaction(
     (database) => {
       const currentRow = selectAcpSessionRow(database.db, storageSessionKey);
       current =
@@ -535,7 +535,7 @@ export async function upsertAcpSessionMeta(params: {
           },
         )
       : null;
-    runOpenClawStateWriteTransaction(
+    runMarketingClawStateWriteTransaction(
       (database) => {
         const sessionKeysToDelete = new Set([storageSessionKey]);
         if (patched?.sessionKey) {
@@ -572,7 +572,7 @@ export async function upsertAcpSessionMeta(params: {
   if (!persisted) {
     return null;
   }
-  runOpenClawStateWriteTransaction(
+  runMarketingClawStateWriteTransaction(
     (database) => {
       upsertAcpSessionMetaRow(
         database.db,

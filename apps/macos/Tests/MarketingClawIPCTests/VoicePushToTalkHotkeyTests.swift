@@ -1,6 +1,6 @@
 import AppKit
 import Testing
-@testable import OpenClaw
+@testable import MarketingClaw
 
 @Suite(.serialized) struct VoicePushToTalkHotkeyTests {
     actor Counter {

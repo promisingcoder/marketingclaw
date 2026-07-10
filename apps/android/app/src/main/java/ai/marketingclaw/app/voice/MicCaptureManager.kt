@@ -1,6 +1,6 @@
-package ai.openclaw.app.voice
+package ai.marketingclaw.app.voice
 
-import ai.openclaw.app.gateway.ChatSendAck
+import ai.marketingclaw.app.gateway.ChatSendAck
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context

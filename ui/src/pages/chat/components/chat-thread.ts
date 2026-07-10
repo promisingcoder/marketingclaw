@@ -1,5 +1,5 @@
 // Chat-owned message thread presentation and thread-local interaction state.
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { truncateUtf16Safe } from "@marketingclaw/normalization-core/utf16-slice";
 import { html, nothing, type TemplateResult } from "lit";
 import { guard } from "lit/directives/guard.js";
 import { ref } from "lit/directives/ref.js";
@@ -353,7 +353,7 @@ export function renderChatSearchBar(
           requestUpdate();
         }}
       />
-      <openclaw-tooltip content="Close search">
+      <marketingclaw-tooltip content="Close search">
         <button
           class="btn btn--ghost"
           aria-label="Close search"
@@ -365,7 +365,7 @@ export function renderChatSearchBar(
         >
           ${icons.x}
         </button>
-      </openclaw-tooltip>
+      </marketingclaw-tooltip>
     </div>
   `;
 }
@@ -434,7 +434,7 @@ export function renderChatPinnedMessages(
                     <span class="agent-chat__pinned-text"
                       >${truncateUtf16Safe(text, 100)}${text.length > 100 ? "..." : ""}</span
                     >
-                    <openclaw-tooltip content="Unpin">
+                    <marketingclaw-tooltip content="Unpin">
                       <button
                         class="btn btn--ghost"
                         aria-label="Unpin"
@@ -445,7 +445,7 @@ export function renderChatPinnedMessages(
                       >
                         ${icons.x}
                       </button>
-                    </openclaw-tooltip>
+                    </marketingclaw-tooltip>
                   </div>
                 `,
               )}

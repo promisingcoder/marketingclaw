@@ -13,10 +13,10 @@ import {
   Text,
   TUI,
 } from "@earendil-works/pi-tui";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@marketingclaw/normalization-core/string-coerce";
 import type { CommandEntry } from "../../packages/gateway-protocol/src/index.js";
 import { resolveAgentIdByWorkspacePath, resolveDefaultAgentId } from "../agents/agent-scope.js";
-import { getRuntimeConfig, type OpenClawConfig } from "../config/config.js";
+import { getRuntimeConfig, type MarketingClawConfig } from "../config/config.js";
 import { isChatStopCommandText } from "../gateway/chat-abort.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { tryProcessCwd } from "../infra/safe-cwd.js";
@@ -86,12 +86,16 @@ export {
   shouldEnableWindowsGitBashPasteFallback,
 } from "./tui-submit.js";
 
-const OPENCLAW_CLI_WRAPPER_PATH = fileURLToPath(new URL("../../openclaw.mjs", import.meta.url));
-const OPENCLAW_RUN_NODE_SCRIPT_PATH = fileURLToPath(
+const MARKETINGCLAW_CLI_WRAPPER_PATH = fileURLToPath(
+  new URL("../../marketingclaw.mjs", import.meta.url),
+);
+const MARKETINGCLAW_RUN_NODE_SCRIPT_PATH = fileURLToPath(
   new URL("../../scripts/run-node.mjs", import.meta.url),
 );
-const OPENCLAW_DIST_ENTRY_JS_PATH = fileURLToPath(new URL("../../dist/entry.js", import.meta.url));
-const OPENCLAW_DIST_ENTRY_MJS_PATH = fileURLToPath(
+const MARKETINGCLAW_DIST_ENTRY_JS_PATH = fileURLToPath(
+  new URL("../../dist/entry.js", import.meta.url),
+);
+const MARKETINGCLAW_DIST_ENTRY_MJS_PATH = fileURLToPath(
   new URL("../../dist/entry.mjs", import.meta.url),
 );
 
@@ -99,7 +103,7 @@ const OPENAI_CODEX_PROVIDER = "openai";
 
 type RunTuiOptions = TuiOptions & {
   backend?: TuiBackend;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   title?: string;
 };
 
@@ -125,11 +129,12 @@ export function resolveLocalAuthCliInvocation(params?: {
 }): { command: string; args: string[] } {
   const hasDistEntry =
     params?.hasDistEntry ??
-    (existsSync(OPENCLAW_DIST_ENTRY_JS_PATH) || existsSync(OPENCLAW_DIST_ENTRY_MJS_PATH));
-  const hasRunNodeScript = params?.hasRunNodeScript ?? existsSync(OPENCLAW_RUN_NODE_SCRIPT_PATH);
+    (existsSync(MARKETINGCLAW_DIST_ENTRY_JS_PATH) || existsSync(MARKETINGCLAW_DIST_ENTRY_MJS_PATH));
+  const hasRunNodeScript =
+    params?.hasRunNodeScript ?? existsSync(MARKETINGCLAW_RUN_NODE_SCRIPT_PATH);
   const command = params?.execPath ?? process.execPath;
-  const wrapperPath = params?.wrapperPath ?? OPENCLAW_CLI_WRAPPER_PATH;
-  const runNodePath = params?.runNodePath ?? OPENCLAW_RUN_NODE_SCRIPT_PATH;
+  const wrapperPath = params?.wrapperPath ?? MARKETINGCLAW_CLI_WRAPPER_PATH;
+  const runNodePath = params?.runNodePath ?? MARKETINGCLAW_RUN_NODE_SCRIPT_PATH;
 
   // Prefer the packaged wrapper when build output exists, but keep source-tree
   // auth working in unbuilt checkouts that only have scripts/run-node.mjs.
@@ -160,13 +165,13 @@ export function resolveLocalAuthSpawnInvocation(params: {
 
 export function resolveLocalAuthSpawnCwd(params: { args: string[]; defaultCwd?: string }): string {
   const defaultCwd =
-    params.defaultCwd ?? tryProcessCwd() ?? path.dirname(OPENCLAW_CLI_WRAPPER_PATH);
+    params.defaultCwd ?? tryProcessCwd() ?? path.dirname(MARKETINGCLAW_CLI_WRAPPER_PATH);
   const entryArg = params.args[0]?.trim();
   if (!entryArg) {
     return defaultCwd;
   }
   const entryBase = path.basename(entryArg).toLowerCase();
-  if (entryBase === "openclaw.mjs") {
+  if (entryBase === "marketingclaw.mjs") {
     return path.dirname(entryArg);
   }
   if (entryBase === "run-node.mjs") {
@@ -201,7 +206,7 @@ export function resolveTuiSessionKey(params: {
 }
 
 export function resolveTuiFooterHostLabel(params: {
-  config: OpenClawConfig;
+  config: MarketingClawConfig;
   connectionUrl: string;
 }): string | null {
   if (params.config.tui?.footer?.showRemoteHost !== true) {
@@ -211,7 +216,7 @@ export function resolveTuiFooterHostLabel(params: {
 }
 
 export function resolveInitialTuiAgentId(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   fallbackAgentId: string;
   initialSessionInput?: string;
   cwd?: string;
@@ -242,8 +247,8 @@ export function resolveGatewayDisconnectState(reason?: string): {
       connectionStatus: `gateway disconnected: ${reasonLabel}`,
       activityStatus: "device approval needed: preview latest request",
       pairingHint:
-        "Device approval needed. Run `openclaw devices approve --latest` to preview the pending request, " +
-        "then rerun the printed `openclaw devices approve <requestId>` command " +
+        "Device approval needed. Run `marketingclaw devices approve --latest` to preview the pending request, " +
+        "then rerun the printed `marketingclaw devices approve <requestId>` command " +
         "(reuse `--token` or other auth flags if needed), then reconnect.",
     };
   }
@@ -468,7 +473,7 @@ export function scheduleProcessExitAfterTuiReturn(
     });
   const timer = setTimeoutFn(() => {
     try {
-      writeStderr("openclaw tui forcing process exit after return\n");
+      writeStderr("marketingclaw tui forcing process exit after return\n");
     } catch {
       // Best effort only; forced exit must not depend on stderr.
     }
@@ -523,7 +528,7 @@ export function resolveTuiCtrlCAction(params: {
   return resolveCtrlCAction(params);
 }
 
-function resolveEmptySessionInfoDefaults(config: OpenClawConfig): SessionInfo {
+function resolveEmptySessionInfoDefaults(config: MarketingClawConfig): SessionInfo {
   return {
     verboseLevel: config.agents?.defaults?.verboseDefault,
   };
@@ -532,7 +537,7 @@ function resolveEmptySessionInfoDefaults(config: OpenClawConfig): SessionInfo {
 export async function runTui(opts: RunTuiOptions): Promise<TuiResult> {
   const isLocalMode = opts.local === true || opts.backend !== undefined;
   const config = opts.config ?? getRuntimeConfig({ skipPluginValidation: !isLocalMode });
-  const fallbackCwd = path.dirname(OPENCLAW_CLI_WRAPPER_PATH);
+  const fallbackCwd = path.dirname(MARKETINGCLAW_CLI_WRAPPER_PATH);
   const resolveUsableCwd = () => tryProcessCwd() ?? fallbackCwd;
   const emptySessionInfoDefaults = resolveEmptySessionInfoDefaults(config);
   const initialSessionInput = (opts.session ?? "").trim();
@@ -788,7 +793,7 @@ export async function runTui(opts: RunTuiOptions): Promise<TuiResult> {
       : null
     : null;
   if (isLocalMode) {
-    setConsoleSubsystemFilter(["__openclaw_tui_quiet__"]);
+    setConsoleSubsystemFilter(["__marketingclaw_tui_quiet__"]);
   }
 
   const tui = new TUI(new ProcessTerminal());
@@ -987,7 +992,7 @@ export async function runTui(opts: RunTuiOptions): Promise<TuiResult> {
   const updateHeader = () => {
     const sessionLabel = formatSessionKey(currentSessionKey);
     const agentLabel = formatAgentLabel(currentAgentId);
-    const title = opts.title ?? "openclaw tui";
+    const title = opts.title ?? "marketingclaw tui";
     header.setText(
       theme.header(
         `${title} - ${client.connection.url} - agent ${agentLabel} - session ${sessionLabel}`,
@@ -1181,7 +1186,7 @@ export async function runTui(opts: RunTuiOptions): Promise<TuiResult> {
       return await work();
     } finally {
       if (isLocalMode) {
-        setConsoleSubsystemFilter(["__openclaw_tui_quiet__"]);
+        setConsoleSubsystemFilter(["__marketingclaw_tui_quiet__"]);
       }
       tui.start();
       tui.setFocus(editor);
@@ -1365,7 +1370,7 @@ export async function runTui(opts: RunTuiOptions): Promise<TuiResult> {
   const deferredFinish = createDeferredTuiFinish();
   const forceExit = () => {
     try {
-      process.stderr.write("openclaw tui forcing exit\n");
+      process.stderr.write("marketingclaw tui forcing exit\n");
     } catch {
       // Best effort only; force exit must not depend on stderr.
     }
@@ -1398,7 +1403,7 @@ export async function runTui(opts: RunTuiOptions): Promise<TuiResult> {
       .catch((err: unknown) => {
         if (!isTuiTerminalLossError(err)) {
           try {
-            process.stderr.write(`openclaw tui shutdown failed: ${String(err)}\n`);
+            process.stderr.write(`marketingclaw tui shutdown failed: ${String(err)}\n`);
           } catch {
             // Best effort only; exit must still complete.
           }

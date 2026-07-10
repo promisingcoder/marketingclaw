@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { MarketingClawConfig } from "../../config/config.js";
 import type { RuntimeEnv } from "../../runtime.js";
 import { modelsAliasesListCommand, modelsAliasesRemoveCommand } from "./aliases.js";
 
@@ -30,7 +30,7 @@ function makeRuntime(): RuntimeEnv & { logs: string[] } {
   };
 }
 
-function snapshot(sourceConfig: OpenClawConfig) {
+function snapshot(sourceConfig: MarketingClawConfig) {
   return {
     valid: true,
     hash: "snapshot-hash",
@@ -48,7 +48,7 @@ describe("modelsAliasesRemoveCommand", () => {
   });
 
   it("removes a user-added alias from the source config", async () => {
-    const cfg: OpenClawConfig = {
+    const cfg: MarketingClawConfig = {
       agents: {
         defaults: {
           models: {
@@ -56,7 +56,7 @@ describe("modelsAliasesRemoveCommand", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
     mocks.readConfigFileSnapshot.mockResolvedValue(snapshot(cfg));
     mocks.replaceConfigFile.mockResolvedValue(undefined);
 
@@ -64,7 +64,7 @@ describe("modelsAliasesRemoveCommand", () => {
 
     expect(mocks.replaceConfigFile).toHaveBeenCalledOnce();
     const [replaceParams] = mocks.replaceConfigFile.mock.calls[0] ?? [];
-    const written = replaceParams?.nextConfig as OpenClawConfig;
+    const written = replaceParams?.nextConfig as MarketingClawConfig;
     expect(written.agents?.defaults?.models?.["openai/gpt-5.4-mini"]?.alias).toBeUndefined();
   });
 
@@ -72,7 +72,7 @@ describe("modelsAliasesRemoveCommand", () => {
     // Source config: model entry exists but no user-set alias. applyModelDefaults
     // would materialize `gpt-mini -> openai/gpt-5.4-mini` into the resolved config,
     // so `list` shows it, but it is not stored in the source config.
-    const cfg: OpenClawConfig = {
+    const cfg: MarketingClawConfig = {
       agents: {
         defaults: {
           models: {
@@ -80,7 +80,7 @@ describe("modelsAliasesRemoveCommand", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
     mocks.readConfigFileSnapshot.mockResolvedValue(snapshot(cfg));
 
     await expect(modelsAliasesRemoveCommand("gpt-mini", makeRuntime())).rejects.toThrow(
@@ -95,7 +95,7 @@ describe("modelsAliasesRemoveCommand", () => {
     // the `gemini` built-in alias (see src/config/model-alias-defaults.test.ts:135-144), so
     // `list` shows `gemini`. `remove gemini` must compare against the normalized key and
     // return the actionable built-in error, not the misleading generic "Alias not found".
-    const cfg: OpenClawConfig = {
+    const cfg: MarketingClawConfig = {
       agents: {
         defaults: {
           models: {
@@ -103,7 +103,7 @@ describe("modelsAliasesRemoveCommand", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
     mocks.readConfigFileSnapshot.mockResolvedValue(snapshot(cfg));
 
     await expect(modelsAliasesRemoveCommand("gemini", makeRuntime())).rejects.toThrow(
@@ -117,7 +117,7 @@ describe("modelsAliasesRemoveCommand", () => {
     // honors the opt-out (see src/config/defaults.ts:337 and src/config/model-alias-defaults.test.ts:106),
     // so `list` does not show `gemini` and `remove gemini` should return the plain
     // not-found error rather than the "built-in alias" error.
-    const cfg: OpenClawConfig = {
+    const cfg: MarketingClawConfig = {
       agents: {
         defaults: {
           models: {
@@ -125,7 +125,7 @@ describe("modelsAliasesRemoveCommand", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
     mocks.readConfigFileSnapshot.mockResolvedValue(snapshot(cfg));
 
     await expect(modelsAliasesRemoveCommand("gemini", makeRuntime())).rejects.toThrow(
@@ -135,9 +135,9 @@ describe("modelsAliasesRemoveCommand", () => {
   });
 
   it("falls back to 'Alias not found' when the alias is neither user-added nor a materialized built-in", async () => {
-    const cfg: OpenClawConfig = {
+    const cfg: MarketingClawConfig = {
       agents: { defaults: { models: {} } },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
     mocks.readConfigFileSnapshot.mockResolvedValue(snapshot(cfg));
 
     await expect(modelsAliasesRemoveCommand("does-not-exist", makeRuntime())).rejects.toThrow(
@@ -154,7 +154,7 @@ describe("modelsAliasesRemoveCommand", () => {
     // User has explicitly set `gpt-mini` as the alias for a different target.
     // applyModelDefaults skips entries with an existing alias, so the user-set
     // alias is what `list` shows and `remove` should remove it normally.
-    const cfg: OpenClawConfig = {
+    const cfg: MarketingClawConfig = {
       agents: {
         defaults: {
           models: {
@@ -162,7 +162,7 @@ describe("modelsAliasesRemoveCommand", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
     mocks.readConfigFileSnapshot.mockResolvedValue(snapshot(cfg));
     mocks.replaceConfigFile.mockResolvedValue(undefined);
 
@@ -170,7 +170,7 @@ describe("modelsAliasesRemoveCommand", () => {
 
     expect(mocks.replaceConfigFile).toHaveBeenCalledOnce();
     const [replaceParams] = mocks.replaceConfigFile.mock.calls[0] ?? [];
-    const written = replaceParams?.nextConfig as OpenClawConfig;
+    const written = replaceParams?.nextConfig as MarketingClawConfig;
     expect(written.agents?.defaults?.models?.["openai/gpt-5.4-nano"]?.alias).toBeUndefined();
   });
 });
@@ -184,7 +184,7 @@ describe("modelsAliasesListCommand <-> modelsAliasesRemoveCommand agreement", ()
 
   it("any alias remove succeeds OR returns an explanatory error — never a misleading 'not found' for a listed alias", async () => {
     // Resolved config (what `list` reads) has the materialized built-in.
-    const resolvedCfg: OpenClawConfig = {
+    const resolvedCfg: MarketingClawConfig = {
       agents: {
         defaults: {
           models: {
@@ -193,9 +193,9 @@ describe("modelsAliasesListCommand <-> modelsAliasesRemoveCommand agreement", ()
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
     // Source config (what `remove` mutates) only has the user-set alias.
-    const sourceCfg: OpenClawConfig = {
+    const sourceCfg: MarketingClawConfig = {
       agents: {
         defaults: {
           models: {
@@ -204,7 +204,7 @@ describe("modelsAliasesListCommand <-> modelsAliasesRemoveCommand agreement", ()
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
 
     mocks.loadModelsConfig.mockResolvedValue(resolvedCfg);
     mocks.readConfigFileSnapshot.mockResolvedValue({

@@ -106,7 +106,7 @@ export async function cleanupCrestodianAgentSession(
 
 type CrestodianAgentTurnParams = Parameters<CrestodianAgentTurnRunner>[0];
 
-type RunConfig = import("../config/types.openclaw.js").OpenClawConfig;
+type RunConfig = import("../config/types.marketingclaw.js").MarketingClawConfig;
 
 type CrestodianAgentTurnPlan =
   | { runner: "cli"; runConfig: RunConfig; modelLabel: string; provider: string; model: string }
@@ -188,7 +188,7 @@ async function mirrorCrestodianToolStateFromEvents(params: {
       return;
     }
     const name = typeof evt.data.name === "string" ? evt.data.name : "";
-    // CLI harnesses report MCP tools with transport prefixes (mcp__openclaw__crestodian).
+    // CLI harnesses report MCP tools with transport prefixes (mcp__marketingclaw__crestodian).
     if (name !== "crestodian" && !name.endsWith("__crestodian")) {
       return;
     }

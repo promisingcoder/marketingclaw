@@ -1,7 +1,7 @@
-package ai.openclaw.app.gateway
+package ai.marketingclaw.app.gateway
 
-import ai.openclaw.app.NotificationNodeEventOutbox
-import ai.openclaw.app.PendingNotificationNodeEvent
+import ai.marketingclaw.app.NotificationNodeEventOutbox
+import ai.marketingclaw.app.PendingNotificationNodeEvent
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -925,7 +925,7 @@ class GatewaySessionReconnectTest {
           permissions = emptyMap(),
           client =
             GatewayClientInfo(
-              id = "openclaw-android-test",
+              id = "marketingclaw-android-test",
               displayName = "Android Test",
               version = "1.0.0-test",
               platform = "android",

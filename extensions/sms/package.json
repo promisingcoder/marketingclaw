@@ -1,19 +1,19 @@
 {
-  "name": "@openclaw/sms",
+  "name": "@marketingclaw/sms",
   "version": "2026.6.11",
-  "description": "OpenClaw SMS channel plugin for Twilio text messages.",
+  "description": "MarketingClaw SMS channel plugin for Twilio text messages.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/promisingcoder/marketingclaw"
   },
   "type": "module",
   "dependencies": {
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@marketingclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "marketingclaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -32,12 +32,12 @@
       "pluginApi": ">=2026.6.11"
     },
     "build": {
-      "openclawVersion": "2026.6.11",
+      "marketingclawVersion": "2026.6.11",
       "bundledDist": false
     },
     "install": {
-      "clawhubSpec": "clawhub:@openclaw/sms",
-      "npmSpec": "@openclaw/sms",
+      "clawhubSpec": "clawhub:@marketingclaw/sms",
+      "npmSpec": "@marketingclaw/sms",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.6.9",
       "allowInvalidConfigRecovery": true

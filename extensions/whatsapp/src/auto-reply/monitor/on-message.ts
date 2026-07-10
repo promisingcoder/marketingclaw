@@ -1,15 +1,15 @@
 // Whatsapp plugin module implements on message behavior.
-import type { AckReactionHandle } from "openclaw/plugin-sdk/channel-feedback";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { AckReactionHandle } from "marketingclaw/plugin-sdk/channel-feedback";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
 import {
   ensureConfiguredBindingRouteReady,
   resolveConfiguredBindingRoute,
-} from "openclaw/plugin-sdk/conversation-binding-runtime";
-import type { getReplyFromConfig } from "openclaw/plugin-sdk/reply-runtime";
-import type { MsgContext } from "openclaw/plugin-sdk/reply-runtime";
-import { resolveAgentRoute } from "openclaw/plugin-sdk/routing";
-import { buildGroupHistoryKey } from "openclaw/plugin-sdk/routing";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
+} from "marketingclaw/plugin-sdk/conversation-binding-runtime";
+import type { getReplyFromConfig } from "marketingclaw/plugin-sdk/reply-runtime";
+import type { MsgContext } from "marketingclaw/plugin-sdk/reply-runtime";
+import { resolveAgentRoute } from "marketingclaw/plugin-sdk/routing";
+import { buildGroupHistoryKey } from "marketingclaw/plugin-sdk/routing";
+import { logVerbose } from "marketingclaw/plugin-sdk/runtime-env";
 import { resolveWhatsAppAccount } from "../../accounts.js";
 import { resolveWhatsAppGroupSessionRoute } from "../../group-session-key.js";
 import { getPrimaryIdentityId, getSenderIdentity } from "../../identity.js";
@@ -39,8 +39,8 @@ import {
 } from "./status-reaction.js";
 
 export function createWebOnMessageHandler(params: {
-  cfg: OpenClawConfig;
-  loadConfig?: () => OpenClawConfig;
+  cfg: MarketingClawConfig;
+  loadConfig?: () => MarketingClawConfig;
   verbose: boolean;
   connectionId: string;
   maxMediaBytes: number;
@@ -50,7 +50,9 @@ export function createWebOnMessageHandler(params: {
   echoTracker: EchoTracker;
   backgroundTasks: Set<Promise<unknown>>;
   replyResolver: typeof getReplyFromConfig;
-  replyLogger: ReturnType<(typeof import("openclaw/plugin-sdk/runtime-env"))["getChildLogger"]>;
+  replyLogger: ReturnType<
+    (typeof import("marketingclaw/plugin-sdk/runtime-env"))["getChildLogger"]
+  >;
   baseMentionConfig: MentionConfig;
   account: { authDir?: string; accountId?: string; selfChatMode?: boolean };
 }) {
@@ -87,7 +89,7 @@ export function createWebOnMessageHandler(params: {
   };
 
   const processForRoute = async (
-    cfg: OpenClawConfig,
+    cfg: MarketingClawConfig,
     msg: AdmittedWebInboundMessage,
     route: ReturnType<typeof resolveAgentRoute>,
     groupHistoryKey: string,

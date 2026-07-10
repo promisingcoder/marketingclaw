@@ -1,5 +1,5 @@
 /**
- * Public descriptor contracts for the generic OpenClaw tool planner.
+ * Public descriptor contracts for the generic MarketingClaw tool planner.
  *
  * These types keep tool ownership, execution, availability, and protocol
  * metadata separate so core, plugins, channels, and MCP servers share one plan.

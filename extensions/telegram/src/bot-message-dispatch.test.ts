@@ -4,8 +4,8 @@ import {
   createPluginStateKeyedStoreForTests,
   createPluginStateSyncKeyedStoreForTests,
   resetPluginStateStoreForTests,
-} from "openclaw/plugin-sdk/plugin-state-test-runtime";
-import { setReplyPayloadMetadata } from "openclaw/plugin-sdk/reply-payload-testing";
+} from "marketingclaw/plugin-sdk/plugin-state-test-runtime";
+import { setReplyPayloadMetadata } from "marketingclaw/plugin-sdk/reply-payload-testing";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { resolveAutoTopicLabelConfig as resolveAutoTopicLabelConfigRuntime } from "./auto-topic-label-config.js";
 import type { TelegramBotDeps } from "./bot-deps.js";
@@ -99,7 +99,7 @@ const resolveDefaultModelForAgent = vi.hoisted(() =>
   vi.fn(() => ({ provider: "openai", model: "gpt-test" })),
 );
 const getAgentScopedMediaLocalRoots = vi.hoisted(() =>
-  vi.fn((_cfg: unknown, agentId: string) => [`/tmp/.openclaw/workspace-${agentId}`]),
+  vi.fn((_cfg: unknown, agentId: string) => [`/tmp/.marketingclaw/workspace-${agentId}`]),
 );
 const resolveChunkMode = vi.hoisted(() => vi.fn(() => undefined));
 const resolveMarkdownTableMode = vi.hoisted(() => vi.fn(() => "preserve"));
@@ -108,17 +108,17 @@ vi.mock("./draft-stream.js", () => ({
   createTelegramDraftStream,
 }));
 
-vi.mock("openclaw/plugin-sdk/channel-outbound", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/channel-outbound")>();
+vi.mock("marketingclaw/plugin-sdk/channel-outbound", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("marketingclaw/plugin-sdk/channel-outbound")>();
   return {
     ...actual,
     deliverInboundReplyWithMessageSendContext,
   };
 });
 
-vi.mock("openclaw/plugin-sdk/session-transcript-runtime", async (importOriginal) => {
+vi.mock("marketingclaw/plugin-sdk/session-transcript-runtime", async (importOriginal) => {
   const actual =
-    await importOriginal<typeof import("openclaw/plugin-sdk/session-transcript-runtime")>();
+    await importOriginal<typeof import("marketingclaw/plugin-sdk/session-transcript-runtime")>();
   return {
     ...actual,
     appendAssistantMirrorMessageByIdentity,
@@ -451,7 +451,7 @@ describe("dispatchTelegramMessage draft streaming", () => {
       removeAckAfterReply: false,
     } as unknown as TelegramMessageContext;
     base.turn = {
-      storePath: "/tmp/openclaw/telegram-sessions.json",
+      storePath: "/tmp/marketingclaw/telegram-sessions.json",
       recordInboundSession: vi.fn(async () => undefined),
       record: {
         onRecordError: vi.fn(),
@@ -679,9 +679,9 @@ describe("dispatchTelegramMessage draft streaming", () => {
     expect(draftStream.update).toHaveBeenCalledWith("Hello");
     const delivery = expectDeliverRepliesParams({ thread: { id: 777, scope: "dm" } });
     const mediaLocalRoots = delivery.mediaLocalRoots as string[] | undefined;
-    expect(mediaLocalRoots?.some((root) => /[\\/]\.openclaw[\\/]workspace-work$/u.test(root))).toBe(
-      true,
-    );
+    expect(
+      mediaLocalRoots?.some((root) => /[\\/]\.marketingclaw[\\/]workspace-work$/u.test(root)),
+    ).toBe(true);
     const dispatchParams = expectDispatchParams({});
     expect(
       typeof (dispatchParams.dispatcherOptions as { beforeDeliver?: unknown }).beforeDeliver,
@@ -840,7 +840,7 @@ describe("dispatchTelegramMessage draft streaming", () => {
         groupHistories,
         sendChatActionHandler,
         turn: {
-          storePath: "/tmp/openclaw/telegram-sessions.json",
+          storePath: "/tmp/marketingclaw/telegram-sessions.json",
           recordInboundSession,
           record: {
             updateLastRoute: {
@@ -1280,7 +1280,7 @@ describe("dispatchTelegramMessage draft streaming", () => {
         recoveredHistoryKey,
         [
           { sender: "Bob", body: "before self marker", timestamp: 2 },
-          { sender: "OpenClaw (you)", body: "self marker", timestamp: 3 },
+          { sender: "MarketingClaw (you)", body: "self marker", timestamp: 3 },
           { sender: "Dana", body: "after watermark", timestamp: 4 },
         ],
       ],
@@ -1973,7 +1973,7 @@ describe("dispatchTelegramMessage draft streaming", () => {
   });
 
   it("records streamed final replies into the prompt context cache", async () => {
-    const storePath = `/tmp/openclaw-telegram-stream-context-${process.pid}-${Date.now()}.json`;
+    const storePath = `/tmp/marketingclaw-telegram-stream-context-${process.pid}-${Date.now()}.json`;
     const transcriptTimestamp = Date.now() + 1_000;
     const context = createContext();
     context.ctxPayload.SessionKey = "agent:default:telegram:direct:123";

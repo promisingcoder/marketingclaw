@@ -1,7 +1,7 @@
 /**
  * Upload an image from a URL to Tlon storage.
  */
-import { MAX_IMAGE_BYTES, readRemoteMediaBuffer } from "openclaw/plugin-sdk/media-runtime";
+import { MAX_IMAGE_BYTES, readRemoteMediaBuffer } from "marketingclaw/plugin-sdk/media-runtime";
 import { uploadFile } from "../tlon-api.js";
 
 const TLON_UPLOAD_IMAGE_IDLE_TIMEOUT_MS = 30_000;

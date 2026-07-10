@@ -1,12 +1,12 @@
-# OpenClaw Cerebras Provider
+# MarketingClaw Cerebras Provider
 
-Official OpenClaw provider plugin for Cerebras.
+Official MarketingClaw provider plugin for Cerebras.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugins install @openclaw/cerebras-provider
-openclaw gateway restart
+marketingclaw plugins install @marketingclaw/cerebras-provider
+marketingclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/cerebras> for setup and configuration.
+See <https://docs.marketingclaw.ai/providers/cerebras> for setup and configuration.

@@ -2,8 +2,8 @@
  * Static provider discovery entry for Codex, used before the full plugin entry
  * is loaded.
  */
-import type { ProviderCatalogContext } from "openclaw/plugin-sdk/provider-catalog-shared";
-import type { ProviderPlugin } from "openclaw/plugin-sdk/provider-model-shared";
+import type { ProviderCatalogContext } from "marketingclaw/plugin-sdk/provider-catalog-shared";
+import type { ProviderPlugin } from "marketingclaw/plugin-sdk/provider-model-shared";
 import {
   buildCodexProviderConfig,
   CODEX_APP_SERVER_AUTH_MARKER,

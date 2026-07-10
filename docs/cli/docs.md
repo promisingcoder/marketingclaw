@@ -1,39 +1,39 @@
 ---
-summary: "CLI reference for `openclaw docs` (search the live docs index)"
+summary: "CLI reference for `marketingclaw docs` (search the live docs index)"
 read_when:
-  - You want to search the live OpenClaw docs from the terminal
+  - You want to search the live MarketingClaw docs from the terminal
   - You need to know which hosted search API the docs CLI calls
 title: "Docs"
 ---
 
-# `openclaw docs`
+# `marketingclaw docs`
 
-Search the live OpenClaw docs index from the terminal.
+Search the live MarketingClaw docs index from the terminal.
 
 ## Usage
 
 ```bash
-openclaw docs                       # print docs entrypoint and example search
-openclaw docs <query...>            # search the live docs index
+marketingclaw docs                       # print docs entrypoint and example search
+marketingclaw docs <query...>            # search the live docs index
 ```
 
 | Argument     | Description                                                                        |
 | ------------ | ---------------------------------------------------------------------------------- |
 | `[query...]` | Free-form search query. Multi-word queries are joined with spaces and sent as one. |
 
-With no query, `openclaw docs` prints the docs entrypoint URL and a sample search command instead of running a search.
+With no query, `marketingclaw docs` prints the docs entrypoint URL and a sample search command instead of running a search.
 
 ## Examples
 
 ```bash
-openclaw docs browser existing-session
-openclaw docs sandbox allowHostControl
-openclaw docs gateway token secretref
+marketingclaw docs browser existing-session
+marketingclaw docs sandbox allowHostControl
+marketingclaw docs gateway token secretref
 ```
 
 ## How it works
 
-`openclaw docs` calls `https://docs.openclaw.ai/api/search` and renders the JSON results. The search request uses a fixed 30 second timeout.
+`marketingclaw docs` calls `https://docs.marketingclaw.ai/api/search` and renders the JSON results. The search request uses a fixed 30 second timeout.
 
 ## Output
 
@@ -44,8 +44,8 @@ In non-rich output (piped, `--no-color`, scripts), the same data renders as Mark
 ```markdown
 # Docs search: <query>
 
-- [Title](https://docs.openclaw.ai/...) - snippet
-- [Title](https://docs.openclaw.ai/...) - snippet
+- [Title](https://docs.marketingclaw.ai/...) - snippet
+- [Title](https://docs.marketingclaw.ai/...) - snippet
 ```
 
 ## Exit codes
@@ -58,4 +58,4 @@ In non-rich output (piped, `--no-color`, scripts), the same data renders as Mark
 ## Related
 
 - [CLI reference](/cli)
-- [Live docs](https://docs.openclaw.ai)
+- [Live docs](https://docs.marketingclaw.ai)

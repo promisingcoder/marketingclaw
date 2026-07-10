@@ -1,10 +1,10 @@
 // Nvidia tests cover index plugin behavior.
 import fs from "node:fs";
-import { createTestPluginApi } from "openclaw/plugin-sdk/plugin-test-api";
+import { createTestPluginApi } from "marketingclaw/plugin-sdk/plugin-test-api";
 import {
   registerSingleProviderPlugin,
   resolveProviderPluginChoice,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
+} from "marketingclaw/plugin-sdk/plugin-test-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import plugin from "./index.js";
 import {
@@ -19,7 +19,7 @@ const ssrfRuntimeMocks = vi.hoisted(() => ({
   })),
 }));
 
-vi.mock("openclaw/plugin-sdk/ssrf-runtime", () => ssrfRuntimeMocks);
+vi.mock("marketingclaw/plugin-sdk/ssrf-runtime", () => ssrfRuntimeMocks);
 
 type NvidiaManifest = {
   providerAuthChoices?: Array<Record<string, unknown>>;
@@ -30,7 +30,7 @@ type RegisteredModelCatalogProvider = Parameters<
 
 function readManifest(): NvidiaManifest {
   return JSON.parse(
-    fs.readFileSync(new URL("./openclaw.plugin.json", import.meta.url), "utf8"),
+    fs.readFileSync(new URL("./marketingclaw.plugin.json", import.meta.url), "utf8"),
   ) as NvidiaManifest;
 }
 

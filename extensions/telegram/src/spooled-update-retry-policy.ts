@@ -3,7 +3,7 @@ import {
   collectErrorGraphCandidates,
   formatErrorMessage,
   readErrorName,
-} from "openclaw/plugin-sdk/error-runtime";
+} from "marketingclaw/plugin-sdk/error-runtime";
 import { isTelegramMessageDispatchReplayForgetError } from "./message-dispatch-dedupe.js";
 import type { TelegramSpooledUpdate } from "./telegram-ingress-spool.js";
 

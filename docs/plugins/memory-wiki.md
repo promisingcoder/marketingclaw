@@ -32,7 +32,7 @@ A common local-first setup: QMD as the active memory backend for recall, and
 QMD + bridge mode example under [Configuration](#configuration).
 
 If bridge mode reports zero exported artifacts, the active memory plugin is
-not currently exposing public bridge inputs. Run `openclaw wiki doctor` first,
+not currently exposing public bridge inputs. Run `marketingclaw wiki doctor` first,
 then confirm the active memory plugin supports public artifacts.
 
 ## Vault modes
@@ -49,7 +49,7 @@ Bridge mode can index, per `bridge.*` config toggle:
 - memory event logs (`followMemoryEvents`)
 
 When bridge mode is active and `bridge.readMemoryArtifacts` is enabled,
-`openclaw wiki status`, `openclaw wiki doctor`, and `openclaw wiki bridge
+`marketingclaw wiki status`, `marketingclaw wiki doctor`, and `marketingclaw wiki bridge
 import` route through the running Gateway so they see the same active memory
 plugin context as agent/runtime memory. If bridge is disabled or artifact
 reads are off, those commands keep local/offline behavior.
@@ -69,7 +69,7 @@ reads are off, those commands keep local/offline behavior.
   reports/
   _attachments/
   _views/
-  .openclaw-wiki/
+  .marketingclaw-wiki/
 ```
 
 Managed content stays inside generated blocks; human note blocks are
@@ -84,13 +84,13 @@ preserved across regeneration.
 ## Open Knowledge Format imports
 
 ```bash
-openclaw wiki okf import ./bundles/ga4
+marketingclaw wiki okf import ./bundles/ga4
 ```
 
 Import an unpacked Open Knowledge Format bundle into wiki concept pages. Good
 fit when a data catalog, documentation crawler, or enrichment agent already
 produces OKF: keep OKF as the portable exchange artifact, let `memory-wiki`
-turn it into OpenClaw-native concept pages and compiled digests.
+turn it into MarketingClaw-native concept pages and compiled digests.
 
 - non-reserved `.md` files are concept documents
 - each imported concept requires a non-empty `type` frontmatter field; missing `type` produces a `missing-type` warning and the file is skipped
@@ -186,8 +186,8 @@ claims:
 Compile reads wiki pages, normalizes summaries, and emits stable
 machine-facing artifacts under:
 
-- `.openclaw-wiki/cache/agent-digest.json`
-- `.openclaw-wiki/cache/claims.jsonl`
+- `.marketingclaw-wiki/cache/agent-digest.json`
+- `.marketingclaw-wiki/cache/claims.jsonl`
 
 Agents and runtime code read these digests instead of scraping Markdown.
 Compiled output also powers first-pass wiki indexing for search/get, claim-id
@@ -276,13 +276,13 @@ Put config under `plugins.entries.memory-wiki.config`:
         config: {
           vaultMode: "isolated",
           vault: {
-            path: "~/.openclaw/wiki/main",
+            path: "~/.marketingclaw/wiki/main",
             renderMode: "obsidian",
           },
           obsidian: {
             enabled: true,
             useOfficialCli: true,
-            vaultName: "OpenClaw Wiki",
+            vaultName: "MarketingClaw Wiki",
             openAfterWrites: false,
           },
           bridge: {
@@ -326,7 +326,7 @@ Key toggles:
 | Key                                        | Values / default                               | Notes                                                    |
 | ------------------------------------------ | ---------------------------------------------- | -------------------------------------------------------- |
 | `vaultMode`                                | `isolated` (default), `bridge`, `unsafe-local` |                                                          |
-| `vault.path`                               | default `~/.openclaw/wiki/main`                |                                                          |
+| `vault.path`                               | default `~/.marketingclaw/wiki/main`           |                                                          |
 | `vault.renderMode`                         | `native` (default), `obsidian`                 |                                                          |
 | `bridge.readMemoryArtifacts`               | default `true`                                 | import active memory plugin public artifacts             |
 | `bridge.followMemoryEvents`                | default `true`                                 | include event logs in bridge mode                        |
@@ -385,17 +385,17 @@ intentionally enable compiled digest prompts.
 ## CLI
 
 ```bash
-openclaw wiki status
-openclaw wiki doctor
-openclaw wiki init
-openclaw wiki ingest ./notes/alpha.md
-openclaw wiki compile
-openclaw wiki lint
-openclaw wiki search "alpha"
-openclaw wiki get entity.alpha
-openclaw wiki apply synthesis "Alpha Summary" --body "..." --source-id source.alpha
-openclaw wiki bridge import
-openclaw wiki obsidian status
+marketingclaw wiki status
+marketingclaw wiki doctor
+marketingclaw wiki init
+marketingclaw wiki ingest ./notes/alpha.md
+marketingclaw wiki compile
+marketingclaw wiki lint
+marketingclaw wiki search "alpha"
+marketingclaw wiki get entity.alpha
+marketingclaw wiki apply synthesis "Alpha Summary" --body "..." --source-id source.alpha
+marketingclaw wiki bridge import
+marketingclaw wiki obsidian status
 ```
 
 See [CLI: wiki](/cli/wiki) for the full command reference, including

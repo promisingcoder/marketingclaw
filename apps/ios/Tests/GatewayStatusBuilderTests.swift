@@ -1,6 +1,6 @@
-import OpenClawKit
+import MarketingClawKit
 import Testing
-@testable import OpenClaw
+@testable import MarketingClaw
 
 struct GatewayStatusBuilderTests {
     @Test func `paused problem keeps error status`() {

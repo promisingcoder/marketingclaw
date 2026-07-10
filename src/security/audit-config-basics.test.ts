@@ -67,7 +67,7 @@ describe("security audit config basics", () => {
   });
 
   it("flags per-agent skill allowlists combined with host exec and a global mcporter registry", async () => {
-    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-audit-mcporter-"));
+    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-audit-mcporter-"));
     try {
       await fs.mkdir(path.join(stateDir, "skills", "config"), { recursive: true });
       await fs.writeFile(
@@ -94,7 +94,7 @@ describe("security audit config basics", () => {
           },
         },
         sourceConfig: {},
-        env: { OPENCLAW_STATE_DIR: stateDir },
+        env: { MARKETINGCLAW_STATE_DIR: stateDir },
         stateDir,
         includeFilesystem: false,
         includeChannelSecurity: false,
@@ -120,7 +120,7 @@ describe("security audit config basics", () => {
   });
 
   it("does not flag per-agent skill allowlists when matching agents deny exec", async () => {
-    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-audit-mcporter-deny-"));
+    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-audit-mcporter-deny-"));
     try {
       const report = await runSecurityAudit({
         config: {
@@ -136,7 +136,7 @@ describe("security audit config basics", () => {
           tools: { exec: { security: "deny" } },
         },
         sourceConfig: {},
-        env: { OPENCLAW_STATE_DIR: stateDir },
+        env: { MARKETINGCLAW_STATE_DIR: stateDir },
         stateDir,
         includeFilesystem: false,
         includeChannelSecurity: false,

@@ -114,7 +114,7 @@ function githubApiToken(): string | undefined {
 function githubApiHeaders(token?: string): Record<string, string> {
   const headers: Record<string, string> = {
     Accept: "application/vnd.github+json",
-    "User-Agent": "OpenClaw-Control-UI",
+    "User-Agent": "MarketingClaw-Control-UI",
     "X-GitHub-Api-Version": GITHUB_API_VERSION,
   };
   if (token) {
@@ -124,20 +124,13 @@ function githubApiHeaders(token?: string): Record<string, string> {
 }
 
 function isGitHubApiRedirect(status: number): boolean {
-  return (
-    status === 301 || status === 302 || status === 303 || status === 307 || status === 308
-  );
+  return status === 301 || status === 302 || status === 303 || status === 307 || status === 308;
 }
 
 function safeGitHubApiUrl(raw: string, base?: URL): URL | null {
   try {
     const url = new URL(raw, base);
-    if (
-      url.origin !== GITHUB_API_ORIGIN ||
-      url.username ||
-      url.password ||
-      url.port
-    ) {
+    if (url.origin !== GITHUB_API_ORIGIN || url.username || url.password || url.port) {
       return null;
     }
     return url;
@@ -232,10 +225,7 @@ async function assertPublicRepositoryUrl(
   }
 }
 
-function redirectedRepositoryApiUrl(
-  target: ControlUiGitHubPreviewTarget,
-  url: URL,
-): string | null {
+function redirectedRepositoryApiUrl(target: ControlUiGitHubPreviewTarget, url: URL): string | null {
   const segments = url.pathname.split("/").filter(Boolean);
   const collection = target.kind === "pull" ? "pulls" : "issues";
   if (

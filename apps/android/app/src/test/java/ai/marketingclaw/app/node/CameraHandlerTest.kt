@@ -1,4 +1,4 @@
-package ai.openclaw.app.node
+package ai.marketingclaw.app.node
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -27,7 +27,7 @@ class CameraHandlerTest {
 
   @Test
   fun cameraClipSession_closesRecordingUnbindsAndDeletesOwnedFile() {
-    val tempFile = File.createTempFile("openclaw-clip-test-", ".mp4")
+    val tempFile = File.createTempFile("marketingclaw-clip-test-", ".mp4")
     val cleanup = mutableListOf<String>()
     val session =
       CameraClipSession(
@@ -62,7 +62,7 @@ class CameraHandlerTest {
 
   @Test
   fun cameraClipSession_keepsFileTransferredToCaller() {
-    val tempFile = File.createTempFile("openclaw-clip-test-", ".mp4")
+    val tempFile = File.createTempFile("marketingclaw-clip-test-", ".mp4")
     try {
       val cleanup = mutableListOf<String>()
       val session =

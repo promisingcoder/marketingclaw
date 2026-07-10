@@ -1,4 +1,4 @@
-// Validates the current runtime against OpenClaw's Node engine floor.
+// Validates the current runtime against MarketingClaw's Node engine floor.
 import process from "node:process";
 import { defaultRuntime, type RuntimeEnv } from "../runtime.js";
 
@@ -70,7 +70,7 @@ export function detectRuntime(): RuntimeDetails {
   };
 }
 
-/** Returns whether a detected runtime meets OpenClaw's minimum runtime contract. */
+/** Returns whether a detected runtime meets MarketingClaw's minimum runtime contract. */
 export function runtimeSatisfies(details: RuntimeDetails): boolean {
   if (details.kind === "node") {
     return isSupportedNodeVersion(details.version);
@@ -78,7 +78,7 @@ export function runtimeSatisfies(details: RuntimeDetails): boolean {
   return false;
 }
 
-/** Checks a Node version label against OpenClaw's supported Node version range. */
+/** Checks a Node version label against MarketingClaw's supported Node version range. */
 export function isSupportedNodeVersion(version: string | null): boolean {
   const parsed = parseSemver(version);
   if (!parsed) {
@@ -157,11 +157,11 @@ export function assertSupportedRuntime(
 
   runtime.error(
     [
-      "openclaw requires Node >=22.19.0 <23 or >=23.11.0.",
+      "marketingclaw requires Node >=22.19.0 <23 or >=23.11.0.",
       `Detected: ${runtimeLabel} (exec: ${execLabel}).`,
       `PATH searched: ${details.pathEnv}`,
       "Install Node: https://nodejs.org/en/download",
-      "Upgrade Node and re-run openclaw.",
+      "Upgrade Node and re-run marketingclaw.",
     ].join("\n"),
   );
   runtime.exit(1);

@@ -1,7 +1,7 @@
 import Foundation
-import OpenClawKit
+import MarketingClawKit
 import Testing
-@testable import OpenClawChatUI
+@testable import MarketingClawChatUI
 
 private func chatTextMessage(
     role: String,
@@ -20,7 +20,7 @@ private func chatTextMessage(
         "timestamp": timestamp,
     ]
     if let idempotencyKey {
-        message["__openclaw"] = ["idempotencyKey": idempotencyKey]
+        message["__marketingclaw"] = ["idempotencyKey": idempotencyKey]
     }
     return AnyCodable(message)
 }
@@ -29,12 +29,12 @@ private func chatTextModelMessage(
     role: String,
     text: String,
     timestamp: Double,
-    idempotencyKey: String? = nil) -> OpenClawChatMessage
+    idempotencyKey: String? = nil) -> MarketingClawChatMessage
 {
-    OpenClawChatMessage(
+    MarketingClawChatMessage(
         role: role,
         content: [
-            OpenClawChatMessageContent(
+            MarketingClawChatMessageContent(
                 type: "text",
                 text: text,
                 mimeType: nil,
@@ -55,7 +55,7 @@ private func chatErrorMessage(role: String, errorMessage: String, timestamp: Dou
     ])
 }
 
-extension [OpenClawChatMessage] {
+extension [MarketingClawChatMessage] {
     fileprivate func containsUserText(_ text: String) -> Bool {
         contains { message in
             message.role == "user" &&
@@ -70,15 +70,15 @@ private func historyPayload(
     messages: [AnyCodable] = [],
     supportsActiveRunState: Bool = true,
     hasActiveRun: Bool? = nil,
-    inFlightRun: OpenClawChatInFlightRun? = nil) -> OpenClawChatHistoryPayload
+    inFlightRun: MarketingClawChatInFlightRun? = nil) -> MarketingClawChatHistoryPayload
 {
-    OpenClawChatHistoryPayload(
+    MarketingClawChatHistoryPayload(
         sessionKey: sessionKey,
         sessionId: sessionId,
         messages: messages,
         thinkingLevel: "off",
         sessionInfo: supportsActiveRunState
-            ? OpenClawChatSessionInfo(hasActiveRun: hasActiveRun ?? (inFlightRun != nil))
+            ? MarketingClawChatSessionInfo(hasActiveRun: hasActiveRun ?? (inFlightRun != nil))
             : nil,
         inFlightRun: inFlightRun)
 }
@@ -93,9 +93,9 @@ private func sessionEntry(
     archived: Bool = false,
     totalTokens: Int? = nil,
     totalTokensFresh: Bool? = nil,
-    contextTokens: Int? = nil) -> OpenClawChatSessionEntry
+    contextTokens: Int? = nil) -> MarketingClawChatSessionEntry
 {
-    OpenClawChatSessionEntry(
+    MarketingClawChatSessionEntry(
         key: key,
         kind: nil,
         displayName: displayName,
@@ -123,8 +123,8 @@ private func sessionEntry(
         archivedAt: archived ? updatedAt : nil)
 }
 
-private func sessionsListResponse(_ sessions: [OpenClawChatSessionEntry]) -> OpenClawChatSessionsListResponse {
-    OpenClawChatSessionsListResponse(
+private func sessionsListResponse(_ sessions: [MarketingClawChatSessionEntry]) -> MarketingClawChatSessionsListResponse {
+    MarketingClawChatSessionsListResponse(
         ts: nil,
         path: nil,
         count: sessions.count,
@@ -132,8 +132,8 @@ private func sessionsListResponse(_ sessions: [OpenClawChatSessionEntry]) -> Ope
         sessions: sessions)
 }
 
-private func thinkingOption(_ id: String, label: String? = nil) -> OpenClawChatThinkingLevelOption {
-    OpenClawChatThinkingLevelOption(id: id, label: label ?? id)
+private func thinkingOption(_ id: String, label: String? = nil) -> MarketingClawChatThinkingLevelOption {
+    MarketingClawChatThinkingLevelOption(id: id, label: label ?? id)
 }
 
 private func sessionEntry(
@@ -142,11 +142,11 @@ private func sessionEntry(
     model: String?,
     modelProvider: String? = nil,
     thinkingLevel: String? = nil,
-    thinkingLevels: [OpenClawChatThinkingLevelOption]? = nil,
+    thinkingLevels: [MarketingClawChatThinkingLevelOption]? = nil,
     thinkingOptions: [String]? = nil,
-    thinkingDefault: String? = nil) -> OpenClawChatSessionEntry
+    thinkingDefault: String? = nil) -> MarketingClawChatSessionEntry
 {
-    OpenClawChatSessionEntry(
+    MarketingClawChatSessionEntry(
         key: key,
         kind: nil,
         displayName: nil,
@@ -175,9 +175,9 @@ private func modelChoice(
     id: String,
     name: String,
     provider: String = "anthropic",
-    reasoning: Bool? = nil) -> OpenClawChatModelChoice
+    reasoning: Bool? = nil) -> MarketingClawChatModelChoice
 {
-    OpenClawChatModelChoice(
+    MarketingClawChatModelChoice(
         modelID: id,
         name: name,
         provider: provider,
@@ -186,10 +186,10 @@ private func modelChoice(
 }
 
 private func sessionsResponse(
-    _ session: OpenClawChatSessionEntry,
-    defaults: OpenClawChatSessionsDefaults? = nil) -> OpenClawChatSessionsListResponse
+    _ session: MarketingClawChatSessionEntry,
+    defaults: MarketingClawChatSessionsDefaults? = nil) -> MarketingClawChatSessionsListResponse
 {
-    OpenClawChatSessionsListResponse(
+    MarketingClawChatSessionsListResponse(
         ts: 1,
         path: nil,
         count: 1,
@@ -201,10 +201,10 @@ private func commandChoice(
     name: String,
     aliases: [String],
     description: String = "",
-    source: OpenClawChatCommandChoice.Source = .command,
-    acceptsArgs: Bool = false) -> OpenClawChatCommandChoice
+    source: MarketingClawChatCommandChoice.Source = .command,
+    acceptsArgs: Bool = false) -> MarketingClawChatCommandChoice
 {
-    OpenClawChatCommandChoice(
+    MarketingClawChatCommandChoice(
         id: "\(source.rawValue):\(name)",
         name: name,
         textAliases: aliases,
@@ -217,13 +217,13 @@ private func commandChoice(
 private func makeViewModel(
     sessionKey: String = "main",
     activeAgentId: String? = nil,
-    historyResponses: [OpenClawChatHistoryPayload],
+    historyResponses: [MarketingClawChatHistoryPayload],
     sessionRoutingContract: String? = nil,
-    sessionsResponses: [OpenClawChatSessionsListResponse] = [],
-    modelResponses: [[OpenClawChatModelChoice]] = [],
-    commandResponses: [[OpenClawChatCommandChoice]] = [],
+    sessionsResponses: [MarketingClawChatSessionsListResponse] = [],
+    modelResponses: [[MarketingClawChatModelChoice]] = [],
+    commandResponses: [[MarketingClawChatCommandChoice]] = [],
     requestHistoryHook: (@Sendable (String) async throws -> Void)? = nil,
-    historyResponseHook: (@Sendable (String, Int, [String]) async throws -> OpenClawChatHistoryPayload?)? = nil,
+    historyResponseHook: (@Sendable (String, Int, [String]) async throws -> MarketingClawChatHistoryPayload?)? = nil,
     setActiveSessionHook: (@Sendable (String) async throws -> Void)? = nil,
     createSessionHook: (@Sendable (String, String?) async throws -> Void)? = nil,
     resetSessionHook: (@Sendable (String) async throws -> Void)? = nil,
@@ -234,8 +234,8 @@ private func makeViewModel(
     setSessionPinnedHook: (@Sendable (String, Bool) async throws -> Void)? = nil,
     setSessionArchivedHook: (@Sendable (String, Bool) async throws -> Void)? = nil,
     listSessionsHook: (
-        @Sendable (TestSessionListQuery) async throws -> OpenClawChatSessionsListResponse?)? = nil,
-    sendMessageHook: (@Sendable (String) async throws -> OpenClawChatSendResponse)? = nil,
+        @Sendable (TestSessionListQuery) async throws -> MarketingClawChatSessionsListResponse?)? = nil,
+    sendMessageHook: (@Sendable (String) async throws -> MarketingClawChatSendResponse)? = nil,
     sendMessageStatus: String = "ok",
     waitForRunCompletionHook: (@Sendable (String, Int) async -> Bool)? = nil,
     healthResponses: [Bool] = [true],
@@ -243,7 +243,7 @@ private func makeViewModel(
     modelPickerStore: ChatModelPickerStore? = nil,
     onSessionChanged: (@MainActor (String) -> Void)? = nil,
     onThinkingLevelChanged: (@MainActor @Sendable (String) -> Void)? = nil) async
-    -> (TestChatTransport, OpenClawChatViewModel)
+    -> (TestChatTransport, MarketingClawChatViewModel)
 {
     // Default to a throwaway suite so model selections in unrelated tests never
     // write favorites/recents into the test host's standard UserDefaults.
@@ -272,7 +272,7 @@ private func makeViewModel(
         sendMessageStatus: sendMessageStatus,
         waitForRunCompletionHook: waitForRunCompletionHook,
         healthResponses: healthResponses)
-    let vm = OpenClawChatViewModel(
+    let vm = MarketingClawChatViewModel(
         sessionKey: sessionKey,
         transport: transport,
         activeAgentId: activeAgentId,
@@ -285,7 +285,7 @@ private func makeViewModel(
 }
 
 private func loadAndWaitBootstrap(
-    vm: OpenClawChatViewModel,
+    vm: MarketingClawChatViewModel,
     sessionId: String? = nil) async throws
 {
     await MainActor.run { vm.load() }
@@ -296,7 +296,7 @@ private func loadAndWaitBootstrap(
     }
 }
 
-private func sendUserMessage(_ vm: OpenClawChatViewModel, text: String = "hi") async {
+private func sendUserMessage(_ vm: MarketingClawChatViewModel, text: String = "hi") async {
     await MainActor.run {
         vm.input = text
         vm.send()
@@ -320,7 +320,7 @@ private func waitForSentRunId(after sentRunCount: Int, _ transport: TestChatTran
 @discardableResult
 private func sendMessageAndEmitFinal(
     transport: TestChatTransport,
-    vm: OpenClawChatViewModel,
+    vm: MarketingClawChatViewModel,
     text: String,
     sessionKey: String = "main") async throws -> String
 {
@@ -335,7 +335,7 @@ private func sendMessageAndEmitFinal(
 
     transport.emit(
         .chat(
-            OpenClawChatEventPayload(
+            MarketingClawChatEventPayload(
                 runId: runId,
                 sessionKey: sessionKey,
                 state: "final",
@@ -352,7 +352,7 @@ private func emitAssistantText(
 {
     transport.emit(
         .agent(
-            OpenClawAgentEventPayload(
+            MarketingClawAgentEventPayload(
                 runId: runId,
                 seq: seq,
                 stream: "assistant",
@@ -367,7 +367,7 @@ private func emitToolStart(
 {
     transport.emit(
         .agent(
-            OpenClawAgentEventPayload(
+            MarketingClawAgentEventPayload(
                 runId: runId,
                 seq: seq,
                 stream: "tool",
@@ -387,7 +387,7 @@ private func emitAgentLifecycleEnd(
 {
     transport.emit(
         .agent(
-            OpenClawAgentEventPayload(
+            MarketingClawAgentEventPayload(
                 runId: runId,
                 seq: seq,
                 stream: "lifecycle",
@@ -402,7 +402,7 @@ private func emitExternalFinal(
 {
     transport.emit(
         .chat(
-            OpenClawChatEventPayload(
+            MarketingClawChatEventPayload(
                 runId: runId,
                 sessionKey: sessionKey,
                 state: "final",
@@ -515,15 +515,15 @@ private actor TestChatTransportState {
     var archivedChanges: [(key: String, archived: Bool)] = []
 }
 
-private final class TestChatTransport: @unchecked Sendable, OpenClawChatTransport {
+private final class TestChatTransport: @unchecked Sendable, MarketingClawChatTransport {
     private let state = TestChatTransportState()
-    private let historyResponses: [OpenClawChatHistoryPayload]
-    private let sessionsResponses: [OpenClawChatSessionsListResponse]
-    private let modelResponses: [[OpenClawChatModelChoice]]
-    private let commandResponses: [[OpenClawChatCommandChoice]]
+    private let historyResponses: [MarketingClawChatHistoryPayload]
+    private let sessionsResponses: [MarketingClawChatSessionsListResponse]
+    private let modelResponses: [[MarketingClawChatModelChoice]]
+    private let commandResponses: [[MarketingClawChatCommandChoice]]
     private let requestHistoryHook: (@Sendable (String) async throws -> Void)?
     private let historyResponseHook:
-        (@Sendable (String, Int, [String]) async throws -> OpenClawChatHistoryPayload?)?
+        (@Sendable (String, Int, [String]) async throws -> MarketingClawChatHistoryPayload?)?
     private let setActiveSessionHook: (@Sendable (String) async throws -> Void)?
     private let createSessionHook: (@Sendable (String, String?) async throws -> Void)?
     private let resetSessionHook: (@Sendable (String) async throws -> Void)?
@@ -534,22 +534,22 @@ private final class TestChatTransport: @unchecked Sendable, OpenClawChatTranspor
     private let setSessionPinnedHook: (@Sendable (String, Bool) async throws -> Void)?
     private let setSessionArchivedHook: (@Sendable (String, Bool) async throws -> Void)?
     private let listSessionsHook:
-        (@Sendable (TestSessionListQuery) async throws -> OpenClawChatSessionsListResponse?)?
-    private let sendMessageHook: (@Sendable (String) async throws -> OpenClawChatSendResponse)?
+        (@Sendable (TestSessionListQuery) async throws -> MarketingClawChatSessionsListResponse?)?
+    private let sendMessageHook: (@Sendable (String) async throws -> MarketingClawChatSendResponse)?
     private let sendMessageStatus: String
     private let waitForRunCompletionHook: (@Sendable (String, Int) async -> Bool)?
     private let healthResponses: [Bool]
 
-    private let stream: AsyncStream<OpenClawChatTransportEvent>
-    private let continuation: AsyncStream<OpenClawChatTransportEvent>.Continuation
+    private let stream: AsyncStream<MarketingClawChatTransportEvent>
+    private let continuation: AsyncStream<MarketingClawChatTransportEvent>.Continuation
 
     init(
-        historyResponses: [OpenClawChatHistoryPayload],
-        sessionsResponses: [OpenClawChatSessionsListResponse] = [],
-        modelResponses: [[OpenClawChatModelChoice]] = [],
-        commandResponses: [[OpenClawChatCommandChoice]] = [],
+        historyResponses: [MarketingClawChatHistoryPayload],
+        sessionsResponses: [MarketingClawChatSessionsListResponse] = [],
+        modelResponses: [[MarketingClawChatModelChoice]] = [],
+        commandResponses: [[MarketingClawChatCommandChoice]] = [],
         requestHistoryHook: (@Sendable (String) async throws -> Void)? = nil,
-        historyResponseHook: (@Sendable (String, Int, [String]) async throws -> OpenClawChatHistoryPayload?)? = nil,
+        historyResponseHook: (@Sendable (String, Int, [String]) async throws -> MarketingClawChatHistoryPayload?)? = nil,
         setActiveSessionHook: (@Sendable (String) async throws -> Void)? = nil,
         createSessionHook: (@Sendable (String, String?) async throws -> Void)? = nil,
         resetSessionHook: (@Sendable (String) async throws -> Void)? = nil,
@@ -560,8 +560,8 @@ private final class TestChatTransport: @unchecked Sendable, OpenClawChatTranspor
         setSessionPinnedHook: (@Sendable (String, Bool) async throws -> Void)? = nil,
         setSessionArchivedHook: (@Sendable (String, Bool) async throws -> Void)? = nil,
         listSessionsHook: (
-            @Sendable (TestSessionListQuery) async throws -> OpenClawChatSessionsListResponse?)? = nil,
-        sendMessageHook: (@Sendable (String) async throws -> OpenClawChatSendResponse)? = nil,
+            @Sendable (TestSessionListQuery) async throws -> MarketingClawChatSessionsListResponse?)? = nil,
+        sendMessageHook: (@Sendable (String) async throws -> MarketingClawChatSendResponse)? = nil,
         sendMessageStatus: String = "ok",
         waitForRunCompletionHook: (@Sendable (String, Int) async -> Bool)? = nil,
         healthResponses: [Bool] = [true])
@@ -586,14 +586,14 @@ private final class TestChatTransport: @unchecked Sendable, OpenClawChatTranspor
         self.sendMessageStatus = sendMessageStatus
         self.waitForRunCompletionHook = waitForRunCompletionHook
         self.healthResponses = healthResponses
-        var cont: AsyncStream<OpenClawChatTransportEvent>.Continuation!
+        var cont: AsyncStream<MarketingClawChatTransportEvent>.Continuation!
         self.stream = AsyncStream { c in
             cont = c
         }
         self.continuation = cont
     }
 
-    func events() -> AsyncStream<OpenClawChatTransportEvent> {
+    func events() -> AsyncStream<MarketingClawChatTransportEvent> {
         self.stream
     }
 
@@ -608,17 +608,17 @@ private final class TestChatTransport: @unchecked Sendable, OpenClawChatTranspor
         key: String,
         label _: String?,
         parentSessionKey: String?,
-        worktree _: Bool?) async throws -> OpenClawChatCreateSessionResponse
+        worktree _: Bool?) async throws -> MarketingClawChatCreateSessionResponse
     {
         if let createSessionHook {
             try await createSessionHook(key, parentSessionKey)
         }
         await self.state.createdSessionKeysAppend(key)
         await self.state.createdParentSessionKeysAppend(parentSessionKey)
-        return OpenClawChatCreateSessionResponse(ok: true, key: key, sessionId: "created-\(key)")
+        return MarketingClawChatCreateSessionResponse(ok: true, key: key, sessionId: "created-\(key)")
     }
 
-    func requestHistory(sessionKey: String) async throws -> OpenClawChatHistoryPayload {
+    func requestHistory(sessionKey: String) async throws -> MarketingClawChatHistoryPayload {
         let idx = await state.nextHistoryCallIndex()
         if let requestHistoryHook {
             try await requestHistoryHook(sessionKey)
@@ -632,7 +632,7 @@ private final class TestChatTransport: @unchecked Sendable, OpenClawChatTranspor
         if idx < self.historyResponses.count {
             return self.historyResponses[idx]
         }
-        return self.historyResponses.last ?? OpenClawChatHistoryPayload(
+        return self.historyResponses.last ?? MarketingClawChatHistoryPayload(
             sessionKey: sessionKey,
             sessionId: nil,
             messages: [],
@@ -646,7 +646,7 @@ private final class TestChatTransport: @unchecked Sendable, OpenClawChatTranspor
         message: String,
         thinking: String,
         idempotencyKey: String,
-        attachments: [OpenClawChatAttachmentPayload]) async throws -> OpenClawChatSendResponse
+        attachments: [MarketingClawChatAttachmentPayload]) async throws -> MarketingClawChatSendResponse
     {
         await self.state.sentAgentIDsAppend(agentID)
         await self.state.sentRoutingContractsAppend(expectedSessionRoutingContract)
@@ -663,7 +663,7 @@ private final class TestChatTransport: @unchecked Sendable, OpenClawChatTranspor
         message: String,
         thinking: String,
         idempotencyKey: String,
-        attachments _: [OpenClawChatAttachmentPayload]) async throws -> OpenClawChatSendResponse
+        attachments _: [MarketingClawChatAttachmentPayload]) async throws -> MarketingClawChatSendResponse
     {
         await self.state.sentSessionKeysAppend(sessionKey)
         await self.state.sentMessagesAppend(message)
@@ -672,7 +672,7 @@ private final class TestChatTransport: @unchecked Sendable, OpenClawChatTranspor
         if let sendMessageHook {
             return try await sendMessageHook(idempotencyKey)
         }
-        return OpenClawChatSendResponse(runId: idempotencyKey, status: self.sendMessageStatus)
+        return MarketingClawChatSendResponse(runId: idempotencyKey, status: self.sendMessageStatus)
     }
 
     func abortRun(sessionKey _: String, runId: String) async throws {
@@ -682,7 +682,7 @@ private final class TestChatTransport: @unchecked Sendable, OpenClawChatTranspor
     func listSessions(
         limit: Int?,
         search: String?,
-        archived: Bool) async throws -> OpenClawChatSessionsListResponse
+        archived: Bool) async throws -> MarketingClawChatSessionsListResponse
     {
         let query = TestSessionListQuery(limit: limit, search: search, archived: archived)
         // Single actor hop: bootstrap assertions in older tests race the
@@ -694,7 +694,7 @@ private final class TestChatTransport: @unchecked Sendable, OpenClawChatTranspor
         if idx < self.sessionsResponses.count {
             return self.sessionsResponses[idx]
         }
-        return self.sessionsResponses.last ?? OpenClawChatSessionsListResponse(
+        return self.sessionsResponses.last ?? MarketingClawChatSessionsListResponse(
             ts: nil,
             path: nil,
             count: 0,
@@ -730,7 +730,7 @@ private final class TestChatTransport: @unchecked Sendable, OpenClawChatTranspor
         }
     }
 
-    func listModels() async throws -> [OpenClawChatModelChoice] {
+    func listModels() async throws -> [MarketingClawChatModelChoice] {
         let idx = await state.nextModelsCallIndex()
         if idx < self.modelResponses.count {
             return self.modelResponses[idx]
@@ -742,7 +742,7 @@ private final class TestChatTransport: @unchecked Sendable, OpenClawChatTranspor
         !self.commandResponses.isEmpty
     }
 
-    func listCommands(sessionKey: String) async throws -> [OpenClawChatCommandChoice] {
+    func listCommands(sessionKey: String) async throws -> [MarketingClawChatCommandChoice] {
         await self.state.commandSessionKeysAppend(sessionKey)
         let idx = await state.nextCommandsCallIndex()
         if idx < self.commandResponses.count {
@@ -792,7 +792,7 @@ private final class TestChatTransport: @unchecked Sendable, OpenClawChatTranspor
         return await self.waitForRunCompletionHook?(runId, timeoutMs) ?? false
     }
 
-    func emit(_ evt: OpenClawChatTransportEvent) {
+    func emit(_ evt: MarketingClawChatTransportEvent) {
         self.continuation.yield(evt)
     }
 
@@ -1000,7 +1000,7 @@ extension TestChatTransportState {
 struct ChatViewModelTests {
     @Test func `context usage fraction validates freshness and token bounds`() {
         func fraction(total: Int?, fresh: Bool? = true, context: Int?) -> Double? {
-            OpenClawChatViewModel.chatContextUsageFraction(
+            MarketingClawChatViewModel.chatContextUsageFraction(
                 for: sessionEntry(
                     key: "main",
                     updatedAt: 1,
@@ -1021,7 +1021,7 @@ struct ChatViewModelTests {
 
     @Test @MainActor func `event listener does not retain discarded view model`() async throws {
         let transport = TestChatTransport(historyResponses: [historyPayload()])
-        var viewModel: OpenClawChatViewModel? = OpenClawChatViewModel(
+        var viewModel: MarketingClawChatViewModel? = MarketingClawChatViewModel(
             sessionKey: "main",
             transport: transport)
         transport.emit(.health(ok: true))
@@ -1041,7 +1041,7 @@ struct ChatViewModelTests {
         let data = #"{"sessionKey":"main","messages":[],"inFlightRun":{"runId":"run-active","text":"partial"}}"#
             .data(using: .utf8)!
 
-        let payload = try JSONDecoder().decode(OpenClawChatHistoryPayload.self, from: data)
+        let payload = try JSONDecoder().decode(MarketingClawChatHistoryPayload.self, from: data)
 
         #expect(payload.inFlightRun?.runId == "run-active")
         #expect(payload.inFlightRun?.text == "partial")
@@ -1051,7 +1051,7 @@ struct ChatViewModelTests {
         let data = #"{"runId":"run-global","sessionKey":"global","agentId":"work","state":"delta"}"#
             .data(using: .utf8)!
 
-        let payload = try JSONDecoder().decode(OpenClawChatEventPayload.self, from: data)
+        let payload = try JSONDecoder().decode(MarketingClawChatEventPayload.self, from: data)
 
         #expect(payload.agentId == "work")
     }
@@ -1059,7 +1059,7 @@ struct ChatViewModelTests {
     @Test func `bootstrap adopts active history run and consumes live events`() async throws {
         let activeHistory = historyPayload(
             messages: [chatTextMessage(role: "user", text: "keep working", timestamp: 1)],
-            inFlightRun: OpenClawChatInFlightRun(runId: "run-active", text: "partial reply"))
+            inFlightRun: MarketingClawChatInFlightRun(runId: "run-active", text: "partial reply"))
         let completedHistory = historyPayload(
             messages: [
                 chatTextMessage(role: "user", text: "keep working", timestamp: 1),
@@ -1089,7 +1089,7 @@ struct ChatViewModelTests {
 
     @Test func `adopts Codex history run without buffered text`() async throws {
         let history = historyPayload(
-            inFlightRun: OpenClawChatInFlightRun(runId: "run-codex", text: ""))
+            inFlightRun: MarketingClawChatInFlightRun(runId: "run-codex", text: ""))
         let (_, vm) = await makeViewModel(historyResponses: [history])
 
         try await loadAndWaitBootstrap(vm: vm)
@@ -1101,9 +1101,9 @@ struct ChatViewModelTests {
 
     @Test func `foreground history refreshes adopted run snapshot`() async throws {
         let firstHistory = historyPayload(
-            inFlightRun: OpenClawChatInFlightRun(runId: "run-active", text: "first partial"))
+            inFlightRun: MarketingClawChatInFlightRun(runId: "run-active", text: "first partial"))
         let resumedHistory = historyPayload(
-            inFlightRun: OpenClawChatInFlightRun(runId: "run-active", text: "resumed partial"))
+            inFlightRun: MarketingClawChatInFlightRun(runId: "run-active", text: "resumed partial"))
         let historyCalls = AsyncCounter()
         let (_, vm) = await makeViewModel(
             historyResponses: [firstHistory, resumedHistory],
@@ -1146,7 +1146,7 @@ struct ChatViewModelTests {
                 guard index > 0, let runId = sentRunIds.last else { return nil }
                 return historyPayload(
                     messages: [olderUser, olderAssistant],
-                    inFlightRun: OpenClawChatInFlightRun(runId: runId, text: "working"))
+                    inFlightRun: MarketingClawChatInFlightRun(runId: runId, text: "working"))
             },
             sendMessageStatus: "pending")
         try await loadAndWaitBootstrap(vm: vm)
@@ -1170,7 +1170,7 @@ struct ChatViewModelTests {
     @Test func `foreground discovers run started without local ownership`() async throws {
         let idleHistory = historyPayload()
         let activeHistory = historyPayload(
-            inFlightRun: OpenClawChatInFlightRun(runId: "run-external", text: "external partial"))
+            inFlightRun: MarketingClawChatInFlightRun(runId: "run-external", text: "external partial"))
         let (_, vm) = await makeViewModel(historyResponses: [idleHistory, activeHistory])
 
         try await loadAndWaitBootstrap(vm: vm)
@@ -1191,7 +1191,7 @@ struct ChatViewModelTests {
                 chatTextMessage(role: "user", text: "use a tool", timestamp: 1),
                 chatTextMessage(role: "assistant", text: "intermediate output", timestamp: 2),
             ],
-            inFlightRun: OpenClawChatInFlightRun(runId: "run-tool", text: "still working"))
+            inFlightRun: MarketingClawChatInFlightRun(runId: "run-tool", text: "still working"))
         let (_, vm) = await makeViewModel(historyResponses: [idleHistory, activeHistory])
 
         try await loadAndWaitBootstrap(vm: vm)
@@ -1268,7 +1268,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "main",
                     message: chatTextModelMessage(role: "assistant", text: "done", timestamp: now + 1),
                     messageId: "msg-done",
@@ -1307,7 +1307,7 @@ struct ChatViewModelTests {
     @Test func `foreground clears completed run without assistant output`() async throws {
         let activeHistory = historyPayload(
             messages: [chatTextMessage(role: "user", text: "quiet task", timestamp: 1)],
-            inFlightRun: OpenClawChatInFlightRun(runId: "run-quiet", text: ""))
+            inFlightRun: MarketingClawChatInFlightRun(runId: "run-quiet", text: ""))
         let completedHistory = historyPayload(
             messages: [chatTextMessage(role: "user", text: "quiet task", timestamp: 1)],
             hasActiveRun: false)
@@ -1345,13 +1345,13 @@ struct ChatViewModelTests {
         let sendGate = AsyncGate()
         let historyCalls = AsyncCounter()
         let activeHistory = historyPayload(
-            inFlightRun: OpenClawChatInFlightRun(runId: "run-active", text: "accepted"))
+            inFlightRun: MarketingClawChatInFlightRun(runId: "run-active", text: "accepted"))
         let (_, vm) = await makeViewModel(
             historyResponses: [historyPayload(), historyPayload(), activeHistory],
             requestHistoryHook: { _ in _ = await historyCalls.increment() },
             sendMessageHook: { _ in
                 await sendGate.wait()
-                return OpenClawChatSendResponse(runId: "run-active", status: "pending")
+                return MarketingClawChatSendResponse(runId: "run-active", status: "pending")
             })
 
         try await loadAndWaitBootstrap(vm: vm)
@@ -1374,11 +1374,11 @@ struct ChatViewModelTests {
     @Test func `post-send history keeps active run with intermediate assistant output`() async throws {
         let activeHistory = historyPayload(
             messages: [chatTextMessage(role: "assistant", text: "intermediate", timestamp: 2)],
-            inFlightRun: OpenClawChatInFlightRun(runId: "run-active", text: "working"))
+            inFlightRun: MarketingClawChatInFlightRun(runId: "run-active", text: "working"))
         let (_, vm) = await makeViewModel(
             historyResponses: [historyPayload(), activeHistory],
             sendMessageHook: { _ in
-                OpenClawChatSendResponse(runId: "run-active", status: "pending")
+                MarketingClawChatSendResponse(runId: "run-active", status: "pending")
             })
 
         try await loadAndWaitBootstrap(vm: vm)
@@ -1416,7 +1416,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: "other-run",
                     sessionKey: "main",
                     state: "delta",
@@ -1440,7 +1440,7 @@ struct ChatViewModelTests {
                 chatTextMessage(role: "assistant", text: "same reply", timestamp: 2),
                 chatTextMessage(role: "user", text: "current", timestamp: 3),
             ],
-            inFlightRun: OpenClawChatInFlightRun(runId: "run-stale", text: "stale partial"))
+            inFlightRun: MarketingClawChatInFlightRun(runId: "run-stale", text: "stale partial"))
         let (transport, vm) = await makeViewModel(
             historyResponses: [staleHistory],
             requestHistoryHook: { _ in
@@ -1452,7 +1452,7 @@ struct ChatViewModelTests {
         try await waitUntil("bootstrap history starts") { await historyCalls.current() == 1 }
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: "run-live",
                     sessionKey: "main",
                     state: "delta",
@@ -1474,7 +1474,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: "run-live",
                     sessionKey: "main",
                     state: "final",
@@ -1488,13 +1488,13 @@ struct ChatViewModelTests {
     @Test func `global chat delta adopts only selected agent run`() async throws {
         let bareGlobalMatches = await MainActor.run {
             (
-                OpenClawChatViewModel.matchesCurrentSessionKey(
+                MarketingClawChatViewModel.matchesCurrentSessionKey(
                     incoming: "global",
                     agentId: "work",
                     current: "global",
                     mainSessionKey: "main",
                     activeAgentId: "main"),
-                OpenClawChatViewModel.matchesCurrentSessionKey(
+                MarketingClawChatViewModel.matchesCurrentSessionKey(
                     incoming: "global",
                     agentId: "main",
                     current: "global",
@@ -1504,21 +1504,21 @@ struct ChatViewModelTests {
         #expect(!bareGlobalMatches.0)
         #expect(bareGlobalMatches.1)
         #expect(await MainActor.run {
-            !OpenClawChatViewModel.matchesCurrentSessionKey(
+            !MarketingClawChatViewModel.matchesCurrentSessionKey(
                 incoming: "global",
                 agentId: "work",
                 current: "global",
                 mainSessionKey: "main")
         })
         #expect(await MainActor.run {
-            OpenClawChatViewModel.matchesCurrentSessionKey(
+            MarketingClawChatViewModel.matchesCurrentSessionKey(
                 incoming: "global",
                 current: "global",
                 mainSessionKey: "main",
                 activeAgentId: "main")
         })
         #expect(await MainActor.run {
-            OpenClawChatViewModel.matchesCurrentSessionKey(
+            MarketingClawChatViewModel.matchesCurrentSessionKey(
                 incoming: "global",
                 current: "global",
                 mainSessionKey: "main",
@@ -1526,13 +1526,13 @@ struct ChatViewModelTests {
         })
         let globalAliasMatches = await MainActor.run {
             (
-                OpenClawChatViewModel.matchesCurrentSessionKey(
+                MarketingClawChatViewModel.matchesCurrentSessionKey(
                     incoming: "global",
                     agentId: "work",
                     current: "main",
                     mainSessionKey: "global",
                     activeAgentId: "main"),
-                OpenClawChatViewModel.matchesCurrentSessionKey(
+                MarketingClawChatViewModel.matchesCurrentSessionKey(
                     incoming: "global",
                     agentId: "main",
                     current: "main",
@@ -1542,7 +1542,7 @@ struct ChatViewModelTests {
         #expect(!globalAliasMatches.0)
         #expect(globalAliasMatches.1)
         #expect(await MainActor.run {
-            !OpenClawChatViewModel.matchesCurrentSessionKey(
+            !MarketingClawChatViewModel.matchesCurrentSessionKey(
                 incoming: "main",
                 agentId: "work",
                 current: "global",
@@ -1550,7 +1550,7 @@ struct ChatViewModelTests {
                 activeAgentId: "main")
         })
         #expect(await MainActor.run {
-            !OpenClawChatViewModel.matchesCurrentSessionKey(
+            !MarketingClawChatViewModel.matchesCurrentSessionKey(
                 incoming: "global",
                 current: "global",
                 mainSessionKey: "main")
@@ -1564,7 +1564,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: "run-other",
                     sessionKey: "global",
                     agentId: "main",
@@ -1576,7 +1576,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: "run-work",
                     sessionKey: "global",
                     agentId: "work",
@@ -1595,7 +1595,7 @@ struct ChatViewModelTests {
         try await loadAndWaitBootstrap(vm: lateVM)
         lateTransport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: "run-late",
                     sessionKey: "global",
                     agentId: "work",
@@ -1607,7 +1607,7 @@ struct ChatViewModelTests {
         await MainActor.run { lateVM.syncActiveAgentId("work") }
         lateTransport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: "run-late",
                     sessionKey: "global",
                     agentId: "work",
@@ -1631,7 +1631,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: "run-main",
                     sessionKey: "global",
                     agentId: "main",
@@ -1759,7 +1759,7 @@ struct ChatViewModelTests {
         let historyGate = AsyncGate()
         let historyCalls = AsyncCounter()
         let activeHistory = historyPayload(
-            inFlightRun: OpenClawChatInFlightRun(runId: "run-active", text: "active partial"))
+            inFlightRun: MarketingClawChatInFlightRun(runId: "run-active", text: "active partial"))
         let (transport, vm) = await makeViewModel(
             historyResponses: [activeHistory],
             requestHistoryHook: { _ in
@@ -1771,7 +1771,7 @@ struct ChatViewModelTests {
         try await waitUntil("bootstrap history starts") { await historyCalls.current() == 1 }
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "main",
                     message: chatTextModelMessage(
                         role: "assistant",
@@ -1795,9 +1795,9 @@ struct ChatViewModelTests {
 
     @Test func `manual refresh re-adopts active run after clearing local ownership`() async throws {
         let firstHistory = historyPayload(
-            inFlightRun: OpenClawChatInFlightRun(runId: "run-active", text: "first partial"))
+            inFlightRun: MarketingClawChatInFlightRun(runId: "run-active", text: "first partial"))
         let refreshedHistory = historyPayload(
-            inFlightRun: OpenClawChatInFlightRun(runId: "run-active", text: "refreshed partial"))
+            inFlightRun: MarketingClawChatInFlightRun(runId: "run-active", text: "refreshed partial"))
         let (_, vm) = await makeViewModel(historyResponses: [firstHistory, refreshedHistory])
 
         try await loadAndWaitBootstrap(vm: vm)
@@ -1815,7 +1815,7 @@ struct ChatViewModelTests {
         let historyCalls = AsyncCounter()
         let olderCompletions = AsyncCounter()
         let initialHistory = historyPayload(
-            inFlightRun: OpenClawChatInFlightRun(runId: "run-initial", text: "initial"))
+            inFlightRun: MarketingClawChatInFlightRun(runId: "run-initial", text: "initial"))
         let (_, vm) = await makeViewModel(
             historyResponses: [initialHistory],
             requestHistoryHook: { _ in _ = await historyCalls.increment() },
@@ -1824,11 +1824,11 @@ struct ChatViewModelTests {
                     await olderGate.wait()
                     _ = await olderCompletions.increment()
                     return historyPayload(
-                        inFlightRun: OpenClawChatInFlightRun(runId: "run-older", text: "older"))
+                        inFlightRun: MarketingClawChatInFlightRun(runId: "run-older", text: "older"))
                 }
                 if index == 2 {
                     return historyPayload(
-                        inFlightRun: OpenClawChatInFlightRun(runId: "run-newer", text: "newer"))
+                        inFlightRun: MarketingClawChatInFlightRun(runId: "run-newer", text: "newer"))
                 }
                 return nil
             })
@@ -1852,7 +1852,7 @@ struct ChatViewModelTests {
         let historyCalls = AsyncCounter()
         let staleCompletions = AsyncCounter()
         let activeHistory = historyPayload(
-            inFlightRun: OpenClawChatInFlightRun(runId: "run-active", text: "initial"))
+            inFlightRun: MarketingClawChatInFlightRun(runId: "run-active", text: "initial"))
         let (transport, vm) = await makeViewModel(
             historyResponses: [activeHistory],
             requestHistoryHook: { _ in _ = await historyCalls.increment() },
@@ -1861,7 +1861,7 @@ struct ChatViewModelTests {
                 await staleGate.wait()
                 _ = await staleCompletions.increment()
                 return historyPayload(
-                    inFlightRun: OpenClawChatInFlightRun(runId: "run-active", text: "stale"))
+                    inFlightRun: MarketingClawChatInFlightRun(runId: "run-active", text: "stale"))
             })
 
         try await loadAndWaitBootstrap(vm: vm)
@@ -1884,7 +1884,7 @@ struct ChatViewModelTests {
         let historyCalls = AsyncCounter()
         let activeHistory = historyPayload(
             messages: [chatTextMessage(role: "user", text: "keep going", timestamp: 1)],
-            inFlightRun: OpenClawChatInFlightRun(runId: "run-active", text: "initial"))
+            inFlightRun: MarketingClawChatInFlightRun(runId: "run-active", text: "initial"))
         let staleCompletedHistory = historyPayload(
             messages: [
                 chatTextMessage(role: "user", text: "keep going", timestamp: 1),
@@ -1920,7 +1920,7 @@ struct ChatViewModelTests {
         let historyCalls = AsyncCounter()
         let staleCompletions = AsyncCounter()
         let activeHistory = historyPayload(
-            inFlightRun: OpenClawChatInFlightRun(runId: "run-active", text: "working"))
+            inFlightRun: MarketingClawChatInFlightRun(runId: "run-active", text: "working"))
         let completedHistory = historyPayload(
             messages: [chatTextMessage(role: "assistant", text: "done", timestamp: 2)])
         let (transport, vm) = await makeViewModel(
@@ -1962,7 +1962,7 @@ struct ChatViewModelTests {
                 chatTextMessage(role: "assistant", text: "live final", timestamp: 0.5),
                 chatTextMessage(role: "user", text: "finish this", timestamp: 1),
             ],
-            inFlightRun: OpenClawChatInFlightRun(runId: "run-active", text: "working"))
+            inFlightRun: MarketingClawChatInFlightRun(runId: "run-active", text: "working"))
         let (transport, vm) = await makeViewModel(
             historyResponses: [activeHistory],
             requestHistoryHook: { _ in _ = await historyCalls.increment() },
@@ -1976,7 +1976,7 @@ struct ChatViewModelTests {
                             chatTextMessage(role: "assistant", text: "live final", timestamp: 0.5),
                             chatTextMessage(role: "user", text: "finish this", timestamp: 1),
                         ],
-                        inFlightRun: OpenClawChatInFlightRun(runId: "run-active", text: "stale"))
+                        inFlightRun: MarketingClawChatInFlightRun(runId: "run-active", text: "stale"))
                 }
                 if index == 2 {
                     throw NSError(domain: "test", code: 1)
@@ -1990,7 +1990,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: "run-active",
                     sessionKey: "main",
                     state: "final",
@@ -2012,7 +2012,7 @@ struct ChatViewModelTests {
         let historyCalls = AsyncCounter()
         let staleCompletions = AsyncCounter()
         let currentHistory = historyPayload(
-            inFlightRun: OpenClawChatInFlightRun(runId: "run-current", text: "current"))
+            inFlightRun: MarketingClawChatInFlightRun(runId: "run-current", text: "current"))
         let (transport, vm) = await makeViewModel(
             historyResponses: [currentHistory],
             requestHistoryHook: { _ in _ = await historyCalls.increment() },
@@ -2021,7 +2021,7 @@ struct ChatViewModelTests {
                     await staleGate.wait()
                     _ = await staleCompletions.increment()
                     return historyPayload(
-                        inFlightRun: OpenClawChatInFlightRun(runId: "run-finished", text: "stale"))
+                        inFlightRun: MarketingClawChatInFlightRun(runId: "run-finished", text: "stale"))
                 }
                 if index == 2 {
                     throw NSError(domain: "test", code: 1)
@@ -2048,7 +2048,7 @@ struct ChatViewModelTests {
     @Test func `sequence gap re-adopts active run from history`() async throws {
         let initialHistory = historyPayload()
         let recoveredHistory = historyPayload(
-            inFlightRun: OpenClawChatInFlightRun(runId: "run-recovered", text: "recovered partial"))
+            inFlightRun: MarketingClawChatInFlightRun(runId: "run-recovered", text: "recovered partial"))
         let (transport, vm) = await makeViewModel(historyResponses: [initialHistory, recoveredHistory])
 
         try await loadAndWaitBootstrap(vm: vm)
@@ -2113,7 +2113,7 @@ struct ChatViewModelTests {
     }
 
     @Test func `displays error message fallback only for assistant error turns`() throws {
-        func decodeMessage(role: String, stopReason: String, contentText: String? = nil) throws -> OpenClawChatMessage {
+        func decodeMessage(role: String, stopReason: String, contentText: String? = nil) throws -> MarketingClawChatMessage {
             let contentJSON = contentText.map { #"[{"type":"text","text":"\#($0)"}]"# } ?? "[]"
             let data = """
             {
@@ -2124,18 +2124,18 @@ struct ChatViewModelTests {
               "errorMessage": "stale provider failure"
             }
             """.data(using: .utf8)!
-            return try JSONDecoder().decode(OpenClawChatMessage.self, from: data)
+            return try JSONDecoder().decode(MarketingClawChatMessage.self, from: data)
         }
 
         let assistantError = try decodeMessage(role: "assistant", stopReason: "error")
         #expect(assistantError.content.isEmpty)
         #expect(
-            OpenClawChatMessage.errorDisplayText(
+            MarketingClawChatMessage.errorDisplayText(
                 role: assistantError.role,
                 stopReason: assistantError.stopReason,
                 errorMessage: assistantError.errorMessage) == "stale provider failure")
         #expect(
-            OpenClawChatMessage.displayText(
+            MarketingClawChatMessage.displayText(
                 contentText: "",
                 role: assistantError.role,
                 stopReason: assistantError.stopReason,
@@ -2146,7 +2146,7 @@ struct ChatViewModelTests {
             stopReason: "error",
             contentText: "[assistant turn failed before producing content]")
         #expect(
-            OpenClawChatMessage.displayText(
+            MarketingClawChatMessage.displayText(
                 contentText: sentinelAssistant.content.compactMap(\.text).joined(separator: "\n"),
                 role: sentinelAssistant.role,
                 stopReason: sentinelAssistant.stopReason,
@@ -2157,7 +2157,7 @@ struct ChatViewModelTests {
             stopReason: "error",
             contentText: "partial answer")
         #expect(
-            OpenClawChatMessage.displayText(
+            MarketingClawChatMessage.displayText(
                 contentText: partialAssistant.content.compactMap(\.text).joined(separator: "\n"),
                 role: partialAssistant.role,
                 stopReason: partialAssistant.stopReason,
@@ -2167,7 +2167,7 @@ struct ChatViewModelTests {
         #expect(stoppedAssistant.errorMessage == "stale provider failure")
         #expect(stoppedAssistant.content.isEmpty)
         #expect(
-            OpenClawChatMessage.errorDisplayText(
+            MarketingClawChatMessage.errorDisplayText(
                 role: stoppedAssistant.role,
                 stopReason: stoppedAssistant.stopReason,
                 errorMessage: stoppedAssistant.errorMessage) == nil)
@@ -2176,7 +2176,7 @@ struct ChatViewModelTests {
         #expect(toolUseAssistant.errorMessage == "stale provider failure")
         #expect(toolUseAssistant.content.isEmpty)
         #expect(
-            OpenClawChatMessage.errorDisplayText(
+            MarketingClawChatMessage.errorDisplayText(
                 role: toolUseAssistant.role,
                 stopReason: toolUseAssistant.stopReason,
                 errorMessage: toolUseAssistant.errorMessage) == nil)
@@ -2214,7 +2214,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: runId,
                     sessionKey: "main",
                     state: "final",
@@ -2243,7 +2243,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: runId,
                     sessionKey: "main",
                     state: "final",
@@ -2273,7 +2273,7 @@ struct ChatViewModelTests {
         try await loadAndWaitBootstrap(vm: vm, sessionId: sessionId)
         await sendUserMessage(vm, text: "hello")
         let runId = try await waitForLastSentRunId(transport)
-        let final = OpenClawChatEventPayload(
+        let final = MarketingClawChatEventPayload(
             runId: runId,
             sessionKey: "main",
             state: "final",
@@ -2311,7 +2311,7 @@ struct ChatViewModelTests {
                                 timestamp: now + 1,
                                 idempotencyKey: "\(runId):user"),
                         ],
-                        inFlightRun: OpenClawChatInFlightRun(runId: runId, text: "working"))
+                        inFlightRun: MarketingClawChatInFlightRun(runId: runId, text: "working"))
                 }
                 return historyPayload(
                     sessionId: sessionId,
@@ -2335,7 +2335,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: runId,
                     sessionKey: "main",
                     state: "final",
@@ -2383,7 +2383,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: runId,
                     sessionKey: "main",
                     state: "final",
@@ -2429,7 +2429,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: runId,
                     sessionKey: "main",
                     state: "final",
@@ -2450,7 +2450,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "agent:main:main",
                     message: chatTextModelMessage(role: "assistant", text: "dedupe me", timestamp: now + 2),
                     messageId: "msg-assistant-final",
@@ -2491,7 +2491,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "agent:main:main",
                     message: chatTextModelMessage(role: "assistant", text: "canonical first", timestamp: now + 2),
                     messageId: "msg-assistant-first",
@@ -2507,7 +2507,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: runId,
                     sessionKey: "main",
                     state: "final",
@@ -2532,7 +2532,7 @@ struct ChatViewModelTests {
         let (transport, vm) = await makeViewModel(
             historyResponses: [history, history],
             sendMessageHook: { runId in
-                OpenClawChatSendResponse(runId: runId, status: "pending")
+                MarketingClawChatSendResponse(runId: runId, status: "pending")
             })
         try await loadAndWaitBootstrap(vm: vm, sessionId: sessionId)
 
@@ -2541,7 +2541,7 @@ struct ChatViewModelTests {
         let firstRunId = try await waitForLastSentRunId(transport)
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: firstRunId,
                     sessionKey: "main",
                     state: "final",
@@ -2561,7 +2561,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "agent:main:main",
                     message: chatTextModelMessage(role: "assistant", text: "OK", timestamp: now + 4),
                     messageId: "msg-second-assistant",
@@ -2717,7 +2717,7 @@ struct ChatViewModelTests {
             },
             sendMessageHook: { _ in
                 await responseGate.wait()
-                return OpenClawChatSendResponse(runId: remoteRunId, status: "in_flight")
+                return MarketingClawChatSendResponse(runId: remoteRunId, status: "in_flight")
             })
         try await loadAndWaitBootstrap(vm: vm, sessionId: sessionId)
 
@@ -2751,7 +2751,7 @@ struct ChatViewModelTests {
             ],
             sendMessageHook: { _ in
                 await responseGate.wait()
-                return OpenClawChatSendResponse(runId: remoteRunId, status: "in_flight")
+                return MarketingClawChatSendResponse(runId: remoteRunId, status: "in_flight")
             })
         try await loadAndWaitBootstrap(vm: vm, sessionId: sessionId)
 
@@ -2762,12 +2762,12 @@ struct ChatViewModelTests {
         let canonicalTimestamp = now + 5000
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "agent:main:main",
-                    message: OpenClawChatMessage(
+                    message: MarketingClawChatMessage(
                         role: "user",
                         content: [
-                            OpenClawChatMessageContent(
+                            MarketingClawChatMessageContent(
                                 type: "text",
                                 text: "canonical active request",
                                 mimeType: nil,
@@ -2824,14 +2824,14 @@ struct ChatViewModelTests {
             historyResponses: [initialHistory, canonicalHistory, canonicalHistory],
             sendMessageHook: { _ in
                 await responseGate.wait()
-                return OpenClawChatSendResponse(runId: remoteRunId, status: "in_flight")
+                return MarketingClawChatSendResponse(runId: remoteRunId, status: "in_flight")
             })
         try await loadAndWaitBootstrap(vm: vm, sessionId: sessionId)
 
         await sendUserMessage(vm, text: "same active request")
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "agent:main:main",
                     message: chatTextModelMessage(
                         role: "assistant",
@@ -2842,7 +2842,7 @@ struct ChatViewModelTests {
                     messageSeq: 2)))
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "agent:main:main",
                     message: chatTextModelMessage(
                         role: "user",
@@ -2863,7 +2863,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: remoteRunId,
                     sessionKey: "main",
                     state: "final",
@@ -2914,7 +2914,7 @@ struct ChatViewModelTests {
             },
             sendMessageHook: { _ in
                 await responseGate.wait()
-                return OpenClawChatSendResponse(runId: remoteRunId, status: "in_flight")
+                return MarketingClawChatSendResponse(runId: remoteRunId, status: "in_flight")
             })
         try await loadAndWaitBootstrap(vm: vm, sessionId: sessionId)
 
@@ -2936,7 +2936,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: remoteRunId,
                     sessionKey: "main",
                     state: "final",
@@ -2983,7 +2983,7 @@ struct ChatViewModelTests {
             historyResponses: [history, history],
             sendMessageHook: { _ in
                 await responseGate.wait()
-                return OpenClawChatSendResponse(runId: remoteRunId, status: "in_flight")
+                return MarketingClawChatSendResponse(runId: remoteRunId, status: "in_flight")
             })
         try await loadAndWaitBootstrap(vm: vm, sessionId: sessionId)
 
@@ -3004,7 +3004,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: remoteRunId,
                     sessionKey: "main",
                     state: "final",
@@ -3049,7 +3049,7 @@ struct ChatViewModelTests {
                 }
             },
             sendMessageHook: { _ in
-                OpenClawChatSendResponse(runId: remoteRunId, status: "in_flight")
+                MarketingClawChatSendResponse(runId: remoteRunId, status: "in_flight")
             })
         try await loadAndWaitBootstrap(vm: vm, sessionId: sessionId)
 
@@ -3059,7 +3059,7 @@ struct ChatViewModelTests {
         }
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: remoteRunId,
                     sessionKey: "main",
                     state: "final",
@@ -3082,7 +3082,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "agent:main:main",
                     message: chatTextModelMessage(
                         role: "user",
@@ -3092,7 +3092,7 @@ struct ChatViewModelTests {
                     messageSeq: 2)))
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "agent:main:main",
                     message: chatTextModelMessage(
                         role: "assistant",
@@ -3145,7 +3145,7 @@ struct ChatViewModelTests {
                 }
             },
             sendMessageHook: { _ in
-                OpenClawChatSendResponse(runId: remoteRunId, status: "in_flight")
+                MarketingClawChatSendResponse(runId: remoteRunId, status: "in_flight")
             })
         try await loadAndWaitBootstrap(vm: vm, sessionId: sessionId)
 
@@ -3155,7 +3155,7 @@ struct ChatViewModelTests {
         }
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: remoteRunId,
                     sessionKey: "main",
                     state: "final",
@@ -3178,7 +3178,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "agent:main:main",
                     message: chatTextModelMessage(
                         role: "user",
@@ -3188,7 +3188,7 @@ struct ChatViewModelTests {
                     messageSeq: 2)))
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "agent:main:main",
                     message: chatTextModelMessage(
                         role: "assistant",
@@ -3234,7 +3234,7 @@ struct ChatViewModelTests {
             },
             sendMessageHook: { _ in
                 await responseGate.wait()
-                return OpenClawChatSendResponse(runId: remoteRunId, status: "in_flight")
+                return MarketingClawChatSendResponse(runId: remoteRunId, status: "in_flight")
             })
         try await loadAndWaitBootstrap(vm: vm, sessionId: sessionId)
 
@@ -3253,7 +3253,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "agent:main:main",
                     message: chatTextModelMessage(
                         role: "user",
@@ -3264,7 +3264,7 @@ struct ChatViewModelTests {
                     messageSeq: 1)))
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "agent:main:main",
                     message: chatTextModelMessage(
                         role: "assistant",
@@ -3275,7 +3275,7 @@ struct ChatViewModelTests {
                     messageSeq: 2)))
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "agent:main:main",
                     message: chatTextModelMessage(
                         role: "user",
@@ -3293,7 +3293,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: remoteRunId,
                     sessionKey: "main",
                     state: "final",
@@ -3348,14 +3348,14 @@ struct ChatViewModelTests {
             },
             sendMessageHook: { _ in
                 await responseGate.wait()
-                return OpenClawChatSendResponse(runId: remoteRunId, status: "in_flight")
+                return MarketingClawChatSendResponse(runId: remoteRunId, status: "in_flight")
             })
         try await loadAndWaitBootstrap(vm: vm, sessionId: sessionId)
 
         await sendUserMessage(vm, text: "same active request")
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: remoteRunId,
                     sessionKey: "main",
                     state: "final",
@@ -3404,7 +3404,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "agent:main:main",
                     message: chatTextModelMessage(
                         role: "assistant",
@@ -3439,7 +3439,7 @@ struct ChatViewModelTests {
             historyResponses: [history],
             sendMessageHook: { runId in
                 let count = await sendCount.increment()
-                return OpenClawChatSendResponse(
+                return MarketingClawChatSendResponse(
                     runId: runId,
                     status: count == 1 ? "timeout" : "ok")
             })
@@ -3785,7 +3785,7 @@ struct ChatViewModelTests {
             })
         try await loadAndWaitBootstrap(vm: vm, sessionId: sessionId)
 
-        transport.emit(OpenClawChatTransportEvent.seqGap)
+        transport.emit(MarketingClawChatTransportEvent.seqGap)
         try await waitUntil("stale refresh is in flight") {
             await historyCount.current() == 2
         }
@@ -3853,7 +3853,7 @@ struct ChatViewModelTests {
             })
         try await loadAndWaitBootstrap(vm: vm, sessionId: "sess-bootstrap")
 
-        transport.emit(OpenClawChatTransportEvent.seqGap)
+        transport.emit(MarketingClawChatTransportEvent.seqGap)
         try await waitUntil("stale transformed refresh is in flight") {
             await historyCount.current() == 2
         }
@@ -3900,7 +3900,7 @@ struct ChatViewModelTests {
         let runId = try await waitForLastSentRunId(transport)
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: runId,
                     sessionKey: "agent:main:main",
                     state: "final",
@@ -3935,7 +3935,7 @@ struct ChatViewModelTests {
         let runId = try await waitForLastSentRunId(transport)
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: runId,
                     sessionKey: "main",
                     state: "error",
@@ -3949,7 +3949,7 @@ struct ChatViewModelTests {
             await MainActor.run {
                 vm.messages.contains(where: { message in
                     message.role == "assistant" &&
-                        OpenClawChatMessage.displayText(
+                        MarketingClawChatMessage.displayText(
                             contentText: message.content.compactMap(\.text).joined(separator: "\n"),
                             role: message.role,
                             stopReason: message.stopReason,
@@ -3976,7 +3976,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: "external-run",
                     sessionKey: "agent:main:main",
                     state: "final",
@@ -3999,12 +3999,12 @@ struct ChatViewModelTests {
 
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "agent:aiden:main",
-                    message: OpenClawChatMessage(
+                    message: MarketingClawChatMessage(
                         role: "user",
                         content: [
-                            OpenClawChatMessageContent(
+                            MarketingClawChatMessageContent(
                                 type: "text",
                                 text: "spoken transcript",
                                 mimeType: nil,
@@ -4035,13 +4035,13 @@ struct ChatViewModelTests {
 
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "global",
                     agentId: "work",
-                    message: OpenClawChatMessage(
+                    message: MarketingClawChatMessage(
                         role: "user",
                         content: [
-                            OpenClawChatMessageContent(
+                            MarketingClawChatMessageContent(
                                 type: "text",
                                 text: "global transcript",
                                 mimeType: nil,
@@ -4072,13 +4072,13 @@ struct ChatViewModelTests {
 
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "global",
                     agentId: "main",
-                    message: OpenClawChatMessage(
+                    message: MarketingClawChatMessage(
                         role: "user",
                         content: [
-                            OpenClawChatMessageContent(
+                            MarketingClawChatMessageContent(
                                 type: "text",
                                 text: "wrong global transcript",
                                 mimeType: nil,
@@ -4096,12 +4096,12 @@ struct ChatViewModelTests {
     @Test func `exact ordinary session matches before agent bootstrap`() async {
         let matches = await MainActor.run {
             (
-                OpenClawChatViewModel.matchesCurrentSessionKey(
+                MarketingClawChatViewModel.matchesCurrentSessionKey(
                     incoming: "main",
                     agentId: "work",
                     current: "main",
                     mainSessionKey: "main"),
-                OpenClawChatViewModel.matchesCurrentSessionKey(
+                MarketingClawChatViewModel.matchesCurrentSessionKey(
                     incoming: "main",
                     agentId: "work",
                     current: "main",
@@ -4115,18 +4115,18 @@ struct ChatViewModelTests {
     @Test func `agent scoped opaque event matches only its presentation owner`() async {
         let matches = await MainActor.run {
             (
-                OpenClawChatViewModel.matchesCurrentSessionKey(
+                MarketingClawChatViewModel.matchesCurrentSessionKey(
                     incoming: "agent:reviewer:Matrix:Channel:!MixedRoom:example.org",
                     current: "Matrix:Channel:!MixedRoom:example.org",
                     mainSessionKey: "main",
                     activeAgentId: "reviewer"),
-                OpenClawChatViewModel.matchesCurrentSessionKey(
+                MarketingClawChatViewModel.matchesCurrentSessionKey(
                     incoming: "agent:reviewer:Matrix:Channel:!MixedRoom:example.org",
                     agentId: "work",
                     current: "Matrix:Channel:!MixedRoom:example.org",
                     mainSessionKey: "main",
                     activeAgentId: "reviewer"),
-                OpenClawChatViewModel.matchesCurrentSessionKey(
+                MarketingClawChatViewModel.matchesCurrentSessionKey(
                     incoming: "agent:reviewer:Matrix:Channel:!MixedRoom:example.org",
                     current: "Matrix:Channel:!MixedRoom:example.org",
                     mainSessionKey: "main",
@@ -4147,12 +4147,12 @@ struct ChatViewModelTests {
 
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "agent:sentinel:main",
-                    message: OpenClawChatMessage(
+                    message: MarketingClawChatMessage(
                         role: "user",
                         content: [
-                            OpenClawChatMessageContent(
+                            MarketingClawChatMessageContent(
                                 type: "text",
                                 text: "wrong agent transcript",
                                 mimeType: nil,
@@ -4181,12 +4181,12 @@ struct ChatViewModelTests {
 
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "agent:main:main",
-                    message: OpenClawChatMessage(
+                    message: MarketingClawChatMessage(
                         role: "assistant",
                         content: [
-                            OpenClawChatMessageContent(
+                            MarketingClawChatMessageContent(
                                 type: "text",
                                 text: "agent reply",
                                 mimeType: nil,
@@ -4211,7 +4211,7 @@ struct ChatViewModelTests {
         let (transport, vm) = await makeViewModel(
             historyResponses: [historyPayload()],
             sendMessageHook: { runId in
-                OpenClawChatSendResponse(runId: runId, status: "pending")
+                MarketingClawChatSendResponse(runId: runId, status: "pending")
             })
 
         await MainActor.run { vm.load() }
@@ -4229,12 +4229,12 @@ struct ChatViewModelTests {
         // server-assigned timestamp that differs from the optimistic local one.
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "agent:main:main",
-                    message: OpenClawChatMessage(
+                    message: MarketingClawChatMessage(
                         role: "user",
                         content: [
-                            OpenClawChatMessageContent(
+                            MarketingClawChatMessageContent(
                                 type: "text",
                                 text: "echo me",
                                 mimeType: nil,
@@ -4271,7 +4271,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: runId,
                     sessionKey: "main",
                     state: "final",
@@ -4284,12 +4284,12 @@ struct ChatViewModelTests {
         let canonicalTimestamp = Date().timeIntervalSince1970 * 1000 + 5000
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "agent:main:main",
-                    message: OpenClawChatMessage(
+                    message: MarketingClawChatMessage(
                         role: "user",
                         content: [
-                            OpenClawChatMessageContent(
+                            MarketingClawChatMessageContent(
                                 type: "text",
                                 text: "redacted canonical text",
                                 mimeType: nil,
@@ -4330,12 +4330,12 @@ struct ChatViewModelTests {
 
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "agent:main:main",
-                    message: OpenClawChatMessage(
+                    message: MarketingClawChatMessage(
                         role: "user",
                         content: [
-                            OpenClawChatMessageContent(
+                            MarketingClawChatMessageContent(
                                 type: "text",
                                 text: "legacy echo",
                                 mimeType: nil,
@@ -4357,12 +4357,12 @@ struct ChatViewModelTests {
         let localCanonicalTimestamp = canonicalTimestamp + 1000
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "agent:main:main",
-                    message: OpenClawChatMessage(
+                    message: MarketingClawChatMessage(
                         role: "user",
                         content: [
-                            OpenClawChatMessageContent(
+                            MarketingClawChatMessageContent(
                                 type: "text",
                                 text: "legacy echo",
                                 mimeType: nil,
@@ -4405,12 +4405,12 @@ struct ChatViewModelTests {
 
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "agent:main:main",
-                    message: OpenClawChatMessage(
+                    message: MarketingClawChatMessage(
                         role: "user",
                         content: [
-                            OpenClawChatMessageContent(
+                            MarketingClawChatMessageContent(
                                 type: "text",
                                 text: "repeat",
                                 mimeType: nil,
@@ -4439,12 +4439,12 @@ struct ChatViewModelTests {
 
         transport.emit(
             .sessionMessage(
-                OpenClawSessionMessageEventPayload(
+                MarketingClawSessionMessageEventPayload(
                     sessionKey: "other",
-                    message: OpenClawChatMessage(
+                    message: MarketingClawChatMessage(
                         role: "user",
                         content: [
-                            OpenClawChatMessageContent(
+                            MarketingClawChatMessageContent(
                                 type: "text",
                                 text: "other transcript",
                                 mimeType: nil,
@@ -4545,7 +4545,7 @@ struct ChatViewModelTests {
         let recentOlder = now - (5 * 60 * 60 * 1000)
         let stale = now - (26 * 60 * 60 * 1000)
         let history = historyPayload()
-        let sessions = OpenClawChatSessionsListResponse(
+        let sessions = MarketingClawChatSessionsListResponse(
             ts: now,
             path: nil,
             count: 4,
@@ -4566,7 +4566,7 @@ struct ChatViewModelTests {
     }
 
     @Test func `context usage follows active session switches`() async throws {
-        let sessions = OpenClawChatSessionsListResponse(
+        let sessions = MarketingClawChatSessionsListResponse(
             ts: 1,
             path: nil,
             count: 2,
@@ -4607,7 +4607,7 @@ struct ChatViewModelTests {
         let now = Date().timeIntervalSince1970 * 1000
         let recent = now - (30 * 60 * 1000)
         let history = historyPayload(sessionKey: "custom", sessionId: "sess-custom")
-        let sessions = OpenClawChatSessionsListResponse(
+        let sessions = MarketingClawChatSessionsListResponse(
             ts: now,
             path: nil,
             count: 1,
@@ -4632,16 +4632,16 @@ struct ChatViewModelTests {
         let recent = now - (30 * 60 * 1000)
         let recentOlder = now - (90 * 60 * 1000)
         let history = historyPayload(sessionKey: "Luke’s MacBook Pro", sessionId: "sess-main")
-        let sessions = OpenClawChatSessionsListResponse(
+        let sessions = MarketingClawChatSessionsListResponse(
             ts: now,
             path: nil,
             count: 2,
-            defaults: OpenClawChatSessionsDefaults(
+            defaults: MarketingClawChatSessionsDefaults(
                 model: nil,
                 contextTokens: nil,
                 mainSessionKey: "Luke’s MacBook Pro"),
             sessions: [
-                OpenClawChatSessionEntry(
+                MarketingClawChatSessionEntry(
                     key: "Luke’s MacBook Pro",
                     kind: nil,
                     displayName: "Luke’s MacBook Pro",
@@ -4680,16 +4680,16 @@ struct ChatViewModelTests {
         let recent = now - (2 * 60 * 1000)
         let recentOlder = now - (5 * 60 * 1000)
         let history = historyPayload(sessionKey: "agent:main:main", sessionId: "sess-main")
-        let sessions = OpenClawChatSessionsListResponse(
+        let sessions = MarketingClawChatSessionsListResponse(
             ts: now,
             path: nil,
             count: 2,
-            defaults: OpenClawChatSessionsDefaults(
+            defaults: MarketingClawChatSessionsDefaults(
                 model: nil,
                 contextTokens: nil,
                 mainSessionKey: "agent:main:main"),
             sessions: [
-                OpenClawChatSessionEntry(
+                MarketingClawChatSessionEntry(
                     key: "agent:main:onboarding",
                     kind: nil,
                     displayName: "Luke’s MacBook Pro",
@@ -4709,7 +4709,7 @@ struct ChatViewModelTests {
                     modelProvider: nil,
                     model: nil,
                     contextTokens: nil),
-                OpenClawChatSessionEntry(
+                MarketingClawChatSessionEntry(
                     key: "agent:main:main",
                     kind: nil,
                     displayName: "Luke’s MacBook Pro",
@@ -4748,11 +4748,11 @@ struct ChatViewModelTests {
                 chatTextMessage(role: "assistant", text: "before new", timestamp: 1),
             ])
         let after = historyPayload(sessionKey: "agent:aiden:ios-new", sessionId: nil, messages: [])
-        let sessions = OpenClawChatSessionsListResponse(
+        let sessions = MarketingClawChatSessionsListResponse(
             ts: nil,
             path: nil,
             count: 1,
-            defaults: OpenClawChatSessionsDefaults(
+            defaults: MarketingClawChatSessionsDefaults(
                 model: nil,
                 contextTokens: nil,
                 mainSessionKey: "agent:aiden:main"),
@@ -4800,7 +4800,7 @@ struct ChatViewModelTests {
                 chatTextMessage(role: "assistant", text: "after reset fallback", timestamp: 2),
             ])
         let unsupported = NSError(
-            domain: "OpenClawChatTransport",
+            domain: "MarketingClawChatTransport",
             code: 0,
             userInfo: [NSLocalizedDescriptionKey: "sessions.create not supported by this transport"])
 
@@ -5167,11 +5167,11 @@ struct ChatViewModelTests {
     @Test func `bootstraps model selection from session and defaults`() async throws {
         let now = Date().timeIntervalSince1970 * 1000
         let history = historyPayload()
-        let sessions = OpenClawChatSessionsListResponse(
+        let sessions = MarketingClawChatSessionsListResponse(
             ts: now,
             path: nil,
             count: 1,
-            defaults: OpenClawChatSessionsDefaults(model: "openai/gpt-4.1-mini", contextTokens: nil),
+            defaults: MarketingClawChatSessionsDefaults(model: "openai/gpt-4.1-mini", contextTokens: nil),
             sessions: [
                 sessionEntry(key: "main", updatedAt: now, model: "anthropic/claude-opus-4-6"),
             ])
@@ -5202,11 +5202,11 @@ struct ChatViewModelTests {
     @Test func `selecting default model patches nil and updates selection`() async throws {
         let now = Date().timeIntervalSince1970 * 1000
         let history = historyPayload()
-        let sessions = OpenClawChatSessionsListResponse(
+        let sessions = MarketingClawChatSessionsListResponse(
             ts: now,
             path: nil,
             count: 1,
-            defaults: OpenClawChatSessionsDefaults(model: "openai/gpt-4.1-mini", contextTokens: nil),
+            defaults: MarketingClawChatSessionsDefaults(model: "openai/gpt-4.1-mini", contextTokens: nil),
             sessions: [
                 sessionEntry(key: "main", updatedAt: now, model: "anthropic/claude-opus-4-6"),
             ])
@@ -5222,14 +5222,14 @@ struct ChatViewModelTests {
 
         try await loadAndWaitBootstrap(vm: vm)
 
-        await MainActor.run { vm.selectModel(OpenClawChatViewModel.defaultModelSelectionID) }
+        await MainActor.run { vm.selectModel(MarketingClawChatViewModel.defaultModelSelectionID) }
 
         try await waitUntil("session model patched") {
             let patched = await transport.patchedModels()
             return patched == [nil]
         }
 
-        #expect(await MainActor.run { vm.modelSelectionID } == OpenClawChatViewModel.defaultModelSelectionID)
+        #expect(await MainActor.run { vm.modelSelectionID } == MarketingClawChatViewModel.defaultModelSelectionID)
     }
 
     @Test @MainActor func `successful model selection records recent and selected pin updates sections`() async throws {
@@ -5243,7 +5243,7 @@ struct ChatViewModelTests {
             modelChoice(id: "gpt-5.4", name: "GPT-5.4", provider: "openai"),
             modelChoice(id: "claude-opus-4-6", name: "Claude Opus 4.6"),
         ]
-        let sessions = OpenClawChatSessionsListResponse(
+        let sessions = MarketingClawChatSessionsListResponse(
             ts: now,
             path: nil,
             count: 1,
@@ -5272,11 +5272,11 @@ struct ChatViewModelTests {
     @Test func `selecting provider qualified model disambiguates duplicate model I ds`() async throws {
         let now = Date().timeIntervalSince1970 * 1000
         let history = historyPayload()
-        let sessions = OpenClawChatSessionsListResponse(
+        let sessions = MarketingClawChatSessionsListResponse(
             ts: now,
             path: nil,
             count: 1,
-            defaults: OpenClawChatSessionsDefaults(model: "openrouter/gpt-4.1-mini", contextTokens: nil),
+            defaults: MarketingClawChatSessionsDefaults(model: "openrouter/gpt-4.1-mini", contextTokens: nil),
             sessions: [
                 sessionEntry(key: "main", updatedAt: now, model: "gpt-4.1-mini", modelProvider: "openrouter"),
             ])
@@ -5305,7 +5305,7 @@ struct ChatViewModelTests {
     @Test func `slash model I ds stay provider qualified in selection and patch`() async throws {
         let now = Date().timeIntervalSince1970 * 1000
         let history = historyPayload()
-        let sessions = OpenClawChatSessionsListResponse(
+        let sessions = MarketingClawChatSessionsListResponse(
             ts: now,
             path: nil,
             count: 1,
@@ -5342,7 +5342,7 @@ struct ChatViewModelTests {
         let modelPickerStore = ChatModelPickerStore(defaults: defaults)
         let now = Date().timeIntervalSince1970 * 1000
         let history = historyPayload()
-        let sessions = OpenClawChatSessionsListResponse(
+        let sessions = MarketingClawChatSessionsListResponse(
             ts: now,
             path: nil,
             count: 1,
@@ -5389,7 +5389,7 @@ struct ChatViewModelTests {
     @Test func `send waits for in flight model patch to finish`() async throws {
         let now = Date().timeIntervalSince1970 * 1000
         let history = historyPayload()
-        let sessions = OpenClawChatSessionsListResponse(
+        let sessions = MarketingClawChatSessionsListResponse(
             ts: now,
             path: nil,
             count: 1,
@@ -5442,7 +5442,7 @@ struct ChatViewModelTests {
     @Test func `failed latest model selection does not replay after older completion finishes`() async throws {
         let now = Date().timeIntervalSince1970 * 1000
         let history = historyPayload()
-        let sessions = OpenClawChatSessionsListResponse(
+        let sessions = MarketingClawChatSessionsListResponse(
             ts: now,
             path: nil,
             count: 1,
@@ -5493,7 +5493,7 @@ struct ChatViewModelTests {
     @Test func `failed latest model selection restores earlier success without replay`() async throws {
         let now = Date().timeIntervalSince1970 * 1000
         let history = historyPayload()
-        let sessions = OpenClawChatSessionsListResponse(
+        let sessions = MarketingClawChatSessionsListResponse(
             ts: now,
             path: nil,
             count: 1,
@@ -5725,7 +5725,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: runId,
                     sessionKey: "main",
                     state: "final",
@@ -5785,7 +5785,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: runId,
                     sessionKey: "main",
                     state: "final",
@@ -5849,7 +5849,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: runId,
                     sessionKey: "main",
                     state: "final",
@@ -6055,7 +6055,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: runId,
                     sessionKey: "main",
                     state: "final",
@@ -6104,7 +6104,7 @@ struct ChatViewModelTests {
         let bootstrapHistoryGate = SessionSubscribeGate()
         let mainHistoryCount = AsyncCounter()
         let bootstrapHistoryReleasedCount = AsyncCounter()
-        let sessions = OpenClawChatSessionsListResponse(
+        let sessions = MarketingClawChatSessionsListResponse(
             ts: Date().timeIntervalSince1970 * 1000,
             path: nil,
             count: 1,
@@ -6194,7 +6194,7 @@ struct ChatViewModelTests {
                         sessionKey: "main",
                         sessionId: sessionId,
                         messages: [chatTextMessage(role: "user", text: "hello", timestamp: now)],
-                        inFlightRun: OpenClawChatInFlightRun(runId: runId, text: ""))
+                        inFlightRun: MarketingClawChatInFlightRun(runId: runId, text: ""))
                 }
                 guard index == 4 else { return nil }
                 return historyPayload(
@@ -6610,7 +6610,7 @@ struct ChatViewModelTests {
 
     @Test func `switching sessions ignores late model patch completion from previous session`() async throws {
         let now = Date().timeIntervalSince1970 * 1000
-        let sessions = OpenClawChatSessionsListResponse(
+        let sessions = MarketingClawChatSessionsListResponse(
             ts: now,
             path: nil,
             count: 2,
@@ -6662,13 +6662,13 @@ struct ChatViewModelTests {
             await MainActor.run { vm.sessionKey == "other" && vm.sessionId == "sess-other" }
         }
 
-        #expect(await MainActor.run { vm.modelSelectionID } == OpenClawChatViewModel.defaultModelSelectionID)
+        #expect(await MainActor.run { vm.modelSelectionID } == MarketingClawChatViewModel.defaultModelSelectionID)
         #expect(await MainActor.run { vm.sessions.first(where: { $0.key == "other" })?.model } == nil)
     }
 
     @Test func `late model completion does not replay current session selection into previous session`() async throws {
         let now = Date().timeIntervalSince1970 * 1000
-        let initialSessions = OpenClawChatSessionsListResponse(
+        let initialSessions = MarketingClawChatSessionsListResponse(
             ts: now,
             path: nil,
             count: 2,
@@ -6677,7 +6677,7 @@ struct ChatViewModelTests {
                 sessionEntry(key: "main", updatedAt: now, model: nil),
                 sessionEntry(key: "other", updatedAt: now - 1000, model: nil),
             ])
-        let sessionsAfterOtherSelection = OpenClawChatSessionsListResponse(
+        let sessionsAfterOtherSelection = MarketingClawChatSessionsListResponse(
             ts: now,
             path: nil,
             count: 2,
@@ -6742,7 +6742,7 @@ struct ChatViewModelTests {
     }
 
     @Test func `explicit thinking level wins over history and persists changes`() async throws {
-        let history = OpenClawChatHistoryPayload(
+        let history = MarketingClawChatHistoryPayload(
             sessionKey: "main",
             sessionId: "sess-main",
             messages: [],
@@ -6771,7 +6771,7 @@ struct ChatViewModelTests {
     }
 
     @Test func `server provided thinking levels outside menu are preserved for send`() async throws {
-        let history = OpenClawChatHistoryPayload(
+        let history = MarketingClawChatHistoryPayload(
             sessionKey: "main",
             sessionId: "sess-main",
             messages: [],
@@ -6824,7 +6824,7 @@ struct ChatViewModelTests {
         """
 
         let decoded = try JSONDecoder().decode(
-            OpenClawChatSessionsListResponse.self,
+            MarketingClawChatSessionsListResponse.self,
             from: Data(json.utf8))
 
         #expect(decoded.defaults?.modelProvider == "anthropic")
@@ -6837,16 +6837,16 @@ struct ChatViewModelTests {
     }
 
     @Test func `session thinking levels drive picker options`() async throws {
-        let history = OpenClawChatHistoryPayload(
+        let history = MarketingClawChatHistoryPayload(
             sessionKey: "main",
             sessionId: "sess-main",
             messages: [],
             thinkingLevel: "adaptive")
-        let sessions = OpenClawChatSessionsListResponse(
+        let sessions = MarketingClawChatSessionsListResponse(
             ts: 1,
             path: nil,
             count: 1,
-            defaults: OpenClawChatSessionsDefaults(
+            defaults: MarketingClawChatSessionsDefaults(
                 modelProvider: "openai",
                 model: "gpt-5.5",
                 contextTokens: nil,
@@ -6859,7 +6859,7 @@ struct ChatViewModelTests {
                 thinkingOptions: ["off", "low", "xhigh", "maximum"],
                 thinkingDefault: "xhigh"),
             sessions: [
-                OpenClawChatSessionEntry(
+                MarketingClawChatSessionEntry(
                     key: "main",
                     kind: nil,
                     displayName: nil,
@@ -7272,7 +7272,7 @@ struct ChatViewModelTests {
         try await waitUntil("models loaded with default selection") {
             await MainActor.run {
                 vm.modelChoices.count == 2 &&
-                    vm.modelSelectionID == OpenClawChatViewModel.defaultModelSelectionID
+                    vm.modelSelectionID == MarketingClawChatViewModel.defaultModelSelectionID
             }
         }
 
@@ -7302,18 +7302,18 @@ struct ChatViewModelTests {
     }
 
     @Test func `thinking options fallback and current unsupported level stay visible`() async throws {
-        let history = OpenClawChatHistoryPayload(
+        let history = MarketingClawChatHistoryPayload(
             sessionKey: "main",
             sessionId: "sess-main",
             messages: [],
             thinkingLevel: "xhigh")
-        let sessions = OpenClawChatSessionsListResponse(
+        let sessions = MarketingClawChatSessionsListResponse(
             ts: 1,
             path: nil,
             count: 1,
             defaults: nil,
             sessions: [
-                OpenClawChatSessionEntry(
+                MarketingClawChatSessionEntry(
                     key: "main",
                     kind: nil,
                     displayName: nil,
@@ -7350,16 +7350,16 @@ struct ChatViewModelTests {
     }
 
     @Test func `matching default thinking levels beat legacy row thinking options`() async throws {
-        let history = OpenClawChatHistoryPayload(
+        let history = MarketingClawChatHistoryPayload(
             sessionKey: "main",
             sessionId: "sess-main",
             messages: [],
             thinkingLevel: "adaptive")
-        let sessions = OpenClawChatSessionsListResponse(
+        let sessions = MarketingClawChatSessionsListResponse(
             ts: 1,
             path: nil,
             count: 1,
-            defaults: OpenClawChatSessionsDefaults(
+            defaults: MarketingClawChatSessionsDefaults(
                 modelProvider: "anthropic",
                 model: "claude-opus-4-7",
                 contextTokens: nil,
@@ -7371,7 +7371,7 @@ struct ChatViewModelTests {
                 thinkingOptions: ["off", "adaptive", "max"],
                 thinkingDefault: "adaptive"),
             sessions: [
-                OpenClawChatSessionEntry(
+                MarketingClawChatSessionEntry(
                     key: "main",
                     kind: nil,
                     displayName: nil,
@@ -7406,16 +7406,16 @@ struct ChatViewModelTests {
     }
 
     @Test func `default thinking levels do not leak to different session model`() async throws {
-        let history = OpenClawChatHistoryPayload(
+        let history = MarketingClawChatHistoryPayload(
             sessionKey: "main",
             sessionId: "sess-main",
             messages: [],
             thinkingLevel: "max")
-        let sessions = OpenClawChatSessionsListResponse(
+        let sessions = MarketingClawChatSessionsListResponse(
             ts: 1,
             path: nil,
             count: 1,
-            defaults: OpenClawChatSessionsDefaults(
+            defaults: MarketingClawChatSessionsDefaults(
                 modelProvider: "anthropic",
                 model: "claude-opus-4-7",
                 contextTokens: nil,
@@ -7427,7 +7427,7 @@ struct ChatViewModelTests {
                 thinkingOptions: ["off", "adaptive", "max"],
                 thinkingDefault: "adaptive"),
             sessions: [
-                OpenClawChatSessionEntry(
+                MarketingClawChatSessionEntry(
                     key: "main",
                     kind: nil,
                     displayName: nil,
@@ -7461,7 +7461,7 @@ struct ChatViewModelTests {
     }
 
     @Test func `stale thinking patch completion reapplies latest selection`() async throws {
-        let history = OpenClawChatHistoryPayload(
+        let history = MarketingClawChatHistoryPayload(
             sessionKey: "main",
             sessionId: "sess-main",
             messages: [],
@@ -7505,7 +7505,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: "other-run",
                     sessionKey: "main",
                     state: "error",
@@ -7516,7 +7516,7 @@ struct ChatViewModelTests {
     }
 
     @Test func `strips inbound metadata from history messages`() async throws {
-        let history = OpenClawChatHistoryPayload(
+        let history = MarketingClawChatHistoryPayload(
             sessionKey: "main",
             sessionId: "sess-main",
             messages: [
@@ -7525,7 +7525,7 @@ struct ChatViewModelTests {
                     "content": [["type": "text", "text": """
                     Conversation info (untrusted metadata):
                     ```json
-                    { \"sender\": \"openclaw-ios\" }
+                    { \"sender\": \"marketingclaw-ios\" }
                     ```
 
                     Hello?
@@ -7535,7 +7535,7 @@ struct ChatViewModelTests {
             ],
             thinkingLevel: "off")
         let transport = TestChatTransport(historyResponses: [history])
-        let vm = await MainActor.run { OpenClawChatViewModel(sessionKey: "main", transport: transport) }
+        let vm = await MainActor.run { MarketingClawChatViewModel(sessionKey: "main", transport: transport) }
 
         await MainActor.run { vm.load() }
         try await waitUntil("history loaded") { await MainActor.run { !vm.messages.isEmpty } }
@@ -7568,7 +7568,7 @@ struct ChatViewModelTests {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                MarketingClawChatEventPayload(
                     runId: runId,
                     sessionKey: "main",
                     state: "aborted",
@@ -7582,7 +7582,7 @@ struct ChatViewModelTests {
 @Suite(.serialized)
 struct ChatViewModelSessionManagementTests {
     @Test @MainActor func `session list organizer orders pinned first with key tiebreak`() {
-        let organized = OpenClawChatSessionListOrganizer.organize([
+        let organized = MarketingClawChatSessionListOrganizer.organize([
             sessionEntry(key: "c-tie", updatedAt: 100),
             sessionEntry(key: "a-tie", updatedAt: 100),
             sessionEntry(key: "recent", updatedAt: 500),
@@ -7598,9 +7598,9 @@ struct ChatViewModelSessionManagementTests {
             sessionEntry(key: "agent:main:topic-b", updatedAt: 1, displayName: "Groceries"),
             sessionEntry(key: "agent:main:trip-notes", updatedAt: 3, displayName: "Notes"),
         ]
-        let matched = OpenClawChatSessionListOrganizer.filter(sessions, search: "TRIP")
+        let matched = MarketingClawChatSessionListOrganizer.filter(sessions, search: "TRIP")
         #expect(matched.map(\.key) == ["agent:main:topic-a", "agent:main:trip-notes"])
-        #expect(OpenClawChatSessionListOrganizer.filter(sessions, search: "  ") == sessions)
+        #expect(MarketingClawChatSessionListOrganizer.filter(sessions, search: "  ") == sessions)
     }
 
     @Test func `pin patches transport and reorders optimistically`() async throws {

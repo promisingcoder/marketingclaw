@@ -1,6 +1,6 @@
 /**
  * Builds the Codex app-server dynamic tool list for one turn, including
- * OpenClaw-owned tools, Codex native-tool fallback rules, sandbox shell shims,
+ * MarketingClaw-owned tools, Codex native-tool fallback rules, sandbox shell shims,
  * and provider allowlist normalization.
  */
 import {
@@ -16,9 +16,9 @@ import {
   supportsModelTools,
   type EmbeddedRunAttemptParams,
   type RuntimeToolSchemaDiagnostic,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import { resolveAgentDir } from "openclaw/plugin-sdk/agent-runtime";
-import { isToolAllowed } from "openclaw/plugin-sdk/sandbox";
+} from "marketingclaw/plugin-sdk/agent-harness-runtime";
+import { resolveAgentDir } from "marketingclaw/plugin-sdk/agent-runtime";
+import { isToolAllowed } from "marketingclaw/plugin-sdk/sandbox";
 import { readCodexPluginConfig, type CodexPluginConfig } from "./config.js";
 import {
   filterCodexDynamicTools,
@@ -34,16 +34,18 @@ import type { CodexSandboxExecEnvironment } from "./sandbox-exec-server.js";
 import { filterToolsForVisionInputs } from "./vision-tools.js";
 import { resolveCodexWebSearchPlan, type CodexNativeWebSearchSupport } from "./web-search.js";
 
-type OpenClawCodingToolsOptions = NonNullable<
-  Parameters<(typeof import("openclaw/plugin-sdk/agent-harness"))["createOpenClawCodingTools"]>[0]
+type MarketingClawCodingToolsOptions = NonNullable<
+  Parameters<
+    (typeof import("marketingclaw/plugin-sdk/agent-harness"))["createMarketingClawCodingTools"]
+  >[0]
 >;
-type OpenClawExecOptions = NonNullable<OpenClawCodingToolsOptions["exec"]>;
+type MarketingClawExecOptions = NonNullable<MarketingClawCodingToolsOptions["exec"]>;
 
-/** Factory seam for constructing OpenClaw runtime tools without eagerly loading agent-harness. */
-export type OpenClawCodingToolsFactory =
-  (typeof import("openclaw/plugin-sdk/agent-harness"))["createOpenClawCodingTools"];
-type OpenClawDynamicTool = ReturnType<OpenClawCodingToolsFactory>[number];
-type OpenClawSandboxContext = Awaited<ReturnType<typeof resolveSandboxContext>>;
+/** Factory seam for constructing MarketingClaw runtime tools without eagerly loading agent-harness. */
+export type MarketingClawCodingToolsFactory =
+  (typeof import("marketingclaw/plugin-sdk/agent-harness"))["createMarketingClawCodingTools"];
+type MarketingClawDynamicTool = ReturnType<MarketingClawCodingToolsFactory>[number];
+type MarketingClawSandboxContext = Awaited<ReturnType<typeof resolveSandboxContext>>;
 type CodexDynamicToolBuildEvent = Parameters<
   NonNullable<EmbeddedRunAttemptParams["onAgentEvent"]>
 >[0];
@@ -68,7 +70,7 @@ export type DynamicToolBuildParams = {
   effectiveWorkspace: string;
   effectiveCwd?: string;
   sandboxSessionKey: string;
-  sandbox: OpenClawSandboxContext;
+  sandbox: MarketingClawSandboxContext;
   nativeToolSurfaceEnabled?: boolean;
   nativeProviderWebSearchSupport?: CodexNativeWebSearchSupport;
   runAbortController: AbortController;
@@ -84,23 +86,25 @@ export type DynamicToolBuildParams = {
   onWebSearchPolicyResolved?: (allowed: boolean) => void;
 };
 
-let openClawCodingToolsFactoryForTests: OpenClawCodingToolsFactory | undefined;
+let marketingClawCodingToolsFactoryForTests: MarketingClawCodingToolsFactory | undefined;
 
 /** Overrides the runtime tool factory for tests that need deterministic tool catalogs. */
-export function setOpenClawCodingToolsFactoryForTests(factory: OpenClawCodingToolsFactory): void {
-  openClawCodingToolsFactoryForTests = factory;
+export function setMarketingClawCodingToolsFactoryForTests(
+  factory: MarketingClawCodingToolsFactory,
+): void {
+  marketingClawCodingToolsFactoryForTests = factory;
 }
 
 /** Clears the test-only runtime tool factory override. */
-export function resetOpenClawCodingToolsFactoryForTests(): void {
-  openClawCodingToolsFactoryForTests = undefined;
+export function resetMarketingClawCodingToolsFactoryForTests(): void {
+  marketingClawCodingToolsFactoryForTests = undefined;
 }
 
 /** Splits sandbox and run session keys so tool calls can bind to both scopes when needed. */
-export function resolveOpenClawCodingToolsSessionKeys(
+export function resolveMarketingClawCodingToolsSessionKeys(
   params: EmbeddedRunAttemptParams,
   sandboxSessionKey: string,
-): Pick<OpenClawCodingToolsOptions, "sessionKey" | "runSessionKey"> {
+): Pick<MarketingClawCodingToolsOptions, "sessionKey" | "runSessionKey"> {
   return {
     sessionKey: sandboxSessionKey,
     runSessionKey:
@@ -223,13 +227,13 @@ export async function buildDynamicTools(input: DynamicToolBuildParams) {
   });
   const modelHasVision = params.model.input?.includes("image") ?? false;
   const agentDir = params.agentDir ?? resolveAgentDir(params.config ?? {}, input.sessionAgentId);
-  const agentHarness = await import("openclaw/plugin-sdk/agent-harness");
-  const createOpenClawCodingTools =
-    openClawCodingToolsFactoryForTests ?? agentHarness.createOpenClawCodingTools;
+  const agentHarness = await import("marketingclaw/plugin-sdk/agent-harness");
+  const createMarketingClawCodingTools =
+    marketingClawCodingToolsFactoryForTests ?? agentHarness.createMarketingClawCodingTools;
   toolBuildStages.mark("load-agent-harness-tools");
-  const sessionKeys = resolveOpenClawCodingToolsSessionKeys(params, input.sandboxSessionKey);
+  const sessionKeys = resolveMarketingClawCodingToolsSessionKeys(params, input.sandboxSessionKey);
   const nativeExecutionPolicy = resolveCodexNativeExecutionPolicyForDynamicTools(input);
-  const allTools = createOpenClawCodingTools({
+  const allTools = createMarketingClawCodingTools({
     agentId: input.sessionAgentId,
     ...(params.crestodianTool ? { crestodianTool: params.crestodianTool } : {}),
     ...buildEmbeddedAttemptToolRunContext(params),
@@ -281,7 +285,7 @@ export async function buildDynamicTools(input: DynamicToolBuildParams) {
     modelId: params.modelId,
     modelCompat:
       params.model.compat && typeof params.model.compat === "object"
-        ? (params.model.compat as OpenClawCodingToolsOptions["modelCompat"])
+        ? (params.model.compat as MarketingClawCodingToolsOptions["modelCompat"])
         : undefined,
     modelApi: params.model.api,
     modelContextWindowTokens: params.model.contextWindow,
@@ -322,7 +326,7 @@ export async function buildDynamicTools(input: DynamicToolBuildParams) {
     onToolOutcome: params.onToolOutcome,
     allocateToolOutcomeOrdinal: params.allocateToolOutcomeOrdinal,
   });
-  toolBuildStages.mark("create-openclaw-coding-tools");
+  toolBuildStages.mark("create-marketingclaw-coding-tools");
   const preNormalizationDiagnostics: RuntimeToolSchemaDiagnostic[] = [];
   const readableAllToolProjection = filterProviderNormalizableTools(allTools);
   preNormalizationDiagnostics.push(...readableAllToolProjection.diagnostics);
@@ -473,7 +477,7 @@ export function includeForcedCodexDynamicToolAllow(
 /** Decides whether Codex native code mode can own shell/file tools for this turn. */
 export function shouldEnableCodexAppServerNativeToolSurface(
   params: EmbeddedRunAttemptParams,
-  sandbox?: OpenClawSandboxContext,
+  sandbox?: MarketingClawSandboxContext,
   options: {
     agentId?: string;
     runtimeSessionKey?: string;
@@ -488,7 +492,7 @@ export function shouldEnableCodexAppServerNativeToolSurface(
     return canCodexAppServerNativeToolSurfaceHonorSandbox(sandbox, options);
   }
   // Codex native code mode exposes its shell/file surface as one app-server
-  // capability, so narrow OpenClaw allowlists must fail closed rather than
+  // capability, so narrow MarketingClaw allowlists must fail closed rather than
   // widening `message` or `web_search` into shell access.
   return (
     hasWildcardCodexToolsAllow(toolsAllow) &&
@@ -496,13 +500,13 @@ export function shouldEnableCodexAppServerNativeToolSurface(
   );
 }
 
-/** Returns true when OpenClaw policy requires the Node-owned exec/process tools instead. */
+/** Returns true when MarketingClaw policy requires the Node-owned exec/process tools instead. */
 export function isCodexNativeExecutionBlockedByNodeExecHost(
   params: EmbeddedRunAttemptParams,
   options: {
     agentId?: string;
     runtimeSessionKey?: string;
-    sandbox?: OpenClawSandboxContext;
+    sandbox?: MarketingClawSandboxContext;
   } = {},
 ): boolean {
   return !resolveCodexNativeExecutionPolicy({
@@ -529,7 +533,7 @@ function resolveCodexRuntimePolicySessionKey(
 }
 
 function canCodexAppServerNativeToolSurfaceHonorSandbox(
-  sandbox: OpenClawSandboxContext | undefined,
+  sandbox: MarketingClawSandboxContext | undefined,
   options: { sandboxExecServerEnabled?: boolean } = {},
 ): boolean {
   if (!sandbox?.enabled) {
@@ -544,7 +548,7 @@ function canCodexAppServerNativeToolSurfaceHonorSandbox(
   }
   // Codex app-server native shell, filesystem, and user MCP execution are owned
   // by the app-server process. Without the explicit exec-server integration,
-  // active OpenClaw sandboxing must disable the native surface and route shell
+  // active MarketingClaw sandboxing must disable the native surface and route shell
   // access through sandbox-backed dynamic tools instead.
   return false;
 }
@@ -569,9 +573,9 @@ function filterCodexMemoryFlushDynamicTools<T extends { name: string }>(tools: T
   );
 }
 
-/** Requires a Codex sandbox environment only when native tools must run inside OpenClaw sandboxing. */
+/** Requires a Codex sandbox environment only when native tools must run inside MarketingClaw sandboxing. */
 export function shouldRequireCodexSandboxExecServerEnvironment(params: {
-  sandbox?: OpenClawSandboxContext;
+  sandbox?: MarketingClawSandboxContext;
   nativeToolSurfaceEnabled: boolean;
   sandboxExecServerEnabled: boolean;
 }): boolean {
@@ -607,7 +611,7 @@ export function resolveCodexAppServerExecutionCwd(params: {
   });
 }
 
-/** Projects a local OpenClaw workspace cwd into the remote Codex app-server workspace root. */
+/** Projects a local MarketingClaw workspace cwd into the remote Codex app-server workspace root. */
 export function mapCodexAppServerRemoteWorkspacePath(params: {
   value: string;
   localWorkspaceRoot: string;
@@ -628,7 +632,7 @@ export function mapCodexAppServerRemoteWorkspacePath(params: {
   const prefix = `${localRoot}/`;
   if (!normalizedValue.startsWith(prefix)) {
     throw new Error(
-      `Codex remoteWorkspaceRoot is configured but cwd ${params.value} is outside OpenClaw workspace root ${params.localWorkspaceRoot}; refusing to send a gateway-local cwd to the remote Codex app-server.`,
+      `Codex remoteWorkspaceRoot is configured but cwd ${params.value} is outside MarketingClaw workspace root ${params.localWorkspaceRoot}; refusing to send a gateway-local cwd to the remote Codex app-server.`,
     );
   }
   return joinRemoteWorkspacePath(remoteRoot, normalizedValue.slice(prefix.length));
@@ -646,18 +650,18 @@ function joinRemoteWorkspacePath(remoteRoot: string, suffix: string): string {
   return remoteRoot === "/" ? `/${suffix}` : `${remoteRoot}/${suffix}`;
 }
 
-/** Converts OpenClaw sandbox networking into Codex's external-sandbox policy shape. */
-export function resolveCodexExternalSandboxPolicyForOpenClawSandbox(
-  sandbox: OpenClawSandboxContext | undefined,
+/** Converts MarketingClaw sandbox networking into Codex's external-sandbox policy shape. */
+export function resolveCodexExternalSandboxPolicyForMarketingClawSandbox(
+  sandbox: MarketingClawSandboxContext | undefined,
 ): CodexSandboxPolicy {
   return {
     type: "externalSandbox",
-    networkAccess: codexNetworkAccessForOpenClawSandbox(sandbox) ? "enabled" : "restricted",
+    networkAccess: codexNetworkAccessForMarketingClawSandbox(sandbox) ? "enabled" : "restricted",
   };
 }
 
-function codexNetworkAccessForOpenClawSandbox(
-  sandbox: OpenClawSandboxContext | undefined,
+function codexNetworkAccessForMarketingClawSandbox(
+  sandbox: MarketingClawSandboxContext | undefined,
 ): boolean {
   if (sandbox?.backendId !== "docker") {
     return true;
@@ -680,10 +684,10 @@ export function disableCodexPluginThreadConfig(pluginConfig?: unknown): CodexPlu
 
 /** Adds sandbox_exec/process aliases when native Code Mode cannot directly honor the sandbox. */
 export function addSandboxShellDynamicToolsIfAvailable(
-  filteredTools: OpenClawDynamicTool[],
-  allTools: OpenClawDynamicTool[],
+  filteredTools: MarketingClawDynamicTool[],
+  allTools: MarketingClawDynamicTool[],
   input: DynamicToolBuildParams,
-): OpenClawDynamicTool[] {
+): MarketingClawDynamicTool[] {
   if (
     !shouldExposeSandboxExecDynamicTool(input) ||
     isSandboxShellDynamicToolExcluded(input.pluginConfig)
@@ -697,11 +701,11 @@ export function addSandboxShellDynamicToolsIfAvailable(
   if (!execTool || !processTool) {
     return filteredTools;
   }
-  const sandboxExecTool: OpenClawDynamicTool = {
+  const sandboxExecTool: MarketingClawDynamicTool = {
     ...execTool,
     name: "sandbox_exec",
     description:
-      "Run a shell command through OpenClaw's configured sandbox backend for this session. Use when OpenClaw sandboxing is active or when a command must execute in the sandbox backend, such as an SSH-backed sandbox or Docker container-path bind layout. Use Codex's native shell only when no OpenClaw sandbox is active and native Code Mode is available.",
+      "Run a shell command through MarketingClaw's configured sandbox backend for this session. Use when MarketingClaw sandboxing is active or when a command must execute in the sandbox backend, such as an SSH-backed sandbox or Docker container-path bind layout. Use Codex's native shell only when no MarketingClaw sandbox is active and native Code Mode is available.",
     execute: async (toolCallId, args, signal, onUpdate) => {
       const result = await execTool.execute(toolCallId, args, signal, onUpdate);
       return {
@@ -719,11 +723,11 @@ export function addSandboxShellDynamicToolsIfAvailable(
       };
     },
   };
-  const sandboxProcessTool: OpenClawDynamicTool = {
+  const sandboxProcessTool: MarketingClawDynamicTool = {
     ...processTool,
     name: "sandbox_process",
     description:
-      "Manage sandbox_exec sessions that were started through OpenClaw's configured sandbox backend for this session: list, poll, log, write, send-keys, submit, paste, kill, clear, or remove. Use only for sandbox_exec follow-up; use Codex's native shell session handling only when no OpenClaw sandbox is active and native Code Mode is available.",
+      "Manage sandbox_exec sessions that were started through MarketingClaw's configured sandbox backend for this session: list, poll, log, write, send-keys, submit, paste, kill, clear, or remove. Use only for sandbox_exec follow-up; use Codex's native shell session handling only when no MarketingClaw sandbox is active and native Code Mode is available.",
   };
   return [...filteredTools, sandboxExecTool, sandboxProcessTool];
 }
@@ -758,11 +762,11 @@ function isSandboxShellDynamicToolExcluded(config: CodexPluginConfig): boolean {
 }
 
 function addNodeShellDynamicToolsIfNeeded(
-  filteredTools: OpenClawDynamicTool[],
-  allTools: OpenClawDynamicTool[],
+  filteredTools: MarketingClawDynamicTool[],
+  allTools: MarketingClawDynamicTool[],
   input: DynamicToolBuildParams,
   nodePolicy: CodexNativeExecutionPolicy,
-): OpenClawDynamicTool[] {
+): MarketingClawDynamicTool[] {
   if (isCodexMemoryFlushRun(input.params)) {
     return filteredTools;
   }
@@ -776,7 +780,7 @@ function addNodeShellDynamicToolsIfNeeded(
   if (!execTool || !processTool) {
     return filteredTools;
   }
-  const toolsToAppend: OpenClawDynamicTool[] = [];
+  const toolsToAppend: MarketingClawDynamicTool[] = [];
   if (
     !isCodexDynamicToolExcluded(input.pluginConfig, ["exec", CODEX_NODE_EXEC_DYNAMIC_TOOL_NAME]) &&
     !filteredTools.some(
@@ -800,14 +804,14 @@ function addNodeShellDynamicToolsIfNeeded(
 }
 
 function createNodeExecDynamicTool(
-  execTool: OpenClawDynamicTool,
+  execTool: MarketingClawDynamicTool,
   configuredNode: string | undefined,
-): OpenClawDynamicTool {
+): MarketingClawDynamicTool {
   return {
     ...execTool,
     name: CODEX_NODE_EXEC_DYNAMIC_TOOL_NAME,
     description:
-      "Run a shell command on the OpenClaw configured remote node for this session. This tool always uses OpenClaw host=node internally and follows the existing node exec approval and allowlist policy. Use node_process for follow-up on backgrounded node_exec sessions. Use Codex's native shell for local app-server work.",
+      "Run a shell command on the MarketingClaw configured remote node for this session. This tool always uses MarketingClaw host=node internally and follows the existing node exec approval and allowlist policy. Use node_process for follow-up on backgrounded node_exec sessions. Use Codex's native shell for local app-server work.",
     parameters: hideNodeExecDynamicToolParameters(execTool.parameters),
     execute: async (toolCallId, args, signal, onUpdate) => {
       const result = await execTool.execute(
@@ -833,12 +837,14 @@ function createNodeExecDynamicTool(
   };
 }
 
-function createNodeProcessDynamicTool(processTool: OpenClawDynamicTool): OpenClawDynamicTool {
+function createNodeProcessDynamicTool(
+  processTool: MarketingClawDynamicTool,
+): MarketingClawDynamicTool {
   return {
     ...processTool,
     name: CODEX_NODE_PROCESS_DYNAMIC_TOOL_NAME,
     description:
-      "Manage node_exec sessions that were started on the OpenClaw configured remote node for this session: list, poll, log, write, send-keys, submit, paste, kill, clear, or remove. Use only for node_exec follow-up; use Codex's native shell session handling for local app-server work.",
+      "Manage node_exec sessions that were started on the MarketingClaw configured remote node for this session: list, poll, log, write, send-keys, submit, paste, kill, clear, or remove. Use only for node_exec follow-up; use Codex's native shell session handling for local app-server work.",
   };
 }
 
@@ -856,7 +862,7 @@ function pinNodeExecDynamicToolArgs(args: unknown, configuredNode: string | unde
   };
 }
 
-function hideNodeExecDynamicToolParameters(parameters: OpenClawDynamicTool["parameters"]) {
+function hideNodeExecDynamicToolParameters(parameters: MarketingClawDynamicTool["parameters"]) {
   if (!parameters || typeof parameters !== "object" || Array.isArray(parameters)) {
     return parameters;
   }
@@ -901,7 +907,7 @@ function resolveCodexNativeExecutionPolicyForDynamicTools(
 
 function resolveNodeExecToolOverrides(
   policy: CodexNativeExecutionPolicy,
-): Pick<OpenClawExecOptions, "host" | "node"> | undefined {
+): Pick<MarketingClawExecOptions, "host" | "node"> | undefined {
   if (policy.effectiveExecHost !== "node") {
     return undefined;
   }

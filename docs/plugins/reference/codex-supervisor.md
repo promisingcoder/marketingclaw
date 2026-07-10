@@ -1,5 +1,5 @@
 ---
-summary: "Supervise Codex app-server sessions from OpenClaw."
+summary: "Supervise Codex app-server sessions from MarketingClaw."
 read_when:
   - You are installing, configuring, or auditing the codex-supervisor plugin
 title: "Codex Supervisor plugin"
@@ -7,18 +7,18 @@ title: "Codex Supervisor plugin"
 
 # Codex Supervisor plugin
 
-Supervise Codex app-server sessions from OpenClaw.
+Supervise Codex app-server sessions from MarketingClaw.
 
 ## Distribution
 
-- Package: `@openclaw/codex-supervisor`
-- Install route: included in OpenClaw
+- Package: `@marketingclaw/codex-supervisor`
+- Install route: included in MarketingClaw
 
 ## Surface
 
 contracts: tools
 
-<!-- openclaw-plugin-reference:manual-start -->
+<!-- marketingclaw-plugin-reference:manual-start -->
 
 ## Enable the plugin
 
@@ -37,13 +37,13 @@ on every computer whose Codex sessions should appear in the federated catalog:
 }
 ```
 
-Each entry belongs to the OpenClaw process on that computer:
+Each entry belongs to the MarketingClaw process on that computer:
 
-| Entry location                           | What it enables                                                                                  |
-| ---------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| Gateway `openclaw.json`                  | The Gateway-local catalog, fleet aggregation, `openclaw codex sessions`, and the Control UI page |
-| Headless node host `openclaw.json`       | The node-local catalog command advertised by `openclaw node run` or the installed node service   |
-| Native macOS app's local `openclaw.json` | The same node-local catalog command, implemented by the app                                      |
+| Entry location                                | What it enables                                                                                       |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Gateway `marketingclaw.json`                  | The Gateway-local catalog, fleet aggregation, `marketingclaw codex sessions`, and the Control UI page |
+| Headless node host `marketingclaw.json`       | The node-local catalog command advertised by `marketingclaw node run` or the installed node service   |
+| Native macOS app's local `marketingclaw.json` | The same node-local catalog command, implemented by the app                                           |
 
 The node entry is local consent to share session metadata with its paired
 Gateway. Enabling only the Gateway does not authorize access to another
@@ -54,8 +54,8 @@ A newly advertised catalog command changes the node's approved command surface.
 Approve that update from the Gateway host:
 
 ```bash
-openclaw nodes pending
-openclaw nodes approve <requestId>
+marketingclaw nodes pending
+marketingclaw nodes approve <requestId>
 ```
 
 ## App Server selection
@@ -76,10 +76,10 @@ replace or attach to the live-control connection.
 The command queries the Gateway and groups results by stable host id:
 
 ```bash
-openclaw codex sessions
-openclaw codex sessions --json
-openclaw codex sessions --search "Fix tests"
-openclaw codex sessions --archived
+marketingclaw codex sessions
+marketingclaw codex sessions --json
+marketingclaw codex sessions --search "Fix tests"
+marketingclaw codex sessions --archived
 ```
 
 Options:
@@ -142,4 +142,4 @@ metadata-only CLI or Control UI catalog.
 state-DB-only listing path and caps stored results at 200 by default. Pass
 `max_stored_sessions` to lower or raise that cap, up to 1000.
 
-<!-- openclaw-plugin-reference:manual-end -->
+<!-- marketingclaw-plugin-reference:manual-end -->

@@ -1,5 +1,5 @@
-import OpenClawKit
-import OpenClawProtocol
+import MarketingClawKit
+import MarketingClawProtocol
 import SwiftUI
 
 struct SettingsChannelsDestination: View {
@@ -22,7 +22,7 @@ struct SettingsChannelsDestination: View {
             }
             self.channelsCard
         }
-        .font(OpenClawType.body)
+        .font(MarketingClawType.body)
         .task(id: self.refreshID) {
             await self.loadChannels(force: false)
         }
@@ -37,9 +37,9 @@ struct SettingsChannelsDestination: View {
                 ProIconBadge(systemName: "point.3.connected.trianglepath.dotted", color: self.summaryColor)
                 VStack(alignment: .leading, spacing: 3) {
                     Text("Channels / Integrations")
-                        .font(OpenClawType.headline)
+                        .font(MarketingClawType.headline)
                     Text(self.summaryDetail)
-                        .font(OpenClawType.caption)
+                        .font(MarketingClawType.caption)
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
@@ -47,7 +47,7 @@ struct SettingsChannelsDestination: View {
                 ProValuePill(value: self.summaryValue, color: self.summaryColor)
             }
         }
-        .padding(.horizontal, OpenClawProMetric.pagePadding)
+        .padding(.horizontal, MarketingClawProMetric.pagePadding)
     }
 
     private var channelsCard: some View {
@@ -69,7 +69,7 @@ struct SettingsChannelsDestination: View {
                         title: "Channel status unavailable",
                         detail: errorText,
                         value: "error",
-                        color: OpenClawBrand.warn)
+                        color: MarketingClawBrand.warn)
                 } else if !self.canRead {
                     ProStatusRow(
                         icon: "wifi.slash",
@@ -83,7 +83,7 @@ struct SettingsChannelsDestination: View {
                         title: "Loading channels",
                         detail: "Fetching installed channels, accounts, and routing status from the gateway.",
                         value: "loading",
-                        color: OpenClawBrand.accent)
+                        color: MarketingClawBrand.accent)
                 } else if self.channelEntries.isEmpty {
                     ProStatusRow(
                         icon: "tray",
@@ -113,7 +113,7 @@ struct SettingsChannelsDestination: View {
                 }
             }
         }
-        .padding(.horizontal, OpenClawProMetric.pagePadding)
+        .padding(.horizontal, MarketingClawProMetric.pagePadding)
     }
 
     private var refreshID: String {
@@ -161,8 +161,8 @@ struct SettingsChannelsDestination: View {
 
     private var summaryColor: Color {
         guard self.canRead else { return .secondary }
-        if self.errorText != nil { return OpenClawBrand.warn }
-        return self.channelEntries.contains(where: { $0.running || $0.connected }) ? OpenClawBrand.ok : OpenClawBrand
+        if self.errorText != nil { return MarketingClawBrand.warn }
+        return self.channelEntries.contains(where: { $0.running || $0.connected }) ? MarketingClawBrand.ok : MarketingClawBrand
             .accent
     }
 
@@ -347,15 +347,15 @@ private struct SettingsChannelRow: View {
                 ProIconBadge(systemName: self.entry.systemImage, color: self.entry.color)
                 VStack(alignment: .leading, spacing: 4) {
                     Text(self.entry.label)
-                        .font(OpenClawType.subheadSemiBold)
+                        .font(MarketingClawType.subheadSemiBold)
                     Text(self.entry.detailText)
-                        .font(OpenClawType.caption)
+                        .font(MarketingClawType.caption)
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
                     if let lastError = self.entry.lastError {
                         Text(lastError)
-                            .font(OpenClawType.caption2Medium)
-                            .foregroundStyle(OpenClawBrand.warn)
+                            .font(MarketingClawType.caption2Medium)
+                            .foregroundStyle(MarketingClawBrand.warn)
                             .lineLimit(2)
                     }
                 }
@@ -381,14 +381,14 @@ private struct SettingsChannelRow: View {
     private func accountRow(_ account: SettingsChannelAccount) -> some View {
         HStack(spacing: 10) {
             Image(systemName: account.running || account.connected ? "checkmark.circle.fill" : "circle")
-                .font(OpenClawType.captionSemiBold)
+                .font(MarketingClawType.captionSemiBold)
                 .foregroundStyle(account.color)
                 .frame(width: 28, height: 28)
             VStack(alignment: .leading, spacing: 2) {
                 Text(account.displayName)
-                    .font(OpenClawType.captionSemiBold)
+                    .font(MarketingClawType.captionSemiBold)
                 Text(account.detailText)
-                    .font(OpenClawType.caption2)
+                    .font(MarketingClawType.caption2)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
             }
@@ -399,14 +399,14 @@ private struct SettingsChannelRow: View {
                         self.stop(account.id)
                     } label: {
                         Text("Stop")
-                            .font(OpenClawType.subhead)
+                            .font(MarketingClawType.subhead)
                     }
                 } else {
                     Button {
                         self.start(account.id)
                     } label: {
                         Text("Start")
-                            .font(OpenClawType.subhead)
+                            .font(MarketingClawType.subhead)
                     }
                     .disabled(!account.configured || !account.enabled)
                 }
@@ -415,12 +415,12 @@ private struct SettingsChannelRow: View {
                         self.logout(account.id)
                     } label: {
                         Text("Logout")
-                            .font(OpenClawType.subhead)
+                            .font(MarketingClawType.subhead)
                     }
                 }
             } label: {
                 Image(systemName: self.actionMenuIcon(account))
-                    .font(OpenClawType.captionSemiBold)
+                    .font(MarketingClawType.captionSemiBold)
             }
             .buttonStyle(.bordered)
             .controlSize(.mini)
@@ -459,9 +459,9 @@ private struct SettingsChannelEntry: Identifiable {
     let accounts: [SettingsChannelAccount]
 
     var color: Color {
-        if self.connected || self.running { return OpenClawBrand.ok }
-        if self.lastError != nil { return OpenClawBrand.warn }
-        return self.configured ? OpenClawBrand.accent : .secondary
+        if self.connected || self.running { return MarketingClawBrand.ok }
+        if self.lastError != nil { return MarketingClawBrand.warn }
+        return self.configured ? MarketingClawBrand.accent : .secondary
     }
 
     var statusValue: String {
@@ -529,9 +529,9 @@ private struct SettingsChannelAccount: Identifiable {
     }
 
     var color: Color {
-        if self.connected || self.running { return OpenClawBrand.ok }
-        if self.lastError != nil { return OpenClawBrand.warn }
-        return self.configured ? OpenClawBrand.accent : .secondary
+        if self.connected || self.running { return MarketingClawBrand.ok }
+        if self.lastError != nil { return MarketingClawBrand.warn }
+        return self.configured ? MarketingClawBrand.accent : .secondary
     }
 }
 
@@ -566,7 +566,7 @@ private enum SettingsChannelError: Error {
 private struct SettingsChannelsStatesPreview: View {
     var body: some View {
         ZStack {
-            OpenClawProBackground()
+            MarketingClawProBackground()
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
                     self.stateSection("Connected") {
@@ -592,7 +592,7 @@ private struct SettingsChannelsStatesPreview: View {
                             title: "Loading channel status",
                             detail: "Checking installed channel clients and account state.",
                             value: "loading",
-                            color: OpenClawBrand.accent)
+                            color: MarketingClawBrand.accent)
                     }
 
                     self.stateSection("Empty") {
@@ -616,7 +616,7 @@ private struct SettingsChannelsStatesPreview: View {
                             title: "Channel status unavailable",
                             detail: "Gateway returned an unexpected channel status response.",
                             value: "error",
-                            color: OpenClawBrand.warn)
+                            color: MarketingClawBrand.warn)
                     }
 
                     self.stateSection("Offline") {
@@ -628,7 +628,7 @@ private struct SettingsChannelsStatesPreview: View {
                             color: .secondary)
                     }
                 }
-                .padding(.horizontal, OpenClawProMetric.pagePadding)
+                .padding(.horizontal, MarketingClawProMetric.pagePadding)
                 .padding(.vertical, 18)
             }
         }
@@ -640,7 +640,7 @@ private struct SettingsChannelsStatesPreview: View {
     {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
-                .font(OpenClawType.subheadSemiBold)
+                .font(MarketingClawType.subheadSemiBold)
                 .foregroundStyle(.secondary)
             ProCard(padding: 0, radius: SettingsLayout.cardRadius) {
                 VStack(spacing: 0) {
@@ -665,7 +665,7 @@ private struct SettingsChannelsStatesPreview: View {
         accounts: [
             SettingsChannelAccount(
                 id: "main",
-                name: "OpenClaw Ops",
+                name: "MarketingClaw Ops",
                 configured: true,
                 enabled: true,
                 running: true,

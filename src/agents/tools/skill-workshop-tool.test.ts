@@ -4,21 +4,21 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../../test-utils/openclaw-test-state.js";
+  createMarketingClawTestState,
+  type MarketingClawTestState,
+} from "../../test-utils/marketingclaw-test-state.js";
 import { createTrackedTempDirs } from "../../test-utils/tracked-temp-dirs.js";
-import { createOpenClawTools } from "../openclaw-tools.js";
+import { createMarketingClawTools } from "../marketingclaw-tools.js";
 import { createSkillWorkshopTool } from "./skill-workshop-tool.js";
 
 const tempDirs = createTrackedTempDirs();
-let testState: OpenClawTestState;
+let testState: MarketingClawTestState;
 let stateDir = "";
 
 beforeEach(async () => {
-  testState = await createOpenClawTestState({
+  testState = await createMarketingClawTestState({
     layout: "state-only",
-    prefix: "openclaw-skill-workshop-state-",
+    prefix: "marketingclaw-skill-workshop-state-",
   });
   stateDir = testState.stateDir;
 });
@@ -30,7 +30,7 @@ afterEach(async () => {
 
 describe("skill_workshop tool", () => {
   it("describes action selection and pending-proposal discovery in its schema", () => {
-    const tool = createSkillWorkshopTool({ workspaceDir: "/tmp/openclaw" });
+    const tool = createSkillWorkshopTool({ workspaceDir: "/tmp/marketingclaw" });
     const schema = JSON.stringify(tool.parameters);
 
     expect(schema).toContain("create = new skill");
@@ -43,9 +43,9 @@ describe("skill_workshop tool", () => {
     expect(schema).toContain("shortens the proposal listing entry");
   });
 
-  it("is exposed in the OpenClaw tool set", async () => {
-    const workspaceDir = await tempDirs.make("openclaw-skill-workshop-tool-");
-    const tools = createOpenClawTools({
+  it("is exposed in the MarketingClaw tool set", async () => {
+    const workspaceDir = await tempDirs.make("marketingclaw-skill-workshop-tool-");
+    const tools = createMarketingClawTools({
       workspaceDir,
       config: {},
       disablePluginTools: true,
@@ -54,8 +54,8 @@ describe("skill_workshop tool", () => {
   });
 
   it("stays exposed when autonomous proposal capture is disabled", async () => {
-    const workspaceDir = await tempDirs.make("openclaw-skill-workshop-tool-");
-    const tools = createOpenClawTools({
+    const workspaceDir = await tempDirs.make("marketingclaw-skill-workshop-tool-");
+    const tools = createMarketingClawTools({
       workspaceDir,
       config: {
         skills: {
@@ -71,9 +71,9 @@ describe("skill_workshop tool", () => {
     expect(tools.some((tool) => tool.name === "skill_workshop")).toBe(true);
   });
 
-  it("is not exposed from sandboxed OpenClaw tool sets", async () => {
-    const workspaceDir = await tempDirs.make("openclaw-skill-workshop-tool-");
-    const tools = createOpenClawTools({
+  it("is not exposed from sandboxed MarketingClaw tool sets", async () => {
+    const workspaceDir = await tempDirs.make("marketingclaw-skill-workshop-tool-");
+    const tools = createMarketingClawTools({
       workspaceDir,
       config: {},
       disablePluginTools: true,
@@ -86,7 +86,7 @@ describe("skill_workshop tool", () => {
   it("creates pending skill proposals without applying them", async () => {
     // Creation writes reviewable proposal artifacts under state, not live skill
     // files in the workspace.
-    const workspaceDir = await tempDirs.make("openclaw-skill-workshop-tool-");
+    const workspaceDir = await tempDirs.make("marketingclaw-skill-workshop-tool-");
     const tool = createSkillWorkshopTool({
       workspaceDir,
       config: {},
@@ -287,7 +287,7 @@ describe("skill_workshop tool", () => {
   });
 
   it("rejects whitespace-only proposal content while preserving raw valid markdown", async () => {
-    const workspaceDir = await tempDirs.make("openclaw-skill-workshop-tool-");
+    const workspaceDir = await tempDirs.make("marketingclaw-skill-workshop-tool-");
     const tool = createSkillWorkshopTool({
       workspaceDir,
       config: {},
@@ -326,7 +326,7 @@ describe("skill_workshop tool", () => {
   });
 
   it("applies, rejects, and quarantines proposals through the workshop service", async () => {
-    const workspaceDir = await tempDirs.make("openclaw-skill-workshop-tool-");
+    const workspaceDir = await tempDirs.make("marketingclaw-skill-workshop-tool-");
     const tool = createSkillWorkshopTool({ workspaceDir, config: {}, agentId: "main" });
 
     const created = await tool.execute("call-1", {
@@ -443,8 +443,8 @@ describe("skill_workshop tool", () => {
   });
 
   it("scopes proposal discovery to the tool workspace", async () => {
-    const firstWorkspaceDir = await tempDirs.make("openclaw-skill-workshop-tool-first-");
-    const secondWorkspaceDir = await tempDirs.make("openclaw-skill-workshop-tool-second-");
+    const firstWorkspaceDir = await tempDirs.make("marketingclaw-skill-workshop-tool-first-");
+    const secondWorkspaceDir = await tempDirs.make("marketingclaw-skill-workshop-tool-second-");
     const firstTool = createSkillWorkshopTool({
       workspaceDir: firstWorkspaceDir,
       config: {},

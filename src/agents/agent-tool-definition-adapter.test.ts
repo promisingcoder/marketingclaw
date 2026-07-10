@@ -5,7 +5,7 @@
  */
 import os from "node:os";
 import path from "node:path";
-import type { AgentTool } from "openclaw/plugin-sdk/agent-core";
+import type { AgentTool } from "marketingclaw/plugin-sdk/agent-core";
 import { Type } from "typebox";
 import { describe, expect, it, vi } from "vitest";
 import {
@@ -102,7 +102,7 @@ describe("agent tool definition adapter", () => {
       ask: "off",
     });
     const [definition] = toToolDefinitions([tool]);
-    const missingWorkdir = path.join(os.tmpdir(), `openclaw-missing-denied-cwd-${Date.now()}`);
+    const missingWorkdir = path.join(os.tmpdir(), `marketingclaw-missing-denied-cwd-${Date.now()}`);
 
     const existing = await definition.execute(
       "call-denied-existing-cwd",
@@ -471,7 +471,7 @@ describe("client tool name conflict checks", () => {
     ).toEqual(["Weather", "weather"]);
   });
 
-  it("detects collisions with reserved OpenClaw built-in tool names", () => {
+  it("detects collisions with reserved MarketingClaw built-in tool names", () => {
     expect(
       findClientToolNameConflicts({
         tools: [makeClientTool("Bash"), makeClientTool("grep")],

@@ -11,13 +11,13 @@ import type { DiffViewerPayload, DiffLayout, DiffTheme } from "./types.js";
 import { parseViewerPayloadJson } from "./viewer-payload.js";
 
 // oxlint-disable-next-line eslint/no-underscore-dangle -- Bundled builds replace this compile-time define identifier.
-declare const __OPENCLAW_DIFFS_LANGUAGE_PACK__: boolean | undefined;
+declare const __MARKETINGCLAW_DIFFS_LANGUAGE_PACK__: boolean | undefined;
 
 // Build-time esbuild define; typeof guard keeps the module loadable where the
-// define is absent (vitest/node), matching the __OPENCLAW_VERSION__ pattern.
+// define is absent (vitest/node), matching the __MARKETINGCLAW_VERSION__ pattern.
 function readInjectedLanguagePackFlag(): boolean | undefined {
-  return typeof __OPENCLAW_DIFFS_LANGUAGE_PACK__ === "boolean"
-    ? __OPENCLAW_DIFFS_LANGUAGE_PACK__
+  return typeof __MARKETINGCLAW_DIFFS_LANGUAGE_PACK__ === "boolean"
+    ? __MARKETINGCLAW_DIFFS_LANGUAGE_PACK__
     : undefined;
 }
 
@@ -59,8 +59,8 @@ function parsePayload(element: HTMLScriptElement): DiffViewerPayload {
 function getCards(): Array<{ host: HTMLElement; payload: DiffViewerPayload }> {
   const cards: Array<{ host: HTMLElement; payload: DiffViewerPayload }> = [];
   for (const card of document.querySelectorAll<HTMLElement>(".oc-diff-card")) {
-    const host = card.querySelector<HTMLElement>("[data-openclaw-diff-host]");
-    const payloadNode = card.querySelector<HTMLScriptElement>("[data-openclaw-diff-payload]");
+    const host = card.querySelector<HTMLElement>("[data-marketingclaw-diff-host]");
+    const payloadNode = card.querySelector<HTMLScriptElement>("[data-marketingclaw-diff-payload]");
     if (!host || !payloadNode) {
       continue;
     }
@@ -365,14 +365,14 @@ export async function hydrateViewer(): Promise<void> {
 async function main(): Promise<void> {
   try {
     await hydrateViewer();
-    document.documentElement.dataset.openclawDiffsReady = "true";
+    document.documentElement.dataset.marketingclawDiffsReady = "true";
   } catch (error) {
-    document.documentElement.dataset.openclawDiffsError = "true";
+    document.documentElement.dataset.marketingclawDiffsError = "true";
     console.error("Failed to hydrate diff viewer", error);
   }
 }
 
-export const disableAutoStartKey = Symbol.for("openclaw.diffs.disableAutoStart");
+export const disableAutoStartKey = Symbol.for("marketingclaw.diffs.disableAutoStart");
 
 const autoStartDisabled = Boolean(
   (globalThis as typeof globalThis & Record<symbol, unknown>)[disableAutoStartKey],

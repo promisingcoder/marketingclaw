@@ -2,7 +2,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { openOpenClawStateDatabase } from "../state/openclaw-state-db.js";
+import { openMarketingClawStateDatabase } from "../state/marketingclaw-state-db.js";
 import {
   countFailedDeliveryQueueEntries,
   deleteDeliveryQueueEntry,
@@ -12,7 +12,7 @@ import {
   updateDeliveryQueueEntry,
   upsertDeliveryQueueEntry,
 } from "./delivery-queue-sqlite.js";
-import { resolvePreferredOpenClawTmpDir } from "./tmp-openclaw-dir.js";
+import { resolvePreferredMarketingClawTmpDir } from "./tmp-marketingclaw-dir.js";
 
 describe("delivery-queue-sqlite corrupt JSON resilience", () => {
   let stateDir: string;
@@ -20,7 +20,9 @@ describe("delivery-queue-sqlite corrupt JSON resilience", () => {
   const QUEUE = "test-q";
 
   beforeEach(() => {
-    tmpDir = fs.mkdtempSync(path.join(resolvePreferredOpenClawTmpDir(), "openclaw-dq-case-"));
+    tmpDir = fs.mkdtempSync(
+      path.join(resolvePreferredMarketingClawTmpDir(), "marketingclaw-dq-case-"),
+    );
     stateDir = path.join(tmpDir, "state");
     fs.mkdirSync(stateDir, { recursive: true });
   });
@@ -30,8 +32,8 @@ describe("delivery-queue-sqlite corrupt JSON resilience", () => {
   });
 
   function insertCorruptRow(id: string, json: string) {
-    const { db } = openOpenClawStateDatabase({
-      env: { ...process.env, OPENCLAW_STATE_DIR: stateDir },
+    const { db } = openMarketingClawStateDatabase({
+      env: { ...process.env, MARKETINGCLAW_STATE_DIR: stateDir },
     });
     db.prepare(
       `INSERT INTO delivery_queue_entries
@@ -167,7 +169,9 @@ describe("countFailedDeliveryQueueEntries", () => {
   let stateDir: string;
 
   beforeEach(() => {
-    tmpDir = fs.mkdtempSync(path.join(resolvePreferredOpenClawTmpDir(), "openclaw-dq-count-"));
+    tmpDir = fs.mkdtempSync(
+      path.join(resolvePreferredMarketingClawTmpDir(), "marketingclaw-dq-count-"),
+    );
     stateDir = path.join(tmpDir, "state");
     fs.mkdirSync(stateDir, { recursive: true });
   });

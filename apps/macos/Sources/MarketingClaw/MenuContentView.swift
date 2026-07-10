@@ -2,10 +2,10 @@ import AppKit
 import AVFoundation
 import Foundation
 import Observation
-import OpenClawKit
+import MarketingClawKit
 import SwiftUI
 
-/// Menu contents for the OpenClaw menu bar extra.
+/// Menu contents for the MarketingClaw menu bar extra.
 struct MenuContent: View {
     @Bindable var state: AppState
     let updater: UpdaterProviding?
@@ -136,7 +136,7 @@ struct MenuContent: View {
             Button("Settings…") { self.open(tab: .general) }
                 .keyboardShortcut(",", modifiers: [.command])
             self.debugMenu
-            Button("About OpenClaw") { self.open(tab: .about) }
+            Button("About MarketingClaw") { self.open(tab: .about) }
             if let updater, updater.isAvailable, self.updateStatus.isUpdateReady {
                 Button("Update ready, restart now?") { updater.checkForUpdates(nil) }
             }
@@ -173,11 +173,11 @@ struct MenuContent: View {
     private var connectionLabel: String {
         switch self.state.connectionMode {
         case .unconfigured:
-            "OpenClaw Not Configured"
+            "MarketingClaw Not Configured"
         case .remote:
-            "Remote OpenClaw Active"
+            "Remote MarketingClaw Active"
         case .local:
-            "OpenClaw Active"
+            "MarketingClaw Active"
         }
     }
 
@@ -335,9 +335,9 @@ struct MenuContent: View {
             }
             let commands = Set(entry.commands ?? [])
             let missingRequiredCommands = [
-                OpenClawSystemCommand.notify.rawValue,
-                OpenClawSystemCommand.run.rawValue,
-                OpenClawSystemCommand.which.rawValue,
+                MarketingClawSystemCommand.notify.rawValue,
+                MarketingClawSystemCommand.run.rawValue,
+                MarketingClawSystemCommand.which.rawValue,
             ].filter { !commands.contains($0) }
             if !missingRequiredCommands.isEmpty {
                 return ("Mac capabilities incomplete", .orange)

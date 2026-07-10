@@ -8,7 +8,7 @@ import process from "node:process";
 import { plainGhEnv, resolvePlainGhBin } from "../../../../scripts/lib/plain-gh.mjs";
 
 const runId = process.argv[2];
-const repo = process.env.OPENCLAW_RELEASE_REPO || "openclaw/openclaw";
+const repo = process.env.MARKETINGCLAW_RELEASE_REPO || "marketingclaw/marketingclaw";
 
 if (!runId) {
   console.error("usage: release-ci-summary.mjs <full-release-run-id>");
@@ -34,16 +34,16 @@ function githubRestJson(pathSuffix) {
       "-lc",
       [
         "set -euo pipefail",
-        'token="$("$OPENCLAW_PLAIN_GH_BIN" auth token)"',
-        'curl -fsS -H "Authorization: Bearer ${token}" -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" "${OPENCLAW_GITHUB_REST_URL}"',
+        'token="$("$MARKETINGCLAW_PLAIN_GH_BIN" auth token)"',
+        'curl -fsS -H "Authorization: Bearer ${token}" -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" "${MARKETINGCLAW_GITHUB_REST_URL}"',
       ].join("\n"),
     ],
     {
       encoding: "utf8",
       env: {
         ...plainGhEnv(),
-        OPENCLAW_PLAIN_GH_BIN: resolvePlainGhBin(),
-        OPENCLAW_GITHUB_REST_URL: `https://api.github.com/repos/${repo}/${pathSuffix}`,
+        MARKETINGCLAW_PLAIN_GH_BIN: resolvePlainGhBin(),
+        MARKETINGCLAW_GITHUB_REST_URL: `https://api.github.com/repos/${repo}/${pathSuffix}`,
       },
       maxBuffer: 16 * 1024 * 1024,
       stdio: ["ignore", "pipe", "pipe"],
@@ -97,7 +97,7 @@ const runsQuery = new URLSearchParams({
 });
 const childWorkflowNames = new Set([
   "CI",
-  "OpenClaw Release Checks",
+  "MarketingClaw Release Checks",
   "Plugin Prerelease",
   "NPM Telegram Beta E2E",
   "Full Release Validation",

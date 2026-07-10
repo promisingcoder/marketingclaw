@@ -3,8 +3,8 @@ import {
   AllowFromListSchema,
   ToolPolicySchema,
   buildChannelConfigSchema,
-} from "openclaw/plugin-sdk/channel-config-schema";
-import { buildSecretInputSchema } from "openclaw/plugin-sdk/secret-input";
+} from "marketingclaw/plugin-sdk/channel-config-schema";
+import { buildSecretInputSchema } from "marketingclaw/plugin-sdk/secret-input";
 import { z } from "zod";
 
 const AudioFormatPolicySchema = z

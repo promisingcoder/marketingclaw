@@ -1,6 +1,6 @@
 // Qa Lab tests cover credential lease plugin behavior.
 import { createServer } from "node:http";
-import { MAX_TIMER_TIMEOUT_MS } from "openclaw/plugin-sdk/number-runtime";
+import { MAX_TIMER_TIMEOUT_MS } from "marketingclaw/plugin-sdk/number-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   acquireQaCredentialLease,
@@ -153,8 +153,8 @@ describe("credential lease runtime", () => {
       source: "convex",
       role: "maintainer",
       env: {
-        OPENCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
-        OPENCLAW_QA_CONVEX_SECRET_MAINTAINER: "maintainer-secret",
+        MARKETINGCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
+        MARKETINGCLAW_QA_CONVEX_SECRET_MAINTAINER: "maintainer-secret",
       },
       fetchImpl,
       resolveEnvPayload: () => ({ groupId: "-1", driverToken: "unused", sutToken: "unused" }),
@@ -190,8 +190,8 @@ describe("credential lease runtime", () => {
         source: "convex",
         role: "maintainer",
         env: {
-          OPENCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
-          OPENCLAW_QA_CONVEX_SECRET_MAINTAINER: "maintainer-secret",
+          MARKETINGCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
+          MARKETINGCLAW_QA_CONVEX_SECRET_MAINTAINER: "maintainer-secret",
         },
         fetchImpl,
         resolveEnvPayload: () => ({ groupId: "-1", driverToken: "unused", sutToken: "unused" }),
@@ -212,9 +212,9 @@ describe("credential lease runtime", () => {
           source: "convex",
           role: "maintainer",
           env: {
-            OPENCLAW_QA_CONVEX_SITE_URL: broker.url,
-            OPENCLAW_QA_CONVEX_SECRET_MAINTAINER: "maintainer-secret",
-            OPENCLAW_QA_ALLOW_INSECURE_HTTP: "1",
+            MARKETINGCLAW_QA_CONVEX_SITE_URL: broker.url,
+            MARKETINGCLAW_QA_CONVEX_SECRET_MAINTAINER: "maintainer-secret",
+            MARKETINGCLAW_QA_ALLOW_INSECURE_HTTP: "1",
           },
           resolveEnvPayload: () => ({ groupId: "-1", driverToken: "unused", sutToken: "unused" }),
           parsePayload: (payload) =>
@@ -244,7 +244,7 @@ describe("credential lease runtime", () => {
           credentialId: "cred-chunked",
           leaseToken: "lease-chunked",
           payload: {
-            __openclawQaCredentialPayloadChunksV1: true,
+            __marketingclawQaCredentialPayloadChunksV1: true,
             byteLength: serialized.length,
             chunkCount: 2,
           },
@@ -258,8 +258,8 @@ describe("credential lease runtime", () => {
       source: "convex",
       role: "ci",
       env: {
-        OPENCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
-        OPENCLAW_QA_CONVEX_SECRET_CI: "ci-secret",
+        MARKETINGCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
+        MARKETINGCLAW_QA_CONVEX_SECRET_CI: "ci-secret",
       },
       fetchImpl,
       resolveEnvPayload: () => ({ groupId: "-1", driverToken: "unused", sutToken: "unused" }),
@@ -302,7 +302,7 @@ describe("credential lease runtime", () => {
           credentialId: "cred-utf8",
           leaseToken: "lease-utf8",
           payload: {
-            __openclawQaCredentialPayloadChunksV1: true,
+            __marketingclawQaCredentialPayloadChunksV1: true,
             byteLength: Buffer.byteLength(serialized, "utf8"),
             chunkCount: 1,
           },
@@ -315,8 +315,8 @@ describe("credential lease runtime", () => {
       source: "convex",
       role: "ci",
       env: {
-        OPENCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
-        OPENCLAW_QA_CONVEX_SECRET_CI: "ci-secret",
+        MARKETINGCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
+        MARKETINGCLAW_QA_CONVEX_SECRET_CI: "ci-secret",
       },
       fetchImpl,
       resolveEnvPayload: () => ({ groupId: "-1", driverToken: "unused", sutToken: "unused" }),
@@ -336,7 +336,7 @@ describe("credential lease runtime", () => {
           credentialId: "cred-many-chunks",
           leaseToken: "lease-many-chunks",
           payload: {
-            __openclawQaCredentialPayloadChunksV1: true,
+            __marketingclawQaCredentialPayloadChunksV1: true,
             byteLength: 1,
             chunkCount: 3,
           },
@@ -350,9 +350,9 @@ describe("credential lease runtime", () => {
         source: "convex",
         role: "ci",
         env: {
-          OPENCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
-          OPENCLAW_QA_CONVEX_SECRET_CI: "ci-secret",
-          OPENCLAW_QA_CREDENTIAL_PAYLOAD_MAX_CHUNKS: "2",
+          MARKETINGCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
+          MARKETINGCLAW_QA_CONVEX_SECRET_CI: "ci-secret",
+          MARKETINGCLAW_QA_CREDENTIAL_PAYLOAD_MAX_CHUNKS: "2",
         },
         fetchImpl,
         resolveEnvPayload: () => ({ groupId: "-1", driverToken: "unused", sutToken: "unused" }),
@@ -376,7 +376,7 @@ describe("credential lease runtime", () => {
           credentialId: "cred-large-payload",
           leaseToken: "lease-large-payload",
           payload: {
-            __openclawQaCredentialPayloadChunksV1: true,
+            __marketingclawQaCredentialPayloadChunksV1: true,
             byteLength: 33,
             chunkCount: 1,
           },
@@ -390,9 +390,9 @@ describe("credential lease runtime", () => {
         source: "convex",
         role: "ci",
         env: {
-          OPENCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
-          OPENCLAW_QA_CONVEX_SECRET_CI: "ci-secret",
-          OPENCLAW_QA_CREDENTIAL_PAYLOAD_MAX_BYTES: "32",
+          MARKETINGCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
+          MARKETINGCLAW_QA_CONVEX_SECRET_CI: "ci-secret",
+          MARKETINGCLAW_QA_CREDENTIAL_PAYLOAD_MAX_BYTES: "32",
         },
         fetchImpl,
         resolveEnvPayload: () => ({ groupId: "-1", driverToken: "unused", sutToken: "unused" }),
@@ -416,7 +416,7 @@ describe("credential lease runtime", () => {
           credentialId: "cred-overrun",
           leaseToken: "lease-overrun",
           payload: {
-            __openclawQaCredentialPayloadChunksV1: true,
+            __marketingclawQaCredentialPayloadChunksV1: true,
             byteLength: 2,
             chunkCount: 2,
           },
@@ -431,8 +431,8 @@ describe("credential lease runtime", () => {
         source: "convex",
         role: "ci",
         env: {
-          OPENCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
-          OPENCLAW_QA_CONVEX_SECRET_CI: "ci-secret",
+          MARKETINGCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
+          MARKETINGCLAW_QA_CONVEX_SECRET_CI: "ci-secret",
         },
         fetchImpl,
         resolveEnvPayload: () => ({ groupId: "-1", driverToken: "unused", sutToken: "unused" }),
@@ -464,8 +464,8 @@ describe("credential lease runtime", () => {
       kind: "telegram",
       source: "convex",
       env: {
-        OPENCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
-        OPENCLAW_QA_CONVEX_SECRET_MAINTAINER: "maintainer-secret",
+        MARKETINGCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
+        MARKETINGCLAW_QA_CONVEX_SECRET_MAINTAINER: "maintainer-secret",
       },
       fetchImpl,
       resolveEnvPayload: () => ({ groupId: "-1", driverToken: "unused", sutToken: "unused" }),
@@ -493,8 +493,8 @@ describe("credential lease runtime", () => {
       source: "convex",
       env: {
         CI: "true",
-        OPENCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
-        OPENCLAW_QA_CONVEX_SECRET_CI: "ci-secret",
+        MARKETINGCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
+        MARKETINGCLAW_QA_CONVEX_SECRET_CI: "ci-secret",
       },
       fetchImpl,
       resolveEnvPayload: () => ({ groupId: "-1", driverToken: "unused", sutToken: "unused" }),
@@ -540,9 +540,9 @@ describe("credential lease runtime", () => {
       kind: "telegram",
       source: "convex",
       env: {
-        OPENCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
-        OPENCLAW_QA_CONVEX_SECRET_MAINTAINER: "maintainer-secret",
-        OPENCLAW_QA_CREDENTIAL_ACQUIRE_TIMEOUT_MS: "90000",
+        MARKETINGCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
+        MARKETINGCLAW_QA_CONVEX_SECRET_MAINTAINER: "maintainer-secret",
+        MARKETINGCLAW_QA_CREDENTIAL_ACQUIRE_TIMEOUT_MS: "90000",
       },
       fetchImpl,
       randomImpl: () => 0,
@@ -569,8 +569,8 @@ describe("credential lease runtime", () => {
         kind: "telegram",
         source: "convex",
         env: {
-          OPENCLAW_QA_CONVEX_SITE_URL: "http://qa-cred.example.convex.site",
-          OPENCLAW_QA_CONVEX_SECRET_MAINTAINER: "maintainer-secret",
+          MARKETINGCLAW_QA_CONVEX_SITE_URL: "http://qa-cred.example.convex.site",
+          MARKETINGCLAW_QA_CONVEX_SECRET_MAINTAINER: "maintainer-secret",
         },
         resolveEnvPayload: () => ({ groupId: "-1", driverToken: "unused", sutToken: "unused" }),
         parsePayload: (payload) =>
@@ -579,7 +579,7 @@ describe("credential lease runtime", () => {
     ).rejects.toThrow("must use https://");
   });
 
-  it("allows loopback http URLs when OPENCLAW_QA_ALLOW_INSECURE_HTTP is enabled", async () => {
+  it("allows loopback http URLs when MARKETINGCLAW_QA_ALLOW_INSECURE_HTTP is enabled", async () => {
     const fetchImpl = vi.fn<typeof fetch>().mockResolvedValueOnce(
       jsonResponse({
         status: "ok",
@@ -594,9 +594,9 @@ describe("credential lease runtime", () => {
       source: "convex",
       role: "maintainer",
       env: {
-        OPENCLAW_QA_CONVEX_SITE_URL: "http://127.0.0.1:3210",
-        OPENCLAW_QA_CONVEX_SECRET_MAINTAINER: "maintainer-secret",
-        OPENCLAW_QA_ALLOW_INSECURE_HTTP: "1",
+        MARKETINGCLAW_QA_CONVEX_SITE_URL: "http://127.0.0.1:3210",
+        MARKETINGCLAW_QA_CONVEX_SECRET_MAINTAINER: "maintainer-secret",
+        MARKETINGCLAW_QA_ALLOW_INSECURE_HTTP: "1",
       },
       fetchImpl,
       resolveEnvPayload: () => ({ groupId: "-1", driverToken: "unused", sutToken: "unused" }),
@@ -624,9 +624,9 @@ describe("credential lease runtime", () => {
       source: "convex",
       role: "maintainer",
       env: {
-        OPENCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
-        OPENCLAW_QA_CONVEX_SECRET_MAINTAINER: "maintainer-secret",
-        OPENCLAW_QA_CREDENTIAL_HTTP_TIMEOUT_MS: String(Number.MAX_SAFE_INTEGER),
+        MARKETINGCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
+        MARKETINGCLAW_QA_CONVEX_SECRET_MAINTAINER: "maintainer-secret",
+        MARKETINGCLAW_QA_CREDENTIAL_HTTP_TIMEOUT_MS: String(Number.MAX_SAFE_INTEGER),
       },
       fetchImpl,
       resolveEnvPayload: () => ({ groupId: "-1", driverToken: "unused", sutToken: "unused" }),
@@ -644,15 +644,15 @@ describe("credential lease runtime", () => {
         kind: "telegram",
         source: "convex",
         env: {
-          OPENCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
-          OPENCLAW_QA_CONVEX_SECRET_MAINTAINER: "maintainer-secret",
-          OPENCLAW_QA_CONVEX_ENDPOINT_PREFIX: "//evil.example",
+          MARKETINGCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
+          MARKETINGCLAW_QA_CONVEX_SECRET_MAINTAINER: "maintainer-secret",
+          MARKETINGCLAW_QA_CONVEX_ENDPOINT_PREFIX: "//evil.example",
         },
         resolveEnvPayload: () => ({ groupId: "-1", driverToken: "unused", sutToken: "unused" }),
         parsePayload: (payload) =>
           payload as { groupId: string; driverToken: string; sutToken: string },
       }),
-    ).rejects.toThrow("OPENCLAW_QA_CONVEX_ENDPOINT_PREFIX must be an absolute path");
+    ).rejects.toThrow("MARKETINGCLAW_QA_CONVEX_ENDPOINT_PREFIX must be an absolute path");
   });
 
   it("releases acquired lease when payload parsing fails", async () => {
@@ -674,8 +674,8 @@ describe("credential lease runtime", () => {
         source: "convex",
         role: "maintainer",
         env: {
-          OPENCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
-          OPENCLAW_QA_CONVEX_SECRET_MAINTAINER: "maintainer-secret",
+          MARKETINGCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
+          MARKETINGCLAW_QA_CONVEX_SECRET_MAINTAINER: "maintainer-secret",
         },
         fetchImpl,
         resolveEnvPayload: () => ({ groupId: "-1", driverToken: "unused", sutToken: "unused" }),
@@ -698,13 +698,13 @@ describe("credential lease runtime", () => {
         source: "convex",
         role: "maintainer",
         env: {
-          OPENCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
+          MARKETINGCLAW_QA_CONVEX_SITE_URL: "https://qa-cred.example.convex.site",
         },
         resolveEnvPayload: () => ({ groupId: "-1", driverToken: "unused", sutToken: "unused" }),
         parsePayload: (payload) =>
           payload as { groupId: string; driverToken: string; sutToken: string },
       }),
-    ).rejects.toThrow("OPENCLAW_QA_CONVEX_SECRET_MAINTAINER");
+    ).rejects.toThrow("MARKETINGCLAW_QA_CONVEX_SECRET_MAINTAINER");
   });
 
   it("captures heartbeat failures for fail-fast checks", async () => {

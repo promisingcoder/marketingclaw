@@ -5,8 +5,8 @@ import {
   createPluginStateKeyedStoreForTests,
   createPluginStateSyncKeyedStoreForTests,
   resetPluginStateStoreForTests,
-} from "openclaw/plugin-sdk/plugin-state-test-runtime";
-import { importFreshModule } from "openclaw/plugin-sdk/test-fixtures";
+} from "marketingclaw/plugin-sdk/plugin-state-test-runtime";
+import { importFreshModule } from "marketingclaw/plugin-sdk/test-fixtures";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { markdownToTelegramHtml } from "./format.js";
 import {
@@ -47,7 +47,7 @@ const {
   probeVideoDimensions,
 } = getTelegramSendTestMocks();
 const telegramSendModule = await importTelegramSendModule();
-const { resetLogger, setLoggerOverride } = await import("openclaw/plugin-sdk/runtime-env");
+const { resetLogger, setLoggerOverride } = await import("marketingclaw/plugin-sdk/runtime-env");
 const {
   buildInlineKeyboard,
   createForumTopicTelegram,
@@ -325,7 +325,7 @@ let logCaptureCounter = 0;
 
 function captureInfoLogs(): string {
   logCaptureCounter += 1;
-  const logFile = `/tmp/openclaw-telegram-send-log-${process.pid}-${logCaptureCounter}.jsonl`;
+  const logFile = `/tmp/marketingclaw-telegram-send-log-${process.pid}-${logCaptureCounter}.jsonl`;
   fs.rmSync(logFile, { force: true });
   setLoggerOverride({ level: "info", consoleLevel: "silent", file: logFile });
   return logFile;
@@ -430,7 +430,7 @@ describe("sent-message-cache", () => {
   });
 
   it("keeps sent-message ownership across restart", async () => {
-    const persistedStorePath = `/tmp/openclaw-telegram-send-tests-${process.pid}-restart.json`;
+    const persistedStorePath = `/tmp/marketingclaw-telegram-send-tests-${process.pid}-restart.json`;
     const sentMessageCfg = { session: { store: persistedStorePath } };
 
     recordSentMessage(123, 1, sentMessageCfg);
@@ -453,7 +453,7 @@ describe("sent-message-cache", () => {
   });
 
   it("keeps expired custom-store cleanup away from the default store", () => {
-    const customStorePath = `/tmp/openclaw-telegram-send-tests-${process.pid}-custom-cleanup.json`;
+    const customStorePath = `/tmp/marketingclaw-telegram-send-tests-${process.pid}-custom-cleanup.json`;
     const customCfg = { session: { store: customStorePath } };
     const startedAt = new Date("2026-01-01T00:00:00.000Z");
     vi.useFakeTimers();
@@ -474,7 +474,7 @@ describe("sent-message-cache", () => {
   });
 
   it("keeps default and custom stores isolated while both are loaded", () => {
-    const customStorePath = `/tmp/openclaw-telegram-send-tests-${process.pid}-custom-isolated.json`;
+    const customStorePath = `/tmp/marketingclaw-telegram-send-tests-${process.pid}-custom-isolated.json`;
     const customCfg = { session: { store: customStorePath } };
 
     try {
@@ -869,7 +869,7 @@ describe("sendMessageTelegram", () => {
   });
 
   it("records sent text messages into the Telegram prompt context cache", async () => {
-    const storePath = `/tmp/openclaw-telegram-send-context-${process.pid}-${Date.now()}.json`;
+    const storePath = `/tmp/marketingclaw-telegram-send-context-${process.pid}-${Date.now()}.json`;
     const cfg = { session: { store: storePath } };
     botApi.sendMessage.mockResolvedValueOnce({
       message_id: 1497,
@@ -929,7 +929,7 @@ describe("sendMessageTelegram", () => {
   });
 
   it("records prompt-context text messages with a transcript timestamp override", async () => {
-    const storePath = `/tmp/openclaw-telegram-send-context-override-${process.pid}-${Date.now()}.json`;
+    const storePath = `/tmp/marketingclaw-telegram-send-context-override-${process.pid}-${Date.now()}.json`;
     const cfg = { session: { store: storePath } };
     const transcriptTimestamp = 1_779_394_740_123;
     botApi.sendMessage.mockResolvedValueOnce({
@@ -1328,13 +1328,13 @@ describe("sendMessageTelegram", () => {
     {
       name: "local path",
       markdown:
-        "See [scripts/yougile.py](/home/user/.openclaw/workspace/scripts/yougile.py#L41) and [docs](https://example.com/docs)",
+        "See [scripts/yougile.py](/home/user/.marketingclaw/workspace/scripts/yougile.py#L41) and [docs](https://example.com/docs)",
       rejectedAnchor: '<a href="/home',
       visibleLabel: "<code>scripts/yougile.py</code>",
     },
     {
       name: "relative path",
-      markdown: "Edit [config](./openclaw.json) or see [docs](https://example.com/docs)",
+      markdown: "Edit [config](./marketingclaw.json) or see [docs](https://example.com/docs)",
       rejectedAnchor: '<a href="./',
       visibleLabel: "config",
     },

@@ -3,8 +3,8 @@
  *
  * Projects tool runtime context into persisted lineage, group routing, workspace, and inherited policy metadata.
  */
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { normalizeOptionalString } from "@marketingclaw/normalization-core/string-coerce";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { normalizeAgentId, parseAgentSessionKey } from "../routing/session-key.js";
 import { resolveAgentWorkspaceDir } from "./agent-scope.js";
 
@@ -61,7 +61,7 @@ export function mapToolContextToSpawnedRunMetadata(
 
 /** Resolve which workspace a spawned run should inherit. */
 export function resolveSpawnedWorkspaceInheritance(params: {
-  config: OpenClawConfig;
+  config: MarketingClawConfig;
   targetAgentId?: string;
   requesterSessionKey?: string;
   explicitWorkspaceDir?: string | null;

@@ -71,7 +71,7 @@ describe("WorkboardPage lifecycle", () => {
   it("stops the previous capability runtime when the workboard source changes", async () => {
     const first = createWorkboardCapability();
     const second = createWorkboardCapability();
-    const page = document.createElement("openclaw-workboard-page") as WorkboardPageTestElement;
+    const page = document.createElement("marketingclaw-workboard-page") as WorkboardPageTestElement;
     page.context = contextWithWorkboard(first);
     document.body.append(page);
     await page.updateComplete;

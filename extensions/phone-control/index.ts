@@ -1,18 +1,18 @@
-// Phone Control plugin entrypoint registers its OpenClaw integration.
+// Phone Control plugin entrypoint registers its MarketingClaw integration.
 import {
   asDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,
-} from "openclaw/plugin-sdk/number-runtime";
+} from "marketingclaw/plugin-sdk/number-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
   normalizeStringEntries,
   sortUniqueStrings,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import {
   definePluginEntry,
-  type OpenClawPluginApi,
-  type OpenClawPluginService,
+  type MarketingClawPluginApi,
+  type MarketingClawPluginService,
 } from "./runtime-api.js";
 
 type ArmGroup = "camera" | "screen" | "computer" | "writes" | "all";
@@ -109,18 +109,21 @@ function formatDuration(ms: number): string {
   return `${d}d`;
 }
 
-function openArmStateStore(api: OpenClawPluginApi) {
+function openArmStateStore(api: MarketingClawPluginApi) {
   return api.runtime.state.openKeyedStore<ArmStateFile>({
     namespace: ARM_STATE_NAMESPACE,
     maxEntries: 1,
   });
 }
 
-async function readArmState(api: OpenClawPluginApi): Promise<ArmStateFile | null> {
+async function readArmState(api: MarketingClawPluginApi): Promise<ArmStateFile | null> {
   return (await openArmStateStore(api).lookup(ARM_STATE_KEY)) ?? null;
 }
 
-async function writeArmState(api: OpenClawPluginApi, state: ArmStateFile | null): Promise<void> {
+async function writeArmState(
+  api: MarketingClawPluginApi,
+  state: ArmStateFile | null,
+): Promise<void> {
   const store = openArmStateStore(api);
   if (!state) {
     await store.delete(ARM_STATE_KEY);
@@ -143,9 +146,9 @@ function hasPhoneControlAllowOverride(cfg: PhoneControlConfigView): boolean {
 }
 
 function patchConfigNodeLists(
-  cfg: OpenClawPluginApi["config"],
+  cfg: MarketingClawPluginApi["config"],
   next: { allowCommands: string[]; denyCommands: string[] },
-): OpenClawPluginApi["config"] {
+): MarketingClawPluginApi["config"] {
   return {
     ...cfg,
     gateway: {
@@ -160,7 +163,7 @@ function patchConfigNodeLists(
 }
 
 async function disarmNow(params: {
-  api: OpenClawPluginApi;
+  api: MarketingClawPluginApi;
   reason: string;
 }): Promise<{ changed: boolean; restored: string[]; removed: string[] }> {
   const { api, reason } = params;
@@ -312,11 +315,11 @@ export default definePluginEntry({
   id: "phone-control",
   name: "Phone Control",
   description: "Temporary allowlist control for phone automation commands",
-  register(api: OpenClawPluginApi) {
+  register(api: MarketingClawPluginApi) {
     let expiryInterval: ReturnType<typeof setInterval> | null = null;
     let initialExpiryTick: ReturnType<typeof setImmediate> | null = null;
 
-    const timerService: OpenClawPluginService = {
+    const timerService: MarketingClawPluginService = {
       id: "phone-control-expiry",
       start: async (ctx) => {
         const tick = async () => {

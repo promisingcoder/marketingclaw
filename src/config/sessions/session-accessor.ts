@@ -3,7 +3,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { isDeepStrictEqual } from "node:util";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { uniqueStrings } from "@marketingclaw/normalization-core/string-normalization";
 import {
   acquireSessionWriteLock,
   resolveSessionWriteLockOptions,
@@ -23,7 +23,7 @@ import type {
 } from "../../sessions/transcript-events.js";
 import { createLazyRuntimeModule } from "../../shared/lazy-runtime.js";
 import type { DeliveryContext } from "../../utils/delivery-context.types.js";
-import type { OpenClawConfig } from "../types.openclaw.js";
+import type { MarketingClawConfig } from "../types.marketingclaw.js";
 import { formatSessionArchiveTimestamp } from "./artifacts.js";
 import { extractGeneratedTranscriptSessionId } from "./generated-transcript-session-id.js";
 import { resolveAgentMainSessionKey } from "./main-session.js";
@@ -151,7 +151,7 @@ export type SessionAccessScope = {
 
 export type LogicalSessionAccessScope = {
   /** Runtime config whose session store rules define the logical session owner. */
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   /** Environment override used when resolving configured/discovered agent stores. */
   env?: NodeJS.ProcessEnv;
   /** Canonical or alias session key for the logical entry being read or written. */
@@ -183,7 +183,7 @@ export type SessionEntryCandidateAccessScope = {
   /** Ordered session keys to test inside the resolved store. */
   candidateKeys: readonly string[];
   /** Runtime config whose session store rule selects the backend target. */
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   /** Environment override used when resolving agent-scoped store paths in tests/tools. */
   env?: NodeJS.ProcessEnv;
   /** Optional synthesized entry returned only when no candidate exists. */
@@ -281,7 +281,7 @@ export type TranscriptEvent = unknown;
 
 export type TranscriptMessageAppendOptions<TMessage> = {
   /** Runtime config used for message redaction and transcript header metadata. */
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   /** Working directory recorded in a newly created transcript header. */
   cwd?: string;
   /** How duplicate message idempotency keys are detected before append. */
@@ -328,7 +328,7 @@ export type SessionTranscriptTurnWriteContext = {
 
 export type SessionTranscriptTurnPersistOptions = {
   /** Runtime config used for lock settings, redaction, and header metadata. */
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   /** Working directory recorded in a newly created transcript header. */
   cwd?: string;
   /**
@@ -726,7 +726,7 @@ function isStorePathTemplate(store?: string): boolean {
 
 function resolveLogicalSessionStoreCandidates(params: {
   agentId: string;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   env?: NodeJS.ProcessEnv;
 }): SessionStoreTarget[] {
   const storeConfig = params.cfg.session?.store;
@@ -750,7 +750,7 @@ function resolveLogicalSessionStoreCandidates(params: {
 function buildLogicalSessionEntryCandidateKeys(params: {
   agentId: string;
   canonicalKey: string;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   requestedKey: string;
 }): string[] {
   const targets = new Set<string>();
@@ -2736,7 +2736,7 @@ function resolveManualCompactTranscriptCandidates(params: {
 
   const legacyDir = path.join(
     resolveRequiredHomeDir(process.env, os.homedir),
-    ".openclaw",
+    ".marketingclaw",
     "sessions",
   );
   pushCandidate(() => resolveSessionTranscriptPathInDir(params.sessionId, legacyDir));

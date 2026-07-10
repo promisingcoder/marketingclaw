@@ -1,13 +1,13 @@
 ---
-name: openclaw-changelog-update
-description: Regenerate OpenClaw release changelog sections from git history before beta or stable releases.
+name: marketingclaw-changelog-update
+description: Regenerate MarketingClaw release changelog sections from git history before beta or stable releases.
 ---
 
-# OpenClaw Changelog Update
+# MarketingClaw Changelog Update
 
 Use this for release changelog rewrites and GitHub release-note source text.
 This is mandatory before every beta, beta rerun, stable release, or stable
-rerun. Use it with `release-openclaw-maintainer`; this skill owns changelog
+rerun. Use it with `release-marketingclaw-maintainer`; this skill owns changelog
 content, ordering, grouping, and attribution discipline.
 
 ## Goal
@@ -38,11 +38,11 @@ every human `Thanks @...` attribution.
    writing grouped prose:
 
    ```bash
-   node .agents/skills/openclaw-changelog-update/scripts/verify-release-notes.mjs \
+   node .agents/skills/marketingclaw-changelog-update/scripts/verify-release-notes.mjs \
      --base <base-tag> \
      --target <target-ref> \
      --version <YYYY.M.PATCH> \
-     --manifest /tmp/openclaw-release-<YYYY.M.PATCH>.json \
+     --manifest /tmp/marketingclaw-release-<YYYY.M.PATCH>.json \
      --write-ledger
    ```
 
@@ -130,7 +130,7 @@ every human `Thanks @...` attribution.
      untyped title is not automatically editorial
    - do not add GHSA references, advisory IDs, or security advisory slugs to
      changelog entries or GitHub release-note text unless explicitly requested
-   - never thank bots, `@claude`, `@openclaw`, `@clawsweeper`, or `@steipete`
+   - never thank bots, `@claude`, `@marketingclaw`, `@clawsweeper`, or `@steipete`
    - do not use GitHub's release contributor count as the source of truth; the
      changelog must carry the complete human credit set itself
 7. Sorting preference:
@@ -153,11 +153,11 @@ every human `Thanks @...` attribution.
 - after the manifest-driven rewrite, regenerate and verify the complete
   contribution record before committing:
   ```bash
-  node .agents/skills/openclaw-changelog-update/scripts/verify-release-notes.mjs \
+  node .agents/skills/marketingclaw-changelog-update/scripts/verify-release-notes.mjs \
     --base <base-tag> \
     --target <target-ref> \
     --version <YYYY.M.PATCH> \
-    --manifest /tmp/openclaw-release-<YYYY.M.PATCH>.json \
+    --manifest /tmp/marketingclaw-release-<YYYY.M.PATCH>.json \
     --write-ledger
   ```
 - the command fails when any `#NNN` reference in release history or the
@@ -168,13 +168,13 @@ every human `Thanks @...` attribution.
   co-author is missing from that PR's `Thanks @...` credit
 - when grouped prose names a PR, that same bullet must retain every
   contributor and linked-reporter credit from its generated PR record
-- unqualified `#NNN` references resolve against `openclaw/openclaw`;
-  cross-repository references such as `openclaw/imsg#141` remain literal
+- unqualified `#NNN` references resolve against `marketingclaw/marketingclaw`;
+  cross-repository references such as `marketingclaw/imsg#141` remain literal
   text and must not be rewritten as local issue links
 - after the GitHub release or prerelease is published, verify every matching
   release page against the same source section:
   ```bash
-  node .agents/skills/openclaw-changelog-update/scripts/verify-release-notes.mjs \
+  node .agents/skills/marketingclaw-changelog-update/scripts/verify-release-notes.mjs \
     --base <base-tag> \
     --target <target-ref> \
     --version <YYYY.M.PATCH> \

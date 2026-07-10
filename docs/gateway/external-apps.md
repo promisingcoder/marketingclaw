@@ -3,25 +3,25 @@ summary: "Current integration path for external apps, scripts, dashboards, CI jo
 title: "Gateway integrations for external apps"
 sidebarTitle: "External apps"
 read_when:
-  - You are building an external app, script, dashboard, CI job, or IDE extension that talks to OpenClaw
+  - You are building an external app, script, dashboard, CI job, or IDE extension that talks to MarketingClaw
   - You are choosing between Gateway RPC and the Plugin SDK
   - You are integrating with Gateway agent runs, sessions, events, approvals, models, or tools
 ---
 
-External apps talk to OpenClaw through the Gateway protocol: WebSocket
+External apps talk to MarketingClaw through the Gateway protocol: WebSocket
 transport plus RPC methods. Use it when a script, dashboard, CI job, IDE
 extension, or another process wants to start agent runs, stream events, wait
 for results, cancel work, or inspect Gateway resources.
 
 <Warning>
-  There is no public npm client package yet. Do not add OpenClaw client package
+  There is no public npm client package yet. Do not add MarketingClaw client package
   names as application dependencies until release notes announce a published
   package and this page includes install instructions.
 </Warning>
 
 <Note>
-  This page is for code outside the OpenClaw process. Plugin code that runs
-  inside OpenClaw should use documented `openclaw/plugin-sdk/*` subpaths instead.
+  This page is for code outside the MarketingClaw process. Plugin code that runs
+  inside MarketingClaw should use documented `marketingclaw/plugin-sdk/*` subpaths instead.
 </Note>
 
 ## What is available today
@@ -30,8 +30,8 @@ for results, cancel work, or inspect Gateway resources.
 | --------------------------------------- | ------ | --------------------------------------------------------------------------------------------- |
 | [Gateway protocol](/gateway/protocol)   | Ready  | WebSocket transport, connect handshake, auth scopes, protocol versioning, and events.         |
 | [Gateway RPC reference](/reference/rpc) | Ready  | Current Gateway methods for agents, sessions, tasks, models, tools, artifacts, and approvals. |
-| [`openclaw agent`](/cli/agent)          | Ready  | One-shot script integration when shelling out to the CLI is enough.                           |
-| [`openclaw message`](/cli/message)      | Ready  | Sending messages or channel actions from scripts.                                             |
+| [`marketingclaw agent`](/cli/agent)     | Ready  | One-shot script integration when shelling out to the CLI is enough.                           |
+| [`marketingclaw message`](/cli/message) | Ready  | Sending messages or channel actions from scripts.                                             |
 
 A future client library package is in progress internally, but it is not a
 public install surface yet. Treat it as preview implementation detail until a
@@ -42,8 +42,8 @@ release announces a published, versioned package.
 1. Run or discover a Gateway.
 2. Connect over the [Gateway protocol](/gateway/protocol).
 3. Call documented RPC methods from [Gateway RPC reference](/reference/rpc).
-4. Pin the OpenClaw version you test against.
-5. Recheck the RPC reference when upgrading OpenClaw.
+4. Pin the MarketingClaw version you test against.
+5. Recheck the RPC reference when upgrading MarketingClaw.
 
 For agent runs, start with the `agent` RPC and pair it with `agent.wait` for a
 terminal result. For durable conversation state, use the `sessions.*` methods.
@@ -52,7 +52,7 @@ families your app understands.
 
 ## App code vs plugin code
 
-Use Gateway RPC when code lives outside OpenClaw:
+Use Gateway RPC when code lives outside MarketingClaw:
 
 - Node scripts that start or observe agent runs
 - CI jobs that call a Gateway
@@ -61,7 +61,7 @@ Use Gateway RPC when code lives outside OpenClaw:
 - external bridges that do not need to become channel plugins
 - integration tests with fake or real Gateway transports
 
-Use the Plugin SDK when code runs inside OpenClaw:
+Use the Plugin SDK when code runs inside MarketingClaw:
 
 - provider plugins
 - channel plugins
@@ -69,8 +69,8 @@ Use the Plugin SDK when code runs inside OpenClaw:
 - agent harness plugins
 - trusted runtime helpers
 
-External apps should not import `openclaw/plugin-sdk/*`; those subpaths are for
-plugins loaded by OpenClaw.
+External apps should not import `marketingclaw/plugin-sdk/*`; those subpaths are for
+plugins loaded by MarketingClaw.
 
 ## Related
 

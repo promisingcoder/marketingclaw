@@ -8,7 +8,7 @@ import { applicationContext, type ApplicationContext } from "../../app/context.t
 import { renderSettingsWorkspace } from "../../components/settings-workspace.ts";
 import { t } from "../../i18n/index.ts";
 import { formatRelativeTimestamp } from "../../lib/format.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { MarketingClawLightDomElement } from "../../lit/marketingclaw-element.ts";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
 
 type WorktreesListResult = { worktrees: WorktreeRecord[] };
@@ -23,7 +23,7 @@ function repoName(repoRoot: string): string {
   return repoRoot.split(/[\\/]/).findLast(Boolean) ?? repoRoot;
 }
 
-class WorktreesPage extends OpenClawLightDomElement {
+class WorktreesPage extends MarketingClawLightDomElement {
   @consume({ context: applicationContext, subscribe: true })
   private context!: ApplicationContext;
 
@@ -299,4 +299,4 @@ class WorktreesPage extends OpenClawLightDomElement {
   }
 }
 
-customElements.define("openclaw-worktrees-page", WorktreesPage);
+customElements.define("marketingclaw-worktrees-page", WorktreesPage);

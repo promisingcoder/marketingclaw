@@ -3,7 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { tryReadJsonSync, writeJsonSync } from "../infra/json-files.js";
 
-type OpenClawPackageJson = {
+type MarketingClawPackageJson = {
   exports?: Record<string, unknown>;
 };
 
@@ -60,7 +60,9 @@ function readPrivateLocalOnlyPluginSdkDistFileNames(distRoot: string): Set<strin
 
 function readPublicPluginSdkDistFileNames(distRoot: string): Set<string> | undefined {
   const packageRoot = path.dirname(path.resolve(distRoot));
-  const packageJson = tryReadJsonSync<OpenClawPackageJson>(path.join(packageRoot, "package.json"));
+  const packageJson = tryReadJsonSync<MarketingClawPackageJson>(
+    path.join(packageRoot, "package.json"),
+  );
   if (!packageJson || typeof packageJson !== "object" || Array.isArray(packageJson)) {
     return collectLegacyPublicPluginSdkDistFileNames(distRoot);
   }
@@ -151,17 +153,17 @@ function writeRuntimeModuleWrapper(sourcePath: string, targetPath: string): void
   fs.writeFileSync(targetPath, content, "utf8");
 }
 
-export function ensureOpenClawPluginSdkAlias(distRoot: string): void {
+export function ensureMarketingClawPluginSdkAlias(distRoot: string): void {
   const pluginSdkDir = path.join(distRoot, "plugin-sdk");
   if (!fs.existsSync(pluginSdkDir)) {
     return;
   }
 
   const publicDistFileNames = readPublicPluginSdkDistFileNames(distRoot);
-  const aliasDir = path.join(distRoot, "extensions", "node_modules", "openclaw");
+  const aliasDir = path.join(distRoot, "extensions", "node_modules", "marketingclaw");
   const pluginSdkAliasDir = path.join(aliasDir, "plugin-sdk");
   writeRuntimeJsonFile(path.join(aliasDir, "package.json"), {
-    name: "openclaw",
+    name: "marketingclaw",
     type: "module",
     exports: buildRuntimePluginSdkPackageExports(publicDistFileNames),
   });

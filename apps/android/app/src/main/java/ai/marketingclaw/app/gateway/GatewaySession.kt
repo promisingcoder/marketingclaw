@@ -1,4 +1,4 @@
-package ai.openclaw.app.gateway
+package ai.marketingclaw.app.gateway
 
 import android.util.Log
 import kotlinx.coroutines.CancellationException
@@ -390,7 +390,7 @@ class GatewaySession(
     } catch (_: GatewayRequestNotEnqueued) {
       NodeEventSendOutcome.DISCONNECTED
     } catch (err: Throwable) {
-      Log.w("OpenClawGateway", "node.event failed: ${err::class.java.simpleName}")
+      Log.w("MarketingClawGateway", "node.event failed: ${err::class.java.simpleName}")
       NodeEventSendOutcome.FAILED
     }
   }
@@ -420,7 +420,7 @@ class GatewaySession(
       val res = conn.request("node.event", params, timeoutMs = timeoutMs)
       return RpcResult(ok = res.ok, payloadJson = res.payloadJson, error = res.error)
     } catch (err: Throwable) {
-      Log.w("OpenClawGateway", "node.event failed: ${err::class.java.simpleName}")
+      Log.w("MarketingClawGateway", "node.event failed: ${err::class.java.simpleName}")
       return RpcResult(
         ok = false,
         payloadJson = null,
@@ -559,7 +559,7 @@ class GatewaySession(
     private val client: OkHttpClient = buildClient()
     private val listener = Listener()
     private var socket: WebSocket? = null
-    private val loggerTag = "OpenClawGateway"
+    private val loggerTag = "MarketingClawGateway"
     private val incomingMessages = Channel<String>(Channel.UNLIMITED)
 
     // RPC waiters belong to this socket generation. Closing it must not touch a replacement connection.

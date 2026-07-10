@@ -1,7 +1,7 @@
-package ai.openclaw.app.ui.chat
+package ai.marketingclaw.app.ui.chat
 
-import ai.openclaw.app.ChatDraft
-import ai.openclaw.app.ChatDraftPlacement
+import ai.marketingclaw.app.ChatDraft
+import ai.marketingclaw.app.ChatDraftPlacement
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

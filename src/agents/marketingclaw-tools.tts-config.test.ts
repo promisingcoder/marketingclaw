@@ -1,7 +1,7 @@
-// Verifies createOpenClawTools wires shared config and context into the TTS tool.
+// Verifies createMarketingClawTools wires shared config and context into the TTS tool.
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
-import { testing, createOpenClawTools } from "./openclaw-tools.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
+import { testing, createMarketingClawTools } from "./marketingclaw-tools.js";
 import type { AnyAgentTool } from "./tools/common.js";
 
 const mocks = vi.hoisted(() => {
@@ -25,18 +25,18 @@ const mocks = vi.hoisted(() => {
     createVideoGenerateToolOptions: vi.fn(),
     textToSpeech: vi.fn(async () => ({
       success: true,
-      audioPath: "/tmp/openclaw/tts-config-test.opus",
+      audioPath: "/tmp/marketingclaw/tts-config-test.opus",
       provider: "microsoft",
       voiceCompatible: true,
     })),
   };
 });
 
-vi.mock("./openclaw-plugin-tools.js", () => ({
-  resolveOpenClawPluginToolsForOptions: () => [],
+vi.mock("./marketingclaw-plugin-tools.js", () => ({
+  resolveMarketingClawPluginToolsForOptions: () => [],
 }));
 
-vi.mock("./openclaw-tools.nodes-workspace-guard.js", () => ({
+vi.mock("./marketingclaw-tools.nodes-workspace-guard.js", () => ({
   applyNodesToolWorkspaceGuard: (tool: AnyAgentTool) => tool,
 }));
 
@@ -142,7 +142,7 @@ function getTextToSpeechParams() {
   return calls[0]?.[0] as
     | {
         text?: string;
-        cfg?: OpenClawConfig;
+        cfg?: MarketingClawConfig;
         agentId?: string;
         channel?: string;
         accountId?: string;
@@ -150,7 +150,7 @@ function getTextToSpeechParams() {
     | undefined;
 }
 
-describe("createOpenClawTools TTS config wiring", () => {
+describe("createMarketingClawTools TTS config wiring", () => {
   beforeEach(() => {
     mocks.createCronToolOptions.mockClear();
     mocks.createImageGenerateToolOptions.mockClear();
@@ -172,12 +172,12 @@ describe("createOpenClawTools TTS config wiring", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies MarketingClawConfig;
 
     testing.setDepsForTest({ config: injectedConfig });
 
     try {
-      const tool = createOpenClawTools({
+      const tool = createMarketingClawTools({
         disableMessageTool: true,
         disablePluginTools: true,
       }).find((candidate) => candidate.name === "tts");
@@ -200,7 +200,7 @@ describe("createOpenClawTools TTS config wiring", () => {
     testing.setDepsForTest({ config: {} });
 
     try {
-      const tool = createOpenClawTools({
+      const tool = createMarketingClawTools({
         disableMessageTool: true,
         disablePluginTools: true,
       }).find((candidate) => candidate.name === "tts");
@@ -221,12 +221,12 @@ describe("createOpenClawTools TTS config wiring", () => {
       agents: {
         list: [{ id: "reader" }, { id: "main" }],
       },
-    } satisfies OpenClawConfig;
+    } satisfies MarketingClawConfig;
 
     testing.setDepsForTest({ config: injectedConfig });
 
     try {
-      const tool = createOpenClawTools({
+      const tool = createMarketingClawTools({
         agentSessionKey: "agent:reader:telegram:chat:123",
         disableMessageTool: true,
         disablePluginTools: true,
@@ -259,12 +259,12 @@ describe("createOpenClawTools TTS config wiring", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies MarketingClawConfig;
 
     testing.setDepsForTest({ config: injectedConfig });
 
     try {
-      const tool = createOpenClawTools({
+      const tool = createMarketingClawTools({
         agentChannel: "feishu",
         agentAccountId: "feishu-main",
         disableMessageTool: true,
@@ -288,7 +288,7 @@ describe("createOpenClawTools TTS config wiring", () => {
   });
 });
 
-describe("createOpenClawTools media generation session wiring", () => {
+describe("createMarketingClawTools media generation session wiring", () => {
   beforeEach(() => {
     mocks.createImageGenerateToolOptions.mockClear();
     mocks.createMusicGenerateToolOptions.mockClear();
@@ -304,9 +304,9 @@ describe("createOpenClawTools media generation session wiring", () => {
           musicGenerationModel: { primary: "music-owner/model" },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies MarketingClawConfig;
 
-    createOpenClawTools({
+    createMarketingClawTools({
       config,
       agentSessionKey: "agent:main:cron:daily-media",
       runSessionKey: "agent:main:cron:daily-media:run:run-123",
@@ -340,9 +340,9 @@ describe("createOpenClawTools media generation session wiring", () => {
           imageGenerationModel: { primary: "image-owner/model" },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies MarketingClawConfig;
 
-    createOpenClawTools({
+    createMarketingClawTools({
       config,
       agentSessionKey: "agent:main:slack:channel:C123",
       runSessionKey: "agent:main:slack:channel:C123:run:run-123",
@@ -358,13 +358,13 @@ describe("createOpenClawTools media generation session wiring", () => {
   });
 });
 
-describe("createOpenClawTools session status route context wiring", () => {
+describe("createMarketingClawTools session status route context wiring", () => {
   beforeEach(() => {
     mocks.createSessionStatusToolOptions.mockClear();
   });
 
   it("passes the active live-run route into the session_status tool", () => {
-    createOpenClawTools({
+    createMarketingClawTools({
       agentSessionKey: "agent:main:discord:channel:1489550370136129537",
       runSessionKey: "agent:main:discord:channel:1489550370136129537",
       agentChannel: "webchat",
@@ -392,13 +392,13 @@ describe("createOpenClawTools session status route context wiring", () => {
   });
 });
 
-describe("createOpenClawTools cron context wiring", () => {
+describe("createMarketingClawTools cron context wiring", () => {
   beforeEach(() => {
     mocks.createCronToolOptions.mockClear();
   });
 
   it("passes preserved channel delivery context into the cron tool", async () => {
-    createOpenClawTools({
+    createMarketingClawTools({
       agentSessionKey: "agent:main:matrix:channel:!abcdef1234567890:example.org",
       agentChannel: "matrix",
       agentAccountId: "bot-a",
@@ -422,7 +422,7 @@ describe("createOpenClawTools cron context wiring", () => {
   });
 
   it("uses agent route context when auto-threading context is unavailable", async () => {
-    createOpenClawTools({
+    createMarketingClawTools({
       agentSessionKey: "agent:main:matrix:channel:!abcdef1234567890:example.org",
       agentChannel: "matrix",
       agentAccountId: "bot-a",
@@ -444,7 +444,7 @@ describe("createOpenClawTools cron context wiring", () => {
   });
 
   it("passes self-remove scope into the cron tool", async () => {
-    createOpenClawTools({
+    createMarketingClawTools({
       agentSessionKey: "agent:main:cron:job-current",
       cronSelfRemoveOnlyJobId: "job-current",
       disableMessageTool: true,

@@ -1,11 +1,11 @@
-# OpenClaw LINE
+# MarketingClaw LINE
 
-Official OpenClaw channel plugin for LINE Bot API chats.
+Official MarketingClaw channel plugin for LINE Bot API chats.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugin add @openclaw/line
+marketingclaw plugin add @marketingclaw/line
 ```
 
-Configure LINE channel credentials in OpenClaw, then connect the bot to the chats where agents should receive and send messages.
+Configure LINE channel credentials in MarketingClaw, then connect the bot to the chats where agents should receive and send messages.

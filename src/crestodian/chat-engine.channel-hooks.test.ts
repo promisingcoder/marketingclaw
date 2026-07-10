@@ -43,7 +43,7 @@ vi.mock("../config/config.js", async (importOriginal) => ({
   readConfigFileSnapshot: vi.fn(async () => ({
     exists: true,
     valid: true,
-    path: "/tmp/openclaw.json",
+    path: "/tmp/marketingclaw.json",
     hash: "hash",
     config: {},
     sourceConfig: {},
@@ -60,7 +60,7 @@ describe("Crestodian chat channel setup", () => {
         loadOverview: async () =>
           ({
             config: {
-              path: "/tmp/openclaw.json",
+              path: "/tmp/marketingclaw.json",
               exists: true,
               valid: true,
               issues: [],
@@ -76,8 +76,8 @@ describe("Crestodian chat channel setup", () => {
             },
             gateway: { url: "ws://127.0.0.1:18789", source: "local", reachable: false },
             references: {
-              docsUrl: "https://docs.openclaw.ai",
-              sourceUrl: "https://github.com/openclaw/openclaw",
+              docsUrl: "https://docs.marketingclaw.ai",
+              sourceUrl: "https://github.com/promisingcoder/marketingclaw",
             },
           }) as never,
       },

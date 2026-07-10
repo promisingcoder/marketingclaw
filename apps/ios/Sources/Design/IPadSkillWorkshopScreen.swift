@@ -1,4 +1,4 @@
-import OpenClawKit
+import MarketingClawKit
 import SwiftUI
 
 struct IPadSkillWorkshopScreen: View {
@@ -17,12 +17,12 @@ struct IPadSkillWorkshopScreen: View {
     @State private var errorText: String?
     @State private var noticeText: String?
     @State private var presentedProposalRoute: IPadSkillProposalSheetRoute?
-    let headerLeadingAction: OpenClawSidebarHeaderAction?
+    let headerLeadingAction: MarketingClawSidebarHeaderAction?
     let usesNativeNavigationChrome: Bool
     let openSettings: () -> Void
 
     init(
-        headerLeadingAction: OpenClawSidebarHeaderAction? = nil,
+        headerLeadingAction: MarketingClawSidebarHeaderAction? = nil,
         usesNativeNavigationChrome: Bool = false,
         openSettings: @escaping () -> Void = {})
     {
@@ -63,10 +63,10 @@ struct IPadSkillWorkshopScreen: View {
             NavigationStack {
                 ScrollView {
                     self.presentedProposalDetail(proposalID: route.proposalID)
-                        .padding(.horizontal, OpenClawProMetric.pagePadding)
-                        .padding(.vertical, OpenClawSpacing.space4)
+                        .padding(.horizontal, MarketingClawProMetric.pagePadding)
+                        .padding(.vertical, MarketingClawSpacing.space4)
                 }
-                .background(OpenClawProBackground())
+                .background(MarketingClawProBackground())
                 .navigationTitle("Proposal")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
@@ -75,7 +75,7 @@ struct IPadSkillWorkshopScreen: View {
                             self.presentedProposalRoute = nil
                         } label: {
                             Text("Done")
-                                .font(OpenClawType.subheadSemiBold)
+                                .font(MarketingClawType.subheadSemiBold)
                         }
                     }
                 }
@@ -89,12 +89,12 @@ struct IPadSkillWorkshopScreen: View {
                 icon: "clock",
                 title: "Pending",
                 value: "\(self.count("pending"))",
-                color: OpenClawBrand.warn),
+                color: MarketingClawBrand.warn),
             ProMetric(
                 icon: "checkmark.circle",
                 title: "Applied",
                 value: "\(self.count("applied"))",
-                color: OpenClawBrand.ok),
+                color: MarketingClawBrand.ok),
             ProMetric(
                 icon: "shield",
                 title: "Held",
@@ -104,26 +104,26 @@ struct IPadSkillWorkshopScreen: View {
     }
 
     private var filtersCard: some View {
-        ProCard(radius: OpenClawProMetric.cardRadius) {
+        ProCard(radius: MarketingClawProMetric.cardRadius) {
             VStack(alignment: .leading, spacing: 12) {
                 self.agentScopeMenu
                 self.proposalSearchField
                 Picker("Status", selection: self.$statusFilter) {
                     ForEach(Self.proposalStatusFilters, id: \.self) { filter in
                         Text(Self.proposalStatusFilterLabel(filter))
-                            .font(OpenClawType.captionSemiBold)
+                            .font(MarketingClawType.captionSemiBold)
                             .tag(filter)
                     }
                 }
                 .pickerStyle(.segmented)
                 .controlSize(.small)
-                .tint(OpenClawBrand.accent)
+                .tint(MarketingClawBrand.accent)
                 HStack(spacing: 8) {
                     Button {
                         Task { await self.loadProposals(force: true) }
                     } label: {
                         Label("Refresh", systemImage: "arrow.clockwise")
-                            .font(OpenClawType.captionSemiBold)
+                            .font(MarketingClawType.captionSemiBold)
                     }
                     .buttonStyle(.bordered)
                     .controlSize(.small)
@@ -136,28 +136,28 @@ struct IPadSkillWorkshopScreen: View {
                 }
                 if let noticeText {
                     Text(noticeText)
-                        .font(OpenClawType.caption2)
-                        .foregroundStyle(OpenClawBrand.accent)
+                        .font(MarketingClawType.caption2)
+                        .foregroundStyle(MarketingClawBrand.accent)
                 }
                 if let errorText {
                     Text(errorText)
-                        .font(OpenClawType.caption2)
-                        .foregroundStyle(OpenClawBrand.warn)
+                        .font(MarketingClawType.caption2)
+                        .foregroundStyle(MarketingClawBrand.warn)
                 }
             }
         }
-        .padding(.horizontal, OpenClawProMetric.pagePadding)
+        .padding(.horizontal, MarketingClawProMetric.pagePadding)
     }
 
     private var compactFiltersCard: some View {
-        ProCard(radius: OpenClawProMetric.cardRadius) {
+        ProCard(radius: MarketingClawProMetric.cardRadius) {
             VStack(alignment: .leading, spacing: 12) {
                 HStack(alignment: .firstTextBaseline, spacing: 10) {
                     VStack(alignment: .leading, spacing: 3) {
                         Text("\(self.filteredProposals.count) proposals")
-                            .font(OpenClawType.headline)
+                            .font(MarketingClawType.headline)
                         Text(self.statusFilterLabel)
-                            .font(OpenClawType.caption)
+                            .font(MarketingClawType.caption)
                             .foregroundStyle(.secondary)
                     }
                     Spacer(minLength: 8)
@@ -170,13 +170,13 @@ struct IPadSkillWorkshopScreen: View {
                 Picker("Status", selection: self.$statusFilter) {
                     ForEach(Self.proposalStatusFilters, id: \.self) { filter in
                         Text(Self.proposalStatusFilterLabel(filter))
-                            .font(OpenClawType.captionSemiBold)
+                            .font(MarketingClawType.captionSemiBold)
                             .tag(filter)
                     }
                 }
                 .pickerStyle(.segmented)
                 .controlSize(.small)
-                .tint(OpenClawBrand.accent)
+                .tint(MarketingClawBrand.accent)
 
                 self.proposalSearchField
 
@@ -185,7 +185,7 @@ struct IPadSkillWorkshopScreen: View {
                         Task { await self.loadProposals(force: true) }
                     } label: {
                         Label("Refresh", systemImage: "arrow.clockwise")
-                            .font(OpenClawType.captionSemiBold)
+                            .font(MarketingClawType.captionSemiBold)
                             .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.bordered)
@@ -195,28 +195,28 @@ struct IPadSkillWorkshopScreen: View {
                 }
                 if let noticeText {
                     Text(noticeText)
-                        .font(OpenClawType.caption2)
-                        .foregroundStyle(OpenClawBrand.accent)
+                        .font(MarketingClawType.caption2)
+                        .foregroundStyle(MarketingClawBrand.accent)
                 }
                 if let errorText {
                     Text(errorText)
-                        .font(OpenClawType.caption2)
-                        .foregroundStyle(OpenClawBrand.warn)
+                        .font(MarketingClawType.caption2)
+                        .foregroundStyle(MarketingClawBrand.warn)
                 }
             }
         }
-        .padding(.horizontal, OpenClawProMetric.pagePadding)
+        .padding(.horizontal, MarketingClawProMetric.pagePadding)
     }
 
     private var proposalSearchField: some View {
         HStack(spacing: 8) {
             Image(systemName: "magnifyingglass")
-                .font(OpenClawType.captionSemiBold)
+                .font(MarketingClawType.captionSemiBold)
                 .foregroundStyle(.secondary)
             TextField("Search proposals", text: self.$query)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
-                .font(OpenClawType.subhead)
+                .font(MarketingClawType.subhead)
             if !self.query.isEmpty {
                 Button {
                     self.query = ""
@@ -232,30 +232,30 @@ struct IPadSkillWorkshopScreen: View {
     private var agentScopeMenu: some View {
         HStack(spacing: 8) {
             Text("Agent")
-                .font(OpenClawType.captionSemiBold)
+                .font(MarketingClawType.captionSemiBold)
                 .foregroundStyle(.secondary)
             Menu {
                 Button {
                     self.selectedAgentScopeID = ""
                 } label: {
                     Text("Default agent")
-                        .font(OpenClawType.subhead)
+                        .font(MarketingClawType.subhead)
                 }
                 ForEach(self.agentScopeOptions, id: \.id) { option in
                     Button {
                         self.selectedAgentScopeID = option.id
                     } label: {
                         Text(option.title)
-                            .font(OpenClawType.subhead)
+                            .font(MarketingClawType.subhead)
                     }
                 }
             } label: {
                 HStack(spacing: 6) {
                     Text(self.agentScopeLabel)
-                        .font(OpenClawType.subheadSemiBold)
+                        .font(MarketingClawType.subheadSemiBold)
                         .lineLimit(1)
                     Image(systemName: "chevron.up.chevron.down")
-                        .font(OpenClawType.caption2Bold)
+                        .font(MarketingClawType.caption2Bold)
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
             }
@@ -274,7 +274,7 @@ struct IPadSkillWorkshopScreen: View {
     private var proposalContent: some View {
         VStack(alignment: .leading, spacing: 12) {
             if self.filteredProposals.isEmpty {
-                ProCard(radius: OpenClawProMetric.cardRadius) {
+                ProCard(radius: MarketingClawProMetric.cardRadius) {
                     ProStatusRow(
                         icon: self.canRead ? "hammer" : "wifi.slash",
                         title: self.canRead ? "No proposals" : "No proposals loaded",
@@ -286,13 +286,13 @@ struct IPadSkillWorkshopScreen: View {
                         actionTitle: nil,
                         action: nil)
                 }
-                .padding(.horizontal, OpenClawProMetric.pagePadding)
+                .padding(.horizontal, MarketingClawProMetric.pagePadding)
             } else {
                 if self.isCompactWidth {
                     VStack(alignment: .leading, spacing: 12) {
                         self.proposalList
                     }
-                    .padding(.horizontal, OpenClawProMetric.pagePadding)
+                    .padding(.horizontal, MarketingClawProMetric.pagePadding)
                 } else {
                     self.proposalBoard
                 }
@@ -332,13 +332,13 @@ struct IPadSkillWorkshopScreen: View {
                         .frame(width: 282)
                 }
             }
-            .padding(.horizontal, OpenClawProMetric.pagePadding)
+            .padding(.horizontal, MarketingClawProMetric.pagePadding)
         }
         .scrollIndicators(.visible)
     }
 
     private var proposalList: some View {
-        ProCard(padding: 0, radius: OpenClawProMetric.cardRadius) {
+        ProCard(padding: 0, radius: MarketingClawProMetric.cardRadius) {
             VStack(spacing: 0) {
                 ProPanelHeader(
                     title: "Queue",
@@ -369,21 +369,21 @@ struct IPadSkillWorkshopScreen: View {
                                 forceInspect: true)
                         } label: {
                             Text("Inspect")
-                                .font(OpenClawType.subhead)
+                                .font(MarketingClawType.subhead)
                         }
                         if proposal.status == "pending" {
                             Button {
                                 Task { await self.run(.apply, proposal: proposal) }
                             } label: {
                                 Text("Apply")
-                                    .font(OpenClawType.subhead)
+                                    .font(MarketingClawType.subhead)
                             }
                             .disabled(!self.canApplyProposalMutations || self.busyAction != nil)
                             Button(role: .destructive) {
                                 Task { await self.run(.reject, proposal: proposal) }
                             } label: {
                                 Text("Reject")
-                                    .font(OpenClawType.subhead)
+                                    .font(MarketingClawType.subhead)
                             }
                             .disabled(!self.canApplyProposalMutations || self.busyAction != nil)
                         }
@@ -394,15 +394,15 @@ struct IPadSkillWorkshopScreen: View {
                                 Task { await self.run(.apply, proposal: proposal) }
                             } label: {
                                 Text("Apply")
-                                    .font(OpenClawType.subhead)
+                                    .font(MarketingClawType.subhead)
                             }
-                            .tint(OpenClawBrand.ok)
+                            .tint(MarketingClawBrand.ok)
                             .disabled(!self.canApplyProposalMutations || self.busyAction != nil)
                             Button(role: .destructive) {
                                 Task { await self.run(.reject, proposal: proposal) }
                             } label: {
                                 Text("Reject")
-                                    .font(OpenClawType.subhead)
+                                    .font(MarketingClawType.subhead)
                             }
                             .disabled(!self.canApplyProposalMutations || self.busyAction != nil)
                         }
@@ -415,9 +415,9 @@ struct IPadSkillWorkshopScreen: View {
                                 forceInspect: true)
                         } label: {
                             Text("Inspect")
-                                .font(OpenClawType.subhead)
+                                .font(MarketingClawType.subhead)
                         }
-                        .tint(OpenClawBrand.accent)
+                        .tint(MarketingClawBrand.accent)
                     }
                 }
             }
@@ -429,7 +429,7 @@ struct IPadSkillWorkshopScreen: View {
         if let proposal = proposal(withID: proposalID) {
             self.proposalDetailCard(proposal)
         } else {
-            ProCard(radius: OpenClawProMetric.cardRadius) {
+            ProCard(radius: MarketingClawProMetric.cardRadius) {
                 ProStatusRow(
                     icon: "hammer",
                     title: "Proposal unavailable",
@@ -443,15 +443,15 @@ struct IPadSkillWorkshopScreen: View {
     }
 
     private func proposalDetailCard(_ proposal: IPadSkillProposal) -> some View {
-        ProCard(radius: OpenClawProMetric.cardRadius) {
+        ProCard(radius: MarketingClawProMetric.cardRadius) {
             VStack(alignment: .leading, spacing: 14) {
                 HStack(alignment: .top, spacing: 12) {
                     ProIconBadge(systemName: "hammer", color: proposal.statusColor)
                     VStack(alignment: .leading, spacing: 4) {
                         Text(proposal.title)
-                            .font(OpenClawType.headline)
+                            .font(MarketingClawType.headline)
                         Text(proposal.description)
-                            .font(OpenClawType.caption)
+                            .font(MarketingClawType.caption)
                             .foregroundStyle(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
                     }
@@ -465,23 +465,23 @@ struct IPadSkillWorkshopScreen: View {
 
                 if let content = proposal.content, !content.isEmpty {
                     Text(content)
-                        .font(OpenClawType.monoSmall)
+                        .font(MarketingClawType.monoSmall)
                         .foregroundStyle(.secondary)
                         .lineLimit(16)
                         .textSelection(.enabled)
                 } else {
                     Text("Select refresh to load the proposal body.")
-                        .font(OpenClawType.caption)
+                        .font(MarketingClawType.caption)
                         .foregroundStyle(.secondary)
                 }
 
                 if !proposal.supportFiles.isEmpty {
                     VStack(alignment: .leading, spacing: 6) {
                         Text("Support files")
-                            .font(OpenClawType.subheadSemiBold)
+                            .font(MarketingClawType.subheadSemiBold)
                         ForEach(proposal.supportFiles, id: \.path) { file in
                             Text(file.path)
-                                .font(OpenClawType.monoCaption2)
+                                .font(MarketingClawType.monoCaption2)
                                 .foregroundStyle(.secondary)
                                 .lineLimit(1)
                         }
@@ -515,7 +515,7 @@ struct IPadSkillWorkshopScreen: View {
             Task { await self.run(.apply, proposal: proposal) }
         } label: {
             Label("Apply", systemImage: "checkmark.circle")
-                .font(OpenClawType.captionSemiBold)
+                .font(MarketingClawType.captionSemiBold)
                 .frame(maxWidth: self.isCompactWidth ? .infinity : nil)
         }
         .buttonStyle(.borderedProminent)
@@ -528,7 +528,7 @@ struct IPadSkillWorkshopScreen: View {
             Task { await self.run(.reject, proposal: proposal) }
         } label: {
             Label("Reject", systemImage: "xmark.circle")
-                .font(OpenClawType.captionSemiBold)
+                .font(MarketingClawType.captionSemiBold)
                 .frame(maxWidth: self.isCompactWidth ? .infinity : nil)
         }
         .buttonStyle(.bordered)
@@ -541,7 +541,7 @@ struct IPadSkillWorkshopScreen: View {
             Task { await self.inspect(proposalID: proposal.id, force: true) }
         } label: {
             Label("Inspect", systemImage: "doc.text.magnifyingglass")
-                .font(OpenClawType.captionSemiBold)
+                .font(MarketingClawType.captionSemiBold)
                 .frame(maxWidth: self.isCompactWidth ? .infinity : nil)
         }
         .buttonStyle(.bordered)
@@ -613,9 +613,9 @@ struct IPadSkillWorkshopScreen: View {
     private var adminScopeNotice: some View {
         HStack(spacing: 8) {
             Image(systemName: "lock.shield")
-                .foregroundStyle(OpenClawBrand.warn)
+                .foregroundStyle(MarketingClawBrand.warn)
             Text("Admin scope required.")
-                .font(OpenClawType.captionSemiBold)
+                .font(MarketingClawType.captionSemiBold)
                 .foregroundStyle(.secondary)
             Spacer(minLength: 8)
         }
@@ -919,7 +919,7 @@ struct IPadSkillProposalKanbanColumn: View {
     let reject: (IPadSkillProposal) -> Void
 
     var body: some View {
-        ProCard(padding: 0, radius: OpenClawProMetric.cardRadius) {
+        ProCard(padding: 0, radius: MarketingClawProMetric.cardRadius) {
             VStack(spacing: 0) {
                 ProPanelHeader(
                     title: IPadSkillWorkshopScreen.proposalLaneLabel(self.status),
@@ -987,11 +987,11 @@ private struct IPadSkillProposalKanbanCard: View {
                             color: self.proposal.statusColor)
                         VStack(alignment: .leading, spacing: 4) {
                             Text(self.proposal.title)
-                                .font(OpenClawType.subheadSemiBold)
-                                .foregroundStyle(self.isSelected ? OpenClawBrand.accent : .primary)
+                                .font(MarketingClawType.subheadSemiBold)
+                                .foregroundStyle(self.isSelected ? MarketingClawBrand.accent : .primary)
                                 .lineLimit(2)
                             Text(self.proposal.description)
-                                .font(OpenClawType.caption)
+                                .font(MarketingClawType.caption)
                                 .foregroundStyle(.secondary)
                                 .lineLimit(3)
                         }
@@ -1000,7 +1000,7 @@ private struct IPadSkillProposalKanbanCard: View {
                         ProValuePill(value: self.proposal.status, color: self.proposal.statusColor)
                         Spacer(minLength: 4)
                         Text(self.proposal.ageLabel)
-                            .font(OpenClawType.caption2SemiBold)
+                            .font(MarketingClawType.caption2SemiBold)
                             .foregroundStyle(.secondary)
                     }
                 }
@@ -1012,7 +1012,7 @@ private struct IPadSkillProposalKanbanCard: View {
                 if self.proposal.status == "pending" {
                     Button(action: self.apply) {
                         Image(systemName: "checkmark.circle")
-                            .font(OpenClawType.captionSemiBold)
+                            .font(MarketingClawType.captionSemiBold)
                     }
                     .accessibilityLabel("Apply Proposal")
                     .buttonStyle(.bordered)
@@ -1021,7 +1021,7 @@ private struct IPadSkillProposalKanbanCard: View {
 
                     Button(role: .destructive, action: self.reject) {
                         Image(systemName: "xmark.circle")
-                            .font(OpenClawType.captionSemiBold)
+                            .font(MarketingClawType.captionSemiBold)
                     }
                     .accessibilityLabel("Reject Proposal")
                     .buttonStyle(.bordered)
@@ -1031,7 +1031,7 @@ private struct IPadSkillProposalKanbanCard: View {
 
                 Button(action: self.inspect) {
                     Image(systemName: "doc.text.magnifyingglass")
-                        .font(OpenClawType.captionSemiBold)
+                        .font(MarketingClawType.captionSemiBold)
                 }
                 .accessibilityLabel("Inspect Proposal")
                 .buttonStyle(.bordered)
@@ -1039,25 +1039,25 @@ private struct IPadSkillProposalKanbanCard: View {
                 .disabled(self.isInspecting)
             }
         }
-        .padding(OpenClawSpacing.space3)
+        .padding(MarketingClawSpacing.space3)
         .background(
-            self.isSelected ? OpenClawBrand.accent.opacity(0.08) : Color.clear,
-            in: RoundedRectangle(cornerRadius: OpenClawRadius.xs, style: .continuous))
+            self.isSelected ? MarketingClawBrand.accent.opacity(0.08) : Color.clear,
+            in: RoundedRectangle(cornerRadius: MarketingClawRadius.xs, style: .continuous))
         .contentShape(Rectangle())
         .contextMenu {
             Button(action: self.inspect) {
                 Text("Inspect")
-                    .font(OpenClawType.subhead)
+                    .font(MarketingClawType.subhead)
             }
             if self.proposal.status == "pending" {
                 Button(action: self.apply) {
                     Text("Apply")
-                        .font(OpenClawType.subhead)
+                        .font(MarketingClawType.subhead)
                 }
                 .disabled(!self.canApplyProposalMutations || self.isBusy)
                 Button(role: .destructive, action: self.reject) {
                     Text("Reject")
-                        .font(OpenClawType.subhead)
+                        .font(MarketingClawType.subhead)
                 }
                 .disabled(!self.canApplyProposalMutations || self.isBusy)
             }
@@ -1075,24 +1075,24 @@ struct IPadSkillProposalRow: View {
             ProIconBadge(systemName: self.isBusy ? "hourglass" : "hammer", color: self.proposal.statusColor)
             VStack(alignment: .leading, spacing: 4) {
                 Text(self.proposal.title)
-                    .font(OpenClawType.subheadSemiBold)
-                    .foregroundStyle(self.isSelected ? OpenClawBrand.accent : .primary)
+                    .font(MarketingClawType.subheadSemiBold)
+                    .foregroundStyle(self.isSelected ? MarketingClawBrand.accent : .primary)
                     .lineLimit(1)
                 Text(self.proposal.description)
-                    .font(OpenClawType.caption)
+                    .font(MarketingClawType.caption)
                     .foregroundStyle(.secondary)
                     .lineLimit(2)
             }
             Spacer(minLength: 8)
             Text(self.proposal.ageLabel)
-                .font(OpenClawType.caption2SemiBold)
+                .font(MarketingClawType.caption2SemiBold)
                 .foregroundStyle(.secondary)
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 10)
         .background(
-            self.isSelected ? OpenClawBrand.danger.opacity(0.08) : Color.clear,
-            in: RoundedRectangle(cornerRadius: OpenClawRadius.xs, style: .continuous))
+            self.isSelected ? MarketingClawBrand.danger.opacity(0.08) : Color.clear,
+            in: RoundedRectangle(cornerRadius: MarketingClawRadius.xs, style: .continuous))
     }
 }
 
@@ -1226,11 +1226,11 @@ struct IPadSkillProposal: Identifiable {
 
     var statusColor: Color {
         switch self.status {
-        case "pending": OpenClawBrand.warn
-        case "applied": OpenClawBrand.ok
+        case "pending": MarketingClawBrand.warn
+        case "applied": MarketingClawBrand.ok
         case "rejected": .secondary
-        case "quarantined", "stale": OpenClawBrand.warn
-        default: OpenClawBrand.accent
+        case "quarantined", "stale": MarketingClawBrand.warn
+        default: MarketingClawBrand.accent
         }
     }
 

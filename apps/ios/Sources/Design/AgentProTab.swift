@@ -1,11 +1,11 @@
-import OpenClawKit
+import MarketingClawKit
 import SwiftUI
 
 struct AgentProTab: View {
     @Environment(NodeAppModel.self) var appModel
     @Environment(\.scenePhase) var scenePhase
     let directRoute: AgentRoute?
-    let headerLeadingAction: OpenClawSidebarHeaderAction?
+    let headerLeadingAction: MarketingClawSidebarHeaderAction?
     let headerTitle: String
     let openSettings: (() -> Void)?
     @State var navigationPath: [AgentRoute] = []
@@ -91,7 +91,7 @@ struct AgentProTab: View {
     }
 
     enum AgentLayout {
-        static let cardRadius: CGFloat = OpenClawProMetric.cardRadius
+        static let cardRadius: CGFloat = MarketingClawProMetric.cardRadius
         static let filterHeight: CGFloat = 34
         static let metricTileHeight: CGFloat = 94
     }
@@ -102,8 +102,8 @@ struct AgentProTab: View {
 
         var color: Color {
             switch self {
-            case .online: OpenClawBrand.ok
-            case .ready: OpenClawBrand.info
+            case .online: MarketingClawBrand.ok
+            case .ready: MarketingClawBrand.info
             }
         }
     }
@@ -124,7 +124,7 @@ struct AgentProTab: View {
 
     init(
         directRoute: AgentRoute? = nil,
-        headerLeadingAction: OpenClawSidebarHeaderAction? = nil,
+        headerLeadingAction: MarketingClawSidebarHeaderAction? = nil,
         headerTitle: String = "Agents",
         openSettings: (() -> Void)? = nil)
     {
@@ -157,7 +157,7 @@ struct AgentProTab: View {
     private var overviewNavigation: some View {
         NavigationStack(path: self.$navigationPath) {
             ZStack {
-                OpenClawProBackground()
+                MarketingClawProBackground()
                 ScrollView {
                     VStack(alignment: .leading, spacing: 18) {
                         self.rosterHeader

@@ -53,7 +53,7 @@ function createContext(
       subscribe: options?.gatewaySubscribe ?? subscribe,
     },
     config: {
-      current: { assistantIdentity: { name: "OpenClaw" } },
+      current: { assistantIdentity: { name: "MarketingClaw" } },
       subscribe,
     },
     agentSelection: {
@@ -78,7 +78,7 @@ describe("SkillWorkshopPage lifecycle", () => {
   it("forces a fresh proposal load when the gateway source changes", async () => {
     const firstRequest = vi.fn(async () => ({}));
     const secondRequest = vi.fn(async () => ({
-      schema: "openclaw.skill-workshop.proposals-manifest.v1",
+      schema: "marketingclaw.skill-workshop.proposals-manifest.v1",
       updatedAt: "2026-07-08T00:00:00.000Z",
       proposals: [],
     }));
@@ -86,7 +86,7 @@ describe("SkillWorkshopPage lifecycle", () => {
     loadedState.skillWorkshopAgentId = "research";
     loadedState.skillWorkshopLoaded = true;
     const page = document.createElement(
-      "openclaw-skill-workshop-page",
+      "marketingclaw-skill-workshop-page",
     ) as SkillWorkshopPageTestElement;
     page.data = skillWorkshopRouteData(loadedState);
     page.context = createContext(firstRequest);
@@ -118,7 +118,7 @@ describe("SkillWorkshopPage lifecycle", () => {
       },
     });
     const page = document.createElement(
-      "openclaw-skill-workshop-page",
+      "marketingclaw-skill-workshop-page",
     ) as SkillWorkshopPageTestElement;
     page.context = context;
     document.body.append(page);
@@ -133,7 +133,7 @@ describe("SkillWorkshopPage lifecycle", () => {
     expect(page.state?.skillWorkshopLoaded).toBe(false);
 
     manifest.resolve({
-      schema: "openclaw.skill-workshop.proposals-manifest.v1",
+      schema: "marketingclaw.skill-workshop.proposals-manifest.v1",
       updatedAt: "2026-07-08T00:00:00.000Z",
       proposals: [],
     });
@@ -179,7 +179,7 @@ describe("SkillWorkshopPage lifecycle", () => {
     loadedState.skillWorkshopProposals = [proposal];
     loadedState.skillWorkshopSelectedKey = proposal.key;
     const page = document.createElement(
-      "openclaw-skill-workshop-page",
+      "marketingclaw-skill-workshop-page",
     ) as SkillWorkshopPageTestElement;
     page.data = skillWorkshopRouteData(loadedState);
     page.context = oldContext;

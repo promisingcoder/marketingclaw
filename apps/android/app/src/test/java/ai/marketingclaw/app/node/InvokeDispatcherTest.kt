@@ -1,15 +1,15 @@
-package ai.openclaw.app.node
+package ai.marketingclaw.app.node
 
-import ai.openclaw.app.gateway.DeviceIdentityStore
-import ai.openclaw.app.gateway.GatewaySession
-import ai.openclaw.app.protocol.OpenClawCallLogCommand
-import ai.openclaw.app.protocol.OpenClawCameraCommand
-import ai.openclaw.app.protocol.OpenClawDeviceCommand
-import ai.openclaw.app.protocol.OpenClawLocationCommand
-import ai.openclaw.app.protocol.OpenClawMotionCommand
-import ai.openclaw.app.protocol.OpenClawPhotosCommand
-import ai.openclaw.app.protocol.OpenClawSmsCommand
-import ai.openclaw.app.protocol.OpenClawTalkCommand
+import ai.marketingclaw.app.gateway.DeviceIdentityStore
+import ai.marketingclaw.app.gateway.GatewaySession
+import ai.marketingclaw.app.protocol.MarketingClawCallLogCommand
+import ai.marketingclaw.app.protocol.MarketingClawCameraCommand
+import ai.marketingclaw.app.protocol.MarketingClawDeviceCommand
+import ai.marketingclaw.app.protocol.MarketingClawLocationCommand
+import ai.marketingclaw.app.protocol.MarketingClawMotionCommand
+import ai.marketingclaw.app.protocol.MarketingClawPhotosCommand
+import ai.marketingclaw.app.protocol.MarketingClawSmsCommand
+import ai.marketingclaw.app.protocol.MarketingClawTalkCommand
 import android.content.Context
 import android.content.pm.PackageManager
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -105,7 +105,7 @@ class InvokeDispatcherTest {
           readSmsAvailable = false,
           smsFeatureEnabled = true,
           smsTelephonyAvailable = true,
-        ).handleInvoke(OpenClawSmsCommand.Search.rawValue, "not-json")
+        ).handleInvoke(MarketingClawSmsCommand.Search.rawValue, "not-json")
 
       assertEquals("SMS_PERMISSION_REQUIRED", result.error?.code)
       assertEquals("grant READ_SMS permission", result.error?.message)
@@ -119,7 +119,7 @@ class InvokeDispatcherTest {
           readSmsAvailable = false,
           smsFeatureEnabled = false,
           smsTelephonyAvailable = true,
-        ).handleInvoke(OpenClawSmsCommand.Search.rawValue, "not-json")
+        ).handleInvoke(MarketingClawSmsCommand.Search.rawValue, "not-json")
 
       assertEquals("SMS_UNAVAILABLE", result.error?.code)
       assertEquals("SMS_UNAVAILABLE: SMS not available on this device", result.error?.message)
@@ -133,7 +133,7 @@ class InvokeDispatcherTest {
           sendSmsAvailable = true,
           smsFeatureEnabled = true,
           smsTelephonyAvailable = true,
-        ).handleInvoke(OpenClawSmsCommand.Send.rawValue, """{"to":"+15551234567","message":"hi"}""")
+        ).handleInvoke(MarketingClawSmsCommand.Send.rawValue, """{"to":"+15551234567","message":"hi"}""")
 
       assertEquals("SMS_PERMISSION_REQUIRED", result.error?.code)
       assertEquals("grant SMS permission", result.error?.message)
@@ -147,7 +147,7 @@ class InvokeDispatcherTest {
           sendSmsAvailable = false,
           smsFeatureEnabled = true,
           smsTelephonyAvailable = true,
-        ).handleInvoke(OpenClawSmsCommand.Send.rawValue, """{"to":"+15551234567","message":"hi"}""")
+        ).handleInvoke(MarketingClawSmsCommand.Send.rawValue, """{"to":"+15551234567","message":"hi"}""")
 
       assertEquals("SMS_UNAVAILABLE", result.error?.code)
       assertEquals("SMS_UNAVAILABLE: SMS not available on this device", result.error?.message)
@@ -156,7 +156,7 @@ class InvokeDispatcherTest {
   @Test
   fun handleInvoke_blocksCameraCommandsWhenCameraDisabled() =
     runTest {
-      val result = newDispatcher(cameraEnabled = false).handleInvoke(OpenClawCameraCommand.List.rawValue, null)
+      val result = newDispatcher(cameraEnabled = false).handleInvoke(MarketingClawCameraCommand.List.rawValue, null)
 
       assertEquals("CAMERA_DISABLED", result.error?.code)
       assertEquals("CAMERA_DISABLED: enable Camera in Settings", result.error?.message)
@@ -165,7 +165,7 @@ class InvokeDispatcherTest {
   @Test
   fun handleInvoke_blocksLocationCommandWhenLocationDisabled() =
     runTest {
-      val result = newDispatcher(locationEnabled = false).handleInvoke(OpenClawLocationCommand.Get.rawValue, null)
+      val result = newDispatcher(locationEnabled = false).handleInvoke(MarketingClawLocationCommand.Get.rawValue, null)
 
       assertEquals("LOCATION_DISABLED", result.error?.code)
       assertEquals("LOCATION_DISABLED: enable Location in Settings", result.error?.message)
@@ -176,7 +176,7 @@ class InvokeDispatcherTest {
     runTest {
       val result =
         newDispatcher(installedAppsSharingEnabled = false)
-          .handleInvoke(OpenClawDeviceCommand.Apps.rawValue, """{"limit":1}""")
+          .handleInvoke(MarketingClawDeviceCommand.Apps.rawValue, """{"limit":1}""")
 
       assertEquals("INSTALLED_APPS_SHARING_DISABLED", result.error?.code)
       assertEquals(
@@ -190,7 +190,7 @@ class InvokeDispatcherTest {
     runTest {
       val result =
         newDispatcher(motionActivityAvailable = false)
-          .handleInvoke(OpenClawMotionCommand.Activity.rawValue, null)
+          .handleInvoke(MarketingClawMotionCommand.Activity.rawValue, null)
 
       assertEquals("MOTION_UNAVAILABLE", result.error?.code)
       assertEquals("MOTION_UNAVAILABLE: accelerometer not available", result.error?.message)
@@ -201,7 +201,7 @@ class InvokeDispatcherTest {
     runTest {
       val result =
         newDispatcher(motionPedometerAvailable = false)
-          .handleInvoke(OpenClawMotionCommand.Pedometer.rawValue, null)
+          .handleInvoke(MarketingClawMotionCommand.Pedometer.rawValue, null)
 
       assertEquals("PEDOMETER_UNAVAILABLE", result.error?.code)
       assertEquals("PEDOMETER_UNAVAILABLE: step counter not available", result.error?.message)
@@ -211,7 +211,7 @@ class InvokeDispatcherTest {
   fun handleInvoke_blocksCallLogWhenUnavailable() =
     runTest {
       val result =
-        newDispatcher(callLogAvailable = false).handleInvoke(OpenClawCallLogCommand.Search.rawValue, null)
+        newDispatcher(callLogAvailable = false).handleInvoke(MarketingClawCallLogCommand.Search.rawValue, null)
 
       assertEquals("CALL_LOG_UNAVAILABLE", result.error?.code)
       assertEquals("CALL_LOG_UNAVAILABLE: call log not available on this build", result.error?.message)
@@ -220,7 +220,7 @@ class InvokeDispatcherTest {
   @Test
   fun handleInvoke_blocksPhotosWhenUnavailable() =
     runTest {
-      val result = newDispatcher(photosAvailable = false).handleInvoke(OpenClawPhotosCommand.Latest.rawValue, null)
+      val result = newDispatcher(photosAvailable = false).handleInvoke(MarketingClawPhotosCommand.Latest.rawValue, null)
 
       assertEquals("PHOTOS_UNAVAILABLE", result.error?.code)
       assertEquals("PHOTOS_UNAVAILABLE: photos not available on this build", result.error?.message)
@@ -241,10 +241,10 @@ class InvokeDispatcherTest {
       val talk = InvokeDispatcherFakeTalkHandler()
       val dispatcher = newDispatcher(talkHandler = talk)
 
-      val start = dispatcher.handleInvoke(OpenClawTalkCommand.PttStart.rawValue, null)
-      val stop = dispatcher.handleInvoke(OpenClawTalkCommand.PttStop.rawValue, null)
-      val cancel = dispatcher.handleInvoke(OpenClawTalkCommand.PttCancel.rawValue, null)
-      val once = dispatcher.handleInvoke(OpenClawTalkCommand.PttOnce.rawValue, null)
+      val start = dispatcher.handleInvoke(MarketingClawTalkCommand.PttStart.rawValue, null)
+      val stop = dispatcher.handleInvoke(MarketingClawTalkCommand.PttStop.rawValue, null)
+      val cancel = dispatcher.handleInvoke(MarketingClawTalkCommand.PttCancel.rawValue, null)
+      val once = dispatcher.handleInvoke(MarketingClawTalkCommand.PttOnce.rawValue, null)
 
       assertEquals("""{"captureId":"start"}""", start.payloadJson)
       assertEquals("""{"status":"stop"}""", stop.payloadJson)
@@ -262,10 +262,10 @@ class InvokeDispatcherTest {
       val talk = InvokeDispatcherFakeTalkHandler()
       val dispatcher = newDispatcher(isForeground = false, talkHandler = talk)
 
-      val start = dispatcher.handleInvoke(OpenClawTalkCommand.PttStart.rawValue, null)
-      val once = dispatcher.handleInvoke(OpenClawTalkCommand.PttOnce.rawValue, null)
-      val stop = dispatcher.handleInvoke(OpenClawTalkCommand.PttStop.rawValue, null)
-      val cancel = dispatcher.handleInvoke(OpenClawTalkCommand.PttCancel.rawValue, null)
+      val start = dispatcher.handleInvoke(MarketingClawTalkCommand.PttStart.rawValue, null)
+      val once = dispatcher.handleInvoke(MarketingClawTalkCommand.PttOnce.rawValue, null)
+      val stop = dispatcher.handleInvoke(MarketingClawTalkCommand.PttStop.rawValue, null)
+      val cancel = dispatcher.handleInvoke(MarketingClawTalkCommand.PttCancel.rawValue, null)
 
       assertEquals("""{"captureId":"start"}""", start.payloadJson)
       assertEquals("NODE_BACKGROUND_UNAVAILABLE", once.error?.code)

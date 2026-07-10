@@ -6,11 +6,11 @@ import {
   createPluginStateKeyedStoreForTests,
   createPluginStateSyncKeyedStoreForTests,
   resetPluginStateStoreForTests,
-} from "openclaw/plugin-sdk/plugin-state-test-runtime";
+} from "marketingclaw/plugin-sdk/plugin-state-test-runtime";
 import type {
   OpenKeyedStoreOptions,
   PluginDoctorStateMigrationContext,
-} from "openclaw/plugin-sdk/runtime-doctor";
+} from "marketingclaw/plugin-sdk/runtime-doctor";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { resolveSessionStoreAgentIds, stateMigrations } from "./doctor-contract-api.js";
 import {
@@ -62,12 +62,14 @@ describe("voice-call doctor state migration", () => {
 
   beforeAll(async () => {
     resetPluginStateStoreForTests();
-    const warmStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-voice-call-doctor-"));
+    const warmStateDir = await fs.mkdtemp(
+      path.join(os.tmpdir(), "marketingclaw-voice-call-doctor-"),
+    );
     const warmStorePath = createTestStorePath();
     const warmEnv = {
       ...process.env,
       HOME: warmStateDir,
-      OPENCLAW_STATE_DIR: warmStateDir,
+      MARKETINGCLAW_STATE_DIR: warmStateDir,
     };
     try {
       installStateRuntime();
@@ -81,7 +83,7 @@ describe("voice-call doctor state migration", () => {
       const config = {
         plugins: {
           entries: {
-            "@openclaw/voice-call": {
+            "@marketingclaw/voice-call": {
               config: { store: warmStorePath },
             },
           },
@@ -113,9 +115,9 @@ describe("voice-call doctor state migration", () => {
 
   beforeEach(async () => {
     resetPluginStateStoreForTests();
-    stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-voice-call-doctor-"));
+    stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-voice-call-doctor-"));
     storePath = createTestStorePath();
-    env = { ...process.env, HOME: stateDir, OPENCLAW_STATE_DIR: stateDir };
+    env = { ...process.env, HOME: stateDir, MARKETINGCLAW_STATE_DIR: stateDir };
     installStateRuntime();
   });
 
@@ -149,7 +151,7 @@ describe("voice-call doctor state migration", () => {
     expect(
       resolveSessionStoreAgentIds({
         cfg: {
-          plugins: { entries: { "@openclaw/voice-call": { config: {} } } },
+          plugins: { entries: { "@marketingclaw/voice-call": { config: {} } } },
         },
       }),
     ).toEqual(["main"]);
@@ -182,7 +184,7 @@ describe("voice-call doctor state migration", () => {
     const config = {
       plugins: {
         entries: {
-          "@openclaw/voice-call": {
+          "@marketingclaw/voice-call": {
             config: { store: storePath },
           },
         },
@@ -253,7 +255,7 @@ describe("voice-call doctor state migration", () => {
     const config = {
       plugins: {
         entries: {
-          "@openclaw/voice-call": {
+          "@marketingclaw/voice-call": {
             config: { store: storePath },
           },
         },

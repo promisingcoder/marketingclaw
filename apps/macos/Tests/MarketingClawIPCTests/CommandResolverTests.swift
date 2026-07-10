@@ -1,7 +1,7 @@
 import Darwin
 import Foundation
 import Testing
-@testable import OpenClaw
+@testable import MarketingClaw
 
 @Suite(.serialized) struct CommandResolverTests {
     private func makeDefaults() -> UserDefaults {
@@ -27,17 +27,17 @@ import Testing
 
         let tmp = try makeTempDirForTests()
 
-        let openclawPath = tmp.appendingPathComponent("node_modules/.bin/openclaw")
-        try makeExecutableForTests(at: openclawPath)
+        let marketingclawPath = tmp.appendingPathComponent("node_modules/.bin/marketingclaw")
+        try makeExecutableForTests(at: marketingclawPath)
 
         let searchPaths = [tmp.appendingPathComponent("node_modules/.bin").path]
-        let cmd = CommandResolver.openclawCommand(
+        let cmd = CommandResolver.marketingclawCommand(
             subcommand: "gateway",
             defaults: defaults,
             configRoot: [:],
             searchPaths: searchPaths,
             projectRoot: tmp)
-        #expect(cmd.prefix(2).elementsEqual([openclawPath.path, "gateway"]))
+        #expect(cmd.prefix(2).elementsEqual([marketingclawPath.path, "gateway"]))
     }
 
     @Test func `falls back to node and script`() throws {
@@ -46,13 +46,13 @@ import Testing
         let tmp = try makeTempDirForTests()
 
         let nodePath = tmp.appendingPathComponent("node_modules/.bin/node")
-        let scriptPath = tmp.appendingPathComponent("bin/openclaw.js")
+        let scriptPath = tmp.appendingPathComponent("bin/marketingclaw.js")
         try makeExecutableForTests(at: nodePath)
         try "#!/bin/sh\necho v22.19.0\n".write(to: nodePath, atomically: true, encoding: .utf8)
         try FileManager().setAttributes([.posixPermissions: 0o755], ofItemAtPath: nodePath.path)
         try makeExecutableForTests(at: scriptPath)
 
-        let cmd = CommandResolver.openclawCommand(
+        let cmd = CommandResolver.marketingclawCommand(
             subcommand: "rpc",
             defaults: defaults,
             configRoot: [:],
@@ -73,19 +73,19 @@ import Testing
         let tmp = try makeTempDirForTests()
 
         let binDir = tmp.appendingPathComponent("bin")
-        let openclawPath = binDir.appendingPathComponent("openclaw")
+        let marketingclawPath = binDir.appendingPathComponent("marketingclaw")
         let pnpmPath = binDir.appendingPathComponent("pnpm")
-        try makeExecutableForTests(at: openclawPath)
+        try makeExecutableForTests(at: marketingclawPath)
         try makeExecutableForTests(at: pnpmPath)
 
-        let cmd = CommandResolver.openclawCommand(
+        let cmd = CommandResolver.marketingclawCommand(
             subcommand: "rpc",
             defaults: defaults,
             configRoot: [:],
             searchPaths: [binDir.path],
             projectRoot: tmp)
 
-        #expect(cmd.prefix(2).elementsEqual([openclawPath.path, "rpc"]))
+        #expect(cmd.prefix(2).elementsEqual([marketingclawPath.path, "rpc"]))
     }
 
     @Test func `uses open claw binary without node runtime`() throws {
@@ -94,38 +94,38 @@ import Testing
         let tmp = try makeTempDirForTests()
 
         let binDir = tmp.appendingPathComponent("bin")
-        let openclawPath = binDir.appendingPathComponent("openclaw")
-        try makeExecutableForTests(at: openclawPath)
+        let marketingclawPath = binDir.appendingPathComponent("marketingclaw")
+        try makeExecutableForTests(at: marketingclawPath)
 
-        let cmd = CommandResolver.openclawCommand(
+        let cmd = CommandResolver.marketingclawCommand(
             subcommand: "gateway",
             defaults: defaults,
             configRoot: [:],
             searchPaths: [binDir.path],
             projectRoot: tmp)
 
-        #expect(cmd.prefix(2).elementsEqual([openclawPath.path, "gateway"]))
+        #expect(cmd.prefix(2).elementsEqual([marketingclawPath.path, "gateway"]))
     }
 
     @Test func `falls back to pnpm`() throws {
         let defaults = self.makeLocalDefaults()
         let (tmp, pnpmPath) = try self.makeProjectRootWithPnpm()
 
-        let cmd = CommandResolver.openclawCommand(
+        let cmd = CommandResolver.marketingclawCommand(
             subcommand: "rpc",
             defaults: defaults,
             configRoot: [:],
             searchPaths: [tmp.appendingPathComponent("node_modules/.bin").path],
             projectRoot: tmp)
 
-        #expect(cmd.prefix(4).elementsEqual([pnpmPath.path, "--silent", "openclaw", "rpc"]))
+        #expect(cmd.prefix(4).elementsEqual([pnpmPath.path, "--silent", "marketingclaw", "rpc"]))
     }
 
     @Test func `pnpm keeps extra args after subcommand`() throws {
         let defaults = self.makeLocalDefaults()
         let (tmp, pnpmPath) = try self.makeProjectRootWithPnpm()
 
-        let cmd = CommandResolver.openclawCommand(
+        let cmd = CommandResolver.marketingclawCommand(
             subcommand: "health",
             extraArgs: ["--json", "--timeout", "5"],
             defaults: defaults,
@@ -133,7 +133,7 @@ import Testing
             searchPaths: [tmp.appendingPathComponent("node_modules/.bin").path],
             projectRoot: tmp)
 
-        #expect(cmd.prefix(5).elementsEqual([pnpmPath.path, "--silent", "openclaw", "health", "--json"]))
+        #expect(cmd.prefix(5).elementsEqual([pnpmPath.path, "--silent", "marketingclaw", "health", "--json"]))
         #expect(cmd.suffix(2).elementsEqual(["--timeout", "5"]))
     }
 
@@ -149,9 +149,9 @@ import Testing
 
     @Test func `managed install only precedes external installs after validation`() throws {
         let home = try makeTempDirForTests()
-        let managedBin = home.appendingPathComponent(".openclaw/bin")
+        let managedBin = home.appendingPathComponent(".marketingclaw/bin")
         try FileManager().createDirectory(at: managedBin, withIntermediateDirectories: true)
-        let managedExecutable = managedBin.appendingPathComponent("openclaw")
+        let managedExecutable = managedBin.appendingPathComponent("marketingclaw")
 
         let fallbackPaths = CommandResolver.preferredPaths(
             home: home,
@@ -219,17 +219,17 @@ import Testing
     @Test func `validated CLI preference expires when the app requires a newer version`() throws {
         let defaults = self.makeDefaults()
         let root = try makeTempDirForTests()
-        let executable = root.appendingPathComponent("openclaw")
+        let executable = root.appendingPathComponent("marketingclaw")
         FileManager().createFile(atPath: executable.path, contents: Data())
         try FileManager().setAttributes([.posixPermissions: 0o755], ofItemAtPath: executable.path)
         defaults.set(executable.path, forKey: cliValidatedExecutableKey)
         defaults.set("2026.7.3", forKey: cliValidatedVersionKey)
 
-        #expect(CommandResolver.validatedOpenClawExecutable(
+        #expect(CommandResolver.validatedMarketingClawExecutable(
             defaults: defaults,
             fileManager: .default,
             requiredVersion: "2026.7.3") == executable.path)
-        #expect(CommandResolver.validatedOpenClawExecutable(
+        #expect(CommandResolver.validatedMarketingClawExecutable(
             defaults: defaults,
             fileManager: .default,
             requiredVersion: "2026.8.0") == nil)
@@ -238,11 +238,11 @@ import Testing
     @Test func `builds SSH command for remote mode`() {
         let defaults = self.makeDefaults()
         defaults.set(AppState.ConnectionMode.remote.rawValue, forKey: connectionModeKey)
-        defaults.set("openclaw@example.com:2222", forKey: remoteTargetKey)
+        defaults.set("marketingclaw@example.com:2222", forKey: remoteTargetKey)
         defaults.set("/tmp/id_ed25519", forKey: remoteIdentityKey)
-        defaults.set("/srv/openclaw", forKey: remoteProjectRootKey)
+        defaults.set("/srv/marketingclaw", forKey: remoteProjectRootKey)
 
-        let cmd = CommandResolver.openclawCommand(
+        let cmd = CommandResolver.marketingclawCommand(
             subcommand: "status",
             extraArgs: ["--json"],
             defaults: defaults,
@@ -250,7 +250,7 @@ import Testing
 
         #expect(cmd.first == "/usr/bin/ssh")
         if let marker = cmd.firstIndex(of: "--") {
-            #expect(cmd[marker + 1] == "openclaw@example.com")
+            #expect(cmd[marker + 1] == "marketingclaw@example.com")
         } else {
             #expect(Bool(false))
         }
@@ -261,9 +261,9 @@ import Testing
         #expect(cmd.contains("-i"))
         #expect(cmd.contains("/tmp/id_ed25519"))
         if let script = cmd.last {
-            #expect(script.contains("PRJ='/srv/openclaw'"))
+            #expect(script.contains("PRJ='/srv/marketingclaw'"))
             #expect(script.contains("cd \"$PRJ\""))
-            #expect(script.contains("openclaw"))
+            #expect(script.contains("marketingclaw"))
             #expect(script.contains("status"))
             #expect(script.contains("--json"))
             #expect(script.contains("CLI="))
@@ -275,7 +275,7 @@ import Testing
         defaults.set(AppState.ConnectionMode.remote.rawValue, forKey: connectionModeKey)
         defaults.set("gateway-alias", forKey: remoteTargetKey)
 
-        let cmd = CommandResolver.openclawCommand(
+        let cmd = CommandResolver.marketingclawCommand(
             subcommand: "status",
             defaults: defaults,
             configRoot: [
@@ -298,7 +298,7 @@ import Testing
         defaults.set(AppState.ConnectionMode.remote.rawValue, forKey: connectionModeKey)
         defaults.set("new-gateway-alias", forKey: remoteTargetKey)
 
-        let cmd = CommandResolver.openclawCommand(
+        let cmd = CommandResolver.marketingclawCommand(
             subcommand: "status",
             defaults: defaults,
             configRoot: [
@@ -373,21 +373,21 @@ import Testing
     @Test func `config root local overrides remote defaults`() throws {
         let defaults = self.makeDefaults()
         defaults.set(AppState.ConnectionMode.remote.rawValue, forKey: connectionModeKey)
-        defaults.set("openclaw@example.com:2222", forKey: remoteTargetKey)
+        defaults.set("marketingclaw@example.com:2222", forKey: remoteTargetKey)
 
         let tmp = try makeTempDirForTests()
 
-        let openclawPath = tmp.appendingPathComponent("node_modules/.bin/openclaw")
-        try makeExecutableForTests(at: openclawPath)
+        let marketingclawPath = tmp.appendingPathComponent("node_modules/.bin/marketingclaw")
+        try makeExecutableForTests(at: marketingclawPath)
 
-        let cmd = CommandResolver.openclawCommand(
+        let cmd = CommandResolver.marketingclawCommand(
             subcommand: "daemon",
             defaults: defaults,
             configRoot: ["gateway": ["mode": "local"]],
             searchPaths: [tmp.appendingPathComponent("node_modules/.bin").path],
             projectRoot: tmp)
 
-        #expect(cmd.first == openclawPath.path)
+        #expect(cmd.first == marketingclawPath.path)
         #expect(cmd.count >= 2)
         if cmd.count >= 2 {
             #expect(cmd[1] == "daemon")

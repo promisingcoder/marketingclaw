@@ -4,12 +4,15 @@ import { homedir } from "node:os";
 import { isAbsolute, resolve } from "node:path";
 import { basename } from "node:path";
 import type * as Lark from "@larksuiteoapi/node-sdk";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { extensionForMime } from "openclaw/plugin-sdk/media-mime";
-import { normalizeOptionalString, uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { jsonResult as json } from "openclaw/plugin-sdk/tool-results";
+import { formatErrorMessage } from "marketingclaw/plugin-sdk/error-runtime";
+import { extensionForMime } from "marketingclaw/plugin-sdk/media-mime";
+import {
+  normalizeOptionalString,
+  uniqueStrings,
+} from "marketingclaw/plugin-sdk/string-coerce-runtime";
+import { jsonResult as json } from "marketingclaw/plugin-sdk/tool-results";
 import { Type } from "typebox";
-import type { OpenClawPluginApi } from "../runtime-api.js";
+import type { MarketingClawPluginApi } from "../runtime-api.js";
 import { listEnabledFeishuAccounts } from "./accounts.js";
 import { FeishuDocSchema, type FeishuDocParams } from "./doc-schema.js";
 import { BATCH_SIZE, insertBlocksInBatches } from "./docx-batch-insert.js";
@@ -1358,7 +1361,7 @@ async function listAppScopes(client: Lark.Client) {
 
 // ============ Tool Registration ============
 
-export function registerFeishuDocTools(api: OpenClawPluginApi) {
+export function registerFeishuDocTools(api: MarketingClawPluginApi) {
   if (!api.config) {
     return;
   }

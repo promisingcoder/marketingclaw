@@ -1,4 +1,4 @@
-package ai.openclaw.app.ui
+package ai.marketingclaw.app.ui
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -11,7 +11,7 @@ class SettingsScreensNotificationAppsTest {
         launcherPackages = setOf("com.example.launcher"),
         recentPackages = listOf("com.example.recent", "com.example.launcher"),
         configuredPackages = setOf("com.example.configured"),
-        appPackageName = "ai.openclaw.app",
+        appPackageName = "ai.marketingclaw.app",
       )
 
     assertEquals(
@@ -24,10 +24,10 @@ class SettingsScreensNotificationAppsTest {
   fun resolveNotificationCandidatePackages_filtersBlankAndSelfPackages() {
     val packages =
       resolveNotificationCandidatePackages(
-        launcherPackages = setOf(" ", "ai.openclaw.app"),
+        launcherPackages = setOf(" ", "ai.marketingclaw.app"),
         recentPackages = listOf("com.example.recent", "  "),
-        configuredPackages = setOf("ai.openclaw.app", "com.example.configured"),
-        appPackageName = "ai.openclaw.app",
+        configuredPackages = setOf("ai.marketingclaw.app", "com.example.configured"),
+        appPackageName = "ai.marketingclaw.app",
       )
 
     assertEquals(setOf("com.example.recent", "com.example.configured"), packages)

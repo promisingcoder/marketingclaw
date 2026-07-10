@@ -7,18 +7,18 @@ import { DatabaseSync } from "node:sqlite";
 
 const SCHEMAS = [
   {
-    name: "openclaw-state",
-    schema: "src/state/openclaw-state-schema.sql",
-    outFile: "src/state/openclaw-state-db.generated.d.ts",
-    schemaOutFile: "src/state/openclaw-state-schema.generated.ts",
-    schemaExport: "OPENCLAW_STATE_SCHEMA_SQL",
+    name: "marketingclaw-state",
+    schema: "src/state/marketingclaw-state-schema.sql",
+    outFile: "src/state/marketingclaw-state-db.generated.d.ts",
+    schemaOutFile: "src/state/marketingclaw-state-schema.generated.ts",
+    schemaExport: "MARKETINGCLAW_STATE_SCHEMA_SQL",
   },
   {
-    name: "openclaw-agent",
-    schema: "src/state/openclaw-agent-schema.sql",
-    outFile: "src/state/openclaw-agent-db.generated.d.ts",
-    schemaOutFile: "src/state/openclaw-agent-schema.generated.ts",
-    schemaExport: "OPENCLAW_AGENT_SCHEMA_SQL",
+    name: "marketingclaw-agent",
+    schema: "src/state/marketingclaw-agent-schema.sql",
+    outFile: "src/state/marketingclaw-agent-db.generated.d.ts",
+    schemaOutFile: "src/state/marketingclaw-agent-schema.generated.ts",
+    schemaExport: "MARKETINGCLAW_AGENT_SCHEMA_SQL",
   },
 ];
 

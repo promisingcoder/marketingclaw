@@ -144,18 +144,18 @@ export const id: TranslationMap = {
     pairing: {
       button: "Pasangkan perangkat seluler",
       adminRequired: "Akses administrator diperlukan untuk membuat kode penyiapan.",
-      title: "OpenClaw seluler",
+      title: "MarketingClaw seluler",
       subtitle: "Pindai kode QR ini di aplikasi seluler untuk menghubungkan ponsel baru.",
       generating: "Membuat kode penyiapan yang aman…",
       failed: "Tidak dapat membuat kode penyiapan.",
-      qrAlt: "Kode QR pemasangan OpenClaw seluler",
+      qrAlt: "Kode QR pemasangan MarketingClaw seluler",
       qrUnavailable: "QR tidak tersedia. Salin kode penyiapan sebagai gantinya.",
       copySetupCode: "Salin kode penyiapan",
       newCode: "Kode baru",
       showSetupCode: "Tampilkan kode penyiapan",
       pending: "Permintaan perangkat yang menunggu peninjauan: {count}",
       review: "Tinjau",
-      waiting: "Aplikasi seluler resmi OpenClaw terhubung otomatis setelah dipindai.",
+      waiting: "Aplikasi seluler resmi MarketingClaw terhubung otomatis setelah dipindai.",
       help: "Bantuan pemasangan",
       manageDevices: "Kelola perangkat",
     },
@@ -181,7 +181,7 @@ export const id: TranslationMap = {
   },
   worktrees: {
     title: "Worktree Terkelola",
-    subtitle: "Checkout repositori terisolasi yang dimiliki oleh OpenClaw.",
+    subtitle: "Checkout repositori terisolasi yang dimiliki oleh MarketingClaw.",
     cleanNow: "Bersihkan sekarang",
     name: "Nama",
     repo: "Repositori",
@@ -555,7 +555,7 @@ export const id: TranslationMap = {
     skillWorkshop: "Tinjau, sempurnakan, dan terapkan proposal sebelum menjadi Skills aktif.",
     nodes: "Perangkat yang dipasangkan dan perintah.",
     chat: "Chat Gateway untuk intervensi cepat.",
-    config: "Edit openclaw.json.",
+    config: "Edit marketingclaw.json.",
     profile: "Statistik, rentetan, dan kehidupan agen Anda di reef.",
     communications: "Saluran, pesan, dan pengaturan audio.",
     appearance: "Tema, UI, dan pengaturan wizard penyiapan.",
@@ -1074,7 +1074,7 @@ export const id: TranslationMap = {
       metadataUpgradeSummary:
         "Perangkat ini sudah dipasangkan, tetapi perubahan metadata sedang menunggu persetujuan.",
       mobileHint:
-        "Di seluler? Salin URL lengkap (termasuk #token=...) dari openclaw dashboard --no-open di desktop Anda.",
+        "Di seluler? Salin URL lengkap (termasuk #token=...) dari marketingclaw dashboard --no-open di desktop Anda.",
       docsTitle: "Dokumentasi pemasangan perangkat (dibuka di tab baru)",
       docsLink: "Dokumentasi: Pemasangan perangkat",
     },
@@ -1112,7 +1112,8 @@ export const id: TranslationMap = {
       modelAuthExpiresIn: "kedaluwarsa {when}",
       modelAuthAttentionExpiredTitle: "Autentikasi model kedaluwarsa",
       modelAuthAttentionExpiringTitle: "Autentikasi model akan segera kedaluwarsa",
-      modelAuthAttentionExpiredDesc: "{providers} — autentikasi ulang dengan openclaw models auth",
+      modelAuthAttentionExpiredDesc:
+        "{providers} — autentikasi ulang dengan marketingclaw models auth",
       modelAuthAttentionExpiringEntry: "{provider} ({when})",
     },
     attention: {
@@ -1568,9 +1569,9 @@ export const id: TranslationMap = {
         summary:
           "Gateway dapat dijangkau, tetapi memerlukan token atau kata sandi yang cocok sebelum browser ini dapat terhubung.",
         stepPaste:
-          "Tempel token dari openclaw dashboard --no-open atau masukkan kata sandi yang dikonfigurasi.",
+          "Tempel token dari marketingclaw dashboard --no-open atau masukkan kata sandi yang dikonfigurasi.",
         stepGenerate:
-          "Jika belum ada token yang dikonfigurasi, jalankan openclaw doctor --generate-gateway-token di host Gateway.",
+          "Jika belum ada token yang dikonfigurasi, jalankan marketingclaw doctor --generate-gateway-token di host Gateway.",
         stepConnect: "Klik Connect lagi setelah memperbarui kredensial.",
       },
       authFailed: {
@@ -1578,7 +1579,7 @@ export const id: TranslationMap = {
         summary:
           "Kredensial yang diberikan ditolak. Penyebab paling umum adalah token kedaluwarsa atau token yang disalin dari URL Gateway lain.",
         stepDashboard:
-          "Jalankan openclaw dashboard --no-open lalu buka URL baru atau tempel tokennya.",
+          "Jalankan marketingclaw dashboard --no-open lalu buka URL baru atau tempel tokennya.",
         stepReplace:
           "Ganti nilai token/kata sandi yang lama; jangan gunakan ulang token dari URL Gateway lain.",
         stepMode:
@@ -1602,8 +1603,8 @@ export const id: TranslationMap = {
           "Browser ini memerlukan persetujuan satu kali dari host Gateway sebelum dapat menggunakan Control UI.",
         upgradeSummary:
           "Browser ini sudah dikenal, tetapi akses yang diminta berubah dan memerlukan persetujuan baru.",
-        stepList: "Jalankan openclaw devices list di host Gateway.",
-        stepApproveId: "Setujui permintaan ini: openclaw devices approve {requestId}.",
+        stepList: "Jalankan marketingclaw devices list di host Gateway.",
+        stepApproveId: "Setujui permintaan ini: marketingclaw devices approve {requestId}.",
         stepApprove: "Setujui permintaan browser/perangkat yang tertunda dari daftar tersebut.",
         stepReconnect: "Hubungkan ulang setelah persetujuan selesai.",
       },
@@ -1630,21 +1631,22 @@ export const id: TranslationMap = {
         summary:
           "Control UI yang disajikan dan Gateway yang berjalan tidak sepakat tentang protokol koneksi yang didukung.",
         stepDashboard:
-          "Buka kembali dashboard yang disajikan dengan openclaw dashboard agar UI dan Gateway berasal dari instalasi yang sama.",
+          "Buka kembali dashboard yang disajikan dengan marketingclaw dashboard agar UI dan Gateway berasal dari instalasi yang sama.",
         stepDevUi:
           "Jika menggunakan pnpm ui:dev, bangun ulang atau mulai ulang UI dev terhadap checkout saat ini.",
         stepRestart:
-          "Mulai ulang Gateway setelah memperbarui OpenClaw agar menyajikan protokol saat ini.",
+          "Mulai ulang Gateway setelah memperbarui MarketingClaw agar menyajikan protokol saat ini.",
       },
       network: {
         title: "Tidak dapat terhubung",
         summary:
           "Browser tidak dapat menyelesaikan koneksi Gateway. Periksa target dan transport sebelum mencoba ulang kredensial.",
-        stepGateway: "Pastikan Gateway berjalan dengan openclaw status atau openclaw gateway run.",
+        stepGateway:
+          "Pastikan Gateway berjalan dengan marketingclaw status atau marketingclaw gateway run.",
         stepUrl:
           "Periksa URL WebSocket dan gunakan wss:// saat Gateway berada di belakang HTTPS/Tailscale Serve.",
         stepDashboard:
-          "Buka kembali dashboard dengan openclaw dashboard --no-open untuk menyalin ulang URL dan detail auth saat ini.",
+          "Buka kembali dashboard dengan marketingclaw dashboard --no-open untuk menyalin ulang URL dan detail auth saat ini.",
       },
     },
   },

@@ -1,4 +1,4 @@
-import type { FastMode } from "@openclaw/normalization-core/string-coerce";
+import type { FastMode } from "@marketingclaw/normalization-core/string-coerce";
 // Shared queue type contracts for admission, drain, and fallback handling.
 import type { AutoFallbackPrimaryProbe } from "../../../agents/agent-scope.js";
 import type { ExecToolDefaults } from "../../../agents/bash-tools.js";
@@ -9,7 +9,7 @@ import type { ChatType } from "../../../channels/chat-type.js";
 import type { InboundEventKind } from "../../../channels/inbound-event/kind.js";
 import type { SessionEntry } from "../../../config/sessions.js";
 import type { ReplyToMode } from "../../../config/types.base.js";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../../config/types.marketingclaw.js";
 import type { PromptImageOrderEntry } from "../../../media/prompt-image-order.js";
 import type { PluginHookChannelContext } from "../../../plugins/hook-types.js";
 import type { InputProvenance } from "../../../sessions/input-provenance.js";
@@ -123,7 +123,7 @@ export type FollowupRun = {
     workspaceDir: string;
     /** Task working directory for runtime execution. Defaults to workspaceDir. */
     cwd?: string;
-    config: OpenClawConfig;
+    config: MarketingClawConfig;
     skillsSnapshot?: SkillSnapshot;
     provider: string;
     model: string;
@@ -208,7 +208,7 @@ export function completeFollowupRunLifecycle(run: Pick<FollowupRun, "queuedLifec
 }
 
 export type ResolveQueueSettingsParams = {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   channel?: string;
   sessionEntry?: SessionEntry;
   inlineMode?: QueueMode;

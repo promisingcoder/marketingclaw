@@ -1,6 +1,6 @@
 // Memory Core QMD runtime cache helpers.
 import { createHash } from "node:crypto";
-import type { PluginStateKeyedStore } from "openclaw/plugin-sdk/plugin-state-runtime";
+import type { PluginStateKeyedStore } from "marketingclaw/plugin-sdk/plugin-state-runtime";
 import { memoryCoreWorkspaceEntryKey, openMemoryCoreStateStore } from "../dreaming-state.js";
 
 export const QMD_RUNTIME_CACHE_COLLECTION_VALIDATION_NAMESPACE =

@@ -1,15 +1,15 @@
 // Session attachment contract tests cover plugin session attachment metadata and storage.
 import * as fs from "node:fs/promises";
 import path from "node:path";
-import { FILE_TYPE_SNIFF_MAX_BYTES } from "@openclaw/media-core/mime";
+import { FILE_TYPE_SNIFF_MAX_BYTES } from "@marketingclaw/media-core/mime";
 import {
   createPluginRegistryFixture,
   registerTestPlugin,
-} from "openclaw/plugin-sdk/plugin-test-contracts";
+} from "marketingclaw/plugin-sdk/plugin-test-contracts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { updateSessionStore, type SessionEntry } from "../../config/sessions.js";
 import { withTempConfig } from "../../gateway/test-temp-config.js";
-import { resolvePreferredOpenClawTmpDir } from "../../infra/tmp-openclaw-dir.js";
+import { resolvePreferredMarketingClawTmpDir } from "../../infra/tmp-marketingclaw-dir.js";
 import { createOutboundTestPlugin, createTestRegistry } from "../../test-utils/channel-plugins.js";
 import {
   attachmentProbeFs,
@@ -23,7 +23,7 @@ import { createPluginRegistry } from "../registry.js";
 import { setActivePluginRegistry } from "../runtime.js";
 import type { PluginRuntime } from "../runtime/types.js";
 import { createPluginRecord } from "../status.test-helpers.js";
-import type { OpenClawPluginApi } from "../types.js";
+import type { MarketingClawPluginApi } from "../types.js";
 
 const workflowMocks = vi.hoisted(() => ({
   getChannelPlugin: vi.fn(),
@@ -64,13 +64,13 @@ async function withSessionStore(
   run: (params: { stateDir: string; storePath: string; filePath: string }) => Promise<void>,
 ) {
   const stateDir = await fs.mkdtemp(
-    path.join(resolvePreferredOpenClawTmpDir(), "openclaw-session-attachments-"),
+    path.join(resolvePreferredMarketingClawTmpDir(), "marketingclaw-session-attachments-"),
   );
   const storePath = path.join(stateDir, "sessions.json");
   const filePath = path.join(stateDir, "x.txt");
   await fs.writeFile(filePath, "x", "utf8");
-  const previousStateDir = process.env.OPENCLAW_STATE_DIR;
-  process.env.OPENCLAW_STATE_DIR = stateDir;
+  const previousStateDir = process.env.MARKETINGCLAW_STATE_DIR;
+  process.env.MARKETINGCLAW_STATE_DIR = stateDir;
   try {
     await withTempConfig({
       cfg: { session: { store: storePath } },
@@ -78,9 +78,9 @@ async function withSessionStore(
     });
   } finally {
     if (previousStateDir === undefined) {
-      delete process.env.OPENCLAW_STATE_DIR;
+      delete process.env.MARKETINGCLAW_STATE_DIR;
     } else {
-      process.env.OPENCLAW_STATE_DIR = previousStateDir;
+      process.env.MARKETINGCLAW_STATE_DIR = previousStateDir;
     }
     await fs.rm(stateDir, { recursive: true, force: true });
   }
@@ -145,7 +145,7 @@ describe("plugin session attachments", () => {
     workflowMocks.sendMessage.mockReset();
     setActivePluginRegistry(createEmptyPluginRegistry());
     clearPluginLoaderCache();
-    delete (globalThis as { proofAttachmentApi?: OpenClawPluginApi }).proofAttachmentApi;
+    delete (globalThis as { proofAttachmentApi?: MarketingClawPluginApi }).proofAttachmentApi;
     delete (globalThis as { proofAttachmentLog?: unknown[] }).proofAttachmentLog;
   });
 
@@ -595,7 +595,7 @@ describe("plugin session attachments", () => {
       mockSuccessfulAttachmentDelivery();
 
       const { config, registry } = createPluginRegistryFixture({ session: { store: storePath } });
-      let capturedApi: OpenClawPluginApi | undefined;
+      let capturedApi: MarketingClawPluginApi | undefined;
       registerTestPlugin({
         registry,
         config,
@@ -642,7 +642,7 @@ describe("plugin session attachments", () => {
           },
         } as unknown as PluginRuntime,
       });
-      let capturedApi: OpenClawPluginApi | undefined;
+      let capturedApi: MarketingClawPluginApi | undefined;
       registerTestPlugin({
         registry,
         config: registrationConfig,
@@ -682,7 +682,7 @@ describe("plugin session attachments", () => {
           },
         } as unknown as PluginRuntime,
       });
-      let capturedApi: OpenClawPluginApi | undefined;
+      let capturedApi: MarketingClawPluginApi | undefined;
       registerTestPlugin({
         registry,
         config: registrationConfig,

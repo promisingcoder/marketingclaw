@@ -1,10 +1,10 @@
 // Telegram plugin module implements exec approval resolver behavior.
-import { resolveApprovalOverGateway } from "openclaw/plugin-sdk/approval-gateway-runtime";
-import type { ExecApprovalReplyDecision } from "openclaw/plugin-sdk/approval-reply-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import { resolveApprovalOverGateway } from "marketingclaw/plugin-sdk/approval-gateway-runtime";
+import type { ExecApprovalReplyDecision } from "marketingclaw/plugin-sdk/approval-reply-runtime";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
 
 type ResolveTelegramExecApprovalParams = {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   approvalId: string;
   decision: ExecApprovalReplyDecision;
   senderId?: string | null;

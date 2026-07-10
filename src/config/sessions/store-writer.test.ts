@@ -10,7 +10,7 @@ describe("session store writer", () => {
   });
 
   it("serializes runtime writes through one in-process writer", async () => {
-    const storePath = "/tmp/openclaw-store.json";
+    const storePath = "/tmp/marketingclaw-store.json";
     const firstStarted = createDeferred();
     const releaseFirst = createDeferred();
     const order: string[] = [];
@@ -37,7 +37,7 @@ describe("session store writer", () => {
   });
 
   it("runs nested writes for the active store without requeueing behind itself", async () => {
-    const storePath = "/tmp/openclaw-store.json";
+    const storePath = "/tmp/marketingclaw-store.json";
     const order: string[] = [];
 
     const result = await runExclusiveSessionStoreWrite(storePath, async () => {
@@ -60,7 +60,7 @@ describe("session store writer", () => {
   });
 
   it("does not leak active writer state to async children after the writer returns", async () => {
-    const storePath = "/tmp/openclaw-store.json";
+    const storePath = "/tmp/marketingclaw-store.json";
     const order: string[] = [];
     let releaseChild = () => {};
     const childReleased = new Promise<void>((resolve) => {

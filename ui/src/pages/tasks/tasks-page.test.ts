@@ -76,7 +76,7 @@ describe("TasksPage cancellation lifecycle", () => {
     });
     const client = { request } as unknown as GatewayBrowserClient;
     const source = createGateway(client);
-    const page = document.createElement("openclaw-tasks-page") as TasksPageTestElement;
+    const page = document.createElement("marketingclaw-tasks-page") as TasksPageTestElement;
     page.context = createContext(source.gateway);
     document.body.append(page);
     await vi.waitFor(() => expect(request).toHaveBeenCalledWith("tasks.list", expect.anything()));

@@ -2,16 +2,16 @@
  * Gateway startup orchestration tests.
  */
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { MarketingClawConfig } from "../config/config.js";
 
-const ensureOpenClawModelsJsonMock = vi.fn<
+const ensureMarketingClawModelsJsonMock = vi.fn<
   (
     config: unknown,
     agentDir: unknown,
     options?: unknown,
   ) => Promise<{ agentDir: string; wrote: boolean }>
 >(async () => ({ agentDir: "/tmp/agent", wrote: false }));
-const resolveConfiguredModelRefMock = vi.fn(({ cfg }: { cfg: OpenClawConfig }) => {
+const resolveConfiguredModelRefMock = vi.fn(({ cfg }: { cfg: MarketingClawConfig }) => {
   const configured = cfg.agents?.defaults?.model;
   const primary = typeof configured === "string" ? configured : configured?.primary;
   const [provider = "openai", ...modelParts] = (primary ?? "openai/gpt-5.5").split("/");
@@ -25,22 +25,23 @@ vi.mock("../agents/agent-scope.js", () => ({
 }));
 
 vi.mock("../agents/models-config.js", () => ({
-  ensureOpenClawModelsJson: (config: unknown, agentDir: unknown, options?: unknown) =>
-    ensureOpenClawModelsJsonMock(config, agentDir, options),
+  ensureMarketingClawModelsJson: (config: unknown, agentDir: unknown, options?: unknown) =>
+    ensureMarketingClawModelsJsonMock(config, agentDir, options),
 }));
 
 vi.mock("../agents/model-selection.js", () => ({
   isCliProvider: () => false,
-  resolveConfiguredModelRef: (params: { cfg: OpenClawConfig }) =>
+  resolveConfiguredModelRef: (params: { cfg: MarketingClawConfig }) =>
     resolveConfiguredModelRefMock(params),
 }));
 
 let prewarmConfiguredPrimaryModel: typeof import("./server-startup-post-attach.js").testing.prewarmConfiguredPrimaryModel;
 let shouldSkipStartupModelPrewarm: typeof import("./server-startup-post-attach.js").testing.shouldSkipStartupModelPrewarm;
 
-function expectModelsJsonPrewarmCall(cfg: OpenClawConfig) {
-  expect(ensureOpenClawModelsJsonMock).toHaveBeenCalledTimes(1);
-  const [calledConfig, agentDir, options] = ensureOpenClawModelsJsonMock.mock.calls.at(0) ?? [];
+function expectModelsJsonPrewarmCall(cfg: MarketingClawConfig) {
+  expect(ensureMarketingClawModelsJsonMock).toHaveBeenCalledTimes(1);
+  const [calledConfig, agentDir, options] =
+    ensureMarketingClawModelsJsonMock.mock.calls.at(0) ?? [];
   expect(calledConfig).toBe(cfg);
   expect(agentDir).toBe("/tmp/agent");
   expect(options).toEqual({
@@ -59,7 +60,7 @@ describe("gateway startup primary model warmup", () => {
   });
 
   beforeEach(() => {
-    ensureOpenClawModelsJsonMock.mockClear();
+    ensureMarketingClawModelsJsonMock.mockClear();
     resolveConfiguredModelRefMock.mockClear();
   });
 
@@ -72,7 +73,7 @@ describe("gateway startup primary model warmup", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     await prewarmConfiguredPrimaryModel({
       cfg,
@@ -85,11 +86,11 @@ describe("gateway startup primary model warmup", () => {
 
   it("skips warmup when no explicit primary model is configured", async () => {
     await prewarmConfiguredPrimaryModel({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       log: { warn: vi.fn() },
     });
 
-    expect(ensureOpenClawModelsJsonMock).not.toHaveBeenCalled();
+    expect(ensureMarketingClawModelsJsonMock).not.toHaveBeenCalled();
     expect(resolveConfiguredModelRefMock).not.toHaveBeenCalled();
   });
 
@@ -97,12 +98,12 @@ describe("gateway startup primary model warmup", () => {
     expect(shouldSkipStartupModelPrewarm({})).toBe(false);
     expect(
       shouldSkipStartupModelPrewarm({
-        OPENCLAW_SKIP_STARTUP_MODEL_PREWARM: "1",
+        MARKETINGCLAW_SKIP_STARTUP_MODEL_PREWARM: "1",
       }),
     ).toBe(true);
     expect(
       shouldSkipStartupModelPrewarm({
-        OPENCLAW_SKIP_STARTUP_MODEL_PREWARM: "true",
+        MARKETINGCLAW_SKIP_STARTUP_MODEL_PREWARM: "true",
       }),
     ).toBe(true);
   });
@@ -123,16 +124,16 @@ describe("gateway startup primary model warmup", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       log: { warn: vi.fn() },
     });
 
-    expect(ensureOpenClawModelsJsonMock).not.toHaveBeenCalled();
+    expect(ensureMarketingClawModelsJsonMock).not.toHaveBeenCalled();
     expect(resolveConfiguredModelRefMock).not.toHaveBeenCalled();
   });
 
   it("warns when scoped models.json preparation fails", async () => {
-    ensureOpenClawModelsJsonMock.mockRejectedValueOnce(new Error("models write failed"));
+    ensureMarketingClawModelsJsonMock.mockRejectedValueOnce(new Error("models write failed"));
     const warn = vi.fn();
 
     await prewarmConfiguredPrimaryModel({
@@ -144,7 +145,7 @@ describe("gateway startup primary model warmup", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       log: { warn },
     });
 

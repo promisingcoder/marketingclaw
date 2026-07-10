@@ -1,4 +1,4 @@
-package ai.openclaw.app.gateway
+package ai.marketingclaw.app.gateway
 
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -89,7 +89,7 @@ class GatewayTlsTest {
     private val serverSocket = ServerSocket(0, 50, LOOPBACK_ADDRESS)
     private var acceptedSocket: Socket? = null
     private val worker =
-      thread(start = true, isDaemon = true, name = "openclaw-tls-probe-test-server") {
+      thread(start = true, isDaemon = true, name = "marketingclaw-tls-probe-test-server") {
         try {
           serverSocket.accept().use { socket ->
             acceptedSocket = socket

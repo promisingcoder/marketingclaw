@@ -3,11 +3,11 @@ summary: "Pairing overview: approve who can DM you + which nodes can join"
 read_when:
   - Setting up DM access control
   - Pairing a new iOS/Android node
-  - Reviewing OpenClaw security posture
+  - Reviewing MarketingClaw security posture
 title: "Pairing"
 ---
 
-"Pairing" is OpenClaw's explicit access approval step.
+"Pairing" is MarketingClaw's explicit access approval step.
 It is used in two places:
 
 1. **DM pairing** (who is allowed to talk to the bot)
@@ -35,8 +35,8 @@ Pairing codes:
 ### Approve a sender
 
 ```bash
-openclaw pairing list telegram
-openclaw pairing approve telegram <CODE>
+marketingclaw pairing list telegram
+marketingclaw pairing approve telegram <CODE>
 ```
 
 Add `--notify` to the approve command to tell the requester on the same channel. Multi-account channels take `--account <id>`.
@@ -47,7 +47,7 @@ That gives first-time setups an explicit owner for privileged commands and exec
 approval prompts. After an owner exists, later pairing approvals only grant DM
 access; they do not add more owners.
 
-Supported channels (any installed channel plugin that declares pairing; external plugins such as `openclaw-weixin` can add more): `discord`, `feishu`, `googlechat`, `imessage`, `irc`, `line`, `matrix`, `mattermost`, `msteams`, `nextcloud-talk`, `nostr`, `signal`, `slack`, `sms`, `synology-chat`, `telegram`, `twitch`, `whatsapp`, `zalo`, `zalouser`.
+Supported channels (any installed channel plugin that declares pairing; external plugins such as `marketingclaw-weixin` can add more): `discord`, `feishu`, `googlechat`, `imessage`, `irc`, `line`, `matrix`, `mattermost`, `msteams`, `nextcloud-talk`, `nostr`, `signal`, `slack`, `sms`, `synology-chat`, `telegram`, `twitch`, `whatsapp`, `zalo`, `zalouser`.
 
 ### Reusable sender groups
 
@@ -80,7 +80,7 @@ Access groups are documented in detail here: [Access groups](/channels/access-gr
 
 ### Where the state lives
 
-Stored under `~/.openclaw/credentials/`:
+Stored under `~/.marketingclaw/credentials/`:
 
 - Pending requests: `<channel>-pairing.json`
 - Approved allowlist store: `<channel>-<accountId>-allowFrom.json` (approvals for the
@@ -114,10 +114,10 @@ Use an already connected Control UI session with `operator.admin` access:
 
 1. Open the Control UI and select **Nodes**.
 2. In **Nodes & devices**, click **Pair mobile device**.
-3. On your phone, open the OpenClaw app → **Settings** → **Gateway**.
+3. On your phone, open the MarketingClaw app → **Settings** → **Gateway**.
 4. Scan the QR code or paste the setup code, then connect.
 
-Official OpenClaw iOS and Android apps are approved automatically when their
+Official MarketingClaw iOS and Android apps are approved automatically when their
 setup-code metadata matches. If **Pending approval** shows a request (for
 example, for a non-official client or mismatched metadata), review its role and
 scopes before approving it.
@@ -132,7 +132,7 @@ If you use the `device-pair` plugin, you can do first-time device pairing entire
 
 1. In Telegram, message your bot: `/pair`
 2. The bot replies with two messages: an instruction message and a separate **setup code** message (easy to copy/paste in Telegram).
-3. On your phone, open the OpenClaw iOS app → Settings → Gateway.
+3. On your phone, open the MarketingClaw iOS app → Settings → Gateway.
 4. Scan the QR code (`/pair qr`) or paste the setup code and connect.
 5. The official mobile app connects automatically. If `/pair pending` shows a
    request, review its role and scopes before approving it.
@@ -165,7 +165,7 @@ for loopback, private LAN addresses, `.local` Bonjour hosts, and the Android
 emulator host. Tailnet CGNAT addresses, `.ts.net` names, and public hosts still
 fail closed before QR/setup-code issuance.
 
-For `gateway.bind=lan` setup URLs, OpenClaw detects persistent Tailscale Serve
+For `gateway.bind=lan` setup URLs, MarketingClaw detects persistent Tailscale Serve
 HTTPS roots that proxy the active Gateway's loopback port and advertises them
 alongside the LAN route. Specific-interface `custom` and `tailnet` binds do not
 receive that fallback because a loopback Serve proxy cannot reach those
@@ -175,9 +175,9 @@ reachable endpoint.
 ### Approve a node device
 
 ```bash
-openclaw devices list
-openclaw devices approve <requestId>
-openclaw devices reject <requestId>
+marketingclaw devices list
+marketingclaw devices approve <requestId>
+marketingclaw devices reject <requestId>
 ```
 
 When an explicit approval is denied because the approving paired-device session
@@ -192,7 +192,7 @@ role/scopes/public key), the previous pending request is superseded and a new
 `requestId` is created.
 
 <Note>
-An already paired device does not get broader access silently. If it reconnects asking for more scopes or a broader role, OpenClaw keeps the existing approval as-is and creates a fresh pending upgrade request. Use `openclaw devices list` to compare the currently approved access with the newly requested access before you approve.
+An already paired device does not get broader access silently. If it reconnects asking for more scopes or a broader role, MarketingClaw keeps the existing approval as-is and creates a fresh pending upgrade request. Use `marketingclaw devices list` to compare the currently approved access with the newly requested access before you approve.
 </Note>
 
 ### Optional trusted-CIDR node auto-approve
@@ -219,14 +219,14 @@ approval.
 
 ### Node pairing state storage
 
-Stored under `~/.openclaw/devices/`:
+Stored under `~/.marketingclaw/devices/`:
 
 - `pending.json` (short-lived; pending requests expire after 5 minutes)
 - `paired.json` (paired devices + tokens)
 
 ### Notes
 
-- The legacy `node.pair.*` API (CLI: `openclaw nodes pending|approve|reject|remove|rename`) is a
+- The legacy `node.pair.*` API (CLI: `marketingclaw nodes pending|approve|reject|remove|rename`) is a
   separate gateway-owned pairing store. WS nodes still require device pairing.
 - The pairing record is the durable source of truth for approved roles. Active
   device tokens stay bounded to that approved role set; a stray token entry

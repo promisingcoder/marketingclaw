@@ -16,7 +16,7 @@ function expectedTaskkillPath(): string {
 }
 
 function makeTempDir(): string {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-secret-provider-proof-"));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-secret-provider-proof-"));
   tempDirs.push(root);
   return root;
 }
@@ -73,7 +73,7 @@ function isProcessAlive(pid: number): boolean {
   }
 }
 
-function writeStallingOpenClaw(
+function writeStallingMarketingClaw(
   root: string,
   options: {
     gatewayDescendantMarkerPath?: string;
@@ -90,7 +90,7 @@ function writeStallingOpenClaw(
         )}, "x"), 20);`,
       ].join("\n")
     : "";
-  const scriptPath = path.join(root, "fake-openclaw.mjs");
+  const scriptPath = path.join(root, "fake-marketingclaw.mjs");
   fs.writeFileSync(
     scriptPath,
     [
@@ -119,7 +119,7 @@ function writeStallingOpenClaw(
       "  await delay(60_000);",
       "  process.exit(0);",
       "}",
-      "console.error(`unexpected fake openclaw args: ${args.join(' ')}`);",
+      "console.error(`unexpected fake marketingclaw args: ${args.join(' ')}`);",
       "process.exit(2);",
       "",
     ].join("\n"),
@@ -128,8 +128,8 @@ function writeStallingOpenClaw(
   return scriptPath;
 }
 
-function writeLeakingStartupOpenClaw(root: string): string {
-  const scriptPath = path.join(root, "fake-leaking-openclaw.mjs");
+function writeLeakingStartupMarketingClaw(root: string): string {
+  const scriptPath = path.join(root, "fake-leaking-marketingclaw.mjs");
   fs.writeFileSync(
     scriptPath,
     [
@@ -148,8 +148,8 @@ function writeLeakingStartupOpenClaw(root: string): string {
   return scriptPath;
 }
 
-function writeSignaledStartupOpenClaw(root: string): string {
-  const scriptPath = path.join(root, "fake-signaled-openclaw.mjs");
+function writeSignaledStartupMarketingClaw(root: string): string {
+  const scriptPath = path.join(root, "fake-signaled-marketingclaw.mjs");
   fs.writeFileSync(
     scriptPath,
     [
@@ -171,8 +171,8 @@ function writeSignaledStartupOpenClaw(root: string): string {
   return scriptPath;
 }
 
-function writeNoisySecretsConfigureOpenClaw(root: string): string {
-  const scriptPath = path.join(root, "fake-noisy-secrets-configure-openclaw.mjs");
+function writeNoisySecretsConfigureMarketingClaw(root: string): string {
+  const scriptPath = path.join(root, "fake-noisy-secrets-configure-marketingclaw.mjs");
   fs.writeFileSync(
     scriptPath,
     [
@@ -192,7 +192,7 @@ function writeNoisySecretsConfigureOpenClaw(root: string): string {
 
 function runProofHarness(
   root: string,
-  fakeOpenClaw: string,
+  fakeMarketingClaw: string,
   mode: "start" | "startup-fails" | "status",
   envOverrides: NodeJS.ProcessEnv = {},
 ) {
@@ -201,9 +201,9 @@ function runProofHarness(
     encoding: "utf8",
     env: {
       ...process.env,
-      OPENCLAW_ENTRY: fakeOpenClaw,
-      OPENCLAW_SECRET_PROOF_READY_MS: "60",
-      OPENCLAW_SECRET_PROOF_RPC_MS: "1000",
+      MARKETINGCLAW_ENTRY: fakeMarketingClaw,
+      MARKETINGCLAW_SECRET_PROOF_READY_MS: "60",
+      MARKETINGCLAW_SECRET_PROOF_RPC_MS: "1000",
       ...envOverrides,
     },
     timeout: 5_000,
@@ -217,32 +217,32 @@ afterEach(() => {
 });
 
 describe("secret provider integration proof harness", () => {
-  it("runs pnpm-backed OpenClaw commands through the repo pnpm runner", async () => {
+  it("runs pnpm-backed MarketingClaw commands through the repo pnpm runner", async () => {
     const root = makeTempDir();
     const fakePnpm = path.join(root, "pnpm.cjs");
     fs.writeFileSync(fakePnpm, "#!/usr/bin/env node\n", { mode: 0o755 });
     const proof = await import(`${pathToFileURL(proofScriptPath).href}?case=${Date.now()}`);
 
-    const command = await proof.resolveOpenClawCommand(
+    const command = await proof.resolveMarketingClawCommand(
       ["gateway", "status"],
-      { ...process.env, OPENCLAW_SECRET_PROOF_SENTINEL: "1" },
+      { ...process.env, MARKETINGCLAW_SECRET_PROOF_SENTINEL: "1" },
       {
         nodeExecPath: "/opt/node/bin/node",
         npmExecPath: fakePnpm,
-        runner: { pnpm: true, baseArgs: ["openclaw"], label: "pnpm openclaw" },
+        runner: { pnpm: true, baseArgs: ["marketingclaw"], label: "pnpm marketingclaw" },
       },
     );
 
     expect(command.command).toBe("/opt/node/bin/node");
-    expect(command.args).toEqual([fakePnpm, "openclaw", "gateway", "status"]);
-    expect(command.options.env.OPENCLAW_SECRET_PROOF_SENTINEL).toBe("1");
+    expect(command.args).toEqual([fakePnpm, "marketingclaw", "gateway", "status"]);
+    expect(command.options.env.MARKETINGCLAW_SECRET_PROOF_SENTINEL).toBe("1");
     expect(command.options.shell).toBe(false);
   });
 
   it("keeps stalled startup health probes inside the ready deadline", async () => {
     const root = makeTempDir();
-    const fakeOpenClaw = writeStallingOpenClaw(root);
-    const result = runProofHarness(root, fakeOpenClaw, "start");
+    const fakeMarketingClaw = writeStallingMarketingClaw(root);
+    const result = runProofHarness(root, fakeMarketingClaw, "start");
 
     expect(result.error).toBeUndefined();
     expect(result.status).toBe(0);
@@ -253,9 +253,9 @@ describe("secret provider integration proof harness", () => {
 
   it("fails fast when startup exits by signal", () => {
     const root = makeTempDir();
-    const fakeOpenClaw = writeSignaledStartupOpenClaw(root);
-    const result = runProofHarness(root, fakeOpenClaw, "start", {
-      OPENCLAW_SECRET_PROOF_READY_MS: "2000",
+    const fakeMarketingClaw = writeSignaledStartupMarketingClaw(root);
+    const result = runProofHarness(root, fakeMarketingClaw, "start", {
+      MARKETINGCLAW_SECRET_PROOF_READY_MS: "2000",
     });
 
     expect(result.error).toBeUndefined();
@@ -268,11 +268,11 @@ describe("secret provider integration proof harness", () => {
   it("kills a stalled startup gateway before returning a readiness failure", async () => {
     const root = makeTempDir();
     const markerPath = path.join(root, "gateway-marker.txt");
-    const fakeOpenClaw = writeStallingOpenClaw(root, {
+    const fakeMarketingClaw = writeStallingMarketingClaw(root, {
       gatewayDescendantMarkerPath: markerPath,
     });
-    const result = runProofHarness(root, fakeOpenClaw, "start", {
-      OPENCLAW_SECRET_PROOF_TEARDOWN_GRACE_MS: "100",
+    const result = runProofHarness(root, fakeMarketingClaw, "start", {
+      MARKETINGCLAW_SECRET_PROOF_TEARDOWN_GRACE_MS: "100",
     });
 
     expect(result.error).toBeUndefined();
@@ -290,8 +290,8 @@ describe("secret provider integration proof harness", () => {
   });
 
   it("bounds captured command output", async () => {
-    const previousLimit = process.env.OPENCLAW_SECRET_PROOF_OUTPUT_BYTES;
-    process.env.OPENCLAW_SECRET_PROOF_OUTPUT_BYTES = "1024";
+    const previousLimit = process.env.MARKETINGCLAW_SECRET_PROOF_OUTPUT_BYTES;
+    process.env.MARKETINGCLAW_SECRET_PROOF_OUTPUT_BYTES = "1024";
     try {
       const proof = await import(
         `${pathToFileURL(proofScriptPath).href}?case=output-${Date.now()}`
@@ -306,16 +306,16 @@ describe("secret provider integration proof harness", () => {
       expect(result.stdout).toContain("stdout truncated after 1024 bytes");
     } finally {
       if (previousLimit === undefined) {
-        delete process.env.OPENCLAW_SECRET_PROOF_OUTPUT_BYTES;
+        delete process.env.MARKETINGCLAW_SECRET_PROOF_OUTPUT_BYTES;
       } else {
-        process.env.OPENCLAW_SECRET_PROOF_OUTPUT_BYTES = previousLimit;
+        process.env.MARKETINGCLAW_SECRET_PROOF_OUTPUT_BYTES = previousLimit;
       }
     }
   });
 
   it("clamps oversized command timeout env values before scheduling timers", async () => {
-    const previousTimeout = process.env.OPENCLAW_SECRET_PROOF_COMMAND_MS;
-    process.env.OPENCLAW_SECRET_PROOF_COMMAND_MS = String(Number.MAX_SAFE_INTEGER);
+    const previousTimeout = process.env.MARKETINGCLAW_SECRET_PROOF_COMMAND_MS;
+    process.env.MARKETINGCLAW_SECRET_PROOF_COMMAND_MS = String(Number.MAX_SAFE_INTEGER);
     try {
       const proof = await import(
         `${pathToFileURL(proofScriptPath).href}?case=command-timeout-clamp-${Date.now()}`
@@ -330,9 +330,9 @@ describe("secret provider integration proof harness", () => {
       ).resolves.toMatchObject({ code: 0 });
     } finally {
       if (previousTimeout === undefined) {
-        delete process.env.OPENCLAW_SECRET_PROOF_COMMAND_MS;
+        delete process.env.MARKETINGCLAW_SECRET_PROOF_COMMAND_MS;
       } else {
-        process.env.OPENCLAW_SECRET_PROOF_COMMAND_MS = previousTimeout;
+        process.env.MARKETINGCLAW_SECRET_PROOF_COMMAND_MS = previousTimeout;
       }
     }
   });
@@ -368,23 +368,23 @@ describe("secret provider integration proof harness", () => {
   });
 
   it("blocks skipped secret proofs unless local rehearsals explicitly allow skips", async () => {
-    const previousAllowSkips = process.env.OPENCLAW_SECRET_PROOF_ALLOW_SKIPS;
+    const previousAllowSkips = process.env.MARKETINGCLAW_SECRET_PROOF_ALLOW_SKIPS;
     const proof = await import(
       `${pathToFileURL(proofScriptPath).href}?case=skip-block-${Date.now()}`
     );
     const entries = [{ name: "PX", status: "skip", elapsedMs: 1, evidence: "missing service" }];
 
     try {
-      delete process.env.OPENCLAW_SECRET_PROOF_ALLOW_SKIPS;
+      delete process.env.MARKETINGCLAW_SECRET_PROOF_ALLOW_SKIPS;
       expect(proof.collectBlockingProofResults(entries)).toEqual(entries);
 
-      process.env.OPENCLAW_SECRET_PROOF_ALLOW_SKIPS = "1";
+      process.env.MARKETINGCLAW_SECRET_PROOF_ALLOW_SKIPS = "1";
       expect(proof.collectBlockingProofResults(entries)).toEqual([]);
     } finally {
       if (previousAllowSkips === undefined) {
-        delete process.env.OPENCLAW_SECRET_PROOF_ALLOW_SKIPS;
+        delete process.env.MARKETINGCLAW_SECRET_PROOF_ALLOW_SKIPS;
       } else {
-        process.env.OPENCLAW_SECRET_PROOF_ALLOW_SKIPS = previousAllowSkips;
+        process.env.MARKETINGCLAW_SECRET_PROOF_ALLOW_SKIPS = previousAllowSkips;
       }
     }
   });
@@ -410,11 +410,11 @@ describe("secret provider integration proof harness", () => {
 
   it.runIf(process.platform !== "win32")("bounds captured PTY configure output", async () => {
     const root = makeTempDir();
-    const fakeOpenClaw = writeNoisySecretsConfigureOpenClaw(root);
-    const previousLimit = process.env.OPENCLAW_SECRET_PROOF_OUTPUT_BYTES;
-    const previousEntry = process.env.OPENCLAW_ENTRY;
-    process.env.OPENCLAW_SECRET_PROOF_OUTPUT_BYTES = "128";
-    process.env.OPENCLAW_ENTRY = fakeOpenClaw;
+    const fakeMarketingClaw = writeNoisySecretsConfigureMarketingClaw(root);
+    const previousLimit = process.env.MARKETINGCLAW_SECRET_PROOF_OUTPUT_BYTES;
+    const previousEntry = process.env.MARKETINGCLAW_ENTRY;
+    process.env.MARKETINGCLAW_SECRET_PROOF_OUTPUT_BYTES = "128";
+    process.env.MARKETINGCLAW_ENTRY = fakeMarketingClaw;
     try {
       const proof = await import(
         `${pathToFileURL(proofScriptPath).href}?case=pty-output-${Date.now()}`
@@ -424,7 +424,7 @@ describe("secret provider integration proof harness", () => {
         .runPtySecretsConfigurePreset({
           env: {
             ...process.env,
-            OPENCLAW_ENTRY: fakeOpenClaw,
+            MARKETINGCLAW_ENTRY: fakeMarketingClaw,
           },
         })
         .catch((caught: unknown) => caught);
@@ -437,14 +437,14 @@ describe("secret provider integration proof harness", () => {
       expect((error as Error).message.length).toBeLessThan(600);
     } finally {
       if (previousLimit === undefined) {
-        delete process.env.OPENCLAW_SECRET_PROOF_OUTPUT_BYTES;
+        delete process.env.MARKETINGCLAW_SECRET_PROOF_OUTPUT_BYTES;
       } else {
-        process.env.OPENCLAW_SECRET_PROOF_OUTPUT_BYTES = previousLimit;
+        process.env.MARKETINGCLAW_SECRET_PROOF_OUTPUT_BYTES = previousLimit;
       }
       if (previousEntry === undefined) {
-        delete process.env.OPENCLAW_ENTRY;
+        delete process.env.MARKETINGCLAW_ENTRY;
       } else {
-        process.env.OPENCLAW_ENTRY = previousEntry;
+        process.env.MARKETINGCLAW_ENTRY = previousEntry;
       }
     }
   });
@@ -453,11 +453,11 @@ describe("secret provider integration proof harness", () => {
     "cleans PTY configure descendants before timeout failure",
     async () => {
       const root = makeTempDir();
-      const fakeOpenClaw = path.join(root, "fake-openclaw-pty-timeout.mjs");
+      const fakeMarketingClaw = path.join(root, "fake-marketingclaw-pty-timeout.mjs");
       const descendantPidPath = path.join(root, "descendant.pid");
       const readyPath = path.join(root, "ready");
       let descendantPid = 0;
-      const previousEntry = process.env.OPENCLAW_ENTRY;
+      const previousEntry = process.env.MARKETINGCLAW_ENTRY;
       const descendantScript = [
         "import fs from 'node:fs';",
         "process.on('SIGHUP', () => {});",
@@ -466,7 +466,7 @@ describe("secret provider integration proof harness", () => {
         "setInterval(() => {}, 1000);",
       ].join("\n");
       fs.writeFileSync(
-        fakeOpenClaw,
+        fakeMarketingClaw,
         [
           "#!/usr/bin/env node",
           "import childProcess from 'node:child_process';",
@@ -481,7 +481,7 @@ describe("secret provider integration proof harness", () => {
         ].join("\n"),
         { mode: 0o755 },
       );
-      process.env.OPENCLAW_ENTRY = fakeOpenClaw;
+      process.env.MARKETINGCLAW_ENTRY = fakeMarketingClaw;
       const proof = await import(
         `${pathToFileURL(proofScriptPath).href}?case=pty-timeout-${Date.now()}`
       );
@@ -491,7 +491,7 @@ describe("secret provider integration proof harness", () => {
           {
             env: {
               ...process.env,
-              OPENCLAW_ENTRY: fakeOpenClaw,
+              MARKETINGCLAW_ENTRY: fakeMarketingClaw,
             },
           },
           { timeoutKillGraceMs: 50, timeoutMs: 500 },
@@ -509,9 +509,9 @@ describe("secret provider integration proof harness", () => {
           process.kill(descendantPid, "SIGKILL");
         }
         if (previousEntry === undefined) {
-          delete process.env.OPENCLAW_ENTRY;
+          delete process.env.MARKETINGCLAW_ENTRY;
         } else {
-          process.env.OPENCLAW_ENTRY = previousEntry;
+          process.env.MARKETINGCLAW_ENTRY = previousEntry;
         }
       }
     },
@@ -535,10 +535,10 @@ describe("secret provider integration proof harness", () => {
   );
 
   it.each([
-    ["OPENCLAW_SECRET_PROOF_COMMAND_MS", "150ms"],
-    ["OPENCLAW_SECRET_PROOF_READY_MS", "0"],
-    ["OPENCLAW_SECRET_PROOF_OUTPUT_BYTES", "4mb"],
-    ["OPENCLAW_SECRET_PROOF_RESOLVER_STDIN_BYTES", "4mb"],
+    ["MARKETINGCLAW_SECRET_PROOF_COMMAND_MS", "150ms"],
+    ["MARKETINGCLAW_SECRET_PROOF_READY_MS", "0"],
+    ["MARKETINGCLAW_SECRET_PROOF_OUTPUT_BYTES", "4mb"],
+    ["MARKETINGCLAW_SECRET_PROOF_RESOLVER_STDIN_BYTES", "4mb"],
   ])("rejects malformed proof env limit %s=%s", async (name, value) => {
     const previous = process.env[name];
     process.env[name] = value;
@@ -565,8 +565,8 @@ describe("secret provider integration proof harness", () => {
       `${JSON.stringify({ mode: "ok", calls: 0, values: { "proof/id": "ok" } }, null, 2)}\n`,
       "utf8",
     );
-    const previousLimit = process.env.OPENCLAW_SECRET_PROOF_RESOLVER_STDIN_BYTES;
-    process.env.OPENCLAW_SECRET_PROOF_RESOLVER_STDIN_BYTES = "64";
+    const previousLimit = process.env.MARKETINGCLAW_SECRET_PROOF_RESOLVER_STDIN_BYTES;
+    process.env.MARKETINGCLAW_SECRET_PROOF_RESOLVER_STDIN_BYTES = "64";
 
     try {
       const proof = await import(
@@ -590,9 +590,9 @@ describe("secret provider integration proof harness", () => {
       expect(JSON.parse(fs.readFileSync(storePath, "utf8")).calls).toBe(0);
     } finally {
       if (previousLimit === undefined) {
-        delete process.env.OPENCLAW_SECRET_PROOF_RESOLVER_STDIN_BYTES;
+        delete process.env.MARKETINGCLAW_SECRET_PROOF_RESOLVER_STDIN_BYTES;
       } else {
-        process.env.OPENCLAW_SECRET_PROOF_RESOLVER_STDIN_BYTES = previousLimit;
+        process.env.MARKETINGCLAW_SECRET_PROOF_RESOLVER_STDIN_BYTES = previousLimit;
       }
     }
   });
@@ -605,7 +605,7 @@ describe("secret provider integration proof harness", () => {
 
     try {
       await expect(
-        proof.cleanupEnv("/tmp/openclaw-secret-provider-proof-stuck", {
+        proof.cleanupEnv("/tmp/marketingclaw-secret-provider-proof-stuck", {
           attempts: 3,
           retryDelayMs: 1,
         }),
@@ -971,9 +971,9 @@ describe("secret provider integration proof harness", () => {
 
   it("detects startup secret leaks after the retained output cap", () => {
     const root = makeTempDir();
-    const fakeOpenClaw = writeLeakingStartupOpenClaw(root);
-    const result = runProofHarness(root, fakeOpenClaw, "startup-fails", {
-      OPENCLAW_SECRET_PROOF_OUTPUT_BYTES: "128",
+    const fakeMarketingClaw = writeLeakingStartupMarketingClaw(root);
+    const result = runProofHarness(root, fakeMarketingClaw, "startup-fails", {
+      MARKETINGCLAW_SECRET_PROOF_OUTPUT_BYTES: "128",
     });
 
     expect(result.error).toBeUndefined();
@@ -985,8 +985,8 @@ describe("secret provider integration proof harness", () => {
 
   it("keeps stalled managed status probes inside the ready deadline", async () => {
     const root = makeTempDir();
-    const fakeOpenClaw = writeStallingOpenClaw(root);
-    const result = runProofHarness(root, fakeOpenClaw, "status");
+    const fakeMarketingClaw = writeStallingMarketingClaw(root);
+    const result = runProofHarness(root, fakeMarketingClaw, "status");
 
     expect(result.error).toBeUndefined();
     expect(result.status).toBe(0);

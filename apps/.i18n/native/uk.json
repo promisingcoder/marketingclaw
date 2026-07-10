@@ -85,8 +85,8 @@
     },
     {
       "id": "native.android.ff4c22906eac1e9e",
-      "source": "OPENCLAW",
-      "translated": "OPENCLAW"
+      "source": "MARKETINGCLAW",
+      "translated": "MARKETINGCLAW"
     },
     {
       "id": "native.android.dec357dfc9b8c0a5",
@@ -175,8 +175,8 @@
     },
     {
       "id": "native.android.237761be968be3f4",
-      "source": "OpenClaw needs ${labels.joinToString(\", \")} permissions to continue.",
-      "translated": "OpenClaw потребує дозволів ${labels.joinToString(\", \")}, щоб продовжити."
+      "source": "MarketingClaw needs ${labels.joinToString(\", \")} permissions to continue.",
+      "translated": "MarketingClaw потребує дозволів ${labels.joinToString(\", \")}, щоб продовжити."
     },
     {
       "id": "native.android.f9b9d558dc078d96",
@@ -280,8 +280,8 @@
     },
     {
       "id": "native.android.361ab52b02a0a266",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.android.0f5ae5b2db8c1f12",
@@ -495,8 +495,8 @@
     },
     {
       "id": "native.android.53dcd29a9bdd99c0",
-      "source": "Canvas output appears here when OpenClaw opens an app surface.",
-      "translated": "Вивід полотна з’явиться тут, коли OpenClaw відкриє поверхню застосунку."
+      "source": "Canvas output appears here when MarketingClaw opens an app surface.",
+      "translated": "Вивід полотна з’явиться тут, коли MarketingClaw відкриє поверхню застосунку."
     },
     {
       "id": "native.android.3b37959b1d369a28",
@@ -560,8 +560,8 @@
     },
     {
       "id": "native.android.9f877120690b0c59",
-      "source": "Search OpenClaw",
-      "translated": "Пошук в OpenClaw"
+      "source": "Search MarketingClaw",
+      "translated": "Пошук в MarketingClaw"
     },
     {
       "id": "native.android.c142846e7b88306c",
@@ -600,8 +600,8 @@
     },
     {
       "id": "native.android.8f8384286317f5c9",
-      "source": "OpenClaw session",
-      "translated": "Сеанс OpenClaw"
+      "source": "MarketingClaw session",
+      "translated": "Сеанс MarketingClaw"
     },
     {
       "id": "native.android.23321276a6c8e11e",
@@ -645,8 +645,8 @@
     },
     {
       "id": "native.android.d4cf912850bd01fa",
-      "source": "OpenClaw Android ${openClawAndroidVersionLabel()}",
-      "translated": "OpenClaw Android ${openClawAndroidVersionLabel()}"
+      "source": "MarketingClaw Android ${marketingClawAndroidVersionLabel()}",
+      "translated": "MarketingClaw Android ${marketingClawAndroidVersionLabel()}"
     },
     {
       "id": "native.android.cbff50e93346f3c5",
@@ -1135,18 +1135,18 @@
     },
     {
       "id": "native.android.64c8db13ef91513c",
-      "source": "Welcome to OpenClaw",
-      "translated": "Вітаємо в OpenClaw"
+      "source": "Welcome to MarketingClaw",
+      "translated": "Вітаємо в MarketingClaw"
     },
     {
       "id": "native.android.c38e106cc8f1e9ff",
-      "source": "Turn this device into a secure OpenClaw node for chat, voice, camera, and device tools.",
-      "translated": "Перетворіть цей пристрій на захищений вузол OpenClaw для чату, голосу, камери та інструментів пристрою."
+      "source": "Turn this device into a secure MarketingClaw node for chat, voice, camera, and device tools.",
+      "translated": "Перетворіть цей пристрій на захищений вузол MarketingClaw для чату, голосу, камери та інструментів пристрою."
     },
     {
       "id": "native.android.f941909a3fa51055",
-      "source": "OpenClaw logo",
-      "translated": "Логотип OpenClaw"
+      "source": "MarketingClaw logo",
+      "translated": "Логотип MarketingClaw"
     },
     {
       "id": "native.android.cc878f72a6b70b23",
@@ -1160,8 +1160,8 @@
     },
     {
       "id": "native.android.3bfe29d4d13d3c3e",
-      "source": "Use OpenClaw from your phone",
-      "translated": "Використовуйте OpenClaw зі свого телефона"
+      "source": "Use MarketingClaw from your phone",
+      "translated": "Використовуйте MarketingClaw зі свого телефона"
     },
     {
       "id": "native.android.c0b539eeb4612f5d",
@@ -1170,8 +1170,8 @@
     },
     {
       "id": "native.android.5aed4b5c8d6b246d",
-      "source": "The connected OpenClaw agent can use device capabilities you enable. Continue only if you trust the Gateway and agent you connect to.",
-      "translated": "Підключений агент OpenClaw може використовувати ввімкнені вами можливості пристрою. Продовжуйте, лише якщо довіряєте Gateway і агенту, до яких підключаєтеся."
+      "source": "The connected MarketingClaw agent can use device capabilities you enable. Continue only if you trust the Gateway and agent you connect to.",
+      "translated": "Підключений агент MarketingClaw може використовувати ввімкнені вами можливості пристрою. Продовжуйте, лише якщо довіряєте Gateway і агенту, до яких підключаєтеся."
     },
     {
       "id": "native.android.63c31ee564d63347",
@@ -1180,8 +1180,8 @@
     },
     {
       "id": "native.android.f50a9c1ee6d47055",
-      "source": "Scan a QR code or use the setup code from your OpenClaw Gateway.",
-      "translated": "Відскануйте QR-код або використайте код налаштування з вашого OpenClaw Gateway."
+      "source": "Scan a QR code or use the setup code from your MarketingClaw Gateway.",
+      "translated": "Відскануйте QR-код або використайте код налаштування з вашого MarketingClaw Gateway."
     },
     {
       "id": "native.android.58d80589d9d4b7ff",
@@ -1210,8 +1210,8 @@
     },
     {
       "id": "native.android.c8a43dbba02941f0",
-      "source": "Have a terminal open on the device running OpenClaw.",
-      "translated": "Відкрийте термінал на пристрої, на якому запущено OpenClaw."
+      "source": "Have a terminal open on the device running MarketingClaw.",
+      "translated": "Відкрийте термінал на пристрої, на якому запущено MarketingClaw."
     },
     {
       "id": "native.android.71ce00f359981a0b",
@@ -1240,8 +1240,8 @@
     },
     {
       "id": "native.android.d4b295b5146af4b8",
-      "source": "openclaw gateway",
-      "translated": "openclaw gateway"
+      "source": "marketingclaw gateway",
+      "translated": "marketingclaw gateway"
     },
     {
       "id": "native.android.c6f9da7008df05a6",
@@ -1250,8 +1250,8 @@
     },
     {
       "id": "native.android.db24e4be7a1b5547",
-      "source": "openclaw qr",
-      "translated": "openclaw qr"
+      "source": "marketingclaw qr",
+      "translated": "marketingclaw qr"
     },
     {
       "id": "native.android.96d40475de2885d6",
@@ -1275,8 +1275,8 @@
     },
     {
       "id": "native.android.05987e822ac102ec",
-      "source": "Open the camera and frame the code from openclaw qr.",
-      "translated": "Відкрийте камеру й наведіть її на код з openclaw qr."
+      "source": "Open the camera and frame the code from marketingclaw qr.",
+      "translated": "Відкрийте камеру й наведіть її на код з marketingclaw qr."
     },
     {
       "id": "native.android.90fa932d2e0adbd9",
@@ -1435,8 +1435,8 @@
     },
     {
       "id": "native.android.f43cb6ed03dc6766",
-      "source": "Gateway pairing is complete. Approve this phone as a node so OpenClaw can use the device capabilities you enable.",
-      "translated": "Сполучення з Gateway завершено. Схваліть цей телефон як вузол, щоб OpenClaw міг використовувати можливості пристрою, які ви ввімкнете."
+      "source": "Gateway pairing is complete. Approve this phone as a node so MarketingClaw can use the device capabilities you enable.",
+      "translated": "Сполучення з Gateway завершено. Схваліть цей телефон як вузол, щоб MarketingClaw міг використовувати можливості пристрою, які ви ввімкнете."
     },
     {
       "id": "native.android.8e49feba12c350ac",
@@ -1480,8 +1480,8 @@
     },
     {
       "id": "native.android.d4c3bcf880727fb3",
-      "source": "Only enable access you are comfortable letting OpenClaw use while this phone is connected. You can change these later in Android Settings.",
-      "translated": "Вмикайте лише той доступ, який вам комфортно дозволити OpenClaw використовувати, поки цей телефон підключено. Ви можете змінити це пізніше в Android Settings."
+      "source": "Only enable access you are comfortable letting MarketingClaw use while this phone is connected. You can change these later in Android Settings.",
+      "translated": "Вмикайте лише той доступ, який вам комфортно дозволити MarketingClaw використовувати, поки цей телефон підключено. Ви можете змінити це пізніше в Android Settings."
     },
     {
       "id": "native.android.d7ea800cc2475013",
@@ -1715,8 +1715,8 @@
     },
     {
       "id": "native.android.8f0482425838ae64",
-      "source": "OpenClaw session",
-      "translated": "Сеанс OpenClaw"
+      "source": "MarketingClaw session",
+      "translated": "Сеанс MarketingClaw"
     },
     {
       "id": "native.android.786774c8a76e50d7",
@@ -1765,8 +1765,8 @@
     },
     {
       "id": "native.android.b5e4ae7f8c9eca2d",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.android.6637da0312da85f9",
@@ -1865,8 +1865,8 @@
     },
     {
       "id": "native.android.5e3e4cd42004cb28",
-      "source": "Scheduled OpenClaw work from your gateway.",
-      "translated": "Запланована робота OpenClaw з вашого gateway."
+      "source": "Scheduled MarketingClaw work from your gateway.",
+      "translated": "Запланована робота MarketingClaw з вашого gateway."
     },
     {
       "id": "native.android.b043fde2bb211935",
@@ -1885,8 +1885,8 @@
     },
     {
       "id": "native.android.fe85be29a00c5e58",
-      "source": "Create recurring OpenClaw work from the desktop app.",
-      "translated": "Створюйте повторювану роботу OpenClaw у застосунку для комп’ютера."
+      "source": "Create recurring MarketingClaw work from the desktop app.",
+      "translated": "Створюйте повторювану роботу MarketingClaw у застосунку для комп’ютера."
     },
     {
       "id": "native.android.f6dd71419863574c",
@@ -1980,8 +1980,8 @@
     },
     {
       "id": "native.android.fea93eda5bf97d9e",
-      "source": "How this phone appears to OpenClaw.",
-      "translated": "Як цей телефон відображається в OpenClaw."
+      "source": "How this phone appears to MarketingClaw.",
+      "translated": "Як цей телефон відображається в MarketingClaw."
     },
     {
       "id": "native.android.695229fd01afbc2d",
@@ -2015,8 +2015,8 @@
     },
     {
       "id": "native.android.5ff888931aae2738",
-      "source": "Check that OpenClaw can speak clearly on this phone.",
-      "translated": "Перевірте, що OpenClaw може чітко говорити на цьому телефоні."
+      "source": "Check that MarketingClaw can speak clearly on this phone.",
+      "translated": "Перевірте, що MarketingClaw може чітко говорити на цьому телефоні."
     },
     {
       "id": "native.android.f82d5d81f5dc9b43",
@@ -2075,8 +2075,8 @@
     },
     {
       "id": "native.android.9feed8722db5d2cc",
-      "source": "Choose what reaches OpenClaw.",
-      "translated": "Виберіть, що надходить до OpenClaw."
+      "source": "Choose what reaches MarketingClaw.",
+      "translated": "Виберіть, що надходить до MarketingClaw."
     },
     {
       "id": "native.android.d32071018de11907",
@@ -2090,8 +2090,8 @@
     },
     {
       "id": "native.android.5a077bf9cf4f47c8",
-      "source": "OpenClaw can receive selected alerts.",
-      "translated": "OpenClaw може отримувати вибрані оповіщення."
+      "source": "MarketingClaw can receive selected alerts.",
+      "translated": "MarketingClaw може отримувати вибрані оповіщення."
     },
     {
       "id": "native.android.ebeec52e498bc128",
@@ -2185,8 +2185,8 @@
     },
     {
       "id": "native.android.bdafaceb7af93f5a",
-      "source": "OpenClaw can list launcher-visible apps.",
-      "translated": "OpenClaw може показувати застосунки, видимі в лаунчері."
+      "source": "MarketingClaw can list launcher-visible apps.",
+      "translated": "MarketingClaw може показувати застосунки, видимі в лаунчері."
     },
     {
       "id": "native.android.4ea310efb1f0e7ff",
@@ -2195,8 +2195,8 @@
     },
     {
       "id": "native.android.58549715b04997cc",
-      "source": "Always allows requested location checks while OpenClaw is in the background; Android shows this in the persistent node notification.",
-      "translated": "Завжди дозволяє запитані перевірки місцезнаходження, поки OpenClaw працює у фоновому режимі; Android показує це в постійному сповіщенні вузла."
+      "source": "Always allows requested location checks while MarketingClaw is in the background; Android shows this in the persistent node notification.",
+      "translated": "Завжди дозволяє запитані перевірки місцезнаходження, поки MarketingClaw працює у фоновому режимі; Android показує це в постійному сповіщенні вузла."
     },
     {
       "id": "native.android.d5a8d7f97a7971b1",
@@ -2205,8 +2205,8 @@
     },
     {
       "id": "native.android.9d149d1ad66e42f9",
-      "source": "OpenClaw only checks location when your paired Gateway requests it. ",
-      "translated": "OpenClaw перевіряє місцезнаходження лише тоді, коли це запитує ваш спарений Gateway. "
+      "source": "MarketingClaw only checks location when your paired Gateway requests it. ",
+      "translated": "MarketingClaw перевіряє місцезнаходження лише тоді, коли це запитує ваш спарений Gateway. "
     },
     {
       "id": "native.android.c48805f3de1d72ca",
@@ -2240,8 +2240,8 @@
     },
     {
       "id": "native.android.9d658ff26e59274b",
-      "source": "Connection between this phone and OpenClaw.",
-      "translated": "З’єднання між цим телефоном і OpenClaw."
+      "source": "Connection between this phone and MarketingClaw.",
+      "translated": "З’єднання між цим телефоном і MarketingClaw."
     },
     {
       "id": "native.android.718cb50d1bff3e32",
@@ -2310,8 +2310,8 @@
     },
     {
       "id": "native.android.de12fd162a566974",
-      "source": "Android can scan or paste an existing setup code, but this gateway does not expose setup-code generation to the app yet. Generate the QR/code on the gateway host with openclaw qr, then scan it here or paste the setup code below.",
-      "translated": "Android може відсканувати або вставити наявний код налаштування, але цей gateway ще не надає застосунку можливість створювати коди налаштування. Згенеруйте QR/код на хості gateway за допомогою openclaw qr, а потім відскануйте його тут або вставте код налаштування нижче."
+      "source": "Android can scan or paste an existing setup code, but this gateway does not expose setup-code generation to the app yet. Generate the QR/code on the gateway host with marketingclaw qr, then scan it here or paste the setup code below.",
+      "translated": "Android може відсканувати або вставити наявний код налаштування, але цей gateway ще не надає застосунку можливість створювати коди налаштування. Згенеруйте QR/код на хості gateway за допомогою marketingclaw qr, а потім відскануйте його тут або вставте код налаштування нижче."
     },
     {
       "id": "native.android.0e8f4c02f7aa20e9",
@@ -2365,8 +2365,8 @@
     },
     {
       "id": "native.android.6f19c75742af5126",
-      "source": "A calm, high-contrast OpenClaw interface.",
-      "translated": "Спокійний, висококонтрастний інтерфейс OpenClaw."
+      "source": "A calm, high-contrast MarketingClaw interface.",
+      "translated": "Спокійний, висококонтрастний інтерфейс MarketingClaw."
     },
     {
       "id": "native.android.5311e446ce2bf857",
@@ -2390,8 +2390,8 @@
     },
     {
       "id": "native.android.c2d37ac2ad4c9e3c",
-      "source": "OpenClaw for Android.",
-      "translated": "OpenClaw для Android."
+      "source": "MarketingClaw for Android.",
+      "translated": "MarketingClaw для Android."
     },
     {
       "id": "native.android.d744d434533ea8ed",
@@ -2410,18 +2410,18 @@
     },
     {
       "id": "native.android.aac3310699b496c8",
-      "source": "© 2026 OpenClaw Foundation — MIT License.",
-      "translated": "© 2026 OpenClaw Foundation — Ліцензія MIT."
+      "source": "© 2026 MarketingClaw Foundation — MIT License.",
+      "translated": "© 2026 MarketingClaw Foundation — Ліцензія MIT."
     },
     {
       "id": "native.android.a157bbb606e9b398",
-      "source": "OpenClaw logo",
-      "translated": "Логотип OpenClaw"
+      "source": "MarketingClaw logo",
+      "translated": "Логотип MarketingClaw"
     },
     {
       "id": "native.android.7b78b4869baf2160",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.android.ad4c14835d1b71ca",
@@ -2435,8 +2435,8 @@
     },
     {
       "id": "native.android.996367534eb94cc2",
-      "source": "OpenClaw appreciates its partners in the open-source community.",
-      "translated": "OpenClaw цінує своїх партнерів у спільноті відкритого коду."
+      "source": "MarketingClaw appreciates its partners in the open-source community.",
+      "translated": "MarketingClaw цінує своїх партнерів у спільноті відкритого коду."
     },
     {
       "id": "native.android.24da1d2eb750ba07",
@@ -2885,8 +2885,8 @@
     },
     {
       "id": "native.android.3b2109ae1192e191",
-      "source": "Only while OpenClaw is open.",
-      "translated": "Лише коли OpenClaw відкрито."
+      "source": "Only while MarketingClaw is open.",
+      "translated": "Лише коли MarketingClaw відкрито."
     },
     {
       "id": "native.android.b92944ae7d52f9e3",
@@ -2935,8 +2935,8 @@
     },
     {
       "id": "native.android.2e33a4fd5f60b550",
-      "source": "Start a chat and your active OpenClaw conversations will appear here.",
-      "translated": "Почніть чат, і ваші активні розмови OpenClaw з’являться тут."
+      "source": "Start a chat and your active MarketingClaw conversations will appear here.",
+      "translated": "Почніть чат, і ваші активні розмови MarketingClaw з’являться тут."
     },
     {
       "id": "native.android.85726cfd4207d48a",
@@ -2945,8 +2945,8 @@
     },
     {
       "id": "native.android.4f369a09c8731092",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.android.097cf19d48e09476",
@@ -3135,8 +3135,8 @@
     },
     {
       "id": "native.android.ca1451df912ed5cf",
-      "source": "OpenClaw ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
-      "translated": "OpenClaw ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
+      "source": "MarketingClaw ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
+      "translated": "MarketingClaw ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
     },
     {
       "id": "native.android.b7d8c506999a68f7",
@@ -3175,8 +3175,8 @@
     },
     {
       "id": "native.android.e197964b10ba02ce",
-      "source": "OpenClaw mobile",
-      "translated": "OpenClaw mobile"
+      "source": "MarketingClaw mobile",
+      "translated": "MarketingClaw mobile"
     },
     {
       "id": "native.android.45005deba537cc59",
@@ -3195,8 +3195,8 @@
     },
     {
       "id": "native.android.73a666b0a4a0e617",
-      "source": "Installed capabilities available to OpenClaw.",
-      "translated": "Установлені можливості, доступні для OpenClaw."
+      "source": "Installed capabilities available to MarketingClaw.",
+      "translated": "Установлені можливості, доступні для MarketingClaw."
     },
     {
       "id": "native.android.9507bc022dc2e3ed",
@@ -3380,8 +3380,8 @@
     },
     {
       "id": "native.android.253debc9d0714dda",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.android.ece74bf084239d34",
@@ -3430,8 +3430,8 @@
     },
     {
       "id": "native.android.b4fd37573503cf10",
-      "source": "Your words and OpenClaw replies will appear here.",
-      "translated": "Ваші слова та відповіді OpenClaw з’являтимуться тут."
+      "source": "Your words and MarketingClaw replies will appear here.",
+      "translated": "Ваші слова та відповіді MarketingClaw з’являтимуться тут."
     },
     {
       "id": "native.android.24057bba4bbfa27a",
@@ -3445,8 +3445,8 @@
     },
     {
       "id": "native.android.5b8bd9f2b69b91ea",
-      "source": "OpenClaw is preparing a response.",
-      "translated": "OpenClaw готує відповідь."
+      "source": "MarketingClaw is preparing a response.",
+      "translated": "MarketingClaw готує відповідь."
     },
     {
       "id": "native.android.420cccbd48298a8d",
@@ -3460,8 +3460,8 @@
     },
     {
       "id": "native.android.285eeed928be0fc1",
-      "source": "OpenClaw only listens when you start Talk or Dictation.",
-      "translated": "OpenClaw слухає лише тоді, коли ви запускаєте Розмову або Диктування."
+      "source": "MarketingClaw only listens when you start Talk or Dictation.",
+      "translated": "MarketingClaw слухає лише тоді, коли ви запускаєте Розмову або Диктування."
     },
     {
       "id": "native.android.b10a51fe9d4b8d2d",
@@ -3540,8 +3540,8 @@
     },
     {
       "id": "native.android.dd372d2915032feb",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.android.5ec494944bda138e",
@@ -3550,8 +3550,8 @@
     },
     {
       "id": "native.android.09137c880dd8890e",
-      "source": "OpenClaw is thinking…",
-      "translated": "OpenClaw думає…"
+      "source": "MarketingClaw is thinking…",
+      "translated": "MarketingClaw думає…"
     },
     {
       "id": "native.android.eb6ff96aba8f67b4",
@@ -3780,8 +3780,8 @@
     },
     {
       "id": "native.android.dfbd755eb43b4d26",
-      "source": "OpenClaw · Live",
-      "translated": "OpenClaw · Наживо"
+      "source": "MarketingClaw · Live",
+      "translated": "MarketingClaw · Наживо"
     },
     {
       "id": "native.android.d29098025118ce4b",
@@ -3790,8 +3790,8 @@
     },
     {
       "id": "native.android.82e9fe45e93909b6",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.android.09720189ba712747",
@@ -3810,8 +3810,8 @@
     },
     {
       "id": "native.android.25d8575c0063aee5",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.android.4437f3cbdb3c8cbe",
@@ -3865,8 +3865,8 @@
     },
     {
       "id": "native.android.d851a32f367f8b31",
-      "source": "OpenClaw is working",
-      "translated": "OpenClaw працює"
+      "source": "MarketingClaw is working",
+      "translated": "MarketingClaw працює"
     },
     {
       "id": "native.android.0fd6b75cadc0ce75",
@@ -3880,8 +3880,8 @@
     },
     {
       "id": "native.android.98a0d4d5bba788c4",
-      "source": "OpenClaw is preparing a response.",
-      "translated": "OpenClaw готує відповідь."
+      "source": "MarketingClaw is preparing a response.",
+      "translated": "MarketingClaw готує відповідь."
     },
     {
       "id": "native.android.76d574acfac94fee",
@@ -3920,8 +3920,8 @@
     },
     {
       "id": "native.android.f1d69eb66c5dfa39",
-      "source": "Message OpenClaw",
-      "translated": "Написати OpenClaw"
+      "source": "Message MarketingClaw",
+      "translated": "Написати MarketingClaw"
     },
     {
       "id": "native.android.19396391033f4fa8",
@@ -3970,8 +3970,8 @@
     },
     {
       "id": "native.android.79d7a1026ef43e80",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.android.e8318a46a213cb91",
@@ -4005,13 +4005,13 @@
     },
     {
       "id": "native.android.794873efdfcdff4f",
-      "source": "OpenClaw gateway",
-      "translated": "OpenClaw gateway"
+      "source": "MarketingClaw gateway",
+      "translated": "MarketingClaw gateway"
     },
     {
       "id": "native.android.2d3b6dd9a8f186fe",
-      "source": "Ask OpenClaw anything",
-      "translated": "Запитайте OpenClaw будь-що"
+      "source": "Ask MarketingClaw anything",
+      "translated": "Запитайте MarketingClaw будь-що"
     },
     {
       "id": "native.android.608ccdaeababf056",
@@ -4045,8 +4045,8 @@
     },
     {
       "id": "native.android.3457b4ee28d964ee",
-      "source": "OpenClaw will surface approvals, failed jobs, and channel issues here.",
-      "translated": "OpenClaw показуватиме тут схвалення, невдалі завдання та проблеми з каналами."
+      "source": "MarketingClaw will surface approvals, failed jobs, and channel issues here.",
+      "translated": "MarketingClaw показуватиме тут схвалення, невдалі завдання та проблеми з каналами."
     },
     {
       "id": "native.android.c5e56f0e8af094fb",
@@ -4125,23 +4125,23 @@
     },
     {
       "id": "native.android.f392ee2d50d6b7ce",
-      "source": "ask OpenClaw $prompt",
-      "translated": "запитати OpenClaw $prompt"
+      "source": "ask MarketingClaw $prompt",
+      "translated": "запитати MarketingClaw $prompt"
     },
     {
       "id": "native.android.ea9d1a78cfa13033",
-      "source": "tell OpenClaw to $prompt",
-      "translated": "сказати OpenClaw $prompt"
+      "source": "tell MarketingClaw to $prompt",
+      "translated": "сказати MarketingClaw $prompt"
     },
     {
       "id": "native.android.7f96ac9b9e10abd0",
-      "source": "open OpenClaw and ask $prompt",
-      "translated": "відкрити OpenClaw і запитати $prompt"
+      "source": "open MarketingClaw and ask $prompt",
+      "translated": "відкрити MarketingClaw і запитати $prompt"
     },
     {
       "id": "native.android.a3c395b04ae7a621",
-      "source": "OpenClaw Node",
-      "translated": "Вузол OpenClaw"
+      "source": "MarketingClaw Node",
+      "translated": "Вузол MarketingClaw"
     },
     {
       "id": "native.android.55da01a287502809",
@@ -4315,18 +4315,18 @@
     },
     {
       "id": "native.apple.8f741d09cc1d5495",
-      "source": "OpenClaw Activity",
-      "translated": "Активність OpenClaw"
+      "source": "MarketingClaw Activity",
+      "translated": "Активність MarketingClaw"
     },
     {
       "id": "native.apple.86d546e1f1247028",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.apple.9168fcd110c3019a",
-      "source": "OpenClaw Share",
-      "translated": "OpenClaw Share"
+      "source": "MarketingClaw Share",
+      "translated": "MarketingClaw Share"
     },
     {
       "id": "native.apple.23834d0ff7589921",
@@ -5235,8 +5235,8 @@
     },
     {
       "id": "native.apple.3548c8d1ab43e85e",
-      "source": "OpenClaw could not prepare the Markdown file.",
-      "translated": "OpenClaw не вдалося підготувати файл Markdown."
+      "source": "MarketingClaw could not prepare the Markdown file.",
+      "translated": "MarketingClaw не вдалося підготувати файл Markdown."
     },
     {
       "id": "native.apple.202b97e93b938049",
@@ -5300,13 +5300,13 @@
     },
     {
       "id": "native.apple.14492e334b87e4f2",
-      "source": "Check OpenClaw status",
-      "translated": "Перевірити статус OpenClaw"
+      "source": "Check MarketingClaw status",
+      "translated": "Перевірити статус MarketingClaw"
     },
     {
       "id": "native.apple.bbf7bd23da1e7865",
-      "source": "Summarize the current OpenClaw status and tell me what needs attention.",
-      "translated": "Підсумуй поточний статус OpenClaw і скажи, що потребує уваги."
+      "source": "Summarize the current MarketingClaw status and tell me what needs attention.",
+      "translated": "Підсумуй поточний статус MarketingClaw і скажи, що потребує уваги."
     },
     {
       "id": "native.apple.ea8cbb1b4230c652",
@@ -6075,8 +6075,8 @@
     },
     {
       "id": "native.apple.56935c5384889b8e",
-      "source": "Browse the current OpenClaw reference.",
-      "translated": "Переглянути поточний довідник OpenClaw."
+      "source": "Browse the current MarketingClaw reference.",
+      "translated": "Переглянути поточний довідник MarketingClaw."
     },
     {
       "id": "native.apple.2ee2f8c71fa2d2cc",
@@ -6105,8 +6105,8 @@
     },
     {
       "id": "native.apple.cf9bb65f8e405cc8",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.apple.51c566ed34b67acf",
@@ -6355,8 +6355,8 @@
     },
     {
       "id": "native.apple.9bb1dae351d0e3a4",
-      "source": "Enable OpenClaw Hosted Push Relay?",
-      "translated": "Увімкнути OpenClaw Hosted Push Relay?"
+      "source": "Enable MarketingClaw Hosted Push Relay?",
+      "translated": "Увімкнути MarketingClaw Hosted Push Relay?"
     },
     {
       "id": "native.apple.f8c042a923222472",
@@ -6515,8 +6515,8 @@
     },
     {
       "id": "native.apple.ea2016fd75ff79c9",
-      "source": "OpenClaw can show approval prompts and event alerts when the app is not active.",
-      "translated": "OpenClaw може показувати запити на схвалення та сповіщення про події, коли застосунок неактивний."
+      "source": "MarketingClaw can show approval prompts and event alerts when the app is not active.",
+      "translated": "MarketingClaw може показувати запити на схвалення та сповіщення про події, коли застосунок неактивний."
     },
     {
       "id": "native.apple.408e00d224b5a5ac",
@@ -6530,8 +6530,8 @@
     },
     {
       "id": "native.apple.b525ff6cead949f4",
-      "source": "OpenClaw cannot determine the current notification permission state.",
-      "translated": "OpenClaw не може визначити поточний стан дозволу на сповіщення."
+      "source": "MarketingClaw cannot determine the current notification permission state.",
+      "translated": "MarketingClaw не може визначити поточний стан дозволу на сповіщення."
     },
     {
       "id": "native.apple.80fade864c8ad242",
@@ -6635,8 +6635,8 @@
     },
     {
       "id": "native.apple.2e042499c42824f5",
-      "source": "Enable Notifications to receive approval alerts while OpenClaw is not open.",
-      "translated": "Увімкніть сповіщення, щоб отримувати запити на схвалення, коли OpenClaw не відкрито."
+      "source": "Enable Notifications to receive approval alerts while MarketingClaw is not open.",
+      "translated": "Увімкніть сповіщення, щоб отримувати запити на схвалення, коли MarketingClaw не відкрито."
     },
     {
       "id": "native.apple.fc1f2fdbe437cb9d",
@@ -6715,8 +6715,8 @@
     },
     {
       "id": "native.apple.6d2f325ea39a5ee5",
-      "source": "Control what device context OpenClaw can expose to the gateway.",
-      "translated": "Керуйте тим, який контекст пристрою OpenClaw може надавати gateway."
+      "source": "Control what device context MarketingClaw can expose to the gateway.",
+      "translated": "Керуйте тим, який контекст пристрою MarketingClaw може надавати gateway."
     },
     {
       "id": "native.apple.11954b310eb31f5e",
@@ -6750,13 +6750,13 @@
     },
     {
       "id": "native.apple.a82dc4a746268028",
-      "source": "OpenClaw appreciates its partners in the open-source community.",
-      "translated": "OpenClaw цінує своїх партнерів у спільноті відкритого коду."
+      "source": "MarketingClaw appreciates its partners in the open-source community.",
+      "translated": "MarketingClaw цінує своїх партнерів у спільноті відкритого коду."
     },
     {
       "id": "native.apple.fc49f9b63e160581",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.apple.eaa4fe72f3730f3f",
@@ -6765,8 +6765,8 @@
     },
     {
       "id": "native.apple.35714980723b430d",
-      "source": "OpenClaw app version",
-      "translated": "Версія застосунку OpenClaw"
+      "source": "MarketingClaw app version",
+      "translated": "Версія застосунку MarketingClaw"
     },
     {
       "id": "native.apple.bbb2c589c2049217",
@@ -6795,8 +6795,8 @@
     },
     {
       "id": "native.apple.b962116ff5bf1905",
-      "source": "© 2026 OpenClaw Foundation — MIT License.",
-      "translated": "© 2026 OpenClaw Foundation — Ліцензія MIT."
+      "source": "© 2026 MarketingClaw Foundation — MIT License.",
+      "translated": "© 2026 MarketingClaw Foundation — Ліцензія MIT."
     },
     {
       "id": "native.apple.106434d1305d153b",
@@ -7095,8 +7095,8 @@
     },
     {
       "id": "native.apple.737eb52b08f2640c",
-      "source": "Connected to openclaw-gateway.tailnet.ts.net.",
-      "translated": "Підключено до openclaw-gateway.tailnet.ts.net."
+      "source": "Connected to marketingclaw-gateway.tailnet.ts.net.",
+      "translated": "Підключено до marketingclaw-gateway.tailnet.ts.net."
     },
     {
       "id": "native.apple.b59e37e73db49f94",
@@ -7365,8 +7365,8 @@
     },
     {
       "id": "native.apple.c218ef5194d0ee56",
-      "source": "Run OpenClaw agent?",
-      "translated": "Запустити агент OpenClaw?"
+      "source": "Run MarketingClaw agent?",
+      "translated": "Запустити агент MarketingClaw?"
     },
     {
       "id": "native.apple.32dc136ac23fef8c",
@@ -7630,8 +7630,8 @@
     },
     {
       "id": "native.apple.c18f5bd36f119282",
-      "source": "Run openclaw gateway --port 18789.",
-      "translated": "Виконайте openclaw gateway --port 18789."
+      "source": "Run marketingclaw gateway --port 18789.",
+      "translated": "Виконайте marketingclaw gateway --port 18789."
     },
     {
       "id": "native.apple.a4eb9a9b02915961",
@@ -7665,8 +7665,8 @@
     },
     {
       "id": "native.apple.8f6f60c9a5196918",
-      "source": "Exec approvals can only be reviewed while OpenClaw is open and connected.\n\nEnable Notifications to receive approval notifications while OpenClaw is not open.",
-      "translated": "Затвердження виконання можна переглядати лише тоді, коли OpenClaw відкрито й підключено.\n\nУвімкніть сповіщення, щоб отримувати сповіщення про затвердження, коли OpenClaw не відкрито."
+      "source": "Exec approvals can only be reviewed while MarketingClaw is open and connected.\n\nEnable Notifications to receive approval notifications while MarketingClaw is not open.",
+      "translated": "Затвердження виконання можна переглядати лише тоді, коли MarketingClaw відкрито й підключено.\n\nУвімкніть сповіщення, щоб отримувати сповіщення про затвердження, коли MarketingClaw не відкрито."
     },
     {
       "id": "native.apple.a2378696390cca1e",
@@ -7685,63 +7685,63 @@
     },
     {
       "id": "native.apple.cf820096080f7031",
-      "source": "OpenClaw uses your calendars to show events and scheduling context when you enable calendar access.",
-      "translated": "OpenClaw використовує ваші календарі, щоб показувати події та контекст планування, коли ви надаєте доступ до календаря."
+      "source": "MarketingClaw uses your calendars to show events and scheduling context when you enable calendar access.",
+      "translated": "MarketingClaw використовує ваші календарі, щоб показувати події та контекст планування, коли ви надаєте доступ до календаря."
     },
     {
       "id": "native.apple.fe85b609e9a9a144",
-      "source": "OpenClaw uses your calendars to add events when you enable calendar access.",
-      "translated": "OpenClaw використовує ваші календарі, щоб додавати події, коли ви надаєте доступ до календаря."
+      "source": "MarketingClaw uses your calendars to add events when you enable calendar access.",
+      "translated": "MarketingClaw використовує ваші календарі, щоб додавати події, коли ви надаєте доступ до календаря."
     },
     {
       "id": "native.apple.ff5729a17d66ad91",
-      "source": "OpenClaw uses the camera when you scan a Gateway setup QR code or ask your paired Gateway or assistant to capture a photo or short video from this iPhone, for example to connect to your Gateway or show your assistant a document, device screen, or workspace.",
-      "translated": "OpenClaw використовує камеру, коли ви скануєте QR-код налаштування Gateway або просите спарений Gateway чи помічника зробити фото або коротке відео з цього iPhone, наприклад щоб підключитися до вашого Gateway або показати помічнику документ, екран пристрою чи робочий простір."
+      "source": "MarketingClaw uses the camera when you scan a Gateway setup QR code or ask your paired Gateway or assistant to capture a photo or short video from this iPhone, for example to connect to your Gateway or show your assistant a document, device screen, or workspace.",
+      "translated": "MarketingClaw використовує камеру, коли ви скануєте QR-код налаштування Gateway або просите спарений Gateway чи помічника зробити фото або коротке відео з цього iPhone, наприклад щоб підключитися до вашого Gateway або показати помічнику документ, екран пристрою чи робочий простір."
     },
     {
       "id": "native.apple.2f21aa6f5cd72915",
-      "source": "OpenClaw uses your contacts so you can search and reference people while using the assistant.",
-      "translated": "OpenClaw використовує ваші контакти, щоб ви могли шукати людей і посилатися на них під час використання помічника."
+      "source": "MarketingClaw uses your contacts so you can search and reference people while using the assistant.",
+      "translated": "MarketingClaw використовує ваші контакти, щоб ви могли шукати людей і посилатися на них під час використання помічника."
     },
     {
       "id": "native.apple.9d550c77a37bb165",
-      "source": "OpenClaw discovers and connects to your OpenClaw gateway on the local network.",
-      "translated": "OpenClaw виявляє та підключається до вашого OpenClaw gateway у локальній мережі."
+      "source": "MarketingClaw discovers and connects to your MarketingClaw gateway on the local network.",
+      "translated": "MarketingClaw виявляє та підключається до вашого MarketingClaw gateway у локальній мережі."
     },
     {
       "id": "native.apple.d822c41a0b7e9739",
-      "source": "OpenClaw can share your location in the background when you enable Always.",
-      "translated": "OpenClaw може ділитися вашим місцезнаходженням у фоновому режимі, коли ви вмикаєте «Завжди»."
+      "source": "MarketingClaw can share your location in the background when you enable Always.",
+      "translated": "MarketingClaw може ділитися вашим місцезнаходженням у фоновому режимі, коли ви вмикаєте «Завжди»."
     },
     {
       "id": "native.apple.441062ce99375692",
-      "source": "OpenClaw uses your location when you allow location sharing.",
-      "translated": "OpenClaw використовує ваше місцезнаходження, коли ви дозволяєте ділитися місцезнаходженням."
+      "source": "MarketingClaw uses your location when you allow location sharing.",
+      "translated": "MarketingClaw використовує ваше місцезнаходження, коли ви дозволяєте ділитися місцезнаходженням."
     },
     {
       "id": "native.apple.41f58df89e66324e",
-      "source": "OpenClaw uses the microphone for realtime chat, voice wake, and push-to-talk.",
-      "translated": "OpenClaw використовує мікрофон для чату в реальному часі, голосового пробудження та функції push-to-talk."
+      "source": "MarketingClaw uses the microphone for realtime chat, voice wake, and push-to-talk.",
+      "translated": "MarketingClaw використовує мікрофон для чату в реальному часі, голосового пробудження та функції push-to-talk."
     },
     {
       "id": "native.apple.85345f18204d67ec",
-      "source": "OpenClaw may use motion data to support device-aware interactions and automations.",
-      "translated": "OpenClaw може використовувати дані про рух для підтримки взаємодій і автоматизацій з урахуванням пристрою."
+      "source": "MarketingClaw may use motion data to support device-aware interactions and automations.",
+      "translated": "MarketingClaw може використовувати дані про рух для підтримки взаємодій і автоматизацій з урахуванням пристрою."
     },
     {
       "id": "native.apple.40ed4259ec869f1b",
-      "source": "OpenClaw lets your assistant read photos you allow and lets you choose photos to share.",
-      "translated": "OpenClaw дає змогу вашому асистенту читати дозволені вами фото й дає вам змогу вибирати фото для надсилання."
+      "source": "MarketingClaw lets your assistant read photos you allow and lets you choose photos to share.",
+      "translated": "MarketingClaw дає змогу вашому асистенту читати дозволені вами фото й дає вам змогу вибирати фото для надсилання."
     },
     {
       "id": "native.apple.81b673f0c6fc4371",
-      "source": "OpenClaw uses your reminders to list, add, and complete tasks when you enable reminders access.",
-      "translated": "OpenClaw використовує ваші нагадування, щоб переглядати, додавати та завершувати завдання, коли ви вмикаєте доступ до нагадувань."
+      "source": "MarketingClaw uses your reminders to list, add, and complete tasks when you enable reminders access.",
+      "translated": "MarketingClaw використовує ваші нагадування, щоб переглядати, додавати та завершувати завдання, коли ви вмикаєте доступ до нагадувань."
     },
     {
       "id": "native.apple.2275552c26460945",
-      "source": "OpenClaw uses on-device speech recognition for talk mode and voice wake.",
-      "translated": "OpenClaw використовує розпізнавання мовлення на пристрої для режиму розмови та голосової активації."
+      "source": "MarketingClaw uses on-device speech recognition for talk mode and voice wake.",
+      "translated": "MarketingClaw використовує розпізнавання мовлення на пристрої для режиму розмови та голосової активації."
     },
     {
       "id": "native.apple.cf0450b542893fb5",
@@ -7760,18 +7760,18 @@
     },
     {
       "id": "native.apple.2dc593065171c201",
-      "source": "Location sharing is disabled in OpenClaw. Location Services are off in iOS Settings.",
-      "translated": "Поширення геолокації вимкнено в OpenClaw. Служби геолокації вимкнено в налаштуваннях iOS."
+      "source": "Location sharing is disabled in MarketingClaw. Location Services are off in iOS Settings.",
+      "translated": "Поширення геолокації вимкнено в MarketingClaw. Служби геолокації вимкнено в налаштуваннях iOS."
     },
     {
       "id": "native.apple.1dc990a9cc0500c5",
-      "source": "Location sharing is disabled in OpenClaw. iOS currently allows Always.",
-      "translated": "Поширення геолокації вимкнено в OpenClaw. iOS зараз дозволяє Завжди."
+      "source": "Location sharing is disabled in MarketingClaw. iOS currently allows Always.",
+      "translated": "Поширення геолокації вимкнено в MarketingClaw. iOS зараз дозволяє Завжди."
     },
     {
       "id": "native.apple.9a4e858d2b218d41",
-      "source": "Location sharing is disabled in OpenClaw. iOS currently allows While Using.",
-      "translated": "Поширення геолокації вимкнено в OpenClaw. iOS зараз дозволяє Під час використання."
+      "source": "Location sharing is disabled in MarketingClaw. iOS currently allows While Using.",
+      "translated": "Поширення геолокації вимкнено в MarketingClaw. iOS зараз дозволяє Під час використання."
     },
     {
       "id": "native.apple.ab481eb11214797f",
@@ -7845,8 +7845,8 @@
     },
     {
       "id": "native.apple.633f011b81108a8c",
-      "source": "OpenClaw cannot determine the current iOS location permission.",
-      "translated": "OpenClaw не може визначити поточний дозвіл iOS на доступ до геолокації."
+      "source": "MarketingClaw cannot determine the current iOS location permission.",
+      "translated": "MarketingClaw не може визначити поточний дозвіл iOS на доступ до геолокації."
     },
     {
       "id": "native.apple.0d030e96f7738497",
@@ -7910,8 +7910,8 @@
     },
     {
       "id": "native.apple.d4d9568dca8ceaa9",
-      "source": "The connected OpenClaw agent can use device capabilities you enable.",
-      "translated": "Підключений агент OpenClaw може використовувати можливості пристрою, які ви ввімкнете."
+      "source": "The connected MarketingClaw agent can use device capabilities you enable.",
+      "translated": "Підключений агент MarketingClaw може використовувати можливості пристрою, які ви ввімкнете."
     },
     {
       "id": "native.apple.fdd93eb6b6eef525",
@@ -7930,8 +7930,8 @@
     },
     {
       "id": "native.apple.e8b4dc00cd23ae73",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.apple.c9419426ba8c2a2e",
@@ -7950,8 +7950,8 @@
     },
     {
       "id": "native.apple.4109460a5b8927d8",
-      "source": "Use OpenClaw from your phone",
-      "translated": "Використовуйте OpenClaw зі свого телефона"
+      "source": "Use MarketingClaw from your phone",
+      "translated": "Використовуйте MarketingClaw зі свого телефона"
     },
     {
       "id": "native.apple.cae311a6e975c879",
@@ -8190,8 +8190,8 @@
     },
     {
       "id": "native.apple.559dccb9f9dfbbad",
-      "source": "OpenClaw is checking gateway and node access.",
-      "translated": "OpenClaw перевіряє доступ до Gateway і вузла."
+      "source": "MarketingClaw is checking gateway and node access.",
+      "translated": "MarketingClaw перевіряє доступ до Gateway і вузла."
     },
     {
       "id": "native.apple.4404f435fb496b62",
@@ -8205,8 +8205,8 @@
     },
     {
       "id": "native.apple.9725443db32f5158",
-      "source": "Approve this device on the gateway.\n1) `\\(commandLine)`\n2) `/pair approve` in your OpenClaw chat\n\\(requestLine)\nOpenClaw will also retry automatically when you return to this app.",
-      "translated": "Схваліть цей пристрій на gateway.\n1) `\\(commandLine)`\n2) `/pair approve` у вашому чаті OpenClaw\n\\(requestLine)\nOpenClaw також автоматично повторить спробу, коли ви повернетеся до цього застосунку."
+      "source": "Approve this device on the gateway.\n1) `\\(commandLine)`\n2) `/pair approve` in your MarketingClaw chat\n\\(requestLine)\nMarketingClaw will also retry automatically when you return to this app.",
+      "translated": "Схваліть цей пристрій на gateway.\n1) `\\(commandLine)`\n2) `/pair approve` у вашому чаті MarketingClaw\n\\(requestLine)\nMarketingClaw також автоматично повторить спробу, коли ви повернетеся до цього застосунку."
     },
     {
       "id": "native.apple.af3890b1e07c3084",
@@ -8300,13 +8300,13 @@
     },
     {
       "id": "native.apple.c23d35de8d70863f",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.apple.39042da9fc187030",
-      "source": "OpenClaw \\(self.sidebarGatewayStatusTitle)",
-      "translated": "OpenClaw \\(self.sidebarGatewayStatusTitle)"
+      "source": "MarketingClaw \\(self.sidebarGatewayStatusTitle)",
+      "translated": "MarketingClaw \\(self.sidebarGatewayStatusTitle)"
     },
     {
       "id": "native.apple.f4eea6473f43388d",
@@ -8385,8 +8385,8 @@
     },
     {
       "id": "native.apple.a55a43940452b04b",
-      "source": "OpenClaw iOS",
-      "translated": "OpenClaw iOS"
+      "source": "MarketingClaw iOS",
+      "translated": "MarketingClaw iOS"
     },
     {
       "id": "native.apple.35b6f99d627028f6",
@@ -8635,8 +8635,8 @@
     },
     {
       "id": "native.apple.4ebb39f445d7dbff",
-      "source": "OpenClaw reacts when any trigger appears in a transcription. Keep them short to avoid false positives.",
-      "translated": "OpenClaw реагує, коли будь-який тригер з’являється в транскрипції. Робіть їх короткими, щоб уникнути хибних спрацьовувань."
+      "source": "MarketingClaw reacts when any trigger appears in a transcription. Keep them short to avoid false positives.",
+      "translated": "MarketingClaw реагує, коли будь-який тригер з’являється в транскрипції. Робіть їх короткими, щоб уникнути хибних спрацьовувань."
     },
     {
       "id": "native.apple.994760420a194561",
@@ -8825,13 +8825,13 @@
     },
     {
       "id": "native.apple.1065cfe92d7c1eb6",
-      "source": "Asking OpenClaw",
-      "translated": "Запит до OpenClaw"
+      "source": "Asking MarketingClaw",
+      "translated": "Запит до MarketingClaw"
     },
     {
       "id": "native.apple.d2db26b3bb266491",
-      "source": "Updating OpenClaw",
-      "translated": "Оновлення OpenClaw"
+      "source": "Updating MarketingClaw",
+      "translated": "Оновлення MarketingClaw"
     },
     {
       "id": "native.apple.b6bc54876f20104f",
@@ -8985,8 +8985,8 @@
     },
     {
       "id": "native.apple.3fdc651e507de84b",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.apple.337c2164038d1a5a",
@@ -9015,8 +9015,8 @@
     },
     {
       "id": "native.apple.b816e4b9e492ae6c",
-      "source": "Message OpenClaw",
-      "translated": "Повідомлення OpenClaw"
+      "source": "Message MarketingClaw",
+      "translated": "Повідомлення MarketingClaw"
     },
     {
       "id": "native.apple.f3ccbf04d80cf021",
@@ -9055,13 +9055,13 @@
     },
     {
       "id": "native.apple.6fdc607c6178ba31",
-      "source": "OpenClaw on GitHub",
-      "translated": "OpenClaw на GitHub"
+      "source": "MarketingClaw on GitHub",
+      "translated": "MarketingClaw на GitHub"
     },
     {
       "id": "native.apple.5ac0c79487a492b4",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.apple.383d9c0a8f5f4f7e",
@@ -9115,8 +9115,8 @@
     },
     {
       "id": "native.apple.4ec07761308f7f50",
-      "source": "© 2026 OpenClaw Foundation — MIT License.",
-      "translated": "© 2026 OpenClaw Foundation — ліцензія MIT."
+      "source": "© 2026 MarketingClaw Foundation — MIT License.",
+      "translated": "© 2026 MarketingClaw Foundation — ліцензія MIT."
     },
     {
       "id": "native.apple.c6148a145aa87e36",
@@ -9140,18 +9140,18 @@
     },
     {
       "id": "native.apple.cfc2509b8bbcf1d7",
-      "source": "OpenClaw Gateway \\(version) is ready.",
-      "translated": "OpenClaw Gateway \\(version) готовий."
+      "source": "MarketingClaw Gateway \\(version) is ready.",
+      "translated": "MarketingClaw Gateway \\(version) готовий."
     },
     {
       "id": "native.apple.9b767e46895714f9",
-      "source": "OpenClaw Gateway is not installed yet.",
-      "translated": "OpenClaw Gateway ще не встановлено."
+      "source": "MarketingClaw Gateway is not installed yet.",
+      "translated": "MarketingClaw Gateway ще не встановлено."
     },
     {
       "id": "native.apple.b4dc58a1b294e140",
-      "source": "The OpenClaw Gateway could not be verified. Setup will repair it.",
-      "translated": "Не вдалося перевірити OpenClaw Gateway. Налаштування відновить його."
+      "source": "The MarketingClaw Gateway could not be verified. Setup will repair it.",
+      "translated": "Не вдалося перевірити MarketingClaw Gateway. Налаштування відновить його."
     },
     {
       "id": "native.apple.4088056ae7b0f3b4",
@@ -9235,8 +9235,8 @@
     },
     {
       "id": "native.apple.81435e60c0b78093",
-      "source": "OpenClaw could not load editable settings for this channel.",
-      "translated": "OpenClaw не вдалося завантажити редаговані налаштування для цього каналу."
+      "source": "MarketingClaw could not load editable settings for this channel.",
+      "translated": "MarketingClaw не вдалося завантажити редаговані налаштування для цього каналу."
     },
     {
       "id": "native.apple.f74dfc887ee4f936",
@@ -9345,8 +9345,8 @@
     },
     {
       "id": "native.apple.8103e662c0e40760",
-      "source": "Edit ~/.openclaw/openclaw.json using the schema-driven form.",
-      "translated": "Редагуйте ~/.openclaw/openclaw.json за допомогою форми на основі схеми."
+      "source": "Edit ~/.marketingclaw/marketingclaw.json using the schema-driven form.",
+      "translated": "Редагуйте ~/.marketingclaw/marketingclaw.json за допомогою форми на основі схеми."
     },
     {
       "id": "native.apple.e7afd1797978a4fd",
@@ -9635,8 +9635,8 @@
     },
     {
       "id": "native.apple.df6243155293f80b",
-      "source": "What should OpenClaw do?",
-      "translated": "Що має зробити OpenClaw?"
+      "source": "What should MarketingClaw do?",
+      "translated": "Що має зробити MarketingClaw?"
     },
     {
       "id": "native.apple.81b5ba441a230f07",
@@ -9945,8 +9945,8 @@
     },
     {
       "id": "native.apple.d8b3e55c41a77627",
-      "source": "When enabled, OpenClaw won't install or manage \\(gatewayLaunchdLabel). It will only attach to an existing Gateway.",
-      "translated": "Коли ввімкнено, OpenClaw не встановлюватиме й не керуватиме \\(gatewayLaunchdLabel). Він лише приєднається до наявного Gateway."
+      "source": "When enabled, MarketingClaw won't install or manage \\(gatewayLaunchdLabel). It will only attach to an existing Gateway.",
+      "translated": "Коли ввімкнено, MarketingClaw не встановлюватиме й не керуватиме \\(gatewayLaunchdLabel). Він лише приєднається до наявного Gateway."
     },
     {
       "id": "native.apple.15e528c55a96394f",
@@ -10030,8 +10030,8 @@
     },
     {
       "id": "native.apple.f8e4e2b25dbdbd44",
-      "source": "Deep links (openclaw://…) are always enabled; the key controls unattended runs.",
-      "translated": "Глибинні посилання (openclaw://…) завжди ввімкнені; ключ керує автоматичними запусками."
+      "source": "Deep links (marketingclaw://…) are always enabled; the key controls unattended runs.",
+      "translated": "Глибинні посилання (marketingclaw://…) завжди ввімкнені; ключ керує автоматичними запусками."
     },
     {
       "id": "native.apple.aeba5ae43a292c55",
@@ -10080,8 +10080,8 @@
     },
     {
       "id": "native.apple.78ca12c226ea35ef",
-      "source": "Writes a rotating, local-only log under ~/Library/Logs/OpenClaw/. ",
-      "translated": "Записує ротаційний локальний журнал у ~/Library/Logs/OpenClaw/. "
+      "source": "Writes a rotating, local-only log under ~/Library/Logs/MarketingClaw/. ",
+      "translated": "Записує ротаційний локальний журнал у ~/Library/Logs/MarketingClaw/. "
     },
     {
       "id": "native.apple.5b35a89bea603457",
@@ -10130,13 +10130,13 @@
     },
     {
       "id": "native.apple.5e9e8bf8e35c48ef",
-      "source": "OpenClaw project root",
-      "translated": "Корінь проєкту OpenClaw"
+      "source": "MarketingClaw project root",
+      "translated": "Корінь проєкту MarketingClaw"
     },
     {
       "id": "native.apple.8b01a6daf7a7b94e",
-      "source": "Path to openclaw repo",
-      "translated": "Шлях до репозиторію openclaw"
+      "source": "Path to marketingclaw repo",
+      "translated": "Шлях до репозиторію marketingclaw"
     },
     {
       "id": "native.apple.b9e064d213c6b451",
@@ -10165,8 +10165,8 @@
     },
     {
       "id": "native.apple.a8154f17cda71415",
-      "source": "Used by the CLI session loader; stored in ~/.openclaw/openclaw.json.",
-      "translated": "Використовується завантажувачем сеансів CLI; зберігається в ~/.openclaw/openclaw.json."
+      "source": "Used by the CLI session loader; stored in ~/.marketingclaw/marketingclaw.json.",
+      "translated": "Використовується завантажувачем сеансів CLI; зберігається в ~/.marketingclaw/marketingclaw.json."
     },
     {
       "id": "native.apple.3e472353e27107af",
@@ -10195,13 +10195,13 @@
     },
     {
       "id": "native.apple.3307505d507faf31",
-      "source": "Note: macOS may require restarting OpenClaw after enabling Accessibility or Screen Recording.",
-      "translated": "Примітка: macOS може потребувати перезапуску OpenClaw після ввімкнення Accessibility або Screen Recording."
+      "source": "Note: macOS may require restarting MarketingClaw after enabling Accessibility or Screen Recording.",
+      "translated": "Примітка: macOS може потребувати перезапуску MarketingClaw після ввімкнення Accessibility або Screen Recording."
     },
     {
       "id": "native.apple.e52d463773aef1e1",
-      "source": "Restart OpenClaw",
-      "translated": "Перезапустити OpenClaw"
+      "source": "Restart MarketingClaw",
+      "translated": "Перезапустити MarketingClaw"
     },
     {
       "id": "native.apple.e299e77f3ad75a75",
@@ -10320,13 +10320,13 @@
     },
     {
       "id": "native.apple.a8af393b84d63ab8",
-      "source": "OpenClaw is paused",
-      "translated": "OpenClaw призупинено"
+      "source": "MarketingClaw is paused",
+      "translated": "MarketingClaw призупинено"
     },
     {
       "id": "native.apple.7ba1542539c0d40b",
-      "source": "Unpause OpenClaw to run agent actions.",
-      "translated": "Відновіть OpenClaw, щоб виконувати дії агента."
+      "source": "Unpause MarketingClaw to run agent actions.",
+      "translated": "Відновіть MarketingClaw, щоб виконувати дії агента."
     },
     {
       "id": "native.apple.7c1e1dbfde976ab9",
@@ -10345,8 +10345,8 @@
     },
     {
       "id": "native.apple.50f1211af2a1945e",
-      "source": "Run OpenClaw agent?",
-      "translated": "Запустити агента OpenClaw?"
+      "source": "Run MarketingClaw agent?",
+      "translated": "Запустити агента MarketingClaw?"
     },
     {
       "id": "native.apple.4f3841d5de0135c4",
@@ -10390,8 +10390,8 @@
     },
     {
       "id": "native.apple.0702e353696c907f",
-      "source": "OpenClaw Mac app",
-      "translated": "Застосунок OpenClaw для Mac"
+      "source": "MarketingClaw Mac app",
+      "translated": "Застосунок MarketingClaw для Mac"
     },
     {
       "id": "native.apple.3bed795cded1caa6",
@@ -10455,8 +10455,8 @@
     },
     {
       "id": "native.apple.66ad783199ef9729",
-      "source": "Discover OpenClaw gateways on your LAN",
-      "translated": "Виявляти шлюзи OpenClaw у вашій LAN"
+      "source": "Discover MarketingClaw gateways on your LAN",
+      "translated": "Виявляти шлюзи MarketingClaw у вашій LAN"
     },
     {
       "id": "native.apple.f33dc515a78428f1",
@@ -10485,8 +10485,8 @@
     },
     {
       "id": "native.apple.1c4fca89983d7487",
-      "source": "Everyday OpenClaw app behavior.",
-      "translated": "Повсякденна поведінка застосунку OpenClaw."
+      "source": "Everyday MarketingClaw app behavior.",
+      "translated": "Повсякденна поведінка застосунку MarketingClaw."
     },
     {
       "id": "native.apple.7d03158a40ddb60a",
@@ -10500,8 +10500,8 @@
     },
     {
       "id": "native.apple.405e74c96498b7c0",
-      "source": "Automatically start OpenClaw after you sign in.",
-      "translated": "Автоматично запускати OpenClaw після входу."
+      "source": "Automatically start MarketingClaw after you sign in.",
+      "translated": "Автоматично запускати MarketingClaw після входу."
     },
     {
       "id": "native.apple.927819c087ca3520",
@@ -10510,8 +10510,8 @@
     },
     {
       "id": "native.apple.e7a0819bd2f4e1dc",
-      "source": "Keep OpenClaw visible in the Dock. When off, windows still show the Dock icon while open.",
-      "translated": "Тримати OpenClaw видимим у Dock. Якщо вимкнено, вікна все одно показуватимуть іконку в Dock, доки відкриті."
+      "source": "Keep MarketingClaw visible in the Dock. When off, windows still show the Dock icon while open.",
+      "translated": "Тримати MarketingClaw видимим у Dock. Якщо вимкнено, вікна все одно показуватимуть іконку в Dock, доки відкриті."
     },
     {
       "id": "native.apple.af23f7b5fb03a877",
@@ -10590,13 +10590,13 @@
     },
     {
       "id": "native.apple.64e197a4a8b384ef",
-      "source": "OpenClaw paused",
-      "translated": "OpenClaw призупинено"
+      "source": "MarketingClaw paused",
+      "translated": "MarketingClaw призупинено"
     },
     {
       "id": "native.apple.7fe6df69d8050832",
-      "source": "OpenClaw active",
-      "translated": "OpenClaw активний"
+      "source": "MarketingClaw active",
+      "translated": "MarketingClaw активний"
     },
     {
       "id": "native.apple.2f4258fa73e04344",
@@ -10650,8 +10650,8 @@
     },
     {
       "id": "native.apple.8021dcd7963a4cc2",
-      "source": "OpenClaw starts and monitors the Gateway on this Mac.",
-      "translated": "OpenClaw запускає та відстежує Gateway на цьому Mac."
+      "source": "MarketingClaw starts and monitors the Gateway on this Mac.",
+      "translated": "MarketingClaw запускає та відстежує Gateway на цьому Mac."
     },
     {
       "id": "native.apple.fe2a790f28ffd1ae",
@@ -10665,8 +10665,8 @@
     },
     {
       "id": "native.apple.d261da13966fa812",
-      "source": "OpenClaw runs",
-      "translated": "OpenClaw працює"
+      "source": "MarketingClaw runs",
+      "translated": "MarketingClaw працює"
     },
     {
       "id": "native.apple.397850fa5e803f53",
@@ -10765,8 +10765,8 @@
     },
     {
       "id": "native.apple.c663b8a50de8a7d8",
-      "source": "/home/you/Projects/openclaw",
-      "translated": "/home/you/Projects/openclaw"
+      "source": "/home/you/Projects/marketingclaw",
+      "translated": "/home/you/Projects/marketingclaw"
     },
     {
       "id": "native.apple.938ee646aac4ce66",
@@ -10775,8 +10775,8 @@
     },
     {
       "id": "native.apple.09f99e863e081f9f",
-      "source": "/Applications/OpenClaw.app/.../openclaw",
-      "translated": "/Applications/OpenClaw.app/.../openclaw"
+      "source": "/Applications/MarketingClaw.app/.../marketingclaw",
+      "translated": "/Applications/MarketingClaw.app/.../marketingclaw"
     },
     {
       "id": "native.apple.f588f7dad51aae2e",
@@ -10850,8 +10850,8 @@
     },
     {
       "id": "native.apple.24aa092829f9a3b1",
-      "source": "The current gateway.remote.token value is not plain text. OpenClaw for macOS cannot use it directly; enter a plaintext token here to replace it.",
-      "translated": "Поточне значення gateway.remote.token не є звичайним текстом. OpenClaw для macOS не може використовувати його напряму; введіть тут токен у вигляді звичайного тексту, щоб замінити його."
+      "source": "The current gateway.remote.token value is not plain text. MarketingClaw for macOS cannot use it directly; enter a plaintext token here to replace it.",
+      "translated": "Поточне значення gateway.remote.token не є звичайним текстом. MarketingClaw для macOS не може використовувати його напряму; введіть тут токен у вигляді звичайного тексту, щоб замінити його."
     },
     {
       "id": "native.apple.d0b21bc12ab63cad",
@@ -10990,8 +10990,8 @@
     },
     {
       "id": "native.apple.876c066efa88aee3",
-      "source": "Latest presence beacons from OpenClaw nodes. Updated periodically.",
-      "translated": "Останні сигнали присутності від вузлів OpenClaw. Оновлюється періодично."
+      "source": "Latest presence beacons from MarketingClaw nodes. Updated periodically.",
+      "translated": "Останні сигнали присутності від вузлів MarketingClaw. Оновлюється періодично."
     },
     {
       "id": "native.apple.8a6bcd51fd9f1f62",
@@ -11075,13 +11075,13 @@
     },
     {
       "id": "native.apple.fae2cf18519da0d5",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.apple.13a7356f48278757",
-      "source": "OpenClaw - Voice Wake live meter active",
-      "translated": "OpenClaw — активний індикатор Voice Wake наживо"
+      "source": "MarketingClaw - Voice Wake live meter active",
+      "translated": "MarketingClaw — активний індикатор Voice Wake наживо"
     },
     {
       "id": "native.apple.ef59188264be95d4",
@@ -11175,8 +11175,8 @@
     },
     {
       "id": "native.apple.fbab65790d6eca89",
-      "source": "About OpenClaw",
-      "translated": "Про OpenClaw"
+      "source": "About MarketingClaw",
+      "translated": "Про MarketingClaw"
     },
     {
       "id": "native.apple.14c8f4b1a57569f3",
@@ -11190,18 +11190,18 @@
     },
     {
       "id": "native.apple.5021ed413c045620",
-      "source": "OpenClaw Not Configured",
-      "translated": "OpenClaw не налаштовано"
+      "source": "MarketingClaw Not Configured",
+      "translated": "MarketingClaw не налаштовано"
     },
     {
       "id": "native.apple.4d10ab5feb4add3f",
-      "source": "Remote OpenClaw Active",
-      "translated": "Віддалений OpenClaw активний"
+      "source": "Remote MarketingClaw Active",
+      "translated": "Віддалений MarketingClaw активний"
     },
     {
       "id": "native.apple.b49dea5c1fdb3dd3",
-      "source": "OpenClaw Active",
-      "translated": "OpenClaw активний"
+      "source": "MarketingClaw Active",
+      "translated": "MarketingClaw активний"
     },
     {
       "id": "native.apple.1df24a30d7963640",
@@ -11535,8 +11535,8 @@
     },
     {
       "id": "native.apple.3863947506f62f17",
-      "source": "Create a key at \\(self.model.manualProvider.consoleName), paste it here, and OpenClaw checks it with a real test question.",
-      "translated": "Створіть ключ у \\(self.model.manualProvider.consoleName), вставте його тут, і OpenClaw перевірить його справжнім тестовим запитанням."
+      "source": "Create a key at \\(self.model.manualProvider.consoleName), paste it here, and MarketingClaw checks it with a real test question.",
+      "translated": "Створіть ключ у \\(self.model.manualProvider.consoleName), вставте його тут, і MarketingClaw перевірить його справжнім тестовим запитанням."
     },
     {
       "id": "native.apple.ce55144c35473419",
@@ -11590,8 +11590,8 @@
     },
     {
       "id": "native.apple.ea8beaeecef15e54",
-      "source": "Welcome to OpenClaw",
-      "translated": "Вітаємо в OpenClaw"
+      "source": "Welcome to MarketingClaw",
+      "translated": "Вітаємо в MarketingClaw"
     },
     {
       "id": "native.apple.0629bbbd6db95199",
@@ -11635,8 +11635,8 @@
     },
     {
       "id": "native.apple.fb64a5b187cfdc15",
-      "source": "OpenClaw can take actions using the permissions and services you enable. Review prompts and only connect tools you trust.",
-      "translated": "OpenClaw може виконувати дії, використовуючи дозволи та сервіси, які ви ввімкнете. Переглядайте запити й підключайте лише інструменти, яким довіряєте."
+      "source": "MarketingClaw can take actions using the permissions and services you enable. Review prompts and only connect tools you trust.",
+      "translated": "MarketingClaw може виконувати дії, використовуючи дозволи та сервіси, які ви ввімкнете. Переглядайте запити й підключайте лише інструменти, яким довіряєте."
     },
     {
       "id": "native.apple.a5d02aaf6208e924",
@@ -11645,8 +11645,8 @@
     },
     {
       "id": "native.apple.e6acb60b10ef1206",
-      "source": "Most people pick this Mac — OpenClaw installs everything and keeps it running in the background. You can change this anytime in Settings.",
-      "translated": "Більшість користувачів обирають цей Mac — OpenClaw встановить усе й підтримуватиме роботу у фоновому режимі. Ви можете змінити це будь-коли в Налаштуваннях."
+      "source": "Most people pick this Mac — MarketingClaw installs everything and keeps it running in the background. You can change this anytime in Settings.",
+      "translated": "Більшість користувачів обирають цей Mac — MarketingClaw встановить усе й підтримуватиме роботу у фоновому режимі. Ви можете змінити це будь-коли в Налаштуваннях."
     },
     {
       "id": "native.apple.21f1053c1054db24",
@@ -11670,8 +11670,8 @@
     },
     {
       "id": "native.apple.d54084b48f40aa0a",
-      "source": "OK — OpenClaw won’t start anything yet. Pick Local or Remote later in Settings → General.",
-      "translated": "OK — OpenClaw поки нічого не запускатиме. Виберіть Local або Remote пізніше в Settings → General."
+      "source": "OK — MarketingClaw won’t start anything yet. Pick Local or Remote later in Settings → General.",
+      "translated": "OK — MarketingClaw поки нічого не запускатиме. Виберіть Local або Remote пізніше в Settings → General."
     },
     {
       "id": "native.apple.8d9eb247d41a0ca7",
@@ -11770,8 +11770,8 @@
     },
     {
       "id": "native.apple.dca75ab0dd73f0a4",
-      "source": "/home/you/Projects/openclaw",
-      "translated": "/home/you/Projects/openclaw"
+      "source": "/home/you/Projects/marketingclaw",
+      "translated": "/home/you/Projects/marketingclaw"
     },
     {
       "id": "native.apple.6998a7754dea6eb1",
@@ -11780,8 +11780,8 @@
     },
     {
       "id": "native.apple.5a3f4f943c8ee86a",
-      "source": "/Applications/OpenClaw.app/.../openclaw",
-      "translated": "/Applications/OpenClaw.app/.../openclaw"
+      "source": "/Applications/MarketingClaw.app/.../marketingclaw",
+      "translated": "/Applications/MarketingClaw.app/.../marketingclaw"
     },
     {
       "id": "native.apple.ab88df30f426b434",
@@ -11825,8 +11825,8 @@
     },
     {
       "id": "native.apple.2a50c3ee94dde35d",
-      "source": "The current gateway.remote.token value is not plain text. OpenClaw for macOS cannot use it directly; enter a plaintext token here to replace it.",
-      "translated": "Поточне значення gateway.remote.token не є звичайним текстом. OpenClaw для macOS не може використовувати його напряму; введіть тут токен у відкритому тексті, щоб замінити його."
+      "source": "The current gateway.remote.token value is not plain text. MarketingClaw for macOS cannot use it directly; enter a plaintext token here to replace it.",
+      "translated": "Поточне значення gateway.remote.token не є звичайним текстом. MarketingClaw для macOS не може використовувати його напряму; введіть тут токен у відкритому тексті, щоб замінити його."
     },
     {
       "id": "native.apple.ef011af3c0e22127",
@@ -11845,8 +11845,8 @@
     },
     {
       "id": "native.apple.ce0d1241d7417406",
-      "source": "These macOS permissions let OpenClaw automate apps and capture context on this Mac. Status updates automatically.",
-      "translated": "Ці дозволи macOS дають OpenClaw змогу автоматизувати програми й збирати контекст на цьому Mac. Статус оновлюється автоматично."
+      "source": "These macOS permissions let MarketingClaw automate apps and capture context on this Mac. Status updates automatically.",
+      "translated": "Ці дозволи macOS дають MarketingClaw змогу автоматизувати програми й збирати контекст на цьому Mac. Статус оновлюється автоматично."
     },
     {
       "id": "native.apple.42af85cdf91d0264",
@@ -11855,13 +11855,13 @@
     },
     {
       "id": "native.apple.183aee003b44ede6",
-      "source": "OpenClaw is setting up its background service on this Mac. This usually takes under a minute — no Terminal, no administrator password.",
-      "translated": "OpenClaw налаштовує свою фонову службу на цьому Mac. Зазвичай це займає менше хвилини — без Terminal і без пароля адміністратора."
+      "source": "MarketingClaw is setting up its background service on this Mac. This usually takes under a minute — no Terminal, no administrator password.",
+      "translated": "MarketingClaw налаштовує свою фонову службу на цьому Mac. Зазвичай це займає менше хвилини — без Terminal і без пароля адміністратора."
     },
     {
       "id": "native.apple.d0b8cf59f852b3d0",
-      "source": "Install OpenClaw",
-      "translated": "Установити OpenClaw"
+      "source": "Install MarketingClaw",
+      "translated": "Установити MarketingClaw"
     },
     {
       "id": "native.apple.0112e18fa97e7c0c",
@@ -11900,8 +11900,8 @@
     },
     {
       "id": "native.apple.d82e61ae0119bf7c",
-      "source": "OpenClaw runs the agent from a dedicated workspace so it can load `AGENTS.md` and write files there without mixing into your other projects.",
-      "translated": "OpenClaw запускає агента з окремого робочого простору, щоб він міг завантажувати `AGENTS.md` і записувати файли там, не змішуючи їх з іншими вашими проєктами."
+      "source": "MarketingClaw runs the agent from a dedicated workspace so it can load `AGENTS.md` and write files there without mixing into your other projects.",
+      "translated": "MarketingClaw запускає агента з окремого робочого простору, щоб він міг завантажувати `AGENTS.md` і записувати файли там, не змішуючи їх з іншими вашими проєктами."
     },
     {
       "id": "native.apple.5a32f8309c1faaee",
@@ -11985,8 +11985,8 @@
     },
     {
       "id": "native.apple.952e85bfb2d4b4f5",
-      "source": "On your gateway host: install/update the `openclaw` package and make sure credentials exist\n(typically `~/.openclaw/credentials/oauth.json`). Then connect again if needed.",
-      "translated": "На хості вашого Gateway: установіть/оновіть пакет `openclaw` і переконайтеся, що облікові дані існують\n(зазвичай `~/.openclaw/credentials/oauth.json`). Потім підключіться знову, якщо потрібно."
+      "source": "On your gateway host: install/update the `marketingclaw` package and make sure credentials exist\n(typically `~/.marketingclaw/credentials/oauth.json`). Then connect again if needed.",
+      "translated": "На хості вашого Gateway: установіть/оновіть пакет `marketingclaw` і переконайтеся, що облікові дані існують\n(зазвичай `~/.marketingclaw/credentials/oauth.json`). Потім підключіться знову, якщо потрібно."
     },
     {
       "id": "native.apple.4e5ccb411db3e80f",
@@ -11995,8 +11995,8 @@
     },
     {
       "id": "native.apple.f99e39e248dbc8ed",
-      "source": "Click the OpenClaw menu bar icon for quick chat and status.",
-      "translated": "Натисніть іконку OpenClaw у рядку меню для швидкого чату та стану."
+      "source": "Click the MarketingClaw menu bar icon for quick chat and status.",
+      "translated": "Натисніть іконку MarketingClaw у рядку меню для швидкого чату та стану."
     },
     {
       "id": "native.apple.1b6cfcf3be8765c2",
@@ -12130,8 +12130,8 @@
     },
     {
       "id": "native.apple.4344ff6c0e9d7187",
-      "source": "OpenClaw only asks for macOS capabilities when a feature needs them.",
-      "translated": "OpenClaw запитує можливості macOS лише тоді, коли вони потрібні функції."
+      "source": "MarketingClaw only asks for macOS capabilities when a feature needs them.",
+      "translated": "MarketingClaw запитує можливості macOS лише тоді, коли вони потрібні функції."
     },
     {
       "id": "native.apple.4fecdab98e2f6a11",
@@ -12330,8 +12330,8 @@
     },
     {
       "id": "native.apple.bbb87d21ce8a291e",
-      "source": "Check `gateway.auth.token` or `OPENCLAW_GATEWAY_TOKEN` on the gateway host and try again.",
-      "translated": "Перевірте `gateway.auth.token` або `OPENCLAW_GATEWAY_TOKEN` на хості gateway і повторіть спробу."
+      "source": "Check `gateway.auth.token` or `MARKETINGCLAW_GATEWAY_TOKEN` on the gateway host and try again.",
+      "translated": "Перевірте `gateway.auth.token` або `MARKETINGCLAW_GATEWAY_TOKEN` на хості gateway і повторіть спробу."
     },
     {
       "id": "native.apple.d517136ce6599ed7",
@@ -12340,8 +12340,8 @@
     },
     {
       "id": "native.apple.83145f8f53d7be34",
-      "source": "Scan or paste a fresh setup code from an already-paired OpenClaw client, then try again.",
-      "translated": "Відскануйте або вставте новий код налаштування з уже спареного клієнта OpenClaw, а потім повторіть спробу."
+      "source": "Scan or paste a fresh setup code from an already-paired MarketingClaw client, then try again.",
+      "translated": "Відскануйте або вставте новий код налаштування з уже спареного клієнта MarketingClaw, а потім повторіть спробу."
     },
     {
       "id": "native.apple.4230f873600b819e",
@@ -12350,8 +12350,8 @@
     },
     {
       "id": "native.apple.5123702739aace5f",
-      "source": "Approve this device from an already-paired OpenClaw client. ",
-      "translated": "Схваліть цей пристрій з уже спареного клієнта OpenClaw. "
+      "source": "Approve this device from an already-paired MarketingClaw client. ",
+      "translated": "Схваліть цей пристрій з уже спареного клієнта MarketingClaw. "
     },
     {
       "id": "native.apple.e73170e4ab1dbe8f",
@@ -12360,8 +12360,8 @@
     },
     {
       "id": "native.apple.e3f983b8c517da29",
-      "source": "Gateway token mismatch. Check gateway.auth.token or OPENCLAW_GATEWAY_TOKEN on the gateway host.",
-      "translated": "Невідповідність токена gateway. Перевірте gateway.auth.token або OPENCLAW_GATEWAY_TOKEN на хості gateway."
+      "source": "Gateway token mismatch. Check gateway.auth.token or MARKETINGCLAW_GATEWAY_TOKEN on the gateway host.",
+      "translated": "Невідповідність токена gateway. Перевірте gateway.auth.token або MARKETINGCLAW_GATEWAY_TOKEN на хості gateway."
     },
     {
       "id": "native.apple.cd96754a96e5aa35",
@@ -12380,8 +12380,8 @@
     },
     {
       "id": "native.apple.37d1f4842869452a",
-      "source": "Pairing required. In an already-paired OpenClaw client, ",
-      "translated": "Потрібне сполучення. У вже сполученому клієнті OpenClaw, "
+      "source": "Pairing required. In an already-paired MarketingClaw client, ",
+      "translated": "Потрібне сполучення. У вже сполученому клієнті MarketingClaw, "
     },
     {
       "id": "native.apple.58e76e9c8b04290a",
@@ -12425,48 +12425,48 @@
     },
     {
       "id": "native.apple.2d7556d00f123112",
-      "source": "OpenClaw needs notification permission to show alerts for agent actions.",
-      "translated": "OpenClaw потрібен дозвіл на сповіщення, щоб показувати попередження про дії агента."
+      "source": "MarketingClaw needs notification permission to show alerts for agent actions.",
+      "translated": "MarketingClaw потрібен дозвіл на сповіщення, щоб показувати попередження про дії агента."
     },
     {
       "id": "native.apple.d9e7be03543b508f",
-      "source": "OpenClaw captures the screen when the agent needs screenshots for context.",
-      "translated": "OpenClaw захоплює екран, коли агенту потрібні знімки екрана для контексту."
+      "source": "MarketingClaw captures the screen when the agent needs screenshots for context.",
+      "translated": "MarketingClaw захоплює екран, коли агенту потрібні знімки екрана для контексту."
     },
     {
       "id": "native.apple.eca927767423799c",
-      "source": "OpenClaw can capture photos or short video clips when requested by the agent.",
-      "translated": "OpenClaw може знімати фото або короткі відеокліпи за запитом агента."
+      "source": "MarketingClaw can capture photos or short video clips when requested by the agent.",
+      "translated": "MarketingClaw може знімати фото або короткі відеокліпи за запитом агента."
     },
     {
       "id": "native.apple.9389d1100944a1fd",
-      "source": "OpenClaw can share your location when requested by the agent.",
-      "translated": "OpenClaw може ділитися вашим місцезнаходженням за запитом агента."
+      "source": "MarketingClaw can share your location when requested by the agent.",
+      "translated": "MarketingClaw може ділитися вашим місцезнаходженням за запитом агента."
     },
     {
       "id": "native.apple.59da76aed1cb07ee",
-      "source": "OpenClaw uses the local network to connect to your remote OpenClaw gateway over LAN, Tailnet, or SSH.",
-      "translated": "OpenClaw використовує локальну мережу для підключення до вашого віддаленого OpenClaw gateway через LAN, Tailnet або SSH."
+      "source": "MarketingClaw uses the local network to connect to your remote MarketingClaw gateway over LAN, Tailnet, or SSH.",
+      "translated": "MarketingClaw використовує локальну мережу для підключення до вашого віддаленого MarketingClaw gateway через LAN, Tailnet або SSH."
     },
     {
       "id": "native.apple.5db9a976fd1c7fcb",
-      "source": "OpenClaw needs the mic for Voice Wake tests and agent audio capture.",
-      "translated": "OpenClaw потрібен мікрофон для тестів Voice Wake і захоплення аудіо агентом."
+      "source": "MarketingClaw needs the mic for Voice Wake tests and agent audio capture.",
+      "translated": "MarketingClaw потрібен мікрофон для тестів Voice Wake і захоплення аудіо агентом."
     },
     {
       "id": "native.apple.b7aba524ef867e7f",
-      "source": "OpenClaw uses speech recognition to detect your Voice Wake trigger phrase.",
-      "translated": "OpenClaw використовує розпізнавання мовлення для виявлення вашої тригерної фрази Voice Wake."
+      "source": "MarketingClaw uses speech recognition to detect your Voice Wake trigger phrase.",
+      "translated": "MarketingClaw використовує розпізнавання мовлення для виявлення вашої тригерної фрази Voice Wake."
     },
     {
       "id": "native.apple.2d5411b5cc54a93e",
-      "source": "OpenClaw needs Automation (AppleScript) permission to drive Terminal and other apps for agent actions.",
-      "translated": "OpenClaw потрібен дозвіл Automation (AppleScript), щоб керувати Terminal та іншими застосунками для дій агента."
+      "source": "MarketingClaw needs Automation (AppleScript) permission to drive Terminal and other apps for agent actions.",
+      "translated": "MarketingClaw потрібен дозвіл Automation (AppleScript), щоб керувати Terminal та іншими застосунками для дій агента."
     },
     {
       "id": "native.apple.e16fc45de0f2bb86",
-      "source": "OpenClaw can access Reminders when requested by the agent for the apple-reminders skill.",
-      "translated": "OpenClaw може отримувати доступ до Reminders за запитом агента для Skills apple-reminders."
+      "source": "MarketingClaw can access Reminders when requested by the agent for the apple-reminders skill.",
+      "translated": "MarketingClaw може отримувати доступ до Reminders за запитом агента для Skills apple-reminders."
     },
     {
       "id": "native.apple.6f7c6ef00a40a571",
@@ -12820,8 +12820,8 @@
     },
     {
       "id": "native.apple.d769a8ac65441d48",
-      "source": "Saved to openclaw.json under skills.entries.\\(self.editor.skillKey)",
-      "translated": "Збережено в openclaw.json у skills.entries.\\(self.editor.skillKey)"
+      "source": "Saved to marketingclaw.json under skills.entries.\\(self.editor.skillKey)",
+      "translated": "Збережено в marketingclaw.json у skills.entries.\\(self.editor.skillKey)"
     },
     {
       "id": "native.apple.af47aadb262d225d",
@@ -13165,8 +13165,8 @@
     },
     {
       "id": "native.apple.800bb607f45c05e4",
-      "source": "Stored in ~/.openclaw/openclaw.json. Prefer OPENCLAW_GATEWAY_PASSWORD for production.",
-      "translated": "Зберігається в ~/.openclaw/openclaw.json. Для production краще використовувати OPENCLAW_GATEWAY_PASSWORD."
+      "source": "Stored in ~/.marketingclaw/marketingclaw.json. Prefer MARKETINGCLAW_GATEWAY_PASSWORD for production.",
+      "translated": "Зберігається в ~/.marketingclaw/marketingclaw.json. Для production краще використовувати MARKETINGCLAW_GATEWAY_PASSWORD."
     },
     {
       "id": "native.apple.3942d43ca047de29",
@@ -13435,8 +13435,8 @@
     },
     {
       "id": "native.apple.237e9371a693b0ff",
-      "source": "OpenClaw reacts when any trigger appears in a transcription. Keep phrases short to avoid false positives.",
-      "translated": "OpenClaw реагує, коли будь-який тригер з’являється в транскрипції. Використовуйте короткі фрази, щоб уникнути хибних спрацьовувань."
+      "source": "MarketingClaw reacts when any trigger appears in a transcription. Keep phrases short to avoid false positives.",
+      "translated": "MarketingClaw реагує, коли будь-який тригер з’являється в транскрипції. Використовуйте короткі фрази, щоб уникнути хибних спрацьовувань."
     },
     {
       "id": "native.apple.2bcc6f4eca98f7f2",

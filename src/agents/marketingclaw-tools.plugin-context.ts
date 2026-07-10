@@ -1,9 +1,9 @@
 /**
- * Runtime context resolver for OpenClaw plugin tools.
+ * Runtime context resolver for MarketingClaw plugin tools.
  *
  * Normalizes workspace, delivery, browser, sandbox, and active-model inputs before plugin tool invocation.
  */
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { normalizeDeliveryContext } from "../utils/delivery-context.js";
 import type { GatewayMessageChannel } from "../utils/message-channel.js";
 import { resolveAgentWorkspaceDir, resolveSessionAgentIds } from "./agent-scope.js";
@@ -11,8 +11,8 @@ import { modelKey } from "./model-ref-shared.js";
 import type { ToolFsPolicy } from "./tool-fs-policy.js";
 import { resolveWorkspaceRoot } from "./workspace-dir.js";
 
-/** Options provided by agent runtime callers when invoking OpenClaw plugin tools. */
-export type OpenClawPluginToolOptions = {
+/** Options provided by agent runtime callers when invoking MarketingClaw plugin tools. */
+export type MarketingClawPluginToolOptions = {
   agentSessionKey?: string;
   agentChannel?: GatewayMessageChannel;
   agentAccountId?: string;
@@ -20,7 +20,7 @@ export type OpenClawPluginToolOptions = {
   agentThreadId?: string | number;
   agentDir?: string;
   workspaceDir?: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   fsPolicy?: ToolFsPolicy;
   modelProvider?: string;
   modelId?: string;
@@ -40,11 +40,11 @@ export type OpenClawPluginToolOptions = {
 };
 
 /** Resolves plugin-tool context inputs from runtime options and config state. */
-export function resolveOpenClawPluginToolInputs(params: {
-  options?: OpenClawPluginToolOptions;
-  resolvedConfig?: OpenClawConfig;
-  runtimeConfig?: OpenClawConfig;
-  getRuntimeConfig?: () => OpenClawConfig | undefined;
+export function resolveMarketingClawPluginToolInputs(params: {
+  options?: MarketingClawPluginToolOptions;
+  resolvedConfig?: MarketingClawConfig;
+  runtimeConfig?: MarketingClawConfig;
+  getRuntimeConfig?: () => MarketingClawConfig | undefined;
 }) {
   const { options, resolvedConfig, runtimeConfig, getRuntimeConfig } = params;
   const { sessionAgentId } = resolveSessionAgentIds({

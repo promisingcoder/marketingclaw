@@ -32,7 +32,7 @@ const SPOT_ZONES = { left: [12, 38], right: [60, 84] } as const;
 type LobsterPetElement = LobsterPet & HTMLElement;
 
 function createPet(seed: number, mode: LobsterPetMode = "idle"): LobsterPetElement {
-  const element = document.createElement("openclaw-lobster-pet") as LobsterPetElement;
+  const element = document.createElement("marketingclaw-lobster-pet") as LobsterPetElement;
   element.seed = seed;
   element.mode = mode;
   document.body.append(element);

@@ -1,7 +1,7 @@
 // Launches and manages the local shell process used by TUI local mode.
 import { spawn } from "node:child_process";
 import type { Component, OverlayHandle, SelectItem } from "@earendil-works/pi-tui";
-import { sliceUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { sliceUtf16Safe } from "@marketingclaw/normalization-core/utf16-slice";
 import { tryProcessCwd } from "../infra/safe-cwd.js";
 import { createSearchableSelectList } from "./components/selectors.js";
 
@@ -124,7 +124,7 @@ export function createLocalShellRunner(deps: LocalShellDeps) {
         // and is gated behind an explicit in-session approval prompt.
         shell: true,
         cwd,
-        env: { ...env, OPENCLAW_SHELL: "tui-local" },
+        env: { ...env, MARKETINGCLAW_SHELL: "tui-local" },
       });
 
       let stdout = "";

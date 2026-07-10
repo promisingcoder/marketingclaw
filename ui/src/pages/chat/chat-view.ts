@@ -301,7 +301,7 @@ export function renderChat(props: ChatProps) {
               <span class="callout__content">${props.error}</span>
               ${props.onDismissError
                 ? html`
-                    <openclaw-tooltip content="Dismiss error">
+                    <marketingclaw-tooltip content="Dismiss error">
                       <button
                         class="callout__dismiss"
                         type="button"
@@ -310,7 +310,7 @@ export function renderChat(props: ChatProps) {
                       >
                         ${icons.x}
                       </button>
-                    </openclaw-tooltip>
+                    </marketingclaw-tooltip>
                   `
                 : nothing}
             </div>
@@ -318,7 +318,7 @@ export function renderChat(props: ChatProps) {
         : nothing}
       ${props.focusMode && props.onToggleFocusMode
         ? html`
-            <openclaw-tooltip content="Exit focus mode">
+            <marketingclaw-tooltip content="Exit focus mode">
               <button
                 class="chat-focus-exit"
                 type="button"
@@ -327,7 +327,7 @@ export function renderChat(props: ChatProps) {
               >
                 ${icons.x}
               </button>
-            </openclaw-tooltip>
+            </marketingclaw-tooltip>
           `
         : nothing}
       ${renderChatSearchBar(props.paneId, requestUpdate)}
@@ -374,7 +374,7 @@ export function renderChat(props: ChatProps) {
                     @resize=${(event: CustomEvent) =>
                       props.onSplitRatioChange?.(event.detail.splitRatio)}
                   ></resizable-divider>
-                  <openclaw-chat-detail-panel
+                  <marketingclaw-chat-detail-panel
                     class="chat-sidebar"
                     .content=${props.sidebarContent ?? null}
                     .loadFullMessage=${props.onLoadSidebarFullMessage ?? null}
@@ -384,7 +384,7 @@ export function renderChat(props: ChatProps) {
                     .onOpenWorkspaceFile=${props.onOpenWorkspaceFile ?? null}
                     .onRevealInWorkspace=${props.onRevealWorkspaceFile ?? null}
                     @chat-detail-panel-close=${() => props.onCloseSidebar?.()}
-                  ></openclaw-chat-detail-panel>
+                  ></marketingclaw-chat-detail-panel>
                 `
               : nothing}
           </div>

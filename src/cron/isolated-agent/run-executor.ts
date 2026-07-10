@@ -1,6 +1,6 @@
 /** Executes isolated cron prompts with model fallbacks and interim-ack retries. */
 import { createHash } from "node:crypto";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@marketingclaw/normalization-core/string-coerce";
 import type { BootstrapContextMode } from "../../agents/bootstrap-files.js";
 import type { FastModeAutoProgressState } from "../../agents/fast-mode.js";
 import { runAgentHarnessBeforeMessageWriteHook } from "../../agents/harness/hook-helpers.js";
@@ -10,7 +10,7 @@ import { normalizeToolName } from "../../agents/tool-policy.js";
 import type { ThinkLevel, VerboseLevel } from "../../auto-reply/thinking.js";
 import type { CliSessionBinding } from "../../config/sessions.js";
 import type { AgentDefaultsConfig } from "../../config/types.agent-defaults.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import type { SourceDeliveryPlan } from "../../infra/outbound/source-delivery-plan.js";
 import {
   createUserTurnTranscriptRecorder,
@@ -100,7 +100,7 @@ function resolveIsolatedCronPromptCacheKey(params: {
   const digest = createHash("sha256").update(material).digest("hex").slice(0, 32);
   // Isolated cron rotates transcript/session ids per run; keep cache affinity
   // on stable job identity without sending raw local session labels upstream.
-  return `openclaw-cron-${digest}`;
+  return `marketingclaw-cron-${digest}`;
 }
 
 /** Detects single-line cron prompts that look like shell commands or command invocations. */
@@ -203,8 +203,8 @@ export type CronExecutionResult = {
 
 /** Creates the model-fallback executor for one isolated cron prompt run. */
 export function createCronPromptExecutor(params: {
-  cfg: OpenClawConfig;
-  cfgWithAgentDefaults: OpenClawConfig;
+  cfg: MarketingClawConfig;
+  cfgWithAgentDefaults: MarketingClawConfig;
   job: CronJob;
   agentId: string;
   agentDir: string;
@@ -358,7 +358,7 @@ export function createCronPromptExecutor(params: {
         const bootstrapPromptWarningSignature =
           bootstrapPromptWarningSignaturesSeen[bootstrapPromptWarningSignaturesSeen.length - 1];
         // CLI providers can resume provider-native sessions; embedded providers
-        // use OpenClaw's transcript/session file plus prompt-cache affinity.
+        // use MarketingClaw's transcript/session file plus prompt-cache affinity.
         if (isCliProvider(executionProvider, params.cfgWithAgentDefaults)) {
           const cliSessionBinding = params.cronSession.isNewSession
             ? undefined
@@ -536,8 +536,8 @@ export function createCronPromptExecutor(params: {
 
 /** Executes an isolated cron prompt, including live model-switch and interim-ack retries. */
 export async function executeCronRun(params: {
-  cfg: OpenClawConfig;
-  cfgWithAgentDefaults: OpenClawConfig;
+  cfg: MarketingClawConfig;
+  cfgWithAgentDefaults: MarketingClawConfig;
   job: CronJob;
   agentId: string;
   agentDir: string;

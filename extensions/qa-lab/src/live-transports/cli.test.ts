@@ -1,6 +1,6 @@
 // Qa Lab tests cover live transport CLI and adapter contribution discovery.
 import { Command } from "commander";
-import type { QaRunnerCliContribution } from "openclaw/plugin-sdk/qa-runner-runtime";
+import type { QaRunnerCliContribution } from "marketingclaw/plugin-sdk/qa-runner-runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const { listQaRunnerCliContributions, runSlack, runTelegram, runWhatsApp } = vi.hoisted(() => ({
@@ -10,15 +10,12 @@ const { listQaRunnerCliContributions, runSlack, runTelegram, runWhatsApp } = vi.
   runWhatsApp: vi.fn(),
 }));
 
-vi.mock("openclaw/plugin-sdk/qa-runner-runtime", () => ({ listQaRunnerCliContributions }));
+vi.mock("marketingclaw/plugin-sdk/qa-runner-runtime", () => ({ listQaRunnerCliContributions }));
 vi.mock("./slack/cli.runtime.js", () => ({ runQaSlackCommand: runSlack }));
 vi.mock("./telegram/cli.runtime.js", () => ({ runQaTelegramCommand: runTelegram }));
 vi.mock("./whatsapp/cli.runtime.js", () => ({ runQaWhatsAppCommand: runWhatsApp }));
 
-import {
-  listLiveTransportQaAdapterFactories,
-  listLiveTransportQaCliRegistrations,
-} from "./cli.js";
+import { listLiveTransportQaAdapterFactories, listLiveTransportQaCliRegistrations } from "./cli.js";
 
 const matrixFactory = {
   id: "matrix",
@@ -66,7 +63,13 @@ describe("live transport QA contributions", () => {
     const qa = new Command();
     registration?.register(qa);
 
-    await qa.parseAsync(["node", "openclaw", commandName, "--scenario", `${commandName}-canary`]);
+    await qa.parseAsync([
+      "node",
+      "marketingclaw",
+      commandName,
+      "--scenario",
+      `${commandName}-canary`,
+    ]);
 
     expect(runCommand).toHaveBeenCalledWith(
       expect.objectContaining({ scenarioIds: [`${commandName}-canary`] }),

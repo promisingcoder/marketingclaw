@@ -15,12 +15,13 @@ export type GatewayLogPaths = {
 
 // Restart logs capture supervisor handoff output when normal service logs are unavailable.
 function resolveGatewayLogPrefix(env: GatewayServiceEnv): string {
-  return env.OPENCLAW_LOG_PREFIX?.trim() || "gateway";
+  return env.MARKETINGCLAW_LOG_PREFIX?.trim() || "gateway";
 }
 
 function resolveMacLaunchAgentLogPrefix(env: GatewayServiceEnv): string {
   return (
-    env.OPENCLAW_LOG_PREFIX?.trim() || `gateway${resolveGatewayProfileSuffix(env.OPENCLAW_PROFILE)}`
+    env.MARKETINGCLAW_LOG_PREFIX?.trim() ||
+    `gateway${resolveGatewayProfileSuffix(env.MARKETINGCLAW_PROFILE)}`
   );
 }
 
@@ -37,7 +38,7 @@ export function resolveGatewayLogPaths(env: GatewayServiceEnv): GatewayLogPaths 
 
 function resolveMacLaunchAgentLogPaths(env: GatewayServiceEnv): GatewayLogPaths {
   const home = resolveHomeDir(env).replaceAll("\\", "/");
-  const logDir = path.posix.join(home, "Library", "Logs", "openclaw");
+  const logDir = path.posix.join(home, "Library", "Logs", "marketingclaw");
   const prefix = resolveMacLaunchAgentLogPrefix(env);
   return {
     logDir,
@@ -51,7 +52,7 @@ export function resolveGatewaySupervisorLogPaths(
   options?: { platform?: NodeJS.Platform },
 ): GatewayLogPaths {
   // launchd supervisors write to ~/Library/Logs; systemd and schtasks use the
-  // OpenClaw state dir so generated service users can create the directory.
+  // MarketingClaw state dir so generated service users can create the directory.
   return (options?.platform ?? process.platform) === "darwin"
     ? resolveMacLaunchAgentLogPaths(env)
     : resolveGatewayLogPaths(env);
@@ -89,7 +90,7 @@ export function renderCmdRestartLogSetup(env: GatewayServiceEnv): {
     quotedLogPath,
     lines: [
       `if not exist ${quotedLogDir} mkdir ${quotedLogDir} >nul 2>&1`,
-      `>> ${quotedLogPath} 2>&1 echo [%DATE% %TIME%] openclaw restart log initialized`,
+      `>> ${quotedLogPath} 2>&1 echo [%DATE% %TIME%] marketingclaw restart log initialized`,
     ],
   };
 }

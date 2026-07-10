@@ -1,13 +1,13 @@
-import type { StreamFn } from "openclaw/plugin-sdk/agent-core";
-import { registerSingleProviderPlugin } from "openclaw/plugin-sdk/plugin-test-runtime";
-import { clearLiveCatalogCacheForTests } from "openclaw/plugin-sdk/provider-catalog-live-runtime";
+import type { StreamFn } from "marketingclaw/plugin-sdk/agent-core";
+import { registerSingleProviderPlugin } from "marketingclaw/plugin-sdk/plugin-test-runtime";
+import { clearLiveCatalogCacheForTests } from "marketingclaw/plugin-sdk/provider-catalog-live-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const providerAuthRuntimeMocks = vi.hoisted(() => ({
   resolveApiKeyForProvider: vi.fn(),
 }));
 
-vi.mock("openclaw/plugin-sdk/provider-auth-runtime", () => providerAuthRuntimeMocks);
+vi.mock("marketingclaw/plugin-sdk/provider-auth-runtime", () => providerAuthRuntimeMocks);
 
 import plugin from "./index.js";
 
@@ -208,11 +208,11 @@ describe("ClawRouter plugin", () => {
       id: "openai/gpt-5.5",
       provider: "clawrouter",
       api: "openai-responses",
-      baseUrl: "https://clawrouter.openclaw.ai/v1",
+      baseUrl: "https://clawrouter.marketingclaw.ai/v1",
       params: {
         clawrouterRoute: {
           api: "openai-responses",
-          baseUrl: "https://clawrouter.openclaw.ai/v1",
+          baseUrl: "https://clawrouter.marketingclaw.ai/v1",
         },
       },
     });

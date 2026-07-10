@@ -1,4 +1,4 @@
-// Npm Verify Exec script supports OpenClaw repository automation.
+// Npm Verify Exec script supports MarketingClaw repository automation.
 import { execFileSync } from "node:child_process";
 
 type NpmVerifyCommandInvocation = {
@@ -32,11 +32,14 @@ export function runNpmVerifyCommand(
 ): string {
   const timeoutMs =
     options.timeoutMs ??
-    positiveEnvInt("OPENCLAW_NPM_VERIFY_COMMAND_TIMEOUT_MS", DEFAULT_NPM_VERIFY_COMMAND_TIMEOUT_MS);
+    positiveEnvInt(
+      "MARKETINGCLAW_NPM_VERIFY_COMMAND_TIMEOUT_MS",
+      DEFAULT_NPM_VERIFY_COMMAND_TIMEOUT_MS,
+    );
   const maxBuffer =
     options.maxBufferBytes ??
     positiveEnvInt(
-      "OPENCLAW_NPM_VERIFY_COMMAND_MAX_BUFFER_BYTES",
+      "MARKETINGCLAW_NPM_VERIFY_COMMAND_MAX_BUFFER_BYTES",
       DEFAULT_NPM_VERIFY_COMMAND_MAX_BUFFER_BYTES,
     );
 

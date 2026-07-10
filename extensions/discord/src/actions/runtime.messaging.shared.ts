@@ -1,5 +1,5 @@
 // Discord plugin module implements runtime.messaging.shared behavior.
-import { resolveOpenProviderRuntimeGroupPolicy } from "openclaw/plugin-sdk/runtime-group-policy";
+import { resolveOpenProviderRuntimeGroupPolicy } from "marketingclaw/plugin-sdk/runtime-group-policy";
 import { mergeDiscordAccountConfig, resolveDefaultDiscordAccountId } from "../accounts.js";
 import { createDiscordRuntimeAccountContext } from "../client.js";
 import {
@@ -12,7 +12,7 @@ import {
   type ActionGate,
   readStringParam,
   type DiscordActionConfig,
-  type OpenClawConfig,
+  type MarketingClawConfig,
   withNormalizedTimestamp,
 } from "../runtime-api.js";
 import type { DiscordReactOpts } from "../send.types.js";
@@ -33,7 +33,7 @@ export type DiscordMessagingActionContext = {
   action: string;
   params: Record<string, unknown>;
   isActionEnabled: ActionGate<DiscordActionConfig>;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   options?: DiscordMessagingActionOptions;
   accountId?: string;
   resolveChannelId: () => string;
@@ -43,7 +43,7 @@ export type DiscordMessagingActionContext = {
     channelTargetRequiredMessage?: string;
   }) => Promise<void>;
   resolveReactionChannelId: () => Promise<string>;
-  withOpts: (extra?: Record<string, unknown>) => { cfg: OpenClawConfig; accountId?: string };
+  withOpts: (extra?: Record<string, unknown>) => { cfg: MarketingClawConfig; accountId?: string };
   withReactionRuntimeOptions: <T extends Record<string, unknown> = Record<string, never>>(
     extra?: T,
   ) => DiscordReactOpts & T;
@@ -186,7 +186,7 @@ export function createDiscordMessagingActionContext(params: {
   action: string;
   input: Record<string, unknown>;
   isActionEnabled: ActionGate<DiscordActionConfig>;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   options?: DiscordMessagingActionOptions;
 }): DiscordMessagingActionContext {
   const accountId = readStringParam(params.input, "accountId");

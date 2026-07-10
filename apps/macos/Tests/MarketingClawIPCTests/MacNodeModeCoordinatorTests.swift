@@ -1,7 +1,7 @@
 import Foundation
-import OpenClawKit
+import MarketingClawKit
 import Testing
-@testable import OpenClaw
+@testable import MarketingClaw
 
 struct MacNodeModeCoordinatorTests {
     @Test @MainActor func `fresh node uses durable dedicated identity for local auto approval`() throws {
@@ -35,10 +35,10 @@ struct MacNodeModeCoordinatorTests {
             connectionMode: .remote)
         let commands = MacNodeModeCoordinator.resolvedCommands(caps: caps)
 
-        #expect(!caps.contains(OpenClawCapability.browser.rawValue))
-        #expect(!commands.contains(OpenClawBrowserCommand.proxy.rawValue))
-        #expect(commands.contains(OpenClawCanvasCommand.present.rawValue))
-        #expect(commands.contains(OpenClawSystemCommand.notify.rawValue))
+        #expect(!caps.contains(MarketingClawCapability.browser.rawValue))
+        #expect(!commands.contains(MarketingClawBrowserCommand.proxy.rawValue))
+        #expect(commands.contains(MarketingClawCanvasCommand.present.rawValue))
+        #expect(commands.contains(MarketingClawSystemCommand.notify.rawValue))
     }
 
     @Test func `local mode advertises browser proxy when enabled`() {
@@ -50,8 +50,8 @@ struct MacNodeModeCoordinatorTests {
             connectionMode: .local)
         let commands = MacNodeModeCoordinator.resolvedCommands(caps: caps)
 
-        #expect(caps.contains(OpenClawCapability.browser.rawValue))
-        #expect(commands.contains(OpenClawBrowserCommand.proxy.rawValue))
+        #expect(caps.contains(MarketingClawCapability.browser.rawValue))
+        #expect(commands.contains(MarketingClawBrowserCommand.proxy.rawValue))
     }
 
     @Test func `codex supervisor config advertises native thread catalog`() {
@@ -74,7 +74,7 @@ struct MacNodeModeCoordinatorTests {
                 "entries": ["codex-supervisor": ["enabled": true]],
             ],
         ]
-        #expect(OpenClawConfigFile.explicitlyEnabledPlugin("codex-supervisor", root: enabled))
+        #expect(MarketingClawConfigFile.explicitlyEnabledPlugin("codex-supervisor", root: enabled))
 
         let denied: [String: Any] = [
             "plugins": [
@@ -82,7 +82,7 @@ struct MacNodeModeCoordinatorTests {
                 "entries": ["codex-supervisor": ["enabled": true]],
             ],
         ]
-        #expect(!OpenClawConfigFile.explicitlyEnabledPlugin("codex-supervisor", root: denied))
+        #expect(!MarketingClawConfigFile.explicitlyEnabledPlugin("codex-supervisor", root: denied))
 
         let omittedByAllowlist: [String: Any] = [
             "plugins": [
@@ -90,7 +90,7 @@ struct MacNodeModeCoordinatorTests {
                 "entries": ["codex-supervisor": ["enabled": true]],
             ],
         ]
-        #expect(!OpenClawConfigFile.explicitlyEnabledPlugin(
+        #expect(!MarketingClawConfigFile.explicitlyEnabledPlugin(
             "codex-supervisor",
             root: omittedByAllowlist))
 
@@ -100,7 +100,7 @@ struct MacNodeModeCoordinatorTests {
                 "entries": [" codex-supervisor ": ["enabled": true]],
             ],
         ]
-        #expect(OpenClawConfigFile.explicitlyEnabledPlugin(
+        #expect(MarketingClawConfigFile.explicitlyEnabledPlugin(
             "codex-supervisor",
             root: paddedIds))
 
@@ -110,7 +110,7 @@ struct MacNodeModeCoordinatorTests {
                 "entries": ["codex-supervisor": ["enabled": true]],
             ],
         ]
-        #expect(!OpenClawConfigFile.explicitlyEnabledPlugin(
+        #expect(!MarketingClawConfigFile.explicitlyEnabledPlugin(
             "codex-supervisor",
             root: paddedDeny))
     }
@@ -123,8 +123,8 @@ struct MacNodeModeCoordinatorTests {
             locationMode: .off,
             connectionMode: .local)
         let enabledCommands = MacNodeModeCoordinator.resolvedCommands(caps: enabledCaps)
-        #expect(enabledCaps.contains(OpenClawCapability.computer.rawValue))
-        #expect(enabledCommands.contains(OpenClawComputerCommand.act.rawValue))
+        #expect(enabledCaps.contains(MarketingClawCapability.computer.rawValue))
+        #expect(enabledCommands.contains(MarketingClawComputerCommand.act.rawValue))
 
         let disabledCaps = MacNodeModeCoordinator.resolvedCaps(
             browserControlEnabled: false,
@@ -133,8 +133,8 @@ struct MacNodeModeCoordinatorTests {
             locationMode: .off,
             connectionMode: .local)
         let disabledCommands = MacNodeModeCoordinator.resolvedCommands(caps: disabledCaps)
-        #expect(!disabledCaps.contains(OpenClawCapability.computer.rawValue))
-        #expect(!disabledCommands.contains(OpenClawComputerCommand.act.rawValue))
+        #expect(!disabledCaps.contains(MarketingClawCapability.computer.rawValue))
+        #expect(!disabledCommands.contains(MarketingClawComputerCommand.act.rawValue))
     }
 
     @Test func `tls pin store key uses default wss port`() throws {

@@ -1,4 +1,4 @@
-package ai.openclaw.app
+package ai.marketingclaw.app
 
 import android.content.Context
 import org.junit.Assert.assertEquals
@@ -37,7 +37,7 @@ class SecurePrefsTest {
   @Test
   fun loadLocationMode_enforcesFlavorAvailabilityForAlwaysValue() {
     val context = RuntimeEnvironment.getApplication()
-    val plainPrefs = context.getSharedPreferences("openclaw.node", Context.MODE_PRIVATE)
+    val plainPrefs = context.getSharedPreferences("marketingclaw.node", Context.MODE_PRIVATE)
     plainPrefs
       .edit()
       .clear()
@@ -55,7 +55,7 @@ class SecurePrefsTest {
   @Test
   fun voiceMicEnabled_ignoresOldTalkEnabledKey() {
     val context = RuntimeEnvironment.getApplication()
-    val plainPrefs = context.getSharedPreferences("openclaw.node", Context.MODE_PRIVATE)
+    val plainPrefs = context.getSharedPreferences("marketingclaw.node", Context.MODE_PRIVATE)
     plainPrefs
       .edit()
       .clear()
@@ -71,7 +71,7 @@ class SecurePrefsTest {
   @Test
   fun setVoiceMicEnabled_persistsNewKeyOnly() {
     val context = RuntimeEnvironment.getApplication()
-    val plainPrefs = context.getSharedPreferences("openclaw.node", Context.MODE_PRIVATE)
+    val plainPrefs = context.getSharedPreferences("marketingclaw.node", Context.MODE_PRIVATE)
     plainPrefs
       .edit()
       .clear()
@@ -89,7 +89,7 @@ class SecurePrefsTest {
   @Test
   fun installedAppsSharing_defaultsOffAndPersistsOptIn() {
     val context = RuntimeEnvironment.getApplication()
-    val plainPrefs = context.getSharedPreferences("openclaw.node", Context.MODE_PRIVATE)
+    val plainPrefs = context.getSharedPreferences("marketingclaw.node", Context.MODE_PRIVATE)
     plainPrefs.edit().clear().commit()
     val prefs = testPrefs(context)
 
@@ -104,7 +104,7 @@ class SecurePrefsTest {
   @Test
   fun cameraSharing_defaultsOffAndPersistsOptIn() {
     val context = RuntimeEnvironment.getApplication()
-    val plainPrefs = context.getSharedPreferences("openclaw.node", Context.MODE_PRIVATE)
+    val plainPrefs = context.getSharedPreferences("marketingclaw.node", Context.MODE_PRIVATE)
     plainPrefs.edit().clear().commit()
     val prefs = testPrefs(context)
 
@@ -120,7 +120,7 @@ class SecurePrefsTest {
   @Test
   fun cameraSharing_migratesExistingInstallsToPreviousDefault() {
     val context = RuntimeEnvironment.getApplication()
-    val plainPrefs = context.getSharedPreferences("openclaw.node", Context.MODE_PRIVATE)
+    val plainPrefs = context.getSharedPreferences("marketingclaw.node", Context.MODE_PRIVATE)
     plainPrefs
       .edit()
       .clear()
@@ -135,7 +135,7 @@ class SecurePrefsTest {
   @Test
   fun appearanceThemeMode_defaultsDarkForExistingInstalls() {
     val context = RuntimeEnvironment.getApplication()
-    val plainPrefs = context.getSharedPreferences("openclaw.node", Context.MODE_PRIVATE)
+    val plainPrefs = context.getSharedPreferences("marketingclaw.node", Context.MODE_PRIVATE)
     plainPrefs.edit().clear().commit()
     val prefs = testPrefs(context)
 
@@ -146,7 +146,7 @@ class SecurePrefsTest {
   @Test
   fun setAppearanceThemeMode_persistsSelectedMode() {
     val context = RuntimeEnvironment.getApplication()
-    val plainPrefs = context.getSharedPreferences("openclaw.node", Context.MODE_PRIVATE)
+    val plainPrefs = context.getSharedPreferences("marketingclaw.node", Context.MODE_PRIVATE)
     plainPrefs.edit().clear().commit()
     val securePrefs = context.getSharedPreferences("secure-prefs-test-${UUID.randomUUID()}", Context.MODE_PRIVATE)
     val prefs = SecurePrefs(context, securePrefs)
@@ -161,7 +161,7 @@ class SecurePrefsTest {
   @Test
   fun gatewayCredentials_areIndependentAcrossGateways() {
     val context = RuntimeEnvironment.getApplication()
-    val securePrefs = context.getSharedPreferences("openclaw.node.secure.test", Context.MODE_PRIVATE)
+    val securePrefs = context.getSharedPreferences("marketingclaw.node.secure.test", Context.MODE_PRIVATE)
     securePrefs.edit().clear().commit()
     val prefs = SecurePrefs(context, securePrefsOverride = securePrefs)
 
@@ -175,7 +175,7 @@ class SecurePrefsTest {
   @Test
   fun clearGatewayCredentials_removesOnlyTargetGateway() {
     val context = RuntimeEnvironment.getApplication()
-    val securePrefs = context.getSharedPreferences("openclaw.node.secure.test.clear", Context.MODE_PRIVATE)
+    val securePrefs = context.getSharedPreferences("marketingclaw.node.secure.test.clear", Context.MODE_PRIVATE)
     securePrefs.edit().clear().commit()
     val prefs = SecurePrefs(context, securePrefsOverride = securePrefs)
 
@@ -191,7 +191,7 @@ class SecurePrefsTest {
   @Test
   fun modelFavorites_togglePersistsPinOrder() {
     val context = RuntimeEnvironment.getApplication()
-    val plainPrefs = context.getSharedPreferences("openclaw.node", Context.MODE_PRIVATE)
+    val plainPrefs = context.getSharedPreferences("marketingclaw.node", Context.MODE_PRIVATE)
     plainPrefs.edit().clear().commit()
     val prefs = SecurePrefs(context)
 
@@ -211,7 +211,7 @@ class SecurePrefsTest {
   @Test
   fun modelRecents_dedupesToFrontAndCapsAtFive() {
     val context = RuntimeEnvironment.getApplication()
-    val plainPrefs = context.getSharedPreferences("openclaw.node", Context.MODE_PRIVATE)
+    val plainPrefs = context.getSharedPreferences("marketingclaw.node", Context.MODE_PRIVATE)
     plainPrefs.edit().clear().commit()
     val prefs = SecurePrefs(context)
 
@@ -235,7 +235,7 @@ class SecurePrefsTest {
   @Test
   fun gatewayCustomHeaders_roundTripStaysScopedPerGateway() {
     val context = RuntimeEnvironment.getApplication()
-    val securePrefs = context.getSharedPreferences("openclaw.node.secure.test.headers", Context.MODE_PRIVATE)
+    val securePrefs = context.getSharedPreferences("marketingclaw.node.secure.test.headers", Context.MODE_PRIVATE)
     securePrefs.edit().clear().commit()
     val prefs = SecurePrefs(context, securePrefsOverride = securePrefs)
     val stableId = "manual|gw.example.com|443"
@@ -260,7 +260,7 @@ class SecurePrefsTest {
   @Test
   fun gatewayCustomHeaders_dropsReservedAndUnsafeEntries() {
     val context = RuntimeEnvironment.getApplication()
-    val securePrefs = context.getSharedPreferences("openclaw.node.secure.test.headers2", Context.MODE_PRIVATE)
+    val securePrefs = context.getSharedPreferences("marketingclaw.node.secure.test.headers2", Context.MODE_PRIVATE)
     securePrefs.edit().clear().commit()
     val prefs = SecurePrefs(context, securePrefsOverride = securePrefs)
     val stableId = "manual|gw.example.com|443"
@@ -283,7 +283,7 @@ class SecurePrefsTest {
   @Test
   fun gatewayCustomHeaders_explicitClearRemovesOnlyCustomHeaderCredentials() {
     val context = RuntimeEnvironment.getApplication()
-    val securePrefs = context.getSharedPreferences("openclaw.node.secure.test.headers3", Context.MODE_PRIVATE)
+    val securePrefs = context.getSharedPreferences("marketingclaw.node.secure.test.headers3", Context.MODE_PRIVATE)
     securePrefs.edit().clear().commit()
     val prefs = SecurePrefs(context, securePrefsOverride = securePrefs)
     prefs.saveGatewayCustomHeaders("manual|one.example|443", mapOf("X-One" to "secret-one"))

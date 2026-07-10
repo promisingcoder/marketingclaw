@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">OpenClaw Node</string>
+    <string name="app_name">MarketingClaw Node</string>
     <string name="trust_this_gateway">Bu ağ geçidine güvenilsin mi?</string>
     <string name="trust_and_continue">Güven ve devam et</string>
     <string name="cancel">İptal</string>

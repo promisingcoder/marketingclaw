@@ -77,7 +77,7 @@ export function registerAgentsCommands(program: Command): void {
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/agents", "docs.openclaw.ai/cli/agents")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/agents", "docs.marketingclaw.ai/cli/agents")}\n`,
     );
 
   agents
@@ -213,14 +213,20 @@ export function registerAgentsCommands(program: Command): void {
         `
 ${theme.heading("Examples:")}
 ${formatHelpExamples([
-  ['openclaw agents set-identity --agent main --name "OpenClaw" --emoji "🦞"', "Set name + emoji."],
-  ["openclaw agents set-identity --agent main --avatar avatars/openclaw.png", "Set avatar path."],
   [
-    "openclaw agents set-identity --workspace ~/.openclaw/workspace --from-identity",
+    'marketingclaw agents set-identity --agent main --name "MarketingClaw" --emoji "🦞"',
+    "Set name + emoji.",
+  ],
+  [
+    "marketingclaw agents set-identity --agent main --avatar avatars/marketingclaw.png",
+    "Set avatar path.",
+  ],
+  [
+    "marketingclaw agents set-identity --workspace ~/.marketingclaw/workspace --from-identity",
     "Load from IDENTITY.md.",
   ],
   [
-    "openclaw agents set-identity --identity-file ~/.openclaw/workspace/IDENTITY.md --agent main",
+    "marketingclaw agents set-identity --identity-file ~/.marketingclaw/workspace/IDENTITY.md --agent main",
     "Use a specific IDENTITY.md.",
   ],
 ])}

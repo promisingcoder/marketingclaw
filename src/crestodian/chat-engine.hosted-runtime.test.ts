@@ -26,7 +26,7 @@ const overview: CrestodianOverview = {
   defaultAgentId: "main",
   agents: [{ id: "main", isDefault: true }],
   config: {
-    path: "/tmp/openclaw.json",
+    path: "/tmp/marketingclaw.json",
     exists: true,
     valid: true,
     issues: [],
@@ -44,8 +44,8 @@ const overview: CrestodianOverview = {
     reachable: true,
   },
   references: {
-    docsUrl: "https://docs.openclaw.ai",
-    sourceUrl: "https://github.com/openclaw/openclaw",
+    docsUrl: "https://docs.marketingclaw.ai",
+    sourceUrl: "https://github.com/promisingcoder/marketingclaw",
   },
 };
 

@@ -1,5 +1,5 @@
 // Plugin entry contracts define the manifest-facing hooks implemented by plugin packages.
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { emptyPluginConfigSchema } from "../plugins/config-schema.js";
 import { createCachedLazyValueGetter } from "./lazy-value.js";
 
@@ -18,32 +18,36 @@ export type MigrationPlan = import("../plugins/types.js").MigrationPlan;
 export type MigrationProviderContext = import("../plugins/types.js").MigrationProviderContext;
 export type MigrationProviderPlugin = import("../plugins/types.js").MigrationProviderPlugin;
 export type MigrationSummary = import("../plugins/types.js").MigrationSummary;
-export type OpenClawPluginApi = import("../plugins/types.js").OpenClawPluginApi;
-export type OpenClawPluginCommandDefinition =
-  import("../plugins/types.js").OpenClawPluginCommandDefinition;
-export type OpenClawPluginConfigSchema = import("../plugins/types.js").OpenClawPluginConfigSchema;
-export type OpenClawPluginDefinition = import("../plugins/types.js").OpenClawPluginDefinition;
-export type OpenClawPluginHttpRouteHandler =
-  import("../plugins/types.js").OpenClawPluginHttpRouteHandler;
-export type OpenClawPluginNodeHostCommand =
-  import("../plugins/types.js").OpenClawPluginNodeHostCommand;
-export type OpenClawPluginNodeInvokePolicy =
-  import("../plugins/types.js").OpenClawPluginNodeInvokePolicy;
-export type OpenClawPluginNodeInvokePolicyContext =
-  import("../plugins/types.js").OpenClawPluginNodeInvokePolicyContext;
-export type OpenClawPluginNodeInvokePolicyResult =
-  import("../plugins/types.js").OpenClawPluginNodeInvokePolicyResult;
-export type OpenClawPluginReloadRegistration =
-  import("../plugins/types.js").OpenClawPluginReloadRegistration;
-export type OpenClawPluginSecurityAuditCollector =
-  import("../plugins/types.js").OpenClawPluginSecurityAuditCollector;
-export type OpenClawPluginSecurityAuditContext =
-  import("../plugins/types.js").OpenClawPluginSecurityAuditContext;
-export type OpenClawPluginService = import("../plugins/types.js").OpenClawPluginService;
-export type OpenClawPluginServiceContext =
-  import("../plugins/types.js").OpenClawPluginServiceContext;
-export type OpenClawPluginToolContext = import("../plugins/types.js").OpenClawPluginToolContext;
-export type OpenClawPluginToolFactory = import("../plugins/types.js").OpenClawPluginToolFactory;
+export type MarketingClawPluginApi = import("../plugins/types.js").MarketingClawPluginApi;
+export type MarketingClawPluginCommandDefinition =
+  import("../plugins/types.js").MarketingClawPluginCommandDefinition;
+export type MarketingClawPluginConfigSchema =
+  import("../plugins/types.js").MarketingClawPluginConfigSchema;
+export type MarketingClawPluginDefinition =
+  import("../plugins/types.js").MarketingClawPluginDefinition;
+export type MarketingClawPluginHttpRouteHandler =
+  import("../plugins/types.js").MarketingClawPluginHttpRouteHandler;
+export type MarketingClawPluginNodeHostCommand =
+  import("../plugins/types.js").MarketingClawPluginNodeHostCommand;
+export type MarketingClawPluginNodeInvokePolicy =
+  import("../plugins/types.js").MarketingClawPluginNodeInvokePolicy;
+export type MarketingClawPluginNodeInvokePolicyContext =
+  import("../plugins/types.js").MarketingClawPluginNodeInvokePolicyContext;
+export type MarketingClawPluginNodeInvokePolicyResult =
+  import("../plugins/types.js").MarketingClawPluginNodeInvokePolicyResult;
+export type MarketingClawPluginReloadRegistration =
+  import("../plugins/types.js").MarketingClawPluginReloadRegistration;
+export type MarketingClawPluginSecurityAuditCollector =
+  import("../plugins/types.js").MarketingClawPluginSecurityAuditCollector;
+export type MarketingClawPluginSecurityAuditContext =
+  import("../plugins/types.js").MarketingClawPluginSecurityAuditContext;
+export type MarketingClawPluginService = import("../plugins/types.js").MarketingClawPluginService;
+export type MarketingClawPluginServiceContext =
+  import("../plugins/types.js").MarketingClawPluginServiceContext;
+export type MarketingClawPluginToolContext =
+  import("../plugins/types.js").MarketingClawPluginToolContext;
+export type MarketingClawPluginToolFactory =
+  import("../plugins/types.js").MarketingClawPluginToolFactory;
 export type PluginLogger = import("../plugins/types.js").PluginLogger;
 export type ProviderAugmentModelCatalogContext =
   import("../plugins/types.js").ProviderAugmentModelCatalogContext;
@@ -134,10 +138,10 @@ export type UnifiedModelCatalogProviderContext =
   import("../plugins/types.js").UnifiedModelCatalogProviderContext;
 export type UnifiedModelCatalogProviderPlugin =
   import("../plugins/types.js").UnifiedModelCatalogProviderPlugin;
-export type OpenClawGatewayDiscoveryAdvertiseContext =
-  import("../plugins/types.js").OpenClawGatewayDiscoveryAdvertiseContext;
-export type OpenClawGatewayDiscoveryService =
-  import("../plugins/types.js").OpenClawGatewayDiscoveryService;
+export type MarketingClawGatewayDiscoveryAdvertiseContext =
+  import("../plugins/types.js").MarketingClawGatewayDiscoveryAdvertiseContext;
+export type MarketingClawGatewayDiscoveryService =
+  import("../plugins/types.js").MarketingClawGatewayDiscoveryService;
 export type SpeechProviderPlugin = import("../plugins/types.js").SpeechProviderPlugin;
 export type PluginCommandContext = import("../plugins/types.js").PluginCommandContext;
 export type PluginCommandResult = import("../plugins/types.js").PluginCommandResult;
@@ -206,8 +210,8 @@ export type {
   UnifiedModelCatalogEntry,
   UnifiedModelCatalogKind,
   UnifiedModelCatalogSource,
-} from "@openclaw/model-catalog-core/model-catalog-types";
-export type { OpenClawConfig };
+} from "@marketingclaw/model-catalog-core/model-catalog-types";
+export type { MarketingClawConfig };
 
 export {
   buildJsonPluginConfigSchema,
@@ -221,27 +225,27 @@ type DefinePluginEntryOptions = {
   name: string;
   description: string;
   /**
-   * @deprecated Declare exclusive plugin kind in `openclaw.plugin.json` via
+   * @deprecated Declare exclusive plugin kind in `marketingclaw.plugin.json` via
    * manifest `kind`. Runtime-entry `kind` remains only as a compatibility
    * fallback for older plugins.
    */
-  kind?: OpenClawPluginDefinition["kind"];
-  configSchema?: OpenClawPluginConfigSchema | (() => OpenClawPluginConfigSchema);
-  reload?: OpenClawPluginDefinition["reload"];
-  nodeHostCommands?: OpenClawPluginDefinition["nodeHostCommands"];
-  securityAuditCollectors?: OpenClawPluginDefinition["securityAuditCollectors"];
-  register: (api: OpenClawPluginApi) => void;
+  kind?: MarketingClawPluginDefinition["kind"];
+  configSchema?: MarketingClawPluginConfigSchema | (() => MarketingClawPluginConfigSchema);
+  reload?: MarketingClawPluginDefinition["reload"];
+  nodeHostCommands?: MarketingClawPluginDefinition["nodeHostCommands"];
+  securityAuditCollectors?: MarketingClawPluginDefinition["securityAuditCollectors"];
+  register: (api: MarketingClawPluginApi) => void;
 };
 
-/** Normalized object shape that OpenClaw loads from a plugin entry module. */
+/** Normalized object shape that MarketingClaw loads from a plugin entry module. */
 type DefinedPluginEntry = {
   id: string;
   name: string;
   description: string;
-  configSchema: OpenClawPluginConfigSchema;
-  register: NonNullable<OpenClawPluginDefinition["register"]>;
+  configSchema: MarketingClawPluginConfigSchema;
+  register: NonNullable<MarketingClawPluginDefinition["register"]>;
 } & Pick<
-  OpenClawPluginDefinition,
+  MarketingClawPluginDefinition,
   "kind" | "reload" | "nodeHostCommands" | "securityAuditCollectors"
 >;
 
@@ -250,7 +254,7 @@ type DefinedPluginEntry = {
  *
  * Use this for provider, tool, command, service, memory, and context-engine
  * plugins. Channel plugins should use `defineChannelPluginEntry(...)` from
- * `openclaw/plugin-sdk/core` so they inherit the channel capability wiring.
+ * `marketingclaw/plugin-sdk/core` so they inherit the channel capability wiring.
  */
 export function definePluginEntry({
   id,

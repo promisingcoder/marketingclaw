@@ -1,7 +1,7 @@
+import { spawnSync } from "node:child_process";
 // Release preflight tests keep generated-artifact checks fail-closed for operators.
 import { chmodSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { delimiter, join } from "node:path";
-import { spawnSync } from "node:child_process";
 import { afterEach, describe, expect, it } from "vitest";
 import { cleanupTempDirs, makeTempDir } from "../helpers/temp-dir.js";
 
@@ -36,7 +36,7 @@ afterEach(() => {
 });
 
 function makeFakePnpm(): { binDir: string; logPath: string } {
-  const root = makeTempDir(tempDirs, "openclaw-release-preflight-");
+  const root = makeTempDir(tempDirs, "marketingclaw-release-preflight-");
   const binDir = join(root, "bin");
   const logPath = join(root, "pnpm.log");
   mkdirSync(binDir);
@@ -47,8 +47,8 @@ function makeFakePnpm(): { binDir: string; logPath: string } {
 import { appendFileSync } from "node:fs";
 
 const command = process.argv.slice(2).join(" ");
-appendFileSync(process.env.OPENCLAW_RELEASE_PREFLIGHT_PNPM_LOG, command + "\\n");
-const failures = new Set((process.env.OPENCLAW_RELEASE_PREFLIGHT_FAIL_COMMANDS ?? "").split(";").filter(Boolean));
+appendFileSync(process.env.MARKETINGCLAW_RELEASE_PREFLIGHT_PNPM_LOG, command + "\\n");
+const failures = new Set((process.env.MARKETINGCLAW_RELEASE_PREFLIGHT_FAIL_COMMANDS ?? "").split(";").filter(Boolean));
 process.exit(failures.has(command) ? 7 : 0);
 `,
     { mode: 0o755 },
@@ -70,7 +70,7 @@ function runPreflight(
       ...extraEnv,
       ...(fakePnpm
         ? {
-            OPENCLAW_RELEASE_PREFLIGHT_PNPM_LOG: fakePnpm.logPath,
+            MARKETINGCLAW_RELEASE_PREFLIGHT_PNPM_LOG: fakePnpm.logPath,
             PATH: `${fakePnpm.binDir}${delimiter}${process.env.PATH ?? ""}`,
           }
         : {}),
@@ -95,7 +95,7 @@ describe("scripts/release-preflight.mjs", () => {
   it("runs every check command and reports all failed release artifact checks", () => {
     const fakePnpm = makeFakePnpm();
     const result = runPreflight(["--check"], fakePnpm, {
-      OPENCLAW_RELEASE_PREFLIGHT_FAIL_COMMANDS: "plugins:sync:check;config:docs:check",
+      MARKETINGCLAW_RELEASE_PREFLIGHT_FAIL_COMMANDS: "plugins:sync:check;config:docs:check",
     });
 
     expect(result.status).toBe(1);
@@ -111,8 +111,8 @@ describe("scripts/release-preflight.mjs", () => {
       encoding: "utf8",
       env: {
         ...process.env,
-        OPENCLAW_RELEASE_PREFLIGHT_FAIL_COMMANDS: "deps:shrinkwrap:changed:generate",
-        OPENCLAW_RELEASE_PREFLIGHT_PNPM_LOG: fakePnpm.logPath,
+        MARKETINGCLAW_RELEASE_PREFLIGHT_FAIL_COMMANDS: "deps:shrinkwrap:changed:generate",
+        MARKETINGCLAW_RELEASE_PREFLIGHT_PNPM_LOG: fakePnpm.logPath,
         PATH: `${fakePnpm.binDir}${delimiter}${process.env.PATH ?? ""}`,
       },
     });

@@ -1,19 +1,19 @@
 import type { DatabaseSync } from "node:sqlite";
 import type { Insertable, Selectable } from "kysely";
 import { executeSqliteQuerySync, getNodeSqliteKysely } from "../../infra/kysely-sync.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../../state/openclaw-state-db.generated.js";
+import type { DB as MarketingClawStateKyselyDatabase } from "../../state/marketingclaw-state-db.generated.js";
 import {
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-} from "../../state/openclaw-state-db.js";
+  openMarketingClawStateDatabase,
+  runMarketingClawStateWriteTransaction,
+} from "../../state/marketingclaw-state-db.js";
 import type { ManagedWorktreeOwnerKind, ManagedWorktreeRecord } from "./types.js";
 
-type WorktreesTable = OpenClawStateKyselyDatabase["worktrees"];
+type WorktreesTable = MarketingClawStateKyselyDatabase["worktrees"];
 type WorktreeRow = Selectable<WorktreesTable>;
-type WorktreeRegistryDatabase = Pick<OpenClawStateKyselyDatabase, "worktrees">;
+type WorktreeRegistryDatabase = Pick<MarketingClawStateKyselyDatabase, "worktrees">;
 
 function dbFor(env: NodeJS.ProcessEnv): DatabaseSync {
-  return openOpenClawStateDatabase({ env }).db;
+  return openMarketingClawStateDatabase({ env }).db;
 }
 
 function kyselyFor(db: DatabaseSync) {
@@ -129,7 +129,7 @@ export function insertRegistryWorktree(
   record: ManagedWorktreeRecord,
 ): void {
   const db = dbFor(env);
-  runOpenClawStateWriteTransaction(() => {
+  runMarketingClawStateWriteTransaction(() => {
     executeSqliteQuerySync(db, kyselyFor(db).insertInto("worktrees").values(recordToRow(record)));
   });
 }
@@ -150,7 +150,7 @@ export function updateRegistryWorktree(
   if ("snapshotRef" in patch) {
     values.snapshot_ref = patch.snapshotRef ?? null;
   }
-  runOpenClawStateWriteTransaction(() => {
+  runMarketingClawStateWriteTransaction(() => {
     executeSqliteQuerySync(
       db,
       kyselyFor(db).updateTable("worktrees").set(values).where("id", "=", id),
@@ -160,7 +160,7 @@ export function updateRegistryWorktree(
 
 export function deleteRegistryWorktree(env: NodeJS.ProcessEnv, id: string): void {
   const db = dbFor(env);
-  runOpenClawStateWriteTransaction(() => {
+  runMarketingClawStateWriteTransaction(() => {
     executeSqliteQuerySync(db, kyselyFor(db).deleteFrom("worktrees").where("id", "=", id));
   });
 }

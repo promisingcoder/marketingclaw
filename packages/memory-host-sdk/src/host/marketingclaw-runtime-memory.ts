@@ -11,7 +11,7 @@ export {
   listRegisteredMemoryEmbeddingProviders,
   resolveCanonicalRootMemoryFile,
   shouldSkipRootMemoryAuxiliaryPath,
-} from "./openclaw-runtime.js";
+} from "./marketingclaw-runtime.js";
 export type {
   MemoryEmbeddingBatchChunk,
   MemoryEmbeddingBatchOptions,
@@ -28,5 +28,5 @@ export type {
   MemoryPluginPublicArtifactsProvider,
   MemoryPluginRuntime,
   MemoryPromptSectionBuilder,
-  OpenClawPluginApi,
-} from "./openclaw-runtime.js";
+  MarketingClawPluginApi,
+} from "./marketingclaw-runtime.js";

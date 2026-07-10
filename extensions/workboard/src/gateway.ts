@@ -1,6 +1,6 @@
 // Workboard plugin module implements gateway behavior.
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import type { OpenClawPluginApi } from "../api.js";
+import { formatErrorMessage } from "marketingclaw/plugin-sdk/error-runtime";
+import type { MarketingClawPluginApi } from "../api.js";
 import { dispatchAndStartWorkboardCards } from "./dispatcher.js";
 import { WorkboardStore } from "./store.js";
 import { WORKBOARD_STATUSES, type WorkboardCard } from "./types.js";
@@ -9,7 +9,7 @@ const READ_SCOPE = "operator.read" as const;
 const WRITE_SCOPE = "operator.write" as const;
 
 type GatewayMethodContext = Parameters<
-  Parameters<OpenClawPluginApi["registerGatewayMethod"]>[1]
+  Parameters<MarketingClawPluginApi["registerGatewayMethod"]>[1]
 >[0];
 type GatewayRespond = GatewayMethodContext["respond"];
 
@@ -67,7 +67,7 @@ function redactDiagnosticsRows(result: Awaited<ReturnType<WorkboardStore["diagno
 }
 
 export function registerWorkboardGatewayMethods(params: {
-  api: OpenClawPluginApi;
+  api: MarketingClawPluginApi;
   store?: WorkboardStore;
 }) {
   const { api } = params;

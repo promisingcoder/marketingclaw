@@ -1,7 +1,7 @@
 import Foundation
-import OpenClawChatUI
+import MarketingClawChatUI
 import Testing
-@testable import OpenClaw
+@testable import MarketingClaw
 
 struct CommandSessionGroupingTests {
     @Test func `groups pinned categories and ungrouped in display order`() {
@@ -118,9 +118,9 @@ struct CommandSessionGroupingTests {
         _ key: String,
         category: String? = nil,
         pinned: Bool = false,
-        activity: Double) -> OpenClawChatSessionEntry
+        activity: Double) -> MarketingClawChatSessionEntry
     {
-        OpenClawChatSessionEntry(
+        MarketingClawChatSessionEntry(
             key: key,
             kind: nil,
             displayName: nil,

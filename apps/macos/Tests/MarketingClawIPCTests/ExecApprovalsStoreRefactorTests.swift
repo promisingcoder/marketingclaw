@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import OpenClaw
+@testable import MarketingClaw
 
 @Suite(.serialized)
 struct ExecApprovalsStoreRefactorTests {
@@ -52,15 +52,15 @@ struct ExecApprovalsStoreRefactorTests {
         _ body: @escaping @Sendable (URL) async throws -> Void) async throws
     {
         let root = self.realTemporaryDirectory
-            .appendingPathComponent("openclaw-state-\(UUID().uuidString)", isDirectory: true)
+            .appendingPathComponent("marketingclaw-state-\(UUID().uuidString)", isDirectory: true)
         let home = root.appendingPathComponent("home", isDirectory: true)
         let stateDir = root.appendingPathComponent("state", isDirectory: true)
         defer { try? FileManager().removeItem(at: root) }
         try Self.seedCurrentApprovalsFile(in: stateDir)
 
         try await self.withLockedEnv([
-            "OPENCLAW_HOME": home.path,
-            "OPENCLAW_STATE_DIR": stateDir.path,
+            "MARKETINGCLAW_HOME": home.path,
+            "MARKETINGCLAW_STATE_DIR": stateDir.path,
         ]) {
             try await body(stateDir)
         }
@@ -70,14 +70,14 @@ struct ExecApprovalsStoreRefactorTests {
         _ body: @escaping @Sendable (URL, URL) async throws -> Void) async throws
     {
         let root = self.realTemporaryDirectory
-            .appendingPathComponent("openclaw-home-state-\(UUID().uuidString)", isDirectory: true)
+            .appendingPathComponent("marketingclaw-home-state-\(UUID().uuidString)", isDirectory: true)
         let home = root.appendingPathComponent("home", isDirectory: true)
         let stateDir = root.appendingPathComponent("state", isDirectory: true)
         defer { try? FileManager().removeItem(at: root) }
 
         try await self.withLockedEnv([
-            "OPENCLAW_HOME": home.path,
-            "OPENCLAW_STATE_DIR": stateDir.path,
+            "MARKETINGCLAW_HOME": home.path,
+            "MARKETINGCLAW_STATE_DIR": stateDir.path,
         ]) {
             try await body(home, stateDir)
         }
@@ -100,7 +100,7 @@ struct ExecApprovalsStoreRefactorTests {
     @Test
     func `ensure file migrates default approvals into custom state dir`() async throws {
         try await self.withTempHomeAndStateDir { home, stateDir in
-            let legacyDir = home.appendingPathComponent(".openclaw", isDirectory: true)
+            let legacyDir = home.appendingPathComponent(".marketingclaw", isDirectory: true)
             try FileManager().createDirectory(
                 at: legacyDir,
                 withIntermediateDirectories: true)

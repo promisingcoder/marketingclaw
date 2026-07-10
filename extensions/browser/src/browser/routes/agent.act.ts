@@ -1,7 +1,7 @@
 /**
  * Browser agent action route registration and existing-session execution.
  *
- * Dispatches normalized actions to either Playwright-backed OpenClaw browser
+ * Dispatches normalized actions to either Playwright-backed MarketingClaw browser
  * control or Chrome MCP existing-session operations with navigation guards.
  */
 import { setTimeout as sleep } from "node:timers/promises";

@@ -18,6 +18,6 @@ export const page = definePage({
   component: () =>
     import("./workboard-page.ts").then(() => ({
       header: true,
-      render: () => html`<openclaw-workboard-page></openclaw-workboard-page>`,
+      render: () => html`<marketingclaw-workboard-page></marketingclaw-workboard-page>`,
     })),
 });

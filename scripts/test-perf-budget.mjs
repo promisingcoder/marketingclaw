@@ -19,10 +19,11 @@ function parseArgs(argv, env = process.env) {
     argv,
     {
       config: "test/vitest/vitest.unit.config.ts",
-      maxWallMs: readBudgetEnvNumber("OPENCLAW_TEST_PERF_MAX_WALL_MS", env),
-      baselineWallMs: readBudgetEnvNumber("OPENCLAW_TEST_PERF_BASELINE_WALL_MS", env),
-      maxRegressionPct: readBudgetEnvNumber("OPENCLAW_TEST_PERF_MAX_REGRESSION_PCT", env) ?? 10,
-      reportOnly: readBooleanEnv("OPENCLAW_TEST_PERF_REPORT_ONLY", env),
+      maxWallMs: readBudgetEnvNumber("MARKETINGCLAW_TEST_PERF_MAX_WALL_MS", env),
+      baselineWallMs: readBudgetEnvNumber("MARKETINGCLAW_TEST_PERF_BASELINE_WALL_MS", env),
+      maxRegressionPct:
+        readBudgetEnvNumber("MARKETINGCLAW_TEST_PERF_MAX_REGRESSION_PCT", env) ?? 10,
+      reportOnly: readBooleanEnv("MARKETINGCLAW_TEST_PERF_REPORT_ONLY", env),
     },
     [
       stringFlag("--config", "config"),
@@ -83,7 +84,7 @@ function main() {
   const startedAt = process.hrtime.bigint();
   const reportPath = runVitestJsonReport({
     config: opts.config,
-    prefix: "openclaw-vitest-perf",
+    prefix: "marketingclaw-vitest-perf",
   });
   const elapsedMs = Number.parseFloat(String(process.hrtime.bigint() - startedAt)) / 1_000_000;
 

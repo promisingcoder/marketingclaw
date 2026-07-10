@@ -1,4 +1,4 @@
-import { chunkMarkdownTextWithMode } from "openclaw/plugin-sdk/reply-chunking";
+import { chunkMarkdownTextWithMode } from "marketingclaw/plugin-sdk/reply-chunking";
 // Telegram tests cover telegram outbound plugin behavior.
 import { describe, expect, it } from "vitest";
 import { splitTelegramHtmlChunks } from "./format.js";
@@ -34,7 +34,7 @@ describe("telegramPlugin outbound", () => {
 
   it("strips assistant-visible tool traces before outbound delivery", () => {
     clearTelegramRuntime();
-    const text = 'Done.\n⚠️ 🛠️ `search "Pipeline" in ~/.openclaw/workspace-* (agent)` failed';
+    const text = 'Done.\n⚠️ 🛠️ `search "Pipeline" in ~/.marketingclaw/workspace-* (agent)` failed';
 
     expect(telegramOutbound.sanitizeText?.({ text, payload: { text } })).toBe("Done.");
   });

@@ -2,9 +2,9 @@
  * Gateway tool-resolution exclusion tests.
  */
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 
-type CreateOpenClawToolsArg = {
+type CreateMarketingClawToolsArg = {
   clientCaps?: string[];
   cronCreatorToolAllowlist?: Array<string | { name: string; pluginId?: string }>;
   inheritedToolDenylist?: string[];
@@ -22,7 +22,7 @@ const hoisted = vi.hoisted(() => {
   }
   return {
     makeTool,
-    createOpenClawToolsMock: vi.fn((_args: CreateOpenClawToolsArg) => [
+    createMarketingClawToolsMock: vi.fn((_args: CreateMarketingClawToolsArg) => [
       makeTool("read"),
       makeTool("sessions_spawn"),
       makeTool("cron"),
@@ -32,15 +32,16 @@ const hoisted = vi.hoisted(() => {
   };
 });
 
-vi.mock("../agents/openclaw-tools.js", () => ({
-  createOpenClawTools: (args: CreateOpenClawToolsArg) => hoisted.createOpenClawToolsMock(args),
+vi.mock("../agents/marketingclaw-tools.js", () => ({
+  createMarketingClawTools: (args: CreateMarketingClawToolsArg) =>
+    hoisted.createMarketingClawToolsMock(args),
 }));
 
 import { resolveGatewayScopedTools } from "./tool-resolution.js";
 
 describe("resolveGatewayScopedTools excludeToolNames", () => {
   beforeEach(() => {
-    hoisted.createOpenClawToolsMock.mockClear();
+    hoisted.createMarketingClawToolsMock.mockClear();
   });
 
   function readCreateToolsArgs(index = 0): {
@@ -49,9 +50,9 @@ describe("resolveGatewayScopedTools excludeToolNames", () => {
     inheritedToolDenylist?: string[];
     pluginToolDenylist?: string[];
   } {
-    const args = hoisted.createOpenClawToolsMock.mock.calls[index]?.[0];
+    const args = hoisted.createMarketingClawToolsMock.mock.calls[index]?.[0];
     if (!args || typeof args !== "object") {
-      throw new Error("expected createOpenClawTools args");
+      throw new Error("expected createMarketingClawTools args");
     }
     return args as {
       clientCaps?: string[];
@@ -63,7 +64,7 @@ describe("resolveGatewayScopedTools excludeToolNames", () => {
 
   it("passes gateway client capabilities into tool construction", () => {
     resolveGatewayScopedTools({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       sessionKey: "agent:main:direct:test",
       surface: "loopback",
       clientCaps: ["tool-events", "inline-widgets"],
@@ -74,7 +75,7 @@ describe("resolveGatewayScopedTools excludeToolNames", () => {
 
   it("filters loopback dedup exclusions without inheriting policy denies", () => {
     const result = resolveGatewayScopedTools({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       sessionKey: "agent:main:direct:test",
       surface: "loopback",
       excludeToolNames: ["read", "apply_patch"],
@@ -95,7 +96,7 @@ describe("resolveGatewayScopedTools excludeToolNames", () => {
     const ownerResult = resolveGatewayScopedTools({
       cfg: {
         gateway: { tools: { allow: ["gateway"] } },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       sessionKey: "agent:main:direct:test",
       surface: "loopback",
       senderIsOwner: true,
@@ -103,7 +104,7 @@ describe("resolveGatewayScopedTools excludeToolNames", () => {
     const nonOwnerResult = resolveGatewayScopedTools({
       cfg: {
         gateway: { tools: { allow: ["gateway"] } },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       sessionKey: "agent:main:direct:test",
       surface: "loopback",
       senderIsOwner: false,
@@ -126,7 +127,7 @@ describe("resolveGatewayScopedTools excludeToolNames", () => {
     resolveGatewayScopedTools({
       cfg: {
         gateway: { tools: { deny: ["exec"] } },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       sessionKey: "agent:main:direct:test",
       surface: "loopback",
       excludeToolNames: ["read", "apply_patch"],
@@ -138,7 +139,7 @@ describe("resolveGatewayScopedTools excludeToolNames", () => {
   });
 
   it("passes final filtered tool surface to gateway cron jobs", () => {
-    hoisted.createOpenClawToolsMock.mockReturnValueOnce([
+    hoisted.createMarketingClawToolsMock.mockReturnValueOnce([
       hoisted.makeTool("read"),
       hoisted.makeTool("cron"),
       hoisted.makeTool("exec"),
@@ -147,7 +148,7 @@ describe("resolveGatewayScopedTools excludeToolNames", () => {
     const result = resolveGatewayScopedTools({
       cfg: {
         tools: { allow: ["read", "cron"] },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       sessionKey: "agent:main:direct:test",
       surface: "loopback",
     });

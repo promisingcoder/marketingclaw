@@ -1,7 +1,7 @@
-package ai.openclaw.app.chat
+package ai.marketingclaw.app.chat
 
-import ai.openclaw.app.ui.chat.stageVoiceNoteAttachment
-import ai.openclaw.app.ui.chat.toOutgoingAttachment
+import ai.marketingclaw.app.ui.chat.stageVoiceNoteAttachment
+import ai.marketingclaw.app.ui.chat.toOutgoingAttachment
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest

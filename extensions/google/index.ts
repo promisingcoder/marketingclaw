@@ -1,17 +1,17 @@
-// Google plugin entrypoint registers its OpenClaw integration.
-import type { ImageGenerationProvider } from "openclaw/plugin-sdk/image-generation";
-import type { MediaUnderstandingProvider } from "openclaw/plugin-sdk/media-understanding";
-import type { MusicGenerationProvider } from "openclaw/plugin-sdk/music-generation";
-import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
+// Google plugin entrypoint registers its MarketingClaw integration.
+import type { ImageGenerationProvider } from "marketingclaw/plugin-sdk/image-generation";
+import type { MediaUnderstandingProvider } from "marketingclaw/plugin-sdk/media-understanding";
+import type { MusicGenerationProvider } from "marketingclaw/plugin-sdk/music-generation";
+import { definePluginEntry } from "marketingclaw/plugin-sdk/plugin-entry";
 import type {
   RealtimeVoiceBridge,
   RealtimeVoiceBridgeCreateRequest,
   RealtimeVoiceProviderConfig,
   RealtimeVoiceProviderPlugin,
-} from "openclaw/plugin-sdk/realtime-voice";
-import { normalizeResolvedSecretInputString } from "openclaw/plugin-sdk/secret-input";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
-import type { VideoGenerationProvider } from "openclaw/plugin-sdk/video-generation";
+} from "marketingclaw/plugin-sdk/realtime-voice";
+import { normalizeResolvedSecretInputString } from "marketingclaw/plugin-sdk/secret-input";
+import { normalizeOptionalString } from "marketingclaw/plugin-sdk/string-coerce-runtime";
+import type { VideoGenerationProvider } from "marketingclaw/plugin-sdk/video-generation";
 import { buildGoogleGeminiCliBackend } from "./cli-backend.js";
 import { registerGoogleGeminiCliProvider } from "./gemini-cli-provider.js";
 import {

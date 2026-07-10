@@ -15,12 +15,12 @@ type MockRegistryToolEntry = {
   factory: (ctx: unknown) => unknown;
 };
 
-const loadOpenClawPluginsMock = vi.fn();
+const loadMarketingClawPluginsMock = vi.fn();
 const resolveRuntimePluginRegistryMock = vi.fn();
 const applyPluginAutoEnableMock = vi.fn();
 
 vi.mock("./loader.js", () => ({
-  loadOpenClawPlugins: (params: unknown) => loadOpenClawPluginsMock(params),
+  loadMarketingClawPlugins: (params: unknown) => loadMarketingClawPluginsMock(params),
   resolveCompatibleRuntimePluginRegistry: (params: unknown) =>
     resolveRuntimePluginRegistryMock(params),
   resolvePluginRegistryLoadCacheKey: (params: unknown) => JSON.stringify(params),
@@ -105,7 +105,7 @@ function createToolRegistry(entries: MockRegistryToolEntry[]) {
 
 function setRegistry(entries: MockRegistryToolEntry[]) {
   const registry = createToolRegistry(entries);
-  loadOpenClawPluginsMock.mockReturnValue(registry);
+  loadMarketingClawPluginsMock.mockReturnValue(registry);
   setActivePluginRegistry?.(registry as never, "test-tool-registry", "gateway-bindable", "/tmp");
   installToolManifestSnapshots({
     config: createContext().config,
@@ -424,7 +424,7 @@ function expectResolvedToolNames(
 
 function expectLoaderCall(overrides: Record<string, unknown>) {
   void overrides;
-  expect(loadOpenClawPluginsMock).not.toHaveBeenCalled();
+  expect(loadMarketingClawPluginsMock).not.toHaveBeenCalled();
 }
 
 function mockCallParams(
@@ -439,7 +439,7 @@ function mockCallParams(
 }
 
 function expectLoaderSelectedOnlyPluginIds(expectedPluginIds: readonly string[]) {
-  const selectedPluginIds = loadOpenClawPluginsMock.mock.calls.map(
+  const selectedPluginIds = loadMarketingClawPluginsMock.mock.calls.map(
     ([params]) => (params as { onlyPluginIds?: string[] }).onlyPluginIds,
   );
   expect(selectedPluginIds).toStrictEqual([expectedPluginIds]);
@@ -492,10 +492,10 @@ describe("resolvePluginTools optional tools", () => {
   });
 
   beforeEach(() => {
-    loadOpenClawPluginsMock.mockReset();
+    loadMarketingClawPluginsMock.mockReset();
     resolveRuntimePluginRegistryMock.mockReset();
     resolveRuntimePluginRegistryMock.mockImplementation((params) =>
-      loadOpenClawPluginsMock(params),
+      loadMarketingClawPluginsMock(params),
     );
     applyPluginAutoEnableMock.mockReset();
     applyPluginAutoEnableMock.mockImplementation(({ config }: { config: unknown }) => ({
@@ -732,7 +732,7 @@ describe("resolvePluginTools optional tools", () => {
       plugin: createXaiToolManifest(),
     });
     const factory = vi.fn(() => makeTool("x_search"));
-    loadOpenClawPluginsMock.mockImplementation((params) =>
+    loadMarketingClawPluginsMock.mockImplementation((params) =>
       Array.isArray((params as { onlyPluginIds?: string[] }).onlyPluginIds) &&
       (params as { onlyPluginIds?: string[] }).onlyPluginIds?.length === 0
         ? { tools: [], diagnostics: [] }
@@ -760,7 +760,7 @@ describe("resolvePluginTools optional tools", () => {
 
     expect(tools).toStrictEqual([]);
     expect(factory).not.toHaveBeenCalled();
-    expect(loadOpenClawPluginsMock).not.toHaveBeenCalled();
+    expect(loadMarketingClawPluginsMock).not.toHaveBeenCalled();
   });
 
   it("loads manifest-gated tools when a named account supplies required config", () => {
@@ -788,7 +788,7 @@ describe("resolvePluginTools optional tools", () => {
       env: {},
       plugin: createFeishuToolManifest(),
     });
-    loadOpenClawPluginsMock.mockReturnValue(
+    loadMarketingClawPluginsMock.mockReturnValue(
       createToolRegistry([
         {
           pluginId: "feishu",
@@ -862,7 +862,7 @@ describe("resolvePluginTools optional tools", () => {
         },
       },
     });
-    loadOpenClawPluginsMock.mockReturnValue(
+    loadMarketingClawPluginsMock.mockReturnValue(
       createToolRegistry([
         {
           pluginId: "account-demo",
@@ -911,7 +911,7 @@ describe("resolvePluginTools optional tools", () => {
       env: {},
       plugin: createFeishuToolManifest(),
     });
-    loadOpenClawPluginsMock.mockReturnValue(
+    loadMarketingClawPluginsMock.mockReturnValue(
       createToolRegistry([
         {
           pluginId: "feishu",
@@ -933,13 +933,13 @@ describe("resolvePluginTools optional tools", () => {
 
     expect(tools).toStrictEqual([]);
     expect(factory).not.toHaveBeenCalled();
-    expect(loadOpenClawPluginsMock).not.toHaveBeenCalled();
+    expect(loadMarketingClawPluginsMock).not.toHaveBeenCalled();
   });
 
   it("standalone bootstrap loads configured plugin tools before resolution", () => {
     const config = createContext().config;
     const registry = createToolRegistry([createOptionalDemoEntry()]);
-    loadOpenClawPluginsMock.mockReturnValue(registry);
+    loadMarketingClawPluginsMock.mockReturnValue(registry);
     installToolManifestSnapshot({
       config,
       plugin: {
@@ -984,7 +984,7 @@ describe("resolvePluginTools optional tools", () => {
     };
     const config = context.config;
     const registry = createToolRegistry([createOptionalDemoEntry()]);
-    loadOpenClawPluginsMock.mockReturnValue(registry);
+    loadMarketingClawPluginsMock.mockReturnValue(registry);
     installToolManifestSnapshot({
       config,
       plugin: {
@@ -1065,7 +1065,7 @@ describe("resolvePluginTools optional tools", () => {
       "/tmp",
     );
     resolveRuntimePluginRegistryMock.mockReturnValue(partialRegistry);
-    loadOpenClawPluginsMock.mockReturnValue(fullRegistry);
+    loadMarketingClawPluginsMock.mockReturnValue(fullRegistry);
 
     const tools = resolvePluginTools(
       createResolveToolsParams({
@@ -1075,7 +1075,7 @@ describe("resolvePluginTools optional tools", () => {
     );
 
     expectResolvedToolNames(tools, ["other_tool", "optional_tool"]);
-    const loaderParams = mockCallParams(loadOpenClawPluginsMock) as {
+    const loaderParams = mockCallParams(loadMarketingClawPluginsMock) as {
       activate?: unknown;
       cache?: unknown;
       onlyPluginIds?: unknown;
@@ -1102,7 +1102,7 @@ describe("resolvePluginTools optional tools", () => {
     };
     const config = context.config;
     const registry = createToolRegistry([]);
-    loadOpenClawPluginsMock.mockReturnValue(registry);
+    loadMarketingClawPluginsMock.mockReturnValue(registry);
     installToolManifestSnapshot({
       config,
       plugin: {
@@ -1179,7 +1179,7 @@ describe("resolvePluginTools optional tools", () => {
       "/tmp",
     );
     resolveRuntimePluginRegistryMock.mockReturnValue(staleRegistry);
-    loadOpenClawPluginsMock.mockReturnValue(freshRegistry);
+    loadMarketingClawPluginsMock.mockReturnValue(freshRegistry);
 
     const tools = resolvePluginTools(
       createResolveToolsParams({
@@ -1218,7 +1218,7 @@ describe("resolvePluginTools optional tools", () => {
       ],
       diagnostics: [],
     } as never);
-    loadOpenClawPluginsMock.mockReturnValue({ tools: [], diagnostics: [] });
+    loadMarketingClawPluginsMock.mockReturnValue({ tools: [], diagnostics: [] });
 
     const tools = resolvePluginTools({
       context: {
@@ -1231,7 +1231,7 @@ describe("resolvePluginTools optional tools", () => {
 
     expect(tools).toStrictEqual([]);
     expect(factory).not.toHaveBeenCalled();
-    expect(loadOpenClawPluginsMock).not.toHaveBeenCalled();
+    expect(loadMarketingClawPluginsMock).not.toHaveBeenCalled();
   });
 
   it("loads plugin-owned tools when manifest tool metadata has env auth evidence", () => {
@@ -1274,7 +1274,7 @@ describe("resolvePluginTools optional tools", () => {
     expectResolvedToolNames(tools, ["x_search"]);
     expect(getPluginToolMeta(tools[0])?.replaySafe).toBe(true);
     expect(factory).toHaveBeenCalledTimes(1);
-    expect(loadOpenClawPluginsMock).not.toHaveBeenCalled();
+    expect(loadMarketingClawPluginsMock).not.toHaveBeenCalled();
   });
 
   it("loads plugin-owned tools when manifest config signals point at configured non-env SecretRefs", () => {
@@ -1301,7 +1301,7 @@ describe("resolvePluginTools optional tools", () => {
         providers: {
           vault: {
             source: "file",
-            path: "/tmp/openclaw-secrets.json",
+            path: "/tmp/marketingclaw-secrets.json",
             mode: "json",
           },
         },
@@ -1342,7 +1342,7 @@ describe("resolvePluginTools optional tools", () => {
 
     expectResolvedToolNames(tools, ["x_search"]);
     expect(factory).toHaveBeenCalledTimes(1);
-    expect(loadOpenClawPluginsMock).not.toHaveBeenCalled();
+    expect(loadMarketingClawPluginsMock).not.toHaveBeenCalled();
   });
 
   it("skips optional tools without explicit allowlist", () => {
@@ -1439,7 +1439,7 @@ describe("resolvePluginTools optional tools", () => {
       declaredNames: ["other_tool"],
       factory: () => makeTool("other_tool"),
     };
-    loadOpenClawPluginsMock.mockReturnValue(
+    loadMarketingClawPluginsMock.mockReturnValue(
       createToolRegistry([defaultEntry, createOptionalDemoEntry()]),
     );
     installToolManifestSnapshots({
@@ -1483,7 +1483,7 @@ describe("resolvePluginTools optional tools", () => {
     const context = createContext();
     const config = context.config;
     const explicitOptionalEntry = createOptionalDemoEntry();
-    loadOpenClawPluginsMock.mockReturnValue(createToolRegistry([explicitOptionalEntry]));
+    loadMarketingClawPluginsMock.mockReturnValue(createToolRegistry([explicitOptionalEntry]));
     installToolManifestSnapshots({
       config,
       plugins: [
@@ -1595,7 +1595,7 @@ describe("resolvePluginTools optional tools", () => {
     expectResolvedToolNames(tools, ["optional_tool"]);
     expect(optionalFactory).toHaveBeenCalledTimes(1);
     expect(unavailableFactory).not.toHaveBeenCalled();
-    expect(loadOpenClawPluginsMock).not.toHaveBeenCalled();
+    expect(loadMarketingClawPluginsMock).not.toHaveBeenCalled();
   });
 
   it("does not materialize manifest-unavailable optional sibling tools under alsoAllow", () => {
@@ -1663,7 +1663,7 @@ describe("resolvePluginTools optional tools", () => {
     expectResolvedToolNames(tools, ["other_tool"]);
     expect(defaultFactory).toHaveBeenCalledTimes(1);
     expect(optionalFactory).not.toHaveBeenCalled();
-    expect(loadOpenClawPluginsMock).not.toHaveBeenCalled();
+    expect(loadMarketingClawPluginsMock).not.toHaveBeenCalled();
   });
 
   it("does not materialize manifest-optional sibling tools from non-optional factories by default", async () => {
@@ -1719,7 +1719,7 @@ describe("resolvePluginTools optional tools", () => {
 
     expectResolvedToolNames(tools, ["other_tool"]);
     expect(factory).toHaveBeenCalledTimes(1);
-    expect(loadOpenClawPluginsMock).not.toHaveBeenCalled();
+    expect(loadMarketingClawPluginsMock).not.toHaveBeenCalled();
   });
 
   it("marks allowlisted manifest-optional sibling tools from non-optional factories as optional", () => {
@@ -1907,11 +1907,11 @@ describe("resolvePluginTools optional tools", () => {
     {
       name: "uses loaded plugin tools with an explicit env",
       params: {
-        env: { OPENCLAW_HOME: "/srv/openclaw-home" } as NodeJS.ProcessEnv,
+        env: { MARKETINGCLAW_HOME: "/srv/marketingclaw-home" } as NodeJS.ProcessEnv,
         toolAllowlist: ["optional_tool"],
       },
       expectedLoaderCall: {
-        env: { OPENCLAW_HOME: "/srv/openclaw-home" },
+        env: { MARKETINGCLAW_HOME: "/srv/marketingclaw-home" },
       },
     },
     {
@@ -2085,7 +2085,7 @@ describe("resolvePluginTools optional tools", () => {
     expectResolvedToolNames(second, ["cached_tool"]);
     expect(factory).toHaveBeenCalledTimes(1);
     expect(second[0]).not.toBe(first[0]);
-    expect(loadOpenClawPluginsMock).not.toHaveBeenCalled();
+    expect(loadMarketingClawPluginsMock).not.toHaveBeenCalled();
 
     await expect(second[0]?.execute("call", {}, undefined)).resolves.toEqual({
       content: [{ type: "text", text: "same" }],
@@ -2213,8 +2213,8 @@ describe("resolvePluginTools optional tools", () => {
     replacementRegistry.plugins.push({ id: "cache-lifecycle-test", status: "loaded" });
     setActivePluginRegistry?.(replacementRegistry as never, "provider-runtime", "default", "/tmp");
     resolveRuntimePluginRegistryMock.mockReturnValue(undefined);
-    loadOpenClawPluginsMock.mockReset();
-    loadOpenClawPluginsMock
+    loadMarketingClawPluginsMock.mockReset();
+    loadMarketingClawPluginsMock
       .mockReturnValueOnce(gatewayRegistry)
       .mockReturnValue(createToolRegistry([]));
 
@@ -2224,7 +2224,7 @@ describe("resolvePluginTools optional tools", () => {
     await expect(tool?.execute("call-2", {}, undefined)).resolves.toEqual({
       content: [{ type: "text", text: "ok" }],
     });
-    expect(loadOpenClawPluginsMock).toHaveBeenCalledTimes(1);
+    expect(loadMarketingClawPluginsMock).toHaveBeenCalledTimes(1);
     expect(getActivePluginRegistry?.()).toBe(replacementRegistry);
     expect(getActivePluginRegistry?.()?.tools.map((entry) => entry.pluginId)).toContain(
       "unrelated-live",
@@ -2452,7 +2452,7 @@ describe("resolvePluginTools optional tools", () => {
     );
 
     expectResolvedToolNames(tools, ["optional_tool"]);
-    expect(loadOpenClawPluginsMock).not.toHaveBeenCalled();
+    expect(loadMarketingClawPluginsMock).not.toHaveBeenCalled();
   });
 
   it("reuses the gateway-bindable registry when it covers the tool runtime scope", () => {
@@ -2469,7 +2469,7 @@ describe("resolvePluginTools optional tools", () => {
 
     expectResolvedToolNames(tools, ["optional_tool"]);
     expect(resolveRuntimePluginRegistryMock).not.toHaveBeenCalled();
-    expect(loadOpenClawPluginsMock).not.toHaveBeenCalled();
+    expect(loadMarketingClawPluginsMock).not.toHaveBeenCalled();
   });
 
   it("does not widen active registry reuse to non-matching plugin tool owners", () => {
@@ -2517,7 +2517,7 @@ describe("resolvePluginTools optional tools", () => {
     expectResolvedToolNames(tools, ["optional_tool"]);
     expect(heavyFactory).not.toHaveBeenCalled();
     expect(resolveRuntimePluginRegistryMock).not.toHaveBeenCalled();
-    expect(loadOpenClawPluginsMock).not.toHaveBeenCalled();
+    expect(loadMarketingClawPluginsMock).not.toHaveBeenCalled();
   });
 
   it("does not let disabled bundled tool owners poison explicit runtime allowlists", () => {
@@ -2590,7 +2590,7 @@ describe("resolvePluginTools optional tools", () => {
     expectResolvedToolNames(tools, ["memory_search", "memory_get"]);
     expect(memorySearchFactory).toHaveBeenCalledTimes(1);
     expect(resolveRuntimePluginRegistryMock).not.toHaveBeenCalled();
-    expect(loadOpenClawPluginsMock).not.toHaveBeenCalled();
+    expect(loadMarketingClawPluginsMock).not.toHaveBeenCalled();
   });
 
   it("falls back from a loaded channel registry without matching tool entries", () => {
@@ -2660,7 +2660,7 @@ describe("resolvePluginTools optional tools", () => {
 
     expectResolvedToolNames(tools, ["memory_search", "memory_get"]);
     expect(memorySearchFactory).toHaveBeenCalledTimes(1);
-    expect(loadOpenClawPluginsMock).not.toHaveBeenCalled();
+    expect(loadMarketingClawPluginsMock).not.toHaveBeenCalled();
   });
 
   it("loads a standalone registry when cached runtime registries lack matching tool entries", () => {
@@ -2719,7 +2719,7 @@ describe("resolvePluginTools optional tools", () => {
       diagnostics: [],
     } as never);
     resolveRuntimePluginRegistryMock.mockReturnValue(undefined);
-    loadOpenClawPluginsMock.mockReturnValue(loadedRegistry);
+    loadMarketingClawPluginsMock.mockReturnValue(loadedRegistry);
 
     const tools = resolvePluginTools(
       createResolveToolsParams({
@@ -2731,7 +2731,7 @@ describe("resolvePluginTools optional tools", () => {
 
     expectResolvedToolNames(tools, ["memory_search", "memory_get"]);
     expect(memorySearchFactory).toHaveBeenCalledTimes(1);
-    const loaderParams = mockCallParams(loadOpenClawPluginsMock) as {
+    const loaderParams = mockCallParams(loadMarketingClawPluginsMock) as {
       activate?: unknown;
       onlyPluginIds?: unknown;
       toolDiscovery?: unknown;
@@ -2781,7 +2781,7 @@ describe("resolvePluginTools optional tools", () => {
     });
     setActivePluginRegistry(activeRegistry as never, "gateway-startup", "gateway-bindable", "/tmp");
     resolveRuntimePluginRegistryMock.mockReturnValue(activeRegistry);
-    loadOpenClawPluginsMock.mockReturnValue(createToolRegistry([]));
+    loadMarketingClawPluginsMock.mockReturnValue(createToolRegistry([]));
 
     resolvePluginTools({
       context: {
@@ -2797,7 +2797,7 @@ describe("resolvePluginTools optional tools", () => {
     };
     expect(runtimeRegistryParams.onlyPluginIds).toContain("tavily");
     expect(runtimeRegistryParams.toolDiscovery).toBe(true);
-    const loaderParams = mockCallParams(loadOpenClawPluginsMock) as {
+    const loaderParams = mockCallParams(loadMarketingClawPluginsMock) as {
       onlyPluginIds?: string[];
       toolDiscovery?: unknown;
     };
@@ -2835,7 +2835,7 @@ describe("resolvePluginTools optional tools", () => {
 
     expectResolvedToolNames(tools, ["optional_tool"]);
     expect(resolveRuntimePluginRegistryMock).not.toHaveBeenCalled();
-    expect(loadOpenClawPluginsMock).not.toHaveBeenCalled();
+    expect(loadMarketingClawPluginsMock).not.toHaveBeenCalled();
   });
 
   it("reuses the pinned gateway channel registry even when the caller omits gateway binding", () => {
@@ -2867,7 +2867,7 @@ describe("resolvePluginTools optional tools", () => {
 
     expectResolvedToolNames(tools, ["optional_tool"]);
     expect(resolveRuntimePluginRegistryMock).not.toHaveBeenCalled();
-    expect(loadOpenClawPluginsMock).not.toHaveBeenCalled();
+    expect(loadMarketingClawPluginsMock).not.toHaveBeenCalled();
   });
 
   it("loads plugin tools when gateway-bindable tool loads have no active registry", () => {
@@ -2900,7 +2900,7 @@ describe("resolvePluginTools optional tools", () => {
       toolAllowlist: ["optional_tool"],
     });
 
-    expect(loadOpenClawPluginsMock).not.toHaveBeenCalled();
+    expect(loadMarketingClawPluginsMock).not.toHaveBeenCalled();
   });
 
   it("includes non-optional browser tool when toolAllowlist is empty (full profile)", () => {
@@ -2976,7 +2976,7 @@ describe("resolvePluginTools optional tools", () => {
 
     expectResolvedToolNames(tools, []);
     expect(browserFactory).not.toHaveBeenCalled();
-    expect(loadOpenClawPluginsMock).not.toHaveBeenCalled();
+    expect(loadMarketingClawPluginsMock).not.toHaveBeenCalled();
   });
 
   it("includes optional tools when wildcard allowlist is active (#76507)", () => {

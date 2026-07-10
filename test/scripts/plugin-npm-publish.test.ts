@@ -24,7 +24,7 @@ function runPluginPublishWrapper(args: string[], env: NodeJS.ProcessEnv = {}) {
 }
 
 function makePackage(version: string): { packageDir: string; path: string } {
-  const root = mkdtempSync(join(tmpdir(), "openclaw-plugin-publish-test-"));
+  const root = mkdtempSync(join(tmpdir(), "marketingclaw-plugin-publish-test-"));
   tempDirs.push(root);
   const packageDir = join(root, "plugin");
   const binDir = join(root, "bin");
@@ -66,7 +66,7 @@ describe("plugin npm publish wrapper", () => {
 
     expect(result.status).toBe(2);
     expect(result.stdout).toBe("");
-    expect(result.stderr.trim()).toBe("--pack requires OPENCLAW_PLUGIN_NPM_PACK_OUTPUT_DIR");
+    expect(result.stderr.trim()).toBe("--pack requires MARKETINGCLAW_PLUGIN_NPM_PACK_OUTPUT_DIR");
   });
 
   it("rejects option-like package dirs before package checks", () => {
@@ -88,7 +88,7 @@ describe("plugin npm publish wrapper", () => {
   it("uses the extended-stable plan without latest or beta mirrors", () => {
     const fixture = makePackage("2026.7.33");
     const result = runPluginPublishWrapper(["--dry-run", fixture.packageDir], {
-      OPENCLAW_PLUGIN_NPM_PUBLISH_TAG: "extended-stable",
+      MARKETINGCLAW_PLUGIN_NPM_PUBLISH_TAG: "extended-stable",
       PATH: fixture.path,
     });
 
@@ -101,7 +101,7 @@ describe("plugin npm publish wrapper", () => {
   it("rejects extended-stable versions below patch 33", () => {
     const fixture = makePackage("2026.7.32");
     const result = runPluginPublishWrapper(["--dry-run", fixture.packageDir], {
-      OPENCLAW_PLUGIN_NPM_PUBLISH_TAG: "extended-stable",
+      MARKETINGCLAW_PLUGIN_NPM_PUBLISH_TAG: "extended-stable",
       PATH: fixture.path,
     });
 

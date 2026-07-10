@@ -1,15 +1,15 @@
 // Copilot plugin module implements BYOK provider mapping.
 import type { ProviderConfig } from "@github/copilot-sdk";
-import { isNonSecretApiKeyMarker } from "openclaw/plugin-sdk/provider-auth";
-import { isBlockedHostnameOrIp } from "openclaw/plugin-sdk/ssrf-runtime";
+import { isNonSecretApiKeyMarker } from "marketingclaw/plugin-sdk/provider-auth";
+import { isBlockedHostnameOrIp } from "marketingclaw/plugin-sdk/ssrf-runtime";
 import { tokenFingerprint } from "./auth-bridge.js";
 
 export const COPILOT_BYOK_PROVIDER_ERROR =
   "[copilot-attempt] BYOK requires an OpenAI-compatible or Anthropic model api and a non-empty baseUrl";
 export const COPILOT_BYOK_TRANSPORT_POLICY_ERROR =
-  "[copilot-attempt] BYOK does not support OpenClaw provider request proxy, TLS, or private-network policy overrides";
+  "[copilot-attempt] BYOK does not support MarketingClaw provider request proxy, TLS, or private-network policy overrides";
 export const COPILOT_BYOK_ENDPOINT_POLICY_ERROR =
-  "[copilot-attempt] BYOK endpoint is blocked by OpenClaw SSRF policy";
+  "[copilot-attempt] BYOK endpoint is blocked by MarketingClaw SSRF policy";
 
 const CREDENTIAL_QUERY_PARAM_NAMES = new Set([
   "accesstoken",
@@ -70,8 +70,8 @@ export type ResolvedCopilotProvider = {
 };
 
 /**
- * Maps OpenClaw's prepared model facts into the Copilot SDK's session-level
- * provider contract. The SDK owns the wire request; OpenClaw only supplies
+ * Maps MarketingClaw's prepared model facts into the Copilot SDK's session-level
+ * provider contract. The SDK owns the wire request; MarketingClaw only supplies
  * the already-resolved endpoint, model, headers, and credential.
  */
 export function resolveCopilotProvider(params: {

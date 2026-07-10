@@ -1,3 +1,3 @@
-import OpenClawProtocol
+import MarketingClawProtocol
 
-public typealias AnyCodable = OpenClawProtocol.AnyCodable
+public typealias AnyCodable = MarketingClawProtocol.AnyCodable

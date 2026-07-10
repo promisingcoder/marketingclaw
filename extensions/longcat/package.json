@@ -1,22 +1,22 @@
 {
-  "name": "@openclaw/longcat-provider",
+  "name": "@marketingclaw/longcat-provider",
   "version": "2026.6.11",
-  "description": "OpenClaw LongCat provider plugin.",
+  "description": "MarketingClaw LongCat provider plugin.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/promisingcoder/marketingclaw"
   },
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@marketingclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "marketingclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@openclaw/longcat-provider",
-      "npmSpec": "@openclaw/longcat-provider",
+      "clawhubSpec": "clawhub:@marketingclaw/longcat-provider",
+      "npmSpec": "@marketingclaw/longcat-provider",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.6.8"
     },
@@ -24,7 +24,7 @@
       "pluginApi": ">=2026.6.11"
     },
     "build": {
-      "openclawVersion": "2026.6.11",
+      "marketingclawVersion": "2026.6.11",
       "bundledDist": false
     },
     "release": {

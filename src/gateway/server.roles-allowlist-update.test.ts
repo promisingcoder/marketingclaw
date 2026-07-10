@@ -117,9 +117,9 @@ const connectNodeClient = async (params: {
   displayName?: string;
   onEvent?: (evt: { event?: string; payload?: unknown }) => void;
 }) => {
-  const token = process.env.OPENCLAW_GATEWAY_TOKEN;
+  const token = process.env.MARKETINGCLAW_GATEWAY_TOKEN;
   if (!token) {
-    throw new Error("OPENCLAW_GATEWAY_TOKEN is required for node test clients");
+    throw new Error("MARKETINGCLAW_GATEWAY_TOKEN is required for node test clients");
   }
   return await connectGatewayClient({
     url: `ws://127.0.0.1:${params.port}`,
@@ -157,9 +157,9 @@ const approveAllPendingPairings = async () => {
 };
 
 function getGatewayTestConfigPath(): string {
-  const configPath = process.env.OPENCLAW_CONFIG_PATH;
+  const configPath = process.env.MARKETINGCLAW_CONFIG_PATH;
   if (!configPath) {
-    throw new Error("OPENCLAW_CONFIG_PATH is required in the gateway test environment");
+    throw new Error("MARKETINGCLAW_CONFIG_PATH is required in the gateway test environment");
   }
   return configPath;
 }
@@ -484,13 +484,13 @@ describe("gateway node command allowlist", () => {
 
     try {
       const systemDeviceIdentity = loadOrCreateDeviceIdentity(
-        path.join(os.tmpdir(), `openclaw-node-system-run-${Date.now()}-${Math.random()}.json`),
+        path.join(os.tmpdir(), `marketingclaw-node-system-run-${Date.now()}-${Math.random()}.json`),
       );
       const emptyDeviceIdentity = loadOrCreateDeviceIdentity(
-        path.join(os.tmpdir(), `openclaw-node-empty-${Date.now()}-${Math.random()}.json`),
+        path.join(os.tmpdir(), `marketingclaw-node-empty-${Date.now()}-${Math.random()}.json`),
       );
       const allowedDeviceIdentity = loadOrCreateDeviceIdentity(
-        path.join(os.tmpdir(), `openclaw-node-allowed-${Date.now()}-${Math.random()}.json`),
+        path.join(os.tmpdir(), `marketingclaw-node-allowed-${Date.now()}-${Math.random()}.json`),
       );
 
       systemClient = await connectNodeClientWithPairing({
@@ -650,7 +650,7 @@ describe("gateway node command allowlist", () => {
     let configPath: string | undefined;
 
     try {
-      const deviceIdentity = createDeviceIdentityForTest("openclaw-node-current-allowlist");
+      const deviceIdentity = createDeviceIdentityForTest("marketingclaw-node-current-allowlist");
       nodeClient = await connectNodeClientWithPairing({
         port,
         commands: ["canvas.snapshot"],
@@ -686,7 +686,7 @@ describe("gateway node command allowlist", () => {
   });
 
   test("records only allowlisted commands in pending node pairing requests", async () => {
-    const deviceIdentity = createDeviceIdentityForTest("openclaw-allowlisted-pending");
+    const deviceIdentity = createDeviceIdentityForTest("marketingclaw-allowlisted-pending");
     const displayName = "node-pending-allowlisted-only";
     let nodeClient: GatewayClient | undefined;
 
@@ -710,7 +710,7 @@ describe("gateway node command allowlist", () => {
   });
 
   test("rejects reconnect metadata spoof for paired node devices", async () => {
-    const deviceIdentity = createDeviceIdentityForTest("openclaw-spoof-test-device");
+    const deviceIdentity = createDeviceIdentityForTest("marketingclaw-spoof-test-device");
 
     let iosClient: GatewayClient | undefined;
     try {
@@ -743,7 +743,7 @@ describe("gateway node command allowlist", () => {
   });
 
   test("does not promote paired desktop client id changes into host command defaults", async () => {
-    const deviceIdentity = createDeviceIdentityForTest("openclaw-client-id-promotion");
+    const deviceIdentity = createDeviceIdentityForTest("marketingclaw-client-id-promotion");
     const displayName = "node-client-id-promotion";
 
     let macClient: GatewayClient | undefined;
@@ -794,7 +794,7 @@ describe("gateway node command allowlist", () => {
   });
 
   test("allows canonical node-host reconnect for legacy pinned platform metadata", async () => {
-    const deviceIdentity = createDeviceIdentityForTest("openclaw-node-host-platform-upgrade");
+    const deviceIdentity = createDeviceIdentityForTest("marketingclaw-node-host-platform-upgrade");
     const displayName = "node-host-platform-upgrade";
 
     let legacyClient: GatewayClient | undefined;
@@ -840,7 +840,9 @@ describe("gateway node command allowlist", () => {
   });
 
   test("filters system.run for confusable iOS metadata at connect time", async () => {
-    const deviceIdentity = createDeviceIdentityForTest("openclaw-confusable-node-greek-omicron");
+    const deviceIdentity = createDeviceIdentityForTest(
+      "marketingclaw-confusable-node-greek-omicron",
+    );
     const displayName = "node-greek-omicron-family";
 
     let client: GatewayClient | undefined;

@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import { describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { MarketingClawConfig } from "../config/config.js";
 import { runHeartbeatOnce, type HeartbeatDeps } from "./heartbeat-runner.js";
 import { installHeartbeatRunnerTestRuntime } from "./heartbeat-runner.test-harness.js";
 import {
@@ -16,7 +16,7 @@ type StoredEntry = Record<string, unknown> | undefined;
 describe("runHeartbeatOnce clears stuck pendingFinalDelivery state once delivery is satisfied", () => {
   const TELEGRAM_GROUP = "-1001234567890";
 
-  function createHeartbeatConfig(storePath: string): OpenClawConfig {
+  function createHeartbeatConfig(storePath: string): MarketingClawConfig {
     return {
       agents: {
         defaults: {
@@ -31,7 +31,7 @@ describe("runHeartbeatOnce clears stuck pendingFinalDelivery state once delivery
         },
       },
       session: { store: storePath },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
   }
 
   function heartbeatDeps(
@@ -140,7 +140,7 @@ describe("runHeartbeatOnce clears stuck pendingFinalDelivery state once delivery
       const cfg = {
         ...createHeartbeatConfig(storePath),
         messages: { responsePrefix: "🤖" },
-      } as unknown as OpenClawConfig;
+      } as unknown as MarketingClawConfig;
 
       const body = "Heartbeat update: everything is green.";
       const deliveredText = `🤖 ${body}`;

@@ -2,12 +2,12 @@
  * Anthropic Vertex provider plugin entry. It registers implicit ADC-backed
  * catalog discovery, Anthropic replay policy, thinking profiles, and auth markers.
  */
-import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
-import { readConfiguredProviderCatalogEntries } from "openclaw/plugin-sdk/provider-catalog-shared";
+import { definePluginEntry } from "marketingclaw/plugin-sdk/plugin-entry";
+import { readConfiguredProviderCatalogEntries } from "marketingclaw/plugin-sdk/provider-catalog-shared";
 import {
   NATIVE_ANTHROPIC_REPLAY_HOOKS,
   resolveClaudeThinkingProfile,
-} from "openclaw/plugin-sdk/provider-model-shared";
+} from "marketingclaw/plugin-sdk/provider-model-shared";
 import {
   hasAnthropicVertexAvailableAuth,
   mergeImplicitAnthropicVertexProvider,

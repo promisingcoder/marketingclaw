@@ -46,7 +46,7 @@ describe("canonical live-transport scenarios", () => {
     );
     expect(whatsappDefaultCanonicalScenarioIds("live-frontier")).toEqual(["whatsapp-help-command"]);
     expect(telegram.find(({ id }) => id === "telegram-status-command")?.regressionRefs).toEqual([
-      "openclaw/openclaw#74698",
+      "marketingclaw/marketingclaw#74698",
     ]);
   });
 
@@ -84,7 +84,7 @@ describe("canonical live-transport scenarios", () => {
       },
       options: {
         providerMode: "mock-openai",
-        repoRoot: "/tmp/openclaw-repo",
+        repoRoot: "/tmp/marketingclaw-repo",
       },
       scenarioIds: ["telegram-help-command"],
     });

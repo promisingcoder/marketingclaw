@@ -5,14 +5,14 @@ import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { readAcpSessionMetaForEntry } from "../acp/runtime/session-meta.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { MarketingClawConfig } from "../config/config.js";
 import * as sessionStore from "../config/sessions.js";
 import { resolveChannelAllowFromPath } from "../pairing/pairing-store.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
+import type { DB as MarketingClawStateKyselyDatabase } from "../state/marketingclaw-state-db.generated.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-} from "../state/openclaw-state-db.js";
+  closeMarketingClawStateDatabaseForTest,
+  openMarketingClawStateDatabase,
+} from "../state/marketingclaw-state-db.js";
 import { createTrackedTempDirs } from "../test-utils/tracked-temp-dirs.js";
 import {
   executeSqliteQuerySync,
@@ -39,14 +39,14 @@ const pluginDoctorStateMigrationEntries = vi.hoisted(
           id: string;
           label: string;
           detectLegacyState: (params: {
-            config: OpenClawConfig;
+            config: MarketingClawConfig;
             env: NodeJS.ProcessEnv;
             stateDir: string;
             oauthDir: string;
             context: unknown;
           }) => Promise<{ preview: string[] } | null> | { preview: string[] } | null;
           migrateLegacyState: (params: {
-            config: OpenClawConfig;
+            config: MarketingClawConfig;
             env: NodeJS.ProcessEnv;
             stateDir: string;
             oauthDir: string;
@@ -66,14 +66,14 @@ const pluginDoctorStateMigrationEntries = vi.hoisted(
           id: string;
           label: string;
           detectLegacyState: (params: {
-            config: OpenClawConfig;
+            config: MarketingClawConfig;
             env: NodeJS.ProcessEnv;
             stateDir: string;
             oauthDir: string;
             context: unknown;
           }) => Promise<{ preview: string[] } | null> | { preview: string[] } | null;
           migrateLegacyState: (params: {
-            config: OpenClawConfig;
+            config: MarketingClawConfig;
             env: NodeJS.ProcessEnv;
             stateDir: string;
             oauthDir: string;
@@ -98,7 +98,7 @@ vi.mock("../channels/plugins/bundled.js", () => {
     }
   }
 
-  function resolveChatAppAccountId(cfg: OpenClawConfig): string {
+  function resolveChatAppAccountId(cfg: MarketingClawConfig): string {
     const channel = (cfg.channels as Record<string, { defaultAccount?: string }> | undefined)
       ?.chatapp;
     return channel?.defaultAccount ?? "default";
@@ -144,8 +144,8 @@ vi.mock("../channels/plugins/bundled.js", () => {
               ];
         });
       },
-      ({ cfg, env }: { cfg: OpenClawConfig; env: NodeJS.ProcessEnv }) => {
-        const root = env.OPENCLAW_STATE_DIR;
+      ({ cfg, env }: { cfg: MarketingClawConfig; env: NodeJS.ProcessEnv }) => {
+        const root = env.MARKETINGCLAW_STATE_DIR;
         if (!root) {
           return [];
         }
@@ -173,11 +173,14 @@ vi.mock("../plugins/doctor-contract-registry.js", async (importOriginal) => {
 
 const tempDirs = createTrackedTempDirs();
 
-type UpdateCheckStateDatabase = Pick<OpenClawStateKyselyDatabase, "update_check_state">;
-type ConfigHealthDatabase = Pick<OpenClawStateKyselyDatabase, "config_health_entries">;
-type PluginBindingApprovalsDatabase = Pick<OpenClawStateKyselyDatabase, "plugin_binding_approvals">;
+type UpdateCheckStateDatabase = Pick<MarketingClawStateKyselyDatabase, "update_check_state">;
+type ConfigHealthDatabase = Pick<MarketingClawStateKyselyDatabase, "config_health_entries">;
+type PluginBindingApprovalsDatabase = Pick<
+  MarketingClawStateKyselyDatabase,
+  "plugin_binding_approvals"
+>;
 type CurrentConversationBindingsDatabase = Pick<
-  OpenClawStateKyselyDatabase,
+  MarketingClawStateKyselyDatabase,
   "current_conversation_bindings"
 >;
 
@@ -193,7 +196,7 @@ async function expectMissingPath(targetPath: string): Promise<void> {
   expect(statError?.path).toBe(targetPath);
   expect(statError?.syscall).toBe("stat");
 }
-const createTempDir = () => tempDirs.make("openclaw-state-migrations-test-");
+const createTempDir = () => tempDirs.make("marketingclaw-state-migrations-test-");
 
 function readUpdateCheckState(env: NodeJS.ProcessEnv):
   | {
@@ -203,7 +206,7 @@ function readUpdateCheckState(env: NodeJS.ProcessEnv):
       auto_install_id: string | null;
     }
   | undefined {
-  const { db } = openOpenClawStateDatabase({ env });
+  const { db } = openMarketingClawStateDatabase({ env });
   const stateDb = getNodeSqliteKysely<UpdateCheckStateDatabase>(db);
   return executeSqliteQueryTakeFirstSync(
     db,
@@ -225,7 +228,7 @@ function readConfigHealthRows(env: NodeJS.ProcessEnv): Array<{
   last_promoted_good_json: string | null;
   last_observed_suspicious_signature: string | null;
 }> {
-  const { db } = openOpenClawStateDatabase({ env });
+  const { db } = openMarketingClawStateDatabase({ env });
   const stateDb = getNodeSqliteKysely<ConfigHealthDatabase>(db);
   return executeSqliteQuerySync(
     db,
@@ -250,7 +253,7 @@ function insertConfigHealthRow(
     last_observed_suspicious_signature: string | null;
   },
 ): void {
-  const { db } = openOpenClawStateDatabase({ env });
+  const { db } = openMarketingClawStateDatabase({ env });
   const stateDb = getNodeSqliteKysely<ConfigHealthDatabase>(db);
   executeSqliteQuerySync(
     db,
@@ -270,7 +273,7 @@ function readCurrentConversationBindingRows(env: NodeJS.ProcessEnv): Array<{
   conversation_id: string;
   record_json: string;
 }> {
-  const { db } = openOpenClawStateDatabase({ env });
+  const { db } = openMarketingClawStateDatabase({ env });
   const stateDb = getNodeSqliteKysely<CurrentConversationBindingsDatabase>(db);
   return executeSqliteQuerySync(
     db,
@@ -297,7 +300,7 @@ function readPluginBindingApprovalRows(env: NodeJS.ProcessEnv): Array<{
   plugin_name: string | null;
   approved_at: number;
 }> {
-  const { db } = openOpenClawStateDatabase({ env });
+  const { db } = openMarketingClawStateDatabase({ env });
   const stateDb = getNodeSqliteKysely<PluginBindingApprovalsDatabase>(db);
   return executeSqliteQuerySync(
     db,
@@ -320,7 +323,7 @@ function insertCurrentConversationBindingRow(
     recordJson: string;
   },
 ): void {
-  const { db } = openOpenClawStateDatabase({ env });
+  const { db } = openMarketingClawStateDatabase({ env });
   const stateDb = getNodeSqliteKysely<CurrentConversationBindingsDatabase>(db);
   executeSqliteQuerySync(
     db,
@@ -346,7 +349,7 @@ function insertCurrentConversationBindingRow(
   );
 }
 
-function createConfig(): OpenClawConfig {
+function createConfig(): MarketingClawConfig {
   return {
     agents: {
       list: [{ id: "worker-1", default: true }],
@@ -363,20 +366,20 @@ function createConfig(): OpenClawConfig {
         },
       },
     },
-  } as OpenClawConfig;
+  } as MarketingClawConfig;
 }
 
 function createEnv(stateDir: string): NodeJS.ProcessEnv {
   return {
     ...process.env,
     HOME: path.dirname(stateDir),
-    OPENCLAW_STATE_DIR: stateDir,
+    MARKETINGCLAW_STATE_DIR: stateDir,
   };
 }
 
 async function createLegacyStateFixture(params?: { includePreKey?: boolean }) {
   const root = await createTempDir();
-  const stateDir = path.join(root, ".openclaw");
+  const stateDir = path.join(root, ".marketingclaw");
   const env = createEnv(stateDir);
   const cfg = createConfig();
 
@@ -428,7 +431,7 @@ afterEach(async () => {
   pluginDoctorStateMigrationEntries.entries = [];
   resetAutoMigrateLegacyStateForTest();
   resetAutoMigrateLegacyStateDirForTest();
-  closeOpenClawStateDatabaseForTest();
+  closeMarketingClawStateDatabaseForTest();
   await tempDirs.cleanup();
 });
 
@@ -453,7 +456,7 @@ describe("state migrations", () => {
     const root = await createTempDir();
     const stateDir = path.join(root, "custom-state");
     const customHome = path.join(root, "custom-home");
-    const env = { ...process.env, HOME: customHome, OPENCLAW_STATE_DIR: stateDir };
+    const env = { ...process.env, HOME: customHome, MARKETINGCLAW_STATE_DIR: stateDir };
     const observed: string[] = [];
     pluginDoctorStateMigrationEntries.entries = [
       {
@@ -645,7 +648,7 @@ describe("state migrations", () => {
 
   it("canonicalizes parsed owners before removing the legacy store", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const legacyStorePath = path.join(stateDir, "sessions", "sessions.json");
     await fs.mkdir(path.dirname(legacyStorePath), { recursive: true });
@@ -659,7 +662,7 @@ describe("state migrations", () => {
     const cfg = {
       session: { mainKey: "work" },
       agents: { list: [{ id: "main", default: true }] },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
     const detected = await detectLegacyStateMigrations({ cfg, env, homedir: () => root });
 
     await runLegacyStateMigrations({ detected, config: cfg, now: () => 1234 });
@@ -676,7 +679,7 @@ describe("state migrations", () => {
 
   it("defers non-main owner merges across hard-linked stores", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const targetStorePath = path.join(stateDir, "agents", "ops", "sessions", "sessions.json");
     await fs.mkdir(path.dirname(targetStorePath), { recursive: true });
@@ -701,7 +704,7 @@ describe("state migrations", () => {
     const cfg = {
       session: { mainKey: "work", store: configuredStorePath },
       agents: { list: [{ id: "ops", default: true }, { id: "research" }] },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
     const detected = await detectLegacyStateMigrations({ cfg, env, homedir: () => root });
     expect(detected.sessions.preserveAmbiguousKeys).toBe(true);
 
@@ -724,7 +727,7 @@ describe("state migrations", () => {
 
   it("defers an unambiguous legacy merge through a final store symlink", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const outsideStorePath = path.join(root, "outside-sessions.json");
     await fs.writeFile(outsideStorePath, "{}\n", "utf8");
@@ -740,7 +743,7 @@ describe("state migrations", () => {
       }),
       "utf8",
     );
-    const cfg = { agents: { list: [{ id: "main", default: true }] } } as OpenClawConfig;
+    const cfg = { agents: { list: [{ id: "main", default: true }] } } as MarketingClawConfig;
     const detected = await detectLegacyStateMigrations({ cfg, env, homedir: () => root });
 
     const result = await runLegacyStateMigrations({ detected, config: cfg, now: () => 1234 });
@@ -749,13 +752,13 @@ describe("state migrations", () => {
     await expect(fs.readFile(outsideStorePath, "utf8")).resolves.toBe("{}\n");
     await expect(fs.readFile(legacyStorePath, "utf8")).resolves.toContain("legacy-task");
     expect(result.warnings).toContain(
-      `Deferred legacy session migration in final-component symlink store ${targetStorePath}; configure one canonical session.store path, then rerun openclaw doctor --fix`,
+      `Deferred legacy session migration in final-component symlink store ${targetStorePath}; configure one canonical session.store path, then rerun marketingclaw doctor --fix`,
     );
   });
 
   it("defers legacy migration when configured store identity is inaccessible", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const targetStorePath = path.join(stateDir, "agents", "main", "sessions", "sessions.json");
     await fs.mkdir(path.dirname(targetStorePath), { recursive: true });
@@ -772,7 +775,7 @@ describe("state migrations", () => {
     const cfg = {
       session: { store: configuredStorePath },
       agents: { list: [{ id: "main", default: true }] },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
     const realStatSync = fsSync.statSync.bind(fsSync);
     const statSpy = vi.spyOn(fsSync, "statSync").mockImplementation((candidate) => {
       if (path.resolve(candidate.toString()) === configuredStorePath) {
@@ -799,7 +802,7 @@ describe("state migrations", () => {
 
   it("keeps the legacy source when its store write fails", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const targetStorePath = path.join(stateDir, "agents", "main", "sessions", "sessions.json");
     await fs.mkdir(path.dirname(targetStorePath), { recursive: true });
@@ -813,7 +816,7 @@ describe("state migrations", () => {
     );
     const cfg = {
       agents: { list: [{ id: "main", default: true }] },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
     const detected = await detectLegacyStateMigrations({ cfg, env, homedir: () => root });
     const realSaveSessionStore = sessionStore.saveSessionStore;
     let sawRequiredWrite = false;
@@ -843,7 +846,7 @@ describe("state migrations", () => {
 
   it("preserves shared ownership through missing parent-symlink store paths", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const agentsDir = path.join(stateDir, "agents");
     await fs.mkdir(agentsDir, { recursive: true });
@@ -863,7 +866,7 @@ describe("state migrations", () => {
     const cfg = {
       session: { mainKey: "work", store: configuredStorePath },
       agents: { list: [{ id: "ops", default: true }] },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
     const detected = await detectLegacyStateMigrations({
       cfg,
       env,
@@ -894,7 +897,7 @@ describe("state migrations", () => {
 
     beforeAll(async () => {
       const root = await createTempDir();
-      const stateDir = path.join(root, ".openclaw");
+      const stateDir = path.join(root, ".marketingclaw");
       const env = createEnv(stateDir);
       targetStorePath = path.join(stateDir, "agents", "worker-1", "sessions", "sessions.json");
       await fs.mkdir(path.dirname(targetStorePath), { recursive: true });
@@ -928,7 +931,7 @@ describe("state migrations", () => {
             "voice-call": { config: { agentId: "worker-1" } },
           },
         },
-      } as OpenClawConfig;
+      } as MarketingClawConfig;
 
       result = await autoMigrateLegacyState({ cfg, env, homedir: () => root });
       targetStore = JSON.parse(await fs.readFile(targetStorePath, "utf8")) as Record<
@@ -955,7 +958,7 @@ describe("state migrations", () => {
 
   it("preserves a singleton final symlink through all session migration phases", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const outsideStorePath = path.join(root, "outside-sessions.json");
     await fs.writeFile(
@@ -968,7 +971,7 @@ describe("state migrations", () => {
     const storePath = path.join(stateDir, "agents", "main", "sessions", "sessions.json");
     await fs.mkdir(path.dirname(storePath), { recursive: true });
     await fs.symlink(outsideStorePath, storePath);
-    const cfg = { agents: { list: [{ id: "main", default: true }] } } as OpenClawConfig;
+    const cfg = { agents: { list: [{ id: "main", default: true }] } } as MarketingClawConfig;
 
     const result = await autoMigrateLegacyState({ cfg, env, homedir: () => root });
 
@@ -979,14 +982,14 @@ describe("state migrations", () => {
     >;
     expect(outsideStore["voice:15550001111"]?.sessionId).toBe("outside-voice");
     expect(result.warnings).toEqual([
-      `Deferred session key migration in final-component symlink store ${storePath}; configure one canonical session.store path, then rerun openclaw doctor --fix`,
-      `Deferred legacy session migration in final-component symlink store ${storePath}; configure one canonical session.store path, then rerun openclaw doctor --fix`,
+      `Deferred session key migration in final-component symlink store ${storePath}; configure one canonical session.store path, then rerun marketingclaw doctor --fix`,
+      `Deferred legacy session migration in final-component symlink store ${storePath}; configure one canonical session.store path, then rerun marketingclaw doctor --fix`,
     ]);
   });
 
   it("preserves ACP metadata through a singleton fixed-store symlink", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const outsideStorePath = path.join(root, "outside-sessions.json");
     await fs.writeFile(
@@ -1012,7 +1015,7 @@ describe("state migrations", () => {
     const cfg = {
       session: { store: configuredStorePath },
       agents: { list: [{ id: "main", default: true }] },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     const result = await autoMigrateLegacyState({ cfg, env, homedir: () => root });
 
@@ -1023,7 +1026,7 @@ describe("state migrations", () => {
     >;
     expect(outsideStore["agent:main:task"]?.acp).toBeDefined();
     expect(result.warnings).toContain(
-      `Deferred ACP metadata migration in final-component symlink store ${configuredStorePath}; configure one canonical session.store path, then rerun openclaw doctor --fix`,
+      `Deferred ACP metadata migration in final-component symlink store ${configuredStorePath}; configure one canonical session.store path, then rerun marketingclaw doctor --fix`,
     );
     expect(result.changes).not.toContain(
       "Migrated 1 ACP session metadata row → shared SQLite state",
@@ -1032,7 +1035,7 @@ describe("state migrations", () => {
 
   it("defers ACP metadata migration across hard-linked store paths", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const targetStorePath = path.join(stateDir, "agents", "main", "sessions", "sessions.json");
     await fs.mkdir(path.dirname(targetStorePath), { recursive: true });
@@ -1059,7 +1062,7 @@ describe("state migrations", () => {
     const cfg = {
       session: { store: configuredStorePath },
       agents: { list: [{ id: "main", default: true }] },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     const result = await autoMigrateLegacyState({ cfg, env, homedir: () => root });
 
@@ -1080,7 +1083,7 @@ describe("state migrations", () => {
 
   it("defers global main aliases across hard-linked store paths", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const targetStorePath = path.join(stateDir, "agents", "main", "sessions", "sessions.json");
     await fs.mkdir(path.dirname(targetStorePath), { recursive: true });
@@ -1107,7 +1110,7 @@ describe("state migrations", () => {
     const cfg = {
       session: { scope: "global", store: configuredStorePath },
       agents: { list: [{ id: "main", default: true }] },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     const result = await autoMigrateLegacyState({ cfg, env, homedir: () => root });
 
@@ -1133,7 +1136,7 @@ describe("state migrations", () => {
     { name: "templated plugin", templated: true },
   ])("preserves foreign ACP aliases in $name stores", async ({ templated }) => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const storeTemplate = path.join(root, "stores", "{agentId}", "sessions.json");
     const storePath = templated
@@ -1166,7 +1169,7 @@ describe("state migrations", () => {
           "voice-call": { config: { agentId: "voice" } },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     const result = await autoMigrateLegacyState({ cfg, env, homedir: () => root });
 
@@ -1189,7 +1192,7 @@ describe("state migrations", () => {
 
   it("migrates malformed agent-shaped rows in single-owner plugin stores", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const storeTemplate = path.join(root, "stores", "{agentId}", "sessions.json");
     const storePath = path.join(root, "stores", "voice", "sessions.json");
@@ -1239,7 +1242,7 @@ describe("state migrations", () => {
           "voice-call": { config: { agentId: "voice" } },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     const result = await autoMigrateLegacyState({ cfg, env, homedir: () => root });
 
@@ -1271,7 +1274,7 @@ describe("state migrations", () => {
 
   it("preserves multi-owner rows through coalesced templated-store migration", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const storeTemplate = path.join(
       stateDir,
@@ -1333,7 +1336,7 @@ describe("state migrations", () => {
       session: { store: storeTemplate },
       agents: { list: [{ id: "main", default: true }] },
       acp: { allowedAgents: ["voice"] },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     const result = await autoMigrateLegacyState({ cfg, env, homedir: () => root });
 
@@ -1364,7 +1367,7 @@ describe("state migrations", () => {
 
   it("does not process ACP stores rejected by target validation", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const outsideStorePath = path.join(root, "outside-sessions.json");
     await fs.writeFile(
@@ -1388,7 +1391,7 @@ describe("state migrations", () => {
     const storePath = path.join(stateDir, "agents", "main", "sessions", "sessions.json");
     await fs.mkdir(path.dirname(storePath), { recursive: true });
     await fs.symlink(outsideStorePath, storePath);
-    const cfg = { agents: { list: [{ id: "main", default: true }] } } as OpenClawConfig;
+    const cfg = { agents: { list: [{ id: "main", default: true }] } } as MarketingClawConfig;
 
     const result = await autoMigrateLegacyState({ cfg, env, homedir: () => root });
 
@@ -1405,7 +1408,7 @@ describe("state migrations", () => {
 
   it("canonicalizes imported ACP aliases with their session row owner", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const storeTemplate = path.join(
       stateDir,
@@ -1442,7 +1445,7 @@ describe("state migrations", () => {
     const cfg = {
       session: { mainKey: "desk", store: storeTemplate },
       agents: { list: [{ id: "main", default: true }, { id: "voice" }] },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     const result = await autoMigrateLegacyState({ cfg, env, homedir: () => root });
 
@@ -1465,7 +1468,7 @@ describe("state migrations", () => {
 
   it("migrates legacy delivery queue files into shared SQLite state", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const cfg = createConfig();
     await fs.mkdir(path.join(stateDir, "delivery-queue"), { recursive: true });
@@ -1537,7 +1540,7 @@ describe("state migrations", () => {
     expect(result.changes).toContain(
       "Migrated 2 session delivery queue entries → shared SQLite state",
     );
-    const { db } = openOpenClawStateDatabase({ env });
+    const { db } = openMarketingClawStateDatabase({ env });
     const rows = db
       .prepare(
         "SELECT queue_name, id, status, channel, target, retry_count FROM delivery_queue_entries ORDER BY queue_name, id",
@@ -1583,7 +1586,7 @@ describe("state migrations", () => {
 
   it("migrates legacy voice wake JSON settings into shared SQLite state", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const cfg = createConfig();
     const settingsDir = path.join(stateDir, "settings");
@@ -1635,7 +1638,7 @@ describe("state migrations", () => {
 
   it("archives legacy voice wake JSON when shared SQLite already matches", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const cfg = createConfig();
     const settingsDir = path.join(stateDir, "settings");
@@ -1672,7 +1675,7 @@ describe("state migrations", () => {
 
   it("auto-migrates standalone legacy voice wake JSON settings", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const cfg = createConfig();
     const settingsDir = path.join(stateDir, "settings");
@@ -1694,10 +1697,10 @@ describe("state migrations", () => {
 
   it("runs plugin doctor migrations after repairing shared state schema", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const cfg = createConfig();
-    const stateDbPath = path.join(stateDir, "state", "openclaw.sqlite");
+    const stateDbPath = path.join(stateDir, "state", "marketingclaw.sqlite");
     await fs.mkdir(path.dirname(stateDbPath), { recursive: true });
     const db = new DatabaseSync(stateDbPath);
     try {
@@ -1746,10 +1749,10 @@ describe("state migrations", () => {
 
   it("does not run plugin doctor migrations after shared state schema repair fails", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const cfg = createConfig();
-    const stateDbPath = path.join(stateDir, "state", "openclaw.sqlite");
+    const stateDbPath = path.join(stateDir, "state", "marketingclaw.sqlite");
     await fs.mkdir(path.dirname(stateDbPath), { recursive: true });
     const db = new DatabaseSync(stateDbPath);
     try {
@@ -1789,9 +1792,9 @@ describe("state migrations", () => {
 
   it("reports plugin detector failures in read-only legacy state detection", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
-    const cfg = { ...createConfig(), agents: { list: 42 } } as unknown as OpenClawConfig;
+    const cfg = { ...createConfig(), agents: { list: 42 } } as unknown as MarketingClawConfig;
     pluginDoctorStateMigrationEntries.entries = [
       {
         pluginId: "msteams",
@@ -1816,9 +1819,9 @@ describe("state migrations", () => {
 
   it("continues plugin doctor migrations when one detector rejects malformed config", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
-    const cfg = { ...createConfig(), agents: { list: 42 } } as unknown as OpenClawConfig;
+    const cfg = { ...createConfig(), agents: { list: 42 } } as unknown as MarketingClawConfig;
     const migrateLegacyState = vi.fn(() => ({
       changes: ["healthy plugin state migrated"],
       warnings: [],
@@ -1861,7 +1864,7 @@ describe("state migrations", () => {
 
   it("skips stale plugin doctor plans when refresh detection fails", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const cfg = createConfig();
     const migrateLegacyState = vi.fn(() => ({
@@ -1908,11 +1911,11 @@ describe("state migrations", () => {
   it("runs plugin doctor migrations against the canonical state dir after state-dir repair", async () => {
     const root = await createTempDir();
     const legacyStateDir = path.join(root, ".clawdbot");
-    const canonicalStateDir = path.join(root, ".openclaw");
+    const canonicalStateDir = path.join(root, ".marketingclaw");
     await fs.mkdir(legacyStateDir, { recursive: true });
     await fs.writeFile(path.join(legacyStateDir, "legacy.txt"), "legacy", "utf8");
     const env: NodeJS.ProcessEnv = { ...process.env, HOME: root };
-    delete env.OPENCLAW_STATE_DIR;
+    delete env.MARKETINGCLAW_STATE_DIR;
     const cfg = createConfig();
     const detectedStateDirs: string[] = [];
     const migratedStateDirs: string[] = [];
@@ -1949,7 +1952,7 @@ describe("state migrations", () => {
 
   it("migrates legacy update-check JSON into shared SQLite state", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const cfg = createConfig();
     const sourcePath = path.join(stateDir, "update-check.json");
@@ -1987,10 +1990,10 @@ describe("state migrations", () => {
 
   it("migrates legacy config health JSON into shared SQLite state", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const cfg = createConfig();
-    const configPath = path.join(stateDir, "openclaw.json");
+    const configPath = path.join(stateDir, "marketingclaw.json");
     const logsDir = path.join(stateDir, "logs");
     const sourcePath = path.join(logsDir, "config-health.json");
     const fingerprint = {
@@ -2047,10 +2050,10 @@ describe("state migrations", () => {
 
   it("reconciles missing promoted config health state without replacing current SQLite fields", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const cfg = createConfig();
-    const configPath = path.join(stateDir, "openclaw.json");
+    const configPath = path.join(stateDir, "marketingclaw.json");
     const importedConfigPath = path.join(stateDir, "imported.json");
     const sourcePath = path.join(stateDir, "logs", "config-health.json");
     const legacyFingerprint = { hash: "legacy", bytes: 10 };
@@ -2106,10 +2109,10 @@ describe("state migrations", () => {
 
   it("keeps complete SQLite config health state when legacy fingerprints differ", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const cfg = createConfig();
-    const configPath = path.join(stateDir, "openclaw.json");
+    const configPath = path.join(stateDir, "marketingclaw.json");
     const sourcePath = path.join(stateDir, "logs", "config-health.json");
     await fs.mkdir(path.dirname(sourcePath), { recursive: true });
     await fs.writeFile(
@@ -2151,10 +2154,10 @@ describe("state migrations", () => {
 
   it("removes a regenerated config health source when its archive already exists", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const cfg = createConfig();
-    const configPath = path.join(stateDir, "openclaw.json");
+    const configPath = path.join(stateDir, "marketingclaw.json");
     const sourcePath = path.join(stateDir, "logs", "config-health.json");
     const archivedPath = `${sourcePath}.migrated`;
     await fs.mkdir(path.dirname(sourcePath), { recursive: true });
@@ -2182,7 +2185,7 @@ describe("state migrations", () => {
 
   it("leaves malformed legacy config health state in place", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const cfg = createConfig();
     const sourcePath = path.join(stateDir, "logs", "config-health.json");
     await fs.mkdir(path.dirname(sourcePath), { recursive: true });
@@ -2203,7 +2206,7 @@ describe("state migrations", () => {
 
   it("migrates legacy current-conversation bindings JSON into shared SQLite state", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const cfg = createConfig();
     const bindingsDir = path.join(stateDir, "bindings");
@@ -2264,7 +2267,7 @@ describe("state migrations", () => {
 
   it("migrates legacy plugin binding approvals JSON into shared SQLite state", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const cfg = createConfig();
     const sourcePath = path.join(stateDir, "plugin-binding-approvals.json");
@@ -2318,7 +2321,7 @@ describe("state migrations", () => {
     const stateDir = path.join(root, "custom-state");
     const env = createEnv(stateDir);
     const cfg = createConfig();
-    const sourcePath = path.join(root, ".openclaw", "plugin-binding-approvals.json");
+    const sourcePath = path.join(root, ".marketingclaw", "plugin-binding-approvals.json");
     await fs.mkdir(path.dirname(sourcePath), { recursive: true });
     await fs.writeFile(
       sourcePath,
@@ -2362,7 +2365,7 @@ describe("state migrations", () => {
 
   it("imports non-conflicting legacy current-conversation bindings when SQLite has a conflict", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const cfg = createConfig();
     const bindingsDir = path.join(stateDir, "bindings");
@@ -2448,7 +2451,7 @@ describe("state migrations", () => {
 
   it("keeps legacy delivery queue files when shared SQLite already has a conflicting row", async () => {
     const root = await createTempDir();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const env = createEnv(stateDir);
     const cfg = createConfig();
     const queueDir = path.join(stateDir, "delivery-queue");
@@ -2492,7 +2495,7 @@ describe("state migrations", () => {
       "utf8",
     );
 
-    const { db } = openOpenClawStateDatabase({ env });
+    const { db } = openMarketingClawStateDatabase({ env });
     db.prepare(
       `
         INSERT INTO delivery_queue_entries (

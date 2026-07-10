@@ -1,4 +1,4 @@
-// Check Openclaw Package Tarball tests cover check openclaw package tarball script behavior.
+// Check Marketingclaw Package Tarball tests cover check marketingclaw package tarball script behavior.
 import { spawnSync } from "node:child_process";
 import {
   chmodSync,
@@ -14,7 +14,7 @@ import { delimiter, dirname, join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { LOCAL_BUILD_METADATA_DIST_PATHS } from "../../scripts/lib/local-build-metadata-paths.mjs";
 
-const CHECK_SCRIPT = "scripts/check-openclaw-package-tarball.mjs";
+const CHECK_SCRIPT = "scripts/check-marketingclaw-package-tarball.mjs";
 const FLAT_PLUGIN_SDK_DECLARATION = "dist/plugin-sdk/provider-entry.d.ts";
 const DEEP_PLUGIN_SDK_DECLARATION = "dist/plugin-sdk/src/plugin-sdk/provider-entry.d.ts";
 
@@ -30,24 +30,24 @@ function withTarball(
     shrinkwrapRootPackage?: Record<string, unknown>;
   } = {},
 ) {
-  const root = mkdtempSync(join(tmpdir(), "openclaw-package-tarball-test-"));
+  const root = mkdtempSync(join(tmpdir(), "marketingclaw-package-tarball-test-"));
   try {
     const packageRoot = join(root, "package");
     mkdirSync(join(packageRoot, "dist"), { recursive: true });
     writeFileSync(
       join(packageRoot, "package.json"),
-      JSON.stringify({ name: "openclaw", version, ...options.packageJson }),
+      JSON.stringify({ name: "marketingclaw", version, ...options.packageJson }),
     );
     if (options.includeShrinkwrap !== false) {
       writeFileSync(
         join(packageRoot, "npm-shrinkwrap.json"),
         JSON.stringify({
-          name: "openclaw",
+          name: "marketingclaw",
           version,
           lockfileVersion: 3,
           packages: {
             "": {
-              name: "openclaw",
+              name: "marketingclaw",
               version,
               ...options.shrinkwrapRootPackage,
             },
@@ -63,7 +63,7 @@ function withTarball(
       options.includeControlUi === false
         ? files
         : {
-            "dist/control-ui/index.html": "<!doctype html><openclaw-app></openclaw-app>",
+            "dist/control-ui/index.html": "<!doctype html><marketingclaw-app></marketingclaw-app>",
             "dist/control-ui/assets/app.js": "console.log('ok');\n",
             ...files,
           };
@@ -73,7 +73,7 @@ function withTarball(
       writeFileSync(filePath, body);
     }
 
-    const tarball = join(root, "openclaw.tgz");
+    const tarball = join(root, "marketingclaw.tgz");
     const pack = spawnSync("tar", ["-czf", tarball, "-C", root, "package"], {
       encoding: "utf8",
     });
@@ -84,13 +84,13 @@ function withTarball(
   }
 }
 
-describe("check-openclaw-package-tarball", () => {
+describe("check-marketingclaw-package-tarball", () => {
   it("prints help before touching tarball state", () => {
     const result = spawnSync("node", [CHECK_SCRIPT, "--help"], { encoding: "utf8" });
 
     expect(result.status, result.stderr).toBe(0);
     expect(result.stdout).toContain(
-      "Usage: node scripts/check-openclaw-package-tarball.mjs [--require-bundled-workspace-deps] <openclaw.tgz>",
+      "Usage: node scripts/check-marketingclaw-package-tarball.mjs [--require-bundled-workspace-deps] <marketingclaw.tgz>",
     );
     expect(result.stderr).toBe("");
   });
@@ -99,22 +99,24 @@ describe("check-openclaw-package-tarball", () => {
     const unknown = spawnSync("node", [CHECK_SCRIPT, "--tag"], { encoding: "utf8" });
 
     expect(unknown.status).not.toBe(0);
-    expect(unknown.stderr).toContain("Unknown OpenClaw package tarball check option: --tag");
-    expect(unknown.stderr).not.toContain("OpenClaw package tarball does not exist");
+    expect(unknown.stderr).toContain("Unknown MarketingClaw package tarball check option: --tag");
+    expect(unknown.stderr).not.toContain("MarketingClaw package tarball does not exist");
 
-    const extra = spawnSync("node", [CHECK_SCRIPT, "openclaw.tgz", "extra"], {
+    const extra = spawnSync("node", [CHECK_SCRIPT, "marketingclaw.tgz", "extra"], {
       encoding: "utf8",
     });
 
     expect(extra.status).not.toBe(0);
-    expect(extra.stderr).toContain("Unexpected OpenClaw package tarball check argument: extra");
-    expect(extra.stderr).not.toContain("OpenClaw package tarball does not exist");
+    expect(extra.stderr).toContain(
+      "Unexpected MarketingClaw package tarball check argument: extra",
+    );
+    expect(extra.stderr).not.toContain("MarketingClaw package tarball does not exist");
   });
 
   it.runIf(process.platform !== "win32")(
     "removes the extract dir when tar extraction fails",
     () => {
-      const root = mkdtempSync(join(tmpdir(), "openclaw-package-tarball-extract-fail-"));
+      const root = mkdtempSync(join(tmpdir(), "marketingclaw-package-tarball-extract-fail-"));
       try {
         const fakeBin = join(root, "bin");
         mkdirSync(fakeBin);
@@ -128,20 +130,20 @@ describe("check-openclaw-package-tarball", () => {
             "const args = process.argv.slice(2);",
             "if (args[0] === '-tf') { console.log('package/package.json'); process.exit(0); }",
             "const outputDir = args[args.indexOf('-C') + 1];",
-            "fs.writeFileSync(process.env.OPENCLAW_TEST_EXTRACT_DIR_FILE, outputDir);",
+            "fs.writeFileSync(process.env.MARKETINGCLAW_TEST_EXTRACT_DIR_FILE, outputDir);",
             "console.error('extract denied');",
             "process.exit(7);",
           ].join("\n"),
         );
         chmodSync(fakeTar, 0o755);
-        const tarball = join(root, "openclaw.tgz");
+        const tarball = join(root, "marketingclaw.tgz");
         writeFileSync(tarball, "not used by fake tar");
 
         const result = spawnSync("node", [CHECK_SCRIPT, tarball], {
           encoding: "utf8",
           env: {
             ...process.env,
-            OPENCLAW_TEST_EXTRACT_DIR_FILE: extractDirFile,
+            MARKETINGCLAW_TEST_EXTRACT_DIR_FILE: extractDirFile,
             PATH: `${fakeBin}${delimiter}${process.env.PATH ?? ""}`,
           },
         });
@@ -164,7 +166,7 @@ describe("check-openclaw-package-tarball", () => {
 
         expect(result.status, result.stderr).toBe(0);
         expect(result.stderr).toContain("legacy inventory references omitted private QA");
-        expect(result.stdout).toContain("OpenClaw package tarball integrity passed.");
+        expect(result.stdout).toContain("MarketingClaw package tarball integrity passed.");
       },
       "2026.4.25-beta.10",
     );
@@ -223,7 +225,7 @@ describe("check-openclaw-package-tarball", () => {
         const result = spawnSync("node", [CHECK_SCRIPT, tarball], { encoding: "utf8" });
 
         expect(result.status, result.stderr).toBe(0);
-        expect(result.stdout).toContain("OpenClaw package tarball integrity passed.");
+        expect(result.stdout).toContain("MarketingClaw package tarball integrity passed.");
       },
     );
   });
@@ -255,7 +257,7 @@ describe("check-openclaw-package-tarball", () => {
         const result = spawnSync("node", [CHECK_SCRIPT, tarball], { encoding: "utf8" });
 
         expect(result.status, result.stderr).toBe(0);
-        expect(result.stdout).toContain("OpenClaw package tarball integrity passed.");
+        expect(result.stdout).toContain("MarketingClaw package tarball integrity passed.");
       },
       "2026.4.27",
     );
@@ -358,7 +360,7 @@ describe("check-openclaw-package-tarball", () => {
         const result = spawnSync("node", [CHECK_SCRIPT, tarball], { encoding: "utf8" });
 
         expect(result.status, result.stderr).toBe(0);
-        expect(result.stdout).toContain("OpenClaw package tarball integrity passed.");
+        expect(result.stdout).toContain("MarketingClaw package tarball integrity passed.");
       },
       "2026.4.27",
     );
@@ -375,7 +377,7 @@ describe("check-openclaw-package-tarball", () => {
         const result = spawnSync("node", [CHECK_SCRIPT, tarball], { encoding: "utf8" });
 
         expect(result.status, result.stderr).toBe(0);
-        expect(result.stdout).toContain("OpenClaw package tarball integrity passed.");
+        expect(result.stdout).toContain("MarketingClaw package tarball integrity passed.");
       },
       "2026.4.27",
     );
@@ -454,11 +456,11 @@ describe("check-openclaw-package-tarball", () => {
 
         expect(result.status).not.toBe(0);
         expect(result.stderr).toContain(
-          "package.json dependencies.@openclaw/ai must not use workspace protocol workspace:*",
+          "package.json dependencies.@marketingclaw/ai must not use workspace protocol workspace:*",
         );
       },
       "2026.6.11",
-      { packageJson: { dependencies: { "@openclaw/ai": "workspace:*" } } },
+      { packageJson: { dependencies: { "@marketingclaw/ai": "workspace:*" } } },
     );
   });
 
@@ -471,11 +473,11 @@ describe("check-openclaw-package-tarball", () => {
 
         expect(result.status).not.toBe(0);
         expect(result.stderr).toContain(
-          "npm-shrinkwrap.json packages root dependencies.@openclaw/ai must not use workspace protocol workspace:*",
+          "npm-shrinkwrap.json packages root dependencies.@marketingclaw/ai must not use workspace protocol workspace:*",
         );
       },
       "2026.6.11",
-      { shrinkwrapRootPackage: { dependencies: { "@openclaw/ai": "workspace:*" } } },
+      { shrinkwrapRootPackage: { dependencies: { "@marketingclaw/ai": "workspace:*" } } },
     );
   });
 
@@ -487,10 +489,10 @@ describe("check-openclaw-package-tarball", () => {
         const result = spawnSync("node", [CHECK_SCRIPT, tarball], { encoding: "utf8" });
 
         expect(result.status, result.stderr).toBe(0);
-        expect(result.stdout).toContain("OpenClaw package tarball integrity passed.");
+        expect(result.stdout).toContain("MarketingClaw package tarball integrity passed.");
       },
       "2026.6.11",
-      { packageJson: { dependencies: { "@openclaw/ai": "2026.6.11" } } },
+      { packageJson: { dependencies: { "@marketingclaw/ai": "2026.6.11" } } },
     );
   });
 
@@ -507,14 +509,14 @@ describe("check-openclaw-package-tarball", () => {
 
         expect(result.status).not.toBe(0);
         expect(result.stderr).toContain(
-          "package.json dependencies.@openclaw/ai must be listed in bundleDependencies because it is private to the OpenClaw workspace",
+          "package.json dependencies.@marketingclaw/ai must be listed in bundleDependencies because it is private to the MarketingClaw workspace",
         );
         expect(result.stderr).toContain(
-          "package.json dependencies.@openclaw/ai must be bundled in node_modules/@openclaw/ai",
+          "package.json dependencies.@marketingclaw/ai must be bundled in node_modules/@marketingclaw/ai",
         );
       },
       "2026.6.11",
-      { packageJson: { dependencies: { "@openclaw/ai": "2026.6.11" } } },
+      { packageJson: { dependencies: { "@marketingclaw/ai": "2026.6.11" } } },
     );
   });
 
@@ -523,8 +525,8 @@ describe("check-openclaw-package-tarball", () => {
       ["dist/index.js"],
       {
         "dist/index.js": "export {};\n",
-        "node_modules/@openclaw/ai/package.json": JSON.stringify({
-          name: "@openclaw/ai",
+        "node_modules/@marketingclaw/ai/package.json": JSON.stringify({
+          name: "@marketingclaw/ai",
           version: "2026.6.11",
         }),
       },
@@ -532,13 +534,13 @@ describe("check-openclaw-package-tarball", () => {
         const result = spawnSync("node", [CHECK_SCRIPT, tarball], { encoding: "utf8" });
 
         expect(result.status, result.stderr).toBe(0);
-        expect(result.stdout).toContain("OpenClaw package tarball integrity passed.");
+        expect(result.stdout).toContain("MarketingClaw package tarball integrity passed.");
       },
       "2026.6.11",
       {
         packageJson: {
-          dependencies: { "@openclaw/ai": "2026.6.11" },
-          bundleDependencies: ["@openclaw/ai"],
+          dependencies: { "@marketingclaw/ai": "2026.6.11" },
+          bundleDependencies: ["@marketingclaw/ai"],
         },
       },
     );
@@ -583,7 +585,7 @@ describe("check-openclaw-package-tarball", () => {
         expect(result.stderr).toContain(
           "legacy package includes local build metadata tar entry dist/.runtime-postbuildstamp",
         );
-        expect(result.stdout).toContain("OpenClaw package tarball integrity passed.");
+        expect(result.stdout).toContain("MarketingClaw package tarball integrity passed.");
       },
       "2026.4.26",
     );

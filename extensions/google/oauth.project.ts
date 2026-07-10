@@ -1,5 +1,5 @@
 // Google plugin module implements oauth.project behavior.
-import { readProviderJsonResponse } from "openclaw/plugin-sdk/provider-http";
+import { readProviderJsonResponse } from "marketingclaw/plugin-sdk/provider-http";
 import { fetchWithTimeout } from "./oauth.http.js";
 import {
   CODE_ASSIST_ENDPOINT_PROD,

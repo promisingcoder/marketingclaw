@@ -12,7 +12,7 @@ const rootSdk = require(rootAliasPath) as Record<string, unknown>;
 const rootAliasSource = fs.readFileSync(rootAliasPath, "utf-8");
 const compatPath = fileURLToPath(new URL("../../plugin-sdk/compat.ts", import.meta.url));
 const packageJsonPath = fileURLToPath(new URL("../../../package.json", import.meta.url));
-const diagnosticEventsStateKey = Symbol.for("openclaw.diagnosticEvents.state.v1");
+const diagnosticEventsStateKey = Symbol.for("marketingclaw.diagnosticEvents.state.v1");
 const legacyRootExportNames = [
   "registerContextEngine",
   "buildMemorySystemPromptAddition",
@@ -26,7 +26,7 @@ const legacyRootExportNames = [
   "createTypingCallbacks",
   "createChannelReplyPipeline",
   "resolveChannelSourceReplyDeliveryMode",
-  "resolvePreferredOpenClawTmpDir",
+  "resolvePreferredMarketingClawTmpDir",
 ] as const;
 
 type EmptySchema = {
@@ -146,7 +146,9 @@ function loadRootAliasWithStubs(options?: {
     if (id === "node:os") {
       return {
         tmpdir: () =>
-          context.process.env.TMPDIR ?? options?.defaultTmpDir ?? "/tmp/openclaw-root-alias-test",
+          context.process.env.TMPDIR ??
+          options?.defaultTmpDir ??
+          "/tmp/marketingclaw-root-alias-test",
       };
     }
     if (id === "jiti") {
@@ -210,7 +212,7 @@ function ensureDiagnosticEventsStateFixture(
   }
   const state = vm.runInNewContext(
     `({
-      marker: Symbol.for("openclaw.diagnosticEvents.state.v1"),
+      marker: Symbol.for("marketingclaw.diagnosticEvents.state.v1"),
       enabled: true,
       seq: 0,
       listeners: new Set(),
@@ -359,7 +361,13 @@ describe("plugin-sdk root alias", () => {
     expect(lazyModule.jitiLoadCalls).toBe(1);
     expect(lazyModule.createJitiOptions.at(-1)?.tryNative).toBe(false);
     expect(lazyModule.createJitiOptions.at(-1)?.fsCache).toBe(
-      path.join("/tmp/openclaw-root-alias-test", "jiti", "openclaw", "3.4.5", "12345-678"),
+      path.join(
+        "/tmp/marketingclaw-root-alias-test",
+        "jiti",
+        "marketingclaw",
+        "3.4.5",
+        "12345-678",
+      ),
     );
     expect((lazyRootSdk.slowHelper as () => string)()).toBe("loaded");
     expect(Object.keys(lazyRootSdk)).toContain("slowHelper");
@@ -368,15 +376,21 @@ describe("plugin-sdk root alias", () => {
 
   it("preserves jiti's tmpdir guard when root-alias TMPDIR resolves to cwd", () => {
     const lazyModule = loadRootAliasWithStubs({
-      cwd: "/tmp/openclaw-root-alias-cwd",
-      defaultTmpDir: "/tmp/openclaw-root-alias-fallback",
-      env: { TMPDIR: "/tmp/openclaw-root-alias-cwd" },
+      cwd: "/tmp/marketingclaw-root-alias-cwd",
+      defaultTmpDir: "/tmp/marketingclaw-root-alias-fallback",
+      env: { TMPDIR: "/tmp/marketingclaw-root-alias-cwd" },
       packageVersion: "3.4.5",
     });
 
     expect("slowHelper" in lazyModule.moduleExports).toBe(true);
     expect(lazyModule.createJitiOptions.at(-1)?.fsCache).toBe(
-      path.join("/tmp/openclaw-root-alias-fallback", "jiti", "openclaw", "3.4.5", "12345-678"),
+      path.join(
+        "/tmp/marketingclaw-root-alias-fallback",
+        "jiti",
+        "marketingclaw",
+        "3.4.5",
+        "12345-678",
+      ),
     );
   });
 
@@ -479,12 +493,12 @@ describe("plugin-sdk root alias", () => {
 
     expect((lazyModule.moduleExports.slowHelper as () => string)()).toBe("loaded");
     const aliasMap = (lazyModule.createJitiOptions.at(-1)?.alias ?? {}) as Record<string, string>;
-    expect(aliasMap["openclaw/plugin-sdk"]).toBe(rootAliasPath);
-    expect(aliasMap["@openclaw/plugin-sdk"]).toBe(rootAliasPath);
-    expect(aliasMap["openclaw/plugin-sdk/group-access"]).toContain(
+    expect(aliasMap["marketingclaw/plugin-sdk"]).toBe(rootAliasPath);
+    expect(aliasMap["@marketingclaw/plugin-sdk"]).toBe(rootAliasPath);
+    expect(aliasMap["marketingclaw/plugin-sdk/group-access"]).toContain(
       path.join("src", "plugin-sdk", "group-access.ts"),
     );
-    expect(aliasMap["@openclaw/plugin-sdk/group-access"]).toContain(
+    expect(aliasMap["@marketingclaw/plugin-sdk/group-access"]).toContain(
       path.join("src", "plugin-sdk", "group-access.ts"),
     );
   });
@@ -501,7 +515,7 @@ describe("plugin-sdk root alias", () => {
 
     expect((lazyModule.moduleExports.slowHelper as () => string)()).toBe("loaded");
     const aliasMap = (lazyModule.createJitiOptions.at(-1)?.alias ?? {}) as Record<string, string>;
-    expect(aliasMap["@openclaw/llm-core"]).toBe(sourceLlmCorePath);
+    expect(aliasMap["@marketingclaw/llm-core"]).toBe(sourceLlmCorePath);
   });
 
   it("keeps AI runtime transitive package imports on the source graph", () => {
@@ -525,10 +539,10 @@ describe("plugin-sdk root alias", () => {
 
     expect((lazyModule.moduleExports.slowHelper as () => string)()).toBe("loaded");
     const aliasMap = (lazyModule.createJitiOptions.at(-1)?.alias ?? {}) as Record<string, string>;
-    expect(aliasMap["@openclaw/ai/internal/runtime"]).toBe(sourcePaths.aiRuntime);
-    expect(aliasMap["@openclaw/markdown-core/code-spans"]).toBe(sourcePaths.codeSpans);
-    expect(aliasMap["@openclaw/markdown-core/fences"]).toBe(sourcePaths.fences);
-    expect(aliasMap["@openclaw/normalization-core/number-coercion"]).toBe(
+    expect(aliasMap["@marketingclaw/ai/internal/runtime"]).toBe(sourcePaths.aiRuntime);
+    expect(aliasMap["@marketingclaw/markdown-core/code-spans"]).toBe(sourcePaths.codeSpans);
+    expect(aliasMap["@marketingclaw/markdown-core/fences"]).toBe(sourcePaths.fences);
+    expect(aliasMap["@marketingclaw/normalization-core/number-coercion"]).toBe(
       sourcePaths.numberCoercion,
     );
   });
@@ -551,46 +565,46 @@ describe("plugin-sdk root alias", () => {
       (lazyModule.createJitiOptions.at(-1)?.alias ?? {}) as Record<string, string>,
     );
     expect(aliasKeys).toEqual([
-      "openclaw/plugin-sdk/alpha",
-      "@openclaw/plugin-sdk/alpha",
-      "openclaw/plugin-sdk/group-access",
-      "@openclaw/plugin-sdk/group-access",
-      "openclaw/plugin-sdk/zeta",
-      "@openclaw/plugin-sdk/zeta",
-      "@openclaw/llm-core",
-      "@openclaw/llm-core/diagnostics",
-      "@openclaw/llm-core/event-stream",
-      "@openclaw/llm-core/types",
-      "@openclaw/llm-core/validation",
-      "@openclaw/ai",
-      "@openclaw/ai/providers",
-      "@openclaw/ai/diagnostics",
-      "@openclaw/ai/event-stream",
-      "@openclaw/ai/types",
-      "@openclaw/ai/validation",
-      "@openclaw/ai/internal/anthropic",
-      "@openclaw/ai/internal/openai",
-      "@openclaw/ai/internal/runtime",
-      "@openclaw/ai/internal/shared",
-      "@openclaw/markdown-core",
-      "@openclaw/markdown-core/code-spans",
-      "@openclaw/markdown-core/fences",
-      "@openclaw/markdown-core/frontmatter",
-      "@openclaw/markdown-core/ir",
-      "@openclaw/markdown-core/render",
-      "@openclaw/markdown-core/render-aware-chunking",
-      "@openclaw/markdown-core/tables",
-      "@openclaw/markdown-core/types",
-      "@openclaw/normalization-core",
-      "@openclaw/normalization-core/boolean-coercion",
-      "@openclaw/normalization-core/error-coercion",
-      "@openclaw/normalization-core/number-coercion",
-      "@openclaw/normalization-core/record-coerce",
-      "@openclaw/normalization-core/string-coerce",
-      "@openclaw/normalization-core/string-normalization",
-      "@openclaw/normalization-core/utf16-slice",
-      "openclaw/plugin-sdk",
-      "@openclaw/plugin-sdk",
+      "marketingclaw/plugin-sdk/alpha",
+      "@marketingclaw/plugin-sdk/alpha",
+      "marketingclaw/plugin-sdk/group-access",
+      "@marketingclaw/plugin-sdk/group-access",
+      "marketingclaw/plugin-sdk/zeta",
+      "@marketingclaw/plugin-sdk/zeta",
+      "@marketingclaw/llm-core",
+      "@marketingclaw/llm-core/diagnostics",
+      "@marketingclaw/llm-core/event-stream",
+      "@marketingclaw/llm-core/types",
+      "@marketingclaw/llm-core/validation",
+      "@marketingclaw/ai",
+      "@marketingclaw/ai/providers",
+      "@marketingclaw/ai/diagnostics",
+      "@marketingclaw/ai/event-stream",
+      "@marketingclaw/ai/types",
+      "@marketingclaw/ai/validation",
+      "@marketingclaw/ai/internal/anthropic",
+      "@marketingclaw/ai/internal/openai",
+      "@marketingclaw/ai/internal/runtime",
+      "@marketingclaw/ai/internal/shared",
+      "@marketingclaw/markdown-core",
+      "@marketingclaw/markdown-core/code-spans",
+      "@marketingclaw/markdown-core/fences",
+      "@marketingclaw/markdown-core/frontmatter",
+      "@marketingclaw/markdown-core/ir",
+      "@marketingclaw/markdown-core/render",
+      "@marketingclaw/markdown-core/render-aware-chunking",
+      "@marketingclaw/markdown-core/tables",
+      "@marketingclaw/markdown-core/types",
+      "@marketingclaw/normalization-core",
+      "@marketingclaw/normalization-core/boolean-coercion",
+      "@marketingclaw/normalization-core/error-coercion",
+      "@marketingclaw/normalization-core/number-coercion",
+      "@marketingclaw/normalization-core/record-coerce",
+      "@marketingclaw/normalization-core/string-coerce",
+      "@marketingclaw/normalization-core/string-normalization",
+      "@marketingclaw/normalization-core/utf16-slice",
+      "marketingclaw/plugin-sdk",
+      "@marketingclaw/plugin-sdk",
     ]);
   });
 
@@ -604,7 +618,7 @@ describe("plugin-sdk root alias", () => {
       "ssrf-runtime-internal.ts",
     );
     const lazyModule = loadRootAliasWithStubs({
-      env: { OPENCLAW_ENABLE_PRIVATE_QA_CLI: "1" },
+      env: { MARKETINGCLAW_ENABLE_PRIVATE_QA_CLI: "1" },
       privateLocalOnlySubpaths: ["qa-lab", "../escape", "nested/path", "ssrf-runtime-internal"],
       existingPaths: [qaLabPath, ssrfRuntimeInternalPath],
       monolithicExports: {
@@ -614,12 +628,12 @@ describe("plugin-sdk root alias", () => {
 
     expect((lazyModule.moduleExports.slowHelper as () => string)()).toBe("loaded");
     const aliasMap = (lazyModule.createJitiOptions.at(-1)?.alias ?? {}) as Record<string, string>;
-    expect(aliasMap["openclaw/plugin-sdk/qa-lab"]).toBe(qaLabPath);
-    expect(aliasMap["@openclaw/plugin-sdk/qa-lab"]).toBe(qaLabPath);
-    expect(aliasMap).not.toHaveProperty("openclaw/plugin-sdk/../escape");
-    expect(aliasMap).not.toHaveProperty("openclaw/plugin-sdk/nested/path");
-    expect(aliasMap).not.toHaveProperty("openclaw/plugin-sdk/ssrf-runtime-internal");
-    expect(aliasMap).not.toHaveProperty("@openclaw/plugin-sdk/ssrf-runtime-internal");
+    expect(aliasMap["marketingclaw/plugin-sdk/qa-lab"]).toBe(qaLabPath);
+    expect(aliasMap["@marketingclaw/plugin-sdk/qa-lab"]).toBe(qaLabPath);
+    expect(aliasMap).not.toHaveProperty("marketingclaw/plugin-sdk/../escape");
+    expect(aliasMap).not.toHaveProperty("marketingclaw/plugin-sdk/nested/path");
+    expect(aliasMap).not.toHaveProperty("marketingclaw/plugin-sdk/ssrf-runtime-internal");
+    expect(aliasMap).not.toHaveProperty("@marketingclaw/plugin-sdk/ssrf-runtime-internal");
   });
 
   it("keeps non-QA private local-only plugin-sdk subpaths out of the CJS root alias", () => {
@@ -641,9 +655,9 @@ describe("plugin-sdk root alias", () => {
 
     expect((lazyModule.moduleExports.slowHelper as () => string)()).toBe("loaded");
     const aliasMap = (lazyModule.createJitiOptions.at(-1)?.alias ?? {}) as Record<string, string>;
-    expect(aliasMap).not.toHaveProperty("openclaw/plugin-sdk/codex-mcp-projection");
-    expect(aliasMap).not.toHaveProperty("@openclaw/plugin-sdk/codex-mcp-projection");
-    expect(aliasMap).not.toHaveProperty("openclaw/plugin-sdk/qa-runtime");
+    expect(aliasMap).not.toHaveProperty("marketingclaw/plugin-sdk/codex-mcp-projection");
+    expect(aliasMap).not.toHaveProperty("@marketingclaw/plugin-sdk/codex-mcp-projection");
+    expect(aliasMap).not.toHaveProperty("marketingclaw/plugin-sdk/qa-runtime");
   });
 
   it("builds source plugin-sdk subpath aliases through the wider source extension family", () => {
@@ -660,10 +674,10 @@ describe("plugin-sdk root alias", () => {
 
     expect((lazyModule.moduleExports.slowHelper as () => string)()).toBe("loaded");
     const aliasMap = (lazyModule.createJitiOptions.at(-1)?.alias ?? {}) as Record<string, string>;
-    expect(aliasMap["openclaw/plugin-sdk/channel-runtime"]).toBe(
+    expect(aliasMap["marketingclaw/plugin-sdk/channel-runtime"]).toBe(
       path.join(packageRoot, "src", "plugin-sdk", "channel-runtime.mts"),
     );
-    expect(aliasMap["@openclaw/plugin-sdk/channel-runtime"]).toBe(
+    expect(aliasMap["@marketingclaw/plugin-sdk/channel-runtime"]).toBe(
       path.join(packageRoot, "src", "plugin-sdk", "channel-runtime.mts"),
     );
   });
@@ -840,7 +854,9 @@ describe("plugin-sdk root alias", () => {
     )((event) => {
       seen.push(event.type);
     });
-    const state = lazyModule.globalContext[Symbol.for("openclaw.diagnosticEvents.state.v1")] as {
+    const state = lazyModule.globalContext[
+      Symbol.for("marketingclaw.diagnosticEvents.state.v1")
+    ] as {
       listeners: Set<(event: { type: string }, metadata: { trusted: boolean }) => void>;
     };
 

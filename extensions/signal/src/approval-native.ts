@@ -1,30 +1,30 @@
 // Signal plugin module implements approval native behavior.
-import { createChannelApprovalCapability } from "openclaw/plugin-sdk/approval-delivery-runtime";
-import { createLazyChannelApprovalNativeRuntimeAdapter } from "openclaw/plugin-sdk/approval-handler-adapter-runtime";
-import type { ChannelApprovalNativeRuntimeAdapter } from "openclaw/plugin-sdk/approval-handler-runtime";
+import { createChannelApprovalCapability } from "marketingclaw/plugin-sdk/approval-delivery-runtime";
+import { createLazyChannelApprovalNativeRuntimeAdapter } from "marketingclaw/plugin-sdk/approval-handler-adapter-runtime";
+import type { ChannelApprovalNativeRuntimeAdapter } from "marketingclaw/plugin-sdk/approval-handler-runtime";
 import {
   createChannelApproverDmTargetResolver,
   createChannelNativeOriginTargetResolver,
   createNativeApprovalChannelRouteGates,
   createNativeApprovalForwardingFallbackSuppressor,
   shouldSuppressLocalNativeExecApprovalPrompt,
-} from "openclaw/plugin-sdk/approval-native-runtime";
-import { buildApprovalReactionPendingContentForRequest } from "openclaw/plugin-sdk/approval-reaction-runtime";
+} from "marketingclaw/plugin-sdk/approval-native-runtime";
+import { buildApprovalReactionPendingContentForRequest } from "marketingclaw/plugin-sdk/approval-reaction-runtime";
 import type {
   ExecApprovalRequest,
   PluginApprovalRequest,
-} from "openclaw/plugin-sdk/approval-runtime";
+} from "marketingclaw/plugin-sdk/approval-runtime";
 import type {
   ChannelApprovalCapability,
   ChannelOutboundPayloadHint,
-} from "openclaw/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
-import { parseAgentSessionKey } from "openclaw/plugin-sdk/routing";
+} from "marketingclaw/plugin-sdk/channel-contract";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import type { ReplyPayload } from "marketingclaw/plugin-sdk/reply-runtime";
+import { parseAgentSessionKey } from "marketingclaw/plugin-sdk/routing";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import {
   listSignalAccountIds,
   resolveDefaultSignalAccountId,
@@ -35,7 +35,7 @@ import { normalizeSignalMessagingTarget } from "./normalize.js";
 
 type ApprovalRequest = ExecApprovalRequest | PluginApprovalRequest;
 type ApprovalKind = "exec" | "plugin";
-type ApprovalForwardingConfig = NonNullable<NonNullable<OpenClawConfig["approvals"]>["exec"]>;
+type ApprovalForwardingConfig = NonNullable<NonNullable<MarketingClawConfig["approvals"]>["exec"]>;
 type ApprovalForwardingMode = NonNullable<ApprovalForwardingConfig["mode"]>;
 type ChannelApprovalForwardTarget = Parameters<
   NonNullable<
@@ -51,7 +51,7 @@ type SignalApprovalTarget = {
 const DEFAULT_APPROVAL_FORWARDING_MODE: ApprovalForwardingMode = "session";
 
 function isSignalApprovalTransportEnabled(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   accountId?: string | null;
 }): boolean {
   return resolveSignalAccount({ cfg: params.cfg, accountId: params.accountId }).enabled;
@@ -118,7 +118,7 @@ const {
 } = signalApprovalRouteGates;
 
 export function isSignalNativeApprovalHandlerConfigured(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   accountId?: string | null;
 }): boolean {
   return isSignalNativeApprovalHandlerConfiguredBase(params);
@@ -134,7 +134,7 @@ function resolveSignalSessionTargetFromSessionKey(sessionKey?: string | null): s
 }
 
 export function shouldSuppressLocalSignalExecApprovalPrompt(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   accountId?: string | null;
   payload: ReplyPayload;
   hint?: ChannelOutboundPayloadHint;
@@ -168,7 +168,7 @@ function isSignalGroupTarget(to: string): boolean {
 }
 
 function resolveSignalOriginTarget(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   accountId?: string | null;
   approvalKind?: ApprovalKind;
   request: ApprovalRequest;

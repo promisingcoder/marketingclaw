@@ -24,7 +24,7 @@ import {
 const execFileAsync = promisify(execFile);
 const SCENARIO_ID = "ux-matrix-evidence-dashboard";
 const SOURCE_PATH = "scripts/qa/ux-matrix-evidence-producer.ts";
-const SUITE_COMMAND = `pnpm openclaw qa suite --scenario ${SCENARIO_ID}`;
+const SUITE_COMMAND = `pnpm marketingclaw qa suite --scenario ${SCENARIO_ID}`;
 
 type MatrixCell = {
   artifacts: Array<{ kind: string; path: string }>;
@@ -605,7 +605,7 @@ async function writeProducerMetadata(params: {
     return acc;
   }, {});
   await writeJson(path.join(params.artifactBase, "manifest.json"), {
-    kind: "openclaw.qa.ux-matrix",
+    kind: "marketingclaw.qa.ux-matrix",
     run: {
       scenarioId: SCENARIO_ID,
       status: counts.fail ? "fail" : counts.blocked ? "blocked" : "pass",
@@ -627,7 +627,7 @@ async function writeProducerMetadata(params: {
       status: cell.status,
       surface: cell.surface,
     })),
-    kind: "openclaw.qa.ux-matrix.release-ledger",
+    kind: "marketingclaw.qa.ux-matrix.release-ledger",
   });
   await writeText(
     path.join(params.artifactBase, "commands.txt"),
@@ -656,7 +656,7 @@ async function runUxMatrixEvidenceProducer(options: ProducerOptions) {
     "logs.txt",
   );
   const cliResult = await runCommandForCell({
-    args: ["openclaw.mjs", "--help"],
+    args: ["marketingclaw.mjs", "--help"],
     artifactBase: options.artifactBase,
     command: process.execPath,
     cwd: options.repoRoot,

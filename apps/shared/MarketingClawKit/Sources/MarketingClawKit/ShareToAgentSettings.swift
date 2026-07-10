@@ -1,7 +1,7 @@
 import Foundation
 
 public enum ShareToAgentSettings {
-    private static var suiteName: String { OpenClawAppGroup.identifier }
+    private static var suiteName: String { MarketingClawAppGroup.identifier }
     private static let defaultInstructionKey = "share.defaultInstruction"
 
     private static var defaults: UserDefaults {

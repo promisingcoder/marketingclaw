@@ -25,13 +25,13 @@ actor PortGuardian {
     /// across app instances; entries there that we do not own are reap candidates,
     /// never adopted — adopting them would resurrect records a sibling removed.
     private var ownRecords: [Int32: Record] = [:]
-    private let logger = Logger(subsystem: "ai.openclaw", category: "portguard")
+    private let logger = Logger(subsystem: "ai.marketingclaw", category: "portguard")
     #if DEBUG
     private var testingDescriptors: [Int: Descriptor] = [:]
     #endif
     private nonisolated static let appSupportDir: URL = {
         let base = FileManager().urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        return base.appendingPathComponent("OpenClaw", isDirectory: true)
+        return base.appendingPathComponent("MarketingClaw", isDirectory: true)
     }()
 
     private nonisolated static var recordPath: URL {
@@ -190,7 +190,7 @@ actor PortGuardian {
         // absorbs wall-clock steps between kernel start time and the record write.
         guard process.startedAt <= record.timestamp + 5 else { return .drop }
         // ppid 1 means reparented to launchd: the owning app instance died. Any other
-        // live parent may be a concurrent OpenClaw instance (prod + dev), so hands off.
+        // live parent may be a concurrent MarketingClaw instance (prod + dev), so hands off.
         return process.parentPid == 1 ? .reap : .keep
     }
 
@@ -442,7 +442,7 @@ actor PortGuardian {
     {
         let expectedDesc: String
         let okPredicate: (Listener) -> Bool
-        let expectedCommands = ["node", "openclaw", "tsx", "pnpm", "bun"]
+        let expectedCommands = ["node", "marketingclaw", "tsx", "pnpm", "bun"]
 
         switch mode {
         case .remote:
@@ -529,21 +529,21 @@ actor PortGuardian {
             return false
         case .local:
             // Preserve both the legacy hidden alias and the current service process title.
-            if full.contains("gateway-daemon") || full.contains("openclaw-gateway")
-                || cmd.contains("openclaw-gateway")
+            if full.contains("gateway-daemon") || full.contains("marketingclaw-gateway")
+                || cmd.contains("marketingclaw-gateway")
             {
                 return true
             }
-            if self.isNodeOpenClawGatewayCommand(full) { return true }
+            if self.isNodeMarketingClawGatewayCommand(full) { return true }
             // If args are unavailable, treat a CLI listener as expected.
-            if cmd.contains("openclaw"), full == cmd { return true }
+            if cmd.contains("marketingclaw"), full == cmd { return true }
             return false
         case .unconfigured:
             return false
         }
     }
 
-    private static func isNodeOpenClawGatewayCommand(_ fullCommand: String) -> Bool {
+    private static func isNodeMarketingClawGatewayCommand(_ fullCommand: String) -> Bool {
         let tokens = fullCommand
             .split(whereSeparator: \.isWhitespace)
             .map { self.unquoteCommandToken(String($0)) }
@@ -551,16 +551,16 @@ actor PortGuardian {
         guard URL(fileURLWithPath: tokens[0]).lastPathComponent.lowercased() == "node" else {
             return false
         }
-        return self.isOpenClawDistEntrypointToken(tokens[1])
+        return self.isMarketingClawDistEntrypointToken(tokens[1])
             && tokens[2].lowercased() == "gateway"
     }
 
-    private static func isOpenClawDistEntrypointToken(_ token: String) -> Bool {
+    private static func isMarketingClawDistEntrypointToken(_ token: String) -> Bool {
         let normalized = token.replacingOccurrences(of: "\\", with: "/").lowercased()
         guard normalized.hasSuffix("/dist/index.js") else { return false }
         return normalized
             .split(separator: "/", omittingEmptySubsequences: true)
-            .contains("openclaw")
+            .contains("marketingclaw")
     }
 
     private static func unquoteCommandToken(_ token: String) -> String {

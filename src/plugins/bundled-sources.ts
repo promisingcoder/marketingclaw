@@ -1,7 +1,7 @@
 // Resolves bundled plugin source metadata from package manifests.
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import { discoverOpenClawPlugins, type PluginDiscoveryResult } from "./discovery.js";
+import { isRecord } from "@marketingclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@marketingclaw/normalization-core/string-coerce";
+import { discoverMarketingClawPlugins, type PluginDiscoveryResult } from "./discovery.js";
 import { loadPluginManifest } from "./manifest.js";
 
 export type BundledPluginSource = {
@@ -44,7 +44,7 @@ export function resolveBundledPluginSources(params: {
 }): Map<string, BundledPluginSource> {
   const discovery =
     params.discovery ??
-    discoverOpenClawPlugins({ workspaceDir: params.workspaceDir, env: params.env });
+    discoverMarketingClawPlugins({ workspaceDir: params.workspaceDir, env: params.env });
   const bundled = new Map<string, BundledPluginSource>();
 
   for (const candidate of discovery.candidates) {
@@ -123,5 +123,5 @@ export function resolveBundledPluginInstallCommandHint(params: {
   if (!bundledSource?.localPath) {
     return null;
   }
-  return `openclaw plugins install ${bundledSource.localPath}`;
+  return `marketingclaw plugins install ${bundledSource.localPath}`;
 }

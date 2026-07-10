@@ -9,7 +9,7 @@ export {
   parseNonNegativeByteSize,
   resolveSessionTranscriptsDirForAgent,
   resolveStateDir,
-} from "./openclaw-runtime.js";
+} from "./marketingclaw-runtime.js";
 export type {
   MemoryBackend,
   MemoryCitationsMode,
@@ -18,7 +18,7 @@ export type {
   MemoryQmdMcporterConfig,
   MemoryQmdSearchMode,
   MemorySearchConfig,
-  OpenClawConfig,
+  MarketingClawConfig,
   SecretInput,
   SessionSendPolicyConfig,
-} from "./openclaw-runtime.js";
+} from "./marketingclaw-runtime.js";

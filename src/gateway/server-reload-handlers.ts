@@ -16,7 +16,7 @@ import { getTotalPendingReplies } from "../auto-reply/reply/dispatcher-registry.
 import type { CliDeps } from "../cli/deps.types.js";
 import { isRestartEnabled } from "../config/commands.flags.js";
 import { getRuntimeConfig } from "../config/config.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { isTruthyEnvValue } from "../infra/env.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import type { HeartbeatRunner } from "../infra/heartbeat-runner.js";
@@ -183,7 +183,7 @@ type GatewayReloadHandlerParams = {
   getChannelAutostartSuppression?: GatewayChannelManager["getAutostartSuppression"];
   stopPostReadySidecars?: () => Promise<void> | void;
   reloadPlugins: (params: {
-    nextConfig: OpenClawConfig;
+    nextConfig: MarketingClawConfig;
     changedPaths: readonly string[];
     beforeReplace: (channels: ReadonlySet<ChannelKind>) => Promise<void>;
     isAborted?: () => boolean;
@@ -196,7 +196,7 @@ type GatewayReloadHandlerParams = {
   logChannels: { info: (msg: string) => void; error: (msg: string) => void };
   logCron: { error: (msg: string) => void };
   logReload: GatewayReloadLog;
-  createHealthMonitor: (config: OpenClawConfig) => ChannelHealthMonitor | null;
+  createHealthMonitor: (config: MarketingClawConfig) => ChannelHealthMonitor | null;
   createGmailRestartAbortController?: () => GatewayGmailRestartAbortController;
   clearGmailRestartAbortController?: (controller: GatewayGmailRestartAbortController) => void;
   onCronRestart?: () => void;
@@ -207,8 +207,8 @@ type ManagedGatewayConfigReloaderParams = Omit<
   "createHealthMonitor" | "logReload"
 > & {
   minimalTestGateway: boolean;
-  initialConfig: OpenClawConfig;
-  initialCompareConfig?: OpenClawConfig;
+  initialConfig: MarketingClawConfig;
+  initialCompareConfig?: MarketingClawConfig;
   initialInternalWriteHash: string | null;
   watchPath: string;
   readSnapshot: typeof import("../config/config.js").readConfigFileSnapshot;
@@ -219,10 +219,12 @@ type ManagedGatewayConfigReloaderParams = Omit<
   };
   channelManager: GatewayChannelManager;
   activateRuntimeSecrets: ActivateRuntimeSecrets;
-  resolveSharedGatewaySessionGenerationForConfig: (config: OpenClawConfig) => string | undefined;
+  resolveSharedGatewaySessionGenerationForConfig: (
+    config: MarketingClawConfig,
+  ) => string | undefined;
   sharedGatewaySessionGenerationState: SharedGatewaySessionGenerationState;
   clients: Iterable<SharedGatewayAuthClient>;
-  reconcileTerminalSessions: (plan: GatewayReloadPlan, nextConfig: OpenClawConfig) => void;
+  reconcileTerminalSessions: (plan: GatewayReloadPlan, nextConfig: MarketingClawConfig) => void;
   commitTerminalConfig: () => void;
 };
 
@@ -273,7 +275,10 @@ export function createGatewayReloadHandlers(params: GatewayReloadHandlerParams) 
   const collectActiveRestartSessionIds = () => {
     return new Set<string>(listActiveEmbeddedRunSessionIds());
   };
-  const markActiveMainSessionsForRestart = async (nextConfig: OpenClawConfig, reason: string) => {
+  const markActiveMainSessionsForRestart = async (
+    nextConfig: MarketingClawConfig,
+    reason: string,
+  ) => {
     const sessionKeys = collectActiveRestartSessionKeys();
     const sessionIds = collectActiveRestartSessionIds();
     if (sessionKeys.size === 0 && sessionIds.size === 0) {
@@ -291,7 +296,7 @@ export function createGatewayReloadHandlers(params: GatewayReloadHandlerParams) 
   };
   const waitForActiveWorkBeforeChannelReload = async (
     channels: Iterable<ChannelKind>,
-    nextConfig: OpenClawConfig,
+    nextConfig: MarketingClawConfig,
   ): Promise<boolean> => {
     // Returns true when the wait was cancelled (in-process restart supersedes),
     // false when active work drained or timed out and channel reload may proceed.
@@ -346,7 +351,7 @@ export function createGatewayReloadHandlers(params: GatewayReloadHandlerParams) 
     }
   };
 
-  const applyHotReload = async (plan: GatewayReloadPlan, nextConfig: OpenClawConfig) => {
+  const applyHotReload = async (plan: GatewayReloadPlan, nextConfig: MarketingClawConfig) => {
     setGatewaySigusr1RestartPolicy({ allowExternal: isRestartEnabled(nextConfig) });
     const state = params.getState();
     const nextState = { ...state };
@@ -373,8 +378,8 @@ export function createGatewayReloadHandlers(params: GatewayReloadHandlerParams) 
     let activePluginChannelsAfterReload: ReadonlySet<ChannelKind> | null = null;
     let pluginReloadAborted = false;
     const shouldSkipChannelRestart = () =>
-      isTruthyEnvValue(process.env.OPENCLAW_SKIP_CHANNELS) ||
-      isTruthyEnvValue(process.env.OPENCLAW_SKIP_PROVIDERS);
+      isTruthyEnvValue(process.env.MARKETINGCLAW_SKIP_CHANNELS) ||
+      isTruthyEnvValue(process.env.MARKETINGCLAW_SKIP_PROVIDERS);
     const getChannelAutostartSuppression = () => params.getChannelAutostartSuppression?.() ?? null;
     const logSuppressedChannelRestart = (
       channels: ReadonlySet<ChannelKind>,
@@ -519,7 +524,7 @@ export function createGatewayReloadHandlers(params: GatewayReloadHandlerParams) 
               signal: restartAbortController.signal,
               onSkipped: () =>
                 params.logHooks.info(
-                  "skipping gmail watcher restart (OPENCLAW_SKIP_GMAIL_WATCHER=1)",
+                  "skipping gmail watcher restart (MARKETINGCLAW_SKIP_GMAIL_WATCHER=1)",
                 ),
             });
           }
@@ -532,7 +537,7 @@ export function createGatewayReloadHandlers(params: GatewayReloadHandlerParams) 
     if (channelsToRestart.size > 0) {
       if (shouldSkipChannelRestart()) {
         params.logChannels.info(
-          "skipping channel reload (OPENCLAW_SKIP_CHANNELS=1 or OPENCLAW_SKIP_PROVIDERS=1)",
+          "skipping channel reload (MARKETINGCLAW_SKIP_CHANNELS=1 or MARKETINGCLAW_SKIP_PROVIDERS=1)",
         );
       } else if (getChannelAutostartSuppression()) {
         let cancelledByRestart = pluginReloadAborted;
@@ -636,7 +641,10 @@ export function createGatewayReloadHandlers(params: GatewayReloadHandlerParams) 
 
   let restartPending = false;
 
-  const requestGatewayRestart = (plan: GatewayReloadPlan, nextConfig: OpenClawConfig): boolean => {
+  const requestGatewayRestart = (
+    plan: GatewayReloadPlan,
+    nextConfig: MarketingClawConfig,
+  ): boolean => {
     setGatewaySigusr1RestartPolicy({ allowExternal: isRestartEnabled(nextConfig) });
     const reasons = plan.restartReasons.length
       ? plan.restartReasons.join(", ")

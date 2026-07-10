@@ -2,7 +2,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { AssistantMessage } from "openclaw/plugin-sdk/llm";
+import type { AssistantMessage } from "marketingclaw/plugin-sdk/llm";
 import { afterEach, describe, expect, it } from "vitest";
 import { SessionManager } from "../../agents/sessions/session-manager.js";
 import { forkSessionFromParentTranscript } from "./session-accessor.js";
@@ -21,7 +21,7 @@ afterEach(async () => {
 
 describe("forkSessionFromParentTranscript", () => {
   it("forks the active branch without synchronously opening the session manager", async () => {
-    const root = await makeRoot("openclaw-parent-fork-");
+    const root = await makeRoot("marketingclaw-parent-fork-");
     const sessionsDir = path.join(root, "sessions");
     await fs.mkdir(sessionsDir);
     const parentSessionFile = path.join(sessionsDir, "parent.jsonl");
@@ -136,7 +136,7 @@ describe("forkSessionFromParentTranscript", () => {
   });
 
   it("keeps opaque append-parent metadata on the active fork branch", async () => {
-    const root = await makeRoot("openclaw-parent-fork-opaque-");
+    const root = await makeRoot("marketingclaw-parent-fork-opaque-");
     const sessionsDir = path.join(root, "sessions");
     await fs.mkdir(sessionsDir);
     const parentSessionFile = path.join(sessionsDir, "parent.jsonl");
@@ -245,7 +245,7 @@ describe("forkSessionFromParentTranscript", () => {
   });
 
   it("keeps parentless visible history with a disjoint append cursor", async () => {
-    const root = await makeRoot("openclaw-parent-fork-disjoint-");
+    const root = await makeRoot("marketingclaw-parent-fork-disjoint-");
     const sessionsDir = path.join(root, "sessions");
     await fs.mkdir(sessionsDir);
     const parentSessionFile = path.join(sessionsDir, "parent.jsonl");
@@ -322,7 +322,7 @@ describe("forkSessionFromParentTranscript", () => {
   });
 
   it("keeps an explicit empty visible branch separate from its opaque append parent", async () => {
-    const root = await makeRoot("openclaw-parent-fork-empty-opaque-");
+    const root = await makeRoot("marketingclaw-parent-fork-empty-opaque-");
     const sessionsDir = path.join(root, "sessions");
     await fs.mkdir(sessionsDir);
     const parentSessionFile = path.join(sessionsDir, "parent.jsonl");
@@ -406,7 +406,7 @@ describe("forkSessionFromParentTranscript", () => {
   });
 
   it("keeps a reachable branch suffix when an older parent is missing", async () => {
-    const root = await makeRoot("openclaw-parent-fork-missing-ancestor-");
+    const root = await makeRoot("marketingclaw-parent-fork-missing-ancestor-");
     const sessionsDir = path.join(root, "sessions");
     await fs.mkdir(sessionsDir);
     const parentSessionFile = path.join(sessionsDir, "parent.jsonl");
@@ -455,7 +455,7 @@ describe("forkSessionFromParentTranscript", () => {
   });
 
   it("keeps visible history when the next append explicitly starts a root branch", async () => {
-    const root = await makeRoot("openclaw-parent-fork-root-append-");
+    const root = await makeRoot("marketingclaw-parent-fork-root-append-");
     const sessionsDir = path.join(root, "sessions");
     await fs.mkdir(sessionsDir);
     const parentSessionFile = path.join(sessionsDir, "parent.jsonl");
@@ -517,7 +517,7 @@ describe("forkSessionFromParentTranscript", () => {
   });
 
   it("preserves supported current-version linear transcripts", async () => {
-    const root = await makeRoot("openclaw-parent-fork-linear-");
+    const root = await makeRoot("marketingclaw-parent-fork-linear-");
     const sessionsDir = path.join(root, "sessions");
     await fs.mkdir(sessionsDir);
     const parentSessionFile = path.join(sessionsDir, "parent.jsonl");
@@ -594,7 +594,7 @@ describe("forkSessionFromParentTranscript", () => {
   });
 
   it("creates a header-only child when the parent has no entries", async () => {
-    const root = await makeRoot("openclaw-parent-fork-empty-");
+    const root = await makeRoot("marketingclaw-parent-fork-empty-");
     const sessionsDir = path.join(root, "sessions");
     await fs.mkdir(sessionsDir);
     const parentSessionFile = path.join(sessionsDir, "parent.jsonl");

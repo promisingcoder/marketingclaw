@@ -1,5 +1,5 @@
 import Foundation
-import OpenClawProtocol
+import MarketingClawProtocol
 
 public enum GatewayDeviceAuthPayload {
     public static func buildConnectCompatibilityPayload(
@@ -86,7 +86,7 @@ public enum GatewayDeviceAuthPayload {
         payload: String,
         identity: DeviceIdentity,
         signedAtMs: Int64,
-        nonce: String) -> [String: OpenClawProtocol.AnyCodable]?
+        nonce: String) -> [String: MarketingClawProtocol.AnyCodable]?
     {
         guard let signature = DeviceIdentityStore.signPayload(payload, identity: identity),
               let publicKey = DeviceIdentityStore.publicKeyBase64Url(identity)
@@ -94,11 +94,11 @@ public enum GatewayDeviceAuthPayload {
             return nil
         }
         return [
-            "id": OpenClawProtocol.AnyCodable(identity.deviceId),
-            "publicKey": OpenClawProtocol.AnyCodable(publicKey),
-            "signature": OpenClawProtocol.AnyCodable(signature),
-            "signedAt": OpenClawProtocol.AnyCodable(signedAtMs),
-            "nonce": OpenClawProtocol.AnyCodable(nonce),
+            "id": MarketingClawProtocol.AnyCodable(identity.deviceId),
+            "publicKey": MarketingClawProtocol.AnyCodable(publicKey),
+            "signature": MarketingClawProtocol.AnyCodable(signature),
+            "signedAt": MarketingClawProtocol.AnyCodable(signedAtMs),
+            "nonce": MarketingClawProtocol.AnyCodable(nonce),
         ]
     }
 }

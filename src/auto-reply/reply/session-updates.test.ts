@@ -93,7 +93,7 @@ describe("ensureSkillSnapshot", () => {
   });
 
   it("uses config-aware session agent resolution for legacy session keys", async () => {
-    vi.stubEnv("OPENCLAW_TEST_FAST", "0");
+    vi.stubEnv("MARKETINGCLAW_TEST_FAST", "0");
 
     await ensureSkillSnapshot({
       sessionKey: "main",
@@ -123,8 +123,8 @@ describe("ensureSkillSnapshot", () => {
   });
 
   it("keeps a concurrent rename and unpin while persisting a skill snapshot", async () => {
-    vi.stubEnv("OPENCLAW_TEST_FAST", "0");
-    const root = tempDirs.make("openclaw-session-updates-");
+    vi.stubEnv("MARKETINGCLAW_TEST_FAST", "0");
+    const root = tempDirs.make("marketingclaw-session-updates-");
     const storePath = path.join(root, "sessions.json");
     const sessionKey = "agent:main:reply";
     const staleEntry: SessionEntry = {

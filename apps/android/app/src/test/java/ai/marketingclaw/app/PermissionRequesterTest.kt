@@ -1,4 +1,4 @@
-package ai.openclaw.app
+package ai.marketingclaw.app
 
 import android.Manifest
 import androidx.activity.ComponentActivity

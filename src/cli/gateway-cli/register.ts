@@ -1,5 +1,5 @@
 // Commander registration for gateway status, health, diagnostics, discovery, and run commands.
-import { formatByteSize } from "@openclaw/normalization-core";
+import { formatByteSize } from "@marketingclaw/normalization-core";
 import type { Command } from "commander";
 import { formatDocsLink } from "../../../packages/terminal-core/src/links.js";
 import { colorize, isRich, theme } from "../../../packages/terminal-core/src/theme.js";
@@ -504,12 +504,12 @@ export function registerGatewayCli(program: Command) {
         "after",
         () =>
           `\n${theme.heading("Examples:")}\n${formatHelpExamples([
-            ["openclaw gateway run", "Run the gateway in the foreground."],
-            ["openclaw gateway status", "Show service status plus connectivity/capability."],
-            ["openclaw gateway discover", "Find local and wide-area gateway beacons."],
-            ["openclaw gateway stability", "Show recent stability diagnostics."],
-            ["openclaw gateway call health", "Call a gateway RPC method directly."],
-          ])}\n\n${theme.muted("Docs:")} ${formatDocsLink("/cli/gateway", "docs.openclaw.ai/cli/gateway")}\n`,
+            ["marketingclaw gateway run", "Run the gateway in the foreground."],
+            ["marketingclaw gateway status", "Show service status plus connectivity/capability."],
+            ["marketingclaw gateway discover", "Find local and wide-area gateway beacons."],
+            ["marketingclaw gateway stability", "Show recent stability diagnostics."],
+            ["marketingclaw gateway call health", "Call a gateway RPC method directly."],
+          ])}\n\n${theme.muted("Docs:")} ${formatDocsLink("/cli/gateway", "docs.marketingclaw.ai/cli/gateway")}\n`,
       ),
   );
 

@@ -2,7 +2,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { CURRENT_SESSION_VERSION } from "openclaw/plugin-sdk/agent-sessions";
+import { CURRENT_SESSION_VERSION } from "marketingclaw/plugin-sdk/agent-sessions";
 import { afterEach, describe, expect, it } from "vitest";
 import { readCodexMirroredSessionHistoryMessages } from "./session-history.js";
 
@@ -15,7 +15,7 @@ afterEach(async () => {
 });
 
 async function writeSession(records: unknown[]): Promise<string> {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-session-history-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-codex-session-history-"));
   tempDirs.push(dir);
   const sessionFile = path.join(dir, "session.jsonl");
   const header = {
@@ -64,7 +64,7 @@ function mirroredTarget(sessionFile: string) {
 
 describe("readCodexMirroredSessionHistoryMessages", () => {
   it("treats a missing mirrored session file as empty history", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-session-history-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-codex-session-history-"));
     tempDirs.push(dir);
     const sessionFile = path.join(dir, "session.jsonl");
 
@@ -74,7 +74,7 @@ describe("readCodexMirroredSessionHistoryMessages", () => {
   });
 
   it("returns undefined for malformed non-empty mirrored session files", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-session-history-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-codex-session-history-"));
     tempDirs.push(dir);
     const sessionFile = path.join(dir, "session.jsonl");
     await fs.writeFile(sessionFile, JSON.stringify({ type: "message", id: "orphan" }) + "\n");

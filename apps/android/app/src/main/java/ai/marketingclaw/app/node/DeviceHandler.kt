@@ -1,9 +1,9 @@
-package ai.openclaw.app.node
+package ai.marketingclaw.app.node
 
-import ai.openclaw.app.BuildConfig
-import ai.openclaw.app.SensitiveFeatureConfig
-import ai.openclaw.app.gateway.GatewaySession
-import ai.openclaw.app.hasPhotoReadPermission
+import ai.marketingclaw.app.BuildConfig
+import ai.marketingclaw.app.SensitiveFeatureConfig
+import ai.marketingclaw.app.gateway.GatewaySession
+import ai.marketingclaw.app.hasPhotoReadPermission
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.ActivityManager
@@ -96,7 +96,7 @@ private class AndroidDeviceAppSource(
   @SuppressLint("QueryPermissionsNeeded")
   private fun visibleInstalledApplications(packageManager: PackageManager): List<ApplicationInfo> {
     // Android package visibility intentionally bounds this result to packages the app can see.
-    // OpenClaw should not request QUERY_ALL_PACKAGES for this optional device-context surface.
+    // MarketingClaw should not request QUERY_ALL_PACKAGES for this optional device-context surface.
     return packageManager.getInstalledApplications(PackageManager.MATCH_ALL)
   }
 }

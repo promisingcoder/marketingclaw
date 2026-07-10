@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@marketingclaw/normalization-core/string-coerce";
 import {
   ErrorCodes,
   type ErrorShape,
@@ -22,7 +22,7 @@ import {
 import type { SessionEntry } from "../config/sessions.js";
 import { resolveAgentMainSessionKey } from "../config/sessions/main-session.js";
 import { createSessionEntryWithTranscript } from "../config/sessions/session-accessor.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import {
   createInternalHookEvent,
   hasInternalHookListeners,
@@ -52,7 +52,7 @@ type RequestedSessionAgentIdResolution =
   | { ok: false; error: ErrorShape };
 
 export function resolveRequestedSessionAgentId(
-  cfg: OpenClawConfig,
+  cfg: MarketingClawConfig,
   key: string,
   explicitAgentId?: string,
 ): RequestedSessionAgentIdResolution {
@@ -156,7 +156,7 @@ type CreateGatewaySessionResult =
   | { ok: false; error: ErrorShape };
 
 export async function createGatewaySession(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   key?: string;
   agentId?: string;
   label?: string;

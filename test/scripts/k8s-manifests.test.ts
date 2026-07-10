@@ -71,9 +71,9 @@ describe("k8s manifests", () => {
     expect(deployment).toMatchObject({
       apiVersion: "apps/v1",
       kind: "Deployment",
-      metadata: { name: "openclaw" },
+      metadata: { name: "marketingclaw" },
     });
-    expect(matchLabels).toEqual({ app: "openclaw" });
+    expect(matchLabels).toEqual({ app: "marketingclaw" });
     expect(templateLabels).toMatchObject(matchLabels);
     expect(serviceSelector).toEqual(matchLabels);
     expect(ports).toContainEqual({
@@ -97,14 +97,20 @@ describe("k8s manifests", () => {
 
     expect(gateway.command).toEqual(["node", "/app/dist/index.js", "gateway", "run"]);
     expect(findNamed(env, "HOME")).toMatchObject({ value: "/home/node" });
-    expect(findNamed(env, "OPENCLAW_CONFIG_DIR")).toMatchObject({ value: "/home/node/.openclaw" });
-    expect(findNamed(env, "OPENCLAW_GATEWAY_TOKEN")).toMatchObject({
-      valueFrom: { secretKeyRef: { key: "OPENCLAW_GATEWAY_TOKEN", name: "openclaw-secrets" } },
+    expect(findNamed(env, "MARKETINGCLAW_CONFIG_DIR")).toMatchObject({
+      value: "/home/node/.marketingclaw",
     });
-    expect(findNamed(volumes, "openclaw-home")).toMatchObject({
-      persistentVolumeClaim: { claimName: "openclaw-home-pvc" },
+    expect(findNamed(env, "MARKETINGCLAW_GATEWAY_TOKEN")).toMatchObject({
+      valueFrom: {
+        secretKeyRef: { key: "MARKETINGCLAW_GATEWAY_TOKEN", name: "marketingclaw-secrets" },
+      },
     });
-    expect(findNamed(volumes, "config")).toMatchObject({ configMap: { name: "openclaw-config" } });
+    expect(findNamed(volumes, "marketingclaw-home")).toMatchObject({
+      persistentVolumeClaim: { claimName: "marketingclaw-home-pvc" },
+    });
+    expect(findNamed(volumes, "config")).toMatchObject({
+      configMap: { name: "marketingclaw-config" },
+    });
     expect(securityContext).toMatchObject({
       allowPrivilegeEscalation: false,
       readOnlyRootFilesystem: true,
@@ -116,11 +122,11 @@ describe("k8s manifests", () => {
     const configMap = readManifest("configmap.yaml");
     const pvc = readManifest("pvc.yaml");
     const data = asRecord(configMap.data, "configmap data");
-    const config = JSON.parse(String(data["openclaw.json"])) as Record<string, unknown>;
-    const gateway = asRecord(config.gateway, "openclaw config gateway");
-    const auth = asRecord(gateway.auth, "openclaw config auth");
-    const agents = asRecord(config.agents, "openclaw config agents");
-    const defaults = asRecord(agents.defaults, "openclaw config agent defaults");
+    const config = JSON.parse(String(data["marketingclaw.json"])) as Record<string, unknown>;
+    const gateway = asRecord(config.gateway, "marketingclaw config gateway");
+    const auth = asRecord(gateway.auth, "marketingclaw config auth");
+    const agents = asRecord(config.agents, "marketingclaw config agents");
+    const defaults = asRecord(agents.defaults, "marketingclaw config agent defaults");
     const pvcSpec = asRecord(pvc.spec, "pvc spec");
     const resources = asRecord(pvcSpec.resources, "pvc resources");
     const requests = asRecord(resources.requests, "pvc resource requests");
@@ -128,16 +134,16 @@ describe("k8s manifests", () => {
     expect(configMap).toMatchObject({
       apiVersion: "v1",
       kind: "ConfigMap",
-      metadata: { name: "openclaw-config" },
+      metadata: { name: "marketingclaw-config" },
     });
     expect(gateway).toMatchObject({ mode: "local", port: 18789 });
     expect(auth).toMatchObject({ mode: "token" });
-    expect(defaults).toMatchObject({ workspace: "~/.openclaw/workspace" });
-    expect(data["AGENTS.md"]).toContain("OpenClaw Assistant");
+    expect(defaults).toMatchObject({ workspace: "~/.marketingclaw/workspace" });
+    expect(data["AGENTS.md"]).toContain("MarketingClaw Assistant");
     expect(pvc).toMatchObject({
       apiVersion: "v1",
       kind: "PersistentVolumeClaim",
-      metadata: { name: "openclaw-home-pvc" },
+      metadata: { name: "marketingclaw-home-pvc" },
     });
     expect(requests).toMatchObject({ storage: "10Gi" });
   });

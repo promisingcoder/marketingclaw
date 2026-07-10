@@ -1,12 +1,12 @@
-# OpenClaw StepFun Provider
+# MarketingClaw StepFun Provider
 
-Official OpenClaw provider plugin for StepFun.
+Official MarketingClaw provider plugin for StepFun.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugins install @openclaw/stepfun-provider
-openclaw gateway restart
+marketingclaw plugins install @marketingclaw/stepfun-provider
+marketingclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/stepfun> for setup and configuration.
+See <https://docs.marketingclaw.ai/providers/stepfun> for setup and configuration.

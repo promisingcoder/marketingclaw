@@ -9,7 +9,7 @@ import {
   shouldStartOnboardingForFreshInstall,
 } from "../../../../dist/cli/run-main.js";
 import { clearConfigCache } from "../../../../dist/config/config.js";
-import type { OpenClawConfig } from "../../../../dist/config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../../../dist/config/types.marketingclaw.js";
 import { runCrestodian } from "../../../../dist/crestodian/crestodian.js";
 import type { RuntimeEnv } from "../../../../dist/runtime.js";
 import { createE2eStateDir } from "../../../../scripts/e2e/lib/temp-state-dir.ts";
@@ -71,26 +71,27 @@ function renderCommandTemplate(template: string, vars: Record<string, string>): 
 
 async function main() {
   const spec = await readFirstRunSpec();
-  const tempState = await createE2eStateDir("openclaw-crestodian-first-run-");
+  const tempState = await createE2eStateDir("marketingclaw-crestodian-first-run-");
   tempState.registerExitCleanup();
   const stateDir = tempState.stateDir;
-  const configPath = process.env.OPENCLAW_CONFIG_PATH ?? path.join(stateDir, "openclaw.json");
-  setEnvValue("OPENCLAW_STATE_DIR", stateDir);
-  setEnvValue("OPENCLAW_CONFIG_PATH", configPath);
+  const configPath =
+    process.env.MARKETINGCLAW_CONFIG_PATH ?? path.join(stateDir, "marketingclaw.json");
+  setEnvValue("MARKETINGCLAW_STATE_DIR", stateDir);
+  setEnvValue("MARKETINGCLAW_CONFIG_PATH", configPath);
   await fs.rm(stateDir, { recursive: true, force: true });
   await fs.mkdir(stateDir, { recursive: true });
   clearConfigCache();
 
   assert(
-    await shouldStartOnboardingForFreshInstall(["node", "openclaw"]),
-    "fresh bare OpenClaw invocation did not route to onboarding",
+    await shouldStartOnboardingForFreshInstall(["node", "marketingclaw"]),
+    "fresh bare MarketingClaw invocation did not route to onboarding",
   );
   assert(
-    shouldStartCrestodianForModernOnboard(["node", "openclaw", "onboard", "--modern"]),
+    shouldStartCrestodianForModernOnboard(["node", "marketingclaw", "onboard", "--modern"]),
     "modern onboard invocation did not route to Crestodian",
   );
   process.exitCode = undefined;
-  await runCli(["node", "openclaw", "onboard", "--modern", "--non-interactive", "--json"]);
+  await runCli(["node", "marketingclaw", "onboard", "--modern", "--non-interactive", "--json"]);
   assert(
     process.exitCode === undefined || process.exitCode === 0,
     "modern onboard overview exited nonzero",
@@ -135,7 +136,7 @@ async function main() {
     );
   }
 
-  const config = JSON.parse(await fs.readFile(configPath, "utf8")) as OpenClawConfig;
+  const config = JSON.parse(await fs.readFile(configPath, "utf8")) as MarketingClawConfig;
   assert(
     config.agents?.defaults?.workspace === spec.dockerDefaultWorkspace,
     "first-run setup did not write default workspace",

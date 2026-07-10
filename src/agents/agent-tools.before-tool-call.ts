@@ -5,8 +5,8 @@
  */
 import os from "node:os";
 import path from "node:path";
-import { addTimerTimeoutGraceMs } from "@openclaw/normalization-core/number-coercion";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { addTimerTimeoutGraceMs } from "@marketingclaw/normalization-core/number-coercion";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import type { ToolLoopDetectionConfig } from "../config/types.tools.js";
 import { GatewayClientRequestError } from "../gateway/client.js";
 import {
@@ -132,7 +132,7 @@ export type ToolOutcomeObserver = (observation: ToolOutcomeObservation) => void;
 
 export type HookContext = {
   agentId?: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   /** Tool execution cwd for host-derived path facts. */
   cwd?: string;
   /** Host workspace used to resolve relative tool params for diagnostics only. */

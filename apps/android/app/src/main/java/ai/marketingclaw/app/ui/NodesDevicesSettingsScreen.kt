@@ -1,19 +1,19 @@
-package ai.openclaw.app.ui
+package ai.marketingclaw.app.ui
 
-import ai.openclaw.app.GatewayDeviceTokenSummary
-import ai.openclaw.app.GatewayNodeApprovalState
-import ai.openclaw.app.GatewayNodeSummary
-import ai.openclaw.app.GatewayNodesDevicesSummary
-import ai.openclaw.app.GatewayPairedDeviceSummary
-import ai.openclaw.app.GatewayPendingDeviceSummary
-import ai.openclaw.app.MainViewModel
-import ai.openclaw.app.ui.design.ClawDetailRow
-import ai.openclaw.app.ui.design.ClawPanel
-import ai.openclaw.app.ui.design.ClawSecondaryButton
-import ai.openclaw.app.ui.design.ClawStatus
-import ai.openclaw.app.ui.design.ClawStatusPill
-import ai.openclaw.app.ui.design.ClawTextBadge
-import ai.openclaw.app.ui.design.ClawTheme
+import ai.marketingclaw.app.GatewayDeviceTokenSummary
+import ai.marketingclaw.app.GatewayNodeApprovalState
+import ai.marketingclaw.app.GatewayNodeSummary
+import ai.marketingclaw.app.GatewayNodesDevicesSummary
+import ai.marketingclaw.app.GatewayPairedDeviceSummary
+import ai.marketingclaw.app.GatewayPendingDeviceSummary
+import ai.marketingclaw.app.MainViewModel
+import ai.marketingclaw.app.ui.design.ClawDetailRow
+import ai.marketingclaw.app.ui.design.ClawPanel
+import ai.marketingclaw.app.ui.design.ClawSecondaryButton
+import ai.marketingclaw.app.ui.design.ClawStatus
+import ai.marketingclaw.app.ui.design.ClawStatusPill
+import ai.marketingclaw.app.ui.design.ClawTextBadge
+import ai.marketingclaw.app.ui.design.ClawTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -230,7 +230,7 @@ private fun GatewayNodesDevicesSummary.isEmpty(): Boolean = nodes.isEmpty() && p
 
 private fun nodeSubtitle(node: GatewayNodeSummary): String {
   val kind = node.deviceFamily ?: "Node host"
-  val version = node.version?.let { "OpenClaw $it" }
+  val version = node.version?.let { "MarketingClaw $it" }
   val status = if (node.paired) "Paired" else "Unpaired"
   val approval = nodeApprovalSubtitle(node.approvalState)
   val commands =

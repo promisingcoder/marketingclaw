@@ -27,16 +27,16 @@ async function mountMenu(options: {
   containers.push(container);
   document.body.append(container);
   render(
-    html`<openclaw-native-link-menu
+    html`<marketingclaw-native-link-menu
       .x=${100}
       .y=${100}
       .trigger=${options.trigger ?? null}
       .onAction=${options.onAction ?? (() => {})}
       .onClose=${options.onClose ?? (() => {})}
-    ></openclaw-native-link-menu>`,
+    ></marketingclaw-native-link-menu>`,
     container,
   );
-  const menu = container.querySelector("openclaw-native-link-menu");
+  const menu = container.querySelector("marketingclaw-native-link-menu");
   if (!(menu instanceof NativeLinkMenu)) {
     throw new Error("Expected native link menu");
   }

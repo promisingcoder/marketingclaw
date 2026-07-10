@@ -6,7 +6,7 @@ import {
   isFutureDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,
   resolveTimerTimeoutMs,
-} from "@openclaw/normalization-core/number-coercion";
+} from "@marketingclaw/normalization-core/number-coercion";
 import { logRejectedLargePayload } from "../logging/diagnostic-payload.js";
 import { MAX_BUFFERED_BYTES } from "./server-constants.js";
 import type { GatewayWsClient } from "./server/ws-types.js";
@@ -88,7 +88,7 @@ type PingableSocket = {
   ) => unknown;
 };
 
-const SERIALIZED_EVENT_PAYLOAD = Symbol("openclaw.serializedEventPayload");
+const SERIALIZED_EVENT_PAYLOAD = Symbol("marketingclaw.serializedEventPayload");
 const AUTHORIZED_SYSTEM_RUN_EVENT_GRACE_MS = 5 * 60 * 1000;
 const WEBSOCKET_OPEN_READY_STATE = 1;
 const SLOW_CONSUMER_CLOSE_CODE = 1008;
@@ -662,7 +662,7 @@ export class NodeRegistry {
     const node = this.nodesById.get(params.nodeId);
     return (
       node?.connId === params.connId &&
-      node.clientId === "openclaw-macos" &&
+      node.clientId === "marketingclaw-macos" &&
       node.platform === "darwin"
     );
   }

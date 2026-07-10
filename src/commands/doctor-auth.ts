@@ -30,7 +30,7 @@ import {
 } from "../agents/auth-profiles/oauth-refresh-failure.js";
 import { resolveAuthStorePathForDisplay } from "../agents/auth-profiles/path-resolve.js";
 import { buildProviderAuthRecoveryHint } from "../agents/provider-auth-recovery-hint.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import type { HealthFinding } from "../flows/health-checks.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { isRecord } from "../utils.js";
@@ -46,7 +46,7 @@ const DOCTOR_REAUTH_PROVIDER_ALIASES: Readonly<Record<string, string>> = {
   [LEGACY_CODEX_PROVIDER_ID]: OPENAI_PROVIDER_ID,
 };
 
-function hasConfiguredCodexOAuthProfile(cfg: OpenClawConfig): boolean {
+function hasConfiguredCodexOAuthProfile(cfg: MarketingClawConfig): boolean {
   return Object.values(cfg.auth?.profiles ?? {}).some(
     (profile) =>
       (profile.provider === OPENAI_PROVIDER_ID || profile.provider === LEGACY_CODEX_PROVIDER_ID) &&
@@ -136,7 +136,7 @@ export function legacyCodexProviderOverrideToHealthFinding(
 }
 
 /** Emits a warning when legacy Codex transport overrides can shadow configured Codex OAuth. */
-export function noteLegacyCodexProviderOverride(cfg: OpenClawConfig): void {
+export function noteLegacyCodexProviderOverride(cfg: MarketingClawConfig): void {
   const providerOverride = cfg.models?.providers?.[LEGACY_CODEX_PROVIDER_ID];
   if (!providerOverride) {
     return;
@@ -168,7 +168,7 @@ function formatAgentNoteTitle(title: string, agentId: string, labelAgents: boole
   return labelAgents ? `${title} (agent: ${agentId})` : title;
 }
 
-function listAuthProfileHealthTargets(cfg: OpenClawConfig): AuthProfileHealthTarget[] {
+function listAuthProfileHealthTargets(cfg: MarketingClawConfig): AuthProfileHealthTarget[] {
   const defaultAgentId = resolveDefaultAgentId(cfg);
   const targets = new Map<string, AuthProfileHealthTarget>();
   const addTarget = (agentId: string, agentDir: string, isDefault: boolean) => {
@@ -252,14 +252,14 @@ export function formatOAuthRefreshFailureDoctorLine(params: {
 
 async function resolveAuthIssueHint(
   issue: AuthIssue,
-  cfg: OpenClawConfig,
+  cfg: MarketingClawConfig,
   store: ReturnType<typeof ensureAuthProfileStore>,
 ): Promise<string | null> {
   if (issue.reasonCode === "invalid_expires") {
     return "Invalid token expires metadata. Set a future Unix ms timestamp or remove expires.";
   }
   if (issue.reasonCode === "malformed_api_key") {
-    return "Paste the API key value, not an OpenClaw onboarding command.";
+    return "Paste the API key value, not an MarketingClaw onboarding command.";
   }
   const providerHint = await formatAuthDoctorHint({
     cfg,
@@ -277,7 +277,7 @@ async function resolveAuthIssueHint(
 
 async function formatAuthIssueLine(
   issue: AuthIssue,
-  cfg: OpenClawConfig,
+  cfg: MarketingClawConfig,
   store: ReturnType<typeof ensureAuthProfileStore>,
 ): Promise<string> {
   const remaining =
@@ -313,8 +313,8 @@ function authProfileIssueToHealthFinding(params: {
     fixHint:
       params.hint ??
       (params.issue.status === "expiring"
-        ? "Run `openclaw doctor --fix` to refresh expiring OAuth profiles, or re-authenticate static tokens."
-        : "Run `openclaw doctor --fix` to refresh OAuth profiles, or re-authenticate this provider."),
+        ? "Run `marketingclaw doctor --fix` to refresh expiring OAuth profiles, or re-authenticate static tokens."
+        : "Run `marketingclaw doctor --fix` to refresh OAuth profiles, or re-authenticate this provider."),
   };
 }
 
@@ -349,7 +349,7 @@ function isAuthProfileHealthIssue(profile: AuthHealthSummary["profiles"][number]
 }
 
 async function collectAuthProfileHealthFindingsForTarget(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   allowKeychainPrompt: boolean;
   target: AuthProfileHealthTarget;
   labelAgents: boolean;
@@ -416,7 +416,7 @@ async function collectAuthProfileHealthFindingsForTarget(params: {
 
 /** Collects read-only structured findings for auth profile health. */
 export async function collectAuthProfileHealthFindings(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   allowKeychainPrompt?: boolean;
 }): Promise<readonly HealthFinding[]> {
   const configuredProfiles = Object.keys(params.cfg.auth?.profiles ?? {}).length > 0;
@@ -451,7 +451,7 @@ export async function collectAuthProfileHealthFindings(params: {
 }
 
 async function noteAuthProfileHealthForTarget(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   prompter: DoctorPrompter;
   allowKeychainPrompt: boolean;
   target: AuthProfileHealthTarget;
@@ -570,7 +570,7 @@ async function noteAuthProfileHealthForTarget(params: {
 
 /** Checks configured agent auth stores and emits doctor notes for stale or unusable profiles. */
 export async function noteAuthProfileHealth(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   prompter: DoctorPrompter;
   allowKeychainPrompt: boolean;
 }): Promise<void> {

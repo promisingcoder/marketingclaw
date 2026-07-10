@@ -1,11 +1,11 @@
 /**
- * In-memory registry that associates browser tabs with OpenClaw sessions for
+ * In-memory registry that associates browser tabs with MarketingClaw sessions for
  * cleanup on session end or idle sweeps.
  */
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import { browserCloseTab } from "./client.js";
 
 type TrackedSessionBrowserTab = {

@@ -7,10 +7,10 @@ import os from "node:os";
 import nodePath from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
 import {
-  closeOpenClawStateDatabaseForTest,
+  closeMarketingClawStateDatabaseForTest,
   createChannelIngressQueueForTests as createChannelIngressQueue,
-} from "openclaw/plugin-sdk/plugin-state-test-runtime";
-import { WEBHOOK_RATE_LIMIT_DEFAULTS } from "openclaw/plugin-sdk/webhook-ingress";
+} from "marketingclaw/plugin-sdk/plugin-state-test-runtime";
+import { WEBHOOK_RATE_LIMIT_DEFAULTS } from "marketingclaw/plugin-sdk/webhook-ingress";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { clearTelegramRuntime, setTelegramRuntime } from "./runtime.js";
 import type { TelegramRuntime } from "./runtime.types.js";
@@ -223,7 +223,7 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   resetTelegramWebhookMocks();
-  webhookStateDir = await fs.mkdtemp(nodePath.join(os.tmpdir(), "openclaw-telegram-webhook-"));
+  webhookStateDir = await fs.mkdtemp(nodePath.join(os.tmpdir(), "marketingclaw-telegram-webhook-"));
   webhookSpoolDir = nodePath.join(webhookStateDir, "telegram", "ingress-spool-test");
   await fs.mkdir(webhookSpoolDir, { recursive: true });
   installTelegramIngressQueueRuntime(() => webhookStateDir ?? os.tmpdir());
@@ -231,7 +231,7 @@ beforeEach(async () => {
 
 afterEach(async () => {
   clearTelegramRuntime();
-  closeOpenClawStateDatabaseForTest();
+  closeMarketingClawStateDatabaseForTest();
   const stateDir = webhookStateDir;
   webhookStateDir = undefined;
   webhookSpoolDir = undefined;

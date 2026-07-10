@@ -1,6 +1,6 @@
 // Telegram rich/plain fallback policy is shared by durable sends, final replies,
 // and draft previews. A second copy reintroduces silent drift in parse failures.
-import { formatErrorMessage } from "openclaw/plugin-sdk/ssrf-runtime";
+import { formatErrorMessage } from "marketingclaw/plugin-sdk/ssrf-runtime";
 import {
   telegramHtmlToPlainTextFallback,
   type TelegramRichHtmlDegradationReason,

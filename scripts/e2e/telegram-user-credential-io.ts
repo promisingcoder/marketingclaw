@@ -1,4 +1,4 @@
-// Telegram User Credential Io script supports OpenClaw repository automation.
+// Telegram User Credential Io script supports MarketingClaw repository automation.
 import { spawn, spawnSync } from "node:child_process";
 import { readBoundedResponseText } from "../lib/bounded-response.ts";
 import { resolveWindowsTaskkillPath } from "../lib/windows-taskkill.mjs";
@@ -34,19 +34,19 @@ let forwardedSignalExitCode: number | undefined;
 let forwardedSignalForceKillTimer: NodeJS.Timeout | undefined;
 
 function readKillGraceMs() {
-  const raw = process.env.OPENCLAW_QA_CREDENTIAL_KILL_GRACE_MS?.trim();
+  const raw = process.env.MARKETINGCLAW_QA_CREDENTIAL_KILL_GRACE_MS?.trim();
   if (!raw) {
     return 5_000;
   }
   if (!/^\d+$/u.test(raw)) {
     throw new Error(
-      `OPENCLAW_QA_CREDENTIAL_KILL_GRACE_MS must be a non-negative integer; got: ${raw}`,
+      `MARKETINGCLAW_QA_CREDENTIAL_KILL_GRACE_MS must be a non-negative integer; got: ${raw}`,
     );
   }
   const parsed = Number(raw);
   if (!Number.isSafeInteger(parsed)) {
     throw new Error(
-      `OPENCLAW_QA_CREDENTIAL_KILL_GRACE_MS must be a non-negative integer; got: ${raw}`,
+      `MARKETINGCLAW_QA_CREDENTIAL_KILL_GRACE_MS must be a non-negative integer; got: ${raw}`,
     );
   }
   return parsed;
@@ -98,19 +98,19 @@ function resolveFetchBodyLimit(limit: number | undefined) {
     }
     return limit;
   }
-  const raw = process.env.OPENCLAW_QA_CREDENTIAL_HTTP_MAX_BODY_BYTES?.trim();
+  const raw = process.env.MARKETINGCLAW_QA_CREDENTIAL_HTTP_MAX_BODY_BYTES?.trim();
   if (!raw) {
     return DEFAULT_FETCH_BODY_LIMIT;
   }
   if (!/^\d+$/u.test(raw)) {
     throw new Error(
-      `OPENCLAW_QA_CREDENTIAL_HTTP_MAX_BODY_BYTES must be a positive integer; got: ${raw}`,
+      `MARKETINGCLAW_QA_CREDENTIAL_HTTP_MAX_BODY_BYTES must be a positive integer; got: ${raw}`,
     );
   }
   const parsed = Number(raw);
   if (!Number.isSafeInteger(parsed) || parsed < 1) {
     throw new Error(
-      `OPENCLAW_QA_CREDENTIAL_HTTP_MAX_BODY_BYTES must be a positive integer; got: ${raw}`,
+      `MARKETINGCLAW_QA_CREDENTIAL_HTTP_MAX_BODY_BYTES must be a positive integer; got: ${raw}`,
     );
   }
   return parsed;

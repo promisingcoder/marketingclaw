@@ -4,7 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import { promisify } from "node:util";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { closeOpenClawStateDatabaseForTest } from "../../state/openclaw-state-db.js";
+import { closeMarketingClawStateDatabaseForTest } from "../../state/marketingclaw-state-db.js";
 import { getRegistryWorktree } from "./registry.js";
 import { IDLE_GC_MS, ManagedWorktreeService, SNAPSHOT_RETENTION_MS } from "./service.js";
 
@@ -34,8 +34,8 @@ async function initializeRepository(root: string, name = "repo"): Promise<string
   const repo = path.join(root, name);
   await fs.mkdir(repo, { recursive: true });
   await git(repo, "init", "-b", "main");
-  await git(repo, "config", "user.name", "OpenClaw Test");
-  await git(repo, "config", "user.email", "openclaw-test@example.invalid");
+  await git(repo, "config", "user.name", "MarketingClaw Test");
+  await git(repo, "config", "user.email", "marketingclaw-test@example.invalid");
   await fs.writeFile(path.join(repo, "README.md"), "base\n");
   await git(repo, "add", "README.md");
   await git(repo, "commit", "-m", "initial");
@@ -60,15 +60,15 @@ describe("ManagedWorktreeService", () => {
 
   beforeEach(async () => {
     const tempRoot = await fs.realpath(os.tmpdir());
-    root = await fs.mkdtemp(path.join(tempRoot, "openclaw-managed-worktrees-"));
+    root = await fs.mkdtemp(path.join(tempRoot, "marketingclaw-managed-worktrees-"));
     repo = await initializeRepository(root);
-    env = { ...process.env, OPENCLAW_STATE_DIR: path.join(root, "openclaw-state") };
+    env = { ...process.env, MARKETINGCLAW_STATE_DIR: path.join(root, "marketingclaw-state") };
     now = 1_700_000_000_000;
     service = new ManagedWorktreeService({ env, now: () => now });
   });
 
   afterEach(async () => {
-    closeOpenClawStateDatabaseForTest();
+    closeMarketingClawStateDatabaseForTest();
     await fs.rm(root, { recursive: true, force: true });
   });
 
@@ -78,7 +78,7 @@ describe("ManagedWorktreeService", () => {
     const repeated = await service.create({ repoRoot: repo, name: "remote-task" });
 
     expect(created.baseRef).toBe("origin/main");
-    expect(created.branch).toBe("openclaw/remote-task");
+    expect(created.branch).toBe("marketingclaw/remote-task");
     expect(created.path).toContain(path.join("worktrees", created.repoFingerprint, "remote-task"));
     expect(await git(created.path, "branch", "--show-current")).toBe(created.branch);
     expect(repeated).toEqual(created);
@@ -101,7 +101,7 @@ describe("ManagedWorktreeService", () => {
       throw new Error("expected one concurrent create to succeed");
     }
     expect(await git(repo, "worktree", "list", "--porcelain")).toContain(created.path);
-    expect(await git(created.path, "branch", "--show-current")).toBe("openclaw/concurrent");
+    expect(await git(created.path, "branch", "--show-current")).toBe("marketingclaw/concurrent");
   });
 
   it("falls back to local HEAD when fetch fails", async () => {
@@ -145,14 +145,14 @@ describe("ManagedWorktreeService", () => {
 
   it("preserves a pre-existing branch when a managed name collides", async () => {
     await addRemote(root, repo);
-    await git(repo, "branch", "openclaw/existing-name", "HEAD");
-    const branchTip = await git(repo, "rev-parse", "openclaw/existing-name");
+    await git(repo, "branch", "marketingclaw/existing-name", "HEAD");
+    const branchTip = await git(repo, "rev-parse", "marketingclaw/existing-name");
 
     await expect(service.create({ repoRoot: repo, name: "existing-name" })).rejects.toThrow(
       "branch already exists",
     );
 
-    expect(await git(repo, "rev-parse", "openclaw/existing-name")).toBe(branchTip);
+    expect(await git(repo, "rev-parse", "marketingclaw/existing-name")).toBe(branchTip);
   });
 
   it("copies only included ignored regular files without following symlinks", async () => {
@@ -206,11 +206,11 @@ describe("ManagedWorktreeService", () => {
   });
 
   it("runs an executable setup script with source and worktree paths", async () => {
-    await fs.mkdir(path.join(repo, ".openclaw"));
-    const script = path.join(repo, ".openclaw", "worktree-setup.sh");
+    await fs.mkdir(path.join(repo, ".marketingclaw"));
+    const script = path.join(repo, ".marketingclaw", "worktree-setup.sh");
     await fs.writeFile(
       script,
-      '#!/bin/sh\nprintf "%s\\n%s\\n" "$OPENCLAW_SOURCE_TREE_PATH" "$OPENCLAW_WORKTREE_PATH" > setup-paths.txt\n',
+      '#!/bin/sh\nprintf "%s\\n%s\\n" "$MARKETINGCLAW_SOURCE_TREE_PATH" "$MARKETINGCLAW_WORKTREE_PATH" > setup-paths.txt\n',
       { mode: 0o755 },
     );
     const created = await service.create({ repoRoot: repo, name: "setup" });
@@ -220,14 +220,14 @@ describe("ManagedWorktreeService", () => {
   });
 
   it("removes the worktree and branch when setup fails", async () => {
-    await fs.mkdir(path.join(repo, ".openclaw"));
-    const script = path.join(repo, ".openclaw", "worktree-setup.sh");
+    await fs.mkdir(path.join(repo, ".marketingclaw"));
+    const script = path.join(repo, ".marketingclaw", "worktree-setup.sh");
     await fs.writeFile(script, "#!/bin/sh\necho setup-broke >&2\nexit 9\n", { mode: 0o755 });
     await expect(service.create({ repoRoot: repo, name: "broken-setup" })).rejects.toThrow(
       "setup-broke",
     );
     expect(await git(repo, "worktree", "list", "--porcelain")).not.toContain("broken-setup");
-    expect(await git(repo, "branch", "--list", "openclaw/broken-setup")).toBe("");
+    expect(await git(repo, "branch", "--list", "marketingclaw/broken-setup")).toBe("");
   });
 
   it("restores tracked and untracked state while reprovisioning ignored files", async () => {
@@ -258,7 +258,7 @@ describe("ManagedWorktreeService", () => {
     expect(await git(restored.path, "branch", "--show-current")).toBe(created.branch);
     expect(await git(restored.path, "rev-parse", "HEAD")).toBe(originalHead);
     expect(await git(restored.path, "log", "--format=%s", created.branch)).not.toContain(
-      "OpenClaw worktree snapshot",
+      "MarketingClaw worktree snapshot",
     );
     expect(await fs.readFile(path.join(restored.path, "README.md"), "utf8")).toBe("changed\n");
     expect(await fs.readFile(path.join(restored.path, "untracked.txt"), "utf8")).toBe(
@@ -358,7 +358,7 @@ describe("ManagedWorktreeService", () => {
       name: "idle-dead",
       ownerKind: "workboard",
     });
-    await git(repo, "worktree", "lock", "--reason", "openclaw pid=999999", created.path);
+    await git(repo, "worktree", "lock", "--reason", "marketingclaw pid=999999", created.path);
     now += IDLE_GC_MS + 1;
 
     const result = await service.gc();
@@ -453,10 +453,20 @@ describe("ManagedWorktreeService", () => {
   });
 
   it("deletes unregistered orphan debris but preserves git-listed worktrees", async () => {
-    const debris = path.join(env.OPENCLAW_STATE_DIR!, "worktrees", "orphan-fingerprint", "debris");
+    const debris = path.join(
+      env.MARKETINGCLAW_STATE_DIR!,
+      "worktrees",
+      "orphan-fingerprint",
+      "debris",
+    );
     await fs.mkdir(debris, { recursive: true });
     await fs.writeFile(path.join(debris, "file"), "debris");
-    const foreign = path.join(env.OPENCLAW_STATE_DIR!, "worktrees", "foreign-fingerprint", "live");
+    const foreign = path.join(
+      env.MARKETINGCLAW_STATE_DIR!,
+      "worktrees",
+      "foreign-fingerprint",
+      "live",
+    );
     await fs.mkdir(path.dirname(foreign), { recursive: true });
     await git(repo, "worktree", "add", "--detach", foreign, "HEAD");
 

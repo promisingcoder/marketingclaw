@@ -8,7 +8,7 @@ import {
   type EmbeddedAgentActiveSessionSteerTarget,
 } from "./attempt.queue-message.js";
 
-describe("embedded OpenClaw queued steering cancellation", () => {
+describe("embedded MarketingClaw queued steering cancellation", () => {
   it("forwards prepared transcript context with a queued steering message", async () => {
     const steer = vi.fn(async () => undefined);
     const recorder = createUserTurnTranscriptRecorder({

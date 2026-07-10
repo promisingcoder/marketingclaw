@@ -1,9 +1,12 @@
 // Whatsapp plugin module implements extract behavior.
 import type { proto } from "baileys";
 import { extractMessageContent, getContentType, normalizeMessageContent } from "baileys";
-import { formatLocationText, type NormalizedLocation } from "openclaw/plugin-sdk/channel-inbound";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
+import {
+  formatLocationText,
+  type NormalizedLocation,
+} from "marketingclaw/plugin-sdk/channel-inbound";
+import { logVerbose } from "marketingclaw/plugin-sdk/runtime-env";
+import { uniqueStrings } from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import { resolveComparableIdentity, type WhatsAppReplyContext } from "../identity.js";
 import { jidToE164 } from "../text-runtime.js";
 import { parseVcard } from "../vcard.js";

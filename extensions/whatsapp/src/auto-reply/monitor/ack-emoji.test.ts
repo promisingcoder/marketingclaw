@@ -1,21 +1,21 @@
 // Whatsapp tests cover ack emoji plugin behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import { resolveWhatsAppAckEmoji } from "./ack-emoji.js";
 
 function createConfig(
   ackReaction?: NonNullable<
-    NonNullable<NonNullable<OpenClawConfig["channels"]>["whatsapp"]>["ackReaction"]
+    NonNullable<NonNullable<MarketingClawConfig["channels"]>["whatsapp"]>["ackReaction"]
   >,
-): OpenClawConfig {
-  const cfg: OpenClawConfig = {
+): MarketingClawConfig {
+  const cfg: MarketingClawConfig = {
     agents: {
       list: [{ id: "agent", identity: { emoji: "🔥" } }],
     },
     channels: {
       whatsapp: {},
     },
-  } as OpenClawConfig;
+  } as MarketingClawConfig;
   if (ackReaction !== undefined) {
     cfg.channels!.whatsapp!.ackReaction = ackReaction;
   }
@@ -70,7 +70,7 @@ describe("resolveWhatsAppAckEmoji", () => {
   });
 
   it("uses normalized agent ids for the identity fallback", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: MarketingClawConfig = {
       agents: {
         list: [{ id: "Agent", identity: { emoji: "🔥" } }],
       },
@@ -79,7 +79,7 @@ describe("resolveWhatsAppAckEmoji", () => {
           ackReaction: { direct: true, group: "mentions" },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(
       resolveWhatsAppAckEmoji({
@@ -91,13 +91,13 @@ describe("resolveWhatsAppAckEmoji", () => {
   });
 
   it("uses the default ack emoji when configured without an emoji or agent identity", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: MarketingClawConfig = {
       channels: {
         whatsapp: {
           ackReaction: { direct: true, group: "mentions" },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(
       resolveWhatsAppAckEmoji({

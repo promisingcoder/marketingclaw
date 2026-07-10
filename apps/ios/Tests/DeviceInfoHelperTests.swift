@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import OpenClaw
+@testable import MarketingClaw
 
 struct DeviceInfoHelperTests {
     @Test func `iOS version display omits platform prefix`() {

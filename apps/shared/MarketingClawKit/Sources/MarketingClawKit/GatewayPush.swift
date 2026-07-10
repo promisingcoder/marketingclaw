@@ -1,4 +1,4 @@
-import OpenClawProtocol
+import MarketingClawProtocol
 
 public enum GatewayServerCapability: String, CaseIterable, Sendable {
     case chatSendRoutingContract = "chat-send-routing-contract"

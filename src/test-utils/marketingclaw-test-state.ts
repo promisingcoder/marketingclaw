@@ -1,8 +1,8 @@
-// Creates isolated OpenClaw state directories for integration-style tests.
+// Creates isolated MarketingClaw state directories for integration-style tests.
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { uniqueStrings } from "@marketingclaw/normalization-core/string-normalization";
 import { resolveAuthProfileDatabasePath } from "../agents/auth-profiles/sqlite.js";
 import { saveAuthProfileStore } from "../agents/auth-profiles/store.js";
 import type { AuthProfileStore } from "../agents/auth-profiles/types.js";
@@ -14,9 +14,9 @@ type ConfigRuntimeResettable = typeof configRuntime & {
   resetConfigRuntimeState?: () => void;
 };
 
-type OpenClawTestStateLayout = "home" | "state-only" | "split";
+type MarketingClawTestStateLayout = "home" | "state-only" | "split";
 
-type OpenClawTestStateScenario =
+type MarketingClawTestStateScenario =
   | "empty"
   | "minimal"
   | "update-stable"
@@ -24,11 +24,11 @@ type OpenClawTestStateScenario =
   | "gateway-loopback"
   | "external-service";
 
-export type OpenClawTestStateOptions = {
+export type MarketingClawTestStateOptions = {
   prefix?: string;
   label?: string;
-  layout?: OpenClawTestStateLayout;
-  scenario?: OpenClawTestStateScenario;
+  layout?: MarketingClawTestStateLayout;
+  scenario?: MarketingClawTestStateScenario;
   agentEnv?: "clear" | "main";
   applyEnv?: boolean;
   env?: Record<string, string | undefined>;
@@ -38,7 +38,7 @@ export type OpenClawTestStateOptions = {
   };
 };
 
-export type OpenClawTestState = {
+export type MarketingClawTestState = {
   root: string;
   home: string;
   stateDir: string;
@@ -59,17 +59,17 @@ export type OpenClawTestState = {
   cleanup: () => Promise<void>;
 };
 
-const DEFAULT_PREFIX = "openclaw-test-state-";
+const DEFAULT_PREFIX = "marketingclaw-test-state-";
 const ENV_KEYS = [
   "HOME",
   "USERPROFILE",
   "HOMEDRIVE",
   "HOMEPATH",
-  "OPENCLAW_HOME",
-  "OPENCLAW_STATE_DIR",
-  "OPENCLAW_CONFIG_PATH",
-  "OPENCLAW_AGENT_DIR",
-  "OPENCLAW_SERVICE_REPAIR_POLICY",
+  "MARKETINGCLAW_HOME",
+  "MARKETINGCLAW_STATE_DIR",
+  "MARKETINGCLAW_CONFIG_PATH",
+  "MARKETINGCLAW_AGENT_DIR",
+  "MARKETINGCLAW_SERVICE_REPAIR_POLICY",
 ] as const;
 
 function resetConfigRuntimeStateForTest(): void {
@@ -108,7 +108,7 @@ function resolveWindowsHomeEnv(
 
 function resolveLayout(
   root: string,
-  layout: OpenClawTestStateLayout,
+  layout: MarketingClawTestStateLayout,
 ): {
   home: string;
   stateDir: string;
@@ -117,11 +117,11 @@ function resolveLayout(
 } {
   if (layout === "home") {
     const home = path.join(root, "home");
-    const stateDir = path.join(home, ".openclaw");
+    const stateDir = path.join(home, ".marketingclaw");
     return {
       home,
       stateDir,
-      configPath: path.join(stateDir, "openclaw.json"),
+      configPath: path.join(stateDir, "marketingclaw.json"),
       workspaceDir: path.join(home, "workspace"),
     };
   }
@@ -131,7 +131,7 @@ function resolveLayout(
     return {
       home,
       stateDir,
-      configPath: path.join(root, "config", "openclaw.json"),
+      configPath: path.join(root, "config", "marketingclaw.json"),
       workspaceDir: path.join(root, "workspace"),
     };
   }
@@ -139,12 +139,14 @@ function resolveLayout(
   return {
     home: path.join(root, "home"),
     stateDir,
-    configPath: path.join(stateDir, "openclaw.json"),
+    configPath: path.join(stateDir, "marketingclaw.json"),
     workspaceDir: path.join(root, "workspace"),
   };
 }
 
-function scenarioConfig(options: OpenClawTestStateOptions): Record<string, unknown> | undefined {
+function scenarioConfig(
+  options: MarketingClawTestStateOptions,
+): Record<string, unknown> | undefined {
   const scenario = options.scenario ?? "empty";
   if (scenario === "minimal" || scenario === "external-service") {
     return {};
@@ -167,7 +169,7 @@ function scenarioConfig(options: OpenClawTestStateOptions): Record<string, unkno
         bind: "loopback",
         auth: {
           mode: "token",
-          token: options.gateway?.token ?? "openclaw-test-token",
+          token: options.gateway?.token ?? "marketingclaw-test-token",
         },
         controlUi: {
           enabled: false,
@@ -190,7 +192,7 @@ function scenarioConfig(options: OpenClawTestStateOptions): Record<string, unkno
         port: options.gateway?.port ?? 18789,
         auth: {
           mode: "token",
-          token: options.gateway?.token ?? "openclaw-test-token",
+          token: options.gateway?.token ?? "marketingclaw-test-token",
         },
         controlUi: {
           enabled: false,
@@ -201,17 +203,17 @@ function scenarioConfig(options: OpenClawTestStateOptions): Record<string, unkno
   return undefined;
 }
 
-function scenarioEnv(options: OpenClawTestStateOptions): Record<string, string | undefined> {
+function scenarioEnv(options: MarketingClawTestStateOptions): Record<string, string | undefined> {
   if ((options.scenario ?? "empty") === "external-service") {
     return {
-      OPENCLAW_SERVICE_REPAIR_POLICY: "external",
+      MARKETINGCLAW_SERVICE_REPAIR_POLICY: "external",
     };
   }
   return {};
 }
 
 function buildEnvVars(params: {
-  layout: OpenClawTestStateLayout;
+  layout: MarketingClawTestStateLayout;
   home: string;
   stateDir: string;
   configPath: string;
@@ -223,14 +225,14 @@ function buildEnvVars(params: {
   const agentDirEnv =
     params.agentEnv === "main"
       ? {
-          OPENCLAW_AGENT_DIR: params.agentDir,
+          MARKETINGCLAW_AGENT_DIR: params.agentDir,
         }
       : {
-          OPENCLAW_AGENT_DIR: undefined,
+          MARKETINGCLAW_AGENT_DIR: undefined,
         };
   const envVars: Record<string, string | undefined> = {
-    OPENCLAW_STATE_DIR: params.stateDir,
-    OPENCLAW_CONFIG_PATH: params.configPath,
+    MARKETINGCLAW_STATE_DIR: params.stateDir,
+    MARKETINGCLAW_CONFIG_PATH: params.configPath,
     ...agentDirEnv,
     ...params.scenarioEnv,
     ...params.extraEnv,
@@ -239,7 +241,7 @@ function buildEnvVars(params: {
     Object.assign(envVars, {
       HOME: params.home,
       USERPROFILE: params.home,
-      OPENCLAW_HOME: params.home,
+      MARKETINGCLAW_HOME: params.home,
       ...resolveWindowsHomeEnv(params.home),
     });
   }
@@ -264,9 +266,9 @@ async function writeJsonFile(filePath: string, value: unknown): Promise<string> 
   return filePath;
 }
 
-export async function createOpenClawTestState(
-  options: OpenClawTestStateOptions = {},
-): Promise<OpenClawTestState> {
+export async function createMarketingClawTestState(
+  options: MarketingClawTestStateOptions = {},
+): Promise<MarketingClawTestState> {
   const label = normalizeLabel(options.label ?? options.scenario);
   const prefix = options.prefix ?? `${DEFAULT_PREFIX}${label}-`;
   // Canonicalize: macOS tmpdir sits behind a symlink (/var -> /private/var) and
@@ -306,7 +308,7 @@ export async function createOpenClawTestState(
   const sessionsDir = (agentId = "main") =>
     path.join(paths.stateDir, "agents", agentId, "sessions");
 
-  const state: OpenClawTestState = {
+  const state: MarketingClawTestState = {
     root,
     ...paths,
     env,
@@ -335,7 +337,7 @@ export async function createOpenClawTestState(
     applyEnv: () => {
       resetConfigRuntimeStateForTest();
       for (const [key, value] of Object.entries(envVars)) {
-        // Test fixtures apply a fixed OpenClaw env set, not plugin-provided host env.
+        // Test fixtures apply a fixed MarketingClaw env set, not plugin-provided host env.
         if (value === undefined) {
           Reflect.deleteProperty(process.env, key);
         } else {
@@ -369,11 +371,11 @@ export async function createOpenClawTestState(
   return state;
 }
 
-export async function withOpenClawTestState<T>(
-  options: OpenClawTestStateOptions,
-  fn: (state: OpenClawTestState) => Promise<T>,
+export async function withMarketingClawTestState<T>(
+  options: MarketingClawTestStateOptions,
+  fn: (state: MarketingClawTestState) => Promise<T>,
 ): Promise<T> {
-  const state = await createOpenClawTestState(options);
+  const state = await createMarketingClawTestState(options);
   try {
     return await fn(state);
   } finally {

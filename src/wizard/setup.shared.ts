@@ -8,7 +8,7 @@ import {
 } from "../cli/plugins-install-record-commit.js";
 import type { GatewayAuthChoice, OnboardOptions } from "../commands/onboard-types.js";
 import { createConfigIO, replaceConfigFile, resolveGatewayPort } from "../config/config.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { isPlainObject } from "../utils.js";
 import { t } from "./i18n/index.js";
 import { WizardCancelledError, type WizardPrompter } from "./prompts.js";
@@ -41,11 +41,11 @@ function mergeWizardConfigValueOntoLatest(current: unknown, base: unknown, next:
 
 /** Preserve concurrent edits while applying only changes made by an interactive wizard. */
 export function mergeWizardConfigOntoLatest(
-  current: OpenClawConfig,
-  base: OpenClawConfig,
-  next: OpenClawConfig,
-): OpenClawConfig {
-  return mergeWizardConfigValueOntoLatest(current, base, next) as OpenClawConfig;
+  current: MarketingClawConfig,
+  base: MarketingClawConfig,
+  next: MarketingClawConfig,
+): MarketingClawConfig {
+  return mergeWizardConfigValueOntoLatest(current, base, next) as MarketingClawConfig;
 }
 
 /**
@@ -53,13 +53,13 @@ export function mergeWizardConfigOntoLatest(
  * flows never drop install records that a concurrent migration already staged.
  */
 export async function writeWizardConfigFile(
-  configInput: OpenClawConfig,
+  configInput: MarketingClawConfig,
   opts: {
     allowConfigSizeDrop?: boolean;
-    migrationBaseConfig?: OpenClawConfig;
+    migrationBaseConfig?: MarketingClawConfig;
     onPendingPluginInstallMigration?: () => void;
   } = {},
-): Promise<OpenClawConfig> {
+): Promise<MarketingClawConfig> {
   let config = configInput;
   const allowConfigSizeDrop = opts.allowConfigSizeDrop === true;
   if (!allowConfigSizeDrop && hasPendingPluginInstallRecords(config)) {
@@ -105,8 +105,8 @@ export async function readSetupConfigFileSnapshot() {
 export async function requireRiskAcknowledgement(params: {
   opts: OnboardOptions;
   prompter: WizardPrompter;
-  config: OpenClawConfig;
-}): Promise<OpenClawConfig> {
+  config: MarketingClawConfig;
+}): Promise<MarketingClawConfig> {
   if (params.config.wizard?.securityAcknowledgedAt) {
     return params.config;
   }
@@ -127,7 +127,7 @@ export async function requireRiskAcknowledgement(params: {
   return applySecurityAcknowledgement(params.config);
 }
 
-function applySecurityAcknowledgement(config: OpenClawConfig): OpenClawConfig {
+function applySecurityAcknowledgement(config: MarketingClawConfig): MarketingClawConfig {
   if (config.wizard?.securityAcknowledgedAt) {
     return config;
   }
@@ -142,7 +142,7 @@ function applySecurityAcknowledgement(config: OpenClawConfig): OpenClawConfig {
 
 /** Derive quickstart gateway defaults, preserving any existing gateway settings. */
 export function resolveQuickstartGatewayDefaults(
-  baseConfig: OpenClawConfig,
+  baseConfig: MarketingClawConfig,
 ): QuickstartGatewayDefaults {
   const hasExisting =
     typeof baseConfig.gateway?.port === "number" ||

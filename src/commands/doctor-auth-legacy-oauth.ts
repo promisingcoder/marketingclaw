@@ -2,7 +2,7 @@
 import { sanitizeForLog } from "../../packages/terminal-core/src/ansi.js";
 import { repairOAuthProfileIdMismatch } from "../agents/auth-profiles/repair.js";
 import { ensureAuthProfileStore } from "../agents/auth-profiles/store.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import type { DoctorPrompter } from "./doctor-prompter.js";
 
 async function loadProviderRuntime() {
@@ -13,7 +13,7 @@ async function loadNoteRuntime() {
   return import("../../packages/terminal-core/src/note.js");
 }
 
-function hasConfigOAuthProfiles(cfg: OpenClawConfig): boolean {
+function hasConfigOAuthProfiles(cfg: MarketingClawConfig): boolean {
   return Object.values(cfg.auth?.profiles ?? {}).some((profile) => profile?.mode === "oauth");
 }
 
@@ -29,9 +29,9 @@ function sanitizePromptLabel(label: string | undefined): string | undefined {
  * before writing config so stale provider-specific ids do not silently shadow current profiles.
  */
 export async function maybeRepairLegacyOAuthProfileIds(
-  cfg: OpenClawConfig,
+  cfg: MarketingClawConfig,
   prompter: DoctorPrompter,
-): Promise<OpenClawConfig> {
+): Promise<MarketingClawConfig> {
   if (!hasConfigOAuthProfiles(cfg)) {
     return cfg;
   }

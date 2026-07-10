@@ -1,5 +1,5 @@
 /**
- * Fast OpenClaw tool-bundle mock.
+ * Fast MarketingClaw tool-bundle mock.
  *
  * Provides lightweight built-in tool stubs for inventory-heavy tests.
  */
@@ -53,9 +53,9 @@ const coreTools = [
   stubTool("pdf"),
 ];
 
-const createOpenClawToolsMock = vi.fn(
+const createMarketingClawToolsMock = vi.fn(
   (options?: { enableHeartbeatTool?: boolean; recordToolPrepStage?: (name: string) => void }) => {
-    options?.recordToolPrepStage?.("openclaw-tools:test-helper");
+    options?.recordToolPrepStage?.("marketingclaw-tools:test-helper");
     return coreTools
       .filter((tool) => tool.name !== "heartbeat_respond" || options?.enableHeartbeatTool === true)
       .map((tool) => Object.assign({}, tool));
@@ -65,10 +65,10 @@ const createOpenClawToolsMock = vi.fn(
 // Preserve action enums for tools whose tests assert schema/inventory behavior without paying the
 // cost of constructing the real tool bundle. The real capability filter stays
 // in place so client-caps gating behaves like production in these suites.
-vi.mock("../openclaw-tools.js", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("../openclaw-tools.js")>();
+vi.mock("../marketingclaw-tools.js", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../marketingclaw-tools.js")>();
   return {
-    createOpenClawTools: createOpenClawToolsMock,
+    createMarketingClawTools: createMarketingClawToolsMock,
     filterToolsByClientCaps: actual.filterToolsByClientCaps,
     testing: {
       setDepsForTest: () => {},

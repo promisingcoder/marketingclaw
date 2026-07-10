@@ -6,7 +6,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { withEnvAsync } from "../test-utils/env.js";
 import { createConfigIO, resetConfigRuntimeState, writeConfigFile } from "./io.js";
 import type { ConfigWriteOptions } from "./io.js";
-import type { OpenClawConfig } from "./types.openclaw.js";
+import type { MarketingClawConfig } from "./types.marketingclaw.js";
 
 function makeEaccesFs(configPath: string) {
   const eaccesErr = Object.assign(new Error(`EACCES: permission denied, open '${configPath}'`), {
@@ -31,7 +31,7 @@ function makeEaccesFs(configPath: string) {
 
 describe("config io EACCES handling", () => {
   it("returns a helpful error message when config file is not readable (EACCES)", async () => {
-    const configPath = "/data/.openclaw/openclaw.json";
+    const configPath = "/data/.marketingclaw/marketingclaw.json";
     const errors: string[] = [];
     const io = createConfigIO({
       configPath,
@@ -52,7 +52,7 @@ describe("config io EACCES handling", () => {
   });
 
   it("includes configPath in the chown hint for the correct remediation command", async () => {
-    const configPath = "/home/myuser/.openclaw/openclaw.json";
+    const configPath = "/home/myuser/.marketingclaw/marketingclaw.json";
     const io = createConfigIO({
       configPath,
       fs: makeEaccesFs(configPath),
@@ -65,7 +65,7 @@ describe("config io EACCES handling", () => {
   });
 
   it("marks the snapshot with the underlying read error code", async () => {
-    const configPath = "/data/.openclaw/openclaw.json";
+    const configPath = "/data/.marketingclaw/marketingclaw.json";
     const io = createConfigIO({
       configPath,
       fs: makeEaccesFs(configPath),
@@ -117,11 +117,11 @@ describe("config write guard after unreadable config", () => {
   ] satisfies Array<{ label: string; writeOptions?: ConfigWriteOptions }>)(
     "refuses to overwrite a present-but-unreadable config during $label",
     async ({ writeOptions }) => {
-      const home = fsNode.mkdtempSync(path.join(os.tmpdir(), "openclaw-unreadable-"));
+      const home = fsNode.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-unreadable-"));
       tempRoots.push(home);
-      const stateDir = path.join(home, ".openclaw");
+      const stateDir = path.join(home, ".marketingclaw");
       fsNode.mkdirSync(stateDir, { recursive: true, mode: 0o700 });
-      const configPath = path.join(stateDir, "openclaw.json");
+      const configPath = path.join(stateDir, "marketingclaw.json");
       const liveConfig = {
         gateway: { mode: "local", port: 18789, auth: { mode: "token" } },
         channels: { telegram: { enabled: true } },
@@ -143,7 +143,7 @@ describe("config write guard after unreadable config", () => {
       const snapshot = await io.readConfigFileSnapshot();
       expect(snapshot.readError).toEqual({ code: "EACCES" });
 
-      const skeletal: OpenClawConfig = { channels: { telegram: { enabled: true } } };
+      const skeletal: MarketingClawConfig = { channels: { telegram: { enabled: true } } };
       await expect(io.writeConfigFile(skeletal, writeOptions)).rejects.toMatchObject({
         code: "CONFIG_WRITE_REJECTED",
         reasons: expect.arrayContaining(["unreadable-config-before-write"]),
@@ -151,7 +151,7 @@ describe("config write guard after unreadable config", () => {
       expect(fsNode.readFileSync(configPath, "utf-8")).toBe(liveBytes);
       const rejectedArtifacts = fsNode
         .readdirSync(stateDir)
-        .filter((name) => name.startsWith("openclaw.json.rejected."));
+        .filter((name) => name.startsWith("marketingclaw.json.rejected."));
       expect(rejectedArtifacts).toHaveLength(1);
     },
   );
@@ -159,15 +159,15 @@ describe("config write guard after unreadable config", () => {
   it.skipIf(process.platform === "win32")(
     "rejects exported writes before re-reading an unreadable base snapshot",
     async () => {
-      const home = fsNode.mkdtempSync(path.join(os.tmpdir(), "openclaw-unreadable-"));
+      const home = fsNode.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-unreadable-"));
       tempRoots.push(home);
-      const stateDir = path.join(home, ".openclaw");
+      const stateDir = path.join(home, ".marketingclaw");
       fsNode.mkdirSync(stateDir, { recursive: true, mode: 0o700 });
-      const configPath = path.join(stateDir, "openclaw.json");
+      const configPath = path.join(stateDir, "marketingclaw.json");
       const liveConfig = {
         gateway: { mode: "local", port: 18789, auth: { mode: "token" } },
         meta: { lastTouchedVersion: "2026.5.3-1" },
-      } satisfies OpenClawConfig;
+      } satisfies MarketingClawConfig;
       const liveBytes = `${JSON.stringify(liveConfig, null, 2)}\n`;
       fsNode.writeFileSync(configPath, liveBytes, { mode: 0o600 });
 
@@ -176,7 +176,7 @@ describe("config write guard after unreadable config", () => {
       try {
         fsNode.chmodSync(configPath, 0o000);
         await withEnvAsync(
-          { OPENCLAW_CONFIG_PATH: configPath, OPENCLAW_TEST_FAST: "1" },
+          { MARKETINGCLAW_CONFIG_PATH: configPath, MARKETINGCLAW_TEST_FAST: "1" },
           async () => {
             await expect(
               writeConfigFile({ channels: { telegram: { enabled: true } } }),
@@ -196,7 +196,7 @@ describe("config write guard after unreadable config", () => {
       expect(fsNode.readFileSync(configPath, "utf-8")).toBe(liveBytes);
       const rejectedArtifacts = fsNode
         .readdirSync(stateDir)
-        .filter((name) => name.startsWith("openclaw.json.rejected."));
+        .filter((name) => name.startsWith("marketingclaw.json.rejected."));
       expect(rejectedArtifacts).toHaveLength(1);
     },
   );

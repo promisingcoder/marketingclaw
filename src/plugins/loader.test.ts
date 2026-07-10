@@ -59,8 +59,8 @@ import { warnWhenAllowlistIsOpen } from "./loader-provenance.js";
 import {
   testing,
   clearPluginLoaderCache,
-  loadOpenClawPluginCliRegistry,
-  loadOpenClawPlugins,
+  loadMarketingClawPluginCliRegistry,
+  loadMarketingClawPlugins,
   type PluginLoadOptions,
   PluginLoadReentryError,
   resolveRuntimePluginRegistry,
@@ -95,7 +95,7 @@ import {
   registerMemoryPromptSupplement,
   resolveMemoryFlushPlan,
 } from "./memory-state.js";
-import { ensureOpenClawPluginSdkAlias } from "./plugin-sdk-dist-alias.js";
+import { ensureMarketingClawPluginSdkAlias } from "./plugin-sdk-dist-alias.js";
 import { createEmptyPluginRegistry } from "./registry.js";
 import {
   getActivePluginRegistry,
@@ -190,7 +190,7 @@ function simplePluginBody(id: string) {
 }
 
 function updatePluginManifest(plugin: Pick<TempPlugin, "dir">, patch: Record<string, unknown>) {
-  const manifestPath = path.join(plugin.dir, "openclaw.plugin.json");
+  const manifestPath = path.join(plugin.dir, "marketingclaw.plugin.json");
   const raw = JSON.parse(fs.readFileSync(manifestPath, "utf-8")) as Record<string, unknown>;
   fs.writeFileSync(manifestPath, JSON.stringify({ ...raw, ...patch }, null, 2), "utf-8");
 }
@@ -227,7 +227,7 @@ function setupBundledDreamingMemoryPlugins(params?: {
   });
   const openSchema = { type: "object", additionalProperties: true };
   fs.writeFileSync(
-    path.join(memoryCoreDir, "openclaw.plugin.json"),
+    path.join(memoryCoreDir, "marketingclaw.plugin.json"),
     JSON.stringify(
       { id: "memory-core", kind: "memory", configSchema: EMPTY_PLUGIN_SCHEMA },
       null,
@@ -236,7 +236,7 @@ function setupBundledDreamingMemoryPlugins(params?: {
     "utf-8",
   );
   fs.writeFileSync(
-    path.join(selectedMemoryDir, "openclaw.plugin.json"),
+    path.join(selectedMemoryDir, "marketingclaw.plugin.json"),
     JSON.stringify(
       {
         id: selectedId,
@@ -248,7 +248,7 @@ function setupBundledDreamingMemoryPlugins(params?: {
     ),
     "utf-8",
   );
-  process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
+  process.env.MARKETINGCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
   return { bundledDir, selectedId };
 }
 
@@ -269,14 +269,18 @@ function writeBundledPlugin(params: {
     filename: params.filename ?? "index.cjs",
     body: params.body ?? simplePluginBody(params.id),
   });
-  delete process.env.OPENCLAW_DISABLE_BUNDLED_PLUGINS;
-  process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
+  delete process.env.MARKETINGCLAW_DISABLE_BUNDLED_PLUGINS;
+  process.env.MARKETINGCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
   return { bundledDir, plugin };
 }
 
-function makeOpenClawDevSourceRoot() {
+function makeMarketingClawDevSourceRoot() {
   const root = makeTempDir();
-  fs.writeFileSync(path.join(root, "package.json"), JSON.stringify({ name: "openclaw" }), "utf-8");
+  fs.writeFileSync(
+    path.join(root, "package.json"),
+    JSON.stringify({ name: "marketingclaw" }),
+    "utf-8",
+  );
   mkdirSafe(path.join(root, "src"));
   mkdirSafe(path.join(root, "extensions"));
   return root;
@@ -289,7 +293,7 @@ function writeWorkspacePlugin(params: {
   workspaceDir?: string;
 }) {
   const workspaceDir = params.workspaceDir ?? makeTempDir();
-  const workspacePluginDir = path.join(workspaceDir, ".openclaw", "extensions", params.id);
+  const workspacePluginDir = path.join(workspaceDir, ".marketingclaw", "extensions", params.id);
   mkdirSafe(workspacePluginDir);
   const plugin = writePlugin({
     id: params.id,
@@ -302,7 +306,7 @@ function writeWorkspacePlugin(params: {
 
 function withStateDir<T>(run: (stateDir: string) => T) {
   const stateDir = makeTempDir();
-  return withEnv({ OPENCLAW_STATE_DIR: stateDir }, () => run(stateDir));
+  return withEnv({ MARKETINGCLAW_STATE_DIR: stateDir }, () => run(stateDir));
 }
 
 function loadBundledMemoryPluginRegistry(options?: {
@@ -311,8 +315,8 @@ function loadBundledMemoryPluginRegistry(options?: {
   pluginFilename?: string;
 }) {
   if (!options && cachedBundledMemoryDir) {
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = cachedBundledMemoryDir;
-    return loadOpenClawPlugins({
+    process.env.MARKETINGCLAW_BUNDLED_PLUGINS_DIR = cachedBundledMemoryDir;
+    return loadMarketingClawPlugins({
       cache: false,
       workspaceDir: cachedBundledMemoryDir,
       config: {
@@ -340,7 +344,7 @@ function loadBundledMemoryPluginRegistry(options?: {
           name: options.packageMeta.name,
           version: options.packageMeta.version,
           description: options.packageMeta.description,
-          openclaw: { extensions: [`./${pluginFilename}`] },
+          marketingclaw: { extensions: [`./${pluginFilename}`] },
         },
         null,
         2,
@@ -360,9 +364,9 @@ function loadBundledMemoryPluginRegistry(options?: {
   if (!options) {
     cachedBundledMemoryDir = bundledDir;
   }
-  process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
+  process.env.MARKETINGCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
 
-  return loadOpenClawPlugins({
+  return loadMarketingClawPlugins({
     cache: false,
     workspaceDir: bundledDir,
     config: {
@@ -385,10 +389,10 @@ function setupBundledTelegramPlugin() {
       filename: "telegram.cjs",
     });
   }
-  process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = cachedBundledTelegramDir;
+  process.env.MARKETINGCLAW_BUNDLED_PLUGINS_DIR = cachedBundledTelegramDir;
 }
 
-function expectTelegramLoaded(registry: ReturnType<typeof loadOpenClawPlugins>) {
+function expectTelegramLoaded(registry: ReturnType<typeof loadMarketingClawPlugins>) {
   const telegram = registry.plugins.find((entry) => entry.id === "telegram");
   expect(telegram?.status).toBe("loaded");
   expect(registry.channels.map((entry) => entry.plugin.id)).toContain("telegram");
@@ -398,10 +402,13 @@ function loadRegistryFromSinglePlugin(params: {
   plugin: TempPlugin;
   pluginConfig?: Record<string, unknown>;
   includeWorkspaceDir?: boolean;
-  options?: Omit<Parameters<typeof loadOpenClawPlugins>[0], "cache" | "workspaceDir" | "config">;
+  options?: Omit<
+    Parameters<typeof loadMarketingClawPlugins>[0],
+    "cache" | "workspaceDir" | "config"
+  >;
 }) {
   const pluginConfig = params.pluginConfig ?? {};
-  return loadOpenClawPlugins({
+  return loadMarketingClawPlugins({
     cache: false,
     ...(params.includeWorkspaceDir === false ? {} : { workspaceDir: params.plugin.dir }),
     ...params.options,
@@ -416,9 +423,9 @@ function loadRegistryFromSinglePlugin(params: {
 
 function loadRegistryFromAllowedPlugins(
   plugins: TempPlugin[],
-  options?: Omit<Parameters<typeof loadOpenClawPlugins>[0], "cache" | "config">,
+  options?: Omit<Parameters<typeof loadMarketingClawPlugins>[0], "cache" | "config">,
 ) {
-  return loadOpenClawPlugins({
+  return loadMarketingClawPlugins({
     cache: false,
     ...options,
     config: {
@@ -674,7 +681,7 @@ function createEscapingEntryFixture(params: { id: string; sourceBody: string }) 
   const linkedEntry = path.join(pluginDir, "entry.cjs");
   fs.writeFileSync(outsideEntry, params.sourceBody, "utf-8");
   fs.writeFileSync(
-    path.join(pluginDir, "openclaw.plugin.json"),
+    path.join(pluginDir, "marketingclaw.plugin.json"),
     JSON.stringify(
       {
         id: params.id,
@@ -689,7 +696,7 @@ function createEscapingEntryFixture(params: { id: string; sourceBody: string }) 
 }
 
 function resolveLoadedPluginSource(
-  registry: ReturnType<typeof loadOpenClawPlugins>,
+  registry: ReturnType<typeof loadMarketingClawPlugins>,
   pluginId: string,
 ) {
   return fs.realpathSync(registry.plugins.find((entry) => entry.id === pluginId)?.source ?? "");
@@ -697,8 +704,8 @@ function resolveLoadedPluginSource(
 
 function expectCachePartitionByPluginSource(params: {
   pluginId: string;
-  loadFirst: () => ReturnType<typeof loadOpenClawPlugins>;
-  loadSecond: () => ReturnType<typeof loadOpenClawPlugins>;
+  loadFirst: () => ReturnType<typeof loadMarketingClawPlugins>;
+  loadSecond: () => ReturnType<typeof loadMarketingClawPlugins>;
   expectedFirstSource: string;
   expectedSecondSource: string;
 }) {
@@ -715,8 +722,8 @@ function expectCachePartitionByPluginSource(params: {
 }
 
 function expectCacheMissThenHit(params: {
-  loadFirst: () => ReturnType<typeof loadOpenClawPlugins>;
-  loadVariant: () => ReturnType<typeof loadOpenClawPlugins>;
+  loadFirst: () => ReturnType<typeof loadMarketingClawPlugins>;
+  loadVariant: () => ReturnType<typeof loadMarketingClawPlugins>;
 }) {
   const first = params.loadFirst();
   const second = params.loadVariant();
@@ -761,7 +768,7 @@ function createSetupEntryChannelPluginFixture(params: {
     JSON.stringify(
       {
         name: params.packageName,
-        openclaw: {
+        marketingclaw: {
           extensions: ["./index.cjs"],
           setupEntry: "./setup-entry.cjs",
           ...(params.startupDeferConfiguredChannelFullLoadUntilAfterListen
@@ -779,7 +786,7 @@ function createSetupEntryChannelPluginFixture(params: {
     "utf-8",
   );
   fs.writeFileSync(
-    path.join(pluginDir, "openclaw.plugin.json"),
+    path.join(pluginDir, "marketingclaw.plugin.json"),
     JSON.stringify(
       {
         id: params.id,
@@ -967,10 +974,10 @@ module.exports = {
 
 function createEnvResolvedPluginFixture(pluginId: string) {
   useNoBundledPlugins();
-  const openclawHome = makeTempDir();
+  const marketingclawHome = makeTempDir();
   const ignoredHome = makeTempDir();
   const stateDir = makeTempDir();
-  const pluginDir = path.join(openclawHome, "plugins", pluginId);
+  const pluginDir = path.join(marketingclawHome, "plugins", pluginId);
   mkdirSafe(pluginDir);
   const plugin = writePlugin({
     id: pluginId,
@@ -980,10 +987,10 @@ function createEnvResolvedPluginFixture(pluginId: string) {
   });
   const env = {
     ...process.env,
-    OPENCLAW_HOME: openclawHome,
+    MARKETINGCLAW_HOME: marketingclawHome,
     HOME: ignoredHome,
-    OPENCLAW_STATE_DIR: stateDir,
-    OPENCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
+    MARKETINGCLAW_STATE_DIR: stateDir,
+    MARKETINGCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
   };
   return { plugin, env };
 }
@@ -1014,7 +1021,7 @@ function expectEscapingEntryRejected(params: {
     throw err;
   }
 
-  const registry = loadOpenClawPlugins({
+  const registry = loadMarketingClawPlugins({
     cache: false,
     config: {
       plugins: {
@@ -1073,7 +1080,7 @@ afterAll(() => {
   cachedBundledMemoryDir = "";
 });
 
-describe("loadOpenClawPlugins", () => {
+describe("loadMarketingClawPlugins", () => {
   it("emits loader startup trace timings for normal plugin load and register", () => {
     useNoBundledPlugins();
     const plugin = writePlugin({
@@ -1154,7 +1161,7 @@ describe("loadOpenClawPlugins", () => {
     // Case 3: config.env.vars participates in the same effective env as config IO.
     delete probe.envConfigProbeResult;
     withEnv({ ENV_CONFIG_PROBE_SECRET: undefined }, () => {
-      loadOpenClawPlugins({
+      loadMarketingClawPlugins({
         cache: false,
         workspaceDir: plugin.dir,
         config: {
@@ -1212,7 +1219,7 @@ describe("loadOpenClawPlugins", () => {
     });
     const { details, startupTrace } = createStartupTraceRecorder();
 
-    loadOpenClawPlugins({
+    loadMarketingClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -1376,9 +1383,9 @@ describe("loadOpenClawPlugins", () => {
       },
     };
     const manifestRegistry = loadPluginManifestRegistry({ config });
-    fs.rmSync(path.join(plugin.dir, "openclaw.plugin.json"));
+    fs.rmSync(path.join(plugin.dir, "marketingclaw.plugin.json"));
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       config,
       manifestRegistry,
@@ -1408,8 +1415,8 @@ describe("loadOpenClawPlugins", () => {
       { stateDir },
     );
 
-    const registry = withEnv({ OPENCLAW_STATE_DIR: stateDir }, () =>
-      loadOpenClawPlugins({
+    const registry = withEnv({ MARKETINGCLAW_STATE_DIR: stateDir }, () =>
+      loadMarketingClawPlugins({
         cache: false,
         config: {
           plugins: {
@@ -1430,16 +1437,22 @@ describe("loadOpenClawPlugins", () => {
   it("refreshes bundled plugin-sdk aliases without deleting the shared alias directory", () => {
     const distRoot = makeTempDir();
     const pluginSdkDir = path.join(distRoot, "plugin-sdk");
-    const aliasDir = path.join(distRoot, "extensions", "node_modules", "openclaw", "plugin-sdk");
+    const aliasDir = path.join(
+      distRoot,
+      "extensions",
+      "node_modules",
+      "marketingclaw",
+      "plugin-sdk",
+    );
     mkdirSafe(pluginSdkDir);
     mkdirSafe(aliasDir);
     fs.writeFileSync(path.join(pluginSdkDir, "index.js"), "export const value = 1;\n", "utf8");
     fs.writeFileSync(path.join(pluginSdkDir, "core.js"), "export const core = 1;\n", "utf8");
     fs.writeFileSync(path.join(aliasDir, "sentinel.txt"), "keep\n", "utf8");
 
-    ensureOpenClawPluginSdkAlias(distRoot);
+    ensureMarketingClawPluginSdkAlias(distRoot);
     fs.writeFileSync(path.join(pluginSdkDir, "core.js"), "export const core = 2;\n", "utf8");
-    ensureOpenClawPluginSdkAlias(distRoot);
+    ensureMarketingClawPluginSdkAlias(distRoot);
 
     expect(fs.existsSync(path.join(aliasDir, "sentinel.txt"))).toBe(true);
     expect(fs.readFileSync(path.join(aliasDir, "core.js"), "utf8")).toContain("core.js");
@@ -1449,7 +1462,7 @@ describe("loadOpenClawPlugins", () => {
     const packageRoot = makeTempDir();
     const distRoot = path.join(packageRoot, "dist");
     const pluginSdkDir = path.join(distRoot, "plugin-sdk");
-    const aliasRoot = path.join(distRoot, "extensions", "node_modules", "openclaw");
+    const aliasRoot = path.join(distRoot, "extensions", "node_modules", "marketingclaw");
     const aliasDir = path.join(aliasRoot, "plugin-sdk");
     mkdirSafe(pluginSdkDir);
     mkdirSafe(aliasDir);
@@ -1457,7 +1470,7 @@ describe("loadOpenClawPlugins", () => {
       path.join(packageRoot, "package.json"),
       JSON.stringify(
         {
-          name: "openclaw",
+          name: "marketingclaw",
           version: "2026.4.22",
           type: "module",
           exports: {
@@ -1487,7 +1500,7 @@ describe("loadOpenClawPlugins", () => {
       "utf8",
     );
 
-    ensureOpenClawPluginSdkAlias(distRoot);
+    ensureMarketingClawPluginSdkAlias(distRoot);
 
     const aliasPackage = JSON.parse(
       fs.readFileSync(path.join(aliasRoot, "package.json"), "utf8"),
@@ -1505,13 +1518,13 @@ describe("loadOpenClawPlugins", () => {
     const packageRoot = makeTempDir();
     const distRoot = path.join(packageRoot, "dist");
     const pluginSdkDir = path.join(distRoot, "plugin-sdk");
-    const aliasRoot = path.join(distRoot, "extensions", "node_modules", "openclaw");
+    const aliasRoot = path.join(distRoot, "extensions", "node_modules", "marketingclaw");
     const aliasDir = path.join(aliasRoot, "plugin-sdk");
     mkdirSafe(pluginSdkDir);
     mkdirSafe(aliasDir);
     fs.writeFileSync(
       path.join(packageRoot, "package.json"),
-      JSON.stringify({ name: "openclaw", version: "2026.4.22", type: "module" }, null, 2),
+      JSON.stringify({ name: "marketingclaw", version: "2026.4.22", type: "module" }, null, 2),
       "utf8",
     );
     fs.writeFileSync(path.join(pluginSdkDir, "index.js"), "export const root = true;\n", "utf8");
@@ -1531,7 +1544,7 @@ describe("loadOpenClawPlugins", () => {
       "utf8",
     );
 
-    ensureOpenClawPluginSdkAlias(distRoot);
+    ensureMarketingClawPluginSdkAlias(distRoot);
 
     const aliasPackage = JSON.parse(
       fs.readFileSync(path.join(aliasRoot, "package.json"), "utf8"),
@@ -1562,9 +1575,9 @@ describe("loadOpenClawPlugins", () => {
       dir: bundledDir,
       filename: "bundled.cjs",
     });
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
+    process.env.MARKETINGCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -1584,7 +1597,7 @@ describe("loadOpenClawPlugins", () => {
     fs.mkdirSync(pluginRoot, { recursive: true });
     fs.writeFileSync(
       path.join(packageRoot, "package.json"),
-      JSON.stringify({ name: "openclaw", version: "2026.4.22", type: "module" }),
+      JSON.stringify({ name: "marketingclaw", version: "2026.4.22", type: "module" }),
       "utf-8",
     );
     fs.writeFileSync(
@@ -1592,11 +1605,11 @@ describe("loadOpenClawPlugins", () => {
       "export const normalizeLowercaseStringOrEmpty = (value) => String(value).toLowerCase();\n",
       "utf-8",
     );
-    ensureOpenClawPluginSdkAlias(path.join(packageRoot, "dist"));
+    ensureMarketingClawPluginSdkAlias(path.join(packageRoot, "dist"));
     fs.writeFileSync(
       path.join(pluginRoot, "index.js"),
       [
-        `import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";`,
+        `import { normalizeLowercaseStringOrEmpty } from "marketingclaw/plugin-sdk/string-coerce-runtime";`,
         `export default {`,
         `  id: "discord",`,
         `  register(api) {`,
@@ -1611,10 +1624,10 @@ describe("loadOpenClawPlugins", () => {
       path.join(pluginRoot, "package.json"),
       JSON.stringify(
         {
-          name: "@openclaw/discord",
+          name: "@marketingclaw/discord",
           version: "1.0.0",
           type: "module",
-          openclaw: { extensions: ["./index.js"] },
+          marketingclaw: { extensions: ["./index.js"] },
         },
         null,
         2,
@@ -1622,7 +1635,7 @@ describe("loadOpenClawPlugins", () => {
       "utf-8",
     );
     fs.writeFileSync(
-      path.join(pluginRoot, "openclaw.plugin.json"),
+      path.join(pluginRoot, "marketingclaw.plugin.json"),
       JSON.stringify(
         {
           id: "discord",
@@ -1634,9 +1647,9 @@ describe("loadOpenClawPlugins", () => {
       ),
       "utf-8",
     );
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
+    process.env.MARKETINGCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -1694,7 +1707,7 @@ describe("loadOpenClawPlugins", () => {
           },
         },
       } satisfies PluginLoadConfig,
-      assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+      assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
         expectTelegramLoaded(registry);
       },
     },
@@ -1710,7 +1723,7 @@ describe("loadOpenClawPlugins", () => {
           enabled: true,
         },
       } satisfies PluginLoadConfig,
-      assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+      assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
         expectTelegramLoaded(registry);
       },
     },
@@ -1726,7 +1739,7 @@ describe("loadOpenClawPlugins", () => {
           allow: ["browser"],
         },
       } satisfies PluginLoadConfig,
-      assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+      assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
         const telegram = registry.plugins.find((entry) => entry.id === "telegram");
         expect(telegram?.status).toBe("loaded");
         expect(telegram?.error).toBeUndefined();
@@ -1747,7 +1760,7 @@ describe("loadOpenClawPlugins", () => {
           },
         },
       } satisfies PluginLoadConfig,
-      assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+      assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
         const telegram = registry.plugins.find((entry) => entry.id === "telegram");
         expect(telegram?.status).toBe("disabled");
         expect(telegram?.error).toBe("disabled in config");
@@ -1757,7 +1770,7 @@ describe("loadOpenClawPlugins", () => {
     "handles bundled telegram plugin enablement and override rules: $name",
     ({ config, assert }) => {
       setupBundledTelegramPlugin();
-      const registry = loadOpenClawPlugins({
+      const registry = loadMarketingClawPlugins({
         cache: false,
         workspaceDir: cachedBundledTelegramDir,
         config,
@@ -1783,7 +1796,7 @@ describe("loadOpenClawPlugins", () => {
       env: {},
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       workspaceDir: cachedBundledTelegramDir,
       config: autoEnabled.config,
@@ -1815,7 +1828,7 @@ describe("loadOpenClawPlugins", () => {
       env: {},
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       workspaceDir: cachedBundledTelegramDir,
       config: autoEnabled.config,
@@ -1846,7 +1859,7 @@ describe("loadOpenClawPlugins", () => {
       },
     } satisfies PluginLoadConfig;
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       workspaceDir: cachedBundledTelegramDir,
       config: {
@@ -1887,7 +1900,7 @@ describe("loadOpenClawPlugins", () => {
       },
     } satisfies PluginLoadConfig;
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       workspaceDir: bundledDir,
       config,
@@ -1904,7 +1917,7 @@ describe("loadOpenClawPlugins", () => {
   it("preserves package.json metadata for bundled memory plugins", () => {
     const registry = loadBundledMemoryPluginRegistry({
       packageMeta: {
-        name: "@openclaw/memory-core",
+        name: "@marketingclaw/memory-core",
         version: "1.2.3",
         description: "Memory plugin package",
       },
@@ -1934,7 +1947,7 @@ describe("loadOpenClawPlugins", () => {
 };`,
         });
 
-        const registry = loadOpenClawPlugins({
+        const registry = loadMarketingClawPlugins({
           cache: false,
           workspaceDir: plugin.dir,
           config: {
@@ -1971,7 +1984,7 @@ describe("loadOpenClawPlugins", () => {
 };`,
         });
 
-        const registry = loadOpenClawPlugins({
+        const registry = loadMarketingClawPlugins({
           cache: false,
           workspaceDir: plugin.dir,
           config: {
@@ -2012,7 +2025,7 @@ describe("loadOpenClawPlugins", () => {
 };`,
         });
 
-        const registry = loadOpenClawPlugins({
+        const registry = loadMarketingClawPlugins({
           cache: false,
           workspaceDir: plugin.dir,
           config: {
@@ -2054,7 +2067,7 @@ describe("loadOpenClawPlugins", () => {
 };`,
         });
 
-        const registry = loadOpenClawPlugins({
+        const registry = loadMarketingClawPlugins({
           cache: false,
           workspaceDir: plugin.dir,
           config: {
@@ -2088,7 +2101,7 @@ describe("loadOpenClawPlugins", () => {
 };`,
         });
 
-        const registry = loadOpenClawPlugins({
+        const registry = loadMarketingClawPlugins({
           cache: false,
           workspaceDir: plugin.dir,
           coreGatewayMethodNames: ["config.openFile"],
@@ -2125,7 +2138,7 @@ describe("loadOpenClawPlugins", () => {
 };`,
         });
 
-        const registry = loadOpenClawPlugins({
+        const registry = loadMarketingClawPlugins({
           cache: false,
           config: {
             plugins: {
@@ -2251,7 +2264,7 @@ describe("loadOpenClawPlugins", () => {
 module.exports = { id: "skipped-scoped-only", register() { throw new Error("skipped plugin should not load"); } };`,
         });
 
-        const registry = loadOpenClawPlugins({
+        const registry = loadMarketingClawPlugins({
           cache: false,
           config: {
             plugins: {
@@ -2278,7 +2291,7 @@ module.exports = { id: "skipped-scoped-only", register() { throw new Error("skip
 module.exports = { id: "manifest-only-plugin", register() { throw new Error("manifest-only snapshot should not register"); } };`,
         });
 
-        const registry = loadOpenClawPlugins({
+        const registry = loadMarketingClawPlugins({
           cache: false,
           activate: false,
           loadModules: false,
@@ -2310,7 +2323,7 @@ module.exports = { id: "manifest-only-plugin", register() { throw new Error("man
 module.exports = { id: "manifest-surfaces-plugin", register() { throw new Error("manifest-only snapshot should not register"); } };`,
         });
         fs.writeFileSync(
-          path.join(plugin.dir, "openclaw.plugin.json"),
+          path.join(plugin.dir, "marketingclaw.plugin.json"),
           JSON.stringify(
             {
               id: "manifest-surfaces-plugin",
@@ -2327,7 +2340,7 @@ module.exports = { id: "manifest-surfaces-plugin", register() { throw new Error(
           "utf-8",
         );
 
-        const registry = loadOpenClawPlugins({
+        const registry = loadMarketingClawPlugins({
           cache: false,
           activate: false,
           loadModules: false,
@@ -2367,7 +2380,7 @@ module.exports = { id: "manifest-surfaces-plugin", register() { throw new Error(
 };`,
         });
         fs.writeFileSync(
-          path.join(memoryPlugin.dir, "openclaw.plugin.json"),
+          path.join(memoryPlugin.dir, "marketingclaw.plugin.json"),
           JSON.stringify(
             {
               id: "memory-demo",
@@ -2380,7 +2393,7 @@ module.exports = { id: "manifest-surfaces-plugin", register() { throw new Error(
           "utf-8",
         );
 
-        const registry = loadOpenClawPlugins({
+        const registry = loadMarketingClawPlugins({
           cache: false,
           activate: false,
           loadModules: false,
@@ -2408,7 +2421,7 @@ module.exports = { id: "manifest-surfaces-plugin", register() { throw new Error(
       label: "tracks plugins as imported when module evaluation throws after top-level execution",
       run: () => {
         useNoBundledPlugins();
-        const importMarker = "__openclaw_loader_import_throw_marker";
+        const importMarker = "__marketingclaw_loader_import_throw_marker";
         Reflect.deleteProperty(globalThis, importMarker);
 
         const plugin = writePlugin({
@@ -2419,7 +2432,7 @@ throw new Error("boom after import");
 module.exports = { id: "throws-after-import", register() {} };`,
         });
 
-        const registry = loadOpenClawPlugins({
+        const registry = loadMarketingClawPlugins({
           cache: false,
           activate: false,
           config: {
@@ -2444,13 +2457,14 @@ module.exports = { id: "throws-after-import", register() {} };`,
       label: "fails loudly when a plugin reenters the same snapshot load during register",
       run: () => {
         useNoBundledPlugins();
-        const marker = "__openclaw_loader_reentry_error";
-        const reenterFnMarker = "__openclaw_loader_reentry_fn";
+        const marker = "__marketingclaw_loader_reentry_error";
+        const reenterFnMarker = "__marketingclaw_loader_reentry_fn";
         Reflect.deleteProperty(globalThis, marker);
         Reflect.set(
           globalThis,
           reenterFnMarker,
-          (options: Parameters<typeof loadOpenClawPlugins>[0]) => loadOpenClawPlugins(options),
+          (options: Parameters<typeof loadMarketingClawPlugins>[0]) =>
+            loadMarketingClawPlugins(options),
         );
         const pluginDir = makeTempDir();
         const pluginFile = path.join(pluginDir, "reentrant-snapshot.cjs");
@@ -2464,7 +2478,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
               allow: ["reentrant-snapshot"],
             },
           },
-        } satisfies Parameters<typeof loadOpenClawPlugins>[0];
+        } satisfies Parameters<typeof loadMarketingClawPlugins>[0];
         writePlugin({
           id: "reentrant-snapshot",
           dir: pluginDir,
@@ -2485,7 +2499,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
 };`,
         });
 
-        const registry = loadOpenClawPlugins(nestedOptions);
+        const registry = loadMarketingClawPlugins(nestedOptions);
 
         try {
           const reentryError = Reflect.get(globalThis, marker) as
@@ -2507,8 +2521,8 @@ module.exports = { id: "throws-after-import", register() {} };`,
       label: "lets resolveRuntimePluginRegistry short-circuit during same snapshot load",
       run: () => {
         useNoBundledPlugins();
-        const marker = "__openclaw_runtime_registry_reentry_marker";
-        const resolverMarker = "__openclaw_runtime_registry_reentry_fn";
+        const marker = "__marketingclaw_runtime_registry_reentry_marker";
+        const resolverMarker = "__marketingclaw_runtime_registry_reentry_fn";
         Reflect.deleteProperty(globalThis, marker);
         Reflect.set(
           globalThis,
@@ -2528,7 +2542,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
               allow: ["runtime-registry-reentry"],
             },
           },
-        } satisfies Parameters<typeof loadOpenClawPlugins>[0];
+        } satisfies Parameters<typeof loadMarketingClawPlugins>[0];
         writePlugin({
           id: "runtime-registry-reentry",
           dir: pluginDir,
@@ -2542,7 +2556,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
 };`,
         });
 
-        const registry = loadOpenClawPlugins(nestedOptions);
+        const registry = loadMarketingClawPlugins(nestedOptions);
 
         try {
           expect(Reflect.get(globalThis, marker)).toBe("undefined");
@@ -2577,12 +2591,12 @@ module.exports = { id: "throws-after-import", register() {} };`,
           },
         };
 
-        const full = loadOpenClawPlugins(options);
-        const scoped = loadOpenClawPlugins({
+        const full = loadMarketingClawPlugins(options);
+        const scoped = loadMarketingClawPlugins({
           ...options,
           onlyPluginIds: ["allowed-cache-scope"],
         });
-        const scopedAgain = loadOpenClawPlugins({
+        const scopedAgain = loadMarketingClawPlugins({
           ...options,
           onlyPluginIds: ["allowed-cache-scope"],
         });
@@ -2609,7 +2623,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
         setActivePluginRegistry(previousRegistry, "existing-registry");
         resetGlobalHookRunner();
 
-        const scoped = loadOpenClawPlugins({
+        const scoped = loadMarketingClawPlugins({
           cache: false,
           activate: false,
           workspaceDir: plugin.dir,
@@ -2645,7 +2659,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       body: `module.exports = { id: "extra-empty-scope", register() {} };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       activate: false,
       config: {
@@ -2670,10 +2684,10 @@ module.exports = { id: "throws-after-import", register() {} };`,
 
     const discovery = await import("./discovery.js");
     const manifestRegistry = await import("./manifest-registry.js");
-    const discoverySpy = vi.spyOn(discovery, "discoverOpenClawPlugins");
+    const discoverySpy = vi.spyOn(discovery, "discoverMarketingClawPlugins");
     const manifestSpy = vi.spyOn(manifestRegistry, "loadPluginManifestRegistry");
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       activate: false,
       config: {
@@ -2712,7 +2726,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
     });
     clearPluginCommands();
 
-    const scoped = loadOpenClawPlugins({
+    const scoped = loadMarketingClawPlugins({
       cache: false,
       activate: false,
       workspaceDir: plugin.dir,
@@ -2729,7 +2743,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
     expect(scoped.commands.map((entry) => entry.command.name)).toEqual(["pair"]);
     expect(getPluginCommandSpecs("telegram")).toStrictEqual([]);
 
-    const active = loadOpenClawPlugins({
+    const active = loadMarketingClawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -2771,7 +2785,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       };`,
     });
 
-    loadOpenClawPlugins({
+    loadMarketingClawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -2784,7 +2798,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
     });
     expect(listRegisteredAgentHarnessIdsForTest()).toEqual(["codex"]);
 
-    loadOpenClawPlugins({
+    loadMarketingClawPlugins({
       cache: false,
       workspaceDir: makeTempDir(),
       config: {
@@ -2812,7 +2826,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -2850,7 +2864,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
     });
 
     clearInternalHooks();
-    const scoped = loadOpenClawPlugins({
+    const scoped = loadMarketingClawPlugins({
       cache: false,
       activate: false,
       workspaceDir: plugin.dir,
@@ -2905,8 +2919,8 @@ module.exports = { id: "throws-after-import", register() {} };`,
       onlyPluginIds: ["internal-hook-reload"],
     };
 
-    loadOpenClawPlugins(loadOptions);
-    loadOpenClawPlugins(loadOptions);
+    loadMarketingClawPlugins(loadOptions);
+    loadMarketingClawPlugins(loadOptions);
 
     const event = createInternalHookEvent("gateway", "startup", "gateway:startup");
     await triggerInternalHook(event);
@@ -2934,7 +2948,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       };`,
     });
     fs.writeFileSync(
-      path.join(plugin.dir, "openclaw.plugin.json"),
+      path.join(plugin.dir, "marketingclaw.plugin.json"),
       JSON.stringify(
         {
           id: "hook-config-context",
@@ -2948,7 +2962,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
 
     clearInternalHooks();
 
-    loadOpenClawPlugins({
+    loadMarketingClawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -3078,7 +3092,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
     });
     for (const plugin of [first, second]) {
       fs.writeFileSync(
-        path.join(plugin.dir, "openclaw.plugin.json"),
+        path.join(plugin.dir, "marketingclaw.plugin.json"),
         JSON.stringify(
           {
             id: plugin.id,
@@ -3093,7 +3107,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
 
     clearInternalHooks();
 
-    loadOpenClawPlugins({
+    loadMarketingClawPlugins({
       cache: false,
       workspaceDir: first.dir,
       onlyPluginIds: ["hook-context-first", "hook-context-second"],
@@ -3187,7 +3201,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
     clearPluginCommands();
     clearPluginInteractiveHandlers();
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -3237,7 +3251,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
 
     clearInternalHooks();
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -3280,7 +3294,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -3313,7 +3327,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       path.join(scopedDir, "package.json"),
       JSON.stringify({
         name: "@openclaw/scoped-provider",
-        openclaw: { extensions: ["./index.cjs"] },
+        marketingclaw: { extensions: ["./index.cjs"] },
       }),
       "utf-8",
     );
@@ -3340,7 +3354,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       path.join(unscopedDir, "package.json"),
       JSON.stringify({
         name: "@openclaw/unscoped-provider",
-        openclaw: { extensions: ["./index.cjs"] },
+        marketingclaw: { extensions: ["./index.cjs"] },
       }),
       "utf-8",
     );
@@ -3359,10 +3373,10 @@ module.exports = { id: "throws-after-import", register() {} };`,
       enabledByDefault: true,
       providers: ["unscoped-provider"],
     });
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
-    delete process.env.OPENCLAW_DISABLE_BUNDLED_PLUGINS;
+    process.env.MARKETINGCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
+    delete process.env.MARKETINGCLAW_DISABLE_BUNDLED_PLUGINS;
 
-    const scoped = loadOpenClawPlugins({
+    const scoped = loadMarketingClawPlugins({
       cache: false,
       activate: false,
       config: {
@@ -3442,7 +3456,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       };`,
     });
 
-    const scoped = loadOpenClawPlugins({
+    const scoped = loadMarketingClawPlugins({
       cache: false,
       activate: false,
       workspaceDir: plugin.dir,
@@ -3490,7 +3504,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       contracts: { embeddingProviders: ["snapshot"] },
     });
 
-    const scoped = loadOpenClawPlugins({
+    const scoped = loadMarketingClawPlugins({
       cache: false,
       activate: false,
       workspaceDir: plugin.dir,
@@ -3537,7 +3551,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       contracts: { embeddingProviders: ["shared"] },
     });
 
-    const scoped = loadOpenClawPlugins({
+    const scoped = loadMarketingClawPlugins({
       cache: false,
       activate: false,
       workspaceDir: plugin.dir,
@@ -3581,7 +3595,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       contracts: { embeddingProviders: ["failed"] },
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -3641,7 +3655,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -3688,7 +3702,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       };`,
     });
 
-    const scoped = loadOpenClawPlugins({
+    const scoped = loadMarketingClawPlugins({
       cache: false,
       activate: false,
       workspaceDir: plugin.dir,
@@ -3733,7 +3747,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -3783,15 +3797,15 @@ module.exports = { id: "throws-after-import", register() {} };`,
         },
       },
       onlyPluginIds: ["cached-detached-runtime"],
-    } satisfies Parameters<typeof loadOpenClawPlugins>[0];
+    } satisfies Parameters<typeof loadMarketingClawPlugins>[0];
 
-    loadOpenClawPlugins(loadOptions);
+    loadMarketingClawPlugins(loadOptions);
     expect(getDetachedTaskLifecycleRuntimeRegistration()?.pluginId).toBe("cached-detached-runtime");
 
     clearDetachedTaskLifecycleRuntimeRegistration();
     expect(getDetachedTaskLifecycleRuntimeRegistration()).toBeUndefined();
 
-    loadOpenClawPlugins(loadOptions);
+    loadMarketingClawPlugins(loadOptions);
 
     expect(getDetachedTaskLifecycleRuntimeRegistration()?.pluginId).toBe("cached-detached-runtime");
   });
@@ -3827,9 +3841,9 @@ module.exports = { id: "throws-after-import", register() {} };`,
         },
       },
       onlyPluginIds: ["cached-command-interactive"],
-    } satisfies Parameters<typeof loadOpenClawPlugins>[0];
+    } satisfies Parameters<typeof loadMarketingClawPlugins>[0];
 
-    const registry = loadOpenClawPlugins(loadOptions);
+    const registry = loadMarketingClawPlugins(loadOptions);
     expect(getPluginCommandSpecs()).toEqual([
       { name: "hue", description: "Control Hue lights", acceptsArgs: false },
     ]);
@@ -3849,7 +3863,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
     commitPluginInteractiveCallbackDedupe(dedupeKey, 1_000);
     expect(claimPluginInteractiveCallbackDedupe(dedupeKey, 1_001)).toBe(false);
 
-    loadOpenClawPlugins(loadOptions);
+    loadMarketingClawPlugins(loadOptions);
     expect(claimPluginInteractiveCallbackDedupe(dedupeKey, 1_002)).toBe(false);
 
     clearPluginCommands();
@@ -3857,7 +3871,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
     expect(getPluginCommandSpecs()).toStrictEqual([]);
     expect(resolvePluginInteractiveNamespaceMatch("telegram", "hue:on")).toBeNull();
 
-    loadOpenClawPlugins(loadOptions);
+    loadMarketingClawPlugins(loadOptions);
 
     expect(getPluginCommandSpecs()).toEqual([
       { name: "hue", description: "Control Hue lights", acceptsArgs: false },
@@ -3873,7 +3887,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
     useNoBundledPlugins();
     registerDetachedTaskLifecycleRuntime("stale-runtime", createDetachedTaskRuntimeStub("stale"));
 
-    loadOpenClawPlugins({
+    loadMarketingClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -3939,14 +3953,14 @@ module.exports = { id: "throws-after-import", register() {} };`,
       },
     ];
 
-    const first = loadOpenClawPlugins(options);
+    const first = loadMarketingClawPlugins(options);
     await expect(listActiveMemoryPublicArtifacts({ cfg: {} as never })).resolves.toEqual(
       expectedArtifacts,
     );
 
     clearMemoryPluginState();
 
-    const second = loadOpenClawPlugins(options);
+    const second = loadMarketingClawPlugins(options);
     expect(second).toBe(first);
     await expect(listActiveMemoryPublicArtifacts({ cfg: {} as never })).resolves.toEqual(
       expectedArtifacts,
@@ -3998,7 +4012,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
         slots: { memory: "capability-survives-memory" },
       },
     };
-    loadOpenClawPlugins({
+    loadMarketingClawPlugins({
       cache: false,
       workspaceDir: memoryPlugin.dir,
       config: activateConfig,
@@ -4022,7 +4036,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
     // Simulate what resolvePluginWebSearchProviders and similar read-only paths do:
     // load plugins again with activate:false. Each per-plugin snapshot/rollback must
     // preserve the previously registered memory capability.
-    loadOpenClawPlugins({
+    loadMarketingClawPlugins({
       cache: false,
       activate: false,
       workspaceDir: memoryPlugin.dir,
@@ -4036,7 +4050,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
 
   it("uses discovery registration mode for non-activating loads", () => {
     useNoBundledPlugins();
-    const marker = "__openclawDiscoveryModeTest";
+    const marker = "__marketingclawDiscoveryModeTest";
     const plugin = writePlugin({
       id: "discovery-mode-test",
       filename: "discovery-mode-test.cjs",
@@ -4063,7 +4077,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       },
     };
 
-    const snapshot = loadOpenClawPlugins({
+    const snapshot = loadMarketingClawPlugins({
       activate: false,
       cache: false,
       workspaceDir: plugin.dir,
@@ -4073,7 +4087,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
     expect(snapshot.providers.map((entry) => entry.provider.id)).toEqual(["discovery-provider"]);
     expect(snapshot.tools.flatMap((entry) => entry.names)).toContain("discovery_tool");
 
-    loadOpenClawPlugins({
+    loadMarketingClawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config,
@@ -4100,7 +4114,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       activate: false,
       cache: false,
       workspaceDir: plugin.dir,
@@ -4141,7 +4155,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
     });
     updatePluginManifest(plugin, { contracts: { tools: ["manifest_tool"] } });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       activate: false,
       cache: false,
       workspaceDir: plugin.dir,
@@ -4166,7 +4180,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
   it("caches non-activating snapshots without restoring global side effects", () => {
     useNoBundledPlugins();
     clearPluginCommands();
-    const marker = "__openclawSnapshotCacheRegisterCount";
+    const marker = "__marketingclawSnapshotCacheRegisterCount";
     const plugin = writePlugin({
       id: "snapshot-cache",
       filename: "snapshot-cache.cjs",
@@ -4194,15 +4208,15 @@ module.exports = { id: "throws-after-import", register() {} };`,
       onlyPluginIds: ["snapshot-cache"],
     };
 
-    const first = loadOpenClawPlugins(options);
-    const second = loadOpenClawPlugins(options);
+    const first = loadMarketingClawPlugins(options);
+    const second = loadMarketingClawPlugins(options);
 
     expect(second).toBe(first);
     expect((globalThis as Record<string, unknown>)[marker]).toBe(1);
     expect(first.commands.map((entry) => entry.command.name)).toEqual(["snapshot-command"]);
     expect(getPluginCommandSpecs()).toStrictEqual([]);
 
-    const active = loadOpenClawPlugins({
+    const active = loadMarketingClawPlugins({
       workspaceDir: plugin.dir,
       config: options.config,
       onlyPluginIds: ["snapshot-cache"],
@@ -4221,7 +4235,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
 
   it("does not re-register non-bundled plugins after gateway-bindable boot loads", () => {
     useNoBundledPlugins();
-    const marker = "__openclawGatewayBootRegisterCount";
+    const marker = "__marketingclawGatewayBootRegisterCount";
     const plugin = writePlugin({
       id: "costclaw-boot-cache",
       filename: "costclaw-boot-cache.cjs",
@@ -4242,7 +4256,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       },
     };
 
-    loadOpenClawPlugins({
+    loadMarketingClawPlugins({
       workspaceDir: plugin.dir,
       config,
       runtimeOptions: {
@@ -4261,7 +4275,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
 
   it("reuses a gateway-bindable cache entry for later default-mode loads", () => {
     useNoBundledPlugins();
-    const marker = "__openclawGatewayBindableCacheRegisterCount";
+    const marker = "__marketingclawGatewayBindableCacheRegisterCount";
     const plugin = writePlugin({
       id: "gateway-bindable-cache",
       filename: "gateway-bindable-cache.cjs",
@@ -4285,13 +4299,13 @@ module.exports = { id: "throws-after-import", register() {} };`,
       },
     };
 
-    const gatewayBindable = loadOpenClawPlugins({
+    const gatewayBindable = loadMarketingClawPlugins({
       ...options,
       runtimeOptions: {
         allowGatewaySubagentBinding: true,
       },
     });
-    const defaultMode = loadOpenClawPlugins(options);
+    const defaultMode = loadMarketingClawPlugins(options);
 
     expect(defaultMode).toBe(gatewayBindable);
     expect((globalThis as Record<string, unknown>)[marker]).toBe(1);
@@ -4316,13 +4330,13 @@ module.exports = { id: "throws-after-import", register() {} };`,
       },
     };
 
-    const first = loadOpenClawPlugins(options);
+    const first = loadMarketingClawPlugins(options);
     expectGlobalHookRunner(getGlobalHookRunner());
 
     resetGlobalHookRunner();
     expect(getGlobalHookRunner()).toBeNull();
 
-    const second = loadOpenClawPlugins(options);
+    const second = loadMarketingClawPlugins(options);
     expect(second).toBe(first);
     expectGlobalHookRunner(getGlobalHookRunner());
 
@@ -4346,7 +4360,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       } };`,
     });
 
-    const gatewayRegistry = loadOpenClawPlugins({
+    const gatewayRegistry = loadMarketingClawPlugins({
       workspaceDir: gatewayPlugin.dir,
       config: {
         plugins: {
@@ -4371,7 +4385,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       expect(getGlobalPluginRegistry()).toBe(gatewayRegistry);
       expect(expectGlobalHookRunner(getGlobalHookRunner()).hasHooks("subagent_ended")).toBe(true);
 
-      const defaultRegistry = loadOpenClawPlugins({
+      const defaultRegistry = loadMarketingClawPlugins({
         workspaceDir: defaultPlugin.dir,
         config: {
           plugins: {
@@ -4416,7 +4430,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       } };`,
     });
 
-    loadOpenClawPlugins({
+    loadMarketingClawPlugins({
       workspaceDir: firstPlugin.dir,
       config: {
         plugins: {
@@ -4430,7 +4444,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
 
     // A second activation retires the unpinned first registry entirely; its
     // hooks must drop instead of dispatching stale config closures.
-    loadOpenClawPlugins({
+    loadMarketingClawPlugins({
       workspaceDir: secondPlugin.dir,
       config: {
         plugins: {
@@ -4480,19 +4494,19 @@ module.exports = { id: "throws-after-import", register() {} };`,
           expectedFirstSource: pluginA.file,
           expectedSecondSource: pluginB.file,
           loadFirst: () =>
-            loadOpenClawPlugins({
+            loadMarketingClawPlugins({
               ...options,
               env: {
                 ...process.env,
-                OPENCLAW_BUNDLED_PLUGINS_DIR: bundledA,
+                MARKETINGCLAW_BUNDLED_PLUGINS_DIR: bundledA,
               },
             }),
           loadSecond: () =>
-            loadOpenClawPlugins({
+            loadMarketingClawPlugins({
               ...options,
               env: {
                 ...process.env,
-                OPENCLAW_BUNDLED_PLUGINS_DIR: bundledB,
+                MARKETINGCLAW_BUNDLED_PLUGINS_DIR: bundledB,
               },
             }),
         };
@@ -4537,25 +4551,25 @@ module.exports = { id: "throws-after-import", register() {} };`,
           expectedFirstSource: pluginA.file,
           expectedSecondSource: pluginB.file,
           loadFirst: () =>
-            loadOpenClawPlugins({
+            loadMarketingClawPlugins({
               ...options,
               env: {
                 ...process.env,
                 HOME: homeA,
-                OPENCLAW_HOME: undefined,
-                OPENCLAW_STATE_DIR: stateDir,
-                OPENCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
+                MARKETINGCLAW_HOME: undefined,
+                MARKETINGCLAW_STATE_DIR: stateDir,
+                MARKETINGCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
               },
             }),
           loadSecond: () =>
-            loadOpenClawPlugins({
+            loadMarketingClawPlugins({
               ...options,
               env: {
                 ...process.env,
                 HOME: homeB,
-                OPENCLAW_HOME: undefined,
-                OPENCLAW_STATE_DIR: stateDir,
-                OPENCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
+                MARKETINGCLAW_HOME: undefined,
+                MARKETINGCLAW_STATE_DIR: stateDir,
+                MARKETINGCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
               },
             }),
         };
@@ -4577,10 +4591,10 @@ module.exports = { id: "throws-after-import", register() {} };`,
       name: "does not reuse cached registries when env-resolved install paths change",
       setup: () => {
         useNoBundledPlugins();
-        const openclawHome = makeTempDir();
+        const marketingclawHome = makeTempDir();
         const ignoredHome = makeTempDir();
         const stateDir = makeTempDir();
-        const pluginDir = path.join(openclawHome, "plugins", "tracked-install-cache");
+        const pluginDir = path.join(marketingclawHome, "plugins", "tracked-install-cache");
         mkdirSafe(pluginDir);
         const plugin = writePlugin({
           id: "tracked-install-cache",
@@ -4612,25 +4626,25 @@ module.exports = { id: "throws-after-import", register() {} };`,
         const secondHome = makeTempDir();
         return {
           loadFirst: () =>
-            loadOpenClawPlugins({
+            loadMarketingClawPlugins({
               ...options,
               env: {
                 ...process.env,
-                OPENCLAW_HOME: openclawHome,
+                MARKETINGCLAW_HOME: marketingclawHome,
                 HOME: ignoredHome,
-                OPENCLAW_STATE_DIR: stateDir,
-                OPENCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
+                MARKETINGCLAW_STATE_DIR: stateDir,
+                MARKETINGCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
               },
             }),
           loadVariant: () =>
-            loadOpenClawPlugins({
+            loadMarketingClawPlugins({
               ...options,
               env: {
                 ...process.env,
-                OPENCLAW_HOME: secondHome,
+                MARKETINGCLAW_HOME: secondHome,
                 HOME: ignoredHome,
-                OPENCLAW_STATE_DIR: stateDir,
-                OPENCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
+                MARKETINGCLAW_STATE_DIR: stateDir,
+                MARKETINGCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
               },
             }),
         };
@@ -4659,9 +4673,9 @@ module.exports = { id: "throws-after-import", register() {} };`,
         };
 
         return {
-          loadFirst: () => loadOpenClawPlugins(options),
+          loadFirst: () => loadMarketingClawPlugins(options),
           loadVariant: () =>
-            loadOpenClawPlugins({
+            loadMarketingClawPlugins({
               ...options,
               pluginSdkResolution: "workspace" as PluginSdkResolutionPreference,
             }),
@@ -4691,9 +4705,9 @@ module.exports = { id: "throws-after-import", register() {} };`,
         };
 
         return {
-          loadFirst: () => loadOpenClawPlugins(options),
+          loadFirst: () => loadMarketingClawPlugins(options),
           loadVariant: () =>
-            loadOpenClawPlugins({
+            loadMarketingClawPlugins({
               ...options,
               runtimeOptions: {
                 allowGatewaySubagentBinding: true,
@@ -4720,11 +4734,11 @@ module.exports = { id: "throws-after-import", register() {} };`,
     );
 
     const loadWithStateDir = (stateDir: string) =>
-      loadOpenClawPlugins({
+      loadMarketingClawPlugins({
         env: {
           ...process.env,
-          OPENCLAW_STATE_DIR: stateDir,
-          OPENCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
+          MARKETINGCLAW_STATE_DIR: stateDir,
+          MARKETINGCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
         },
         config: {
           plugins: {
@@ -4764,12 +4778,12 @@ module.exports = { id: "throws-after-import", register() {} };`,
       body: `module.exports = { id: "tilde-bundled", register() {} };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       env: {
         ...process.env,
         HOME: homeDir,
-        OPENCLAW_HOME: undefined,
-        OPENCLAW_BUNDLED_PLUGINS_DIR: override,
+        MARKETINGCLAW_HOME: undefined,
+        MARKETINGCLAW_BUNDLED_PLUGINS_DIR: override,
       },
       config: {
         plugins: {
@@ -4786,34 +4800,34 @@ module.exports = { id: "throws-after-import", register() {} };`,
     ).toBe(fs.realpathSync(plugin.file));
   });
 
-  it("prefers OPENCLAW_HOME over HOME for env-expanded load paths", () => {
+  it("prefers MARKETINGCLAW_HOME over HOME for env-expanded load paths", () => {
     const ignoredHome = makeTempDir();
-    const openclawHome = makeTempDir();
+    const marketingclawHome = makeTempDir();
     const stateDir = makeTempDir();
     const bundledDir = makeTempDir();
     const plugin = writePlugin({
-      id: "openclaw-home-demo",
-      dir: path.join(openclawHome, "plugins", "openclaw-home-demo"),
+      id: "marketingclaw-home-demo",
+      dir: path.join(marketingclawHome, "plugins", "marketingclaw-home-demo"),
       filename: "index.cjs",
-      body: `module.exports = { id: "openclaw-home-demo", register() {} };`,
+      body: `module.exports = { id: "marketingclaw-home-demo", register() {} };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       env: {
         ...process.env,
         HOME: ignoredHome,
-        OPENCLAW_HOME: openclawHome,
-        OPENCLAW_STATE_DIR: stateDir,
-        OPENCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
+        MARKETINGCLAW_HOME: marketingclawHome,
+        MARKETINGCLAW_STATE_DIR: stateDir,
+        MARKETINGCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
       },
       config: {
         plugins: {
-          allow: ["openclaw-home-demo"],
+          allow: ["marketingclaw-home-demo"],
           entries: {
-            "openclaw-home-demo": { enabled: true },
+            "marketingclaw-home-demo": { enabled: true },
           },
           load: {
-            paths: ["~/plugins/openclaw-home-demo"],
+            paths: ["~/plugins/marketingclaw-home-demo"],
           },
         },
       },
@@ -4821,7 +4835,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
 
     expect(
       fs.realpathSync(
-        registry.plugins.find((entry) => entry.id === "openclaw-home-demo")?.source ?? "",
+        registry.plugins.find((entry) => entry.id === "marketingclaw-home-demo")?.source ?? "",
       ),
     ).toBe(fs.realpathSync(plugin.file));
   });
@@ -4948,7 +4962,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
     });
 
     expect(() =>
-      loadOpenClawPlugins({
+      loadMarketingClawPlugins({
         cache: false,
         throwOnLoadError: true,
         config: {
@@ -5004,7 +5018,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       body: `module.exports = { default: { default: { id: "missing-register-shape" } } };`,
     });
 
-    const registry = withEnv({ OPENCLAW_PLUGIN_LOAD_DEBUG: "1" }, () =>
+    const registry = withEnv({ MARKETINGCLAW_PLUGIN_LOAD_DEBUG: "1" }, () =>
       loadRegistryFromSinglePlugin({
         plugin,
         pluginConfig: {
@@ -5086,7 +5100,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
     }
   });
 } };`,
-        assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           const channel = registry.channels.find((entry) => entry.plugin.id === "demo");
           expect(channel?.plugin.id).toBe("demo");
         },
@@ -5132,7 +5146,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
     }
   });
 } };`,
-        assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           expect(countMatching(registry.channels, (entry) => entry.plugin.id === "demo")).toBe(1);
           expect(
             registry.channels.find((entry) => entry.plugin.id === "demo")?.plugin.meta?.label,
@@ -5145,7 +5159,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
         body: `module.exports = { id: "context-engine-malformed", register(api) {
   api.registerContextEngine({ id: "broken-context" });
 } };`,
-        assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           expectRegistryErrorDiagnostic({
             registry,
             pluginId: "context-engine-malformed",
@@ -5160,7 +5174,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
         body: `module.exports = { id: "context-engine-core-collision", register(api) {
   api.registerContextEngine("legacy", () => ({}));
 } };`,
-        assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           expectRegistryErrorDiagnostic({
             registry,
             pluginId: "context-engine-core-collision",
@@ -5174,7 +5188,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
         body: `module.exports = { id: "compaction-provider-malformed", register(api) {
   api.registerCompactionProvider({ id: "broken-compaction", label: "Broken" });
 } };`,
-        assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           expectRegistryErrorDiagnostic({
             registry,
             pluginId: "compaction-provider-malformed",
@@ -5189,7 +5203,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
         body: `module.exports = { id: "memory-prompt-supplement-malformed", register(api) {
   api.registerMemoryPromptSupplement({ id: "broken-memory-prompt" });
 } };`,
-        assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           expectRegistryErrorDiagnostic({
             registry,
             pluginId: "memory-prompt-supplement-malformed",
@@ -5204,7 +5218,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
         body: `module.exports = { id: "cli-missing-metadata", register(api) {
   api.registerCli(() => {});
 } };`,
-        assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           expect(registry.cliRegistrars).toHaveLength(0);
           expectRegistryErrorDiagnostic({
             registry,
@@ -5227,7 +5241,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
     ],
   });
 } };`,
-        assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           expect(registry.cliRegistrars).toHaveLength(1);
           expect(registry.cliRegistrars[0]?.parentPath).toEqual(["nodes"]);
           expect(registry.cliRegistrars[0]?.commands).toEqual(["demo-node"]);
@@ -5291,7 +5305,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
         buildBody: (ownerId: string) => `module.exports = { id: "${ownerId}", register(api) {
   api.registerHook("gateway:startup", () => {}, { name: "shared-hook" });
 } };`,
-        selectCount: (registry: ReturnType<typeof loadOpenClawPlugins>) =>
+        selectCount: (registry: ReturnType<typeof loadMarketingClawPlugins>) =>
           countMatching(registry.hooks, (entry) => entry.entry.hook.name === "shared-hook"),
         duplicateMessage: "hook already registered: shared-hook (hook-owner-a)",
         assert: expectDuplicateRegistrationResult,
@@ -5303,7 +5317,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
         buildBody: (ownerId: string) => `module.exports = { id: "${ownerId}", register(api) {
   api.registerService({ id: "shared-service", start() {} });
 } };`,
-        selectCount: (registry: ReturnType<typeof loadOpenClawPlugins>) =>
+        selectCount: (registry: ReturnType<typeof loadMarketingClawPlugins>) =>
           countMatching(registry.services, (entry) => entry.service.id === "shared-service"),
         duplicateMessage: "service already registered: shared-service (service-owner-a)",
         assert: expectDuplicateRegistrationResult,
@@ -5315,13 +5329,13 @@ module.exports = { id: "throws-after-import", register() {} };`,
         buildBody: (ownerId: string) => `module.exports = { id: "${ownerId}", register(api) {
   api.registerGatewayDiscoveryService({ id: "shared-discovery", advertise() {} });
 } };`,
-        selectCount: (registry: ReturnType<typeof loadOpenClawPlugins>) =>
+        selectCount: (registry: ReturnType<typeof loadMarketingClawPlugins>) =>
           registry.gatewayDiscoveryServices.filter(
             (entry) => entry.service.id === "shared-discovery",
           ).length,
         duplicateMessage:
           "gateway discovery service already registered: shared-discovery (discovery-owner-a)",
-        assertPrimaryOwner: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assertPrimaryOwner: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           expect(
             registry.plugins.find((entry) => entry.id === "discovery-owner-a")
               ?.gatewayDiscoveryServiceIds,
@@ -5339,7 +5353,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
         selectCount: () => 1,
         duplicateMessage:
           "context engine already registered: shared-context-engine-loader-test (plugin:context-engine-owner-a)",
-        assertPrimaryOwner: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assertPrimaryOwner: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           expect(
             registry.plugins.find((entry) => entry.id === "context-engine-owner-a")
               ?.contextEngineIds,
@@ -5354,10 +5368,10 @@ module.exports = { id: "throws-after-import", register() {} };`,
         buildBody: (ownerId: string) => `module.exports = { id: "${ownerId}", register(api) {
   api.registerCli(() => {}, { commands: ["shared-cli"] });
 } };`,
-        selectCount: (registry: ReturnType<typeof loadOpenClawPlugins>) =>
+        selectCount: (registry: ReturnType<typeof loadMarketingClawPlugins>) =>
           registry.cliRegistrars.length,
         duplicateMessage: "cli command already registered: shared-cli (cli-owner-a)",
-        assertPrimaryOwner: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assertPrimaryOwner: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           expect(registry.cliRegistrars[0]?.pluginId).toBe("cli-owner-a");
         },
         assert: expectDuplicateRegistrationResult,
@@ -5504,7 +5518,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
 } };`,
           }),
         ],
-        assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           expect(
             registry.httpRoutes.find((entry) => entry.pluginId === "http-route-missing-auth"),
           ).toBeUndefined();
@@ -5526,7 +5540,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
 } };`,
           }),
         ],
-        assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           const routes = registry.httpRoutes.filter(
             (entry) => entry.pluginId === "http-route-replace-self",
           );
@@ -5553,7 +5567,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
 } };`,
           }),
         ],
-        assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           const route = registry.httpRoutes.find((entry) => entry.path === "/demo");
           expect(route?.pluginId).toBe("http-route-owner-a");
           expectDiagnosticContaining({
@@ -5574,7 +5588,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
 } };`,
           }),
         ],
-        assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           const routes = registry.httpRoutes.filter(
             (entry) => entry.pluginId === "http-route-overlap",
           );
@@ -5598,7 +5612,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
 } };`,
           }),
         ],
-        assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           const routes = registry.httpRoutes.filter(
             (entry) => entry.pluginId === "http-route-overlap-same-auth",
           );
@@ -5620,7 +5634,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       body: `module.exports = { id: "config-disable", register() {} };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -5646,7 +5660,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       JSON.stringify(
         {
           name: "@openclaw/nested-default-channel",
-          openclaw: {
+          marketingclaw: {
             extensions: ["./index.cjs"],
           },
         },
@@ -5656,7 +5670,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       "utf-8",
     );
     fs.writeFileSync(
-      path.join(pluginDir, "openclaw.plugin.json"),
+      path.join(pluginDir, "marketingclaw.plugin.json"),
       JSON.stringify(
         {
           id: "nested-default-channel",
@@ -5704,7 +5718,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       "utf-8",
     );
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       config: {
         channels: {
@@ -5740,7 +5754,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       body: `module.exports = { id: "unrelated-plugin", register() { throw new Error("unrelated plugin should not load"); } };`,
     });
     fs.writeFileSync(
-      path.join(unrelated.dir, "openclaw.plugin.json"),
+      path.join(unrelated.dir, "marketingclaw.plugin.json"),
       JSON.stringify(
         {
           id: "unrelated-plugin",
@@ -5753,7 +5767,7 @@ module.exports = { id: "throws-after-import", register() {} };`,
       "utf-8",
     );
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -5803,7 +5817,7 @@ module.exports = {
 };`,
     });
     fs.writeFileSync(
-      path.join(plugin.dir, "openclaw.plugin.json"),
+      path.join(plugin.dir, "marketingclaw.plugin.json"),
       JSON.stringify(
         {
           id: "lazy-channel-plugin",
@@ -5825,7 +5839,7 @@ module.exports = {
       },
     };
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       config,
     });
@@ -5836,7 +5850,7 @@ module.exports = {
       "disabled",
     );
 
-    const broadSetupRegistry = loadOpenClawPlugins({
+    const broadSetupRegistry = loadMarketingClawPlugins({
       cache: false,
       config,
       includeSetupOnlyChannelPlugins: true,
@@ -5849,7 +5863,7 @@ module.exports = {
       broadSetupRegistry.plugins.find((entry) => entry.id === "lazy-channel-plugin")?.status,
     ).toBe("disabled");
 
-    const scopedSetupRegistry = loadOpenClawPlugins({
+    const scopedSetupRegistry = loadMarketingClawPlugins({
       cache: false,
       config,
       includeSetupOnlyChannelPlugins: true,
@@ -5895,7 +5909,7 @@ module.exports = {
 };`,
     });
     fs.writeFileSync(
-      path.join(workspacePluginDir, "openclaw.plugin.json"),
+      path.join(workspacePluginDir, "marketingclaw.plugin.json"),
       JSON.stringify(
         {
           id: "workspace-shadow",
@@ -5908,7 +5922,7 @@ module.exports = {
       "utf-8",
     );
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       workspaceDir,
       includeSetupOnlyChannelPlugins: true,
@@ -5961,7 +5975,7 @@ module.exports = {
 };`,
     });
     fs.writeFileSync(
-      path.join(workspacePluginDir, "openclaw.plugin.json"),
+      path.join(workspacePluginDir, "marketingclaw.plugin.json"),
       JSON.stringify(
         {
           id: "trusted-workspace-shadow",
@@ -5974,7 +5988,7 @@ module.exports = {
       "utf-8",
     );
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       workspaceDir,
       includeSetupOnlyChannelPlugins: true,
@@ -6030,7 +6044,7 @@ module.exports = {
 };`,
     });
     fs.writeFileSync(
-      path.join(plugin.dir, "openclaw.plugin.json"),
+      path.join(plugin.dir, "marketingclaw.plugin.json"),
       JSON.stringify(
         {
           id: "untrusted-load-path-channel",
@@ -6043,7 +6057,7 @@ module.exports = {
       "utf-8",
     );
 
-    const scopedSetupRegistry = loadOpenClawPlugins({
+    const scopedSetupRegistry = loadMarketingClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -6095,7 +6109,7 @@ module.exports = {
 };`,
     });
     fs.writeFileSync(
-      path.join(plugin.dir, "openclaw.plugin.json"),
+      path.join(plugin.dir, "marketingclaw.plugin.json"),
       JSON.stringify(
         {
           id: "denylisted-load-path-channel",
@@ -6108,7 +6122,7 @@ module.exports = {
       "utf-8",
     );
 
-    const scopedSetupRegistry = loadOpenClawPlugins({
+    const scopedSetupRegistry = loadMarketingClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -6165,7 +6179,7 @@ module.exports = {
         "utf-8",
       );
       fs.writeFileSync(
-        path.join(globalDir, "openclaw.plugin.json"),
+        path.join(globalDir, "marketingclaw.plugin.json"),
         JSON.stringify(
           {
             id: "untrusted-global-channel",
@@ -6184,7 +6198,7 @@ module.exports = {
             name: "@openclaw/untrusted-global-channel",
             version: "0.0.0-test",
             main: "./index.cjs",
-            openclaw: {
+            marketingclaw: {
               extensions: ["./index.cjs"],
             },
           },
@@ -6194,7 +6208,7 @@ module.exports = {
         "utf-8",
       );
 
-      const scopedSetupRegistry = loadOpenClawPlugins({
+      const scopedSetupRegistry = loadMarketingClawPlugins({
         cache: false,
         config: {
           plugins: {
@@ -6250,7 +6264,7 @@ module.exports = {
         "utf-8",
       );
       fs.writeFileSync(
-        path.join(globalDir, "openclaw.plugin.json"),
+        path.join(globalDir, "marketingclaw.plugin.json"),
         JSON.stringify(
           {
             id: "trusted-global-channel",
@@ -6269,7 +6283,7 @@ module.exports = {
             name: "@openclaw/trusted-global-channel",
             version: "0.0.0-test",
             main: "./index.cjs",
-            openclaw: {
+            marketingclaw: {
               extensions: ["./index.cjs"],
             },
           },
@@ -6279,7 +6293,7 @@ module.exports = {
         "utf-8",
       );
 
-      const scopedSetupRegistry = loadOpenClawPlugins({
+      const scopedSetupRegistry = loadMarketingClawPlugins({
         cache: false,
         config: {
           plugins: {
@@ -6335,7 +6349,7 @@ module.exports = {
 };`,
     });
     fs.writeFileSync(
-      path.join(plugin.dir, "openclaw.plugin.json"),
+      path.join(plugin.dir, "marketingclaw.plugin.json"),
       JSON.stringify(
         {
           id: "auto-enabled-load-path-channel",
@@ -6348,7 +6362,7 @@ module.exports = {
       "utf-8",
     );
 
-    const scopedSetupRegistry = loadOpenClawPlugins({
+    const scopedSetupRegistry = loadMarketingClawPlugins({
       cache: false,
       config: {
         channels: {
@@ -6385,7 +6399,7 @@ module.exports = {
         configured: false,
       },
       load: ({ pluginDir }: { pluginDir: string }) =>
-        loadOpenClawPlugins({
+        loadMarketingClawPlugins({
           cache: false,
           config: {
             plugins: {
@@ -6416,7 +6430,7 @@ module.exports = {
         useBundledSetupEntryContract: true,
       },
       load: ({ pluginDir }: { pluginDir: string }) =>
-        loadOpenClawPlugins({
+        loadMarketingClawPlugins({
           cache: false,
           config: {
             plugins: {
@@ -6446,7 +6460,7 @@ module.exports = {
         configured: false,
       },
       load: ({ pluginDir }: { pluginDir: string }) =>
-        loadOpenClawPlugins({
+        loadMarketingClawPlugins({
           cache: false,
           config: {
             plugins: {
@@ -6471,7 +6485,7 @@ module.exports = {
         useBundledSetupEntryContract: true,
       },
       load: ({ pluginDir }: { pluginDir: string }) =>
-        loadOpenClawPlugins({
+        loadMarketingClawPlugins({
           cache: false,
           config: {
             plugins: {
@@ -6497,7 +6511,7 @@ module.exports = {
         splitBundledSetupSecrets: true,
       },
       load: ({ pluginDir }: { pluginDir: string }) =>
-        loadOpenClawPlugins({
+        loadMarketingClawPlugins({
           cache: false,
           config: {
             plugins: {
@@ -6524,7 +6538,7 @@ module.exports = {
         bundledSetupRuntimeMarker: path.join(makeTempDir(), "setup-runtime-applied.txt"),
       },
       load: ({ pluginDir }: { pluginDir: string }) =>
-        loadOpenClawPlugins({
+        loadMarketingClawPlugins({
           cache: false,
           config: {
             plugins: {
@@ -6552,7 +6566,7 @@ module.exports = {
         bundledSetupRuntimeRoutePath: "/setup-runtime-route",
       },
       load: ({ pluginDir }: { pluginDir: string }) =>
-        loadOpenClawPlugins({
+        loadMarketingClawPlugins({
           cache: false,
           preferSetupRuntimeForChannelPlugins: true,
           config: {
@@ -6587,7 +6601,7 @@ module.exports = {
         bundledFullRuntimeMarker: path.join(makeTempDir(), "bundled-runtime-applied.txt"),
       },
       load: ({ pluginDir }: { pluginDir: string }) =>
-        loadOpenClawPlugins({
+        loadMarketingClawPlugins({
           cache: false,
           config: {
             plugins: {
@@ -6614,7 +6628,7 @@ module.exports = {
         bundledSetupRuntimeMarker: path.join(makeTempDir(), "external-setup-runtime-applied.txt"),
       },
       load: ({ pluginDir }: { pluginDir: string }) =>
-        loadOpenClawPlugins({
+        loadMarketingClawPlugins({
           cache: false,
           preferSetupRuntimeForChannelPlugins: true,
           config: {
@@ -6646,7 +6660,7 @@ module.exports = {
         configured: true,
       },
       load: ({ pluginDir }: { pluginDir: string }) =>
-        loadOpenClawPlugins({
+        loadMarketingClawPlugins({
           cache: false,
           preferSetupRuntimeForChannelPlugins: true,
           config: {
@@ -6735,7 +6749,7 @@ module.exports = {
       requireBundledFullRuntimeBeforeLoad: true,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -6768,7 +6782,7 @@ module.exports = {
       body: `module.exports = { id: "setup-runtime-helper-test", register() {} };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -6808,7 +6822,7 @@ module.exports = {
       body: `module.exports = { id: "setup-runtime-route-helper-test", register() {} };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       preferSetupRuntimeForChannelPlugins: true,
       config: {
@@ -6853,7 +6867,7 @@ module.exports = {
       bundledSetupRuntimeLateRoutePath: "/setup-runtime-late-route",
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       preferSetupRuntimeForChannelPlugins: true,
       config: {
@@ -6895,7 +6909,7 @@ module.exports = {
       bundledFullRuntimeMarker: runtimeMarker,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -6930,7 +6944,7 @@ module.exports = {
       bundledFullRuntimeMarker: runtimeMarker,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -6961,7 +6975,7 @@ module.exports = {
       JSON.stringify(
         {
           name: "@openclaw/setup-entry-throws-test",
-          openclaw: {
+          marketingclaw: {
             extensions: ["./index.cjs"],
             setupEntry: "./setup-entry.cjs",
           },
@@ -6972,7 +6986,7 @@ module.exports = {
       "utf-8",
     );
     fs.writeFileSync(
-      path.join(pluginDir, "openclaw.plugin.json"),
+      path.join(pluginDir, "marketingclaw.plugin.json"),
       JSON.stringify(
         {
           id: "setup-entry-throws-test",
@@ -7000,7 +7014,7 @@ module.exports = {
       "utf-8",
     );
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -7028,7 +7042,7 @@ module.exports = {
       JSON.stringify(
         {
           name: "@openclaw/setup-entry-throws-sibling-test",
-          openclaw: {
+          marketingclaw: {
             extensions: ["./index.cjs"],
             setupEntry: "./setup-entry.cjs",
           },
@@ -7039,7 +7053,7 @@ module.exports = {
       "utf-8",
     );
     fs.writeFileSync(
-      path.join(brokenDir, "openclaw.plugin.json"),
+      path.join(brokenDir, "marketingclaw.plugin.json"),
       JSON.stringify(
         {
           id: "setup-entry-throws-sibling-test",
@@ -7090,7 +7104,7 @@ module.exports = {
 } };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -7126,7 +7140,7 @@ module.exports = {
       JSON.stringify(
         {
           name: "@openclaw/register-channel-throws-test",
-          openclaw: {
+          marketingclaw: {
             extensions: ["./index.cjs"],
             setupEntry: "./setup-entry.cjs",
           },
@@ -7137,7 +7151,7 @@ module.exports = {
       "utf-8",
     );
     fs.writeFileSync(
-      path.join(brokenDir, "openclaw.plugin.json"),
+      path.join(brokenDir, "marketingclaw.plugin.json"),
       JSON.stringify(
         {
           id: "register-channel-throws-test",
@@ -7211,7 +7225,7 @@ module.exports = {
 } };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -7269,7 +7283,7 @@ module.exports = {
     mkdirSafe(sourceDir);
     mkdirSafe(runtimeDir);
     fs.writeFileSync(
-      path.join(sourceDir, "openclaw.plugin.json"),
+      path.join(sourceDir, "marketingclaw.plugin.json"),
       JSON.stringify(
         {
           id: "startup-artifact-test",
@@ -7293,12 +7307,12 @@ module.exports = {
 
     const registry = withEnv(
       {
-        OPENCLAW_BUNDLED_PLUGINS_DIR: path.join(repoRoot, "extensions"),
-        OPENCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1",
-        OPENCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
+        MARKETINGCLAW_BUNDLED_PLUGINS_DIR: path.join(repoRoot, "extensions"),
+        MARKETINGCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1",
+        MARKETINGCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
       },
       () =>
-        loadOpenClawPlugins({
+        loadMarketingClawPlugins({
           cache: false,
           preferBuiltPluginArtifacts: true,
           onlyPluginIds: ["startup-artifact-test"],
@@ -7327,7 +7341,7 @@ module.exports = {
     mkdirSafe(sourceDir);
     mkdirSafe(runtimeDir);
     fs.writeFileSync(
-      path.join(sourceDir, "openclaw.plugin.json"),
+      path.join(sourceDir, "marketingclaw.plugin.json"),
       JSON.stringify(
         {
           id: "startup-package-artifact-test",
@@ -7342,7 +7356,7 @@ module.exports = {
       path.join(sourceDir, "package.json"),
       JSON.stringify(
         {
-          openclaw: {
+          marketingclaw: {
             extensions: ["./index.ts"],
           },
         },
@@ -7364,12 +7378,12 @@ module.exports = {
 
     const registry = withEnv(
       {
-        OPENCLAW_BUNDLED_PLUGINS_DIR: path.join(repoRoot, "extensions"),
-        OPENCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1",
-        OPENCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
+        MARKETINGCLAW_BUNDLED_PLUGINS_DIR: path.join(repoRoot, "extensions"),
+        MARKETINGCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1",
+        MARKETINGCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
       },
       () =>
-        loadOpenClawPlugins({
+        loadMarketingClawPlugins({
           cache: false,
           preferBuiltPluginArtifacts: true,
           onlyPluginIds: ["startup-package-artifact-test"],
@@ -7401,7 +7415,7 @@ module.exports = {
       path.join(pluginDir, "package.json"),
       JSON.stringify(
         {
-          openclaw: {
+          marketingclaw: {
             extensions: ["./src/index.mts"],
           },
         },
@@ -7411,7 +7425,7 @@ module.exports = {
       "utf-8",
     );
     fs.writeFileSync(
-      path.join(pluginDir, "openclaw.plugin.json"),
+      path.join(pluginDir, "marketingclaw.plugin.json"),
       JSON.stringify(
         {
           id: "workspace-artifact-test",
@@ -7433,7 +7447,7 @@ module.exports = {
       "utf-8",
     );
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       preferBuiltPluginArtifacts: true,
       config: {
@@ -7464,7 +7478,7 @@ module.exports = {
       path.join(pluginDir, "package.json"),
       JSON.stringify(
         {
-          openclaw: {
+          marketingclaw: {
             extensions: ["./src/index.ts"],
           },
         },
@@ -7474,7 +7488,7 @@ module.exports = {
       "utf-8",
     );
     fs.writeFileSync(
-      path.join(pluginDir, "openclaw.plugin.json"),
+      path.join(pluginDir, "marketingclaw.plugin.json"),
       JSON.stringify(
         {
           id: "workspace-artifact-extension-test",
@@ -7496,7 +7510,7 @@ module.exports = {
       "utf-8",
     );
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       preferBuiltPluginArtifacts: true,
       config: {
@@ -7526,7 +7540,7 @@ module.exports = {
       path.join(pluginDir, "package.json"),
       JSON.stringify(
         {
-          openclaw: {
+          marketingclaw: {
             extensions: ["./index.js"],
           },
         },
@@ -7536,7 +7550,7 @@ module.exports = {
       "utf-8",
     );
     fs.writeFileSync(
-      path.join(pluginDir, "openclaw.plugin.json"),
+      path.join(pluginDir, "marketingclaw.plugin.json"),
       JSON.stringify(
         {
           id: "workspace-explicit-js-test",
@@ -7558,7 +7572,7 @@ module.exports = {
       "utf-8",
     );
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       preferBuiltPluginArtifacts: true,
       config: {
@@ -7588,7 +7602,7 @@ module.exports = {
       path.join(pluginDir, "package.json"),
       JSON.stringify(
         {
-          openclaw: {
+          marketingclaw: {
             extensions: ["./src/index.mts"],
           },
         },
@@ -7598,7 +7612,7 @@ module.exports = {
       "utf-8",
     );
     fs.writeFileSync(
-      path.join(pluginDir, "openclaw.plugin.json"),
+      path.join(pluginDir, "marketingclaw.plugin.json"),
       JSON.stringify(
         {
           id: "workspace-artifact-symlink-test",
@@ -7625,7 +7639,7 @@ module.exports = {
       return;
     }
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       preferBuiltPluginArtifacts: true,
       config: {
@@ -8009,11 +8023,11 @@ module.exports = {
 
           return withEnv(
             {
-              OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-              OPENCLAW_BUNDLED_PLUGINS_DIR: undefined,
+              MARKETINGCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+              MARKETINGCLAW_BUNDLED_PLUGINS_DIR: undefined,
             },
             () =>
-              loadOpenClawPlugins({
+              loadMarketingClawPlugins({
                 cache: false,
                 config: {
                   plugins: {
@@ -8024,7 +8038,7 @@ module.exports = {
               }),
           );
         },
-        assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           const a = registry.plugins.find((entry) => entry.id === "memory-a");
           const b = registry.plugins.find((entry) => entry.id === "memory-b");
           expect(b?.status).toBe("loaded");
@@ -8052,7 +8066,7 @@ module.exports = {
             body: memoryPluginBody("memory-b"),
           });
           fs.writeFileSync(
-            path.join(memoryADir, "openclaw.plugin.json"),
+            path.join(memoryADir, "marketingclaw.plugin.json"),
             JSON.stringify(
               {
                 id: "memory-a",
@@ -8065,7 +8079,7 @@ module.exports = {
             "utf-8",
           );
           fs.writeFileSync(
-            path.join(memoryBDir, "openclaw.plugin.json"),
+            path.join(memoryBDir, "marketingclaw.plugin.json"),
             JSON.stringify(
               {
                 id: "memory-b",
@@ -8077,9 +8091,9 @@ module.exports = {
             ),
             "utf-8",
           );
-          process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
+          process.env.MARKETINGCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
 
-          return loadOpenClawPlugins({
+          return loadMarketingClawPlugins({
             cache: false,
             config: {
               plugins: {
@@ -8093,7 +8107,7 @@ module.exports = {
             },
           });
         },
-        assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           const a = registry.plugins.find((entry) => entry.id === "memory-a");
           const b = registry.plugins.find((entry) => entry.id === "memory-b");
           expect(a?.status).toBe("disabled");
@@ -8107,7 +8121,7 @@ module.exports = {
         loadRegistry: () => {
           const { selectedId } = setupBundledDreamingMemoryPlugins();
 
-          return loadOpenClawPlugins({
+          return loadMarketingClawPlugins({
             cache: false,
             config: {
               plugins: {
@@ -8120,7 +8134,7 @@ module.exports = {
             },
           });
         },
-        assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           const core = registry.plugins.find((entry) => entry.id === "memory-core");
           const lance = registry.plugins.find((entry) => entry.id === "memory-lancedb");
           expect(core?.status).toBe("loaded");
@@ -8136,7 +8150,7 @@ module.exports = {
             coreBody: `throw new Error("manifest-only snapshot should not import memory-core");`,
           });
 
-          return loadOpenClawPlugins({
+          return loadMarketingClawPlugins({
             cache: false,
             activate: false,
             loadModules: false,
@@ -8151,7 +8165,7 @@ module.exports = {
             },
           });
         },
-        assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           const core = registry.plugins.find((entry) => entry.id === "memory-core");
           const lance = registry.plugins.find((entry) => entry.id === "memory-lancedb");
           expect(core?.status).toBe("loaded");
@@ -8166,7 +8180,7 @@ module.exports = {
             coreBody: `throw new Error("denied memory-core should not load");`,
           });
 
-          return loadOpenClawPlugins({
+          return loadMarketingClawPlugins({
             cache: false,
             config: {
               plugins: {
@@ -8180,7 +8194,7 @@ module.exports = {
             },
           });
         },
-        assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           const core = registry.plugins.find((entry) => entry.id === "memory-core");
           const lance = registry.plugins.find((entry) => entry.id === "memory-lancedb");
           expect(core?.status).toBe("disabled");
@@ -8195,7 +8209,7 @@ module.exports = {
             coreBody: `throw new Error("disabled memory-core should not load");`,
           });
 
-          return loadOpenClawPlugins({
+          return loadMarketingClawPlugins({
             cache: false,
             config: {
               plugins: {
@@ -8209,7 +8223,7 @@ module.exports = {
             },
           });
         },
-        assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           const core = registry.plugins.find((entry) => entry.id === "memory-core");
           const lance = registry.plugins.find((entry) => entry.id === "memory-lancedb");
           expect(core?.status).toBe("disabled");
@@ -8225,7 +8239,7 @@ module.exports = {
             coreBody: `throw new Error("non-memory selected slot should not load memory-core");`,
           });
 
-          return loadOpenClawPlugins({
+          return loadMarketingClawPlugins({
             cache: false,
             config: {
               plugins: {
@@ -8238,7 +8252,7 @@ module.exports = {
             },
           });
         },
-        assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           const core = registry.plugins.find((entry) => entry.id === "memory-core");
           const selected = registry.plugins.find((entry) => entry.id === "memory-lancedb");
           expect(core?.status).toBe("disabled");
@@ -8269,7 +8283,7 @@ module.exports = {
           });
           const openSchema = { type: "object", additionalProperties: true };
           fs.writeFileSync(
-            path.join(memoryCoreDir, "openclaw.plugin.json"),
+            path.join(memoryCoreDir, "marketingclaw.plugin.json"),
             JSON.stringify(
               { id: "memory-core", kind: "memory", configSchema: EMPTY_PLUGIN_SCHEMA },
               null,
@@ -8278,7 +8292,7 @@ module.exports = {
             "utf-8",
           );
           fs.writeFileSync(
-            path.join(memoryLanceDir, "openclaw.plugin.json"),
+            path.join(memoryLanceDir, "marketingclaw.plugin.json"),
             JSON.stringify(
               { id: "memory-lancedb", kind: "memory", configSchema: openSchema },
               null,
@@ -8286,9 +8300,9 @@ module.exports = {
             ),
             "utf-8",
           );
-          process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
+          process.env.MARKETINGCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
 
-          return loadOpenClawPlugins({
+          return loadMarketingClawPlugins({
             cache: false,
             config: {
               plugins: {
@@ -8302,7 +8316,7 @@ module.exports = {
             },
           });
         },
-        assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           const core = registry.plugins.find((entry) => entry.id === "memory-core");
           const lance = registry.plugins.find((entry) => entry.id === "memory-lancedb");
           expect(core?.status).toBe("loaded");
@@ -8332,7 +8346,7 @@ module.exports = {
             body: memoryPluginBody("memory-lancedb"),
           });
           fs.writeFileSync(
-            path.join(memoryCoreDir, "openclaw.plugin.json"),
+            path.join(memoryCoreDir, "marketingclaw.plugin.json"),
             JSON.stringify(
               { id: "memory-core", kind: "memory", configSchema: EMPTY_PLUGIN_SCHEMA },
               null,
@@ -8341,7 +8355,7 @@ module.exports = {
             "utf-8",
           );
           fs.writeFileSync(
-            path.join(memoryLanceDir, "openclaw.plugin.json"),
+            path.join(memoryLanceDir, "marketingclaw.plugin.json"),
             JSON.stringify(
               { id: "memory-lancedb", kind: "memory", configSchema: EMPTY_PLUGIN_SCHEMA },
               null,
@@ -8349,9 +8363,9 @@ module.exports = {
             ),
             "utf-8",
           );
-          process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
+          process.env.MARKETINGCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
 
-          return loadOpenClawPlugins({
+          return loadMarketingClawPlugins({
             cache: false,
             config: {
               plugins: {
@@ -8365,7 +8379,7 @@ module.exports = {
             },
           });
         },
-        assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           const core = registry.plugins.find((entry) => entry.id === "memory-core");
           const lance = registry.plugins.find((entry) => entry.id === "memory-lancedb");
           expect(core?.status).toBe("disabled");
@@ -8385,7 +8399,7 @@ module.exports = {
             body: `throw new Error("memory-core should not load when memory slot is none");`,
           });
           fs.writeFileSync(
-            path.join(memoryCoreDir, "openclaw.plugin.json"),
+            path.join(memoryCoreDir, "marketingclaw.plugin.json"),
             JSON.stringify(
               { id: "memory-core", kind: "memory", configSchema: EMPTY_PLUGIN_SCHEMA },
               null,
@@ -8393,9 +8407,9 @@ module.exports = {
             ),
             "utf-8",
           );
-          process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
+          process.env.MARKETINGCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
 
-          return loadOpenClawPlugins({
+          return loadMarketingClawPlugins({
             cache: false,
             config: {
               plugins: {
@@ -8408,7 +8422,7 @@ module.exports = {
             },
           });
         },
-        assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           const core = registry.plugins.find((entry) => entry.id === "memory-core");
           expect(core?.status).toBe("disabled");
         },
@@ -8423,11 +8437,11 @@ module.exports = {
 
           return withEnv(
             {
-              OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-              OPENCLAW_BUNDLED_PLUGINS_DIR: undefined,
+              MARKETINGCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+              MARKETINGCLAW_BUNDLED_PLUGINS_DIR: undefined,
             },
             () =>
-              loadOpenClawPlugins({
+              loadMarketingClawPlugins({
                 cache: false,
                 config: {
                   plugins: {
@@ -8438,7 +8452,7 @@ module.exports = {
               }),
           );
         },
-        assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           const entry = registry.plugins.find((item) => item.id === "memory-off");
           expect(entry?.status).toBe("disabled");
         },
@@ -8451,7 +8465,7 @@ module.exports = {
   it("loads dreaming sidecar metadata through a restrictive selected-memory allowlist", async () => {
     const { selectedId } = setupBundledDreamingMemoryPlugins();
 
-    const registry = await loadOpenClawPluginCliRegistry({
+    const registry = await loadMarketingClawPluginCliRegistry({
       cache: false,
       config: {
         plugins: {
@@ -8487,7 +8501,7 @@ module.exports = {
             body: simplePluginBody("shadow"),
           });
 
-          return loadOpenClawPlugins({
+          return loadMarketingClawPlugins({
             cache: false,
             config: {
               plugins: {
@@ -8522,7 +8536,7 @@ module.exports = {
               filename: "index.cjs",
             });
 
-            return loadOpenClawPlugins({
+            return loadMarketingClawPlugins({
               cache: false,
               config: {
                 plugins: {
@@ -8568,7 +8582,7 @@ module.exports = {
               { stateDir },
             );
 
-            return loadOpenClawPlugins({
+            return loadMarketingClawPlugins({
               cache: false,
               config: {
                 plugins: {
@@ -8592,15 +8606,15 @@ module.exports = {
         pluginId: "demo-dev-source-duplicate",
         bundledFilename: "index.cjs",
         loadRegistry: () => {
-          const devSourceRoot = makeOpenClawDevSourceRoot();
+          const devSourceRoot = makeMarketingClawDevSourceRoot();
           const bundledPluginsDir = path.join(devSourceRoot, "extensions");
           writeBundledPlugin({
             id: "demo-dev-source-duplicate",
             body: simplePluginBody("demo-dev-source-duplicate"),
             bundledDir: path.join(bundledPluginsDir, "demo-dev-source-duplicate"),
           });
-          process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledPluginsDir;
-          return withEnv({ OPENCLAW_DEV_SOURCE_ROOT: devSourceRoot }, () =>
+          process.env.MARKETINGCLAW_BUNDLED_PLUGINS_DIR = bundledPluginsDir;
+          return withEnv({ MARKETINGCLAW_DEV_SOURCE_ROOT: devSourceRoot }, () =>
             withStateDir((stateDir) => {
               const globalDir = path.join(stateDir, "extensions", "demo-dev-source-duplicate");
               mkdirSafe(globalDir);
@@ -8620,7 +8634,7 @@ module.exports = {
                 { stateDir },
               );
 
-              return loadOpenClawPlugins({
+              return loadMarketingClawPlugins({
                 cache: false,
                 config: {
                   plugins: {
@@ -8649,7 +8663,12 @@ module.exports = {
             body: memoryPluginBody("memory-lancedb"),
           });
           return withStateDir((stateDir) => {
-            const globalDir = path.join(stateDir, "node_modules", "@openclaw", "memory-lancedb");
+            const globalDir = path.join(
+              stateDir,
+              "node_modules",
+              "@marketingclaw",
+              "memory-lancedb",
+            );
             mkdirSafe(globalDir);
             const globalPlugin = writePlugin({
               id: "memory-lancedb",
@@ -8676,9 +8695,9 @@ module.exports = {
               path.join(globalDir, "package.json"),
               JSON.stringify(
                 {
-                  name: "@openclaw/memory-lancedb",
+                  name: "@marketingclaw/memory-lancedb",
                   version: "2026.5.12-beta.1",
-                  openclaw: { extensions: ["./index.cjs"] },
+                  marketingclaw: { extensions: ["./index.cjs"] },
                 },
                 null,
                 2,
@@ -8686,7 +8705,7 @@ module.exports = {
               "utf-8",
             );
 
-            return loadOpenClawPlugins({
+            return loadMarketingClawPlugins({
               cache: false,
               config: {
                 plugins: {
@@ -8698,8 +8717,8 @@ module.exports = {
                   installs: {
                     "memory-lancedb": {
                       source: "npm",
-                      spec: "@openclaw/memory-lancedb",
-                      resolvedName: "@openclaw/memory-lancedb",
+                      spec: "@marketingclaw/memory-lancedb",
+                      resolvedName: "@marketingclaw/memory-lancedb",
                       resolvedVersion: "2026.5.12-beta.1",
                       installPath: globalDir,
                     },
@@ -8743,7 +8762,7 @@ module.exports = {
             id: "warn-open-allow-config",
             body: simplePluginBody("warn-open-allow-config"),
           });
-          return loadOpenClawPlugins({
+          return loadMarketingClawPlugins({
             cache: false,
             logger: createWarningLogger(warnings),
             config: {
@@ -8764,7 +8783,7 @@ module.exports = {
             id: "warn-open-allow-workspace",
           });
           return (warnings: string[]) =>
-            loadOpenClawPlugins({
+            loadMarketingClawPlugins({
               cache: false,
               workspaceDir,
               logger: createWarningLogger(warnings),
@@ -8801,7 +8820,7 @@ module.exports = {
       id: "warn-mismatch-allow-plugin",
     });
     const warnings: string[] = [];
-    loadOpenClawPlugins({
+    loadMarketingClawPlugins({
       cache: false,
       workspaceDir,
       logger: createWarningLogger(warnings),
@@ -8831,7 +8850,7 @@ module.exports = {
       id: "warn-partial-allow-plugin",
     });
     const warnings: string[] = [];
-    loadOpenClawPlugins({
+    loadMarketingClawPlugins({
       cache: false,
       workspaceDir,
       logger: createWarningLogger(warnings),
@@ -8869,7 +8888,7 @@ module.exports = {
       id: "warn-noise-workspace-plugin",
     });
     const warnings: string[] = [];
-    loadOpenClawPlugins({
+    loadMarketingClawPlugins({
       cache: false,
       workspaceDir,
       logger: createWarningLogger(warnings),
@@ -8900,7 +8919,7 @@ module.exports = {
       id: "warn-open-allow-remediation",
     });
     const warnings: string[] = [];
-    loadOpenClawPlugins({
+    loadMarketingClawPlugins({
       cache: false,
       workspaceDir,
       logger: createWarningLogger(warnings),
@@ -8915,14 +8934,14 @@ module.exports = {
     expect(openAllowWarning).toBeDefined();
     expect(openAllowWarning).toContain('"warn-open-allow-remediation"');
     expect(openAllowWarning).toContain('"plugins": { "allow": [');
-    expect(openAllowWarning).toContain("openclaw plugins list --enabled --verbose");
-    expect(openAllowWarning).toContain("openclaw plugins inspect warn-open-allow-remediation");
+    expect(openAllowWarning).toContain("marketingclaw plugins list --enabled --verbose");
+    expect(openAllowWarning).toContain("marketingclaw plugins inspect warn-open-allow-remediation");
   });
 
   it("includes actionable plugins.allow remediation hints in the untracked-provenance warning", () => {
     useNoBundledPlugins();
     const stateDir = makeTempDir();
-    withEnv({ OPENCLAW_STATE_DIR: stateDir }, () => {
+    withEnv({ MARKETINGCLAW_STATE_DIR: stateDir }, () => {
       const globalDir = path.join(stateDir, "extensions", "warn-untracked-remediation");
       mkdirSafe(globalDir);
       writePlugin({
@@ -8933,7 +8952,7 @@ module.exports = {
       });
 
       const warnings: string[] = [];
-      const registry = loadOpenClawPlugins({
+      const registry = loadMarketingClawPlugins({
         cache: false,
         logger: createWarningLogger(warnings),
         config: {
@@ -8950,7 +8969,9 @@ module.exports = {
       );
       expect(untrackedWarning).toBeDefined();
       expect(untrackedWarning).toContain('"warn-untracked-remediation"');
-      expect(untrackedWarning).toContain("openclaw plugins inspect warn-untracked-remediation");
+      expect(untrackedWarning).toContain(
+        "marketingclaw plugins inspect warn-untracked-remediation",
+      );
       expect(untrackedWarning).toContain("reinstall from a trusted source");
 
       const diagnostic = registry.diagnostics.find(
@@ -8959,7 +8980,9 @@ module.exports = {
           entry.message.includes("loaded without install/load-path provenance"),
       );
       expect(diagnostic?.message).toContain('"warn-untracked-remediation"');
-      expect(diagnostic?.message).toContain("openclaw plugins inspect warn-untracked-remediation");
+      expect(diagnostic?.message).toContain(
+        "marketingclaw plugins inspect warn-untracked-remediation",
+      );
       expect(diagnostic?.message).toContain("reinstall from a trusted source");
     });
   });
@@ -8991,8 +9014,8 @@ module.exports = {
     expect(message).toContain("plugins.allow is empty");
     expect(message).toContain("(+2 more)");
     expect(message).not.toContain('"plugins": { "allow": [');
-    expect(message).toContain("openclaw plugins list --enabled --verbose");
-    expect(message).toContain("openclaw plugins inspect <id>");
+    expect(message).toContain("marketingclaw plugins list --enabled --verbose");
+    expect(message).toContain("marketingclaw plugins inspect <id>");
   });
 
   it("handles workspace-discovered plugins according to trust and precedence", () => {
@@ -9006,7 +9029,7 @@ module.exports = {
             id: "workspace-helper",
           });
 
-          return loadOpenClawPlugins({
+          return loadMarketingClawPlugins({
             cache: false,
             workspaceDir,
             config: {
@@ -9016,7 +9039,7 @@ module.exports = {
             },
           });
         },
-        assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           expectPluginOriginAndStatus({
             registry,
             pluginId: "workspace-helper",
@@ -9035,7 +9058,7 @@ module.exports = {
             id: "workspace-helper",
           });
 
-          return loadOpenClawPlugins({
+          return loadMarketingClawPlugins({
             cache: false,
             workspaceDir,
             config: {
@@ -9046,7 +9069,7 @@ module.exports = {
             },
           });
         },
-        assert: (registry: ReturnType<typeof loadOpenClawPlugins>) => {
+        assert: (registry: ReturnType<typeof loadMarketingClawPlugins>) => {
           expectPluginOriginAndStatus({
             registry,
             pluginId: "workspace-helper",
@@ -9070,7 +9093,7 @@ module.exports = {
             id: "shadowed",
           });
 
-          return loadOpenClawPlugins({
+          return loadMarketingClawPlugins({
             cache: false,
             workspaceDir,
             config: {
@@ -9105,7 +9128,7 @@ module.exports = {
       body: simplePluginBody("profile-aware"),
     });
     fs.writeFileSync(
-      path.join(plugin.dir, "openclaw.plugin.json"),
+      path.join(plugin.dir, "marketingclaw.plugin.json"),
       JSON.stringify(
         {
           id: "profile-aware",
@@ -9118,7 +9141,7 @@ module.exports = {
       "utf-8",
     );
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       workspaceDir: bundledDir,
       config: {
@@ -9146,7 +9169,7 @@ module.exports = {
       filename: "unscoped.cjs",
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -9178,7 +9201,7 @@ module.exports = {
             });
 
             const warnings: string[] = [];
-            const registry = loadOpenClawPlugins({
+            const registry = loadMarketingClawPlugins({
               cache: false,
               logger: createWarningLogger(warnings),
               config: {
@@ -9196,7 +9219,7 @@ module.exports = {
         label: "warns when loaded non-bundled plugin has no provenance and no allowlist is set",
         loadRegistry: () => {
           const stateDir = makeTempDir();
-          return withEnv({ OPENCLAW_STATE_DIR: stateDir }, () => {
+          return withEnv({ MARKETINGCLAW_STATE_DIR: stateDir }, () => {
             const globalDir = path.join(stateDir, "extensions", "rogue");
             mkdirSafe(globalDir);
             writePlugin({
@@ -9207,7 +9230,7 @@ module.exports = {
             });
 
             const warnings: string[] = [];
-            const registry = loadOpenClawPlugins({
+            const registry = loadMarketingClawPlugins({
               cache: false,
               logger: createWarningLogger(warnings),
               config: {
@@ -9226,7 +9249,7 @@ module.exports = {
         loadRegistry: () => {
           const { plugin, env } = createEnvResolvedPluginFixture("tracked-load-path");
           const warnings: string[] = [];
-          const registry = loadOpenClawPlugins({
+          const registry = loadMarketingClawPlugins({
             cache: false,
             logger: createWarningLogger(warnings),
             env,
@@ -9252,7 +9275,7 @@ module.exports = {
         loadRegistry: () => {
           const { plugin, env } = createEnvResolvedPluginFixture("tracked-install-path");
           const warnings: string[] = [];
-          const registry = loadOpenClawPlugins({
+          const registry = loadMarketingClawPlugins({
             cache: false,
             logger: createWarningLogger(warnings),
             env,
@@ -9292,7 +9315,7 @@ module.exports = {
 
           const pluginDir = path.join(
             realHome,
-            ".openclaw",
+            ".marketingclaw",
             "npm",
             "node_modules",
             "@example",
@@ -9312,7 +9335,7 @@ module.exports = {
                 spec: "@example/tracked-symlink-install@1.0.0",
                 installPath: path.join(
                   linkedHome,
-                  ".openclaw",
+                  ".marketingclaw",
                   "npm",
                   "node_modules",
                   "@example",
@@ -9325,13 +9348,13 @@ module.exports = {
           );
 
           const warnings: string[] = [];
-          const registry = loadOpenClawPlugins({
+          const registry = loadMarketingClawPlugins({
             cache: false,
             logger: createWarningLogger(warnings),
             env: {
               ...process.env,
-              OPENCLAW_STATE_DIR: stateDir,
-              OPENCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
+              MARKETINGCLAW_STATE_DIR: stateDir,
+              MARKETINGCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
             },
             config: {
               plugins: {
@@ -9367,7 +9390,7 @@ module.exports = {
   it("uses the source runtime snapshot allowlist for plugin trust checks", () => {
     useNoBundledPlugins();
     const stateDir = makeTempDir();
-    withEnv({ OPENCLAW_STATE_DIR: stateDir }, () => {
+    withEnv({ MARKETINGCLAW_STATE_DIR: stateDir }, () => {
       const globalDir = path.join(stateDir, "extensions", "trusted-plugin");
       mkdirSafe(globalDir);
       writePlugin({
@@ -9399,7 +9422,7 @@ module.exports = {
       setRuntimeConfigSnapshot(runtimeConfig, sourceConfig);
 
       const warnings: string[] = [];
-      const registry = loadOpenClawPlugins({
+      const registry = loadMarketingClawPlugins({
         cache: false,
         logger: createWarningLogger(warnings),
         config: runtimeConfig,
@@ -9476,8 +9499,8 @@ module.exports = {
       throw err;
     }
 
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
-    const registry = loadOpenClawPlugins({
+    process.env.MARKETINGCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
+    const registry = loadMarketingClawPlugins({
       cache: false,
       workspaceDir: bundledDir,
       config: {
@@ -9518,7 +9541,7 @@ module.exports = {
 } };`,
     });
 
-    const registry = withEnv({ OPENCLAW_STATE_DIR: stateDir }, () =>
+    const registry = withEnv({ MARKETINGCLAW_STATE_DIR: stateDir }, () =>
       loadRegistryFromSinglePlugin({
         plugin,
         pluginConfig: {
@@ -9541,22 +9564,24 @@ module.exports = {
       filename: "legacy-root-import.cjs",
       body: `module.exports = {
   id: "legacy-root-import",
-  configSchema: (require("openclaw/plugin-sdk").emptyPluginConfigSchema)(),
+  configSchema: (require("marketingclaw/plugin-sdk").emptyPluginConfigSchema)(),
         register() {},
       };`,
     });
 
-    const registry = withEnv({ OPENCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins" }, () =>
-      loadOpenClawPlugins({
-        cache: false,
-        workspaceDir: plugin.dir,
-        config: {
-          plugins: {
-            load: { paths: [plugin.file] },
-            allow: ["legacy-root-import"],
+    const registry = withEnv(
+      { MARKETINGCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins" },
+      () =>
+        loadMarketingClawPlugins({
+          cache: false,
+          workspaceDir: plugin.dir,
+          config: {
+            plugins: {
+              load: { paths: [plugin.file] },
+              allow: ["legacy-root-import"],
+            },
           },
-        },
-      }),
+        }),
     );
     const record = registry.plugins.find((entry) => entry.id === "legacy-root-import");
     expect(
@@ -9567,7 +9592,7 @@ module.exports = {
 
   it("supports legacy plugins subscribing to diagnostic events from the root sdk", async () => {
     useNoBundledPlugins();
-    const seenKey = "__openclawLegacyRootDiagnosticSeen";
+    const seenKey = "__marketingclawLegacyRootDiagnosticSeen";
     delete (globalThis as Record<string, unknown>)[seenKey];
 
     const plugin = writePlugin({
@@ -9575,9 +9600,9 @@ module.exports = {
       filename: "legacy-root-diagnostic-listener.cjs",
       body: `module.exports = {
   id: "legacy-root-diagnostic-listener",
-  configSchema: (require("openclaw/plugin-sdk").emptyPluginConfigSchema)(),
+  configSchema: (require("marketingclaw/plugin-sdk").emptyPluginConfigSchema)(),
   register() {
-    const { onDiagnosticEvent } = require("openclaw/plugin-sdk");
+    const { onDiagnosticEvent } = require("marketingclaw/plugin-sdk");
     if (typeof onDiagnosticEvent !== "function") {
       throw new Error("missing onDiagnosticEvent root export");
     }
@@ -9594,9 +9619,9 @@ module.exports = {
 
     try {
       const registry = withEnv(
-        { OPENCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins" },
+        { MARKETINGCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins" },
         () =>
-          loadOpenClawPlugins({
+          loadMarketingClawPlugins({
             cache: false,
             workspaceDir: plugin.dir,
             config: {
@@ -9636,7 +9661,7 @@ module.exports = {
   it("suppresses trust warning logs for non-activating snapshot loads", () => {
     useNoBundledPlugins();
     const stateDir = makeTempDir();
-    withEnv({ OPENCLAW_STATE_DIR: stateDir }, () => {
+    withEnv({ MARKETINGCLAW_STATE_DIR: stateDir }, () => {
       const globalDir = path.join(stateDir, "extensions", "rogue");
       mkdirSafe(globalDir);
       writePlugin({
@@ -9647,7 +9672,7 @@ module.exports = {
       });
 
       const warnings: string[] = [];
-      const registry = loadOpenClawPlugins({
+      const registry = loadMarketingClawPlugins({
         activate: false,
         cache: false,
         logger: createWarningLogger(warnings),
@@ -9692,7 +9717,7 @@ export const runtimeValue = helperValue;`,
       "utf-8",
     );
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {

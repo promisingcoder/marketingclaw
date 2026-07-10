@@ -1,11 +1,11 @@
 ---
 name: crabbox
-description: Use the Crabbox wrapper for OpenClaw remote validation across Linux, macOS, Windows, and WSL2, including delegated Blacksmith Testbox proof. Report the actual provider and id.
+description: Use the Crabbox wrapper for MarketingClaw remote validation across Linux, macOS, Windows, and WSL2, including delegated Blacksmith Testbox proof. Report the actual provider and id.
 ---
 
 # Crabbox
 
-OpenClaw agent sessions use the Crabbox wrapper by default for tests and
+MarketingClaw agent sessions use the Crabbox wrapper by default for tests and
 computationally intensive work: builds, typechecks, lint fan-out, broad gates,
 CI-parity checks, secrets, hosted services, Docker/E2E/package lanes, warmed
 reusable boxes, sync timing, logs/results, cache inspection, and lease cleanup.
@@ -17,7 +17,7 @@ Crabbox is the transport/orchestration surface. The actual backend can be:
 - Blacksmith Testbox through Crabbox: delegated provider,
   `provider=blacksmith-testbox`, ids like `tbx_...`, `syncDelegated=true`
 
-Blacksmith Testbox through the Crabbox wrapper is the default OpenClaw agent
+Blacksmith Testbox through the Crabbox wrapper is the default MarketingClaw agent
 backend for trusted maintainer code and heavy `pnpm` gates. The configured
 Blacksmith workflow hydrates provider and agent credentials, so never sync or
 run untrusted contributor/fork code there. Use secretless fork CI or
@@ -28,7 +28,7 @@ the `tbx_...` id and Actions run.
 Pass `--provider aws` when the task specifically needs direct AWS Crabbox
 behavior, persistent direct-provider leases, `--fresh-pr`, `--full-resync`,
 environment forwarding, capture/download support, or provider comparison. Use
-`--provider blacksmith-testbox` for the default OpenClaw agent path.
+`--provider blacksmith-testbox` for the default MarketingClaw agent path.
 
 ## First Checks
 
@@ -43,7 +43,7 @@ pnpm crabbox:run -- --help | sed -n '1,120p'
 ../crabbox/bin/crabbox webvnc --help
 ```
 
-- OpenClaw scripts prefer `../crabbox/bin/crabbox` when present. The user PATH
+- MarketingClaw scripts prefer `../crabbox/bin/crabbox` when present. The user PATH
   shim can be stale.
 - Check `.crabbox.yaml` for the provider default. Omitting `--provider`
   means Blacksmith Testbox through Crabbox for normal Linux paths; the wrapper
@@ -52,8 +52,8 @@ pnpm crabbox:run -- --help | sed -n '1,120p'
 - The brokered AWS image is a Linux developer image in `eu-west-1`; the repo
   config pins hot `eu-west-1a/b/c` placement so Fast Snapshot Restore can apply.
   If warmup drifts well past the minute-scale path, verify image promotion,
-  region/AZ placement, and FSR state before blaming OpenClaw.
-- For trusted OpenClaw agent tests and computationally intensive work, use the
+  region/AZ placement, and FSR state before blaming MarketingClaw.
+- For trusted MarketingClaw agent tests and computationally intensive work, use the
   repo wrapper with `--provider blacksmith-testbox` or the repo Testbox helpers.
 - Treat contributor/fork source as untrusted unless a maintainer explicitly
   approves credentialed execution after review. Run untrusted source only in
@@ -61,7 +61,7 @@ pnpm crabbox:run -- --help | sed -n '1,120p'
   run, launch an installed trusted Crabbox binary from a clean trusted `main`
   checkout and fetch the remote PR with `--fresh-pr`; never execute the
   untrusted checkout's wrapper or config locally. Set
-  `CRABBOX_ENV_ALLOW=CI` to replace the repo's `OPENCLAW_*`/`NODE_OPTIONS`
+  `CRABBOX_ENV_ALLOW=CI` to replace the repo's `MARKETINGCLAW_*`/`NODE_OPTIONS`
   allowlist, pass `--provider aws --no-hydrate`, and use a fresh temporary
   remote `HOME` on a newly warmed lease dedicated to that untrusted source.
   Unset `CRABBOX_AWS_INSTANCE_PROFILE` and fail closed unless resolved
@@ -91,7 +91,7 @@ pnpm crabbox:run -- --help | sed -n '1,120p'
   Do not warm for read-only, docs-only, or clearly trivial work that will not
   run tests or heavy commands.
 - Run untrusted source only with the sanitized form below. The explicit
-  allowlist prevents locally exported `OPENCLAW_*` credentials from crossing
+  allowlist prevents locally exported `MARKETINGCLAW_*` credentials from crossing
   the SSH boundary; `--no-hydrate` and temporary `HOME` prevent auth-profile
   reuse:
 
@@ -150,17 +150,17 @@ env -u CRABBOX_AWS_INSTANCE_PROFILE \
   remote box selected by source trust. Local test execution requires an
   explicit user request or a reported remote-provider blocker.
 - Do not treat inherited shell env as operator intent. In particular,
-  `OPENCLAW_LOCAL_CHECK_MODE=throttled` from the local shell is not permission
+  `MARKETINGCLAW_LOCAL_CHECK_MODE=throttled` from the local shell is not permission
   to move broad `pnpm check:changed`, `pnpm test:changed`, full `pnpm test`, or
   lint/typecheck fan-out onto the laptop.
-- Only use `OPENCLAW_LOCAL_CHECK_MODE=throttled|full` when the user explicitly
+- Only use `MARKETINGCLAW_LOCAL_CHECK_MODE=throttled|full` when the user explicitly
   asks for local proof in the current task. If Testbox is queued or capacity is
   constrained, report the blocker; do not silently move heavy work onto the
   laptop.
 
 ## macOS And Windows Targets
 
-Use these only when the task needs an existing non-Linux host. OpenClaw broad
+Use these only when the task needs an existing non-Linux host. MarketingClaw broad
 Linux validation uses the repo Crabbox config unless a provider is explicitly
 requested.
 
@@ -193,7 +193,7 @@ crabbox admin hosts allocate --provider aws --target macos --region eu-west-1 --
 CRABBOX_MACOS_TYPES=all scripts/macos-host-region-preflight.sh
 ```
 
-Do not silently substitute AWS macOS for normal OpenClaw Linux proof. Report
+Do not silently substitute AWS macOS for normal MarketingClaw Linux proof. Report
 paid-host blockers as quota, IAM, coordinator deployment, or host availability
 instead of falling back to local macOS.
 
@@ -280,13 +280,13 @@ cleanup when a run fails, is interrupted, or the command output is unclear:
 
 ## Blacksmith Testbox Through Crabbox
 
-Use this for OpenClaw maintainer broad/heavy `pnpm` gates when the prepared CI
+Use this for MarketingClaw maintainer broad/heavy `pnpm` gates when the prepared CI
 environment is the right proof surface:
 
 ```sh
 node scripts/crabbox-wrapper.mjs run \
   --provider blacksmith-testbox \
-  --blacksmith-org openclaw \
+  --blacksmith-org marketingclaw \
   --blacksmith-workflow .github/workflows/ci-check-testbox.yml \
   --blacksmith-job check \
   --blacksmith-ref main \
@@ -312,7 +312,7 @@ checkout state. On Blacksmith, Crabbox forwards them as sticky disks:
 ```sh
 node scripts/crabbox-wrapper.mjs run \
   --provider blacksmith-testbox \
-  --cache-volume pnpm-store=openclaw-node24-pnpm-lock:/tmp/openclaw-pnpm-store \
+  --cache-volume pnpm-store=marketingclaw-node24-pnpm-lock:/tmp/marketingclaw-pnpm-store \
   --timing-json \
   -- \
   corepack pnpm check:changed
@@ -415,7 +415,7 @@ opening a PR for a user-visible bug.
 
 When the user says "test in Crabbox", do not simply copy tests to the remote
 box and run them there. Crabbox is for remote real-scenario proof: copy or
-install OpenClaw as the user would, run the same setup/update/CLI/Gateway/API
+install MarketingClaw as the user would, run the same setup/update/CLI/Gateway/API
 call that failed, and capture behavior from that entrypoint. For regressions or
 bug reports, prove the broken state first when feasible, then run the same
 scenario after the fix.
@@ -466,7 +466,7 @@ Keep it efficient:
 - For agent code tasks, reuse the pre-warmed remote box across focused tests
   and heavy proof. Use a one-shot only when a single late proof is genuinely
   the task's only remote command.
-- Prefer `OPENCLAW_CURRENT_PACKAGE_TGZ` with Docker/package lanes when testing a
+- Prefer `MARKETINGCLAW_CURRENT_PACKAGE_TGZ` with Docker/package lanes when testing a
   candidate tarball; prefer the repo's package helper instead of direct source
   execution when the bug might be packaging/install related.
 - Keep secrets redacted. It is fine to report key presence, source, and length;
@@ -508,18 +508,18 @@ Interactive CLI/onboarding:
   searchable selects. Raw `send-keys -l openai` may not trigger filtering in a
   tmux pane; inspect option order locally or on-box and send exact Down/Enter
   sequences.
-- Isolate mutable state with `OPENCLAW_STATE_DIR=$(mktemp -d)`. Plugin npm
+- Isolate mutable state with `MARKETINGCLAW_STATE_DIR=$(mktemp -d)`. Plugin npm
   installs live under that state dir (`npm/node_modules/...`), not under
-  `OPENCLAW_CONFIG_DIR`. Verify downloads by checking the state dir, package
+  `MARKETINGCLAW_CONFIG_DIR`. Verify downloads by checking the state dir, package
   lock, and installed package metadata.
 - To test automatic setup installs against local package artifacts, use
-  `OPENCLAW_ALLOW_PLUGIN_INSTALL_OVERRIDES=1` plus
-  `OPENCLAW_PLUGIN_INSTALL_OVERRIDES='{"plugin-id":"npm-pack:/tmp/plugin.tgz"}'`.
-  Pack with `npm pack`, set an isolated `OPENCLAW_STATE_DIR`, and verify the
+  `MARKETINGCLAW_ALLOW_PLUGIN_INSTALL_OVERRIDES=1` plus
+  `MARKETINGCLAW_PLUGIN_INSTALL_OVERRIDES='{"plugin-id":"npm-pack:/tmp/plugin.tgz"}'`.
+  Pack with `npm pack`, set an isolated `MARKETINGCLAW_STATE_DIR`, and verify the
   package under `npm/node_modules`. Overrides are test-only and must not be
   treated as official/trusted-source installs.
 - For OpenAI/Codex onboarding proof, the useful markers are the UI line
-  `Installed Codex plugin`, `npm/node_modules/@openclaw/codex`, and the
+  `Installed Codex plugin`, `npm/node_modules/@marketingclaw/codex`, and the
   package-lock entry showing the bundled `@openai/codex` dependency. A dummy
   OpenAI-shaped key can prove only UI/install behavior; it is not live auth.
 
@@ -637,7 +637,7 @@ Common Crabbox-only failures:
 - Provider missing or old CLI: use `../crabbox/bin/crabbox` from the sibling
   repo, or update/install Crabbox before retrying.
 - Bad local config: inspect `.crabbox.yaml`, `crabbox config show`, and
-  `crabbox whoami`; normal OpenClaw agent proof should use Blacksmith Testbox.
+  `crabbox whoami`; normal MarketingClaw agent proof should use Blacksmith Testbox.
   Direct AWS is an explicit fallback and must use brokered auth, not raw keys.
 - Slug/claim confusion: use the raw `cbx_...` / `tbx_...` id, or run one-shot
   without `--id`.
@@ -672,7 +672,7 @@ pnpm crabbox:run -- --provider aws --debug --timing-json -- \
 Auth fallback, only when `blacksmith` says auth is missing:
 
 ```sh
-blacksmith auth login --non-interactive --organization openclaw
+blacksmith auth login --non-interactive --organization marketingclaw
 ```
 
 Raw Blacksmith footguns:
@@ -684,7 +684,7 @@ Raw Blacksmith footguns:
 - Treat `blacksmith testbox list` as cleanup diagnostics, not a shared reusable
   queue.
 
-Use Blacksmith Testbox through Crabbox by default for OpenClaw agent tests and
+Use Blacksmith Testbox through Crabbox by default for MarketingClaw agent tests and
 heavy work. If Blacksmith is down or quota-limited, do not keep probing it;
 switch to direct AWS only when that backend proves the same surface, and note
 the delegated-provider outage.
@@ -693,7 +693,7 @@ the delegated-provider outage.
 
 Crabbox Blacksmith backend delegates setup to:
 
-- org: `openclaw`
+- org: `marketingclaw`
 - workflow: `.github/workflows/ci-check-testbox.yml`
 - job: `check`
 - ref: `main` unless testing a branch/tag intentionally
@@ -721,7 +721,7 @@ Important Blacksmith footguns:
 - If auth is missing and browser auth is acceptable:
 
 ```sh
-blacksmith auth login --non-interactive --organization openclaw
+blacksmith auth login --non-interactive --organization marketingclaw
 ```
 
 ## Brokered AWS Fallback
@@ -740,8 +740,8 @@ pnpm crabbox:stop -- --provider aws <cbx_id-or-slug>
 Install/auth for owned Crabbox if needed:
 
 ```sh
-brew install openclaw/tap/crabbox
-crabbox login --url https://crabbox.openclaw.ai --provider aws
+brew install marketingclaw/tap/crabbox
+crabbox login --url https://crabbox.marketingclaw.ai --provider aws
 ```
 
 New users should self-resolve broker auth before anyone asks for AWS keys:
@@ -752,15 +752,15 @@ crabbox doctor
 crabbox whoami
 ```
 
-- If broker auth is missing, run `crabbox login --url https://crabbox.openclaw.ai --provider aws`.
+- If broker auth is missing, run `crabbox login --url https://crabbox.marketingclaw.ai --provider aws`.
 - If the CLI asks for `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or AWS
-  profile setup during normal OpenClaw validation, assume the agent selected
+  profile setup during normal MarketingClaw validation, assume the agent selected
   the wrong path. Use brokered `crabbox login` or an existing brokered lease
   before asking the user for cloud credentials.
 - Ask for AWS keys only for explicit direct-provider/account administration,
-  not for normal brokered OpenClaw proof.
+  not for normal brokered MarketingClaw proof.
 - Trusted automation may still use
-  `printf '%s' "$CRABBOX_COORDINATOR_TOKEN" | crabbox login --url https://crabbox.openclaw.ai --provider aws --token-stdin`.
+  `printf '%s' "$CRABBOX_COORDINATOR_TOKEN" | crabbox login --url https://crabbox.marketingclaw.ai --provider aws --token-stdin`.
 
 macOS config lives at:
 
@@ -769,7 +769,7 @@ macOS config lives at:
 ```
 
 It should include `broker.url`, `broker.token`, and usually `provider: aws`
-for OpenClaw lanes. Let that config drive normal validation.
+for MarketingClaw lanes. Let that config drive normal validation.
 
 ### Interactive Desktop / WebVNC
 
@@ -823,6 +823,6 @@ Use `--market spot|on-demand` only on AWS warmup/one-shot runs.
 
 ## Boundary
 
-Do not add OpenClaw-specific setup to Crabbox itself. Put repo setup in the
+Do not add MarketingClaw-specific setup to Crabbox itself. Put repo setup in the
 hydration workflow and keep Crabbox generic around lease, sync, command
 execution, logs/results, timing, and cleanup.

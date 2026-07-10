@@ -117,9 +117,9 @@ describe("Anthropic OAuth token responses", () => {
 
 describe("Anthropic OAuth callback host", () => {
   it("rejects non-loopback callback bind hosts", () => {
-    expect(() => testing.resolveCallbackHost({ OPENCLAW_OAUTH_CALLBACK_HOST: "0.0.0.0" })).toThrow(
-      "Anthropic OAuth callback host must be localhost, 127.0.0.1, or ::1",
-    );
+    expect(() =>
+      testing.resolveCallbackHost({ MARKETINGCLAW_OAUTH_CALLBACK_HOST: "0.0.0.0" }),
+    ).toThrow("Anthropic OAuth callback host must be localhost, 127.0.0.1, or ::1");
   });
 
   it("defaults the bind host to IPv4 loopback", () => {
@@ -127,12 +127,12 @@ describe("Anthropic OAuth callback host", () => {
   });
 
   it.each(["localhost", "127.0.0.1", "::1"])("accepts loopback bind host %s", (host) => {
-    expect(testing.resolveCallbackHost({ OPENCLAW_OAUTH_CALLBACK_HOST: host })).toBe(host);
+    expect(testing.resolveCallbackHost({ MARKETINGCLAW_OAUTH_CALLBACK_HOST: host })).toBe(host);
     expect(testing.redirectUri).toBe("http://localhost:53692/callback");
   });
 
   it("defers callback-host validation until login resolves the bind host", () => {
-    vi.stubEnv("OPENCLAW_OAUTH_CALLBACK_HOST", "0.0.0.0");
+    vi.stubEnv("MARKETINGCLAW_OAUTH_CALLBACK_HOST", "0.0.0.0");
     expect(() => testing.resolveCallbackHost()).toThrow(
       "Anthropic OAuth callback host must be localhost, 127.0.0.1, or ::1",
     );
@@ -141,7 +141,7 @@ describe("Anthropic OAuth callback host", () => {
   });
 
   it("binds IPv4 loopback while keeping Anthropic's registered localhost redirect", async () => {
-    vi.stubEnv("OPENCLAW_OAUTH_CALLBACK_HOST", "127.0.0.1");
+    vi.stubEnv("MARKETINGCLAW_OAUTH_CALLBACK_HOST", "127.0.0.1");
     const tokenExchange = vi.fn(async (_url: string | URL | Request, init?: RequestInit) => {
       if (typeof init?.body !== "string") {
         throw new Error("token exchange did not send a JSON string body");

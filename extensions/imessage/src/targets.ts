@@ -1,6 +1,6 @@
 // Imessage plugin module implements targets behavior.
-import { normalizeE164 } from "openclaw/plugin-sdk/account-resolution";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { normalizeE164 } from "marketingclaw/plugin-sdk/account-resolution";
+import { normalizeLowercaseStringOrEmpty } from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import { normalizeBareIMessageChatIdentifier } from "./target-identifiers.js";
 import {
   type ChatSenderAllowParams,

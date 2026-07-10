@@ -1,6 +1,6 @@
 import AppKit
 import Foundation
-@testable import OpenClaw
+@testable import MarketingClaw
 import Testing
 
 @Suite(.serialized)
@@ -34,7 +34,7 @@ struct DashboardWindowSmokeTests {
             dashboardURL: dashboard
         ))
         #expect(try !DashboardWindowController.shouldAllowNavigation(
-            to: #require(URL(string: "https://docs.openclaw.ai/")),
+            to: #require(URL(string: "https://docs.marketingclaw.ai/")),
             dashboardURL: dashboard
         ))
         #expect(!DashboardWindowController.shouldAllowNavigation(
@@ -51,11 +51,11 @@ struct DashboardWindowSmokeTests {
     @Test func `dashboard parses only bounded native link requests`() throws {
         let request = DashboardWindowController.linkRequest(from: [
             "type": "open-link",
-            "url": "https://docs.openclaw.ai/platforms/macos",
+            "url": "https://docs.marketingclaw.ai/platforms/macos",
             "target": "inline",
         ])
         #expect(try request == DashboardLinkRequest(
-            url: #require(URL(string: "https://docs.openclaw.ai/platforms/macos")),
+            url: #require(URL(string: "https://docs.marketingclaw.ai/platforms/macos")),
             target: .inline
         ))
 
@@ -66,12 +66,12 @@ struct DashboardWindowSmokeTests {
         ]) == nil)
         #expect(DashboardWindowController.linkRequest(from: [
             "type": "open-link",
-            "url": "https://docs.openclaw.ai/",
+            "url": "https://docs.marketingclaw.ai/",
             "target": "unknown",
         ]) == nil)
         #expect(DashboardWindowController.linkRequest(from: [
             "type": "other",
-            "url": "https://docs.openclaw.ai/",
+            "url": "https://docs.marketingclaw.ai/",
             "target": "external",
         ]) == nil)
         #expect(try DashboardWindowController.linkRequest(from: [
@@ -150,7 +150,7 @@ struct DashboardWindowSmokeTests {
     }
 
     @Test func `sidebar browser reserves auxiliary schemes for subframes`() throws {
-        let webURL = try #require(URL(string: "https://github.com/openclaw/openclaw"))
+        let webURL = try #require(URL(string: "https://github.com/promisingcoder/marketingclaw"))
         let blankURL = try #require(URL(string: "about:blank"))
         let fileURL = try #require(URL(string: "file:///tmp/private"))
         let mailURL = try #require(URL(string: "mailto:hello@example.com"))
@@ -163,7 +163,7 @@ struct DashboardWindowSmokeTests {
     }
 
     @Test func `external pointer fallback rejects synthetic link activation`() throws {
-        let webURL = try #require(URL(string: "https://docs.openclaw.ai/"))
+        let webURL = try #require(URL(string: "https://docs.marketingclaw.ai/"))
         let mailURL = try #require(URL(string: "mailto:hello@example.com"))
         #expect(DashboardWindowController.shouldOpenExternalDashboardNavigation(
             webURL,
@@ -237,14 +237,14 @@ struct DashboardWindowSmokeTests {
             auth: DashboardWindowAuth(gatewayUrl: nil, token: nil, password: nil)
         )
         let chromeScript = try #require(controller._testUserScripts.first {
-            $0.source.contains("openclaw-native-macos-chrome")
+            $0.source.contains("marketingclaw-native-macos-chrome")
         })
 
         #expect(chromeScript.source.contains(".sidebar-shell"))
         #expect(chromeScript.source.contains(".settings-sidebar__header"))
         #expect(chromeScript.source.contains(".topbar"))
         #expect(chromeScript.source.contains("max-width: 1100px"))
-        #expect(chromeScript.source.contains("--openclaw-native-titlebar-height"))
+        #expect(chromeScript.source.contains("--marketingclaw-native-titlebar-height"))
     }
 
     @Test func `dashboard titlebar hosts back and forward controls`() throws {
@@ -310,7 +310,7 @@ struct DashboardWindowSmokeTests {
 
         #expect(controller.currentURL.absoluteString == "http://127.0.0.1:60002/#token=device-token")
         let authScripts = controller._testUserScripts
-            .filter { $0.source.contains("__OPENCLAW_NATIVE_CONTROL_AUTH__") }
+            .filter { $0.source.contains("__MARKETINGCLAW_NATIVE_CONTROL_AUTH__") }
         #expect(authScripts.count == 1)
         // JSONSerialization escapes "/" so match on host:port, not the full origin.
         #expect(authScripts.first?.source.contains("127.0.0.1:60002") == true)

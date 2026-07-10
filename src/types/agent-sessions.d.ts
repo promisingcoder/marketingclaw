@@ -1,9 +1,9 @@
 // Declares extension points for agent session type augmentation.
-export type OpenClawAgentSessionSkillSourceAugmentation = never;
+export type MarketingClawAgentSessionSkillSourceAugmentation = never;
 
-declare module "openclaw/plugin-sdk/agent-sessions" {
+declare module "marketingclaw/plugin-sdk/agent-sessions" {
   interface Skill {
-    // OpenClaw relies on the source identifier returned by skill loaders.
+    // MarketingClaw relies on the source identifier returned by skill loaders.
     source: string;
   }
 }

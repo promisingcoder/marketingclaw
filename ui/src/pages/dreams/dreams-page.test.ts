@@ -61,7 +61,7 @@ function contextWithGateway(client: GatewayBrowserClient, connected: boolean): A
 }
 
 function createPage(context: ApplicationContext): TestDreamsPage {
-  const page = document.createElement("openclaw-dreams-page") as TestDreamsPage;
+  const page = document.createElement("marketingclaw-dreams-page") as TestDreamsPage;
   page.context = context;
   page.render = () => nothing;
   return page;

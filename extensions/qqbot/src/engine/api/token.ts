@@ -11,9 +11,9 @@ import {
   parseStrictPositiveInteger,
   resolveExpiresAtMsFromDurationSeconds,
   resolveTimestampMsToIsoString,
-} from "openclaw/plugin-sdk/number-runtime";
-import { readResponseTextLimited } from "openclaw/plugin-sdk/provider-http";
-import { fetchWithSsrFGuard, type SsrFPolicy } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "marketingclaw/plugin-sdk/number-runtime";
+import { readResponseTextLimited } from "marketingclaw/plugin-sdk/provider-http";
+import { fetchWithSsrFGuard, type SsrFPolicy } from "marketingclaw/plugin-sdk/ssrf-runtime";
 import type { EngineLogger } from "../types.js";
 import { formatErrorMessage } from "../utils/format.js";
 
@@ -32,7 +32,7 @@ const QQBOT_TOKEN_RESPONSE_LIMIT_BYTES = 8 * 1024;
  * (`QQBOT_MEDIA_SSRF_POLICY` in `../utils/file-utils.ts`) so the relaxation
  * stays narrowly host-scoped instead of weakening the global default.
  *
- * See https://github.com/openclaw/openclaw/issues/88984.
+ * See https://github.com/promisingcoder/marketingclaw/issues/88984.
  */
 const QQBOT_TOKEN_SSRF_POLICY: SsrFPolicy = {
   hostnameAllowlist: ["bots.qq.com"],

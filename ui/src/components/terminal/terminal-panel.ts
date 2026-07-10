@@ -8,7 +8,7 @@ import type { GhosttyTerminalController } from "@openclaw/libterminal/browser";
 import { css, html, nothing, svg } from "lit";
 import { property, state } from "lit/decorators.js";
 import { t } from "../../i18n/index.ts";
-import { OpenClawLitElement } from "../../lit/openclaw-element.ts";
+import { MarketingClawLitElement } from "../../lit/marketingclaw-element.ts";
 import { TerminalConnection, type TerminalGatewayClient } from "./terminal-connection.ts";
 import { createIsolatedGhosttyTerminal } from "./terminal-runtime.ts";
 import { terminalTheme } from "./terminal-theme.ts";
@@ -85,17 +85,17 @@ function terminalTabStatusLabel(tab: TerminalTabState): string | null {
     : t("terminal.exited");
 }
 
-const LAYOUT_KEY = "openclaw.terminal.panel.v1";
+const LAYOUT_KEY = "marketingclaw.terminal.panel.v1";
 // Session ids for reattach after a reload/reconnect. Deliberately
 // sessionStorage, not localStorage: attach is take-over, and a shared
 // per-origin key would make multiple Control UI windows clobber each other's
 // ids and steal each other's live shells. Per-tab storage survives exactly the
 // cases reattach is for (reload, laptop sleep, transient disconnect).
-const SESSIONS_KEY = "openclaw.terminal.sessions.v1";
+const SESSIONS_KEY = "marketingclaw.terminal.sessions.v1";
 const DEFAULT_LAYOUT: PanelLayout = { open: false, dock: "bottom", height: 320, width: 520 };
 const MIN_HEIGHT = 140;
 const MIN_WIDTH = 320;
-const TOGGLE_EVENT = "openclaw:terminal-toggle";
+const TOGGLE_EVENT = "marketingclaw:terminal-toggle";
 const TERMINAL_FONT_FAMILY =
   'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Symbols Nerd Font Mono", "MesloLGLDZ Nerd Font Mono", "JetBrainsMono Nerd Font Mono", "Liberation Mono", monospace';
 const TERMINAL_INPUT_DECODER = new TextDecoder();
@@ -151,8 +151,8 @@ function loadPersistedSessionIds(): string[] {
   }
 }
 
-/** `<openclaw-terminal-panel>` — the dockable Control UI shell surface. */
-export class OpenClawTerminalPanel extends OpenClawLitElement {
+/** `<marketingclaw-terminal-panel>` — the dockable Control UI shell surface. */
+export class MarketingClawTerminalPanel extends MarketingClawLitElement {
   /** Gateway client used for terminal.* RPCs; null until connected. */
   @property({ attribute: false }) client: TerminalGatewayClient | null = null;
   /** Agent whose workspace and sandbox policy own newly opened sessions. */
@@ -1174,12 +1174,12 @@ export class OpenClawTerminalPanel extends OpenClawLitElement {
 
 // Guarded define (not @customElement) so re-imports under a shared registry —
 // e.g. vitest with isolate=false — don't throw "already registered".
-if (!customElements.get("openclaw-terminal-panel")) {
-  customElements.define("openclaw-terminal-panel", OpenClawTerminalPanel);
+if (!customElements.get("marketingclaw-terminal-panel")) {
+  customElements.define("marketingclaw-terminal-panel", MarketingClawTerminalPanel);
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "openclaw-terminal-panel": OpenClawTerminalPanel;
+    "marketingclaw-terminal-panel": MarketingClawTerminalPanel;
   }
 }

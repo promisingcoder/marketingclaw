@@ -1,7 +1,7 @@
 ---
-summary: "Use Venice AI privacy-focused models in OpenClaw"
+summary: "Use Venice AI privacy-focused models in MarketingClaw"
 read_when:
-  - You want privacy-focused inference in OpenClaw
+  - You want privacy-focused inference in MarketingClaw
   - You want Venice AI setup guidance
 title: "Venice AI"
 ---
@@ -26,7 +26,7 @@ Anonymized models are not fully private. Venice strips metadata before forwardin
 <Steps>
   <Step title="Install the plugin">
     ```bash
-    openclaw plugins install @openclaw/venice-provider
+    marketingclaw plugins install @marketingclaw/venice-provider
     ```
   </Step>
   <Step title="Get your API key">
@@ -34,11 +34,11 @@ Anonymized models are not fully private. Venice strips metadata before forwardin
     2. Go to **Settings > API Keys > Create new key**
     3. Copy your API key (format: `vapi_xxxxxxxxxxxx`)
   </Step>
-  <Step title="Configure OpenClaw">
+  <Step title="Configure MarketingClaw">
     <Tabs>
       <Tab title="Interactive (recommended)">
         ```bash
-        openclaw onboard --auth-choice venice-api-key
+        marketingclaw onboard --auth-choice venice-api-key
         ```
 
         Prompts for the API key (or reuses an existing `VENICE_API_KEY`), lists available Venice models, and sets your default model.
@@ -50,7 +50,7 @@ Anonymized models are not fully private. Venice strips metadata before forwardin
       </Tab>
       <Tab title="Non-interactive">
         ```bash
-        openclaw onboard --non-interactive \
+        marketingclaw onboard --non-interactive \
           --auth-choice venice-api-key \
           --venice-api-key "vapi_xxxxxxxxxxxx"
         ```
@@ -60,7 +60,7 @@ Anonymized models are not fully private. Venice strips metadata before forwardin
   </Step>
   <Step title="Verify setup">
     ```bash
-    openclaw agent --model venice/kimi-k2-5 --message "Hello, are you working?"
+    marketingclaw agent --model venice/kimi-k2-5 --message "Hello, are you working?"
     ```
   </Step>
 </Steps>
@@ -71,11 +71,11 @@ Anonymized models are not fully private. Venice strips metadata before forwardin
 - **Strongest anonymized option**: `venice/claude-opus-4-6`.
 
 ```bash
-openclaw models set venice/kimi-k2-5
-openclaw models list --all --provider venice
+marketingclaw models set venice/kimi-k2-5
+marketingclaw models list --all --provider venice
 ```
 
-You can also run `openclaw configure` and pick **Model/auth provider > Venice AI**.
+You can also run `marketingclaw configure` and pick **Model/auth provider > Venice AI**.
 
 <Tip>
 | Use case                 | Model                             | Why                                       |
@@ -146,7 +146,7 @@ tool-call format.
 
 ## Model discovery
 
-The bundled catalog above is a manifest-backed seed list. At runtime OpenClaw
+The bundled catalog above is a manifest-backed seed list. At runtime MarketingClaw
 refreshes it from the Venice `/models` API and falls back to the seed list if
 the API is unreachable. The `/models` endpoint is public (no auth needed for
 listing), but inference requires a valid API key.
@@ -154,7 +154,7 @@ listing), but inference requires a valid API key.
 ## DeepSeek V4 replay behavior
 
 If Venice exposes DeepSeek V4 models such as `deepseek-v4-pro` or
-`deepseek-v4-flash`, OpenClaw fills the required `reasoning_content` replay
+`deepseek-v4-flash`, MarketingClaw fills the required `reasoning_content` replay
 field on assistant messages when Venice omits it, and strips `thinking`/
 `reasoning`/`reasoning_effort` from the request payload (Venice rejects
 DeepSeek's native `thinking` control on these models). This replay fix is
@@ -179,19 +179,19 @@ direct API pricing plus a small Venice fee. See
 
 ```bash
 # Default private model
-openclaw agent --model venice/kimi-k2-5 --message "Quick health check"
+marketingclaw agent --model venice/kimi-k2-5 --message "Quick health check"
 
 # Claude Opus via Venice (anonymized)
-openclaw agent --model venice/claude-opus-4-6 --message "Summarize this task"
+marketingclaw agent --model venice/claude-opus-4-6 --message "Summarize this task"
 
 # Uncensored model
-openclaw agent --model venice/venice-uncensored --message "Draft options"
+marketingclaw agent --model venice/venice-uncensored --message "Draft options"
 
 # Vision model with image
-openclaw agent --model venice/qwen3-vl-235b-a22b --message "Review attached image"
+marketingclaw agent --model venice/qwen3-vl-235b-a22b --message "Review attached image"
 
 # Coding model
-openclaw agent --model venice/qwen3-coder-480b-a35b-instruct --message "Refactor this function"
+marketingclaw agent --model venice/qwen3-coder-480b-a35b-instruct --message "Refactor this function"
 ```
 
 ## Troubleshooting
@@ -200,7 +200,7 @@ openclaw agent --model venice/qwen3-coder-480b-a35b-instruct --message "Refactor
   <Accordion title="API key not recognized">
     ```bash
     echo $VENICE_API_KEY
-    openclaw models list | grep venice
+    marketingclaw models list | grep venice
     ```
 
     Confirm the key starts with `vapi_`.
@@ -208,7 +208,7 @@ openclaw agent --model venice/qwen3-coder-480b-a35b-instruct --message "Refactor
   </Accordion>
 
   <Accordion title="Model not available">
-    Run `openclaw models list --all --provider venice` to see currently
+    Run `marketingclaw models list --all --provider venice` to see currently
     available models; the catalog changes as Venice adds or retires models.
   </Accordion>
 

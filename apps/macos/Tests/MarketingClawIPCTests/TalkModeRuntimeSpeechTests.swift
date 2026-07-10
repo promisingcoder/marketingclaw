@@ -1,7 +1,7 @@
-import OpenClawKit
+import MarketingClawKit
 import Speech
 import Testing
-@testable import OpenClaw
+@testable import MarketingClaw
 
 struct TalkModeRuntimeSpeechTests {
     @Test func `speech request uses dictation defaults`() {

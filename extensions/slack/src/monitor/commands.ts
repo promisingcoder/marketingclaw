@@ -1,6 +1,6 @@
 // Slack plugin module implements commands behavior.
-import type { SlackSlashCommandConfig } from "openclaw/plugin-sdk/config-contracts";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { SlackSlashCommandConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import { normalizeOptionalString } from "marketingclaw/plugin-sdk/string-coerce-runtime";
 
 /**
  * Strip Slack mentions (<@U123>, <@U123|name>) so command detection works on
@@ -21,9 +21,9 @@ export function resolveSlackSlashCommandConfig(
   raw?: SlackSlashCommandConfig,
 ): Required<SlackSlashCommandConfig> {
   const normalizedName = normalizeSlackSlashCommandName(
-    normalizeOptionalString(raw?.name) ?? "openclaw",
+    normalizeOptionalString(raw?.name) ?? "marketingclaw",
   );
-  const name = normalizedName || "openclaw";
+  const name = normalizedName || "marketingclaw";
   return {
     enabled: raw?.enabled === true,
     name,

@@ -1,5 +1,5 @@
 /**
- * `oc://` path syntax — universal addressing for the OpenClaw workspace.
+ * `oc://` path syntax — universal addressing for the MarketingClaw workspace.
  *
  *     oc://{file}[/{section}[/{item}[/{field}]]][?session={id}]
  *
@@ -7,10 +7,10 @@
  * for canonical paths. Extra query parameters are ignored except for
  * the first non-empty `session=` value.
  *
- * @module @openclaw/oc-path/oc-path
+ * @module @marketingclaw/oc-path/oc-path
  */
 
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+import { truncateUtf16Safe } from "marketingclaw/plugin-sdk/text-utility-runtime";
 import { OcEmitSentinelError, REDACTED_SENTINEL } from "./sentinel.js";
 
 const OC_SCHEME = "oc://";

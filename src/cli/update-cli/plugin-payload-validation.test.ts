@@ -4,7 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { PluginInstallRecord } from "../../config/types.plugins.js";
-import { resolveOpenClawPackageRootSync } from "../../infra/openclaw-root.js";
+import { resolveMarketingClawPackageRootSync } from "../../infra/marketingclaw-root.js";
 import { runPluginPayloadSmokeCheck } from "./plugin-payload-validation.js";
 
 type BundleFormat = "codex" | "claude" | "cursor";
@@ -16,7 +16,7 @@ type FormatMarkedBundleInstallRecord = PluginInstallRecord & {
 describe("runPluginPayloadSmokeCheck", () => {
   let tmpRoot: string;
   beforeEach(async () => {
-    tmpRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-payload-smoke-"));
+    tmpRoot = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-payload-smoke-"));
   });
   afterEach(async () => {
     await fs.rm(tmpRoot, { recursive: true, force: true });
@@ -77,7 +77,7 @@ describe("runPluginPayloadSmokeCheck", () => {
   }
 
   function resolveTestHostRoot(): string {
-    const hostRoot = resolveOpenClawPackageRootSync({
+    const hostRoot = resolveMarketingClawPackageRootSync({
       argv1: process.argv[1],
       moduleUrl: import.meta.url,
       cwd: process.cwd(),
@@ -86,9 +86,13 @@ describe("runPluginPayloadSmokeCheck", () => {
     return hostRoot!;
   }
 
-  async function linkOpenClawPeerToHost(dir: string): Promise<void> {
+  async function linkMarketingClawPeerToHost(dir: string): Promise<void> {
     await fs.mkdir(path.join(dir, "node_modules"), { recursive: true });
-    await fs.symlink(resolveTestHostRoot(), path.join(dir, "node_modules", "openclaw"), "junction");
+    await fs.symlink(
+      resolveTestHostRoot(),
+      path.join(dir, "node_modules", "marketingclaw"),
+      "junction",
+    );
   }
 
   async function resolveRealPath(target: string): Promise<string> {
@@ -99,7 +103,7 @@ describe("runPluginPayloadSmokeCheck", () => {
     const dir = path.join(tmpRoot, "discord");
     await writePackage(
       dir,
-      { name: "@openclaw/discord", main: "dist/index.js" },
+      { name: "@marketingclaw/discord", main: "dist/index.js" },
       "module.exports = {};",
     );
     const result = await runPluginPayloadSmokeCheck({
@@ -249,7 +253,7 @@ describe("runPluginPayloadSmokeCheck", () => {
     await writeBundle({ dir, format: "codex" });
     await writePackage(dir, {
       name: "dual-format-bundle",
-      openclaw: { extensions: ["./missing-extension.js"] },
+      marketingclaw: { extensions: ["./missing-extension.js"] },
     });
     const result = await runPluginPayloadSmokeCheck({
       records: {
@@ -289,7 +293,7 @@ describe("runPluginPayloadSmokeCheck", () => {
     ]);
   });
 
-  it("accepts a manifest with no main field (OpenClaw plugins commonly use `exports` or `openclaw.extensions`)", async () => {
+  it("accepts a manifest with no main field (MarketingClaw plugins commonly use `exports` or `marketingclaw.extensions`)", async () => {
     const dir = path.join(tmpRoot, "matrix");
     await writePackage(dir, { name: "@openclaw/plugin-matrix" });
     const result = await runPluginPayloadSmokeCheck({
@@ -302,7 +306,7 @@ describe("runPluginPayloadSmokeCheck", () => {
   it("accepts a manifest that declares only `exports` and no `main`", async () => {
     const dir = path.join(tmpRoot, "qa");
     await writePackage(dir, {
-      name: "@openclaw/qa-channel",
+      name: "@marketingclaw/qa-channel",
       exports: { ".": "./index.js", "./api.js": "./api.js" },
     });
     const result = await runPluginPayloadSmokeCheck({
@@ -312,11 +316,11 @@ describe("runPluginPayloadSmokeCheck", () => {
     expect(result.failures).toEqual([]);
   });
 
-  it("accepts a manifest that declares an existing `openclaw.extensions` entry and no `main`", async () => {
+  it("accepts a manifest that declares an existing `marketingclaw.extensions` entry and no `main`", async () => {
     const dir = path.join(tmpRoot, "brave");
     await writePackage(dir, {
-      name: "@openclaw/brave-plugin",
-      openclaw: { extensions: ["./index.js"] },
+      name: "@marketingclaw/brave-plugin",
+      marketingclaw: { extensions: ["./index.js"] },
     });
     await fs.writeFile(path.join(dir, "index.js"), "export default {};\n", "utf8");
     const result = await runPluginPayloadSmokeCheck({
@@ -326,11 +330,11 @@ describe("runPluginPayloadSmokeCheck", () => {
     expect(result.failures).toEqual([]);
   });
 
-  it("reports a failure when `openclaw.extensions` contains invalid entries", async () => {
+  it("reports a failure when `marketingclaw.extensions` contains invalid entries", async () => {
     const dir = path.join(tmpRoot, "brave");
     await writePackage(dir, {
-      name: "@openclaw/brave-plugin",
-      openclaw: { extensions: ["./index.js", " "] },
+      name: "@marketingclaw/brave-plugin",
+      marketingclaw: { extensions: ["./index.js", " "] },
       main: "main.js",
     });
     await fs.writeFile(path.join(dir, "index.js"), "export default {};\n", "utf8");
@@ -344,7 +348,7 @@ describe("runPluginPayloadSmokeCheck", () => {
         installPath: dir,
         reason: "missing-extension-entry",
         detail:
-          "Plugin extension entry validation failed: package.json openclaw.extensions[1] must be a non-empty string",
+          "Plugin extension entry validation failed: package.json marketingclaw.extensions[1] must be a non-empty string",
       },
     ]);
   });
@@ -352,8 +356,8 @@ describe("runPluginPayloadSmokeCheck", () => {
   it("reports only extension-entry failure for an empty extensions list even if main is missing", async () => {
     const dir = path.join(tmpRoot, "brave-empty");
     await writePackage(dir, {
-      name: "@openclaw/brave-plugin",
-      openclaw: { extensions: [] },
+      name: "@marketingclaw/brave-plugin",
+      marketingclaw: { extensions: [] },
       main: "dist/index.js",
     });
     const result = await runPluginPayloadSmokeCheck({
@@ -366,7 +370,7 @@ describe("runPluginPayloadSmokeCheck", () => {
         installPath: dir,
         reason: "missing-extension-entry",
         detail:
-          "Plugin extension entry validation failed: package.json openclaw.extensions is empty",
+          "Plugin extension entry validation failed: package.json marketingclaw.extensions is empty",
       },
     ]);
   });
@@ -374,8 +378,8 @@ describe("runPluginPayloadSmokeCheck", () => {
   it("reports missing main entry when extension entries are valid", async () => {
     const dir = path.join(tmpRoot, "brave");
     await writePackage(dir, {
-      name: "@openclaw/brave-plugin",
-      openclaw: { extensions: ["./index.js"] },
+      name: "@marketingclaw/brave-plugin",
+      marketingclaw: { extensions: ["./index.js"] },
       main: "dist/index.js",
     });
     await fs.writeFile(path.join(dir, "index.js"), "export default {};\n", "utf8");
@@ -396,8 +400,8 @@ describe("runPluginPayloadSmokeCheck", () => {
   it("accepts a packaged TypeScript extension entry when compiled runtime output exists", async () => {
     const dir = path.join(tmpRoot, "codex");
     await writePackage(dir, {
-      name: "@openclaw/codex",
-      openclaw: { extensions: ["./index.ts"] },
+      name: "@marketingclaw/codex",
+      marketingclaw: { extensions: ["./index.ts"] },
     });
     await fs.mkdir(path.join(dir, "dist"), { recursive: true });
     await fs.writeFile(path.join(dir, "dist", "index.js"), "export default {};\n", "utf8");
@@ -408,14 +412,14 @@ describe("runPluginPayloadSmokeCheck", () => {
     expect(result.failures).toEqual([]);
   });
 
-  it("reports a failure when an openclaw peer link is missing", async () => {
+  it("reports a failure when an marketingclaw peer link is missing", async () => {
     const dir = path.join(tmpRoot, "codex");
     await writePackage(
       dir,
       {
-        name: "@openclaw/codex",
+        name: "@marketingclaw/codex",
         main: "dist/index.js",
-        peerDependencies: { openclaw: ">=2026.5.18-beta.1" },
+        peerDependencies: { marketingclaw: ">=2026.5.18-beta.1" },
       },
       "export default {};\n",
     );
@@ -429,28 +433,28 @@ describe("runPluginPayloadSmokeCheck", () => {
       {
         pluginId: "codex",
         installPath: dir,
-        reason: "missing-openclaw-peer-link",
-        detail: `Plugin declares peerDependency "openclaw" but peer link audit failed: missing ${path.join(
+        reason: "missing-marketingclaw-peer-link",
+        detail: `Plugin declares peerDependency "marketingclaw" but peer link audit failed: missing ${path.join(
           dir,
           "node_modules",
-          "openclaw",
+          "marketingclaw",
         )}.`,
       },
     ]);
   });
 
-  it("reports a failure when an openclaw peer link is a stale real directory", async () => {
+  it("reports a failure when an marketingclaw peer link is a stale real directory", async () => {
     const dir = path.join(tmpRoot, "codex");
     await writePackage(
       dir,
       {
-        name: "@openclaw/codex",
+        name: "@marketingclaw/codex",
         main: "dist/index.js",
-        peerDependencies: { openclaw: ">=2026.5.18-beta.1" },
+        peerDependencies: { marketingclaw: ">=2026.5.18-beta.1" },
       },
       "export default {};\n",
     );
-    const stalePeerDir = path.join(dir, "node_modules", "openclaw");
+    const stalePeerDir = path.join(dir, "node_modules", "marketingclaw");
     await fs.mkdir(stalePeerDir, { recursive: true });
 
     const result = await runPluginPayloadSmokeCheck({
@@ -462,7 +466,7 @@ describe("runPluginPayloadSmokeCheck", () => {
     expect(result.failures[0]).toMatchObject({
       pluginId: "codex",
       installPath: dir,
-      reason: "missing-openclaw-peer-link",
+      reason: "missing-marketingclaw-peer-link",
     });
     expect(result.failures[0]?.detail).toContain(`${stalePeerDir} points to`);
     expect(result.failures[0]?.detail).toContain(
@@ -470,21 +474,21 @@ describe("runPluginPayloadSmokeCheck", () => {
     );
   });
 
-  it("reports a failure when an openclaw peer link points at the wrong package root", async () => {
+  it("reports a failure when an marketingclaw peer link points at the wrong package root", async () => {
     const dir = path.join(tmpRoot, "codex");
     await writePackage(
       dir,
       {
-        name: "@openclaw/codex",
+        name: "@marketingclaw/codex",
         main: "dist/index.js",
-        peerDependencies: { openclaw: ">=2026.5.18-beta.1" },
+        peerDependencies: { marketingclaw: ">=2026.5.18-beta.1" },
       },
       "export default {};\n",
     );
-    const wrongHostRoot = path.join(tmpRoot, "old-openclaw");
+    const wrongHostRoot = path.join(tmpRoot, "old-marketingclaw");
     await fs.mkdir(wrongHostRoot, { recursive: true });
     await fs.mkdir(path.join(dir, "node_modules"), { recursive: true });
-    await fs.symlink(wrongHostRoot, path.join(dir, "node_modules", "openclaw"), "junction");
+    await fs.symlink(wrongHostRoot, path.join(dir, "node_modules", "marketingclaw"), "junction");
 
     const result = await runPluginPayloadSmokeCheck({
       records: { codex: { source: "npm", installPath: dir } },
@@ -495,31 +499,31 @@ describe("runPluginPayloadSmokeCheck", () => {
     expect(result.failures[0]).toMatchObject({
       pluginId: "codex",
       installPath: dir,
-      reason: "missing-openclaw-peer-link",
+      reason: "missing-marketingclaw-peer-link",
     });
     expect(result.failures[0]?.detail).toContain(
       `${path.join(
         dir,
         "node_modules",
-        "openclaw",
+        "marketingclaw",
       )} points to ${await resolveRealPath(wrongHostRoot)} instead of ${await resolveRealPath(
         resolveTestHostRoot(),
       )}`,
     );
   });
 
-  it("accepts an openclaw peer link when it resolves to the host package root", async () => {
+  it("accepts an marketingclaw peer link when it resolves to the host package root", async () => {
     const dir = path.join(tmpRoot, "codex");
     await writePackage(
       dir,
       {
-        name: "@openclaw/codex",
+        name: "@marketingclaw/codex",
         main: "dist/index.js",
-        peerDependencies: { openclaw: ">=2026.5.18-beta.1" },
+        peerDependencies: { marketingclaw: ">=2026.5.18-beta.1" },
       },
       "export default {};\n",
     );
-    await linkOpenClawPeerToHost(dir);
+    await linkMarketingClawPeerToHost(dir);
 
     const result = await runPluginPayloadSmokeCheck({
       records: { codex: { source: "npm", installPath: dir } },
@@ -529,11 +533,11 @@ describe("runPluginPayloadSmokeCheck", () => {
     expect(result.failures).toEqual([]);
   });
 
-  it("reports a failure when an `openclaw.extensions` entry file is missing", async () => {
+  it("reports a failure when an `marketingclaw.extensions` entry file is missing", async () => {
     const dir = path.join(tmpRoot, "brave");
     await writePackage(dir, {
-      name: "@openclaw/brave-plugin",
-      openclaw: { extensions: ["./dist/index.js"] },
+      name: "@marketingclaw/brave-plugin",
+      marketingclaw: { extensions: ["./dist/index.js"] },
     });
     const result = await runPluginPayloadSmokeCheck({
       records: { brave: { source: "npm", installPath: dir } },

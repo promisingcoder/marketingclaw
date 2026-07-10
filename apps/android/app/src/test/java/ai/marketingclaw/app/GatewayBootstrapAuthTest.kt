@@ -1,19 +1,19 @@
-package ai.openclaw.app
+package ai.marketingclaw.app
 
-import ai.openclaw.app.gateway.DeviceAuthStore
-import ai.openclaw.app.gateway.DeviceIdentityStore
-import ai.openclaw.app.gateway.GatewayConnectErrorDetails
-import ai.openclaw.app.gateway.GatewayEndpoint
-import ai.openclaw.app.gateway.GatewayRegistryEntry
-import ai.openclaw.app.gateway.GatewayRegistryEntryKind
-import ai.openclaw.app.gateway.GatewaySession
-import ai.openclaw.app.gateway.GatewayTlsProbeFailure
-import ai.openclaw.app.gateway.GatewayTlsProbeResult
-import ai.openclaw.app.node.ConnectionManager
-import ai.openclaw.app.node.InvokeDispatcher
-import ai.openclaw.app.protocol.OpenClawTalkCommand
-import ai.openclaw.app.voice.MicCaptureManager
-import ai.openclaw.app.voice.TalkModeManager
+import ai.marketingclaw.app.gateway.DeviceAuthStore
+import ai.marketingclaw.app.gateway.DeviceIdentityStore
+import ai.marketingclaw.app.gateway.GatewayConnectErrorDetails
+import ai.marketingclaw.app.gateway.GatewayEndpoint
+import ai.marketingclaw.app.gateway.GatewayRegistryEntry
+import ai.marketingclaw.app.gateway.GatewayRegistryEntryKind
+import ai.marketingclaw.app.gateway.GatewaySession
+import ai.marketingclaw.app.gateway.GatewayTlsProbeFailure
+import ai.marketingclaw.app.gateway.GatewayTlsProbeResult
+import ai.marketingclaw.app.node.ConnectionManager
+import ai.marketingclaw.app.node.InvokeDispatcher
+import ai.marketingclaw.app.protocol.MarketingClawTalkCommand
+import ai.marketingclaw.app.voice.MicCaptureManager
+import ai.marketingclaw.app.voice.TalkModeManager
 import android.Manifest
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
@@ -55,7 +55,7 @@ class GatewayBootstrapAuthTest {
   fun clearPlainPrefs() {
     RuntimeEnvironment
       .getApplication()
-      .getSharedPreferences("openclaw.node", android.content.Context.MODE_PRIVATE)
+      .getSharedPreferences("marketingclaw.node", android.content.Context.MODE_PRIVATE)
       .edit()
       .clear()
       .commit()
@@ -361,7 +361,7 @@ class GatewayBootstrapAuthTest {
     val app = RuntimeEnvironment.getApplication()
     val securePrefs =
       app.getSharedPreferences(
-        "openclaw.node.secure.test.${UUID.randomUUID()}",
+        "marketingclaw.node.secure.test.${UUID.randomUUID()}",
         android.content.Context.MODE_PRIVATE,
       )
     val prefs = SecurePrefs(app, securePrefsOverride = securePrefs)
@@ -387,7 +387,7 @@ class GatewayBootstrapAuthTest {
     val app = RuntimeEnvironment.getApplication()
     val securePrefs =
       app.getSharedPreferences(
-        "openclaw.node.secure.test.${UUID.randomUUID()}",
+        "marketingclaw.node.secure.test.${UUID.randomUUID()}",
         android.content.Context.MODE_PRIVATE,
       )
     val prefs = SecurePrefs(app, securePrefsOverride = securePrefs)
@@ -416,7 +416,7 @@ class GatewayBootstrapAuthTest {
       val app = RuntimeEnvironment.getApplication()
       val securePrefs =
         app.getSharedPreferences(
-          "openclaw.node.secure.test.${UUID.randomUUID()}",
+          "marketingclaw.node.secure.test.${UUID.randomUUID()}",
           android.content.Context.MODE_PRIVATE,
         )
       val prefs = SecurePrefs(app, securePrefsOverride = securePrefs)
@@ -452,7 +452,7 @@ class GatewayBootstrapAuthTest {
       val app = RuntimeEnvironment.getApplication()
       val securePrefs =
         app.getSharedPreferences(
-          "openclaw.node.secure.test.${UUID.randomUUID()}",
+          "marketingclaw.node.secure.test.${UUID.randomUUID()}",
           android.content.Context.MODE_PRIVATE,
         )
       val prefs = SecurePrefs(app, securePrefsOverride = securePrefs)
@@ -495,7 +495,7 @@ class GatewayBootstrapAuthTest {
       val app = RuntimeEnvironment.getApplication()
       val securePrefs =
         app.getSharedPreferences(
-          "openclaw.node.secure.test.${UUID.randomUUID()}",
+          "marketingclaw.node.secure.test.${UUID.randomUUID()}",
           android.content.Context.MODE_PRIVATE,
         )
       val prefs = SecurePrefs(app, securePrefsOverride = securePrefs)
@@ -546,7 +546,7 @@ class GatewayBootstrapAuthTest {
       val app = RuntimeEnvironment.getApplication()
       val securePrefs =
         app.getSharedPreferences(
-          "openclaw.node.secure.test.${UUID.randomUUID()}",
+          "marketingclaw.node.secure.test.${UUID.randomUUID()}",
           android.content.Context.MODE_PRIVATE,
         )
       val prefs = SecurePrefs(app, securePrefsOverride = securePrefs)
@@ -617,7 +617,7 @@ class GatewayBootstrapAuthTest {
         app,
         SecurePrefs(
           app,
-          app.getSharedPreferences("openclaw.node.secure.test.${UUID.randomUUID()}", android.content.Context.MODE_PRIVATE),
+          app.getSharedPreferences("marketingclaw.node.secure.test.${UUID.randomUUID()}", android.content.Context.MODE_PRIVATE),
         ),
         tlsFingerprintProbe = { _, _ ->
           GatewayTlsProbeResult(failure = GatewayTlsProbeFailure.TLS_UNAVAILABLE)
@@ -644,7 +644,7 @@ class GatewayBootstrapAuthTest {
         app,
         SecurePrefs(
           app,
-          app.getSharedPreferences("openclaw.node.secure.test.${UUID.randomUUID()}", android.content.Context.MODE_PRIVATE),
+          app.getSharedPreferences("marketingclaw.node.secure.test.${UUID.randomUUID()}", android.content.Context.MODE_PRIVATE),
         ),
         tlsFingerprintProbe = { _, _ ->
           GatewayTlsProbeResult(failure = GatewayTlsProbeFailure.TLS_HANDSHAKE_TIMEOUT)
@@ -669,7 +669,7 @@ class GatewayBootstrapAuthTest {
       val app = RuntimeEnvironment.getApplication()
       val securePrefs =
         app.getSharedPreferences(
-          "openclaw.node.secure.test.${UUID.randomUUID()}",
+          "marketingclaw.node.secure.test.${UUID.randomUUID()}",
           android.content.Context.MODE_PRIVATE,
         )
       val prefs = SecurePrefs(app, securePrefsOverride = securePrefs)
@@ -696,7 +696,7 @@ class GatewayBootstrapAuthTest {
     val app = RuntimeEnvironment.getApplication()
     val securePrefs =
       app.getSharedPreferences(
-        "openclaw.node.secure.test.${UUID.randomUUID()}",
+        "marketingclaw.node.secure.test.${UUID.randomUUID()}",
         android.content.Context.MODE_PRIVATE,
       )
     val prefs = SecurePrefs(app, securePrefsOverride = securePrefs)
@@ -737,7 +737,7 @@ class GatewayBootstrapAuthTest {
       val app = RuntimeEnvironment.getApplication()
       val securePrefs =
         app.getSharedPreferences(
-          "openclaw.node.secure.test.${UUID.randomUUID()}",
+          "marketingclaw.node.secure.test.${UUID.randomUUID()}",
           android.content.Context.MODE_PRIVATE,
         )
       val runtime = NodeRuntime(app, SecurePrefs(app, securePrefsOverride = securePrefs))
@@ -804,7 +804,7 @@ class GatewayBootstrapAuthTest {
     shadowOf(app).denyPermissions(Manifest.permission.RECORD_AUDIO)
     val securePrefs =
       app.getSharedPreferences(
-        "openclaw.node.secure.test.${UUID.randomUUID()}",
+        "marketingclaw.node.secure.test.${UUID.randomUUID()}",
         android.content.Context.MODE_PRIVATE,
       )
     val prefs = SecurePrefs(app, securePrefsOverride = securePrefs)
@@ -851,7 +851,7 @@ class GatewayBootstrapAuthTest {
 
         runtime.setMicEnabled(true)
         runtime.setTalkModeEnabled(true)
-        val ptt = dispatcher.handleInvoke(OpenClawTalkCommand.PttStart.rawValue, null)
+        val ptt = dispatcher.handleInvoke(MarketingClawTalkCommand.PttStart.rawValue, null)
 
         assertEquals(VoiceCaptureMode.Off, runtime.voiceCaptureMode.value)
         assertEquals("MIC_BUSY", ptt.error?.code)
@@ -873,7 +873,7 @@ class GatewayBootstrapAuthTest {
       val dispatcher = readField<InvokeDispatcher>(runtime, "invokeDispatcher")
       Dispatchers.setMain(Dispatchers.Unconfined)
       try {
-        val result = dispatcher.handleInvoke(OpenClawTalkCommand.PttStart.rawValue, null)
+        val result = dispatcher.handleInvoke(MarketingClawTalkCommand.PttStart.rawValue, null)
 
         assertEquals("UNAVAILABLE", result.error?.code)
         assertEquals(VoiceCaptureMode.Off, runtime.voiceCaptureMode.value)
@@ -894,7 +894,7 @@ class GatewayBootstrapAuthTest {
       runtime.setForeground(false)
       val dispatcher = readField<InvokeDispatcher>(runtime, "invokeDispatcher")
 
-      val result = dispatcher.handleInvoke(OpenClawTalkCommand.PttStart.rawValue, null)
+      val result = dispatcher.handleInvoke(MarketingClawTalkCommand.PttStart.rawValue, null)
 
       assertEquals("NODE_BACKGROUND_UNAVAILABLE", result.error?.code)
       assertEquals("NODE_BACKGROUND_UNAVAILABLE: command requires foreground", result.error?.message)
@@ -932,7 +932,7 @@ class GatewayBootstrapAuthTest {
       preparationMutex.lock()
       try {
         val retry =
-          withTimeout(1_000) { dispatcher.handleInvoke(OpenClawTalkCommand.PttOnce.rawValue, null) }
+          withTimeout(1_000) { dispatcher.handleInvoke(MarketingClawTalkCommand.PttOnce.rawValue, null) }
         assertNull(retry.error)
         assertEquals("""{"captureId":"capture-1","status":"busy"}""", retry.payloadJson)
         assertEquals("capture-1", talkMode.activePushToTalkCaptureId)
@@ -954,7 +954,7 @@ class GatewayBootstrapAuthTest {
       val preparationMutex = readField<Mutex>(runtime, "voiceCapturePreparationMutex")
       preparationMutex.lock()
       try {
-        val request = async { dispatcher.handleInvoke(OpenClawTalkCommand.PttOnce.rawValue, null) }
+        val request = async { dispatcher.handleInvoke(MarketingClawTalkCommand.PttOnce.rawValue, null) }
         yield()
         writeField(talkMode, "finishingPttCaptureId", "capture-finishing")
         preparationMutex.unlock()
@@ -983,7 +983,7 @@ class GatewayBootstrapAuthTest {
       preparationMutex.lock()
       try {
         val retry =
-          withTimeout(1_000) { dispatcher.handleInvoke(OpenClawTalkCommand.PttStart.rawValue, null) }
+          withTimeout(1_000) { dispatcher.handleInvoke(MarketingClawTalkCommand.PttStart.rawValue, null) }
 
         assertEquals("PTT_BUSY", retry.error?.code)
         assertEquals("PTT_BUSY: previous push-to-talk turn is still finishing", retry.error?.message)
@@ -1005,9 +1005,9 @@ class GatewayBootstrapAuthTest {
       Dispatchers.setMain(Dispatchers.Unconfined)
       try {
         preparationMutex.lock()
-        val cancel = async { dispatcher.handleInvoke(OpenClawTalkCommand.PttCancel.rawValue, null) }
+        val cancel = async { dispatcher.handleInvoke(MarketingClawTalkCommand.PttCancel.rawValue, null) }
         yield()
-        val start = async { dispatcher.handleInvoke(OpenClawTalkCommand.PttStart.rawValue, null) }
+        val start = async { dispatcher.handleInvoke(MarketingClawTalkCommand.PttStart.rawValue, null) }
         yield()
         preparationMutex.unlock()
 
@@ -1034,9 +1034,9 @@ class GatewayBootstrapAuthTest {
       Dispatchers.setMain(Dispatchers.Unconfined)
       preparationMutex.lock()
       try {
-        val start = async { dispatcher.handleInvoke(OpenClawTalkCommand.PttStart.rawValue, null) }
+        val start = async { dispatcher.handleInvoke(MarketingClawTalkCommand.PttStart.rawValue, null) }
         yield()
-        val cancel = async { dispatcher.handleInvoke(OpenClawTalkCommand.PttCancel.rawValue, null) }
+        val cancel = async { dispatcher.handleInvoke(MarketingClawTalkCommand.PttCancel.rawValue, null) }
         yield()
         preparationMutex.unlock()
 
@@ -1159,7 +1159,7 @@ class GatewayBootstrapAuthTest {
     val app = RuntimeEnvironment.getApplication()
     val securePrefs =
       app.getSharedPreferences(
-        "openclaw.node.secure.test.${UUID.randomUUID()}",
+        "marketingclaw.node.secure.test.${UUID.randomUUID()}",
         android.content.Context.MODE_PRIVATE,
       )
     val prefs = SecurePrefs(app, securePrefsOverride = securePrefs)
@@ -1213,7 +1213,7 @@ class GatewayBootstrapAuthTest {
   private fun createTestRuntime(app: android.app.Application): NodeRuntime {
     val securePrefs =
       app.getSharedPreferences(
-        "openclaw.node.secure.test.${UUID.randomUUID()}",
+        "marketingclaw.node.secure.test.${UUID.randomUUID()}",
         android.content.Context.MODE_PRIVATE,
       )
     return NodeRuntime(app, SecurePrefs(app, securePrefsOverride = securePrefs))

@@ -1,6 +1,6 @@
-package ai.openclaw.app.node
+package ai.marketingclaw.app.node
 
-import ai.openclaw.app.PermissionRequester
+import ai.marketingclaw.app.PermissionRequester
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager

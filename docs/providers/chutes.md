@@ -2,22 +2,22 @@
 summary: "Chutes setup (OAuth or API key, model discovery, aliases)"
 title: "Chutes"
 read_when:
-  - You want to use Chutes with OpenClaw
+  - You want to use Chutes with MarketingClaw
   - You need the OAuth or API key setup path
   - You want the default model, aliases, or discovery behavior
 ---
 
 [Chutes](https://chutes.ai) exposes open-source model catalogs through an
-OpenAI-compatible API. OpenClaw supports both browser OAuth and API-key auth.
+OpenAI-compatible API. MarketingClaw supports both browser OAuth and API-key auth.
 
-| Property         | Value                                                   |
-| ---------------- | ------------------------------------------------------- |
-| Provider         | `chutes`                                                |
-| Plugin           | official external package (`@openclaw/chutes-provider`) |
-| API              | OpenAI-compatible                                       |
-| Base URL         | `https://llm.chutes.ai/v1`                              |
-| Auth             | OAuth or API key (see below)                            |
-| Runtime env vars | `CHUTES_API_KEY`, `CHUTES_OAUTH_TOKEN`                  |
+| Property         | Value                                                        |
+| ---------------- | ------------------------------------------------------------ |
+| Provider         | `chutes`                                                     |
+| Plugin           | official external package (`@marketingclaw/chutes-provider`) |
+| API              | OpenAI-compatible                                            |
+| Base URL         | `https://llm.chutes.ai/v1`                                   |
+| Auth             | OAuth or API key (see below)                                 |
+| Runtime env vars | `CHUTES_API_KEY`, `CHUTES_OAUTH_TOKEN`                       |
 
 `CHUTES_OAUTH_TOKEN` supplies an already-obtained OAuth access token directly
 (for example in CI), bypassing the interactive browser flow below.
@@ -25,8 +25,8 @@ OpenAI-compatible API. OpenClaw supports both browser OAuth and API-key auth.
 ## Install plugin
 
 ```bash
-openclaw plugins install @openclaw/chutes-provider
-openclaw gateway restart
+marketingclaw plugins install @marketingclaw/chutes-provider
+marketingclaw gateway restart
 ```
 
 ## Getting started
@@ -39,10 +39,10 @@ the Chutes catalog.
     <Steps>
       <Step title="Run the OAuth onboarding flow">
         ```bash
-        openclaw onboard --auth-choice chutes
+        marketingclaw onboard --auth-choice chutes
         ```
-        OpenClaw launches the browser flow locally, or shows a URL + redirect-paste
-        flow on remote/headless hosts. OAuth tokens auto-refresh through OpenClaw auth
+        MarketingClaw launches the browser flow locally, or shows a URL + redirect-paste
+        flow on remote/headless hosts. OAuth tokens auto-refresh through MarketingClaw auth
         profiles.
       </Step>
     </Steps>
@@ -55,7 +55,7 @@ the Chutes catalog.
       </Step>
       <Step title="Run the API key onboarding flow">
         ```bash
-        openclaw onboard --auth-choice chutes-api-key
+        marketingclaw onboard --auth-choice chutes-api-key
         ```
       </Step>
     </Steps>
@@ -64,9 +64,9 @@ the Chutes catalog.
 
 ## Discovery behavior
 
-When Chutes auth is available, OpenClaw queries `GET /v1/models` with that
+When Chutes auth is available, MarketingClaw queries `GET /v1/models` with that
 credential and uses the discovered models, cached for 5 minutes per
-credential. On an expired/unauthorized key (HTTP 401), OpenClaw retries once
+credential. On an expired/unauthorized key (HTTP 401), MarketingClaw retries once
 without credentials. If discovery still returns no rows, fails, or returns any
 other non-2xx status, it falls back to the bundled static catalog (both API-key
 and OAuth discovery use this same path). If discovery fails at startup, the
@@ -74,7 +74,7 @@ static catalog is used automatically.
 
 ## Default aliases
 
-OpenClaw registers three convenience aliases for the Chutes catalog:
+MarketingClaw registers three convenience aliases for the Chutes catalog:
 
 | Alias           | Target model                                          |
 | --------------- | ----------------------------------------------------- |
@@ -97,7 +97,7 @@ The bundled fallback catalog has 47 models. A representative sample of current r
 | `chutes/Qwen/Qwen3-Coder-Next-TEE`                    |
 | `chutes/openai/gpt-oss-120b-TEE`                      |
 
-Run `openclaw models list --all --provider chutes` for the full list.
+Run `marketingclaw models list --all --provider chutes` for the full list.
 
 ## Config example
 

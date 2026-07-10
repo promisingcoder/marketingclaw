@@ -1,12 +1,12 @@
-# OpenClaw Parallel Plugin
+# MarketingClaw Parallel Plugin
 
-Official OpenClaw plugin for Parallel.
+Official MarketingClaw plugin for Parallel.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugins install @openclaw/parallel-plugin
-openclaw gateway restart
+marketingclaw plugins install @marketingclaw/parallel-plugin
+marketingclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/tools/parallel-search> for setup and configuration.
+See <https://docs.marketingclaw.ai/tools/parallel-search> for setup and configuration.

@@ -1,12 +1,12 @@
-# OpenClaw Featherless AI Provider
+# MarketingClaw Featherless AI Provider
 
-Official OpenClaw provider plugin for Featherless AI's OpenAI-compatible API.
+Official MarketingClaw provider plugin for Featherless AI's OpenAI-compatible API.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugins install @openclaw/featherless-provider
-openclaw gateway restart
+marketingclaw plugins install @marketingclaw/featherless-provider
+marketingclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/featherless> for setup and configuration.
+See <https://docs.marketingclaw.ai/providers/featherless> for setup and configuration.

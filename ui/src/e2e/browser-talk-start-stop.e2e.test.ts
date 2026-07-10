@@ -13,7 +13,7 @@ import {
 
 const chromiumExecutablePath = resolvePlaywrightChromiumExecutablePath(chromium.executablePath());
 const chromiumAvailable = canRunPlaywrightChromium(chromiumExecutablePath);
-const allowMissingChromium = process.env.OPENCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM === "1";
+const allowMissingChromium = process.env.MARKETINGCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM === "1";
 const describeControlUiE2e = chromiumAvailable || !allowMissingChromium ? describe : describe.skip;
 
 let server: ControlUiE2eServer;
@@ -87,7 +87,7 @@ async function installTalkBrowserFixtures(page: Page) {
       configurable: true,
       value: MockAudioContext,
     });
-    Object.defineProperty(window, "openclawTalkE2eState", {
+    Object.defineProperty(window, "marketingclawTalkE2eState", {
       configurable: true,
       value: state,
     });
@@ -178,9 +178,9 @@ describeControlUiE2e("Control UI browser Talk", () => {
             () =>
               (
                 window as Window & {
-                  openclawTalkE2eState?: { constraints: unknown[] };
+                  marketingclawTalkE2eState?: { constraints: unknown[] };
                 }
-              ).openclawTalkE2eState?.constraints,
+              ).marketingclawTalkE2eState?.constraints,
           ),
         )
         .toEqual([{ audio: { deviceId: { exact: "usb" } } }]);
@@ -238,7 +238,7 @@ describeControlUiE2e("Control UI browser Talk", () => {
       await page.evaluate(() => {
         const state = (
           window as Window & {
-            openclawTalkE2eState?: {
+            marketingclawTalkE2eState?: {
               inputProcessor?: {
                 onaudioprocess?: (event: {
                   inputBuffer: { getChannelData: () => Float32Array };
@@ -247,7 +247,7 @@ describeControlUiE2e("Control UI browser Talk", () => {
               meterLevel?: number;
             };
           }
-        ).openclawTalkE2eState;
+        ).marketingclawTalkE2eState;
         if (state) {
           state.meterLevel = 0.25;
         }
@@ -279,9 +279,9 @@ describeControlUiE2e("Control UI browser Talk", () => {
           page.evaluate(() => {
             const state = (
               window as Window & {
-                openclawTalkE2eState?: { audioContextsClosed: number; tracksStopped: number };
+                marketingclawTalkE2eState?: { audioContextsClosed: number; tracksStopped: number };
               }
-            ).openclawTalkE2eState;
+            ).marketingclawTalkE2eState;
             return state
               ? {
                   audioContextsClosed: state.audioContextsClosed,
@@ -340,7 +340,7 @@ describeControlUiE2e("Control UI browser Talk", () => {
       await page.evaluate(() => {
         const state = (
           window as Window & {
-            openclawTalkE2eState?: {
+            marketingclawTalkE2eState?: {
               inputProcessor?: {
                 onaudioprocess?: (event: {
                   inputBuffer: { getChannelData: () => Float32Array };
@@ -349,7 +349,7 @@ describeControlUiE2e("Control UI browser Talk", () => {
               meterLevel?: number;
             };
           }
-        ).openclawTalkE2eState;
+        ).marketingclawTalkE2eState;
         if (state) {
           state.meterLevel = 0.25;
         }

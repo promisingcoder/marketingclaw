@@ -87,47 +87,47 @@ describe("resolveNpmInstallRecordSpec", () => {
   it("uses an exact resolved registry spec when managed installs request pinning", () => {
     expect(
       resolveNpmInstallRecordSpec({
-        requestedSpec: "@openclaw/codex",
+        requestedSpec: "@marketingclaw/codex",
         resolution: {
-          name: "@openclaw/codex",
+          name: "@marketingclaw/codex",
           version: "2026.5.30-beta.1",
-          resolvedSpec: "@openclaw/codex@2026.5.30-beta.1",
+          resolvedSpec: "@marketingclaw/codex@2026.5.30-beta.1",
         },
         pinResolvedRegistrySpec: true,
       }),
-    ).toBe("@openclaw/codex@2026.5.30-beta.1");
+    ).toBe("@marketingclaw/codex@2026.5.30-beta.1");
   });
 
   it("keeps moving specs unless the caller owns managed pinning", () => {
     expect(
       resolveNpmInstallRecordSpec({
-        requestedSpec: "@openclaw/codex",
+        requestedSpec: "@marketingclaw/codex",
         resolution: {
-          name: "@openclaw/codex",
+          name: "@marketingclaw/codex",
           version: "2026.5.30-beta.1",
-          resolvedSpec: "@openclaw/codex@2026.5.30-beta.1",
+          resolvedSpec: "@marketingclaw/codex@2026.5.30-beta.1",
         },
       }),
-    ).toBe("@openclaw/codex");
+    ).toBe("@marketingclaw/codex");
   });
 
   it("does not replace the requested spec with tags or non-registry resolutions", () => {
     expect(
       resolveNpmInstallRecordSpec({
-        requestedSpec: "@openclaw/codex",
+        requestedSpec: "@marketingclaw/codex",
         resolution: {
-          name: "@openclaw/codex",
+          name: "@marketingclaw/codex",
           version: "2026.5.30-beta.1",
-          resolvedSpec: "@openclaw/codex@beta",
+          resolvedSpec: "@marketingclaw/codex@beta",
         },
         pinResolvedRegistrySpec: true,
       }),
-    ).toBe("@openclaw/codex");
+    ).toBe("@marketingclaw/codex");
     expect(
       resolveNpmInstallRecordSpec({
         requestedSpec: "file:codex.tgz",
         resolution: {
-          name: "@openclaw/codex",
+          name: "@marketingclaw/codex",
           version: "2026.5.30-beta.1",
           resolvedSpec: "file:codex.tgz",
         },
@@ -154,7 +154,7 @@ describe("recordPluginInstall", () => {
         pluginId: "demo",
         source: "clawhub",
         spec: "clawhub:demo@1.0.0",
-        installPath: "/tmp/openclaw/plugins/demo",
+        installPath: "/tmp/marketingclaw/plugins/demo",
         clawhubUrl: "https://clawhub.ai",
         clawhubPackage: "demo",
         clawhubFamily: "code-plugin",
@@ -171,7 +171,7 @@ describe("recordPluginInstall", () => {
       pluginId: "demo",
       source: "clawhub",
       spec: "clawhub:demo@1.1.0",
-      installPath: "/tmp/openclaw/plugins/demo",
+      installPath: "/tmp/marketingclaw/plugins/demo",
       clawhubUrl: "https://clawhub.ai",
       clawhubPackage: "demo",
       clawhubFamily: "code-plugin",
@@ -183,7 +183,7 @@ describe("recordPluginInstall", () => {
     expect(next.plugins?.installs?.demo).toEqual({
       source: "clawhub",
       spec: "clawhub:demo@1.1.0",
-      installPath: "/tmp/openclaw/plugins/demo",
+      installPath: "/tmp/marketingclaw/plugins/demo",
       clawhubUrl: "https://clawhub.ai",
       clawhubPackage: "demo",
       clawhubFamily: "code-plugin",

@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import OpenClawChatUI
+@testable import MarketingClawChatUI
 
 @MainActor
 struct ChatSessionSidebarModelTests {
@@ -9,9 +9,9 @@ struct ChatSessionSidebarModelTests {
         displayName: String? = nil,
         updatedAt: Double? = nil,
         pinned: Bool? = nil,
-        archived: Bool? = nil) -> OpenClawChatSessionEntry
+        archived: Bool? = nil) -> MarketingClawChatSessionEntry
     {
-        OpenClawChatSessionEntry(
+        MarketingClawChatSessionEntry(
             key: key,
             kind: nil,
             displayName: displayName,

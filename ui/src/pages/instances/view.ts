@@ -27,7 +27,7 @@ export function renderInstances(props: InstancesProps) {
           <div class="card-sub">${t("instances.subtitle")}</div>
         </div>
         <div class="row" style="gap: 8px;">
-          <openclaw-tooltip
+          <marketingclaw-tooltip
             .content=${masked ? t("instances.showHosts") : t("instances.hideHosts")}
           >
             <button
@@ -39,7 +39,7 @@ export function renderInstances(props: InstancesProps) {
             >
               ${masked ? icons.eyeOff : icons.eye}
             </button>
-          </openclaw-tooltip>
+          </marketingclaw-tooltip>
           <button class="btn" ?disabled=${props.loading} @click=${props.onRefresh}>
             ${props.loading ? t("common.loading") : t("common.refresh")}
           </button>

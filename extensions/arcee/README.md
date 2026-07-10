@@ -1,12 +1,12 @@
-# OpenClaw Arcee AI Provider
+# MarketingClaw Arcee AI Provider
 
-Official OpenClaw provider plugin for Arcee AI.
+Official MarketingClaw provider plugin for Arcee AI.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugins install @openclaw/arcee-provider
-openclaw gateway restart
+marketingclaw plugins install @marketingclaw/arcee-provider
+marketingclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/arcee> for setup and configuration.
+See <https://docs.marketingclaw.ai/providers/arcee> for setup and configuration.

@@ -1,7 +1,7 @@
 [
   {
-    "source": "OpenClaw",
-    "target": "OpenClaw"
+    "source": "MarketingClaw",
+    "target": "MarketingClaw"
   },
   {
     "source": "macOS platform notes",
@@ -1172,12 +1172,12 @@
     "target": "Agent runtime architecture"
   },
   {
-    "source": "OpenClaw agent runtime workflow",
-    "target": "OpenClaw agent runtime workflow"
+    "source": "MarketingClaw agent runtime workflow",
+    "target": "MarketingClaw agent runtime workflow"
   },
   {
-    "source": "OpenClaw agent runtime architecture",
-    "target": "OpenClaw agent runtime architecture"
+    "source": "MarketingClaw agent runtime architecture",
+    "target": "MarketingClaw agent runtime architecture"
   },
   {
     "source": "Install and Configure Plugins",
@@ -1420,19 +1420,19 @@
     "target": "待处理的设备配对请求"
   },
   {
-    "source": "openclaw devices list",
-    "target": "openclaw devices list"
+    "source": "marketingclaw devices list",
+    "target": "marketingclaw devices list"
   },
   {
-    "source": "openclaw devices approve",
-    "target": "openclaw devices approve"
+    "source": "marketingclaw devices approve",
+    "target": "marketingclaw devices approve"
   },
   {
-    "source": "openclaw nodes pending",
-    "target": "openclaw nodes pending"
+    "source": "marketingclaw nodes pending",
+    "target": "marketingclaw nodes pending"
   },
   {
-    "source": "openclaw nodes approve",
-    "target": "openclaw nodes approve"
+    "source": "marketingclaw nodes approve",
+    "target": "marketingclaw nodes approve"
   }
 ]

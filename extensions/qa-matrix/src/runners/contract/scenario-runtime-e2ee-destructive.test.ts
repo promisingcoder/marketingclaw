@@ -4,7 +4,7 @@ import path from "node:path";
 import {
   createPluginStateSyncKeyedStoreForTests,
   resetPluginStateStoreForTests,
-} from "openclaw/plugin-sdk/plugin-state-test-runtime";
+} from "marketingclaw/plugin-sdk/plugin-state-test-runtime";
 import { afterEach, describe, expect, it } from "vitest";
 import { testing } from "./scenario-runtime-e2ee-destructive.js";
 
@@ -23,7 +23,7 @@ const storageMetadataRuntime = {
     return {
       namespace: "storage-meta",
       maxEntries: 10,
-      env: { ...process.env, OPENCLAW_STATE_DIR: storageRootDir },
+      env: { ...process.env, MARKETINGCLAW_STATE_DIR: storageRootDir },
     };
   },
 };

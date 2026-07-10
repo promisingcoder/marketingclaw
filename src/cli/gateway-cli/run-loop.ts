@@ -1,7 +1,7 @@
 // In-process gateway run loop, restart signaling, drain, and update respawn handling.
 import { randomUUID } from "node:crypto";
 import net from "node:net";
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { truncateUtf16Safe } from "@marketingclaw/normalization-core/utf16-slice";
 import { clearRuntimeConfigSnapshot } from "../../config/runtime-snapshot.js";
 import {
   captureGatewayRestartTraceHandoff,
@@ -118,8 +118,8 @@ export async function runGatewayLoop(params: {
 }) {
   // macOS/BSD process inspection reports process.title instead of the original
   // argv. Give the long-running Gateway a verifiable identity for lock readers.
-  if (process.title === "openclaw") {
-    process.title = "openclaw-gateway";
+  if (process.title === "marketingclaw") {
+    process.title = "marketingclaw-gateway";
   }
   let startupStartedAt: number;
   // Eagerly resolve the lifecycle runtime module before installing signal
@@ -277,7 +277,7 @@ export async function runGatewayLoop(params: {
         });
       } else {
         gatewayLog.info(
-          `restart mode: in-process restart (${respawn.detail ?? "OPENCLAW_NO_RESPAWN"})`,
+          `restart mode: in-process restart (${respawn.detail ?? "MARKETINGCLAW_NO_RESPAWN"})`,
         );
       }
       if (!(await reacquireLockForInProcessRestart())) {
@@ -337,7 +337,7 @@ export async function runGatewayLoop(params: {
       );
     } else {
       gatewayLog.info(
-        `restart mode: in-process restart (${respawn.detail ?? "OPENCLAW_NO_RESPAWN"})`,
+        `restart mode: in-process restart (${respawn.detail ?? "MARKETINGCLAW_NO_RESPAWN"})`,
       );
     }
     if (isUpdateProcessRestartReason(activeRestartRequest?.restartReason)) {
@@ -818,7 +818,7 @@ export async function runGatewayLoop(params: {
           );
           gatewayLog.warn(
             "An unauthorized SIGUSR1 restart signal was received and ignored. " +
-              "If a pending gateway restart needs to be applied, run `openclaw gateway restart` " +
+              "If a pending gateway restart needs to be applied, run `marketingclaw gateway restart` " +
               "or restart the gateway through your service manager.",
           );
           return;

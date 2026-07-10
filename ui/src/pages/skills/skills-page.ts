@@ -29,7 +29,7 @@ import {
   type ClawHubSkillSecurityVerdict,
   type SkillMessageMap,
 } from "../../lib/skills/index.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { MarketingClawLightDomElement } from "../../lit/marketingclaw-element.ts";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
 import { renderSkills, type SkillDetailTab, type SkillsStatusFilter } from "./view.ts";
 
@@ -43,7 +43,7 @@ export type SkillsRouteData = {
   error: string | null;
 };
 
-class SkillsPage extends OpenClawLightDomElement {
+class SkillsPage extends MarketingClawLightDomElement {
   @consume({ context: applicationContext, subscribe: true })
   private context!: ApplicationContext;
 
@@ -399,6 +399,6 @@ class SkillsPage extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-skills-page")) {
-  customElements.define("openclaw-skills-page", SkillsPage);
+if (!customElements.get("marketingclaw-skills-page")) {
+  customElements.define("marketingclaw-skills-page", SkillsPage);
 }

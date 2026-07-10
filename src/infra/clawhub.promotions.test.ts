@@ -32,11 +32,11 @@ describe("parseClawHubPromotion", () => {
   it("parses a full promotion payload", () => {
     const parsed = parseClawHubPromotion({
       ...validPromotion,
-      pluginNames: ["@openclaw/openrouter-provider"],
+      pluginNames: ["@marketingclaw/openrouter-provider"],
     });
     expect(parsed.slug).toBe("spring-models");
     expect(parsed.models[0]?.suggestedDefault).toBe(true);
-    expect(parsed.pluginNames).toEqual(["@openclaw/openrouter-provider"]);
+    expect(parsed.pluginNames).toEqual(["@marketingclaw/openrouter-provider"]);
   });
 
   it("rejects payloads without models", () => {
@@ -84,7 +84,7 @@ describe("parseClawHubPromotion", () => {
     expect(() =>
       parseClawHubPromotion({
         ...validPromotion,
-        pluginNames: ["@openclaw/openrouter-provider@latest"],
+        pluginNames: ["@marketingclaw/openrouter-provider@latest"],
       }),
     ).toThrow(/pluginNames/);
   });

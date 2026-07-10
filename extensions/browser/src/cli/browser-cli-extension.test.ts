@@ -14,8 +14,8 @@ describe("buildRemoteGatewayRelayUrl", () => {
     expect(buildRemoteGatewayRelayUrl("wss://gateway.example.com")).toBe(
       "wss://gateway.example.com/browser/extension",
     );
-    expect(buildRemoteGatewayRelayUrl("wss://gateway.example.com/openclaw/")).toBe(
-      "wss://gateway.example.com/openclaw/browser/extension",
+    expect(buildRemoteGatewayRelayUrl("wss://gateway.example.com/marketingclaw/")).toBe(
+      "wss://gateway.example.com/marketingclaw/browser/extension",
     );
   });
 
@@ -44,7 +44,7 @@ describe("browser extension path", () => {
     const program = new Command();
     const browser = program.command("browser");
     const log = vi.spyOn(defaultRuntime, "log").mockImplementation(() => {});
-    const pluginRoot = path.join("/opt", "openclaw", "dist", "extensions", "browser");
+    const pluginRoot = path.join("/opt", "marketingclaw", "dist", "extensions", "browser");
     registerBrowserExtensionCommands(browser, () => ({}), pluginRoot);
 
     await program.parseAsync(["browser", "extension", "path"], { from: "user" });

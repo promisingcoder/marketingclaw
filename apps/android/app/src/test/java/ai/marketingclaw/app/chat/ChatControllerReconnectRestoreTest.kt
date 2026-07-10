@@ -1,6 +1,6 @@
-package ai.openclaw.app.chat
+package ai.marketingclaw.app.chat
 
-import ai.openclaw.app.gateway.GatewayRequestOutcomeUnknown
+import ai.marketingclaw.app.gateway.GatewayRequestOutcomeUnknown
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async

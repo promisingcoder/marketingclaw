@@ -1,12 +1,12 @@
-# OpenClaw DeepSeek Provider
+# MarketingClaw DeepSeek Provider
 
-Official OpenClaw provider plugin for DeepSeek.
+Official MarketingClaw provider plugin for DeepSeek.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugins install @openclaw/deepseek-provider
-openclaw gateway restart
+marketingclaw plugins install @marketingclaw/deepseek-provider
+marketingclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/deepseek> for setup and configuration.
+See <https://docs.marketingclaw.ai/providers/deepseek> for setup and configuration.

@@ -1,5 +1,5 @@
 import Testing
-@testable import OpenClawChatUI
+@testable import MarketingClawChatUI
 
 @Suite struct AssistantTextParserTests {
     @Test func splitsThinkAndFinalSegments() {

@@ -1,5 +1,5 @@
 ---
-summary: "Adds Copilot Proxy model provider support to OpenClaw."
+summary: "Adds Copilot Proxy model provider support to MarketingClaw."
 read_when:
   - You are installing, configuring, or auditing the copilot-proxy plugin
 title: "Copilot Proxy plugin"
@@ -7,12 +7,12 @@ title: "Copilot Proxy plugin"
 
 # Copilot Proxy plugin
 
-Adds Copilot Proxy model provider support to OpenClaw.
+Adds Copilot Proxy model provider support to MarketingClaw.
 
 ## Distribution
 
-- Package: `@openclaw/copilot-proxy`
-- Install route: included in OpenClaw
+- Package: `@marketingclaw/copilot-proxy`
+- Install route: included in MarketingClaw
 
 ## Surface
 

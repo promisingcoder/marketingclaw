@@ -1,12 +1,18 @@
 // Discord plugin module implements native command model picker apply behavior.
 import { randomUUID } from "node:crypto";
-import type { ChatCommandDefinition, CommandArgs } from "openclaw/plugin-sdk/command-auth-native";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { applyModelOverrideToSessionEntry } from "openclaw/plugin-sdk/model-session-runtime";
-import type { ResolvedAgentRoute } from "openclaw/plugin-sdk/routing";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { patchSessionEntry, resolveStorePath } from "openclaw/plugin-sdk/session-store-runtime";
-import { withTimeout } from "openclaw/plugin-sdk/text-utility-runtime";
+import type {
+  ChatCommandDefinition,
+  CommandArgs,
+} from "marketingclaw/plugin-sdk/command-auth-native";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import { applyModelOverrideToSessionEntry } from "marketingclaw/plugin-sdk/model-session-runtime";
+import type { ResolvedAgentRoute } from "marketingclaw/plugin-sdk/routing";
+import { logVerbose } from "marketingclaw/plugin-sdk/runtime-env";
+import {
+  patchSessionEntry,
+  resolveStorePath,
+} from "marketingclaw/plugin-sdk/session-store-runtime";
+import { withTimeout } from "marketingclaw/plugin-sdk/text-utility-runtime";
 import type { ButtonInteraction, StringSelectMenuInteraction } from "../internal/discord.js";
 import {
   recordDiscordModelPickerRecentModel,
@@ -15,7 +21,7 @@ import {
 import type { DispatchDiscordCommandInteraction } from "./native-command-dispatch.js";
 import type { ThreadBindingManager } from "./thread-bindings.js";
 
-type DiscordConfig = NonNullable<OpenClawConfig["channels"]>["discord"];
+type DiscordConfig = NonNullable<MarketingClawConfig["channels"]>["discord"];
 
 type DiscordModelPickerSelectionCommand = {
   prompt: string;
@@ -31,7 +37,7 @@ type DiscordModelPickerApplyResult =
   | { status: "failed"; noticeMessage: string };
 
 async function persistDiscordModelPickerOverride(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   route: ResolvedAgentRoute;
   provider: string;
   model: string;
@@ -83,7 +89,7 @@ export async function applyDiscordModelPickerSelection(params: {
   interaction: ButtonInteraction | StringSelectMenuInteraction;
   selectionCommand: DiscordModelPickerSelectionCommand;
   dispatchCommandInteraction: DispatchDiscordCommandInteraction;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   discordConfig: DiscordConfig;
   accountId: string;
   sessionPrefix: string;

@@ -102,7 +102,7 @@ function createContext(gateway: TestGateway): ApplicationContext {
 }
 
 function createPage(context: ApplicationContext): CronTestPage {
-  const page = document.createElement("openclaw-cron-page") as CronTestPage;
+  const page = document.createElement("marketingclaw-cron-page") as CronTestPage;
   page.context = context;
   page.render = () => nothing;
   document.body.append(page);

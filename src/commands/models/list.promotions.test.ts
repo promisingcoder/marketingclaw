@@ -3,11 +3,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { maybeRefreshPromotionsFeed, recordPromotionClaim } from "../../infra/promotions-feed.js";
 import type { RuntimeEnv } from "../../runtime.js";
-import { closeOpenClawStateDatabaseForTest } from "../../state/openclaw-state-db.js";
+import { closeMarketingClawStateDatabaseForTest } from "../../state/marketingclaw-state-db.js";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../../test-utils/openclaw-test-state.js";
+  createMarketingClawTestState,
+  type MarketingClawTestState,
+} from "../../test-utils/marketingclaw-test-state.js";
 import { applyPromotionClaimTags, printAvailablePromotionsSection } from "./list.promotions.js";
 import type { ModelRow } from "./list.types.js";
 
@@ -71,17 +71,17 @@ async function seedFeedCache(entries: unknown[]) {
 }
 
 describe("models list promotion decorations", () => {
-  let testState: OpenClawTestState;
+  let testState: MarketingClawTestState;
 
   beforeEach(async () => {
-    testState = await createOpenClawTestState({
+    testState = await createMarketingClawTestState({
       layout: "state-only",
-      prefix: "openclaw-list-promotions-",
+      prefix: "marketingclaw-list-promotions-",
     });
   });
 
   afterEach(async () => {
-    closeOpenClawStateDatabaseForTest();
+    closeMarketingClawStateDatabaseForTest();
     await testState.cleanup();
   });
 
@@ -123,7 +123,7 @@ describe("models list promotion decorations", () => {
     expect(text).toContain("Available via promotion:");
     expect(text).toContain("Free Example models");
     expect(text).toContain("example-provider/example/model-alpha");
-    expect(text).toContain("openclaw promos claim example-models-launch");
+    expect(text).toContain("marketingclaw promos claim example-models-launch");
     expect(text).toContain("New promotional model offers");
   });
 
@@ -155,7 +155,7 @@ describe("models list promotion decorations", () => {
     await printAvailablePromotionsSection({ configuredKeys: new Set(), runtime, nowMs: NOW });
     const text = lines.join("\n");
     expect(text).toContain("Available via promotion:");
-    expect(text).toContain("openclaw promos claim example-models-launch");
+    expect(text).toContain("marketingclaw promos claim example-models-launch");
   });
 
   it("stays silent when the cached window has passed", async () => {

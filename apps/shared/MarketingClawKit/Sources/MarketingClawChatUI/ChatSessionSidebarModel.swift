@@ -6,7 +6,7 @@ enum ChatSessionSidebarModel {
     struct Section: Identifiable, Equatable {
         let id: String
         let title: String?
-        let sessions: [OpenClawChatSessionEntry]
+        let sessions: [MarketingClawChatSessionEntry]
     }
 
     static func isHiddenInternalSession(_ key: String) -> Bool {
@@ -17,7 +17,7 @@ enum ChatSessionSidebarModel {
 
     @MainActor
     static func sections(
-        sessions: [OpenClawChatSessionEntry],
+        sessions: [MarketingClawChatSessionEntry],
         currentSessionKey: String,
         mainSessionKey: String = "main",
         activeAgentID: String? = nil,
@@ -45,7 +45,7 @@ enum ChatSessionSidebarModel {
         return result
     }
 
-    static func displayName(for session: OpenClawChatSessionEntry) -> String {
+    static func displayName(for session: MarketingClawChatSessionEntry) -> String {
         for candidate in [session.displayName, session.label] {
             if let trimmed = candidate?.trimmingCharacters(in: .whitespacesAndNewlines),
                !trimmed.isEmpty
@@ -64,7 +64,7 @@ enum ChatSessionSidebarModel {
 
     @MainActor
     static func selectedSessionKey(
-        sessions: [OpenClawChatSessionEntry],
+        sessions: [MarketingClawChatSessionEntry],
         currentSessionKey: String,
         mainSessionKey: String,
         activeAgentID: String?) -> String
@@ -90,7 +90,7 @@ enum ChatSessionSidebarModel {
             return currentSessionKey
         }
         return sessions.first(where: {
-            OpenClawChatViewModel.matchesCurrentSessionKey(
+            MarketingClawChatViewModel.matchesCurrentSessionKey(
                 incoming: $0.key,
                 current: currentSessionKey,
                 mainSessionKey: mainSessionKey,
@@ -114,11 +114,11 @@ enum ChatSessionSidebarModel {
 
     @MainActor
     private static func visibleSessions(
-        sessions: [OpenClawChatSessionEntry],
+        sessions: [MarketingClawChatSessionEntry],
         currentSessionKey: String,
         mainSessionKey: String,
         activeAgentID: String?,
-        query: String) -> [OpenClawChatSessionEntry]
+        query: String) -> [MarketingClawChatSessionEntry]
     {
         let selectedSessionKey = self.selectedSessionKey(
             sessions: sessions,
@@ -152,8 +152,8 @@ enum ChatSessionSidebarModel {
         }
     }
 
-    private static func placeholder(key: String) -> OpenClawChatSessionEntry {
-        OpenClawChatSessionEntry(
+    private static func placeholder(key: String) -> MarketingClawChatSessionEntry {
+        MarketingClawChatSessionEntry(
             key: key,
             kind: nil,
             displayName: nil,

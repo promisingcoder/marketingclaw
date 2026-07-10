@@ -1,21 +1,21 @@
 ---
-summary: "CLI reference for `openclaw reset` (reset local state/config)"
+summary: "CLI reference for `marketingclaw reset` (reset local state/config)"
 read_when:
   - You want to wipe local state while keeping the CLI installed
   - You want a dry-run of what would be removed
 title: "Reset"
 ---
 
-# `openclaw reset`
+# `marketingclaw reset`
 
 Reset local config/state (keeps the CLI installed).
 
 ```bash
-openclaw reset
-openclaw reset --dry-run
-openclaw reset --scope config --yes --non-interactive
-openclaw reset --scope config+creds+sessions --yes --non-interactive
-openclaw reset --scope full --yes --non-interactive
+marketingclaw reset
+marketingclaw reset --dry-run
+marketingclaw reset --scope config --yes --non-interactive
+marketingclaw reset --scope config+creds+sessions --yes --non-interactive
+marketingclaw reset --scope full --yes --non-interactive
 ```
 
 ## Options
@@ -37,10 +37,10 @@ openclaw reset --scope full --yes --non-interactive
 
 ## Notes
 
-- Run `openclaw backup create` first for a restorable snapshot before removing local state.
-- Without `--scope`, `openclaw reset` prompts interactively for the scope to remove.
+- Run `marketingclaw backup create` first for a restorable snapshot before removing local state.
+- Without `--scope`, `marketingclaw reset` prompts interactively for the scope to remove.
 - `--non-interactive` is only valid when both `--scope` and `--yes` are set.
-- `config+creds+sessions` and `full` print `Next: openclaw onboard --install-daemon` when done.
+- `config+creds+sessions` and `full` print `Next: marketingclaw onboard --install-daemon` when done.
 
 ## Related
 

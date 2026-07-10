@@ -10,7 +10,7 @@ import { formatRelativeTimestamp } from "../lib/format.ts";
 import { resolveSessionDisplayName } from "../lib/session-display.ts";
 import { getVisibleSessionRows } from "../lib/sessions/index.ts";
 import { normalizeLowercaseStringOrEmpty, normalizeOptionalString } from "../lib/string-coerce.ts";
-import { OpenClawLightDomContentsElement } from "../lit/openclaw-element.ts";
+import { MarketingClawLightDomContentsElement } from "../lit/marketingclaw-element.ts";
 import { SubscriptionsController } from "../lit/subscriptions-controller.ts";
 import { icons, type IconName } from "./icons.ts";
 
@@ -29,7 +29,7 @@ const SESSION_SEARCH_LIMIT = 10;
 const SESSION_SEARCH_MAX_PAGES = 4;
 const SESSION_SEARCH_PAGE_SIZE = 50;
 
-export const COMMAND_PALETTE_TARGET_EVENT = "openclaw-command-palette-target";
+export const COMMAND_PALETTE_TARGET_EVENT = "marketingclaw-command-palette-target";
 
 export type CommandPaletteTargetDetail = {
   owner: Element;
@@ -424,7 +424,7 @@ function renderCommandPalette(props: CommandPaletteProps) {
   `;
 }
 
-export class CommandPalette extends OpenClawLightDomContentsElement {
+export class CommandPalette extends MarketingClawLightDomContentsElement {
   @property({ attribute: false }) onNavigate?: (routeId: RouteId) => void;
   @property({ attribute: false }) onSelectSession?: (sessionKey: string) => void;
   @property({ attribute: false }) onSlashCommand?: (command: string) => void;
@@ -669,6 +669,6 @@ export class CommandPalette extends OpenClawLightDomContentsElement {
   }
 }
 
-if (!customElements.get("openclaw-command-palette")) {
-  customElements.define("openclaw-command-palette", CommandPalette);
+if (!customElements.get("marketingclaw-command-palette")) {
+  customElements.define("marketingclaw-command-palette", CommandPalette);
 }

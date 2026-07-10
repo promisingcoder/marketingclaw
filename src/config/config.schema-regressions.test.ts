@@ -427,7 +427,7 @@ describe("config schema regressions", () => {
       discovery: {
         wideArea: {
           enabled: true,
-          domain: "openclaw.internal",
+          domain: "marketingclaw.internal",
         },
       },
     });
@@ -435,7 +435,7 @@ describe("config schema regressions", () => {
     expect(res.ok).toBe(true);
   });
 
-  it("rejects bindings referencing an agentId missing from agents.list (openclaw#84692)", () => {
+  it("rejects bindings referencing an agentId missing from agents.list (marketingclaw#84692)", () => {
     const res = validateConfigObject({
       agents: {
         list: [{ id: "alpha", model: "anthropic/claude-3-5-sonnet" }],
@@ -503,7 +503,7 @@ describe("config schema regressions", () => {
     expect(res.ok).toBe(true);
   });
 
-  it("accepts a microsoft-foundry model entry carrying thinkingLevelMap (openclaw#91011)", () => {
+  it("accepts a microsoft-foundry model entry carrying thinkingLevelMap (marketingclaw#91011)", () => {
     // Foundry's writer (buildFoundryThinkingLevelMap) persists this during Entra ID onboarding; the
     // strict schema used to reject thinkingLevelMap, so updateConfig rolled the whole write back.
     const res = validateConfigObject({

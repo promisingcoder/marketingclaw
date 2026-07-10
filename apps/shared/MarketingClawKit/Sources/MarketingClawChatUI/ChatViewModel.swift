@@ -1,31 +1,31 @@
 import Foundation
 import Observation
-import OpenClawKit
+import MarketingClawKit
 import OSLog
 
-private let chatUILogger = Logger(subsystem: "ai.openclaw", category: "OpenClawChatUI")
+private let chatUILogger = Logger(subsystem: "ai.marketingclaw", category: "MarketingClawChatUI")
 
 @MainActor
 @Observable
 // swiftlint:disable:next type_body_length
-public final class OpenClawChatViewModel {
+public final class MarketingClawChatViewModel {
     public nonisolated static let defaultModelSelectionID = "__default__"
     static let maxAttachmentBytes = 5_000_000
     static let sessionListFetchLimit = 200
 
-    public internal(set) var messages: [OpenClawChatMessage] = []
+    public internal(set) var messages: [MarketingClawChatMessage] = []
 
     public var input: String = ""
     public private(set) var thinkingLevel: String
     /// Setter is module-internal for the thinking-level extension only.
-    public internal(set) var thinkingLevelOptions: [OpenClawChatThinkingLevelOption]
+    public internal(set) var thinkingLevelOptions: [MarketingClawChatThinkingLevelOption]
     /// Setter is module-internal for the thinking-level extension only.
     public internal(set) var showsThinkingPicker = true
     public private(set) var modelSelectionID: String = "__default__"
-    public private(set) var modelChoices: [OpenClawChatModelChoice] = []
+    public private(set) var modelChoices: [MarketingClawChatModelChoice] = []
     private var modelPickerFavorites: [String]
     private var modelPickerRecents: [String]
-    public private(set) var slashCommands: [OpenClawChatCommandChoice] = []
+    public private(set) var slashCommands: [MarketingClawChatCommandChoice] = []
     public private(set) var isLoadingSlashCommands = false
     public private(set) var slashCommandsErrorText: String?
     public private(set) var hasLoadedSlashCommands = false
@@ -34,8 +34,8 @@ public final class OpenClawChatViewModel {
 
     private struct SlashFilterCache {
         let query: String
-        let filter: OpenClawChatCommandFilter
-        let result: [OpenClawChatCommandChoice]
+        let filter: MarketingClawChatCommandFilter
+        let result: [MarketingClawChatCommandChoice]
     }
 
     private struct DeferredDeliveryIdentity {
@@ -52,7 +52,7 @@ public final class OpenClawChatViewModel {
     private var attachmentStagingCount = 0
     public private(set) var isAborting = false
     public var errorText: String?
-    public var attachments: [OpenClawPendingAttachment] = []
+    public var attachments: [MarketingClawPendingAttachment] = []
     /// Setter is module-internal for the health/outbox extension only.
     public internal(set) var healthOK: Bool = false
 
@@ -71,11 +71,11 @@ public final class OpenClawChatViewModel {
     public private(set) var sessionId: String?
     public private(set) var streamingAssistantText: String?
 
-    public private(set) var pendingToolCalls: [OpenClawChatPendingToolCall] = []
+    public private(set) var pendingToolCalls: [MarketingClawChatPendingToolCall] = []
 
     private(set) var timelineRevision: UInt64 = 0
     /// Setter is module-internal for the transcript-cache extension only.
-    public internal(set) var sessions: [OpenClawChatSessionEntry] = [] {
+    public internal(set) var sessions: [MarketingClawChatSessionEntry] = [] {
         didSet { self.syncContextUsageFraction() }
     }
 
@@ -88,15 +88,15 @@ public final class OpenClawChatViewModel {
     var hasAppliedLiveHistory = false
     var hasAppliedLiveSessions = false
     /// Internal for the outbox extension's flush path only.
-    let transport: any OpenClawChatTransport
-    let haptics: OpenClawChatHaptics
-    let transcriptCache: (any OpenClawChatTranscriptCache)?
-    let outbox: (any OpenClawChatCommandOutbox)?
+    let transport: any MarketingClawChatTransport
+    let haptics: MarketingClawChatHaptics
+    let transcriptCache: (any MarketingClawChatTranscriptCache)?
+    let outbox: (any MarketingClawChatCommandOutbox)?
     @ObservationIgnored
     private let modelPickerStore: ChatModelPickerStore
     /// Per-message outbox display state; rows without an entry are normal
     /// transcript rows. Observable so bubbles update when flush progresses.
-    public internal(set) var outboxStatesByMessageID: [UUID: OpenClawChatOutboxMessageState] = [:]
+    public internal(set) var outboxStatesByMessageID: [UUID: MarketingClawChatOutboxMessageState] = [:]
     @ObservationIgnored
     var outboxCommandIDsByMessageID: [UUID: String] = [:]
     @ObservationIgnored
@@ -132,7 +132,7 @@ public final class OpenClawChatViewModel {
     var pendingCacheWriteTask: Task<Void, Never>?
     private(set) var activeAgentId: String?
     private(set) var sessionRoutingContract: String?
-    var sessionDefaults: OpenClawChatSessionsDefaults? {
+    var sessionDefaults: MarketingClawChatSessionsDefaults? {
         didSet { self.syncContextUsageFraction() }
     }
 
@@ -223,7 +223,7 @@ public final class OpenClawChatViewModel {
         var id: UInt64
         var session: SessionSnapshot
         var pendingRunIDs: Set<String>
-        var visibleMessagesByID: [UUID: OpenClawChatMessage]
+        var visibleMessagesByID: [UUID: MarketingClawChatMessage]
         var historyMutationGeneration: UInt64
         var runOwnershipGeneration: UInt64
         var latestUserTurn: LatestUserTurn?
@@ -247,7 +247,7 @@ public final class OpenClawChatViewModel {
         var scope: RunMessageScope
     }
 
-    private var pendingToolCallsById: [String: OpenClawChatPendingToolCall] = [:] {
+    private var pendingToolCallsById: [String: MarketingClawChatPendingToolCall] = [:] {
         didSet {
             guard self.pendingToolCallsById != oldValue else { return }
             self.pendingToolCalls = self.pendingToolCallsById.values
@@ -260,13 +260,13 @@ public final class OpenClawChatViewModel {
 
     public init(
         sessionKey: String,
-        transport: any OpenClawChatTransport,
+        transport: any MarketingClawChatTransport,
         activeAgentId: String? = nil,
         sessionRoutingContract: String? = nil,
         attachmentOwnerIsActive: @escaping @MainActor () -> Bool = { false },
-        haptics: OpenClawChatHaptics = OpenClawChatHaptics(),
-        transcriptCache: (any OpenClawChatTranscriptCache)? = nil,
-        outbox: (any OpenClawChatCommandOutbox)? = nil,
+        haptics: MarketingClawChatHaptics = MarketingClawChatHaptics(),
+        transcriptCache: (any MarketingClawChatTranscriptCache)? = nil,
+        outbox: (any MarketingClawChatCommandOutbox)? = nil,
         modelPickerStore: ChatModelPickerStore = ChatModelPickerStore(),
         initialThinkingLevel: String? = nil,
         onSessionChanged: (@MainActor (String) -> Void)? = nil,
@@ -493,7 +493,7 @@ public final class OpenClawChatViewModel {
 
     public func slashCommandMatches(
         query: String,
-        filter: OpenClawChatCommandFilter) -> [OpenClawChatCommandChoice]
+        filter: MarketingClawChatCommandFilter) -> [MarketingClawChatCommandChoice]
     {
         if let cache = slashFilterCache, cache.query == query, cache.filter == filter {
             return cache.result
@@ -503,7 +503,7 @@ public final class OpenClawChatViewModel {
         return result
     }
 
-    public func applySlashCommandSelection(_ command: OpenClawChatCommandChoice) {
+    public func applySlashCommandSelection(_ command: MarketingClawChatCommandChoice) {
         let invocation = command.preferredInvocation.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !invocation.isEmpty else { return }
         self.input = command.acceptsArgs ? "\(invocation) " : invocation
@@ -534,7 +534,7 @@ public final class OpenClawChatViewModel {
             .split(separator: ":", maxSplits: 2, omittingEmptySubsequences: false)
         let normalizedMainSessionKey = String(resolvedMainParts.last ?? "")
             .trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-        let contractMainKey = OpenClawChatSessionRoutingContract.parse(contract)?.mainKey ?? ""
+        let contractMainKey = MarketingClawChatSessionRoutingContract.parse(contract)?.mainKey ?? ""
         return normalizedSessionKey == "global" ||
             normalizedSessionKey == "main" ||
             normalizedSessionKey == normalizedMainSessionKey ||
@@ -552,12 +552,12 @@ public final class OpenClawChatViewModel {
         return "Default: \(self.modelLabel(for: defaultModelID))"
     }
 
-    static let baseThinkingLevelOptions: [OpenClawChatThinkingLevelOption] = [
-        OpenClawChatThinkingLevelOption(id: "off", label: "off"),
-        OpenClawChatThinkingLevelOption(id: "minimal", label: "minimal"),
-        OpenClawChatThinkingLevelOption(id: "low", label: "low"),
-        OpenClawChatThinkingLevelOption(id: "medium", label: "medium"),
-        OpenClawChatThinkingLevelOption(id: "high", label: "high"),
+    static let baseThinkingLevelOptions: [MarketingClawChatThinkingLevelOption] = [
+        MarketingClawChatThinkingLevelOption(id: "off", label: "off"),
+        MarketingClawChatThinkingLevelOption(id: "minimal", label: "minimal"),
+        MarketingClawChatThinkingLevelOption(id: "low", label: "low"),
+        MarketingClawChatThinkingLevelOption(id: "medium", label: "medium"),
+        MarketingClawChatThinkingLevelOption(id: "high", label: "high"),
     ]
 
     public func addAttachments(urls: [URL]) {
@@ -576,7 +576,7 @@ public final class OpenClawChatViewModel {
         }
     }
 
-    public func removeAttachment(_ id: OpenClawPendingAttachment.ID) {
+    public func removeAttachment(_ id: MarketingClawPendingAttachment.ID) {
         self.attachments.removeAll { $0.id == id }
         self.applyDeferredExternalStateIfReady()
     }
@@ -633,7 +633,7 @@ public final class OpenClawChatViewModel {
         self.timelineRevision &+= 1
     }
 
-    private func appendMessage(_ message: OpenClawChatMessage) {
+    private func appendMessage(_ message: MarketingClawChatMessage) {
         self.messages.append(message)
         self.markTimelineChanged()
     }
@@ -750,7 +750,7 @@ public final class OpenClawChatViewModel {
 
     @discardableResult
     private func applyHistoryPayload(
-        _ payload: OpenClawChatHistoryPayload,
+        _ payload: MarketingClawChatHistoryPayload,
         for request: HistoryRequest,
         preservingOptimisticLocalMessages: Bool,
         syncThinkingOptions: Bool = false) -> Bool
@@ -838,7 +838,7 @@ public final class OpenClawChatViewModel {
     }
 
     private func provisionalFinalMessagesMissing(
-        from incoming: [OpenClawChatMessage]) -> [OpenClawChatMessage]
+        from incoming: [MarketingClawChatMessage]) -> [MarketingClawChatMessage]
     {
         let incomingRunIds = Set(incoming.compactMap { Self.normalizedIdempotencyKey($0.idempotencyKey) })
         return self.messages.filter { message in
@@ -866,7 +866,7 @@ public final class OpenClawChatViewModel {
     }
 
     private func applyInFlightRunSnapshot(
-        _ snapshot: OpenClawChatInFlightRun?,
+        _ snapshot: MarketingClawChatInFlightRun?,
         for request: HistoryRequest)
     {
         guard request.runOwnershipGeneration == self.runOwnershipGeneration,
@@ -1103,7 +1103,7 @@ public final class OpenClawChatViewModel {
 
     private static func isKnownSlashCommandText(
         _ text: String,
-        commands: [OpenClawChatCommandChoice]) -> Bool
+        commands: [MarketingClawChatCommandChoice]) -> Bool
     {
         guard let commandName = slashCommandName(from: text), !commandName.isEmpty else {
             return false
@@ -1124,14 +1124,14 @@ public final class OpenClawChatViewModel {
     }
 
     private static func commands(
-        _ commands: [OpenClawChatCommandChoice],
+        _ commands: [MarketingClawChatCommandChoice],
         containInvocationName name: String) -> Bool
     {
         commands.contains { self.command($0, matchesInvocationName: name) }
     }
 
     private static func command(
-        _ command: OpenClawChatCommandChoice,
+        _ command: MarketingClawChatCommandChoice,
         matchesInvocationName name: String) -> Bool
     {
         let normalizedName = name.lowercased()
@@ -1144,16 +1144,16 @@ public final class OpenClawChatViewModel {
     }
 
     private static func filteredSlashCommands(
-        _ commands: [OpenClawChatCommandChoice],
+        _ commands: [MarketingClawChatCommandChoice],
         query rawQuery: String,
-        filter: OpenClawChatCommandFilter) -> [OpenClawChatCommandChoice]
+        filter: MarketingClawChatCommandFilter) -> [MarketingClawChatCommandChoice]
     {
         let trimmed = rawQuery.trimmingCharacters(in: .whitespacesAndNewlines)
         let query = self.normalizedSlashQuery(trimmed)
-        let effectiveFilter: OpenClawChatCommandFilter =
+        let effectiveFilter: MarketingClawChatCommandFilter =
             self.queryTargetsSkills(trimmed) && filter == .all ? .skills : filter
         return commands.enumerated()
-            .compactMap { index, command -> (Int, Int, OpenClawChatCommandChoice)? in
+            .compactMap { index, command -> (Int, Int, MarketingClawChatCommandChoice)? in
                 guard self.command(command, isIncludedIn: effectiveFilter) else { return nil }
                 guard let rank = self.commandSearchRank(command, query: query) else { return nil }
                 return (rank, index, command)
@@ -1186,8 +1186,8 @@ public final class OpenClawChatViewModel {
     }
 
     private static func command(
-        _ command: OpenClawChatCommandChoice,
-        isIncludedIn filter: OpenClawChatCommandFilter) -> Bool
+        _ command: MarketingClawChatCommandChoice,
+        isIncludedIn filter: MarketingClawChatCommandFilter) -> Bool
     {
         switch filter {
         case .all:
@@ -1200,7 +1200,7 @@ public final class OpenClawChatViewModel {
     }
 
     private static func commandSearchRank(
-        _ command: OpenClawChatCommandChoice,
+        _ command: MarketingClawChatCommandChoice,
         query: String) -> Int?
     {
         guard !query.isEmpty else { return 0 }
@@ -1347,7 +1347,7 @@ public final class OpenClawChatViewModel {
             let routeResult = await self.transport.acquireOutboxRouteLease()
             guard self.isCurrentSession(sessionSnapshot) else { return }
             if case let .unavailable(reason) = routeResult,
-               reason == OpenClawChatTransportUpgradeMessage.routingContract
+               reason == MarketingClawChatTransportUpgradeMessage.routingContract
             {
                 guard self.hasRestoredOutboxMessages else {
                     self.errorText = "Restoring queued messages. Try again in a moment."
@@ -1404,8 +1404,8 @@ public final class OpenClawChatViewModel {
         // Production attachment sends enter the durable outbox above. Fixture,
         // preview, and embedded transports may intentionally have no outbox;
         // keep their established live-only attachment path available.
-        var userContent: [OpenClawChatMessageContent] = [
-            OpenClawChatMessageContent(
+        var userContent: [MarketingClawChatMessageContent] = [
+            MarketingClawChatMessageContent(
                 type: "text",
                 text: messageText,
                 thinking: nil,
@@ -1418,7 +1418,7 @@ public final class OpenClawChatViewModel {
                 arguments: nil),
         ]
         let encodedAttachments = draftAttachments.map { attachment in
-            OpenClawChatAttachmentPayload(
+            MarketingClawChatAttachmentPayload(
                 type: attachment.type,
                 mimeType: attachment.mimeType,
                 fileName: attachment.fileName,
@@ -1426,7 +1426,7 @@ public final class OpenClawChatViewModel {
         }
         for (attachment, payload) in zip(draftAttachments, encodedAttachments) {
             userContent.append(
-                OpenClawChatMessageContent(
+                MarketingClawChatMessageContent(
                     type: payload.type,
                     text: nil,
                     thinking: nil,
@@ -1442,7 +1442,7 @@ public final class OpenClawChatViewModel {
         let userMessageTimestamp = Date().timeIntervalSince1970 * 1000
         let userMessageID = UUID()
         self.appendMessage(
-            OpenClawChatMessage(
+            MarketingClawChatMessage(
                 id: userMessageID,
                 role: "user",
                 content: userContent,
@@ -1542,7 +1542,7 @@ public final class OpenClawChatViewModel {
             if encodedAttachments.isEmpty, !(error is GatewayResponseError) {
                 self.runMessageScopesByRunID.removeValue(forKey: runId)
                 self.clearPendingRun(runId)
-                let deliveryIsAmbiguous = !(error is OpenClawChatTransportSendError)
+                let deliveryIsAmbiguous = !(error is MarketingClawChatTransportSendError)
                 let preserved = await preserveFailedLiveSend(
                     runId: runId,
                     text: messageText,
@@ -1610,7 +1610,7 @@ public final class OpenClawChatViewModel {
             if let sessionSnapshot, !self.isCurrentSession(sessionSnapshot) {
                 return
             }
-            let organized = OpenClawChatSessionListOrganizer.organize(res.sessions)
+            let organized = MarketingClawChatSessionListOrganizer.organize(res.sessions)
             self.sessions = organized
             self.sessionDefaults = res.defaults
             self.hasAppliedLiveSessions = true
@@ -1738,7 +1738,7 @@ public final class OpenClawChatViewModel {
 
     private static func isUnsupportedCreateSessionError(_ error: Error) -> Bool {
         let nsError = error as NSError
-        return nsError.domain == "OpenClawChatTransport"
+        return nsError.domain == "MarketingClawChatTransport"
             && nsError.localizedDescription == "sessions.create not supported by this transport"
     }
 
@@ -1905,8 +1905,8 @@ public final class OpenClawChatViewModel {
         }
     }
 
-    func placeholderSession(key: String) -> OpenClawChatSessionEntry {
-        OpenClawChatSessionEntry(
+    func placeholderSession(key: String) -> MarketingClawChatSessionEntry {
+        MarketingClawChatSessionEntry(
             key: key,
             kind: nil,
             displayName: nil,
@@ -2085,7 +2085,7 @@ public final class OpenClawChatViewModel {
         }
     }
 
-    private func handleTransportEvent(_ evt: OpenClawChatTransportEvent) {
+    private func handleTransportEvent(_ evt: MarketingClawChatTransportEvent) {
         switch evt {
         case let .health(ok):
             applyTransportHealth(ok)
@@ -2113,7 +2113,7 @@ public final class OpenClawChatViewModel {
         }
     }
 
-    private func handleSessionMessageEvent(_ payload: OpenClawSessionMessageEventPayload) {
+    private func handleSessionMessageEvent(_ payload: MarketingClawSessionMessageEventPayload) {
         guard let message = payload.message else { return }
         let sanitized = Self.stripInboundMetadata(from: message)
         let isCurrentSession = payload.sessionKey.map {
@@ -2151,7 +2151,7 @@ public final class OpenClawChatViewModel {
         self.applyDeferredExternalStateIfReady()
     }
 
-    private func handleChatEvent(_ chat: OpenClawChatEventPayload) {
+    private func handleChatEvent(_ chat: MarketingClawChatEventPayload) {
         let isOurRun = chat.runId.flatMap { self.pendingRuns.contains($0) } ?? false
         if let runId = chat.runId {
             self.logDiagnostic(
@@ -2181,7 +2181,7 @@ public final class OpenClawChatViewModel {
             self.invalidateRunSnapshots()
             self.adoptRun(
                 runId: runId,
-                bufferedText: OpenClawChatEventText.assistantText(from: chat) ?? "")
+                bufferedText: MarketingClawChatEventText.assistantText(from: chat) ?? "")
             return
         }
         if chat.state == "final" || chat.state == "aborted" || chat.state == "error" {
@@ -2209,7 +2209,7 @@ public final class OpenClawChatViewModel {
             if chat.state == "error" {
                 self.errorText = chat.errorMessage ?? "Chat failed"
             }
-            let hapticEvent: OpenClawChatHaptics.Event? = switch chat.state {
+            let hapticEvent: MarketingClawChatHaptics.Event? = switch chat.state {
             case "final": .runCompleted
             case "error": .runFailed
             default: nil
@@ -2230,22 +2230,22 @@ public final class OpenClawChatViewModel {
         }
     }
 
-    private func appendFinalChatMessageIfPresent(_ chat: OpenClawChatEventPayload) {
+    private func appendFinalChatMessageIfPresent(_ chat: MarketingClawChatEventPayload) {
         guard chat.state == "final" else { return }
-        guard let text = OpenClawChatEventText.assistantText(from: chat) else { return }
+        guard let text = MarketingClawChatEventText.assistantText(from: chat) else { return }
 
         let decoded = chat.message.flatMap {
-            try? ChatPayloadDecoding.decode($0, as: OpenClawChatMessage.self)
+            try? ChatPayloadDecoding.decode($0, as: MarketingClawChatMessage.self)
         }
         let message = if let decoded,
                          Self.isAssistantMessage(decoded)
         {
             Self.messageWithTimestampIfNeeded(decoded)
         } else {
-            OpenClawChatMessage(
+            MarketingClawChatMessage(
                 role: "assistant",
                 content: [
-                    OpenClawChatMessageContent(
+                    MarketingClawChatMessageContent(
                         type: "text",
                         text: text,
                         thinking: nil,
@@ -2288,13 +2288,13 @@ public final class OpenClawChatViewModel {
         pruneRunMessageScopes()
     }
 
-    static func isAssistantMessage(_ message: OpenClawChatMessage) -> Bool {
+    static func isAssistantMessage(_ message: MarketingClawChatMessage) -> Bool {
         message.role.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() == "assistant"
     }
 
-    private static func messageWithTimestampIfNeeded(_ message: OpenClawChatMessage) -> OpenClawChatMessage {
+    private static func messageWithTimestampIfNeeded(_ message: MarketingClawChatMessage) -> MarketingClawChatMessage {
         guard message.timestamp == nil else { return message }
-        return OpenClawChatMessage(
+        return MarketingClawChatMessage(
             id: message.id,
             role: message.role,
             content: message.content,
@@ -2307,7 +2307,7 @@ public final class OpenClawChatViewModel {
             errorMessage: message.errorMessage)
     }
 
-    private func handleAgentEvent(_ evt: OpenClawAgentEventPayload) {
+    private func handleAgentEvent(_ evt: MarketingClawAgentEventPayload) {
         let isPendingRun = self.pendingRuns.contains(evt.runId)
         let isLegacySessionStream = self.pendingRuns.isEmpty && self.sessionId == evt.runId
         if !isPendingRun, !isLegacySessionStream {
@@ -2333,7 +2333,7 @@ public final class OpenClawChatViewModel {
             if phase == "start" {
                 self.updateActiveSessionRunWithoutChatSnapshot(false)
                 let args = evt.data["args"]
-                self.pendingToolCallsById[toolCallId] = OpenClawChatPendingToolCall(
+                self.pendingToolCallsById[toolCallId] = MarketingClawChatPendingToolCall(
                     toolCallId: toolCallId,
                     name: name,
                     args: args,
@@ -2347,7 +2347,7 @@ public final class OpenClawChatViewModel {
         }
     }
 
-    private func handleAgentLifecycleEvent(_ evt: OpenClawAgentEventPayload, isPendingRun: Bool) {
+    private func handleAgentLifecycleEvent(_ evt: MarketingClawAgentEventPayload, isPendingRun: Bool) {
         let phase = Self.lowercasedAgentEventString(evt.data["phase"])
         let status = Self.lowercasedAgentEventString(evt.data["status"])
         let aborted = Self.agentEventBool(evt.data["aborted"])
@@ -2393,7 +2393,7 @@ public final class OpenClawChatViewModel {
         return stringValue == "true" || stringValue == "yes" || stringValue == "1"
     }
 
-    private static func agentLifecycleErrorMessage(_ evt: OpenClawAgentEventPayload, aborted: Bool) -> String {
+    private static func agentLifecycleErrorMessage(_ evt: MarketingClawAgentEventPayload, aborted: Bool) -> String {
         if aborted {
             return "Run aborted"
         }
@@ -2410,7 +2410,7 @@ public final class OpenClawChatViewModel {
         return "Chat failed"
     }
 
-    private func finishPendingRunAfterTerminalOkSendAck(_ response: OpenClawChatSendResponse) {
+    private func finishPendingRunAfterTerminalOkSendAck(_ response: MarketingClawChatSendResponse) {
         self.clearPendingRun(response.runId, hapticEvent: .runCompleted)
         self.pendingToolCallsById = [:]
         self.updateStreamingAssistantText(nil)
@@ -2419,7 +2419,7 @@ public final class OpenClawChatViewModel {
                 + "runId=\(response.runId) status=ok")
     }
 
-    private func finishPendingRunIfTerminalSendAck(_ response: OpenClawChatSendResponse) -> Bool {
+    private func finishPendingRunIfTerminalSendAck(_ response: MarketingClawChatSendResponse) -> Bool {
         switch response.status {
         case "timeout":
             self.removePendingLocalUserEcho(for: response.runId)
@@ -2539,11 +2539,11 @@ public final class OpenClawChatViewModel {
         return true
     }
 
-    private static func hasUnansweredLatestUser(in messages: [OpenClawChatMessage]) -> Bool {
+    private static func hasUnansweredLatestUser(in messages: [MarketingClawChatMessage]) -> Bool {
         self.latestUserTurn(in: messages) != nil && !self.hasAssistantMessageAfterLatestUser(in: messages)
     }
 
-    static func latestUserTurn(in messages: [OpenClawChatMessage]) -> LatestUserTurn? {
+    static func latestUserTurn(in messages: [MarketingClawChatMessage]) -> LatestUserTurn? {
         guard let lastUserIndex = messages.lastIndex(where: { $0.role.lowercased() == "user" }) else {
             return nil
         }
@@ -2551,8 +2551,8 @@ public final class OpenClawChatViewModel {
     }
 
     static func userTurn(
-        at userIndex: [OpenClawChatMessage].Index,
-        in messages: [OpenClawChatMessage]) -> LatestUserTurn?
+        at userIndex: [MarketingClawChatMessage].Index,
+        in messages: [MarketingClawChatMessage]) -> LatestUserTurn?
     {
         guard messages.indices.contains(userIndex),
               messages[userIndex].role.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() == "user"
@@ -2579,7 +2579,7 @@ public final class OpenClawChatViewModel {
 
     private static func hasAnsweredUser(
         _ user: LatestUserTurn,
-        in messages: [OpenClawChatMessage])
+        in messages: [MarketingClawChatMessage])
         -> Bool
     {
         // Hooks may transform persisted user content while preserving this key.
@@ -2595,7 +2595,7 @@ public final class OpenClawChatViewModel {
         }
         guard let refreshKey = user.refreshKey else { return false }
         var occurrence = 0
-        var latestMatchingUserIndex: [OpenClawChatMessage].Index?
+        var latestMatchingUserIndex: [MarketingClawChatMessage].Index?
         for (index, message) in messages.enumerated() {
             guard userRefreshIdentityKey(for: message) == refreshKey else { continue }
             occurrence += 1
@@ -2618,8 +2618,8 @@ public final class OpenClawChatViewModel {
     }
 
     private static func hasAssistantMessage(
-        after userIndex: [OpenClawChatMessage].Index,
-        in messages: [OpenClawChatMessage]) -> Bool
+        after userIndex: [MarketingClawChatMessage].Index,
+        in messages: [MarketingClawChatMessage]) -> Bool
     {
         let nextIndex = messages.index(after: userIndex)
         guard nextIndex < messages.endIndex else { return false }
@@ -2631,7 +2631,7 @@ public final class OpenClawChatViewModel {
         }
     }
 
-    private static func hasAssistantMessageAfterLatestUser(in messages: [OpenClawChatMessage]) -> Bool {
+    private static func hasAssistantMessageAfterLatestUser(in messages: [MarketingClawChatMessage]) -> Bool {
         guard let lastUserIndex = messages.lastIndex(where: { $0.role.lowercased() == "user" }) else {
             return false
         }
@@ -2647,7 +2647,7 @@ public final class OpenClawChatViewModel {
     }
 
     private static func assistantHapticEvent(
-        for message: OpenClawChatMessage) -> OpenClawChatHaptics.Event?
+        for message: MarketingClawChatMessage) -> MarketingClawChatHaptics.Event?
     {
         guard message.role.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() == "assistant" else {
             return nil
@@ -2659,14 +2659,14 @@ public final class OpenClawChatViewModel {
         return stopReason == "error" || stopReason == "aborted" ? .runFailed : .runCompleted
     }
 
-    private func assistantHapticEventAfterLatestUser() -> OpenClawChatHaptics.Event? {
+    private func assistantHapticEventAfterLatestUser() -> MarketingClawChatHaptics.Event? {
         guard let userIndex = messages.lastIndex(where: { $0.role.lowercased() == "user" }) else { return nil }
         let nextIndex = self.messages.index(after: userIndex)
         guard nextIndex < self.messages.endIndex else { return nil }
         return self.messages[nextIndex...].reversed().lazy.compactMap(Self.assistantHapticEvent).first
     }
 
-    private func assistantHapticEvent(after timestamp: Double) -> OpenClawChatHaptics.Event? {
+    private func assistantHapticEvent(after timestamp: Double) -> MarketingClawChatHaptics.Event? {
         self.messages.reversed().lazy.compactMap { message in
             guard (message.timestamp ?? 0) >= timestamp else { return nil }
             return Self.assistantHapticEvent(for: message)
@@ -2678,7 +2678,7 @@ public final class OpenClawChatViewModel {
     /// visible session also runs the normal reconciliation/cache pipeline.
     func refreshHistoriesAfterOutboxFlush(
         targets: Set<OutboxDeliveryTarget>,
-        routeLease: OpenClawChatTransportRouteLease) async
+        routeLease: MarketingClawChatTransportRouteLease) async
     {
         let sortedTargets = targets.sorted { lhs, rhs in
             if lhs.deliverySessionKey != rhs.deliverySessionKey {
@@ -2784,7 +2784,7 @@ public final class OpenClawChatViewModel {
 
     private func clearPendingRun(
         _ runId: String,
-        hapticEvent: OpenClawChatHaptics.Event? = nil)
+        hapticEvent: MarketingClawChatHaptics.Event? = nil)
     {
         let wasPending = self.pendingRuns.contains(runId)
         self.pendingRuns.remove(runId)
@@ -2804,7 +2804,7 @@ public final class OpenClawChatViewModel {
 
     private func clearPendingRuns(
         reason: String?,
-        hapticEvent: OpenClawChatHaptics.Event? = nil)
+        hapticEvent: MarketingClawChatHaptics.Event? = nil)
     {
         let runIds = Array(pendingRuns)
         for runId in self.pendingRuns {

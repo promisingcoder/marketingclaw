@@ -9,7 +9,7 @@ read_when:
 title: "Firecrawl"
 ---
 
-OpenClaw can use **Firecrawl** in three ways:
+MarketingClaw can use **Firecrawl** in three ways:
 
 - as the `web_search` provider
 - as explicit plugin tools: `firecrawl_search` and `firecrawl_scrape`
@@ -22,8 +22,8 @@ It is a hosted extraction/search service that supports bot circumvention and cac
 Install the official plugin, then restart Gateway:
 
 ```bash
-openclaw plugins install @openclaw/firecrawl-plugin
-openclaw gateway restart
+marketingclaw plugins install @marketingclaw/firecrawl-plugin
+marketingclaw gateway restart
 ```
 
 ## Keyless web_fetch and API keys
@@ -59,7 +59,7 @@ The explicitly selected hosted Firecrawl `web_fetch` fallback supports starter a
 
 Notes:
 
-- Choosing Firecrawl in onboarding or `openclaw configure --section web` enables the installed Firecrawl plugin automatically.
+- Choosing Firecrawl in onboarding or `marketingclaw configure --section web` enables the installed Firecrawl plugin automatically.
 - `web_search` with Firecrawl supports `query` and `count`.
 - For Firecrawl-specific controls like `sources`, `categories`, or result scraping, use `firecrawl_search`.
 - `baseUrl` defaults to hosted Firecrawl at `https://api.firecrawl.dev`. Self-hosted overrides are allowed only for private/internal endpoints; HTTP is accepted only for those private targets.
@@ -97,12 +97,12 @@ Notes:
 
 Notes:
 
-- The explicitly selected Firecrawl `web_fetch` fallback works without an API key. When configured, OpenClaw sends `plugins.entries.firecrawl.config.webFetch.apiKey` or `FIRECRAWL_API_KEY` for higher limits.
-- Choosing Firecrawl during onboarding or `openclaw configure --section web` enables the plugin and selects Firecrawl for `web_fetch` unless another fetch provider is already configured.
+- The explicitly selected Firecrawl `web_fetch` fallback works without an API key. When configured, MarketingClaw sends `plugins.entries.firecrawl.config.webFetch.apiKey` or `FIRECRAWL_API_KEY` for higher limits.
+- Choosing Firecrawl during onboarding or `marketingclaw configure --section web` enables the plugin and selects Firecrawl for `web_fetch` unless another fetch provider is already configured.
 - `firecrawl_scrape` requires an API key.
 - `maxAgeMs` controls how old cached results can be (ms). Default is 172,800,000 ms (2 days).
 - `onlyMainContent` defaults to `true`; `timeoutSeconds` defaults to 60.
-- Legacy `tools.web.fetch.firecrawl.*` and `tools.web.search.firecrawl.*` config is auto-migrated by `openclaw doctor --fix`.
+- Legacy `tools.web.fetch.firecrawl.*` and `tools.web.search.firecrawl.*` config is auto-migrated by `marketingclaw doctor --fix`.
 - Firecrawl scrape/base URL overrides follow the same hosted/private rule as search: public hosted traffic uses `https://api.firecrawl.dev`; self-hosted overrides must resolve to private/internal endpoints.
 - `firecrawl_scrape` rejects obvious private, loopback, metadata, and non-HTTP(S) target URLs before forwarding them to Firecrawl, matching the `web_fetch` target-safety contract for explicit Firecrawl scrape calls.
 
@@ -110,7 +110,7 @@ Notes:
 
 ### Self-hosted Firecrawl
 
-Set `plugins.entries.firecrawl.config.webSearch.baseUrl`, `plugins.entries.firecrawl.config.webFetch.baseUrl`, or `FIRECRAWL_BASE_URL` when you run Firecrawl yourself. OpenClaw accepts `http://` only for loopback, private-network, `.local`, `.internal`, or `.localhost` targets. Public custom hosts are rejected so Firecrawl API keys are not sent to arbitrary endpoints by accident.
+Set `plugins.entries.firecrawl.config.webSearch.baseUrl`, `plugins.entries.firecrawl.config.webFetch.baseUrl`, or `FIRECRAWL_BASE_URL` when you run Firecrawl yourself. MarketingClaw accepts `http://` only for loopback, private-network, `.local`, `.internal`, or `.localhost` targets. Public custom hosts are rejected so Firecrawl API keys are not sent to arbitrary endpoints by accident.
 
 ## Firecrawl plugin tools
 
@@ -156,7 +156,7 @@ Firecrawl's `proxy` mode controls bot circumvention (`basic`, `stealth`, or `aut
 2. Configured fetch provider, such as Firecrawl (when selected, or auto-detected from configured credentials)
 3. Basic HTML cleanup (last fallback)
 
-The selection knob is `tools.web.fetch.provider`. If you omit it, OpenClaw auto-detects the first ready web-fetch provider from available credentials. The official Firecrawl plugin provides that fallback.
+The selection knob is `tools.web.fetch.provider`. If you omit it, MarketingClaw auto-detects the first ready web-fetch provider from available credentials. The official Firecrawl plugin provides that fallback.
 
 ## Related
 

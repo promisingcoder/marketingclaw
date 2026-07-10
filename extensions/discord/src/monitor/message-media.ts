@@ -1,15 +1,15 @@
 // Discord plugin module implements message media behavior.
 import { StickerFormatType, type APIAttachment, type APIStickerItem } from "discord-api-types/v10";
-import { getFileExtension } from "openclaw/plugin-sdk/media-mime";
-import { saveRemoteMedia, type FetchLike } from "openclaw/plugin-sdk/media-runtime";
-import { buildMediaPayload } from "openclaw/plugin-sdk/reply-payload";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import type { SsrFPolicy } from "openclaw/plugin-sdk/ssrf-runtime";
+import { getFileExtension } from "marketingclaw/plugin-sdk/media-mime";
+import { saveRemoteMedia, type FetchLike } from "marketingclaw/plugin-sdk/media-runtime";
+import { buildMediaPayload } from "marketingclaw/plugin-sdk/reply-payload";
+import { logVerbose } from "marketingclaw/plugin-sdk/runtime-env";
+import type { SsrFPolicy } from "marketingclaw/plugin-sdk/ssrf-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
   uniqueStrings,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import type { Message } from "../internal/discord.js";
 import {
   resolveDiscordMessageSnapshots,

@@ -1,7 +1,7 @@
 import CoreLocation
 import Testing
-@testable import OpenClaw
-@testable import OpenClawKit
+@testable import MarketingClaw
+@testable import MarketingClawKit
 
 @Suite(.serialized) struct LocationPermissionSummaryTests {
     @Test func `always desired when in use authorized needs attention`() {
@@ -162,7 +162,7 @@ import Testing
                 UserDefaults.standard.removeObject(forKey: defaultsKey)
             }
         }
-        UserDefaults.standard.set(OpenClawLocationMode.always.rawValue, forKey: defaultsKey)
+        UserDefaults.standard.set(MarketingClawLocationMode.always.rawValue, forKey: defaultsKey)
         let locationService = MockLocationService(authorizationStatus: .authorizedAlways)
         let appModel = NodeAppModel(locationService: locationService)
 
@@ -198,14 +198,14 @@ private final class MockLocationService: LocationServicing, @unchecked Sendable 
         .fullAccuracy
     }
 
-    func ensureAuthorization(mode: OpenClawLocationMode) async -> CLAuthorizationStatus {
+    func ensureAuthorization(mode: MarketingClawLocationMode) async -> CLAuthorizationStatus {
         _ = mode
         return self.status
     }
 
     func currentLocation(
-        params: OpenClawLocationGetParams,
-        desiredAccuracy: OpenClawLocationAccuracy,
+        params: MarketingClawLocationGetParams,
+        desiredAccuracy: MarketingClawLocationAccuracy,
         maxAgeMs: Int?,
         timeoutMs: Int?) async throws -> CLLocation
     {

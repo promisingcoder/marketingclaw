@@ -6,10 +6,10 @@
 import {
   findNormalizedProviderValue,
   normalizeProviderId,
-} from "@openclaw/model-catalog-core/provider-id";
-import { asDateTimestampMs } from "@openclaw/normalization-core/number-coercion";
-import { normalizeUniqueStringEntries } from "@openclaw/normalization-core/string-normalization";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+} from "@marketingclaw/model-catalog-core/provider-id";
+import { asDateTimestampMs } from "@marketingclaw/normalization-core/number-coercion";
+import { normalizeUniqueStringEntries } from "@marketingclaw/normalization-core/string-normalization";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import {
   DEFAULT_OAUTH_REFRESH_MARGIN_MS,
   type AuthCredentialReasonCode,
@@ -121,7 +121,7 @@ function buildProfileHealth(params: {
   credential: AuthProfileCredential;
   runtimeCredential?: AuthProfileCredential;
   store: AuthProfileStore;
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
   now: number;
   warnAfterMs: number;
   allowKeychainPrompt?: boolean;
@@ -274,7 +274,7 @@ function buildProfileHealth(params: {
 /** Build profile and provider auth health rollups from an auth profile store. */
 export function buildAuthHealthSummary(params: {
   store: AuthProfileStore;
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
   warnAfterMs?: number;
   providers?: string[];
   runtimeCredentialsByProvider?: ReadonlyMap<string, AuthProfileCredential>;

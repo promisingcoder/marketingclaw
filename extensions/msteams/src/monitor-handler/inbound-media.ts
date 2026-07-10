@@ -1,5 +1,5 @@
 // Msteams plugin module implements inbound media behavior.
-import { formatInboundMediaUnavailableText } from "openclaw/plugin-sdk/channel-inbound";
+import { formatInboundMediaUnavailableText } from "marketingclaw/plugin-sdk/channel-inbound";
 import {
   buildMSTeamsGraphMessageUrls,
   downloadMSTeamsAttachments,

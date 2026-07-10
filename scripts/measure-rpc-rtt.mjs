@@ -31,7 +31,7 @@ function usage() {
   return [
     "Usage: node --import tsx scripts/measure-rpc-rtt.mjs",
     "  --output-dir <dir>",
-    "  [--repo-root <openclaw-repo>]",
+    "  [--repo-root <marketingclaw-repo>]",
     "  [--iterations <count>]",
     "  [--methods <comma-separated-methods>]",
     "  [--help, -h]",
@@ -285,12 +285,12 @@ async function defaultOpen(filePath, flags) {
   return await fs.open(filePath, flags);
 }
 
-function resolveOpenClawLaunchArgs(repoRoot, sourceEntryExists = existsSync) {
+function resolveMarketingClawLaunchArgs(repoRoot, sourceEntryExists = existsSync) {
   const sourceEntry = path.join(repoRoot, "src", "entry.ts");
   if (sourceEntryExists(sourceEntry)) {
     return ["--import", "tsx", sourceEntry];
   }
-  return [path.join(repoRoot, "openclaw.mjs")];
+  return [path.join(repoRoot, "marketingclaw.mjs")];
 }
 
 /**
@@ -518,7 +518,7 @@ export async function startGateway({
   }
 
   let child;
-  const launcherArgs = resolveOpenClawLaunchArgs(repoRoot, sourceEntryExists);
+  const launcherArgs = resolveMarketingClawLaunchArgs(repoRoot, sourceEntryExists);
   try {
     child = spawnImpl(
       process.execPath,
@@ -541,14 +541,14 @@ export async function startGateway({
           XDG_CONFIG_HOME: path.join(tempRoot, "xdg-config"),
           XDG_DATA_HOME: path.join(tempRoot, "xdg-data"),
           XDG_CACHE_HOME: path.join(tempRoot, "xdg-cache"),
-          OPENCLAW_CONFIG_PATH: configPath,
-          OPENCLAW_STATE_DIR: path.join(tempRoot, "state"),
-          OPENCLAW_GATEWAY_TOKEN: token,
-          OPENCLAW_SKIP_BROWSER_CONTROL_SERVER: "1",
-          OPENCLAW_SKIP_GMAIL_WATCHER: "1",
-          OPENCLAW_SKIP_CANVAS_HOST: "1",
-          OPENCLAW_NO_RESPAWN: "1",
-          OPENCLAW_TEST_FAST: "1",
+          MARKETINGCLAW_CONFIG_PATH: configPath,
+          MARKETINGCLAW_STATE_DIR: path.join(tempRoot, "state"),
+          MARKETINGCLAW_GATEWAY_TOKEN: token,
+          MARKETINGCLAW_SKIP_BROWSER_CONTROL_SERVER: "1",
+          MARKETINGCLAW_SKIP_GMAIL_WATCHER: "1",
+          MARKETINGCLAW_SKIP_CANVAS_HOST: "1",
+          MARKETINGCLAW_NO_RESPAWN: "1",
+          MARKETINGCLAW_TEST_FAST: "1",
         },
         stdio: ["ignore", stdout.fd, stderr.fd],
       },
@@ -882,14 +882,16 @@ async function main() {
     process.stdout.write(`${usage()}\n`);
     return;
   }
-  const repoRoot = path.resolve(args.repoRoot ?? process.env.OPENCLAW_REPO_ROOT ?? process.cwd());
+  const repoRoot = path.resolve(
+    args.repoRoot ?? process.env.MARKETINGCLAW_REPO_ROOT ?? process.cwd(),
+  );
   const outputDir = path.resolve(args.outputDir);
   await fs.mkdir(outputDir, { recursive: true });
   const tempRoot = await fs.mkdtemp(path.join(outputDir, "..", ".rpc-rtt-"));
   const startedAt = new Date();
   const token = `rpc-rtt-${randomUUID()}`;
   const port = await getFreePort();
-  const configPath = path.join(tempRoot, "openclaw.json");
+  const configPath = path.join(tempRoot, "marketingclaw.json");
   const stdoutPath = path.join(tempRoot, "gateway.stdout.log");
   const stderrPath = path.join(tempRoot, "gateway.stderr.log");
   let gatewayChild;
@@ -930,8 +932,8 @@ async function main() {
     removeGatewayParentCleanup = installGatewayParentCleanup(gatewayChild);
     await waitForGatewayReady({ child: gatewayChild, port, stderrPath });
 
-    const requireFromOpenClaw = createRequire(path.join(repoRoot, "package.json"));
-    const WebSocket = requireFromOpenClaw("ws");
+    const requireFromMarketingClaw = createRequire(path.join(repoRoot, "package.json"));
+    const WebSocket = requireFromMarketingClaw("ws");
     const protocol = await import(
       pathToFileURL(path.join(repoRoot, "packages/gateway-protocol/src/version.ts")).href
     );
@@ -945,14 +947,14 @@ async function main() {
         maxProtocol: protocol.PROTOCOL_VERSION,
         client: {
           id: "gateway-client",
-          displayName: "openclaw-rtt rpc probe",
+          displayName: "marketingclaw-rtt rpc probe",
           version: "rtt",
           platform: process.platform,
           mode: "backend",
-          instanceId: `openclaw-rtt-rpc-${randomUUID()}`,
+          instanceId: `marketingclaw-rtt-rpc-${randomUUID()}`,
         },
         locale: "en-US",
-        userAgent: "openclaw-rtt-rpc",
+        userAgent: "marketingclaw-rtt-rpc",
         role: "operator",
         scopes: ["operator.admin"],
         caps: [],

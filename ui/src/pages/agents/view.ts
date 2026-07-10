@@ -148,7 +148,7 @@ export function renderAgents(props: AgentsProps) {
       <section class="agents-toolbar">
         <div class="agents-toolbar-row">
           <div class="agents-control-select">
-            <openclaw-agent-select
+            <marketingclaw-agent-select
               .agents=${agents}
               .selectedId=${selectedId}
               .defaultId=${defaultId}
@@ -156,7 +156,7 @@ export function renderAgents(props: AgentsProps) {
               .authToken=${props.authToken}
               .disabled=${props.loading}
               .onSelect=${props.onSelectAgent}
-            ></openclaw-agent-select>
+            ></marketingclaw-agent-select>
           </div>
           <div class="agents-toolbar-actions">
             ${selectedAgent

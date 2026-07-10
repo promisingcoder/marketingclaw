@@ -26,7 +26,7 @@ const mocks = vi.hoisted(() => {
         committedConfigs.push(transformed.nextConfig);
         return {
           nextConfig: transformed.nextConfig,
-          path: "/tmp/openclaw.json",
+          path: "/tmp/marketingclaw.json",
           previousHash: "current",
           persistedHash: "after",
         };
@@ -35,7 +35,7 @@ const mocks = vi.hoisted(() => {
     readSnapshot: vi.fn().mockResolvedValueOnce({
       exists: true,
       valid: true,
-      path: "/tmp/openclaw.json",
+      path: "/tmp/marketingclaw.json",
       hash: "before",
       config: { agents: { defaults: { workspace: "/configured/work" } } },
       sourceConfig: { agents: { defaults: { workspace: "/configured/work" } } },

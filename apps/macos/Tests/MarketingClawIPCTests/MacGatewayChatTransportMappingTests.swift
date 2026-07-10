@@ -1,7 +1,7 @@
-import OpenClawChatUI
-import OpenClawProtocol
+import MarketingClawChatUI
+import MarketingClawProtocol
 import Testing
-@testable import OpenClaw
+@testable import MarketingClaw
 
 struct MacGatewayChatTransportMappingTests {
     @Test func `bare global session target carries normalized selected agent`() {
@@ -35,7 +35,7 @@ struct MacGatewayChatTransportMappingTests {
     @Test func `snapshot maps to health`() {
         let snapshot = Snapshot(
             presence: [],
-            health: OpenClawProtocol.AnyCodable(["ok": OpenClawProtocol.AnyCodable(false)]),
+            health: MarketingClawProtocol.AnyCodable(["ok": MarketingClawProtocol.AnyCodable(false)]),
             stateversion: StateVersion(presence: 1, health: 1),
             uptimems: 123,
             configpath: nil,
@@ -68,7 +68,7 @@ struct MacGatewayChatTransportMappingTests {
         let frame = EventFrame(
             type: "event",
             event: "health",
-            payload: OpenClawProtocol.AnyCodable(["ok": OpenClawProtocol.AnyCodable(true)]),
+            payload: MarketingClawProtocol.AnyCodable(["ok": MarketingClawProtocol.AnyCodable(true)]),
             seq: 1,
             stateversion: nil)
 
@@ -91,10 +91,10 @@ struct MacGatewayChatTransportMappingTests {
     }
 
     @Test func `chat event maps to chat`() {
-        let payload = OpenClawProtocol.AnyCodable([
-            "runId": OpenClawProtocol.AnyCodable("run-1"),
-            "sessionKey": OpenClawProtocol.AnyCodable("main"),
-            "state": OpenClawProtocol.AnyCodable("final"),
+        let payload = MarketingClawProtocol.AnyCodable([
+            "runId": MarketingClawProtocol.AnyCodable("run-1"),
+            "sessionKey": MarketingClawProtocol.AnyCodable("main"),
+            "state": MarketingClawProtocol.AnyCodable("final"),
         ])
         let frame = EventFrame(type: "event", event: "chat", payload: payload, seq: 1, stateversion: nil)
         let mapped = MacGatewayChatTransport.mapPushToTransportEvent(.event(frame))
@@ -110,19 +110,19 @@ struct MacGatewayChatTransportMappingTests {
     }
 
     @Test func `session message event maps to session message`() {
-        let payload = OpenClawProtocol.AnyCodable([
-            "sessionKey": OpenClawProtocol.AnyCodable("agent:main:main"),
-            "messageId": OpenClawProtocol.AnyCodable("msg-1"),
-            "messageSeq": OpenClawProtocol.AnyCodable(7),
-            "message": OpenClawProtocol.AnyCodable([
-                "role": OpenClawProtocol.AnyCodable("user"),
-                "content": OpenClawProtocol.AnyCodable([
-                    OpenClawProtocol.AnyCodable([
-                        "type": OpenClawProtocol.AnyCodable("text"),
-                        "text": OpenClawProtocol.AnyCodable("spoken transcript"),
+        let payload = MarketingClawProtocol.AnyCodable([
+            "sessionKey": MarketingClawProtocol.AnyCodable("agent:main:main"),
+            "messageId": MarketingClawProtocol.AnyCodable("msg-1"),
+            "messageSeq": MarketingClawProtocol.AnyCodable(7),
+            "message": MarketingClawProtocol.AnyCodable([
+                "role": MarketingClawProtocol.AnyCodable("user"),
+                "content": MarketingClawProtocol.AnyCodable([
+                    MarketingClawProtocol.AnyCodable([
+                        "type": MarketingClawProtocol.AnyCodable("text"),
+                        "text": MarketingClawProtocol.AnyCodable("spoken transcript"),
                     ]),
                 ]),
-                "timestamp": OpenClawProtocol.AnyCodable(1234.5),
+                "timestamp": MarketingClawProtocol.AnyCodable(1234.5),
             ]),
         ])
         let frame = EventFrame(type: "event", event: "session.message", payload: payload, seq: 1, stateversion: nil)
@@ -144,7 +144,7 @@ struct MacGatewayChatTransportMappingTests {
         let frame = EventFrame(
             type: "event",
             event: "unknown",
-            payload: OpenClawProtocol.AnyCodable(["a": OpenClawProtocol.AnyCodable(1)]),
+            payload: MarketingClawProtocol.AnyCodable(["a": MarketingClawProtocol.AnyCodable(1)]),
             seq: 1,
             stateversion: nil)
         let mapped = MacGatewayChatTransport.mapPushToTransportEvent(.event(frame))

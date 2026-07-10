@@ -1,12 +1,12 @@
 import AppKit
 import Observation
-import OpenClawChatUI
-import OpenClawDiscovery
-import OpenClawIPC
+import MarketingClawChatUI
+import MarketingClawDiscovery
+import MarketingClawIPC
 import SwiftUI
 
 enum UIStrings {
-    static let welcomeTitle = "Welcome to OpenClaw"
+    static let welcomeTitle = "Welcome to MarketingClaw"
 }
 
 enum RemoteOnboardingProbeState: Equatable {
@@ -126,7 +126,7 @@ struct OnboardingView: View {
     @State var remoteAuthIssue: RemoteGatewayAuthIssue?
     @State var suppressRemoteProbeReset = false
     @State var gatewayDiscovery: GatewayDiscoveryModel
-    @State var onboardingChatModel: OpenClawChatViewModel
+    @State var onboardingChatModel: MarketingClawChatViewModel
     @State var onboardingSkillsModel = SkillsSettingsModel()
     @State var crestodianChat = CrestodianOnboardingChatModel()
     @State var aiSetup = OnboardingAISetupModel()
@@ -257,7 +257,7 @@ struct OnboardingView: View {
             initialValue: !state.onboardingSeen && state.connectionMode == .unconfigured)
         self._gatewayDiscovery = State(initialValue: discoveryModel)
         self._onboardingChatModel = State(
-            initialValue: OpenClawChatViewModel(
+            initialValue: MarketingClawChatViewModel(
                 sessionKey: "onboarding",
                 transport: MacGatewayChatTransport()))
     }

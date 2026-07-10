@@ -1,16 +1,16 @@
 // Qqbot tests cover active cfg plugin behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
 import { describe, expect, it, vi } from "vitest";
 import { createActiveCfgProvider, resolveActiveCfg, type GatewayCfgLoader } from "./active-cfg.js";
 
-const getRuntimeConfigMock = vi.hoisted(() => vi.fn<() => OpenClawConfig>());
+const getRuntimeConfigMock = vi.hoisted(() => vi.fn<() => MarketingClawConfig>());
 
-vi.mock("openclaw/plugin-sdk/runtime-config-snapshot", () => ({
+vi.mock("marketingclaw/plugin-sdk/runtime-config-snapshot", () => ({
   getRuntimeConfig: getRuntimeConfigMock,
 }));
 
-function asCfg(shape: { bindings: Array<{ id: string }> }): OpenClawConfig {
-  return shape as unknown as OpenClawConfig;
+function asCfg(shape: { bindings: Array<{ id: string }> }): MarketingClawConfig {
+  return shape as unknown as MarketingClawConfig;
 }
 
 describe("resolveActiveCfg", () => {
@@ -38,7 +38,7 @@ describe("createActiveCfgProvider", () => {
     const first = asCfg({ bindings: [{ id: "first" }] });
     const second = asCfg({ bindings: [{ id: "second" }] });
     const load = vi
-      .fn<() => OpenClawConfig>()
+      .fn<() => MarketingClawConfig>()
       .mockReturnValueOnce(first)
       .mockReturnValueOnce(second);
 
@@ -51,7 +51,7 @@ describe("createActiveCfgProvider", () => {
 
   it("never caches a previously loaded value", () => {
     const fallback = asCfg({ bindings: [] });
-    const calls: OpenClawConfig[] = [
+    const calls: MarketingClawConfig[] = [
       asCfg({ bindings: [{ id: "a" }] }),
       asCfg({ bindings: [{ id: "b" }] }),
       asCfg({ bindings: [{ id: "c" }] }),

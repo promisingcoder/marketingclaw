@@ -1,4 +1,4 @@
-// OpenClaw test instance helper spawns isolated OpenClaw processes.
+// MarketingClaw test instance helper spawns isolated MarketingClaw processes.
 import { type ChildProcessByStdio, spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
@@ -10,13 +10,13 @@ import {
   RUNTIME_POSTBUILD_STAMP_FILE,
 } from "../../scripts/lib/local-build-metadata-paths.mjs";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-  type OpenClawTestStateOptions,
-} from "../../src/test-utils/openclaw-test-state.js";
+  createMarketingClawTestState,
+  type MarketingClawTestState,
+  type MarketingClawTestStateOptions,
+} from "../../src/test-utils/marketingclaw-test-state.js";
 import { sleep } from "../../src/utils.js";
 
-export type OpenClawTestInstanceOptions = {
+export type MarketingClawTestInstanceOptions = {
   name: string;
   cwd?: string;
   port?: number;
@@ -24,22 +24,22 @@ export type OpenClawTestInstanceOptions = {
   hookToken?: string;
   config?: Record<string, unknown>;
   env?: Record<string, string | undefined>;
-  state?: Omit<OpenClawTestStateOptions, "applyEnv" | "gateway" | "env">;
+  state?: Omit<MarketingClawTestStateOptions, "applyEnv" | "gateway" | "env">;
   gatewayArgs?: string[];
   startTimeoutMs?: number;
   stopTimeoutMs?: number;
 };
 
-export type OpenClawTestInstanceCommandResult = {
+export type MarketingClawTestInstanceCommandResult = {
   code: number | null;
   signal: NodeJS.Signals | null;
   stdout: string;
   stderr: string;
 };
 
-type OpenClawTestProcess = ChildProcessByStdio<null, Readable, Readable>;
+type MarketingClawTestProcess = ChildProcessByStdio<null, Readable, Readable>;
 
-export type OpenClawTestInstance = {
+export type MarketingClawTestInstance = {
   name: string;
   port: number;
   url: string;
@@ -48,16 +48,16 @@ export type OpenClawTestInstance = {
   homeDir: string;
   stateDir: string;
   configPath: string;
-  state: OpenClawTestState;
+  state: MarketingClawTestState;
   stdout: string[];
   stderr: string[];
-  child?: OpenClawTestProcess;
+  child?: MarketingClawTestProcess;
   env: NodeJS.ProcessEnv;
   entrypoint: () => Promise<string[]>;
   cli: (
     args: string[],
     options?: { timeoutMs?: number },
-  ) => Promise<OpenClawTestInstanceCommandResult>;
+  ) => Promise<MarketingClawTestInstanceCommandResult>;
   startGateway: () => Promise<void>;
   stopGateway: () => Promise<void>;
   logs: () => string;
@@ -76,7 +76,7 @@ type BoundedStringLog = string[] & {
   truncated?: boolean;
 };
 
-type OpenClawTestChildProcess = Pick<OpenClawTestProcess, "kill" | "pid">;
+type MarketingClawTestChildProcess = Pick<MarketingClawTestProcess, "kill" | "pid">;
 
 function createBoundedStringLog(): string[] {
   const log = [] as BoundedStringLog;
@@ -157,7 +157,7 @@ async function prepareGatewayEntrypoint(cwd: string): Promise<string[]> {
     cwd,
     env: { ...process.env, VITEST: "1" },
     stdio: ["ignore", "pipe", "pipe"],
-    detached: shouldUseOpenClawTestProcessGroup(),
+    detached: shouldUseMarketingClawTestProcessGroup(),
   });
   child.stdout?.setEncoding("utf8");
   child.stderr?.setEncoding("utf8");
@@ -173,7 +173,7 @@ async function prepareGatewayEntrypoint(cwd: string): Promise<string[]> {
   ]);
 
   if (completed === null) {
-    signalOpenClawTestProcess(child, "SIGKILL");
+    signalMarketingClawTestProcess(child, "SIGKILL");
     throw new Error(`timeout preparing gateway entrypoint\n${formatLogs(stdout, stderr)}`);
   }
   if (completed.code !== 0) {
@@ -213,7 +213,7 @@ const getFreePort = async () => {
 };
 
 async function waitForPortOpen(
-  proc: OpenClawTestProcess,
+  proc: MarketingClawTestProcess,
   chunksOut: string[],
   chunksErr: string[],
   port: number,
@@ -253,7 +253,10 @@ async function waitForPortOpen(
   );
 }
 
-async function waitForGatewayExit(child: OpenClawTestProcess, timeoutMs: number): Promise<boolean> {
+async function waitForGatewayExit(
+  child: MarketingClawTestProcess,
+  timeoutMs: number,
+): Promise<boolean> {
   return await Promise.race([
     new Promise<boolean>((resolve) => {
       if (child.exitCode !== null || child.signalCode !== null) {
@@ -266,7 +269,7 @@ async function waitForGatewayExit(child: OpenClawTestProcess, timeoutMs: number)
   ]);
 }
 
-function hasChildExited(child: Pick<OpenClawTestProcess, "exitCode" | "signalCode">) {
+function hasChildExited(child: Pick<MarketingClawTestProcess, "exitCode" | "signalCode">) {
   return child.exitCode !== null || child.signalCode !== null;
 }
 
@@ -299,15 +302,15 @@ function createInstanceEnv(params: {
 }): NodeJS.ProcessEnv {
   const env: NodeJS.ProcessEnv = {
     ...params.stateEnv,
-    OPENCLAW_GATEWAY_TOKEN: "",
-    OPENCLAW_GATEWAY_PASSWORD: "",
-    OPENCLAW_SKIP_CHANNELS: "1",
-    OPENCLAW_SKIP_PROVIDERS: "1",
-    OPENCLAW_SKIP_GMAIL_WATCHER: "1",
-    OPENCLAW_SKIP_CRON: "1",
-    OPENCLAW_SKIP_BROWSER_CONTROL_SERVER: "1",
-    OPENCLAW_SKIP_CANVAS_HOST: "1",
-    OPENCLAW_TEST_MINIMAL_GATEWAY: "1",
+    MARKETINGCLAW_GATEWAY_TOKEN: "",
+    MARKETINGCLAW_GATEWAY_PASSWORD: "",
+    MARKETINGCLAW_SKIP_CHANNELS: "1",
+    MARKETINGCLAW_SKIP_PROVIDERS: "1",
+    MARKETINGCLAW_SKIP_GMAIL_WATCHER: "1",
+    MARKETINGCLAW_SKIP_CRON: "1",
+    MARKETINGCLAW_SKIP_BROWSER_CONTROL_SERVER: "1",
+    MARKETINGCLAW_SKIP_CANVAS_HOST: "1",
+    MARKETINGCLAW_TEST_MINIMAL_GATEWAY: "1",
     VITEST: "1",
   };
   for (const [key, value] of Object.entries(params.extraEnv)) {
@@ -320,14 +323,14 @@ function createInstanceEnv(params: {
   return env;
 }
 
-export async function createOpenClawTestInstance(
-  options: OpenClawTestInstanceOptions,
-): Promise<OpenClawTestInstance> {
+export async function createMarketingClawTestInstance(
+  options: MarketingClawTestInstanceOptions,
+): Promise<MarketingClawTestInstance> {
   const cwd = options.cwd ?? process.cwd();
   const port = options.port ?? (await getFreePort());
   const gatewayToken = options.gatewayToken ?? `gateway-${options.name}-${randomUUID()}`;
   const hookToken = options.hookToken ?? `token-${options.name}-${randomUUID()}`;
-  const state = await createOpenClawTestState({
+  const state = await createMarketingClawTestState({
     label: options.name,
     layout: "home",
     ...options.state,
@@ -354,10 +357,10 @@ export async function createOpenClawTestInstance(
     stateEnv: state.env,
     extraEnv: options.env ?? {},
   });
-  let child: OpenClawTestProcess | undefined;
+  let child: MarketingClawTestProcess | undefined;
   let cleaned = false;
 
-  const instance: OpenClawTestInstance = {
+  const instance: MarketingClawTestInstance = {
     name: options.name,
     port,
     url: `ws://127.0.0.1:${port}`,
@@ -404,7 +407,7 @@ export async function createOpenClawTestInstance(
           cwd,
           env,
           stdio: ["ignore", "pipe", "pipe"],
-          detached: shouldUseOpenClawTestProcessGroup(),
+          detached: shouldUseMarketingClawTestProcessGroup(),
         },
       );
 
@@ -432,7 +435,7 @@ export async function createOpenClawTestInstance(
       }
       if (!hasChildExited(child) && !child.killed) {
         try {
-          signalOpenClawTestProcess(child, "SIGTERM");
+          signalMarketingClawTestProcess(child, "SIGTERM");
         } catch {
           // ignore
         }
@@ -443,7 +446,7 @@ export async function createOpenClawTestInstance(
       );
       if (!exited && !hasChildExited(child) && !child.killed) {
         try {
-          signalOpenClawTestProcess(child, "SIGKILL");
+          signalMarketingClawTestProcess(child, "SIGKILL");
         } catch {
           // ignore
         }
@@ -472,7 +475,7 @@ async function runCommand(params: {
   cwd: string;
   env: NodeJS.ProcessEnv;
   timeoutMs: number;
-}): Promise<OpenClawTestInstanceCommandResult> {
+}): Promise<MarketingClawTestInstanceCommandResult> {
   const [command, ...args] = params.args;
   if (!command) {
     throw new Error("missing command");
@@ -483,7 +486,7 @@ async function runCommand(params: {
     cwd: params.cwd,
     env: params.env,
     stdio: ["ignore", "pipe", "pipe"],
-    detached: shouldUseOpenClawTestProcessGroup(),
+    detached: shouldUseMarketingClawTestProcessGroup(),
   });
   child.stdout?.setEncoding("utf8");
   child.stderr?.setEncoding("utf8");
@@ -498,7 +501,7 @@ async function runCommand(params: {
     sleep(params.timeoutMs).then(() => null),
   ]);
   if (completed === null) {
-    signalOpenClawTestProcess(child, "SIGKILL");
+    signalMarketingClawTestProcess(child, "SIGKILL");
     await waitForGatewayExit(child, GATEWAY_STOP_TIMEOUT_MS);
     throw new Error(
       `command timed out after ${params.timeoutMs}ms: ${params.args.join(" ")}\n${formatLogs(stdout, stderr)}`,
@@ -511,17 +514,17 @@ async function runCommand(params: {
   };
 }
 
-function shouldUseOpenClawTestProcessGroup(): boolean {
+function shouldUseMarketingClawTestProcessGroup(): boolean {
   return process.platform !== "win32";
 }
 
-function signalOpenClawTestProcess(
-  child: OpenClawTestChildProcess,
+function signalMarketingClawTestProcess(
+  child: MarketingClawTestChildProcess,
   signal: NodeJS.Signals,
   killProcess: (pid: number, signal: NodeJS.Signals) => boolean = (pid, nextSignal) =>
     process.kill(pid, nextSignal),
 ): void {
-  if (shouldUseOpenClawTestProcessGroup() && typeof child.pid === "number") {
+  if (shouldUseMarketingClawTestProcessGroup() && typeof child.pid === "number") {
     try {
       killProcess(-child.pid, signal);
       return;
@@ -537,6 +540,6 @@ export const testing = {
   createBoundedStringLog,
   formatLogs,
   hasChildExited,
-  signalOpenClawTestProcess,
+  signalMarketingClawTestProcess,
   waitForPortOpen,
 };

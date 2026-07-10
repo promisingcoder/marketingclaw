@@ -4,7 +4,7 @@
  * exec host without leaking unsafe overrides.
  */
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { OPENCLAW_CLI_ENV_VALUE } from "../infra/openclaw-exec-env.js";
+import { MARKETINGCLAW_CLI_ENV_VALUE } from "../infra/marketingclaw-exec-env.js";
 import type { ExecuteNodeHostCommandParams } from "./bash-tools.exec-host-node.types.js";
 import type { BashSandboxConfig } from "./bash-tools.shared.js";
 import type { ExtensionContext } from "./sessions/index.js";
@@ -15,7 +15,7 @@ declare module "../plugins/hook-types.js" {
   }
 }
 
-const CHANNEL_CONTEXT_ENV_KEY = "OPENCLAW_CHANNEL_CONTEXT";
+const CHANNEL_CONTEXT_ENV_KEY = "MARKETINGCLAW_CHANNEL_CONTEXT";
 type CapturedNodeHostParams = Pick<
   ExecuteNodeHostCommandParams,
   "env" | "requestedEnv" | "workdir"
@@ -116,7 +116,7 @@ vi.mock("../process/supervisor/index.js", () => ({
 
 let createExecTool: typeof import("./bash-tools.exec.js").createExecTool;
 let toToolDefinitions: typeof import("./agent-tool-definition-adapter.js").toToolDefinitions;
-let createOpenClawCodingTools: typeof import("./agent-tools.js").createOpenClawCodingTools;
+let createMarketingClawCodingTools: typeof import("./agent-tools.js").createMarketingClawCodingTools;
 const testExtensionContext = {} as ExtensionContext;
 
 function installResolveExecEnvHook(result: Record<string, string>) {
@@ -130,7 +130,7 @@ describe("exec resolve_exec_env hook wiring", () => {
   beforeAll(async () => {
     ({ createExecTool } = await import("./bash-tools.exec.js"));
     ({ toToolDefinitions } = await import("./agent-tool-definition-adapter.js"));
-    ({ createOpenClawCodingTools } = await import("./agent-tools.js"));
+    ({ createMarketingClawCodingTools } = await import("./agent-tools.js"));
   });
 
   beforeEach(() => {
@@ -172,7 +172,7 @@ describe("exec resolve_exec_env hook wiring", () => {
       PLUGIN_SAFE: "yes",
       PATH: "/tmp/plugin-bin",
       NODE_OPTIONS: "--require /tmp/hook.js",
-      OPENCLAW_CLI: "0",
+      MARKETINGCLAW_CLI: "0",
       "bad-key": "bad",
     });
 
@@ -226,7 +226,7 @@ describe("exec resolve_exec_env hook wiring", () => {
       PLUGIN_SAFE: "yes",
     });
     expect(mocks.gatewayParams[0]?.env).not.toHaveProperty("NODE_OPTIONS");
-    expect(mocks.gatewayParams[0]?.env.OPENCLAW_CLI).toBe(OPENCLAW_CLI_ENV_VALUE);
+    expect(mocks.gatewayParams[0]?.env.MARKETINGCLAW_CLI).toBe(MARKETINGCLAW_CLI_ENV_VALUE);
     expect(mocks.gatewayParams[0]?.env.PATH).not.toBe("/tmp/plugin-bin");
     expect(mocks.spawnInputs[0]?.env).toMatchObject({
       EXISTING: "plugin",
@@ -591,7 +591,7 @@ describe("exec resolve_exec_env hook wiring", () => {
       runBeforeToolCall: vi.fn(async () => undefined),
     };
 
-    const exec = createOpenClawCodingTools({
+    const exec = createMarketingClawCodingTools({
       agentId: "main",
       sessionKey: "agent:main:telegram:chat-1",
       cwd: process.cwd(),
@@ -702,7 +702,7 @@ describe("exec resolve_exec_env hook wiring", () => {
       }),
     };
 
-    const exec = createOpenClawCodingTools({
+    const exec = createMarketingClawCodingTools({
       agentId: "main",
       sessionKey: "agent:main:telegram:chat-1",
       cwd: process.cwd(),

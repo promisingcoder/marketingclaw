@@ -13,7 +13,7 @@ const tempDirs = useAutoCleanupTempDirTracker(afterEach);
 
 describe("persistReplySessionEntry", () => {
   it("does not restore policy fields revoked during reply processing", async () => {
-    const dir = tempDirs.make("openclaw-reply-session-store-");
+    const dir = tempDirs.make("marketingclaw-reply-session-store-");
     try {
       const storePath = path.join(dir, "sessions.json");
       const initialEntry: SessionEntry = {
@@ -62,7 +62,7 @@ describe("persistReplySessionEntry", () => {
   });
 
   it("rejects persistence when the session rotated", async () => {
-    const dir = tempDirs.make("openclaw-reply-session-store-");
+    const dir = tempDirs.make("marketingclaw-reply-session-store-");
     try {
       const storePath = path.join(dir, "sessions.json");
       const initialEntry: SessionEntry = {
@@ -96,7 +96,7 @@ describe("persistReplySessionEntry", () => {
   });
 
   it("does not recreate a row deleted after reply initialization by default", async () => {
-    const dir = tempDirs.make("openclaw-reply-session-store-");
+    const dir = tempDirs.make("marketingclaw-reply-session-store-");
     try {
       const storePath = path.join(dir, "sessions.json");
       const initialEntry: SessionEntry = {
@@ -123,7 +123,7 @@ describe("persistReplySessionEntry", () => {
   });
 
   it("rejects same-value persistence after the session is archived", async () => {
-    const dir = tempDirs.make("openclaw-reply-session-store-");
+    const dir = tempDirs.make("marketingclaw-reply-session-store-");
     try {
       const storePath = path.join(dir, "sessions.json");
       const initialEntry: SessionEntry = {

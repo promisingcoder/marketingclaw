@@ -1,20 +1,20 @@
-package ai.openclaw.app.ui
+package ai.marketingclaw.app.ui
 
-import ai.openclaw.app.AppearanceThemeMode
-import ai.openclaw.app.GatewayAgentSummary
-import ai.openclaw.app.GatewayChannelSummary
-import ai.openclaw.app.GatewayChannelsSummary
-import ai.openclaw.app.GatewayConnectionDisplay
-import ai.openclaw.app.GatewayConnectionProblem
-import ai.openclaw.app.GatewayNodeApprovalState
-import ai.openclaw.app.GatewayNodeSummary
-import ai.openclaw.app.GatewayNodesDevicesSummary
-import ai.openclaw.app.GatewayPendingDeviceSummary
-import ai.openclaw.app.GatewaySkillWorkshopProposal
-import ai.openclaw.app.GatewaySkillWorkshopSummary
-import ai.openclaw.app.chat.ChatSessionEntry
-import ai.openclaw.app.normalizeOperatorScopes
-import ai.openclaw.app.ui.design.ClawStatus
+import ai.marketingclaw.app.AppearanceThemeMode
+import ai.marketingclaw.app.GatewayAgentSummary
+import ai.marketingclaw.app.GatewayChannelSummary
+import ai.marketingclaw.app.GatewayChannelsSummary
+import ai.marketingclaw.app.GatewayConnectionDisplay
+import ai.marketingclaw.app.GatewayConnectionProblem
+import ai.marketingclaw.app.GatewayNodeApprovalState
+import ai.marketingclaw.app.GatewayNodeSummary
+import ai.marketingclaw.app.GatewayNodesDevicesSummary
+import ai.marketingclaw.app.GatewayPendingDeviceSummary
+import ai.marketingclaw.app.GatewaySkillWorkshopProposal
+import ai.marketingclaw.app.GatewaySkillWorkshopSummary
+import ai.marketingclaw.app.chat.ChatSessionEntry
+import ai.marketingclaw.app.normalizeOperatorScopes
+import ai.marketingclaw.app.ui.design.ClawStatus
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.saveable.SaverScope
@@ -519,11 +519,11 @@ class ShellScreenLogicTest {
       stableOverviewRecentRows(
         previousRows =
           listOf(
-            RecentSessionListItem(key = "main", title = "Main session", source = "OpenClaw", metadata = "1h"),
+            RecentSessionListItem(key = "main", title = "Main session", source = "MarketingClaw", metadata = "1h"),
           ),
         candidateRows =
           listOf(
-            RecentSessionListItem(key = "main", title = "Main session", source = "OpenClaw", metadata = ""),
+            RecentSessionListItem(key = "main", title = "Main session", source = "MarketingClaw", metadata = ""),
           ),
       )
 
@@ -536,12 +536,12 @@ class ShellScreenLogicTest {
       stableOverviewRecentRows(
         previousRows =
           listOf(
-            RecentSessionListItem(key = "main", title = "Main session", source = "OpenClaw", metadata = "1h"),
+            RecentSessionListItem(key = "main", title = "Main session", source = "MarketingClaw", metadata = "1h"),
             RecentSessionListItem(key = "discord", title = "Discord", source = "Discord", metadata = "2h"),
           ),
         candidateRows =
           listOf(
-            RecentSessionListItem(key = "main", title = "Main session", source = "OpenClaw", metadata = "1h"),
+            RecentSessionListItem(key = "main", title = "Main session", source = "MarketingClaw", metadata = "1h"),
             RecentSessionListItem(key = "cron", title = "Cron", source = "Cron", metadata = "4h"),
           ),
       )
@@ -613,7 +613,7 @@ class ShellScreenLogicTest {
 
     assertEquals("Scout", overviewAgentName(agents = agents, defaultAgentId = "scout"))
     assertEquals("Main", overviewAgentName(agents = agents, defaultAgentId = null))
-    assertEquals("OpenClaw", overviewAgentName(agents = emptyList(), defaultAgentId = null))
+    assertEquals("MarketingClaw", overviewAgentName(agents = emptyList(), defaultAgentId = null))
   }
 
   @Test
@@ -653,9 +653,9 @@ class ShellScreenLogicTest {
     assertEquals("Telegram", sessionSourceLabel("agent:main:telegram:direct:584667058"))
     assertEquals("Discord", sessionSourceLabel("agent:main:discord:channel:1001"))
     assertEquals("Slack", sessionSourceLabel("agent:main:slack:channel:C123"))
-    assertEquals("OpenClaw", sessionSourceLabel("agent:main:node-android"))
-    assertEquals("OpenClaw", sessionSourceLabel("agent:main:main"))
-    assertEquals("OpenClaw", sessionSourceLabel("Daily standup"))
+    assertEquals("MarketingClaw", sessionSourceLabel("agent:main:node-android"))
+    assertEquals("MarketingClaw", sessionSourceLabel("agent:main:main"))
+    assertEquals("MarketingClaw", sessionSourceLabel("Daily standup"))
   }
 
   @Test

@@ -48,6 +48,6 @@ export const page = definePage({
     import("./dreams-page.ts").then(() => ({
       header: true,
       render: (data: DreamsRouteData | undefined) =>
-        html`<openclaw-dreams-page .routeData=${data}></openclaw-dreams-page>`,
+        html`<marketingclaw-dreams-page .routeData=${data}></marketingclaw-dreams-page>`,
     })),
 });

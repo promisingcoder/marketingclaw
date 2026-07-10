@@ -1,12 +1,12 @@
-# OpenClaw Kilo Gateway Provider
+# MarketingClaw Kilo Gateway Provider
 
-Official OpenClaw provider plugin for Kilo Gateway.
+Official MarketingClaw provider plugin for Kilo Gateway.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugins install @openclaw/kilocode-provider
-openclaw gateway restart
+marketingclaw plugins install @marketingclaw/kilocode-provider
+marketingclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/kilocode> for setup and configuration.
+See <https://docs.marketingclaw.ai/providers/kilocode> for setup and configuration.

@@ -1,11 +1,11 @@
 {
-  "name": "@openclaw/media-understanding-core",
+  "name": "@marketingclaw/media-understanding-core",
   "version": "2026.6.11",
   "private": true,
-  "description": "OpenClaw media understanding runtime package",
+  "description": "MarketingClaw media understanding runtime package",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@marketingclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {}
+  "marketingclaw": {}
 }

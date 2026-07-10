@@ -1,18 +1,18 @@
 // Doctor checks for context engine host requirements against configured agent runtimes.
-import { parseModelCatalogRef } from "@openclaw/model-catalog-core/model-catalog-refs";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { parseModelCatalogRef } from "@marketingclaw/model-catalog-core/model-catalog-refs";
+import { uniqueStrings } from "@marketingclaw/normalization-core/string-normalization";
 import { normalizeEmbeddedAgentRuntime } from "../../../agents/agent-runtime-id.js";
 import { resolveDefaultAgentDir } from "../../../agents/agent-scope-config.js";
 import { resolveCliBackendConfig } from "../../../agents/cli-backends.js";
 import { DEFAULT_MODEL, DEFAULT_PROVIDER } from "../../../agents/defaults.js";
 import { resolveAgentHarnessPolicy } from "../../../agents/harness/policy.js";
 import { getRegisteredAgentHarness } from "../../../agents/harness/registry.js";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../../config/types.marketingclaw.js";
 import {
   buildGenericCliContextEngineHostSupport,
   CODEX_APP_SERVER_CONTEXT_ENGINE_HOST,
   evaluateContextEngineHostSupport,
-  OPENCLAW_EMBEDDED_CONTEXT_ENGINE_HOST,
+  MARKETINGCLAW_EMBEDDED_CONTEXT_ENGINE_HOST,
   type ContextEngineHostSupport,
 } from "../../../context-engine/host-compat.js";
 import { ensureContextEnginesInitialized } from "../../../context-engine/init.js";
@@ -78,7 +78,7 @@ function listModelRefs(value: unknown): string[] {
 }
 
 function collectExplicitRuntimeRefs(
-  cfg: OpenClawConfig,
+  cfg: MarketingClawConfig,
 ): Array<{ runtimeId: string; path: string }> {
   const refs: Array<{ runtimeId: string; path: string }> = [];
   const push = (runtime: unknown, path: string) => {
@@ -116,7 +116,7 @@ function collectExplicitRuntimeRefs(
 }
 
 function collectSelectedModelRefs(
-  cfg: OpenClawConfig,
+  cfg: MarketingClawConfig,
 ): Array<{ modelRef: string; path: string; agentId?: string }> {
   const refs: Array<{ modelRef: string; path: string; agentId?: string }> = [];
   const pushModel = (value: unknown, path: string, agentId?: string) => {
@@ -154,13 +154,13 @@ function collectSelectedModelRefs(
 }
 
 function runtimeHostCandidate(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   runtimeId: string;
   paths: string[];
 }): HostCandidate {
   const runtimeId = normalizeRuntimeId(params.runtimeId) ?? params.runtimeId;
-  if (runtimeId === "openclaw" || runtimeId === "auto") {
-    return { runtimeId, host: OPENCLAW_EMBEDDED_CONTEXT_ENGINE_HOST, paths: params.paths };
+  if (runtimeId === "marketingclaw" || runtimeId === "auto") {
+    return { runtimeId, host: MARKETINGCLAW_EMBEDDED_CONTEXT_ENGINE_HOST, paths: params.paths };
   }
   if (runtimeId === "codex") {
     return { runtimeId, host: CODEX_APP_SERVER_CONTEXT_ENGINE_HOST, paths: params.paths };
@@ -192,7 +192,7 @@ function runtimeHostCandidate(params: {
 
 /** Collect effective agent-run host candidates from provider/model runtime policy. */
 export function collectConfiguredContextEngineAgentRunHosts(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   env?: NodeJS.ProcessEnv;
 }): HostCandidate[] {
   const runtimePaths = new Map<string, string[]>();
@@ -228,7 +228,7 @@ export function collectConfiguredContextEngineAgentRunHosts(params: {
   );
 }
 
-function selectedContextEngineSlotId(cfg: OpenClawConfig): string {
+function selectedContextEngineSlotId(cfg: MarketingClawConfig): string {
   const slotValue = cfg.plugins?.slots?.contextEngine;
   return typeof slotValue === "string" && slotValue.trim()
     ? slotValue.trim()
@@ -236,7 +236,7 @@ function selectedContextEngineSlotId(cfg: OpenClawConfig): string {
 }
 
 async function resolveSelectedContextEngineInfo(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   env?: NodeJS.ProcessEnv;
 }): Promise<ContextEngineInfoResult> {
   const engineId = selectedContextEngineSlotId(params.cfg);
@@ -356,7 +356,7 @@ function formatCompatibilityWarnings(params: {
 
 /** Collect doctor warnings for context engines that cannot run under configured hosts. */
 export async function collectContextEngineHostCompatibilityWarnings(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   doctorFixCommand: string;
   env?: NodeJS.ProcessEnv;
 }): Promise<string[]> {
@@ -379,10 +379,10 @@ export async function collectContextEngineHostCompatibilityWarnings(params: {
 
 /** Repair a globally incompatible context engine by falling back to legacy. */
 export async function maybeRepairContextEngineHostCompatibility(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   doctorFixCommand: string;
   env?: NodeJS.ProcessEnv;
-}): Promise<{ config: OpenClawConfig; changes: string[]; warnings?: string[] }> {
+}): Promise<{ config: MarketingClawConfig; changes: string[]; warnings?: string[] }> {
   const resolved = await resolveSelectedContextEngineInfo(params);
   if (!resolved.info) {
     return { config: params.cfg, changes: [], warnings: resolved.warnings };

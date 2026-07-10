@@ -1,7 +1,7 @@
 /**
  * Extension relay HTTP/WebSocket server.
  *
- * Loopback-only endpoint that pairs the OpenClaw Chrome extension with the
+ * Loopback-only endpoint that pairs the MarketingClaw Chrome extension with the
  * browser control service:
  *   GET /json/version  -> CDP discovery for pw-session (503 until paired)
  *   WS  /cdp           -> CDP browser endpoint (Playwright connectOverCDP)
@@ -19,8 +19,8 @@ import { extensionRelayTokenMatches } from "./relay-auth.js";
 import { ExtensionRelayBridge } from "./relay-bridge.js";
 
 const log = createSubsystemLogger("browser").child("extension-relay");
-const EXTENSION_RELAY_PROTOCOL = "openclaw-extension-relay";
-const EXTENSION_RELAY_TOKEN_PROTOCOL_PREFIX = "openclaw-extension-token.";
+const EXTENSION_RELAY_PROTOCOL = "marketingclaw-extension-relay";
+const EXTENSION_RELAY_TOKEN_PROTOCOL_PREFIX = "marketingclaw-extension-token.";
 
 /**
  * Cap relay frame size to bound memory from a hostile/buggy peer while leaving
@@ -132,7 +132,7 @@ export async function startExtensionRelayServer(params: {
       return;
     }
     if (!isAuthorized(req, params.token)) {
-      res.writeHead(401, { "WWW-Authenticate": 'Basic realm="openclaw-extension-relay"' });
+      res.writeHead(401, { "WWW-Authenticate": 'Basic realm="marketingclaw-extension-relay"' });
       res.end("Unauthorized");
       return;
     }
@@ -143,7 +143,7 @@ export async function startExtensionRelayServer(params: {
         res.end(
           JSON.stringify({
             error:
-              "OpenClaw Chrome extension is not connected. Install the extension and pair it with `openclaw browser extension pair`.",
+              "MarketingClaw Chrome extension is not connected. Install the extension and pair it with `marketingclaw browser extension pair`.",
           }),
         );
         return;

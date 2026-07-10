@@ -1,5 +1,5 @@
 ---
-summary: "Adds OpenCode model provider support to OpenClaw."
+summary: "Adds OpenCode model provider support to MarketingClaw."
 read_when:
   - You are installing, configuring, or auditing the opencode plugin
 title: "OpenCode plugin"
@@ -7,12 +7,12 @@ title: "OpenCode plugin"
 
 # OpenCode plugin
 
-Adds OpenCode model provider support to OpenClaw.
+Adds OpenCode model provider support to MarketingClaw.
 
 ## Distribution
 
-- Package: `@openclaw/opencode-provider`
-- Install route: included in OpenClaw
+- Package: `@marketingclaw/opencode-provider`
+- Install route: included in MarketingClaw
 
 ## Surface
 

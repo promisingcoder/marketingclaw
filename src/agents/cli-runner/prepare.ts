@@ -1,9 +1,9 @@
-import { ensureSystemPromptCacheBoundary } from "@openclaw/ai/internal/shared";
+import { ensureSystemPromptCacheBoundary } from "@marketingclaw/ai/internal/shared";
 /**
  * Prepares CLI backend run context: backend config, prompts, bootstrap context,
  * MCP, auth epoch, and reusable session metadata.
  */
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { uniqueStrings } from "@marketingclaw/normalization-core/string-normalization";
 import { getRuntimeConfig } from "../../config/config.js";
 import type { CliBackendConfig } from "../../config/types.agent-defaults.js";
 import {
@@ -19,7 +19,7 @@ import {
   resolveMcpLoopbackBearerToken,
 } from "../../gateway/mcp-http.loopback-runtime.js";
 import { resolveMcpLoopbackScopedTools } from "../../gateway/mcp-http.runtime.js";
-import { buildCrestodianToolsMcpServerConfig } from "../../mcp/openclaw-tools-serve-config.js";
+import { buildCrestodianToolsMcpServerConfig } from "../../mcp/marketingclaw-tools-serve-config.js";
 import { isClaudeCliProvider } from "../../plugin-sdk/anthropic-cli.js";
 import type {
   CliBackendAuthEpochMode,
@@ -110,9 +110,9 @@ const prepareDeps = {
   createMcpLoopbackServerConfig,
   resolveMcpLoopbackBearerToken,
   resolveMcpLoopbackScopedTools,
-  resolveOpenClawReferencePaths: async (
-    params: Parameters<typeof import("../docs-path.js").resolveOpenClawReferencePaths>[0],
-  ) => (await import("../docs-path.js")).resolveOpenClawReferencePaths(params),
+  resolveMarketingClawReferencePaths: async (
+    params: Parameters<typeof import("../docs-path.js").resolveMarketingClawReferencePaths>[0],
+  ) => (await import("../docs-path.js")).resolveMarketingClawReferencePaths(params),
   prepareClaudeCliSkillsPlugin,
   claudeCliSessionTranscriptHasContent,
   claudeCliSessionTranscriptHasOrphanedToolUse,
@@ -148,7 +148,7 @@ function buildCliSessionDriftUserContext(
   if (reusableCliSession.mode !== "reuse-with-drift") {
     return undefined;
   }
-  return `OpenClaw resumed this CLI session after prompt content changed. Follow the current turn's instructions; changed=${reusableCliSession.drift.reasons.join(",")}.`;
+  return `MarketingClaw resumed this CLI session after prompt content changed. Follow the current turn's instructions; changed=${reusableCliSession.drift.reasons.join(",")}.`;
 }
 
 function prependCliSessionDriftUserContext(
@@ -479,7 +479,7 @@ export async function prepareCliRunContext(
         }),
       });
   // Mirror the embedded runner's bootstrap routing for backends that transport
-  // OpenClaw's system prompt. Only a declared native-tool backend can complete
+  // MarketingClaw's system prompt. Only a declared native-tool backend can complete
   // the file-based ritual; other backends receive limited guidance.
   const canonicalWorkspace = resolveUserPath(
     resolveAgentWorkspaceDir(params.config ?? {}, workspaceResolution.agentId),
@@ -536,7 +536,7 @@ export async function prepareCliRunContext(
   // Ring-zero Crestodian runs replace the bundle MCP surface entirely: no
   // loopback server, no plugin/user servers. The generated MCP config carries
   // only the crestodian stdio server, so the CLI harness sees exactly one
-  // OpenClaw tool (its own native tools stay under the harness's policy).
+  // MarketingClaw tool (its own native tools stay under the harness's policy).
   const crestodianMcpConfig = params.crestodianTool
     ? buildCrestodianToolsMcpServerConfig(params.crestodianTool)
     : undefined;
@@ -551,7 +551,7 @@ export async function prepareCliRunContext(
       await prepareDeps.ensureMcpLoopbackServer();
     } catch (error) {
       throw new Error(
-        `Bundled MCP is enabled, but the OpenClaw MCP loopback server failed to start: ${String(error)}`,
+        `Bundled MCP is enabled, but the MarketingClaw MCP loopback server failed to start: ${String(error)}`,
         { cause: error },
       );
     }
@@ -559,7 +559,7 @@ export async function prepareCliRunContext(
   }
   if (bundleMcpEnabled && !mcpLoopbackRuntime) {
     throw new Error(
-      "Bundled MCP is enabled, but the OpenClaw MCP loopback server did not publish a runtime after startup.",
+      "Bundled MCP is enabled, but the MarketingClaw MCP loopback server did not publish a runtime after startup.",
     );
   }
   const mcpDeliveryCaptureEnabled = bundleMcpEnabled && Boolean(mcpLoopbackRuntime);
@@ -579,28 +579,31 @@ export async function prepareCliRunContext(
         : undefined,
       env: mcpLoopbackRuntime
         ? {
-            OPENCLAW_MCP_TOKEN: prepareDeps.resolveMcpLoopbackBearerToken(
+            MARKETINGCLAW_MCP_TOKEN: prepareDeps.resolveMcpLoopbackBearerToken(
               mcpLoopbackRuntime,
               params.senderIsOwner === true,
             ),
-            OPENCLAW_MCP_AGENT_ID: sessionAgentId ?? "",
-            OPENCLAW_MCP_ACCOUNT_ID: params.agentAccountId ?? "",
-            OPENCLAW_MCP_SESSION_KEY: params.sessionKey ?? "",
-            OPENCLAW_MCP_SESSION_ID: params.sessionId,
-            OPENCLAW_MCP_MESSAGE_CHANNEL: params.messageChannel ?? params.messageProvider ?? "",
-            OPENCLAW_MCP_CLIENT_CAPS: params.clientCaps?.join(",") ?? "",
-            OPENCLAW_MCP_CURRENT_CHANNEL_ID: params.currentChannelId ?? "",
-            OPENCLAW_MCP_CURRENT_THREAD_TS: params.currentThreadTs ?? "",
-            OPENCLAW_MCP_CURRENT_MESSAGE_ID:
+            MARKETINGCLAW_MCP_AGENT_ID: sessionAgentId ?? "",
+            MARKETINGCLAW_MCP_ACCOUNT_ID: params.agentAccountId ?? "",
+            MARKETINGCLAW_MCP_SESSION_KEY: params.sessionKey ?? "",
+            MARKETINGCLAW_MCP_SESSION_ID: params.sessionId,
+            MARKETINGCLAW_MCP_MESSAGE_CHANNEL:
+              params.messageChannel ?? params.messageProvider ?? "",
+            MARKETINGCLAW_MCP_CLIENT_CAPS: params.clientCaps?.join(",") ?? "",
+            MARKETINGCLAW_MCP_CURRENT_CHANNEL_ID: params.currentChannelId ?? "",
+            MARKETINGCLAW_MCP_CURRENT_THREAD_TS: params.currentThreadTs ?? "",
+            MARKETINGCLAW_MCP_CURRENT_MESSAGE_ID:
               params.currentMessageId != null ? String(params.currentMessageId) : "",
-            OPENCLAW_MCP_CURRENT_INBOUND_AUDIO: params.currentInboundAudio === true ? "true" : "",
-            OPENCLAW_MCP_INBOUND_EVENT_KIND: params.currentInboundEventKind ?? "",
-            OPENCLAW_MCP_SOURCE_REPLY_DELIVERY_MODE: params.sourceReplyDeliveryMode ?? "",
-            OPENCLAW_MCP_TASK_SUGGESTION_DELIVERY_MODE: params.taskSuggestionDeliveryMode ?? "",
-            OPENCLAW_MCP_REQUIRE_EXPLICIT_MESSAGE_TARGET: requireExplicitMessageTarget
+            MARKETINGCLAW_MCP_CURRENT_INBOUND_AUDIO:
+              params.currentInboundAudio === true ? "true" : "",
+            MARKETINGCLAW_MCP_INBOUND_EVENT_KIND: params.currentInboundEventKind ?? "",
+            MARKETINGCLAW_MCP_SOURCE_REPLY_DELIVERY_MODE: params.sourceReplyDeliveryMode ?? "",
+            MARKETINGCLAW_MCP_TASK_SUGGESTION_DELIVERY_MODE:
+              params.taskSuggestionDeliveryMode ?? "",
+            MARKETINGCLAW_MCP_REQUIRE_EXPLICIT_MESSAGE_TARGET: requireExplicitMessageTarget
               ? "true"
               : "",
-            OPENCLAW_MCP_CLI_CAPTURE_KEY: "",
+            MARKETINGCLAW_MCP_CLI_CAPTURE_KEY: "",
           }
         : undefined,
       warn: (message) => cliBackendLog.warn(message),
@@ -786,16 +789,16 @@ export async function prepareCliRunContext(
         `cli session reset: provider=${params.provider} reason=${invalidatedReason}`,
       );
     }
-    let openClawHistoryMessages: unknown[] | undefined;
-    const loadOpenClawHistoryMessages = async () => {
-      openClawHistoryMessages ??= await loadCliSessionHistoryMessages({
+    let marketingClawHistoryMessages: unknown[] | undefined;
+    const loadMarketingClawHistoryMessages = async () => {
+      marketingClawHistoryMessages ??= await loadCliSessionHistoryMessages({
         sessionId: params.sessionId,
         sessionFile: params.sessionFile,
         sessionKey: params.sessionKey,
         agentId: params.agentId,
         config: params.config,
       });
-      return openClawHistoryMessages;
+      return marketingClawHistoryMessages;
     };
     const heartbeatPrompt =
       isSideQuestion || params.bootstrapContextRunKind === "commitment-only"
@@ -805,9 +808,9 @@ export async function prepareCliRunContext(
             agentId: sessionAgentId,
             defaultAgentId,
           });
-    const openClawReferences = isSideQuestion
+    const marketingClawReferences = isSideQuestion
       ? { docsPath: null, sourcePath: null }
-      : await prepareDeps.resolveOpenClawReferencePaths({
+      : await prepareDeps.resolveMarketingClawReferencePaths({
           workspaceDir,
           argv1: process.argv[1],
           cwd,
@@ -849,8 +852,8 @@ export async function prepareCliRunContext(
           runtimeCapabilities,
           ownerNumbers: params.ownerNumbers,
           heartbeatPrompt,
-          docsPath: openClawReferences.docsPath ?? undefined,
-          sourcePath: openClawReferences.sourcePath ?? undefined,
+          docsPath: marketingClawReferences.docsPath ?? undefined,
+          sourcePath: marketingClawReferences.sourcePath ?? undefined,
           skillsPrompt: systemPromptSkillsPrompt,
           tools: promptTools,
           contextFiles,
@@ -879,7 +882,7 @@ export async function prepareCliRunContext(
         const hookResult = await resolvePromptBuildHookResult({
           config: params.config ?? getRuntimeConfig(),
           prompt: params.prompt,
-          messages: await loadOpenClawHistoryMessages(),
+          messages: await loadMarketingClawHistoryMessages(),
           hookCtx: {
             runId: params.runId,
             agentId: sessionAgentId,
@@ -952,9 +955,9 @@ export async function prepareCliRunContext(
     const allowRawTranscriptReseed =
       backendResolved.config.reseedFromRawTranscriptWhenUncompacted === true;
     const rawTranscriptReseedReason = reusableCliSessionId ? "session-expired" : invalidatedReason;
-    const shouldPrepareOpenClawHistoryPrompt =
+    const shouldPrepareMarketingClawHistoryPrompt =
       !isSideQuestion && (!reusableCliSessionId || allowRawTranscriptReseed);
-    const openClawHistoryPrompt = shouldPrepareOpenClawHistoryPrompt
+    const marketingClawHistoryPrompt = shouldPrepareMarketingClawHistoryPrompt
       ? buildCliSessionHistoryPrompt({
           messages: await loadCliSessionReseedMessages({
             sessionId: params.sessionId,
@@ -1108,7 +1111,7 @@ export async function prepareCliRunContext(
       systemPromptReport,
       claudeSkillsPluginArgs: claudeSkillsPlugin.args,
       bootstrapPromptWarningLines: bootstrapPromptWarning.lines,
-      ...(openClawHistoryPrompt ? { openClawHistoryPrompt } : {}),
+      ...(marketingClawHistoryPrompt ? { marketingClawHistoryPrompt } : {}),
       heartbeatPrompt,
       authEpoch,
       authEpochVersion: CLI_AUTH_EPOCH_VERSION,

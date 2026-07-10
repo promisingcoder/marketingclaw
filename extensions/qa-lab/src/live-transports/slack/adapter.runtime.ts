@@ -1,7 +1,7 @@
 // Qa Lab plugin module implements Slack live transport adapter behavior.
-import { createSlackWebClient, createSlackWriteClient } from "@openclaw/slack/api.js";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { QaRunnerCliRegistration } from "openclaw/plugin-sdk/qa-runner-runtime";
+import { createSlackWebClient, createSlackWriteClient } from "@marketingclaw/slack/api.js";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import type { QaRunnerCliRegistration } from "marketingclaw/plugin-sdk/qa-runner-runtime";
 import {
   acquireQaCredentialLease,
   startQaCredentialLeaseHeartbeat,
@@ -158,7 +158,7 @@ export async function createSlackQaTransportAdapter(
     async sendInbound(input) {
       heartbeat.throwIfFailed();
       logicalConversationId = input.conversation.id;
-      const text = input.text.replaceAll("@openclaw", `<@${sutIdentity.userId}>`);
+      const text = input.text.replaceAll("@marketingclaw", `<@${sutIdentity.userId}>`);
       const nativeThreadTs = input.threadId ? nativeMessageIds.get(input.threadId) : undefined;
       const sent = await slackLive.sendSlackChannelMessage({
         channelId: runtimeEnv.channelId,
@@ -183,7 +183,7 @@ export async function createSlackQaTransportAdapter(
       activeThreadRoots.clear();
     },
     createGatewayConfig: () =>
-      slackLive.buildSlackQaConfig({} as OpenClawConfig, {
+      slackLive.buildSlackQaConfig({} as MarketingClawConfig, {
         channelId: runtimeEnv.channelId,
         driverBotUserId: driverIdentity.userId,
         sutAccountId: accountId,

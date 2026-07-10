@@ -4,7 +4,7 @@ import path from "node:path";
 import type {
   OpenKeyedStoreOptions,
   PluginStateKeyedStore,
-} from "openclaw/plugin-sdk/plugin-state-runtime";
+} from "marketingclaw/plugin-sdk/plugin-state-runtime";
 
 const MEMORY_CORE_PLUGIN_ID = "memory-core";
 export const DREAMING_DAILY_INGESTION_NAMESPACE = "dreaming-daily-ingestion";
@@ -53,7 +53,7 @@ export async function configureMemoryCoreDreamingStateForTests(
   env: NodeJS.ProcessEnv = process.env,
 ): Promise<void> {
   const { createPluginStateKeyedStoreForTests } =
-    await import("openclaw/plugin-sdk/plugin-state-test-runtime");
+    await import("marketingclaw/plugin-sdk/plugin-state-test-runtime");
   const testEnv = { ...env };
   configureMemoryCoreDreamingState(<T>(options: OpenKeyedStoreOptions) =>
     createPluginStateKeyedStoreForTests<T>(MEMORY_CORE_PLUGIN_ID, { ...options, env: testEnv }),

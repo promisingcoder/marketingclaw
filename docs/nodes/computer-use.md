@@ -13,9 +13,9 @@ The agent emits one uniform command, `computer.act`; it cannot tell how a node f
 
 ## Requirements
 
-- A paired **macOS** node (the OpenClaw macOS app running in node mode).
+- A paired **macOS** node (the MarketingClaw macOS app running in node mode).
 - macOS app setting **Allow Computer Control** enabled (default: off).
-- macOS **Accessibility** permission granted to OpenClaw (for pointer/keyboard injection) and **Screen Recording** permission (for `screen.snapshot`).
+- macOS **Accessibility** permission granted to MarketingClaw (for pointer/keyboard injection) and **Screen Recording** permission (for `screen.snapshot`).
 - The `computer.act` command armed on the gateway (it is dangerous and disarmed by default).
 - A vision-capable agent model.
 
@@ -59,7 +59,7 @@ Reads reuse `screen.snapshot`; there is no second capture path. See [Camera and 
 ## Safety
 
 - Nothing is autonomous: `computer.act` stays disarmed until an operator arms it, and every layer (gateway allowlist, macOS setting, Accessibility permission) must agree.
-- Screenshots are model-only and never auto-sent to chat (issue [#44759](https://github.com/openclaw/openclaw/issues/44759)).
+- Screenshots are model-only and never auto-sent to chat (issue [#44759](https://github.com/promisingcoder/marketingclaw/issues/44759)).
 - Treat screen content as untrusted; it can carry prompt injection.
 
 ## Relationship to other desktop-control paths

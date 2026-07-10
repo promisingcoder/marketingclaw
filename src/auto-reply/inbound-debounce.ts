@@ -2,9 +2,9 @@
 import {
   resolveNonNegativeIntegerOption,
   resolveOptionalIntegerOption,
-} from "@openclaw/normalization-core/number-coercion";
+} from "@marketingclaw/normalization-core/number-coercion";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import type { InboundDebounceByProvider } from "../config/types.messages.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
 
 const resolveMs = (value: unknown): number | undefined =>
   resolveOptionalIntegerOption(value, { min: 0 });
@@ -21,7 +21,7 @@ const resolveChannelOverride = (params: {
 
 /** Resolve effective inbound debounce milliseconds from explicit, channel, and global config. */
 export function resolveInboundDebounceMs(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   channel: string;
   overrideMs?: number;
 }): number {

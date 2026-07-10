@@ -1,8 +1,8 @@
 {
-  "name": "@openclaw/browser-plugin",
+  "name": "@marketingclaw/browser-plugin",
   "version": "2026.6.11",
   "private": true,
-  "description": "OpenClaw browser tool plugin",
+  "description": "MarketingClaw browser tool plugin",
   "type": "module",
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.29.0",
@@ -13,10 +13,10 @@
     "ws": "8.21.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
+    "@marketingclaw/plugin-sdk": "workspace:*",
     "undici": "8.6.0"
   },
-  "openclaw": {
+  "marketingclaw": {
     "extensions": [
       "./index.ts"
     ],

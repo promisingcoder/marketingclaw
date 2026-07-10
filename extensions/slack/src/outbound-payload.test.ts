@@ -1,6 +1,6 @@
 // Slack tests cover outbound payload plugin behavior.
-import { installChannelOutboundPayloadContractSuite } from "openclaw/plugin-sdk/channel-contract-testing";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
+import { installChannelOutboundPayloadContractSuite } from "marketingclaw/plugin-sdk/channel-contract-testing";
+import type { ReplyPayload } from "marketingclaw/plugin-sdk/reply-runtime";
 import { describe, expect, it } from "vitest";
 import { createSlackOutboundPayloadHarness, slackOutbound } from "../test-api.js";
 
@@ -164,7 +164,7 @@ describe("slackOutbound sendPayload", () => {
           elements: [
             expect.objectContaining({
               type: "button",
-              action_id: "openclaw:reply_link:1:1",
+              action_id: "marketingclaw:reply_link:1:1",
               url: "https://example.com/app",
             }),
           ],
@@ -397,7 +397,7 @@ describe("slackOutbound sendPayload", () => {
             blocks: [
               {
                 type: "actions",
-                block_id: "openclaw_reply_buttons_1",
+                block_id: "marketingclaw_reply_buttons_1",
                 elements: [],
               },
             ],
@@ -429,12 +429,12 @@ describe("slackOutbound sendPayload", () => {
     expect(call[0]).toBe(to);
     expect(call[1]).toBe("Deploy?");
     const blocks = sendOptions(call).blocks;
-    expect(blocks?.[0]?.block_id).toBe("openclaw_reply_buttons_1");
+    expect(blocks?.[0]?.block_id).toBe("marketingclaw_reply_buttons_1");
     expect(blocks?.[1]?.type).toBe("section");
-    expect(blocks?.[2]?.block_id).toBe("openclaw_reply_buttons_2");
-    expect(blocks?.[2]?.elements?.[0]?.action_id).toBe("openclaw:reply_button:2:1");
-    expect(blocks?.[3]?.block_id).toBe("openclaw_reply_buttons_3");
-    expect(blocks?.[3]?.elements?.[0]?.action_id).toBe("openclaw:reply_button:3:1");
+    expect(blocks?.[2]?.block_id).toBe("marketingclaw_reply_buttons_2");
+    expect(blocks?.[2]?.elements?.[0]?.action_id).toBe("marketingclaw:reply_button:2:1");
+    expect(blocks?.[3]?.block_id).toBe("marketingclaw_reply_buttons_3");
+    expect(blocks?.[3]?.elements?.[0]?.action_id).toBe("marketingclaw:reply_button:3:1");
   });
 });
 

@@ -1,4 +1,4 @@
-package ai.openclaw.app
+package ai.marketingclaw.app
 
 /**
  * Persisted wake-word mode; raw values are stored in secure preferences.

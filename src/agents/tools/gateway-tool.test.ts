@@ -28,7 +28,7 @@ const {
   })),
   formatDoctorNonInteractiveHintMock: vi.fn(
     () =>
-      "Recommended follow-up: run openclaw doctor --non-interactive in a terminal or approvals-capable OpenClaw surface.",
+      "Recommended follow-up: run marketingclaw doctor --non-interactive in a terminal or approvals-capable MarketingClaw surface.",
   ),
   writeRestartSentinelMock: vi.fn(async (_payload: RestartSentinelPayload) => undefined),
   clearRestartSentinelMock: vi.fn(async () => undefined),
@@ -112,7 +112,7 @@ describe("gateway tool restart continuation", () => {
     });
     formatDoctorNonInteractiveHintMock.mockReset();
     formatDoctorNonInteractiveHintMock.mockReturnValue(
-      "Recommended follow-up: run openclaw doctor --non-interactive in a terminal or approvals-capable OpenClaw surface.",
+      "Recommended follow-up: run marketingclaw doctor --non-interactive in a terminal or approvals-capable MarketingClaw surface.",
     );
     writeRestartSentinelMock.mockReset();
     writeRestartSentinelMock.mockResolvedValue(undefined);

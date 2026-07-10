@@ -85,7 +85,7 @@ if [[ "\${1:-}" == "compose" ]]; then
   for ((i = 0; i + 4 < \${#args[@]}; i++)); do
     if [[ "\${args[$i]}" == "--entrypoint" &&
       "\${args[$((i + 1))]}" == "node" &&
-      "\${args[$((i + 2))]}" == "openclaw-gateway" &&
+      "\${args[$((i + 2))]}" == "marketingclaw-gateway" &&
       "\${args[$((i + 3))]}" == "-e" ]]; then
       node -e "\${args[$((i + 4))]}" "\${args[@]:$((i + 5))}"
       exit $?
@@ -157,22 +157,22 @@ async function createDockerSetupSandbox(): Promise<DockerSetupSandbox> {
   await writeFile(dockerfilePath, "FROM scratch\n");
   await writeFile(
     composePath,
-    "services:\n  openclaw-gateway:\n    image: noop\n  openclaw-cli:\n    image: noop\n",
+    "services:\n  marketingclaw-gateway:\n    image: noop\n  marketingclaw-cli:\n    image: noop\n",
   );
   await writeDockerStub(binDir, logPath);
 
   return { rootDir, scriptPath, logPath, binDir };
 }
 
-const sandboxRootTracker = createSuiteTempRootTracker({ prefix: "openclaw-docker-setup-" });
+const sandboxRootTracker = createSuiteTempRootTracker({ prefix: "marketingclaw-docker-setup-" });
 
 const prestartContainerEnvFlags = [
   "-e HOME=/home/node",
-  "-e OPENCLAW_HOME=/home/node",
-  "-e OPENCLAW_STATE_DIR=/home/node/.openclaw",
-  "-e OPENCLAW_CONFIG_PATH=/home/node/.openclaw/openclaw.json",
-  "-e OPENCLAW_CONFIG_DIR=/home/node/.openclaw",
-  "-e OPENCLAW_WORKSPACE_DIR=/home/node/.openclaw/workspace",
+  "-e MARKETINGCLAW_HOME=/home/node",
+  "-e MARKETINGCLAW_STATE_DIR=/home/node/.marketingclaw",
+  "-e MARKETINGCLAW_CONFIG_PATH=/home/node/.marketingclaw/marketingclaw.json",
+  "-e MARKETINGCLAW_CONFIG_DIR=/home/node/.marketingclaw",
+  "-e MARKETINGCLAW_WORKSPACE_DIR=/home/node/.marketingclaw/workspace",
 ].join(" ");
 
 function createEnv(
@@ -186,10 +186,10 @@ function createEnv(
     LC_ALL: process.env.LC_ALL,
     TMPDIR: process.env.TMPDIR,
     DOCKER_STUB_LOG: sandbox.logPath,
-    OPENCLAW_GATEWAY_TOKEN: "test-token",
-    OPENCLAW_CONFIG_DIR: join(sandbox.rootDir, "config"),
-    OPENCLAW_WORKSPACE_DIR: join(sandbox.rootDir, "openclaw"),
-    OPENCLAW_AUTH_PROFILE_SECRET_DIR: join(sandbox.rootDir, "auth-profile-secrets"),
+    MARKETINGCLAW_GATEWAY_TOKEN: "test-token",
+    MARKETINGCLAW_CONFIG_DIR: join(sandbox.rootDir, "config"),
+    MARKETINGCLAW_WORKSPACE_DIR: join(sandbox.rootDir, "marketingclaw"),
+    MARKETINGCLAW_AUTH_PROFILE_SECRET_DIR: join(sandbox.rootDir, "auth-profile-secrets"),
   };
 
   for (const [key, value] of Object.entries(overrides)) {
@@ -252,7 +252,9 @@ function collectMatchingLines(lines: string[], predicate: (line: string) => bool
 }
 
 function isGatewayStartLine(line: string) {
-  return line.includes("compose") && line.includes(" up -d") && line.includes("openclaw-gateway");
+  return (
+    line.includes("compose") && line.includes(" up -d") && line.includes("marketingclaw-gateway")
+  );
 }
 
 function findGatewayStartLineIndex(lines: string[]) {
@@ -289,9 +291,9 @@ async function runDockerSetupWithUnsetGatewayToken(
   await prepare?.(configDir);
 
   const result = runDockerSetup(sandbox, {
-    OPENCLAW_GATEWAY_TOKEN: undefined,
-    OPENCLAW_CONFIG_DIR: configDir,
-    OPENCLAW_WORKSPACE_DIR: workspaceDir,
+    MARKETINGCLAW_GATEWAY_TOKEN: undefined,
+    MARKETINGCLAW_CONFIG_DIR: configDir,
+    MARKETINGCLAW_WORKSPACE_DIR: workspaceDir,
   });
   const envFile = await readFile(join(sandbox.rootDir, ".env"), "utf8");
 
@@ -357,53 +359,55 @@ describe("scripts/docker/setup.sh", () => {
     const activeSandbox = requireSandbox(sandbox);
 
     const result = runDockerSetup(activeSandbox, {
-      OPENCLAW_DOCKER_APT_PACKAGES: "curl wget",
-      OPENCLAW_EXTRA_MOUNTS: undefined,
-      OPENCLAW_HOME_VOLUME: "openclaw-home",
+      MARKETINGCLAW_DOCKER_APT_PACKAGES: "curl wget",
+      MARKETINGCLAW_EXTRA_MOUNTS: undefined,
+      MARKETINGCLAW_HOME_VOLUME: "marketingclaw-home",
     });
     expect(result.status).toBe(0);
     const envFile = await readFile(join(activeSandbox.rootDir, ".env"), "utf8");
-    expect(envFile).toContain("OPENCLAW_IMAGE_APT_PACKAGES=curl wget");
-    expect(envFile).toContain("OPENCLAW_DOCKER_BUILD_NODE_OPTIONS=--max-old-space-size=8192");
-    expect(envFile).toContain("OPENCLAW_DOCKER_BUILD_TSDOWN_MAX_OLD_SPACE_MB=");
-    expect(envFile).toContain("OPENCLAW_DOCKER_BUILD_SKIP_DTS=1");
-    expect(envFile).toContain("OPENCLAW_EXTRA_MOUNTS=");
-    expect(envFile).toContain("OPENCLAW_HOME_VOLUME=openclaw-home"); // pragma: allowlist secret
-    expect(envFile).toContain("OPENCLAW_DISABLE_BONJOUR=");
+    expect(envFile).toContain("MARKETINGCLAW_IMAGE_APT_PACKAGES=curl wget");
+    expect(envFile).toContain("MARKETINGCLAW_DOCKER_BUILD_NODE_OPTIONS=--max-old-space-size=8192");
+    expect(envFile).toContain("MARKETINGCLAW_DOCKER_BUILD_TSDOWN_MAX_OLD_SPACE_MB=");
+    expect(envFile).toContain("MARKETINGCLAW_DOCKER_BUILD_SKIP_DTS=1");
+    expect(envFile).toContain("MARKETINGCLAW_EXTRA_MOUNTS=");
+    expect(envFile).toContain("MARKETINGCLAW_HOME_VOLUME=marketingclaw-home"); // pragma: allowlist secret
+    expect(envFile).toContain("MARKETINGCLAW_DISABLE_BONJOUR=");
     expect(envFile).toContain(
-      `OPENCLAW_AUTH_PROFILE_SECRET_DIR=${join(activeSandbox.rootDir, "auth-profile-secrets")}`,
+      `MARKETINGCLAW_AUTH_PROFILE_SECRET_DIR=${join(activeSandbox.rootDir, "auth-profile-secrets")}`,
     );
     const extraCompose = await readFile(
       join(activeSandbox.rootDir, "docker-compose.extra.yml"),
       "utf8",
     );
-    expect(extraCompose).toContain("openclaw-home:/home/node");
+    expect(extraCompose).toContain("marketingclaw-home:/home/node");
     expect(extraCompose).toContain(
-      `${join(activeSandbox.rootDir, "auth-profile-secrets")}:/home/node/.config/openclaw`,
+      `${join(activeSandbox.rootDir, "auth-profile-secrets")}:/home/node/.config/marketingclaw`,
     );
     expect(extraCompose).toContain("volumes:");
-    expect(extraCompose).toContain("openclaw-home:");
+    expect(extraCompose).toContain("marketingclaw-home:");
     const log = await readDockerLog(activeSandbox);
-    expect(log).toContain("--build-arg OPENCLAW_IMAGE_APT_PACKAGES=curl wget");
+    expect(log).toContain("--build-arg MARKETINGCLAW_IMAGE_APT_PACKAGES=curl wget");
     expect(log).toContain(
-      "--build-arg OPENCLAW_DOCKER_BUILD_NODE_OPTIONS=--max-old-space-size=8192",
+      "--build-arg MARKETINGCLAW_DOCKER_BUILD_NODE_OPTIONS=--max-old-space-size=8192",
     );
-    expect(log).toContain("--build-arg OPENCLAW_DOCKER_BUILD_TSDOWN_MAX_OLD_SPACE_MB=");
-    expect(log).toContain("--build-arg OPENCLAW_DOCKER_BUILD_SKIP_DTS=1");
+    expect(log).toContain("--build-arg MARKETINGCLAW_DOCKER_BUILD_TSDOWN_MAX_OLD_SPACE_MB=");
+    expect(log).toContain("--build-arg MARKETINGCLAW_DOCKER_BUILD_SKIP_DTS=1");
     expect(log).toContain(
-      `run --rm --no-deps ${prestartContainerEnvFlags} --entrypoint node openclaw-gateway dist/index.js onboard --mode local --no-install-daemon --gateway-auth token --gateway-token-ref-env OPENCLAW_GATEWAY_TOKEN --skip-ui --suppress-gateway-token-output`,
+      `run --rm --no-deps ${prestartContainerEnvFlags} --entrypoint node marketingclaw-gateway dist/index.js onboard --mode local --no-install-daemon --gateway-auth token --gateway-token-ref-env MARKETINGCLAW_GATEWAY_TOKEN --skip-ui --suppress-gateway-token-output`,
     );
     expect(result.stdout).toContain("Gateway token: stored in Docker environment/config");
     expect(result.stdout).toContain("Gateway running with host port mapping.");
     expect(result.stdout).toContain("Access from tailnet devices via the host's tailnet IP.");
     expect(result.stdout).toContain("Commands:");
-    expect(result.stdout).toContain("logs -f openclaw-gateway");
+    expect(result.stdout).toContain("logs -f marketingclaw-gateway");
     expect(result.stdout).not.toContain("test-token");
     expect(result.stdout).not.toContain("#token=");
     expect(log).toContain(
-      `run --rm --no-deps ${prestartContainerEnvFlags} --entrypoint node openclaw-gateway dist/index.js config set --batch-json [{"path":"gateway.mode","value":"local"},{"path":"gateway.bind","value":"lan"},{"path":"gateway.controlUi.allowedOrigins","value":["http://localhost:18789","http://127.0.0.1:18789"]}]`,
+      `run --rm --no-deps ${prestartContainerEnvFlags} --entrypoint node marketingclaw-gateway dist/index.js config set --batch-json [{"path":"gateway.mode","value":"local"},{"path":"gateway.bind","value":"lan"},{"path":"gateway.controlUi.allowedOrigins","value":["http://localhost:18789","http://127.0.0.1:18789"]}]`,
     );
-    expect(log).not.toContain("run --rm openclaw-cli onboard --mode local --no-install-daemon");
+    expect(log).not.toContain(
+      "run --rm marketingclaw-cli onboard --mode local --no-install-daemon",
+    );
   });
 
   it("allows ordinary spaces in host persistence paths and quotes generated mounts", async () => {
@@ -416,28 +420,28 @@ describe("scripts/docker/setup.sh", () => {
     const extraMountSource = join(activeSandbox.rootDir, "extra data");
 
     const result = runDockerSetup(activeSandbox, {
-      OPENCLAW_CONFIG_DIR: configDir,
-      OPENCLAW_WORKSPACE_DIR: workspaceDir,
-      OPENCLAW_AUTH_PROFILE_SECRET_DIR: authProfileSecretDir,
-      OPENCLAW_HOME_VOLUME: homeVolumeDir,
-      OPENCLAW_EXTRA_MOUNTS: `${extraMountSource}:/mnt/extra data:ro`,
+      MARKETINGCLAW_CONFIG_DIR: configDir,
+      MARKETINGCLAW_WORKSPACE_DIR: workspaceDir,
+      MARKETINGCLAW_AUTH_PROFILE_SECRET_DIR: authProfileSecretDir,
+      MARKETINGCLAW_HOME_VOLUME: homeVolumeDir,
+      MARKETINGCLAW_EXTRA_MOUNTS: `${extraMountSource}:/mnt/extra data:ro`,
     });
 
     expect(result.status).toBe(0);
     expect(result.stderr).not.toContain("cannot contain whitespace");
     const envFile = await readFile(join(activeSandbox.rootDir, ".env"), "utf8");
-    expect(envFile).toContain(`OPENCLAW_CONFIG_DIR=${configDir}`);
-    expect(envFile).toContain(`OPENCLAW_WORKSPACE_DIR=${workspaceDir}`);
-    expect(envFile).toContain(`OPENCLAW_AUTH_PROFILE_SECRET_DIR=${authProfileSecretDir}`);
+    expect(envFile).toContain(`MARKETINGCLAW_CONFIG_DIR=${configDir}`);
+    expect(envFile).toContain(`MARKETINGCLAW_WORKSPACE_DIR=${workspaceDir}`);
+    expect(envFile).toContain(`MARKETINGCLAW_AUTH_PROFILE_SECRET_DIR=${authProfileSecretDir}`);
 
     const extraCompose = await readFile(
       join(activeSandbox.rootDir, "docker-compose.extra.yml"),
       "utf8",
     );
     expect(extraCompose).toContain(`"${homeVolumeDir}:/home/node"`);
-    expect(extraCompose).toContain(`"${configDir}:/home/node/.openclaw"`);
-    expect(extraCompose).toContain(`"${workspaceDir}:/home/node/.openclaw/workspace"`);
-    expect(extraCompose).toContain(`"${authProfileSecretDir}:/home/node/.config/openclaw"`);
+    expect(extraCompose).toContain(`"${configDir}:/home/node/.marketingclaw"`);
+    expect(extraCompose).toContain(`"${workspaceDir}:/home/node/.marketingclaw/workspace"`);
+    expect(extraCompose).toContain(`"${authProfileSecretDir}:/home/node/.config/marketingclaw"`);
     expect(extraCompose).toContain(`"${extraMountSource}:/mnt/extra data:ro"`);
   });
 
@@ -445,70 +449,70 @@ describe("scripts/docker/setup.sh", () => {
     const activeSandbox = requireSandbox(sandbox);
 
     const result = runDockerSetup(activeSandbox, {
-      OPENCLAW_DISABLE_BONJOUR: "0",
+      MARKETINGCLAW_DISABLE_BONJOUR: "0",
     });
 
     expect(result.status).toBe(0);
     const envFile = await readFile(join(activeSandbox.rootDir, ".env"), "utf8");
-    expect(envFile).toContain("OPENCLAW_DISABLE_BONJOUR=0");
+    expect(envFile).toContain("MARKETINGCLAW_DISABLE_BONJOUR=0");
   });
 
-  it("normalizes legacy OPENCLAW_DOCKER_APT_PACKAGES into OPENCLAW_IMAGE_APT_PACKAGES", async () => {
+  it("normalizes legacy MARKETINGCLAW_DOCKER_APT_PACKAGES into MARKETINGCLAW_IMAGE_APT_PACKAGES", async () => {
     const activeSandbox = requireSandbox(sandbox);
     await resetDockerLog(activeSandbox);
 
     const result = runDockerSetup(activeSandbox, {
-      OPENCLAW_DOCKER_APT_PACKAGES: "curl wget",
+      MARKETINGCLAW_DOCKER_APT_PACKAGES: "curl wget",
     });
     expect(result.status).toBe(0);
 
     const envFile = await readFile(join(activeSandbox.rootDir, ".env"), "utf8");
-    expect(envFile).toContain("OPENCLAW_IMAGE_APT_PACKAGES=curl wget");
-    expect(envFile).not.toContain("OPENCLAW_DOCKER_APT_PACKAGES");
+    expect(envFile).toContain("MARKETINGCLAW_IMAGE_APT_PACKAGES=curl wget");
+    expect(envFile).not.toContain("MARKETINGCLAW_DOCKER_APT_PACKAGES");
 
     const log = await readDockerLog(activeSandbox);
-    expect(log).toContain("--build-arg OPENCLAW_IMAGE_APT_PACKAGES=curl wget");
-    expect(log).not.toContain("--build-arg OPENCLAW_DOCKER_APT_PACKAGES");
+    expect(log).toContain("--build-arg MARKETINGCLAW_IMAGE_APT_PACKAGES=curl wget");
+    expect(log).not.toContain("--build-arg MARKETINGCLAW_DOCKER_APT_PACKAGES");
   });
 
-  it("prefers OPENCLAW_IMAGE_APT_PACKAGES over legacy OPENCLAW_DOCKER_APT_PACKAGES", async () => {
+  it("prefers MARKETINGCLAW_IMAGE_APT_PACKAGES over legacy MARKETINGCLAW_DOCKER_APT_PACKAGES", async () => {
     const activeSandbox = requireSandbox(sandbox);
     await resetDockerLog(activeSandbox);
 
     const result = runDockerSetup(activeSandbox, {
-      OPENCLAW_IMAGE_APT_PACKAGES: "curl wget httpie",
-      OPENCLAW_DOCKER_APT_PACKAGES: "curl wget",
+      MARKETINGCLAW_IMAGE_APT_PACKAGES: "curl wget httpie",
+      MARKETINGCLAW_DOCKER_APT_PACKAGES: "curl wget",
     });
     expect(result.status).toBe(0);
 
     const envFile = await readFile(join(activeSandbox.rootDir, ".env"), "utf8");
-    expect(envFile).toContain("OPENCLAW_IMAGE_APT_PACKAGES=curl wget httpie");
-    expect(envFile).not.toContain("OPENCLAW_DOCKER_APT_PACKAGES");
+    expect(envFile).toContain("MARKETINGCLAW_IMAGE_APT_PACKAGES=curl wget httpie");
+    expect(envFile).not.toContain("MARKETINGCLAW_DOCKER_APT_PACKAGES");
 
     const log = await readDockerLog(activeSandbox);
-    expect(log).toContain("--build-arg OPENCLAW_IMAGE_APT_PACKAGES=curl wget httpie");
-    expect(log).not.toMatch(/--build-arg OPENCLAW_IMAGE_APT_PACKAGES=curl wget(?! httpie)/);
+    expect(log).toContain("--build-arg MARKETINGCLAW_IMAGE_APT_PACKAGES=curl wget httpie");
+    expect(log).not.toMatch(/--build-arg MARKETINGCLAW_IMAGE_APT_PACKAGES=curl wget(?! httpie)/);
   });
 
-  it("explicitly empty OPENCLAW_IMAGE_APT_PACKAGES suppresses legacy fallback", async () => {
+  it("explicitly empty MARKETINGCLAW_IMAGE_APT_PACKAGES suppresses legacy fallback", async () => {
     const activeSandbox = requireSandbox(sandbox);
     await resetDockerLog(activeSandbox);
 
     const result = runDockerSetup(activeSandbox, {
-      OPENCLAW_IMAGE_APT_PACKAGES: "",
-      OPENCLAW_DOCKER_APT_PACKAGES: "curl wget",
+      MARKETINGCLAW_IMAGE_APT_PACKAGES: "",
+      MARKETINGCLAW_DOCKER_APT_PACKAGES: "curl wget",
     });
     expect(result.status).toBe(0);
 
     const envFile = await readFile(join(activeSandbox.rootDir, ".env"), "utf8");
-    expect(envFile).toContain("OPENCLAW_IMAGE_APT_PACKAGES=");
+    expect(envFile).toContain("MARKETINGCLAW_IMAGE_APT_PACKAGES=");
     expect(envFile).not.toContain("curl wget");
 
     const log = await readDockerLog(activeSandbox);
-    expect(log).not.toContain("--build-arg OPENCLAW_IMAGE_APT_PACKAGES=curl wget");
+    expect(log).not.toContain("--build-arg MARKETINGCLAW_IMAGE_APT_PACKAGES=curl wget");
   });
 
-  it("avoids shared-network openclaw-cli before the gateway is started", async () => {
+  it("avoids shared-network marketingclaw-cli before the gateway is started", async () => {
     const activeSandbox = requireSandbox(sandbox);
 
     await resetDockerLog(activeSandbox);
@@ -521,7 +525,7 @@ describe("scripts/docker/setup.sh", () => {
 
     const prestartLines = lines.slice(0, gatewayStartIdx);
     const prestartCliRunLines = collectMatchingLines(prestartLines, (line) =>
-      /\bcompose\b.*\brun\b.*\bopenclaw-cli\b/.test(line),
+      /\bcompose\b.*\brun\b.*\bmarketingclaw-cli\b/.test(line),
     );
     expect(prestartCliRunLines).toStrictEqual([]);
   });
@@ -531,10 +535,10 @@ describe("scripts/docker/setup.sh", () => {
 
     await resetDockerLog(activeSandbox);
     const result = runDockerSetup(activeSandbox, {
-      OPENCLAW_HOME: "/mnt/c/Users/Trevor",
-      OPENCLAW_STATE_DIR: "/mnt/c/Users/Trevor/.openclaw",
-      OPENCLAW_CONFIG_PATH: "/mnt/c/Users/Trevor/.openclaw/openclaw.json",
-      OPENCLAW_SKIP_ONBOARDING: "1",
+      MARKETINGCLAW_HOME: "/mnt/c/Users/Trevor",
+      MARKETINGCLAW_STATE_DIR: "/mnt/c/Users/Trevor/.marketingclaw",
+      MARKETINGCLAW_CONFIG_PATH: "/mnt/c/Users/Trevor/.marketingclaw/marketingclaw.json",
+      MARKETINGCLAW_SKIP_ONBOARDING: "1",
     });
     expect(result.status).toBe(0);
 
@@ -564,8 +568,8 @@ describe("scripts/docker/setup.sh", () => {
 
     await withUnixSocket(socketPath, async () => {
       const result = runDockerSetup(activeSandbox, {
-        OPENCLAW_SANDBOX: "1",
-        OPENCLAW_DOCKER_SOCKET: socketPath,
+        MARKETINGCLAW_SANDBOX: "1",
+        MARKETINGCLAW_DOCKER_SOCKET: socketPath,
       });
 
       expect(result.status).toBe(0);
@@ -588,20 +592,20 @@ describe("scripts/docker/setup.sh", () => {
     const result = runDockerSetup(
       activeSandbox,
       {
-        OPENCLAW_IMAGE: "ghcr.io/openclaw/openclaw:latest",
-        OPENCLAW_SKIP_ONBOARDING: "1",
+        MARKETINGCLAW_IMAGE: "ghcr.io/marketingclaw/marketingclaw:latest",
+        MARKETINGCLAW_SKIP_ONBOARDING: "1",
       },
       ["--offline"],
     );
 
     expect(result.status).toBe(0);
     expect(result.stdout).toContain(
-      "Using preloaded Docker image: ghcr.io/openclaw/openclaw:latest",
+      "Using preloaded Docker image: ghcr.io/marketingclaw/marketingclaw:latest",
     );
 
     const lines = await readDockerLogLines(activeSandbox);
     const log = lines.join("\n");
-    expect(log).toContain("image inspect ghcr.io/openclaw/openclaw:latest");
+    expect(log).toContain("image inspect ghcr.io/marketingclaw/marketingclaw:latest");
     expect(log).not.toMatch(/^build /m);
     expect(log).not.toMatch(/^pull /m);
     expect(log).toContain("config set --batch-json");
@@ -615,22 +619,22 @@ describe("scripts/docker/setup.sh", () => {
     const result = runDockerSetup(
       activeSandbox,
       {
-        OPENCLAW_IMAGE: "ghcr.io/openclaw/openclaw:offline",
-        DOCKER_STUB_MISSING_IMAGES: "ghcr.io/openclaw/openclaw:offline",
+        MARKETINGCLAW_IMAGE: "ghcr.io/marketingclaw/marketingclaw:offline",
+        DOCKER_STUB_MISSING_IMAGES: "ghcr.io/marketingclaw/marketingclaw:offline",
       },
       ["--offline"],
     );
 
     expect(result.status).not.toBe(0);
     expect(result.stderr).toContain(
-      "Offline Docker setup requires preloaded image ghcr.io/openclaw/openclaw:offline",
+      "Offline Docker setup requires preloaded image ghcr.io/marketingclaw/marketingclaw:offline",
     );
 
     const log = await readDockerLog(activeSandbox);
-    expect(log).toContain("image inspect ghcr.io/openclaw/openclaw:offline");
+    expect(log).toContain("image inspect ghcr.io/marketingclaw/marketingclaw:offline");
     expect(log).not.toMatch(/^build /m);
     expect(log).not.toMatch(/^pull /m);
-    expect(log).not.toContain("up -d openclaw-gateway");
+    expect(log).not.toContain("up -d marketingclaw-gateway");
   });
 
   it("offline sandbox stays disabled when its configured image is missing", async () => {
@@ -644,14 +648,14 @@ describe("scripts/docker/setup.sh", () => {
     const socketPath = join(activeSandbox.rootDir, "sb.sock");
 
     await withUnixSocket(socketPath, async () => {
-      const defaultImage = "registry.example/openclaw-sandbox:approved";
-      const agentImage = " registry.example/openclaw-sandbox:agent ";
+      const defaultImage = "registry.example/marketingclaw-sandbox:approved";
+      const agentImage = " registry.example/marketingclaw-sandbox:agent ";
       const result = runDockerSetup(
         activeSandbox,
         {
-          OPENCLAW_SANDBOX: "1",
-          OPENCLAW_SKIP_ONBOARDING: "1",
-          OPENCLAW_DOCKER_SOCKET: socketPath,
+          MARKETINGCLAW_SANDBOX: "1",
+          MARKETINGCLAW_SKIP_ONBOARDING: "1",
+          MARKETINGCLAW_DOCKER_SOCKET: socketPath,
           DOCKER_STUB_AGENTS_JSON: JSON.stringify({
             defaults: { sandbox: { docker: { image: defaultImage } } },
             list: [{ id: "custom", sandbox: { docker: { image: agentImage } } }],
@@ -670,10 +674,10 @@ describe("scripts/docker/setup.sh", () => {
 
       const lines = await readDockerLogLines(activeSandbox);
       const log = lines.join("\n");
-      expect(log).toContain("image inspect openclaw:local");
+      expect(log).toContain("image inspect marketingclaw:local");
       expect(log).not.toContain(`image inspect ${defaultImage}`);
       expect(log).toContain(`image inspect ${agentImage} host=unix://${socketPath}`);
-      expect(log).not.toContain("image inspect openclaw-sandbox:bookworm-slim");
+      expect(log).not.toContain("image inspect marketingclaw-sandbox:bookworm-slim");
       expect(log).not.toMatch(/^build /m);
       expect(log).not.toMatch(/^pull /m);
       expect(log).not.toContain("config set agents.defaults.sandbox.mode off");
@@ -688,21 +692,21 @@ describe("scripts/docker/setup.sh", () => {
     const socketPath = join(activeSandbox.rootDir, "eff.sock");
 
     await withUnixSocket(socketPath, async () => {
-      const defaultImage = "registry.example/openclaw-sandbox:default";
-      const browserImage = "registry.example/openclaw-sandbox-browser:default";
+      const defaultImage = "registry.example/marketingclaw-sandbox:default";
+      const browserImage = "registry.example/marketingclaw-sandbox-browser:default";
       const ignoredImages = [
-        "registry.example/openclaw-sandbox:ssh",
-        "registry.example/openclaw-sandbox:shared-agent",
-        "registry.example/openclaw-sandbox-browser:shared-agent",
-        "registry.example/openclaw-sandbox:off",
-        "registry.example/openclaw-sandbox-browser:denied",
+        "registry.example/marketingclaw-sandbox:ssh",
+        "registry.example/marketingclaw-sandbox:shared-agent",
+        "registry.example/marketingclaw-sandbox-browser:shared-agent",
+        "registry.example/marketingclaw-sandbox:off",
+        "registry.example/marketingclaw-sandbox-browser:denied",
       ];
       const result = runDockerSetup(
         activeSandbox,
         {
-          OPENCLAW_SANDBOX: "1",
-          OPENCLAW_SKIP_ONBOARDING: "1",
-          OPENCLAW_DOCKER_SOCKET: socketPath,
+          MARKETINGCLAW_SANDBOX: "1",
+          MARKETINGCLAW_SKIP_ONBOARDING: "1",
+          MARKETINGCLAW_DOCKER_SOCKET: socketPath,
           DOCKER_STUB_AGENTS_JSON: JSON.stringify({
             defaults: {
               sandbox: {
@@ -758,13 +762,13 @@ describe("scripts/docker/setup.sh", () => {
     const socketPath = join(activeSandbox.rootDir, "br.sock");
 
     await withUnixSocket(socketPath, async () => {
-      const browserImage = "registry.example/openclaw-sandbox-browser:stale";
+      const browserImage = "registry.example/marketingclaw-sandbox-browser:stale";
       const result = runDockerSetup(
         activeSandbox,
         {
-          OPENCLAW_SANDBOX: "1",
-          OPENCLAW_SKIP_ONBOARDING: "1",
-          OPENCLAW_DOCKER_SOCKET: socketPath,
+          MARKETINGCLAW_SANDBOX: "1",
+          MARKETINGCLAW_SKIP_ONBOARDING: "1",
+          MARKETINGCLAW_DOCKER_SOCKET: socketPath,
           DOCKER_STUB_AGENTS_JSON: JSON.stringify({
             defaults: { sandbox: { browser: { enabled: true, image: browserImage } } },
           }),
@@ -797,8 +801,8 @@ describe("scripts/docker/setup.sh", () => {
     const workspaceDir = join(activeSandbox.rootDir, "workspace-identity");
 
     const result = runDockerSetup(activeSandbox, {
-      OPENCLAW_CONFIG_DIR: configDir,
-      OPENCLAW_WORKSPACE_DIR: workspaceDir,
+      MARKETINGCLAW_CONFIG_DIR: configDir,
+      MARKETINGCLAW_WORKSPACE_DIR: workspaceDir,
     });
 
     expect(result.status).toBe(0);
@@ -806,16 +810,16 @@ describe("scripts/docker/setup.sh", () => {
     expect(identityDirStat.isDirectory()).toBe(true);
   });
 
-  it("writes OPENCLAW_TZ into .env when given a real IANA timezone", async () => {
+  it("writes MARKETINGCLAW_TZ into .env when given a real IANA timezone", async () => {
     const activeSandbox = requireSandbox(sandbox);
 
     const result = runDockerSetup(activeSandbox, {
-      OPENCLAW_TZ: "Asia/Shanghai",
+      MARKETINGCLAW_TZ: "Asia/Shanghai",
     });
 
     expect(result.status).toBe(0);
     const envFile = await readFile(join(activeSandbox.rootDir, ".env"), "utf8");
-    expect(envFile).toContain("OPENCLAW_TZ=Asia/Shanghai");
+    expect(envFile).toContain("MARKETINGCLAW_TZ=Asia/Shanghai");
   });
 
   it("precreates agent data dirs to avoid EACCES in container", async () => {
@@ -824,8 +828,8 @@ describe("scripts/docker/setup.sh", () => {
     const workspaceDir = join(activeSandbox.rootDir, "workspace-agent-dirs");
 
     const result = runDockerSetup(activeSandbox, {
-      OPENCLAW_CONFIG_DIR: configDir,
-      OPENCLAW_WORKSPACE_DIR: workspaceDir,
+      MARKETINGCLAW_CONFIG_DIR: configDir,
+      MARKETINGCLAW_WORKSPACE_DIR: workspaceDir,
     });
 
     expect(result.status).toBe(0);
@@ -840,7 +844,9 @@ describe("scripts/docker/setup.sh", () => {
     const onboardIdx = log.indexOf("onboard");
     expect(chownIdx).toBeGreaterThanOrEqual(0);
     expect(onboardIdx).toBeGreaterThan(chownIdx);
-    expect(log).toContain("run --rm --no-deps --user root --entrypoint sh openclaw-gateway -c");
+    expect(log).toContain(
+      "run --rm --no-deps --user root --entrypoint sh marketingclaw-gateway -c",
+    );
     expect(log).toContain("chown node:node /home/node/.config");
   });
 
@@ -851,9 +857,9 @@ describe("scripts/docker/setup.sh", () => {
     const secretDir = join(activeSandbox.rootDir, "auth-profile-secret-key");
 
     const result = runDockerSetup(activeSandbox, {
-      OPENCLAW_CONFIG_DIR: configDir,
-      OPENCLAW_WORKSPACE_DIR: workspaceDir,
-      OPENCLAW_AUTH_PROFILE_SECRET_DIR: secretDir,
+      MARKETINGCLAW_CONFIG_DIR: configDir,
+      MARKETINGCLAW_WORKSPACE_DIR: workspaceDir,
+      MARKETINGCLAW_AUTH_PROFILE_SECRET_DIR: secretDir,
     });
 
     expect(result.status).toBe(0);
@@ -862,31 +868,31 @@ describe("scripts/docker/setup.sh", () => {
     expect(secretDir.startsWith(`${configDir}/`)).toBe(false);
 
     const log = await readDockerLog(activeSandbox);
-    expect(log).toContain("find /home/node/.config/openclaw -xdev");
+    expect(log).toContain("find /home/node/.config/marketingclaw -xdev");
   });
 
-  it("reuses existing config token when OPENCLAW_GATEWAY_TOKEN is unset", async () => {
+  it("reuses existing config token when MARKETINGCLAW_GATEWAY_TOKEN is unset", async () => {
     const activeSandbox = requireSandbox(sandbox);
     const { result, envFile } = await runDockerSetupWithUnsetGatewayToken(
       activeSandbox,
       "token-reuse",
       async (configDir) => {
         await writeFile(
-          join(configDir, "openclaw.json"),
+          join(configDir, "marketingclaw.json"),
           JSON.stringify({ gateway: { auth: { mode: "token", token: "config-token-123" } } }),
         );
       },
     );
 
     expect(result.status).toBe(0);
-    expect(envFile).toContain("OPENCLAW_GATEWAY_TOKEN=config-token-123"); // pragma: allowlist secret
+    expect(envFile).toContain("MARKETINGCLAW_GATEWAY_TOKEN=config-token-123"); // pragma: allowlist secret
   });
 
-  it("reuses existing .env token when OPENCLAW_GATEWAY_TOKEN and config token are unset", async () => {
+  it("reuses existing .env token when MARKETINGCLAW_GATEWAY_TOKEN and config token are unset", async () => {
     const activeSandbox = requireSandbox(sandbox);
     await writeFile(
       join(activeSandbox.rootDir, ".env"),
-      "OPENCLAW_GATEWAY_TOKEN=dotenv-token-123\nOPENCLAW_GATEWAY_PORT=18789\n", // pragma: allowlist secret
+      "MARKETINGCLAW_GATEWAY_TOKEN=dotenv-token-123\nMARKETINGCLAW_GATEWAY_PORT=18789\n", // pragma: allowlist secret
     );
     const { result, envFile } = await runDockerSetupWithUnsetGatewayToken(
       activeSandbox,
@@ -894,7 +900,7 @@ describe("scripts/docker/setup.sh", () => {
     );
 
     expect(result.status).toBe(0);
-    expect(envFile).toContain("OPENCLAW_GATEWAY_TOKEN=dotenv-token-123"); // pragma: allowlist secret
+    expect(envFile).toContain("MARKETINGCLAW_GATEWAY_TOKEN=dotenv-token-123"); // pragma: allowlist secret
     expect(result.stderr).toBe("");
   });
 
@@ -903,9 +909,9 @@ describe("scripts/docker/setup.sh", () => {
     await writeFile(
       join(activeSandbox.rootDir, ".env"),
       [
-        "OPENCLAW_GATEWAY_TOKEN=",
-        "OPENCLAW_GATEWAY_TOKEN=first-token",
-        "OPENCLAW_GATEWAY_TOKEN=last=token=value\r", // pragma: allowlist secret
+        "MARKETINGCLAW_GATEWAY_TOKEN=",
+        "MARKETINGCLAW_GATEWAY_TOKEN=first-token",
+        "MARKETINGCLAW_GATEWAY_TOKEN=last=token=value\r", // pragma: allowlist secret
       ].join("\n"),
     );
     const { result, envFile } = await runDockerSetupWithUnsetGatewayToken(
@@ -914,26 +920,26 @@ describe("scripts/docker/setup.sh", () => {
     );
 
     expect(result.status).toBe(0);
-    expect(envFile).toContain("OPENCLAW_GATEWAY_TOKEN=last=token=value"); // pragma: allowlist secret
-    expect(envFile).not.toContain("OPENCLAW_GATEWAY_TOKEN=first-token");
+    expect(envFile).toContain("MARKETINGCLAW_GATEWAY_TOKEN=last=token=value"); // pragma: allowlist secret
+    expect(envFile).not.toContain("MARKETINGCLAW_GATEWAY_TOKEN=first-token");
     expect(envFile).not.toContain("\r");
   });
 
-  it("treats OPENCLAW_SANDBOX=0 as disabled", async () => {
+  it("treats MARKETINGCLAW_SANDBOX=0 as disabled", async () => {
     const activeSandbox = requireSandbox(sandbox);
     await resetDockerLog(activeSandbox);
 
     const result = runDockerSetup(activeSandbox, {
-      OPENCLAW_SANDBOX: "0",
+      MARKETINGCLAW_SANDBOX: "0",
     });
 
     expect(result.status).toBe(0);
     const envFile = await readFile(join(activeSandbox.rootDir, ".env"), "utf8");
-    expect(envFile).toContain("OPENCLAW_SANDBOX=");
+    expect(envFile).toContain("MARKETINGCLAW_SANDBOX=");
 
     const log = await readDockerLog(activeSandbox);
-    expect(log).toContain("--build-arg OPENCLAW_INSTALL_DOCKER_CLI=");
-    expect(log).not.toContain("--build-arg OPENCLAW_INSTALL_DOCKER_CLI=1");
+    expect(log).toContain("--build-arg MARKETINGCLAW_INSTALL_DOCKER_CLI=");
+    expect(log).not.toContain("--build-arg MARKETINGCLAW_INSTALL_DOCKER_CLI=1");
     expect(log).toContain("config set agents.defaults.sandbox.mode off");
   });
 
@@ -942,15 +948,15 @@ describe("scripts/docker/setup.sh", () => {
     await resetDockerLog(activeSandbox);
     await writeFile(
       join(activeSandbox.rootDir, "docker-compose.sandbox.yml"),
-      "services:\n  openclaw-gateway:\n    volumes:\n      - /var/run/docker.sock:/var/run/docker.sock\n",
+      "services:\n  marketingclaw-gateway:\n    volumes:\n      - /var/run/docker.sock:/var/run/docker.sock\n",
     );
     const socketPath = join(activeSandbox.rootDir, "missing-cli.sock");
 
     await withUnixSocket(socketPath, async () => {
       const result = runDockerSetup(activeSandbox, {
-        OPENCLAW_SANDBOX: "1",
-        OPENCLAW_DOCKER_SOCKET: socketPath,
-        DOCKER_STUB_FAIL_MATCH: "--entrypoint docker openclaw-gateway --version",
+        MARKETINGCLAW_SANDBOX: "1",
+        MARKETINGCLAW_DOCKER_SOCKET: socketPath,
+        DOCKER_STUB_FAIL_MATCH: "--entrypoint docker marketingclaw-gateway --version",
       });
 
       expect(result.status).toBe(0);
@@ -970,8 +976,8 @@ describe("scripts/docker/setup.sh", () => {
       const result = runDockerSetup(
         activeSandbox,
         {
-          OPENCLAW_SANDBOX: "1",
-          OPENCLAW_DOCKER_SOCKET: socketPath,
+          MARKETINGCLAW_SANDBOX: "1",
+          MARKETINGCLAW_DOCKER_SOCKET: socketPath,
           DOCKER_STUB_FAIL_MATCH: "config set agents.defaults.sandbox.scope",
         },
         ["--offline"],
@@ -986,74 +992,76 @@ describe("scripts/docker/setup.sh", () => {
       const gatewayStarts = collectMatchingLines(lines, (line) => isGatewayStartLine(line));
       expect(gatewayStarts).toHaveLength(2);
       expect(log).toContain(
-        "run --pull never --rm --no-deps openclaw-cli config set agents.defaults.sandbox.mode non-main",
+        "run --pull never --rm --no-deps marketingclaw-cli config set agents.defaults.sandbox.mode non-main",
       );
       expect(log).toContain("config set agents.defaults.sandbox.mode off");
       const forceRecreateLine = log
         .split("\n")
-        .find((line) => line.includes("--force-recreate openclaw-gateway"));
+        .find((line) => line.includes("--force-recreate marketingclaw-gateway"));
       expect(forceRecreateLine).toBe(
-        `compose compose -f ${join(activeSandbox.rootDir, "docker-compose.yml")} up -d --pull never --no-build --force-recreate openclaw-gateway`,
+        `compose compose -f ${join(activeSandbox.rootDir, "docker-compose.yml")} up -d --pull never --no-build --force-recreate marketingclaw-gateway`,
       );
       expect(forceRecreateLine).not.toContain("docker-compose.sandbox.yml");
       expect(log).toContain(
-        `image inspect openclaw-sandbox:bookworm-slim host=unix://${socketPath}`,
+        `image inspect marketingclaw-sandbox:bookworm-slim host=unix://${socketPath}`,
       );
       expectOfflineComposePolicy(lines);
       await expectMissingPath(join(activeSandbox.rootDir, "docker-compose.sandbox.yml"));
     });
   });
 
-  it("rejects injected multiline OPENCLAW_EXTRA_MOUNTS values", () => {
+  it("rejects injected multiline MARKETINGCLAW_EXTRA_MOUNTS values", () => {
     const activeSandbox = requireSandbox(sandbox);
 
     const result = runDockerSetup(activeSandbox, {
-      OPENCLAW_EXTRA_MOUNTS: "/tmp:/tmp\n  evil-service:\n    image: alpine",
+      MARKETINGCLAW_EXTRA_MOUNTS: "/tmp:/tmp\n  evil-service:\n    image: alpine",
     });
 
     expect(result.status).not.toBe(0);
-    expect(result.stderr).toContain("OPENCLAW_EXTRA_MOUNTS cannot contain control characters");
+    expect(result.stderr).toContain("MARKETINGCLAW_EXTRA_MOUNTS cannot contain control characters");
   });
 
-  it("rejects invalid OPENCLAW_EXTRA_MOUNTS mount format", () => {
+  it("rejects invalid MARKETINGCLAW_EXTRA_MOUNTS mount format", () => {
     const activeSandbox = requireSandbox(sandbox);
 
     const result = runDockerSetup(activeSandbox, {
-      OPENCLAW_EXTRA_MOUNTS: "bad mount spec",
+      MARKETINGCLAW_EXTRA_MOUNTS: "bad mount spec",
     });
 
     expect(result.status).not.toBe(0);
     expect(result.stderr).toContain("Invalid mount format");
   });
 
-  it("rejects invalid OPENCLAW_HOME_VOLUME names", () => {
+  it("rejects invalid MARKETINGCLAW_HOME_VOLUME names", () => {
     const activeSandbox = requireSandbox(sandbox);
 
     const result = runDockerSetup(activeSandbox, {
-      OPENCLAW_HOME_VOLUME: "bad name",
+      MARKETINGCLAW_HOME_VOLUME: "bad name",
     });
 
     expect(result.status).not.toBe(0);
-    expect(result.stderr).toContain("OPENCLAW_HOME_VOLUME must match");
+    expect(result.stderr).toContain("MARKETINGCLAW_HOME_VOLUME must match");
   });
 
-  it("rejects OPENCLAW_TZ values that are not present in zoneinfo", () => {
+  it("rejects MARKETINGCLAW_TZ values that are not present in zoneinfo", () => {
     const activeSandbox = requireSandbox(sandbox);
 
     const result = runDockerSetup(activeSandbox, {
-      OPENCLAW_TZ: "Nope/Bad",
+      MARKETINGCLAW_TZ: "Nope/Bad",
     });
 
     expect(result.status).not.toBe(0);
-    expect(result.stderr).toContain("OPENCLAW_TZ must match a timezone in /usr/share/zoneinfo");
+    expect(result.stderr).toContain(
+      "MARKETINGCLAW_TZ must match a timezone in /usr/share/zoneinfo",
+    );
   });
 
-  it("skips onboarding when OPENCLAW_SKIP_ONBOARDING is set", async () => {
+  it("skips onboarding when MARKETINGCLAW_SKIP_ONBOARDING is set", async () => {
     const activeSandbox = requireSandbox(sandbox);
     await resetDockerLog(activeSandbox);
 
     const result = runDockerSetup(activeSandbox, {
-      OPENCLAW_SKIP_ONBOARDING: "1",
+      MARKETINGCLAW_SKIP_ONBOARDING: "1",
     });
 
     expect(result.status).toBe(0);
@@ -1064,24 +1072,24 @@ describe("scripts/docker/setup.sh", () => {
     expect(log).toContain('"path":"gateway.mode","value":"local"');
     expect(log).toContain('"path":"gateway.bind","value":"lan"');
     const envFile = await readFile(join(activeSandbox.rootDir, ".env"), "utf8");
-    expect(envFile).toContain("OPENCLAW_SKIP_ONBOARDING=1");
+    expect(envFile).toContain("MARKETINGCLAW_SKIP_ONBOARDING=1");
   });
 
-  it("treats OPENCLAW_SKIP_ONBOARDING=0 as disabled and runs onboarding", async () => {
+  it("treats MARKETINGCLAW_SKIP_ONBOARDING=0 as disabled and runs onboarding", async () => {
     const activeSandbox = requireSandbox(sandbox);
     await resetDockerLog(activeSandbox);
 
     const result = runDockerSetup(activeSandbox, {
-      OPENCLAW_SKIP_ONBOARDING: "0",
+      MARKETINGCLAW_SKIP_ONBOARDING: "0",
     });
 
     expect(result.status).toBe(0);
     const log = await readDockerLog(activeSandbox);
     expect(log).toContain(
-      "onboard --mode local --no-install-daemon --gateway-auth token --gateway-token-ref-env OPENCLAW_GATEWAY_TOKEN --skip-ui --suppress-gateway-token-output",
+      "onboard --mode local --no-install-daemon --gateway-auth token --gateway-token-ref-env MARKETINGCLAW_GATEWAY_TOKEN --skip-ui --suppress-gateway-token-output",
     );
     const envFile = await readFile(join(activeSandbox.rootDir, ".env"), "utf8");
-    expect(envFile).toMatch(/OPENCLAW_SKIP_ONBOARDING=\n/);
+    expect(envFile).toMatch(/MARKETINGCLAW_SKIP_ONBOARDING=\n/);
   });
 
   it("avoids associative arrays so the script remains Bash 3.2-compatible", async () => {
@@ -1123,28 +1131,28 @@ describe("scripts/docker/setup.sh", () => {
   it("keeps docker-compose gateway Bonjour advertising in auto mode by default", async () => {
     const compose = await readFile(join(repoRoot, "docker-compose.yml"), "utf8");
     expect(
-      compose.match(/OPENCLAW_DISABLE_BONJOUR: \$\{OPENCLAW_DISABLE_BONJOUR:-\}/g),
+      compose.match(/MARKETINGCLAW_DISABLE_BONJOUR: \$\{MARKETINGCLAW_DISABLE_BONJOUR:-\}/g),
     ).toHaveLength(1);
   });
 
   it("keeps docker-compose CLI network namespace settings in sync", async () => {
     const compose = await readFile(join(repoRoot, "docker-compose.yml"), "utf8");
-    expect(compose).toContain('network_mode: "service:openclaw-gateway"');
-    expect(compose).toContain("depends_on:\n      - openclaw-gateway");
+    expect(compose).toContain('network_mode: "service:marketingclaw-gateway"');
+    expect(compose).toContain("depends_on:\n      - marketingclaw-gateway");
   });
 
   it("keeps docker-compose gateway token env defaults aligned across services", async () => {
     const compose = await readFile(join(repoRoot, "docker-compose.yml"), "utf8");
-    expect(compose.match(/OPENCLAW_GATEWAY_TOKEN: \$\{OPENCLAW_GATEWAY_TOKEN:-\}/g)).toHaveLength(
-      2,
-    );
+    expect(
+      compose.match(/MARKETINGCLAW_GATEWAY_TOKEN: \$\{MARKETINGCLAW_GATEWAY_TOKEN:-\}/g),
+    ).toHaveLength(2);
   });
 
   it("keeps docker-compose auth profile secret key source durable outside state", async () => {
     const compose = await readFile(join(repoRoot, "docker-compose.yml"), "utf8");
     expect(
       compose.split(
-        '"${OPENCLAW_AUTH_PROFILE_SECRET_DIR:-${HOME:-/tmp}/.openclaw-auth-profile-secrets}:/home/node/.config/openclaw"',
+        '"${MARKETINGCLAW_AUTH_PROFILE_SECRET_DIR:-${HOME:-/tmp}/.marketingclaw-auth-profile-secrets}:/home/node/.config/marketingclaw"',
       ),
     ).toHaveLength(3);
   });
@@ -1156,7 +1164,7 @@ describe("scripts/docker/setup.sh", () => {
 
   it("keeps docker-compose timezone env defaults aligned across services", async () => {
     const compose = await readFile(join(repoRoot, "docker-compose.yml"), "utf8");
-    expect(compose.match(/TZ: \$\{OPENCLAW_TZ:-UTC\}/g)).toHaveLength(2);
+    expect(compose.match(/TZ: \$\{MARKETINGCLAW_TZ:-UTC\}/g)).toHaveLength(2);
   });
 
   it("pins container-side state, workspace, and config dirs on both services so host .env paths cannot leak (#77436)", async () => {
@@ -1164,29 +1172,35 @@ describe("scripts/docker/setup.sh", () => {
     // Both gateway and CLI services must override env_file values with the
     // canonical container paths so host-style paths written to `.env` cannot
     // reach runtime code inside Linux Docker.
-    expect(compose.match(/OPENCLAW_HOME: \/home\/node$/gm)).toHaveLength(2);
-    expect(compose.match(/OPENCLAW_STATE_DIR: \/home\/node\/\.openclaw$/gm)).toHaveLength(2);
+    expect(compose.match(/MARKETINGCLAW_HOME: \/home\/node$/gm)).toHaveLength(2);
+    expect(compose.match(/MARKETINGCLAW_STATE_DIR: \/home\/node\/\.marketingclaw$/gm)).toHaveLength(
+      2,
+    );
     expect(
-      compose.match(/OPENCLAW_CONFIG_PATH: \/home\/node\/\.openclaw\/openclaw\.json$/gm),
+      compose.match(
+        /MARKETINGCLAW_CONFIG_PATH: \/home\/node\/\.marketingclaw\/marketingclaw\.json$/gm,
+      ),
     ).toHaveLength(2);
-    expect(compose.match(/OPENCLAW_CONFIG_DIR: \/home\/node\/\.openclaw$/gm)).toHaveLength(2);
     expect(
-      compose.match(/OPENCLAW_WORKSPACE_DIR: \/home\/node\/\.openclaw\/workspace$/gm),
+      compose.match(/MARKETINGCLAW_CONFIG_DIR: \/home\/node\/\.marketingclaw$/gm),
+    ).toHaveLength(2);
+    expect(
+      compose.match(/MARKETINGCLAW_WORKSPACE_DIR: \/home\/node\/\.marketingclaw\/workspace$/gm),
     ).toHaveLength(2);
   });
 
-  it("Dockerfile ARG OPENCLAW_IMAGE_APT_PACKAGES must not have a default value", async () => {
-    // If the ARG has a default (e.g. ARG OPENCLAW_IMAGE_APT_PACKAGES=""), Docker treats it as
+  it("Dockerfile ARG MARKETINGCLAW_IMAGE_APT_PACKAGES must not have a default value", async () => {
+    // If the ARG has a default (e.g. ARG MARKETINGCLAW_IMAGE_APT_PACKAGES=""), Docker treats it as
     // "set" even when no --build-arg is passed. That breaks the RUN fallback expression
-    // ${OPENCLAW_IMAGE_APT_PACKAGES-$OPENCLAW_DOCKER_APT_PACKAGES} because the variable is
-    // never truly unset, so legacy-only callers using --build-arg OPENCLAW_DOCKER_APT_PACKAGES
+    // ${MARKETINGCLAW_IMAGE_APT_PACKAGES-$MARKETINGCLAW_DOCKER_APT_PACKAGES} because the variable is
+    // never truly unset, so legacy-only callers using --build-arg MARKETINGCLAW_DOCKER_APT_PACKAGES
     // get nothing installed — a backward-compat regression.
     const dockerfile = await readFile(join(repoRoot, "Dockerfile"), "utf8");
     const argLine = dockerfile
       .split("\n")
-      .find((line) => line.startsWith("ARG OPENCLAW_IMAGE_APT_PACKAGES"));
+      .find((line) => line.startsWith("ARG MARKETINGCLAW_IMAGE_APT_PACKAGES"));
     expect(argLine).toBeDefined();
-    // Must be bare `ARG OPENCLAW_IMAGE_APT_PACKAGES` with no default assignment
-    expect(argLine).toBe("ARG OPENCLAW_IMAGE_APT_PACKAGES");
+    // Must be bare `ARG MARKETINGCLAW_IMAGE_APT_PACKAGES` with no default assignment
+    expect(argLine).toBe("ARG MARKETINGCLAW_IMAGE_APT_PACKAGES");
   });
 });

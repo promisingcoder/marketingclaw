@@ -7,9 +7,9 @@ const gatewayRuntime = vi.hoisted(() => ({
   callGatewayFromCli: vi.fn(),
 }));
 
-vi.mock("openclaw/plugin-sdk/gateway-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/gateway-runtime")>(
-    "openclaw/plugin-sdk/gateway-runtime",
+vi.mock("marketingclaw/plugin-sdk/gateway-runtime", async () => {
+  const actual = await vi.importActual<typeof import("marketingclaw/plugin-sdk/gateway-runtime")>(
+    "marketingclaw/plugin-sdk/gateway-runtime",
   );
   return {
     ...actual,
@@ -29,7 +29,7 @@ const catalog = {
         {
           threadId: "00000000-0000-4000-8000-000000000002",
           name: "Build Codex fleet sessions",
-          cwd: "/Users/test/Projects/openclaw",
+          cwd: "/Users/test/Projects/marketingclaw",
           status: "idle",
           activeFlags: [],
           updatedAt: 1_788_805_800,
@@ -90,7 +90,7 @@ describe("registerCodexSupervisorCli", () => {
           "codex",
           "sessions",
           "--search",
-          "  openclaw  ",
+          "  marketingclaw  ",
           "--archived",
           "--host",
           "node:devbox",
@@ -119,7 +119,7 @@ describe("registerCodexSupervisorCli", () => {
         json: true,
       },
       {
-        search: "openclaw",
+        search: "marketingclaw",
         archived: true,
         limitPerHost: 25,
         hostIds: ["node:devbox"],
@@ -139,7 +139,7 @@ describe("registerCodexSupervisorCli", () => {
     expect(output).toContain("MacBook Pro (gateway · gateway:local) — connected — 1 session");
     expect(output).toContain("00000000-0000-4000-8000-000000000002");
     expect(output).toContain("Build Codex fleet sessions");
-    expect(output).toContain("/Users/test/Projects/openclaw");
+    expect(output).toContain("/Users/test/Projects/marketingclaw");
     expect(output).toContain("branch codex/codex-session-fleet");
     expect(output).toContain(
       "repeat the same filters with --host 'gateway:local' --cursor 'gateway-next'",

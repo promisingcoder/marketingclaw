@@ -1,4 +1,4 @@
-// Defines the top-level OpenClaw configuration type.
+// Defines the top-level MarketingClaw configuration type.
 import type { SilentReplyPolicyShape } from "../shared/silent-reply-policy.js";
 import type { TranscriptsConfig } from "../transcripts/config.js";
 import type { AccessGroupsConfig } from "./types.access-groups.js";
@@ -90,12 +90,12 @@ export type SurfaceConfigEntry = {
   silentReply?: SilentReplyPolicyShape;
 };
 
-/** Top-level OpenClaw config as read from user/project config files. */
-export type OpenClawConfig = {
+/** Top-level MarketingClaw config as read from user/project config files. */
+export type MarketingClawConfig = {
   /** JSON schema URL used by editors and generated config files. */
   $schema?: string;
   meta?: {
-    /** Last OpenClaw version that wrote this config. */
+    /** Last MarketingClaw version that wrote this config. */
     lastTouchedVersion?: string;
     /** ISO timestamp when this config was last written. */
     lastTouchedAt?: string;
@@ -125,7 +125,7 @@ export type OpenClawConfig = {
   wizard?: {
     /** Last setup wizard completion timestamp. */
     lastRunAt?: string;
-    /** OpenClaw version used by the last completed wizard run. */
+    /** MarketingClaw version used by the last completed wizard run. */
     lastRunVersion?: string;
     /** Git commit used by the last completed wizard run, when available. */
     lastRunCommit?: string;
@@ -168,7 +168,7 @@ export type OpenClawConfig = {
   /** Browser automation and browser plugin integration settings. */
   browser?: BrowserConfig;
   ui?: {
-    /** Accent color for OpenClaw UI chrome (hex). */
+    /** Accent color for MarketingClaw UI chrome (hex). */
     seamColor?: string;
     assistant?: {
       /** Assistant display name for UI surfaces. */
@@ -250,14 +250,14 @@ export type OpenClawConfig = {
 };
 
 /** Config input shape accepted before model provider defaults are fully materialized. */
-export type OpenClawConfigInput = Omit<OpenClawConfig, "models"> & {
+export type MarketingClawConfigInput = Omit<MarketingClawConfig, "models"> & {
   models?: ModelsConfigInput;
 };
 
-declare const openClawConfigStateBrand: unique symbol;
+declare const marketingClawConfigStateBrand: unique symbol;
 
-type BrandedConfigState<TState extends string> = OpenClawConfig & {
-  readonly [openClawConfigStateBrand]?: TState;
+type BrandedConfigState<TState extends string> = MarketingClawConfig & {
+  readonly [marketingClawConfigStateBrand]?: TState;
 };
 
 /** Authored config before include/env resolution and runtime defaults. */

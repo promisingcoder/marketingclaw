@@ -1,9 +1,9 @@
-package ai.openclaw.app
+package ai.marketingclaw.app
 
 import android.content.Intent
 
-const val extraAndroidScreenshotMode = "openclaw.screenshotMode"
-const val extraAndroidScreenshotScene = "openclaw.screenshotScene"
+const val extraAndroidScreenshotMode = "marketingclaw.screenshotMode"
+const val extraAndroidScreenshotScene = "marketingclaw.screenshotScene"
 
 enum class AndroidScreenshotScene(
   val rawValue: String,

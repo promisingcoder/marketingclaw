@@ -1,5 +1,5 @@
 /** Applies manifest owner policy for plugin availability and activation decisions. */
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { normalizePluginsConfig, resolveEffectivePluginActivationState } from "./config-state.js";
 import { isPluginEnabledByDefaultForPlatform } from "./default-enablement.js";
 import type { PluginManifestRecord } from "./manifest-registry.js";
@@ -77,7 +77,7 @@ export function resolveManifestOwnerBasePolicyBlock(params: {
 export function isActivatedManifestOwner(params: {
   plugin: OwnerPlugin;
   normalizedConfig: NormalizedPluginsConfig;
-  rootConfig?: OpenClawConfig;
+  rootConfig?: MarketingClawConfig;
 }): boolean {
   return resolveEffectivePluginActivationState({
     id: params.plugin.id,

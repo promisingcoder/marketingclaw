@@ -1,11 +1,11 @@
-package ai.openclaw.app.ui.chat
+package ai.marketingclaw.app.ui.chat
 
-import ai.openclaw.app.ui.mobileAccent
-import ai.openclaw.app.ui.mobileCallout
-import ai.openclaw.app.ui.mobileCaption1
-import ai.openclaw.app.ui.mobileCodeBg
-import ai.openclaw.app.ui.mobileCodeText
-import ai.openclaw.app.ui.mobileTextSecondary
+import ai.marketingclaw.app.ui.mobileAccent
+import ai.marketingclaw.app.ui.mobileCallout
+import ai.marketingclaw.app.ui.mobileCaption1
+import ai.marketingclaw.app.ui.mobileCodeBg
+import ai.marketingclaw.app.ui.mobileCodeText
+import ai.marketingclaw.app.ui.mobileTextSecondary
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

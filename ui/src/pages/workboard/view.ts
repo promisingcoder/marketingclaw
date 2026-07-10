@@ -1,6 +1,6 @@
 // Control UI view renders workboard screen content.
 
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { truncateUtf16Safe } from "@marketingclaw/normalization-core/utf16-slice";
 import { html, nothing, type TemplateResult } from "lit";
 import { ref } from "lit/directives/ref.js";
 import type { GatewayBrowserClient } from "../../api/gateway.ts";
@@ -1087,7 +1087,7 @@ function engineBlockedByRuntime(
     return null;
   }
   const normalized = runtime.toLowerCase();
-  if (normalized === "openclaw" || normalized === "pi") {
+  if (normalized === "marketingclaw" || normalized === "pi") {
     return null;
   }
   return t("workboard.engineDisabledRuntime", {
@@ -1260,7 +1260,7 @@ function renderCardActionButton(params: {
     </button>
   `;
   return params.iconOnly
-    ? html`<openclaw-tooltip .content=${params.label}>${button}</openclaw-tooltip>`
+    ? html`<marketingclaw-tooltip .content=${params.label}>${button}</marketingclaw-tooltip>`
     : button;
 }
 
@@ -1516,7 +1516,7 @@ function renderCardModal(props: WorkboardProps) {
               ${editing ? t("workboard.editCardHelp") : t("workboard.newCardHelp")}
             </p>
           </div>
-          <openclaw-tooltip .content=${t("common.cancel")}>
+          <marketingclaw-tooltip .content=${t("common.cancel")}>
             <button
               class="btn btn--icon workboard-card__icon"
               type="button"
@@ -1528,7 +1528,7 @@ function renderCardModal(props: WorkboardProps) {
             >
               ${icons.x}
             </button>
-          </openclaw-tooltip>
+          </marketingclaw-tooltip>
         </div>
         <div class="workboard-draft__body">
           ${!editing
@@ -1970,7 +1970,7 @@ function renderStartExecutionButton(
     </button>
   `;
   return options.iconOnly
-    ? html`<openclaw-tooltip .content=${title}>${button}</openclaw-tooltip>`
+    ? html`<marketingclaw-tooltip .content=${title}>${button}</marketingclaw-tooltip>`
     : button;
 }
 
@@ -2072,7 +2072,7 @@ function renderCardDetailsPanel(props: WorkboardProps) {
               <span class="workboard-sr-only">${t("workboard.detailTitle")}: </span>${card.title}
             </h2>
           </div>
-          <openclaw-tooltip .content=${t("common.cancel")}>
+          <marketingclaw-tooltip .content=${t("common.cancel")}>
             <button
               class="btn btn--icon workboard-card__icon"
               type="button"
@@ -2084,7 +2084,7 @@ function renderCardDetailsPanel(props: WorkboardProps) {
             >
               ${icons.x}
             </button>
-          </openclaw-tooltip>
+          </marketingclaw-tooltip>
         </header>
 
         <section class="workboard-detail__section">
@@ -2408,7 +2408,7 @@ function renderCard(props: WorkboardProps, card: WorkboardCard) {
     ? renderArchiveCardAction(props, card, busy, archived, { iconOnly: true })
     : nothing;
   const detailAction = html`
-    <openclaw-tooltip .content=${t("workboard.viewDetails")}>
+    <marketingclaw-tooltip .content=${t("workboard.viewDetails")}>
       <button
         class="btn btn--icon workboard-card__icon"
         aria-label=${t("workboard.viewDetails")}
@@ -2423,7 +2423,7 @@ function renderCard(props: WorkboardProps, card: WorkboardCard) {
       >
         ${icons.panelRightOpen}
       </button>
-    </openclaw-tooltip>
+    </marketingclaw-tooltip>
   `;
   const sessionAction = renderOpenSessionCardAction(props, linkedSessionKey, { iconOnly: true });
   const stopAction =
@@ -2754,7 +2754,7 @@ export function renderWorkboard(props: WorkboardProps) {
             </button>
             <div class="workboard-layout-controls">
               <div class="workboard-layout-toggle" role="group" aria-label=${t("workboard.layout")}>
-                <openclaw-tooltip .content=${t("workboard.layoutCompact")}>
+                <marketingclaw-tooltip .content=${t("workboard.layoutCompact")}>
                   <button
                     class="btn btn--icon ${state.layout === "compact" ? "active" : ""}"
                     type="button"
@@ -2767,8 +2767,8 @@ export function renderWorkboard(props: WorkboardProps) {
                   >
                     ${icons.layoutCompact}
                   </button>
-                </openclaw-tooltip>
-                <openclaw-tooltip .content=${t("workboard.layoutComfortable")}>
+                </marketingclaw-tooltip>
+                <marketingclaw-tooltip .content=${t("workboard.layoutComfortable")}>
                   <button
                     class="btn btn--icon ${state.layout === "comfortable" ? "active" : ""}"
                     type="button"
@@ -2781,7 +2781,7 @@ export function renderWorkboard(props: WorkboardProps) {
                   >
                     ${icons.layoutComfortable}
                   </button>
-                </openclaw-tooltip>
+                </marketingclaw-tooltip>
               </div>
               ${renderRefreshStatus(state)}
             </div>

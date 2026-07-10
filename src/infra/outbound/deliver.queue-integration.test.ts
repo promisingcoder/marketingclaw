@@ -1,6 +1,6 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ChannelOutboundAdapter } from "../../channels/plugins/types.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { MarketingClawConfig } from "../../config/config.js";
 import { createEmptyPluginRegistry } from "../../plugins/registry.js";
 import {
   releasePinnedPluginChannelRegistry,
@@ -53,7 +53,7 @@ async function drainMatrixReconnect(opts: { deliver: DeliverFn; stateDir: string
   await drainPendingDeliveries({
     drainKey: "matrix:reconnect-test",
     logLabel: "Matrix reconnect drain",
-    cfg: {} as OpenClawConfig,
+    cfg: {} as MarketingClawConfig,
     log: createRecoveryLog(),
     stateDir: opts.stateDir,
     deliver: opts.deliver,
@@ -69,10 +69,10 @@ function createPartialSendFailure() {
 }
 
 async function deliverPartialMatrixBatch(sendMatrix: ReturnType<typeof vi.fn>, tmpDir: string) {
-  process.env.OPENCLAW_STATE_DIR = tmpDir;
+  process.env.MARKETINGCLAW_STATE_DIR = tmpDir;
   await expect(
     deliverOutboundPayloads({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       channel: "matrix",
       to: "!room:example",
       payloads: [{ text: "first" }, { text: "second" }],
@@ -148,12 +148,12 @@ describe("deliverOutboundPayloads queue integration: mid-batch failure with send
   });
 
   it("retains retryable send-attempt state when an adapter fails before returning a result", async () => {
-    process.env.OPENCLAW_STATE_DIR = tmpDir;
+    process.env.MARKETINGCLAW_STATE_DIR = tmpDir;
     const sendMatrix = vi.fn().mockRejectedValueOnce(new Error("first payload send failed"));
 
     await expect(
       deliverOutboundPayloads({
-        cfg: {} as OpenClawConfig,
+        cfg: {} as MarketingClawConfig,
         channel: "matrix",
         to: "!room:example",
         payloads: [{ text: "first" }],
@@ -173,7 +173,7 @@ describe("deliverOutboundPayloads queue integration: mid-batch failure with send
   });
 
   it("replays an entry after a proven pre-connect failure clears send evidence", async () => {
-    process.env.OPENCLAW_STATE_DIR = tmpDir;
+    process.env.MARKETINGCLAW_STATE_DIR = tmpDir;
     const connectError = Object.assign(new Error("connect ECONNREFUSED"), {
       code: "ECONNREFUSED",
       syscall: "connect",
@@ -182,7 +182,7 @@ describe("deliverOutboundPayloads queue integration: mid-batch failure with send
 
     await expect(
       deliverOutboundPayloads({
-        cfg: {} as OpenClawConfig,
+        cfg: {} as MarketingClawConfig,
         channel: "matrix",
         to: "!room:example",
         payloads: [{ text: "first" }],

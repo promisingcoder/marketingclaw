@@ -30,7 +30,7 @@ extension OnboardingView {
         if self.aiSetup.connected {
             return "All good — your assistant has a working AI connection."
         }
-        return "OpenClaw needs an AI account to think. " +
+        return "MarketingClaw needs an AI account to think. " +
             "It reuses what you already have — nothing new to sign up for if " +
             "Claude Code, Codex, or an API key is on this Mac."
     }

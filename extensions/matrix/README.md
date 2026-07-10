@@ -1,11 +1,11 @@
-# OpenClaw Matrix
+# MarketingClaw Matrix
 
-Official OpenClaw channel plugin for Matrix rooms and direct messages.
+Official MarketingClaw channel plugin for Matrix rooms and direct messages.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugin add @openclaw/matrix
+marketingclaw plugin add @marketingclaw/matrix
 ```
 
-Configure the Matrix homeserver and bot credentials in OpenClaw. The plugin lets agents join configured rooms, receive messages, and reply through Matrix.
+Configure the Matrix homeserver and bot credentials in MarketingClaw. The plugin lets agents join configured rooms, receive messages, and reply through Matrix.

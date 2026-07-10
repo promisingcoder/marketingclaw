@@ -1,8 +1,8 @@
 // Covers provider install catalog entries from plugin metadata.
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-type LoadOpenClawProviderIndex =
-  typeof import("../model-catalog/index.js").loadOpenClawProviderIndex;
+type LoadMarketingClawProviderIndex =
+  typeof import("../model-catalog/index.js").loadMarketingClawProviderIndex;
 type LoadPluginRegistrySnapshot = typeof import("./plugin-registry.js").loadPluginRegistrySnapshot;
 type ResolveManifestProviderAuthChoices =
   typeof import("./provider-auth-choices.js").resolveManifestProviderAuthChoices;
@@ -13,8 +13,8 @@ type InstalledPluginInstallRecordInfo =
   import("./installed-plugin-index.js").InstalledPluginInstallRecordInfo;
 type InstalledPluginIndexRecord = import("./installed-plugin-index.js").InstalledPluginIndexRecord;
 
-const loadOpenClawProviderIndex = vi.hoisted(() =>
-  vi.fn<LoadOpenClawProviderIndex>(() => ({ version: 1, providers: {} })),
+const loadMarketingClawProviderIndex = vi.hoisted(() =>
+  vi.fn<LoadMarketingClawProviderIndex>(() => ({ version: 1, providers: {} })),
 );
 vi.mock("../model-catalog/index.js", async () => {
   const actual = await vi.importActual<typeof import("../model-catalog/index.js")>(
@@ -22,7 +22,7 @@ vi.mock("../model-catalog/index.js", async () => {
   );
   return {
     ...actual,
-    loadOpenClawProviderIndex,
+    loadMarketingClawProviderIndex,
   };
 });
 
@@ -92,9 +92,9 @@ function vllmPluginWithPackageInstall(): InstalledPluginIndexRecord {
   return {
     pluginId: "vllm",
     origin: "global",
-    manifestPath: "/Users/test/.openclaw/plugins/vllm/openclaw.plugin.json",
+    manifestPath: "/Users/test/.marketingclaw/plugins/vllm/marketingclaw.plugin.json",
     manifestHash: "hash",
-    rootDir: "/Users/test/.openclaw/plugins/vllm",
+    rootDir: "/Users/test/.marketingclaw/plugins/vllm",
     enabled: true,
     startup: {
       sidecar: false,
@@ -135,7 +135,7 @@ function mockVllmAuthChoice() {
 describe("provider install catalog", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    loadOpenClawProviderIndex.mockReturnValue({ version: 1, providers: {} });
+    loadMarketingClawProviderIndex.mockReturnValue({ version: 1, providers: {} });
     loadPluginRegistrySnapshot.mockReturnValue({
       version: 1,
       hostContractVersion: "test",
@@ -164,7 +164,7 @@ describe("provider install catalog", () => {
         {
           pluginId: "openai",
           origin: "bundled",
-          manifestPath: "/repo/extensions/openai/openclaw.plugin.json",
+          manifestPath: "/repo/extensions/openai/marketingclaw.plugin.json",
           manifestHash: "hash",
           rootDir: "/repo/extensions/openai",
           enabled: true,
@@ -297,9 +297,9 @@ describe("provider install catalog", () => {
         installRecords: {
           vllm: {
             source: "clawhub",
-            spec: "clawhub:openclaw/vllm@2026.5.2",
+            spec: "clawhub:marketingclaw/vllm@2026.5.2",
             integrity: "sha256-clawpack",
-            clawhubPackage: "openclaw/vllm",
+            clawhubPackage: "marketingclaw/vllm",
           },
         },
         plugins: [vllmPluginWithPackageInstall()],
@@ -317,14 +317,14 @@ describe("provider install catalog", () => {
       label: "vLLM",
       origin: "global",
       install: {
-        clawhubSpec: "clawhub:openclaw/vllm@2026.5.2",
+        clawhubSpec: "clawhub:marketingclaw/vllm@2026.5.2",
         defaultChoice: "clawhub",
       },
       installSource: {
         defaultChoice: "clawhub",
         clawhub: {
-          spec: "clawhub:openclaw/vllm@2026.5.2",
-          packageName: "openclaw/vllm",
+          spec: "clawhub:marketingclaw/vllm@2026.5.2",
+          packageName: "marketingclaw/vllm",
           version: "2026.5.2",
           exactVersion: true,
         },
@@ -346,9 +346,10 @@ describe("provider install catalog", () => {
         {
           pluginId: "demo-provider",
           origin: "global",
-          manifestPath: "/Users/test/.openclaw/plugins/demo-provider/openclaw.plugin.json",
+          manifestPath:
+            "/Users/test/.marketingclaw/plugins/demo-provider/marketingclaw.plugin.json",
           manifestHash: "hash",
-          rootDir: "/Users/test/.openclaw/plugins/demo-provider",
+          rootDir: "/Users/test/.marketingclaw/plugins/demo-provider",
           enabled: true,
           startup: {
             sidecar: false,
@@ -400,7 +401,7 @@ describe("provider install catalog", () => {
         {
           pluginId: "openai",
           origin: "bundled",
-          manifestPath: "/repo/extensions/openai/openclaw.plugin.json",
+          manifestPath: "/repo/extensions/openai/marketingclaw.plugin.json",
           manifestHash: "hash",
           rootDir: "/repo/extensions/openai",
           enabled: true,
@@ -453,7 +454,7 @@ describe("provider install catalog", () => {
         {
           pluginId: "demo-provider",
           origin: "workspace",
-          manifestPath: "/repo/extensions/demo-provider/openclaw.plugin.json",
+          manifestPath: "/repo/extensions/demo-provider/marketingclaw.plugin.json",
           manifestHash: "hash",
           rootDir: "/repo/extensions/demo-provider",
           enabled: false,
@@ -497,7 +498,7 @@ describe("provider install catalog", () => {
   });
 
   it("surfaces provider-index install metadata when the provider plugin is not installed", () => {
-    loadOpenClawProviderIndex.mockReturnValue({
+    loadMarketingClawProviderIndex.mockReturnValue({
       version: 1,
       providers: {
         moonshot: {
@@ -561,10 +562,10 @@ describe("provider install catalog", () => {
   it("surfaces official external provider install metadata when the provider plugin is not installed", () => {
     listOfficialExternalProviderCatalogEntries.mockReturnValue([
       {
-        name: "@openclaw/codex",
+        name: "@marketingclaw/codex",
         source: "official",
         kind: "provider",
-        openclaw: {
+        marketingclaw: {
           plugin: { id: "codex", label: "Codex" },
           providers: [
             {
@@ -584,7 +585,7 @@ describe("provider install catalog", () => {
             },
           ],
           install: {
-            npmSpec: "@openclaw/codex",
+            npmSpec: "@marketingclaw/codex",
             defaultChoice: "npm",
           },
         },
@@ -604,14 +605,14 @@ describe("provider install catalog", () => {
       label: "Codex",
       origin: "bundled",
       install: {
-        npmSpec: "@openclaw/codex",
+        npmSpec: "@marketingclaw/codex",
         defaultChoice: "npm",
       },
       installSource: {
         defaultChoice: "npm",
         npm: {
-          spec: "@openclaw/codex",
-          packageName: "@openclaw/codex",
+          spec: "@marketingclaw/codex",
+          packageName: "@marketingclaw/codex",
           selectorKind: "none",
           exactVersion: false,
           pinState: "floating-without-integrity",
@@ -624,10 +625,10 @@ describe("provider install catalog", () => {
   it("preserves official external provider aliases for configured-plugin repair", () => {
     listOfficialExternalProviderCatalogEntries.mockReturnValue([
       {
-        name: "@openclaw/gmi-provider",
+        name: "@marketingclaw/gmi-provider",
         source: "official",
         kind: "provider",
-        openclaw: {
+        marketingclaw: {
           plugin: { id: "gmi", label: "GMI Cloud" },
           providers: [
             {
@@ -644,7 +645,7 @@ describe("provider install catalog", () => {
             },
           ],
           install: {
-            npmSpec: "@openclaw/gmi-provider",
+            npmSpec: "@marketingclaw/gmi-provider",
             defaultChoice: "npm",
           },
         },
@@ -661,10 +662,10 @@ describe("provider install catalog", () => {
   it("resolves deprecated official external auth choices before their plugin is installed", () => {
     listOfficialExternalProviderCatalogEntries.mockReturnValue([
       {
-        name: "@openclaw/qwen-provider",
+        name: "@marketingclaw/qwen-provider",
         source: "official",
         kind: "provider",
-        openclaw: {
+        marketingclaw: {
           plugin: { id: "qwen", label: "Qwen Cloud" },
           providers: [
             {
@@ -681,7 +682,7 @@ describe("provider install catalog", () => {
             },
           ],
           install: {
-            npmSpec: "@openclaw/qwen-provider",
+            npmSpec: "@marketingclaw/qwen-provider",
             defaultChoice: "npm",
           },
         },
@@ -695,7 +696,7 @@ describe("provider install catalog", () => {
   });
 
   it("surfaces provider-index ClawHub install metadata as the preferred source", () => {
-    loadOpenClawProviderIndex.mockReturnValue({
+    loadMarketingClawProviderIndex.mockReturnValue({
       version: 1,
       providers: {
         moonshot: {
@@ -705,7 +706,7 @@ describe("provider install catalog", () => {
             id: "moonshot",
             package: "@openclaw/plugin-moonshot",
             install: {
-              clawhubSpec: "clawhub:openclaw/moonshot@2026.5.2",
+              clawhubSpec: "clawhub:marketingclaw/moonshot@2026.5.2",
               npmSpec: "@openclaw/plugin-moonshot@2026.5.2",
               defaultChoice: "clawhub",
               expectedIntegrity: "sha512-moonshot",
@@ -735,7 +736,7 @@ describe("provider install catalog", () => {
       label: "Moonshot AI",
       origin: "bundled",
       install: {
-        clawhubSpec: "clawhub:openclaw/moonshot@2026.5.2",
+        clawhubSpec: "clawhub:marketingclaw/moonshot@2026.5.2",
         npmSpec: "@openclaw/plugin-moonshot@2026.5.2",
         defaultChoice: "clawhub",
         expectedIntegrity: "sha512-moonshot",
@@ -743,8 +744,8 @@ describe("provider install catalog", () => {
       installSource: {
         defaultChoice: "clawhub",
         clawhub: {
-          spec: "clawhub:openclaw/moonshot@2026.5.2",
-          packageName: "openclaw/moonshot",
+          spec: "clawhub:marketingclaw/moonshot@2026.5.2",
+          packageName: "marketingclaw/moonshot",
           version: "2026.5.2",
           exactVersion: true,
         },
@@ -775,7 +776,7 @@ describe("provider install catalog", () => {
         {
           pluginId: "moonshot",
           origin: "bundled",
-          manifestPath: "/repo/extensions/moonshot/openclaw.plugin.json",
+          manifestPath: "/repo/extensions/moonshot/marketingclaw.plugin.json",
           manifestHash: "hash",
           rootDir: "/repo/extensions/moonshot",
           enabled: true,
@@ -790,7 +791,7 @@ describe("provider install catalog", () => {
       ],
       diagnostics: [],
     });
-    loadOpenClawProviderIndex.mockReturnValue({
+    loadMarketingClawProviderIndex.mockReturnValue({
       version: 1,
       providers: {
         moonshot: {
@@ -831,7 +832,7 @@ describe("provider install catalog", () => {
         {
           pluginId: "moonshot",
           origin: "bundled",
-          manifestPath: "/repo/extensions/moonshot/openclaw.plugin.json",
+          manifestPath: "/repo/extensions/moonshot/marketingclaw.plugin.json",
           manifestHash: "hash",
           rootDir: "/repo/extensions/moonshot",
           enabled: true,
@@ -846,7 +847,7 @@ describe("provider install catalog", () => {
       ],
       diagnostics: [],
     });
-    loadOpenClawProviderIndex.mockReturnValue({
+    loadMarketingClawProviderIndex.mockReturnValue({
       version: 1,
       providers: {
         groq: {
@@ -875,7 +876,7 @@ describe("provider install catalog", () => {
             id: "moonshot",
             package: "@openclaw/plugin-moonshot",
             install: {
-              clawhubSpec: "clawhub:openclaw/moonshot@2026.5.2",
+              clawhubSpec: "clawhub:marketingclaw/moonshot@2026.5.2",
               npmSpec: "@openclaw/plugin-moonshot@2026.5.2",
               defaultChoice: "clawhub",
             },
@@ -895,7 +896,7 @@ describe("provider install catalog", () => {
             id: "vllm",
             package: "@openclaw/plugin-vllm",
             install: {
-              clawhubSpec: "clawhub:openclaw/vllm@2026.5.2",
+              clawhubSpec: "clawhub:marketingclaw/vllm@2026.5.2",
               npmSpec: "@openclaw/plugin-vllm@2026.5.2",
               defaultChoice: "clawhub",
             },
@@ -924,15 +925,15 @@ describe("provider install catalog", () => {
       label: "vLLM",
       origin: "bundled",
       install: {
-        clawhubSpec: "clawhub:openclaw/vllm@2026.5.2",
+        clawhubSpec: "clawhub:marketingclaw/vllm@2026.5.2",
         npmSpec: "@openclaw/plugin-vllm@2026.5.2",
         defaultChoice: "clawhub",
       },
       installSource: {
         defaultChoice: "clawhub",
         clawhub: {
-          spec: "clawhub:openclaw/vllm@2026.5.2",
-          packageName: "openclaw/vllm",
+          spec: "clawhub:marketingclaw/vllm@2026.5.2",
+          packageName: "marketingclaw/vllm",
           version: "2026.5.2",
           exactVersion: true,
         },

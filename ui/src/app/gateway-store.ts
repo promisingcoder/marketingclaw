@@ -113,7 +113,7 @@ export function createApplicationGateway(
       url: nextConnection.gatewayUrl,
       token: nextConnection.token.trim() ? nextConnection.token : undefined,
       password: nextConnection.password.trim() ? nextConnection.password : undefined,
-      clientName: "openclaw-control-ui",
+      clientName: "marketingclaw-control-ui",
       clientVersion: "dev",
       mode: "webchat",
       instanceId: generateUUID(),

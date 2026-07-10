@@ -1,13 +1,13 @@
 /**
  * Shared Claude CLI backend normalization. It sanitizes command args, maps
- * thinking levels, and keeps OpenClaw-managed CLI runs isolated from shell env.
+ * thinking levels, and keeps MarketingClaw-managed CLI runs isolated from shell env.
  */
 import type {
   CliBackendConfig,
   CliBackendNormalizeConfigContext,
   CliBackendResolveExecutionArgsContext,
-} from "openclaw/plugin-sdk/cli-backend";
-import { normalizeOptionalLowercaseString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "marketingclaw/plugin-sdk/cli-backend";
+import { normalizeOptionalLowercaseString } from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import { CLAUDE_CLI_BACKEND_ID } from "./cli-constants.js";
 export {
   CLAUDE_CLI_BACKEND_ID,
@@ -19,9 +19,9 @@ export {
 
 // Claude Code honors provider-routing, auth, and config-root env before
 // consulting its local login state, so inherited shell overrides must not
-// steer OpenClaw-managed Claude CLI runs toward a different provider,
+// steer MarketingClaw-managed Claude CLI runs toward a different provider,
 // endpoint, token source, plugin/config tree, or telemetry bootstrap mode.
-/** Environment variables removed before launching OpenClaw-managed Claude CLI runs. */
+/** Environment variables removed before launching MarketingClaw-managed Claude CLI runs. */
 export const CLAUDE_CLI_CLEAR_ENV = [
   "ANTHROPIC_API_KEY",
   "ANTHROPIC_API_KEY_OLD",
@@ -101,7 +101,7 @@ export function isClaudeCliProvider(providerId: string): boolean {
   return normalizeOptionalLowercaseString(providerId) === CLAUDE_CLI_BACKEND_ID;
 }
 
-function isOpenClawRequestedYolo(context?: CliBackendNormalizeConfigContext): boolean {
+function isMarketingClawRequestedYolo(context?: CliBackendNormalizeConfigContext): boolean {
   const agentExec = context?.agentId
     ? context.config?.agents?.list?.find((agent) => agent.id === context.agentId)?.tools?.exec
     : undefined;
@@ -111,12 +111,12 @@ function isOpenClawRequestedYolo(context?: CliBackendNormalizeConfigContext): bo
   return security === "full" && ask === "off";
 }
 
-/** Resolve Claude permission mode from OpenClaw exec security settings. */
+/** Resolve Claude permission mode from MarketingClaw exec security settings. */
 export function resolveClaudePermissionMode(context?: CliBackendNormalizeConfigContext): {
   mode?: string;
   overrideExisting: boolean;
 } {
-  return isOpenClawRequestedYolo(context)
+  return isMarketingClawRequestedYolo(context)
     ? { mode: CLAUDE_BYPASS_PERMISSION_MODE, overrideExisting: false }
     : { overrideExisting: false };
 }
@@ -205,7 +205,7 @@ export function normalizeClaudeSettingSourcesArgs(args?: string[]): string[] | u
   return normalized;
 }
 
-/** Map OpenClaw thinking levels to Claude CLI effort flags for a model id. */
+/** Map MarketingClaw thinking levels to Claude CLI effort flags for a model id. */
 function mapClaudeCliThinkingLevelToEffort(
   thinkingLevel?: string | null,
 ): ClaudeCliEffort | undefined {

@@ -12,10 +12,13 @@ function createReq(headers: Record<string, string> = {}): IncomingMessage {
 describe("resolvePluginRouteRuntimeOperatorScopes", () => {
   it("preserves declared trusted-proxy scopes when the header is present", () => {
     expect(
-      resolvePluginRouteRuntimeOperatorScopes(createReq({ "x-openclaw-scopes": "operator.read" }), {
-        authMethod: "trusted-proxy",
-        trustDeclaredOperatorScopes: true,
-      }),
+      resolvePluginRouteRuntimeOperatorScopes(
+        createReq({ "x-marketingclaw-scopes": "operator.read" }),
+        {
+          authMethod: "trusted-proxy",
+          trustDeclaredOperatorScopes: true,
+        },
+      ),
     ).toEqual(["operator.read"]);
   });
 
@@ -33,7 +36,7 @@ describe("resolvePluginRouteRuntimeOperatorScopes", () => {
       resolvePluginRouteRuntimeOperatorScopes(
         createReq({
           authorization: "Bearer secret",
-          "x-openclaw-scopes": "operator.admin,operator.write",
+          "x-marketingclaw-scopes": "operator.admin,operator.write",
         }),
         { authMethod: "token", trustDeclaredOperatorScopes: false },
       ),
@@ -43,7 +46,7 @@ describe("resolvePluginRouteRuntimeOperatorScopes", () => {
   it("does not trust caller-declared admin scopes on plugin routes for mode=none requests", () => {
     expect(
       resolvePluginRouteRuntimeOperatorScopes(
-        createReq({ "x-openclaw-scopes": "operator.admin,operator.write" }),
+        createReq({ "x-marketingclaw-scopes": "operator.admin,operator.write" }),
         { authMethod: "none", trustDeclaredOperatorScopes: true },
       ),
     ).toEqual(["operator.write"]);
@@ -88,7 +91,7 @@ describe("resolvePluginRouteRuntimeOperatorScopes", () => {
   it("preserves trusted-proxy declared scopes for routes opting into trusted-operator surface", () => {
     expect(
       resolvePluginRouteRuntimeOperatorScopes(
-        createReq({ "x-openclaw-scopes": "operator.admin,operator.write" }),
+        createReq({ "x-marketingclaw-scopes": "operator.admin,operator.write" }),
         { authMethod: "trusted-proxy", trustDeclaredOperatorScopes: true },
         "trusted-operator",
       ),

@@ -3,10 +3,10 @@
  *
  * Reads bounded, redacted session transcript history after session visibility filtering.
  */
-import { readStringValue } from "@openclaw/normalization-core/string-coerce";
+import { readStringValue } from "@marketingclaw/normalization-core/string-coerce";
 import { Type } from "typebox";
 import { getRuntimeConfig } from "../../config/config.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import { callGateway } from "../../gateway/call.js";
 import { capArrayByJsonBytes } from "../../gateway/session-transcript-readers.js";
 import { jsonUtf8Bytes } from "../../infra/json-utf8-bytes.js";
@@ -111,8 +111,8 @@ function sanitizeHistoryContentBlock(block: unknown): {
       delete entry.thinkingSignature;
       truncated = true;
     }
-    if ("openclawReasoningReplay" in entry) {
-      delete entry.openclawReasoningReplay;
+    if ("marketingclawReasoningReplay" in entry) {
+      delete entry.marketingclawReasoningReplay;
       truncated = true;
     }
   }
@@ -206,7 +206,7 @@ function readHistoryMessageSeq(message: unknown): number | undefined {
   if (!message || typeof message !== "object" || Array.isArray(message)) {
     return undefined;
   }
-  const meta = (message as Record<string, unknown>)["__openclaw"];
+  const meta = (message as Record<string, unknown>)["__marketingclaw"];
   if (!meta || typeof meta !== "object" || Array.isArray(meta)) {
     return undefined;
   }
@@ -219,7 +219,7 @@ function buildSessionsHistoryOmittedPlaceholder(source: unknown): Record<string,
   return {
     role: "assistant",
     content: "[sessions_history omitted: message too large]",
-    ...(seq !== undefined ? { __openclaw: { seq } } : {}),
+    ...(seq !== undefined ? { __marketingclaw: { seq } } : {}),
   };
 }
 
@@ -277,7 +277,7 @@ function resolveSessionsHistoryPaginationMetadata(params: {
 export function createSessionsHistoryTool(opts?: {
   agentSessionKey?: string;
   sandboxed?: boolean;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   callGateway?: GatewayCaller;
 }): AnyAgentTool {
   return {

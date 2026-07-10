@@ -232,8 +232,8 @@ describe("createRealtimeTranscriptionWebSocketSession", () => {
 
   it("preserves connect failures when the error callback throws", async () => {
     vi.useFakeTimers();
-    const previousDebugProxyEnabled = process.env.OPENCLAW_DEBUG_PROXY_ENABLED;
-    process.env.OPENCLAW_DEBUG_PROXY_ENABLED = "1";
+    const previousDebugProxyEnabled = process.env.MARKETINGCLAW_DEBUG_PROXY_ENABLED;
+    process.env.MARKETINGCLAW_DEBUG_PROXY_ENABLED = "1";
     const onError = vi.fn((_error: Error) => {
       throw new Error("error observer failed");
     });
@@ -265,9 +265,9 @@ describe("createRealtimeTranscriptionWebSocketSession", () => {
     } finally {
       session.close();
       if (previousDebugProxyEnabled === undefined) {
-        delete process.env.OPENCLAW_DEBUG_PROXY_ENABLED;
+        delete process.env.MARKETINGCLAW_DEBUG_PROXY_ENABLED;
       } else {
-        process.env.OPENCLAW_DEBUG_PROXY_ENABLED = previousDebugProxyEnabled;
+        process.env.MARKETINGCLAW_DEBUG_PROXY_ENABLED = previousDebugProxyEnabled;
       }
       vi.useRealTimers();
     }

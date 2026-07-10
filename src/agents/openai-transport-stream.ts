@@ -2,7 +2,7 @@
  * OpenAI-compatible streaming transport.
  *
  * Handles Chat Completions, Responses, Azure variants, tool-call replay, reasoning events, and
- * provider-specific payload policy before converting SDK streams into OpenClaw assistant events.
+ * provider-specific payload policy before converting SDK streams into MarketingClaw assistant events.
  */
 import { randomUUID } from "node:crypto";
 import {
@@ -28,7 +28,7 @@ import {
   type OpenAICompletionsToolChoice,
   type OpenAIReasoningEffort,
   type OpenAIToolProjection,
-} from "@openclaw/ai/internal/openai";
+} from "@marketingclaw/ai/internal/openai";
 import {
   applyProviderReportedUsageCost,
   calculateCost,
@@ -39,16 +39,16 @@ import {
   getFirstStreamEventTimeoutMs,
   parseStreamingJson,
   withFirstStreamEventTimeout,
-} from "@openclaw/ai/internal/runtime";
+} from "@marketingclaw/ai/internal/runtime";
 import {
   describeToolResultMediaPlaceholder,
   extractToolResultText,
   stripSystemPromptCacheBoundary,
-} from "@openclaw/ai/internal/shared";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+} from "@marketingclaw/ai/internal/shared";
+import { isRecord } from "@marketingclaw/normalization-core/record-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@marketingclaw/normalization-core/string-coerce";
+import { uniqueStrings } from "@marketingclaw/normalization-core/string-normalization";
+import { truncateUtf16Safe } from "@marketingclaw/normalization-core/utf16-slice";
 import OpenAI, { AzureOpenAI } from "openai";
 import type { ChatCompletionChunk } from "openai/resources/chat/completions.js";
 import type {
@@ -127,8 +127,8 @@ const MODEL_STREAM_COOPERATIVE_YIELD_INTERVAL_MS = 12;
 const MODEL_STREAM_COOPERATIVE_YIELD_MAX_EVENTS = 64;
 const RESPONSE_FAILED_NO_DETAILS_MESSAGE = "Unknown error (no error details in response)";
 const MAX_OPENAI_STRICT_TOOL_DOWNGRADE_DIAGNOSTIC_KEYS = 256;
-const OPENAI_RESPONSES_REASONING_REPLAY_META_KEY = "__openclaw_replay";
-const OPENAI_RESPONSES_REASONING_REPLAY_BLOCK_META_KEY = "openclawReasoningReplay";
+const OPENAI_RESPONSES_REASONING_REPLAY_META_KEY = "__marketingclaw_replay";
+const OPENAI_RESPONSES_REASONING_REPLAY_BLOCK_META_KEY = "marketingclawReasoningReplay";
 const OPENAI_RESPONSES_REPLAY_ITEM_ID_MAX_LENGTH = 64;
 const OPENAI_CODEX_RESPONSES_PROVIDERS = new Set(["openai"]);
 const log = createSubsystemLogger("openai-transport");
@@ -166,7 +166,7 @@ type BaseStreamOptions = {
   headers?: Record<string, string>;
   firstEventTimeoutMs?: number;
   onFirstEventTimeout?: (reason: Error) => void;
-  openclawCodeModeToolSurface?: boolean;
+  marketingclawCodeModeToolSurface?: boolean;
   responseFormat?: Record<string, unknown>;
   frequencyPenalty?: number;
   presencePenalty?: number;
@@ -1562,7 +1562,7 @@ async function processResponsesStream(
     stage: "responses",
     abort: options?.abortFirstEventStream,
     onTimeout: options?.onFirstEventTimeout,
-    hint: "The provider may be stalled while parsing the tool payload; retry with a smaller tool surface or enable OPENCLAW_DEBUG_MODEL_PAYLOAD=tools to inspect exposed tools.",
+    hint: "The provider may be stalled while parsing the tool payload; retry with a smaller tool surface or enable MARKETINGCLAW_DEBUG_MODEL_PAYLOAD=tools to inspect exposed tools.",
   });
   const cooperativeScheduler = createModelStreamCooperativeScheduler(options?.signal);
   for await (const rawEvent of guardedStream) {
@@ -2063,8 +2063,8 @@ export function createOpenAIResponsesTransportStreamFn(): StreamFn {
         ) as typeof params;
         params = sanitizeResponsesImagePayload(params as Record<string, unknown>) as typeof params;
         if (
-          (options as { openclawCodeModeToolSurface?: unknown } | undefined)
-            ?.openclawCodeModeToolSurface === true
+          (options as { marketingclawCodeModeToolSurface?: unknown } | undefined)
+            ?.marketingclawCodeModeToolSurface === true
         ) {
           enforceCodeModeResponsesToolSurface(params);
           assertCodeModeResponsesToolSurface(params);
@@ -2130,7 +2130,7 @@ function resolveCacheRetention(cacheRetention: string | undefined): "short" | "l
   if (cacheRetention === "short" || cacheRetention === "long" || cacheRetention === "none") {
     return cacheRetention;
   }
-  if (typeof process !== "undefined" && process.env.OPENCLAW_CACHE_RETENTION === "long") {
+  if (typeof process !== "undefined" && process.env.MARKETINGCLAW_CACHE_RETENTION === "long") {
     return "long";
   }
   return "short";
@@ -2207,7 +2207,7 @@ function isOpenAICodexResponsesModel(model: Model): boolean {
   return (
     OPENAI_CODEX_RESPONSES_PROVIDERS.has(model.provider) &&
     (model.api === "openai-chatgpt-responses" ||
-      model.api === "openclaw-openai-responses-transport")
+      model.api === "marketingclaw-openai-responses-transport")
   );
 }
 
@@ -2521,8 +2521,8 @@ export function createAzureOpenAIResponsesTransportStreamFn(): StreamFn {
         ) as typeof params;
         params = sanitizeResponsesImagePayload(params as Record<string, unknown>) as typeof params;
         if (
-          (options as { openclawCodeModeToolSurface?: unknown } | undefined)
-            ?.openclawCodeModeToolSurface === true
+          (options as { marketingclawCodeModeToolSurface?: unknown } | undefined)
+            ?.marketingclawCodeModeToolSurface === true
         ) {
           enforceCodeModeResponsesToolSurface(params);
           assertCodeModeResponsesToolSurface(params);
@@ -2780,8 +2780,8 @@ export function createOpenAICompletionsTransportStreamFn(): StreamFn {
           params = nextParams as typeof params;
         }
         if (
-          (options as { openclawCodeModeToolSurface?: unknown } | undefined)
-            ?.openclawCodeModeToolSurface === true
+          (options as { marketingclawCodeModeToolSurface?: unknown } | undefined)
+            ?.marketingclawCodeModeToolSurface === true
         ) {
           enforceCodeModeResponsesToolSurface(params);
           assertCodeModeResponsesToolSurface(params);
@@ -3093,7 +3093,7 @@ async function processOpenAICompletionsStream(
     stage: "completions",
     abort: options?.abortFirstEventStream,
     onTimeout: options?.onFirstEventTimeout,
-    hint: "The provider may be stalled while parsing the tool payload; retry with a smaller tool surface or enable OPENCLAW_DEBUG_MODEL_PAYLOAD=tools to inspect exposed tools.",
+    hint: "The provider may be stalled while parsing the tool payload; retry with a smaller tool surface or enable MARKETINGCLAW_DEBUG_MODEL_PAYLOAD=tools to inspect exposed tools.",
   });
   for await (const rawChunk of guardedStream) {
     throwIfModelStreamAborted(options?.signal);
@@ -3533,7 +3533,7 @@ function getCompletionsContentDeltas(content: unknown): CompletionsReasoningDelt
   if (!text) {
     return [];
   }
-  // Preserve provider reasoning as OpenClaw thinking blocks so channel/UI
+  // Preserve provider reasoning as MarketingClaw thinking blocks so channel/UI
   // surfaces can decide whether to show it instead of leaking it as answer text.
   if (type.includes("thinking") || type.includes("reasoning")) {
     return [{ kind: "thinking", signature: "content", text }];

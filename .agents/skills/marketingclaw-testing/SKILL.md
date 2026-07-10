@@ -1,9 +1,9 @@
 ---
-name: openclaw-testing
-description: Choose, run, rerun, or debug OpenClaw tests, CI checks, Docker E2E lanes, release validation, and the cheapest safe verification path.
+name: marketingclaw-testing
+description: Choose, run, rerun, or debug MarketingClaw tests, CI checks, Docker E2E lanes, release validation, and the cheapest safe verification path.
 ---
 
-# OpenClaw Testing
+# MarketingClaw Testing
 
 Use this skill when deciding what to test, debugging failures, rerunning CI,
 or validating a change without wasting hours.
@@ -40,7 +40,7 @@ direct AWS with an installed trusted Crabbox binary. Do not execute the
 untrusted checkout's wrapper or config locally:
 
 ```bash
-cd <trusted-openclaw-main>
+cd <trusted-marketingclaw-main>
 env -u CRABBOX_AWS_INSTANCE_PROFILE \
   crabbox config show --json | \
   jq -e '.aws.instanceProfile == ""' >/dev/null
@@ -138,7 +138,7 @@ commands.
 - Treat contributor and fork patches as untrusted unless a maintainer
   explicitly approves credentialed execution after review. For untrusted AWS
   runs, `CRABBOX_ENV_ALLOW=CI` must replace the repo's
-  `OPENCLAW_*` allowlist, `--no-hydrate` must block auth-profile hydration, and
+  `MARKETINGCLAW_*` allowlist, `--no-hydrate` must block auth-profile hydration, and
   the remote command must use a fresh temporary `HOME`. The lease must be newly
   warmed for and bound to one reviewed head SHA, never trusted or previously
   hydrated; stop and rewarm when the SHA changes. Do
@@ -150,7 +150,7 @@ commands.
   tools to require an IMDSv2 token, prove the IAM credentials endpoint returns
   404, and compare remote `git rev-parse HEAD` with the full reviewed head SHA.
   Unset all `CRABBOX_TAILSCALE*` overrides, pass `--network public
-  --tailscale=false`, clear exit-node/LAN flags, then require `crabbox inspect`
+--tailscale=false`, clear exit-node/LAN flags, then require `crabbox inspect`
   to report `network=public` and no Tailscale state before uploading any script.
   Upload trusted `scripts/crabbox-untrusted-bootstrap.sh` with `--fresh-pr`; it
   bootstraps Node 24 and repository-pinned pnpm before executing PR code and
@@ -179,9 +179,9 @@ pnpm changed:lanes --json
 pnpm check:changed       # Crabbox/Testbox changed typecheck/lint/guards; no Vitest
 pnpm test:changed        # cheap smart changed Vitest targets
 pnpm verify              # full check, then full Vitest
-OPENCLAW_TEST_CHANGED_BROAD=1 pnpm test:changed
+MARKETINGCLAW_TEST_CHANGED_BROAD=1 pnpm test:changed
 pnpm test <path-or-filter> -- --reporter=verbose
-OPENCLAW_VITEST_MAX_WORKERS=1 pnpm test <path-or-filter>
+MARKETINGCLAW_VITEST_MAX_WORKERS=1 pnpm test <path-or-filter>
 ```
 
 Use targeted file paths whenever possible. Avoid raw `vitest`; use the repo
@@ -205,7 +205,7 @@ managed dependency path, and do not treat `npm-pack:` as proof of catalog-linked
 official trust.
 
 - For local release-candidate proof, pack the plugin and install it with
-  `openclaw plugins install npm-pack:<path.tgz> --force`. This uses the managed
+  `marketingclaw plugins install npm-pack:<path.tgz> --force`. This uses the managed
   per-plugin npm project and is the closest local substitute for the registry
   artifact's dependency behavior.
 - If the behavior depends on bundled-plugin or trusted official plugin status,
@@ -215,7 +215,7 @@ official trust.
 - Treat missing runtime imports as package-manifest bugs first. Runtime code
   must depend on packages declared in the plugin package `dependencies` or
   `optionalDependencies`; do not make a final proof depend on manually running
-  `npm install` inside `~/.openclaw/npm/projects/...`.
+  `npm install` inside `~/.marketingclaw/npm/projects/...`.
 - If the plugin ships `npm-shrinkwrap.json`, regenerate or check it after
   moving dependencies between dev and runtime sections.
 - Inspect the packed tarball when dependency ownership or generated `dist/`
@@ -236,7 +236,7 @@ official trust.
   so remote summaries show which half failed.
 - `pnpm test:changed` is intentionally cheap by default: direct test edits,
   sibling tests, explicit source mappings, and import-graph dependents.
-- `OPENCLAW_TEST_CHANGED_BROAD=1 pnpm test:changed` is the explicit broad
+- `MARKETINGCLAW_TEST_CHANGED_BROAD=1 pnpm test:changed` is the explicit broad
   fallback for harness/config/package edits that genuinely need it.
 - Do not run extension sweeps just because core changed. If a core edit is for a
   specific plugin bug, run that plugin's tests explicitly. If a public SDK or
@@ -260,7 +260,7 @@ official trust.
 - Public SDK or contract edits do not automatically run every plugin test.
   `check:changed` proves extension type contracts; the agent chooses the
   smallest plugin/contract Vitest proof that matches the actual risk.
-- Use `OPENCLAW_TEST_CHANGED_BROAD=1 pnpm test:changed` only when a harness,
+- Use `MARKETINGCLAW_TEST_CHANGED_BROAD=1 pnpm test:changed` only when a harness,
   config, package, or unknown-root edit really needs the broad Vitest fallback.
 
 ## CI Debugging
@@ -295,7 +295,7 @@ dispatches:
   `include_android=true`
 - `Plugin Prerelease` for release-only plugin static checks, extension shards,
   the release-only `agentic-plugins` shard, and plugin product Docker lanes
-- `OpenClaw Release Checks` for install smoke, cross-OS release checks, live and
+- `MarketingClaw Release Checks` for install smoke, cross-OS release checks, live and
   E2E checks, Docker release-path suites, OpenWebUI, QA Lab, fast Matrix, and
   Telegram release lanes
 - optional post-publish Telegram E2E when a package spec is supplied
@@ -305,7 +305,7 @@ or release orchestration changes, or when explicitly asked:
 
 ```bash
 gh workflow run full-release-validation.yml \
-  --repo openclaw/openclaw \
+  --repo marketingclaw/marketingclaw \
   --ref main \
   -f ref=<branch-or-sha> \
   -f provider=openai \
@@ -355,9 +355,9 @@ workflow only spends setup and queue time on that suite.
 ### Release Evidence
 
 After release-candidate validation or before a release decision, record the
-important run ids in the public `openclaw/releases` evidence ledger.
-Use the manual `OpenClaw Release Evidence`
-(`openclaw-release-evidence.yml`) workflow there. It writes durable summaries
+important run ids in the public `marketingclaw/releases` evidence ledger.
+Use the manual `MarketingClaw Release Evidence`
+(`marketingclaw-release-evidence.yml`) workflow there. It writes durable summaries
 under `evidence/<release-id>/` and commits:
 
 - `release-evidence.md`
@@ -368,9 +368,9 @@ under `evidence/<release-id>/` and commits:
 Use one run per line:
 
 ```text
-full-release-validation openclaw/openclaw <run-id> blocking
-package-acceptance openclaw/openclaw <run-id> blocking
-release-checks openclaw/openclaw <run-id> blocking
+full-release-validation marketingclaw/marketingclaw <run-id> blocking
+package-acceptance marketingclaw/marketingclaw <run-id> blocking
+release-checks marketingclaw/marketingclaw <run-id> blocking
 ```
 
 Store summaries, run URLs, artifact metadata, timings, pass/fail state, and
@@ -378,9 +378,9 @@ short release-manager notes there. Do not store raw logs, provider
 prompts/responses, channel transcripts, signing material, or secret-bearing
 config in git; raw logs stay in Actions artifacts.
 
-When `Full Release Validation` completes and `OPENCLAW_RELEASES_DISPATCH_TOKEN`
+When `Full Release Validation` completes and `MARKETINGCLAW_RELEASES_DISPATCH_TOKEN`
 is configured in the source repo, it requests the public
-`OpenClaw Release Evidence From Full Validation` workflow. That workflow reads
+`MarketingClaw Release Evidence From Full Validation` workflow. That workflow reads
 the parent full-validation run, extracts the child CI/release-checks/Telegram
 run ids from the parent logs, and opens the evidence PR automatically. If the
 token is absent or the run predates this wiring, trigger that workflow manually
@@ -388,7 +388,7 @@ with the full-validation run id.
 
 ### Release Checks
 
-`OpenClaw Release Checks` (`openclaw-release-checks.yml`) is the release child
+`MarketingClaw Release Checks` (`marketingclaw-release-checks.yml`) is the release child
 workflow. It is broader than normal CI but narrower than the umbrella because it
 does not dispatch the separate full normal CI child. It runs Package Acceptance
 with artifact-native delta lanes and `telegram_mode=mock-openai`, so the release
@@ -398,8 +398,8 @@ package/update/plugin lanes. Use it when release-path validation is needed
 without rerunning the entire umbrella.
 
 ```bash
-gh workflow run openclaw-release-checks.yml \
-  --repo openclaw/openclaw \
+gh workflow run marketingclaw-release-checks.yml \
+  --repo marketingclaw/marketingclaw \
   --ref main \
   -f ref=<branch-or-sha> \
   -f provider=openai \
@@ -410,7 +410,7 @@ gh workflow run openclaw-release-checks.yml \
 
 Release-check rerun groups are `all`, `install-smoke`, `cross-os`, `live-e2e`,
 `package`, `qa`, `qa-parity`, and `qa-live`.
-`OpenClaw Release Checks` uses the trusted workflow ref to resolve the selected
+`MarketingClaw Release Checks` uses the trusted workflow ref to resolve the selected
 ref once as `release-package-under-test` and passes that artifact into cross-OS
 release checks, release-path Docker live/E2E checks, and Package Acceptance.
 When `Full Release Validation` dispatches release checks, it passes the requested
@@ -425,7 +425,7 @@ If install-smoke gets slow again, first check whether the root image was reused
 or rebuilt before adding/removing coverage.
 
 The full-profile native live media shards use the prebuilt
-`ghcr.io/openclaw/openclaw-live-media-runner:ubuntu-24.04` container so
+`ghcr.io/marketingclaw/marketingclaw-live-media-runner:ubuntu-24.04` container so
 `ffmpeg`/`ffprobe` are already present. If those jobs suddenly spend minutes in
 dependency setup again, first check the `Live Media Runner Image` workflow and
 the `Verify preinstalled live media dependencies` step before assuming the media
@@ -439,38 +439,38 @@ aliases such as `plugins-runtime-core`, `plugins-runtime`, and
 
 The release QA parity box is internally split into candidate and baseline lane
 jobs, followed by a report job that downloads both artifacts and runs
-`pnpm openclaw qa parity-report`. For parity failures, inspect the failed lane
+`pnpm marketingclaw qa parity-report`. For parity failures, inspect the failed lane
 first; inspect the report job when both lane summaries exist but the comparison
 fails.
 
 ### QA Lab Matrix Profiles
 
-`pnpm openclaw qa matrix` defaults to `--profile all`. Do not assume the CLI
+`pnpm marketingclaw qa matrix` defaults to `--profile all`. Do not assume the CLI
 default is the fast release path. Use explicit profiles:
 
 - `--profile fast`: release-critical Matrix transport contract; add
   `--fail-fast` only when the target CLI supports it
 - `--profile transport|media|e2ee-smoke|e2ee-deep|e2ee-cli`: sharded full
   Matrix proof
-- `OPENCLAW_QA_MATRIX_NO_REPLY_WINDOW_MS=3000`: CI-friendly no-reply quiet
+- `MARKETINGCLAW_QA_MATRIX_NO_REPLY_WINDOW_MS=3000`: CI-friendly no-reply quiet
   window when paired with fast or sharded gates
 
 `QA-Lab - All Lanes` uses explicit fast Matrix on scheduled runs; manual
 dispatch keeps `matrix_profile=all` as the default and always shards that full
-Matrix selection. `OpenClaw Release Checks` uses explicit fast Matrix; run the
+Matrix selection. `MarketingClaw Release Checks` uses explicit fast Matrix; run the
 all-lanes workflow when release investigation needs full Matrix media/E2EE
 inventory.
 
 ### Reusable Live/E2E Checks
 
-`OpenClaw Live And E2E Checks (Reusable)`
-(`openclaw-live-and-e2e-checks-reusable.yml`) is the preferred entry point for
+`MarketingClaw Live And E2E Checks (Reusable)`
+(`marketingclaw-live-and-e2e-checks-reusable.yml`) is the preferred entry point for
 targeted live, Docker, model, and E2E proof. Inputs let you turn off unrelated
 lanes:
 
 ```bash
-gh workflow run openclaw-live-and-e2e-checks-reusable.yml \
-  --repo openclaw/openclaw \
+gh workflow run marketingclaw-live-and-e2e-checks-reusable.yml \
+  --repo marketingclaw/marketingclaw \
   --ref main \
   -f ref=<sha> \
   -f include_repo_e2e=false \
@@ -512,7 +512,7 @@ job:
 - `native-live-src-agents`
 - `native-live-src-gateway-core`
 - `native-live-src-gateway-profiles` (release CI runs this with provider
-  filters such as `OPENCLAW_LIVE_GATEWAY_PROVIDERS=anthropic`)
+  filters such as `MARKETINGCLAW_LIVE_GATEWAY_PROVIDERS=anthropic`)
 - `native-live-src-gateway-backends`
 - `native-live-test`
 - `native-live-extensions-a-k`
@@ -535,28 +535,28 @@ so one live-provider flake does not force a broad native live rerun.
 
 For model-list or provider-selection fixes, use `live_models_only=true` plus the
 specific `live_model_providers` allowlist. Confirm logs show the expected
-`OPENCLAW_LIVE_PROVIDERS` and selected model ids before declaring proof.
+`MARKETINGCLAW_LIVE_PROVIDERS` and selected model ids before declaring proof.
 
 ## Docker
 
 Docker is expensive. First inspect the scheduler without running Docker:
 
 ```bash
-OPENCLAW_DOCKER_ALL_DRY_RUN=1 pnpm test:docker:all
-OPENCLAW_DOCKER_ALL_DRY_RUN=1 OPENCLAW_DOCKER_ALL_LANES=install-e2e pnpm test:docker:all
-OPENCLAW_DOCKER_ALL_LANES=install-e2e node scripts/test-docker-all.mjs --plan-json
+MARKETINGCLAW_DOCKER_ALL_DRY_RUN=1 pnpm test:docker:all
+MARKETINGCLAW_DOCKER_ALL_DRY_RUN=1 MARKETINGCLAW_DOCKER_ALL_LANES=install-e2e pnpm test:docker:all
+MARKETINGCLAW_DOCKER_ALL_LANES=install-e2e node scripts/test-docker-all.mjs --plan-json
 ```
 
 Run one failed lane locally only when explicitly asked or when GitHub is not
 usable:
 
 ```bash
-OPENCLAW_DOCKER_ALL_LANES=<lane> \
-OPENCLAW_DOCKER_ALL_BUILD=0 \
-OPENCLAW_DOCKER_ALL_PREFLIGHT=0 \
-OPENCLAW_SKIP_DOCKER_BUILD=1 \
-OPENCLAW_DOCKER_E2E_BARE_IMAGE='<prepared-bare-image>' \
-OPENCLAW_DOCKER_E2E_FUNCTIONAL_IMAGE='<prepared-functional-image>' \
+MARKETINGCLAW_DOCKER_ALL_LANES=<lane> \
+MARKETINGCLAW_DOCKER_ALL_BUILD=0 \
+MARKETINGCLAW_DOCKER_ALL_PREFLIGHT=0 \
+MARKETINGCLAW_SKIP_DOCKER_BUILD=1 \
+MARKETINGCLAW_DOCKER_E2E_BARE_IMAGE='<prepared-bare-image>' \
+MARKETINGCLAW_DOCKER_E2E_FUNCTIONAL_IMAGE='<prepared-functional-image>' \
 pnpm test:docker:all
 ```
 
@@ -638,8 +638,8 @@ gh workflow run package-acceptance.yml --ref main \
 Npm candidate selection:
 
 - Resolve the registry immediately before dispatch:
-  `npm view openclaw dist-tags --json --prefer-online --cache /tmp/openclaw-npm-cache-verify-$$`
-  and `npm view openclaw@beta version dist.tarball dist.integrity --json --prefer-online --cache /tmp/openclaw-npm-cache-verify-$$`.
+  `npm view marketingclaw dist-tags --json --prefer-online --cache /tmp/marketingclaw-npm-cache-verify-$$`
+  and `npm view openclaw@beta version dist.tarball dist.integrity --json --prefer-online --cache /tmp/marketingclaw-npm-cache-verify-$$`.
 - If Peter asks for "latest beta", use `source=npm` with
   `package_spec=openclaw@beta`, then record the resolved version from `npm view`
   or the workflow summary.
@@ -650,13 +650,13 @@ Npm candidate selection:
   question is explicitly the current stable dist-tag; otherwise pin the exact
   version.
 - `source=npm` only accepts registry specs for `openclaw@beta`,
-  `openclaw@latest`, or exact OpenClaw release versions. Do not pass semver
+  `openclaw@latest`, or exact MarketingClaw release versions. Do not pass semver
   ranges, git refs, file paths, tarball URLs, or plugin package names there.
 - If the candidate is a tarball URL, use `source=url` with `package_sha256`. If
   it is an Actions tarball artifact, use `source=artifact`. If it is an
   unpublished source candidate, use `source=ref` with a trusted ref or SHA.
 - Package acceptance tests exactly the selected package candidate. Do not apply
-  `openclaw update --channel beta` fallback semantics here; if `beta` is absent,
+  `marketingclaw update --channel beta` fallback semantics here; if `beta` is absent,
   stale, older than `latest`, or points at a broken tarball, report that tag
   state instead of silently testing `latest`.
 
@@ -688,7 +688,7 @@ Ref model:
 - `workflow_ref` is the trusted harness/script ref passed to reusable Docker
   E2E.
 - `package_ref` is the source ref to build when `source=ref`. It can be an
-  older branch/tag/SHA as long as it is reachable from an OpenClaw branch or
+  older branch/tag/SHA as long as it is reachable from an MarketingClaw branch or
   release tag.
 
 Example: run latest package acceptance harness against an older trusted commit:
@@ -712,7 +712,7 @@ credentialed package proof for a focused rerun.
 
 Docker E2E images never copy repo sources as the app under test: the bare image
 is a Node/Git runner, and the functional image installs the same prebuilt npm
-tarball that bare lanes mount. `scripts/package-openclaw-for-docker.mjs` is the
+tarball that bare lanes mount. `scripts/package-marketingclaw-for-docker.mjs` is the
 single packer for local scripts and CI and validates the tarball inventory
 before Docker consumes it. `scripts/test-docker-all.mjs --plan-json` is the
 scheduler-owned CI plan for image kind, package, live image, lane, and
@@ -731,7 +731,7 @@ Skill install proof: use `pnpm test:docker:skill-install` or targeted
 `docker_lanes=skill-install` for live ClawHub skill-install validation. The
 lane installs the package tarball in a bare runner, keeps
 `skills.install.allowUploadedArchives=false`, resolves the current live slug
-from `openclaw skills search`, installs it, and verifies `.clawhub` origin/lock
+from `marketingclaw skills search`, installs it, and verifies `.clawhub` origin/lock
 metadata. Prefer this checked-in script over inline heredoc Testbox recipes.
 
 ## Cheap Docker Reruns
@@ -749,7 +749,7 @@ plus per-lane commands. Prefer the combined targeted command when several lanes
 failed for the same patch:
 
 ```bash
-gh workflow run openclaw-live-and-e2e-checks-reusable.yml \
+gh workflow run marketingclaw-live-and-e2e-checks-reusable.yml \
   -f ref=<sha> \
   -f include_repo_e2e=false \
   -f include_release_path_suites=false \

@@ -4,20 +4,23 @@ import { constants, accessSync, readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import os from "node:os";
 import path from "node:path";
-import { createActionGate } from "openclaw/plugin-sdk/channel-actions";
+import { createActionGate } from "marketingclaw/plugin-sdk/channel-actions";
 import {
   createMessageReceiptFromOutboundResults,
   type MessageReceipt,
   type MessageReceiptPartKind,
   type MessageReceiptSourceResult,
-} from "openclaw/plugin-sdk/channel-outbound";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolveMarkdownTableMode } from "openclaw/plugin-sdk/markdown-table-runtime";
-import { kindFromMime, resolveOutboundAttachmentFromUrl } from "openclaw/plugin-sdk/media-runtime";
-import { requireRuntimeConfig } from "openclaw/plugin-sdk/plugin-config-runtime";
-import { sleep as delay } from "openclaw/plugin-sdk/runtime-env";
-import { convertMarkdownTables } from "openclaw/plugin-sdk/text-chunking";
-import { stripInlineDirectiveTagsForDelivery } from "openclaw/plugin-sdk/text-chunking";
+} from "marketingclaw/plugin-sdk/channel-outbound";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import { resolveMarkdownTableMode } from "marketingclaw/plugin-sdk/markdown-table-runtime";
+import {
+  kindFromMime,
+  resolveOutboundAttachmentFromUrl,
+} from "marketingclaw/plugin-sdk/media-runtime";
+import { requireRuntimeConfig } from "marketingclaw/plugin-sdk/plugin-config-runtime";
+import { sleep as delay } from "marketingclaw/plugin-sdk/runtime-env";
+import { convertMarkdownTables } from "marketingclaw/plugin-sdk/text-chunking";
+import { stripInlineDirectiveTagsForDelivery } from "marketingclaw/plugin-sdk/text-chunking";
 import { resolveIMessageAccount, type ResolvedIMessageAccount } from "./accounts.js";
 import {
   appendIMessageApprovalReactionHintForOutboundMessage,
@@ -66,7 +69,7 @@ type IMessageSendOpts = {
   timeoutMs?: number;
   chatId?: number;
   client?: IMessageRpcClient;
-  config: OpenClawConfig;
+  config: MarketingClawConfig;
   account?: ResolvedIMessageAccount;
   resolveAttachmentImpl?: (
     mediaUrl: string,

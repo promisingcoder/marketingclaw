@@ -1,8 +1,8 @@
-package ai.openclaw.app.chat
+package ai.marketingclaw.app.chat
 
-import ai.openclaw.app.gateway.GatewayRequestNotEnqueued
-import ai.openclaw.app.gateway.GatewayRequestRejected
-import ai.openclaw.app.gateway.GatewaySession
+import ai.marketingclaw.app.gateway.GatewayRequestNotEnqueued
+import ai.marketingclaw.app.gateway.GatewayRequestRejected
+import ai.marketingclaw.app.gateway.GatewaySession
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest

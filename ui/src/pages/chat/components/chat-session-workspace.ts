@@ -498,7 +498,7 @@ export function createSessionWorkspaceProps(state: SessionWorkspaceHost): Sessio
     onToggleTerminal: state.terminalAvailable
       ? () => {
           window.dispatchEvent(
-            new CustomEvent("openclaw:terminal-toggle", {
+            new CustomEvent("marketingclaw:terminal-toggle", {
               detail: { dock: "right", open: true },
             }),
           );
@@ -548,7 +548,7 @@ export function renderSessionWorkspaceRail(
   }
   const terminalButton = sessionWorkspace.onToggleTerminal
     ? html`
-        <openclaw-tooltip .content=${t("terminal.toggle")}>
+        <marketingclaw-tooltip .content=${t("terminal.toggle")}>
           <button
             type="button"
             class="chat-workspace-rail__terminal"
@@ -557,7 +557,7 @@ export function renderSessionWorkspaceRail(
           >
             ${icons.terminal}
           </button>
-        </openclaw-tooltip>
+        </marketingclaw-tooltip>
       `
     : nothing;
   if (sessionWorkspace.collapsed) {
@@ -566,7 +566,7 @@ export function renderSessionWorkspaceRail(
         class="chat-workspace-rail chat-workspace-rail--collapsed"
         aria-label=${t("chat.workspaceFiles.label")}
       >
-        <openclaw-tooltip .content=${t("chat.workspaceFiles.expand")}>
+        <marketingclaw-tooltip .content=${t("chat.workspaceFiles.expand")}>
           <button
             type="button"
             class="nav-collapse-toggle chat-workspace-rail__collapse-toggle"
@@ -578,7 +578,7 @@ export function renderSessionWorkspaceRail(
               >${icons.panelRightOpen}</span
             >
           </button>
-        </openclaw-tooltip>
+        </marketingclaw-tooltip>
         <span class="chat-workspace-rail__collapsed-icon" aria-hidden="true"
           >${icons.fileText}</span
         >
@@ -600,7 +600,7 @@ export function renderSessionWorkspaceRail(
       role="group"
       aria-label=${t("chat.workspaceFiles.actions")}
     >
-      <openclaw-tooltip .content=${t("chat.workspaceFiles.preview")}>
+      <marketingclaw-tooltip .content=${t("chat.workspaceFiles.preview")}>
         <button
           class="chat-workspace-rail__row-action"
           type="button"
@@ -612,8 +612,8 @@ export function renderSessionWorkspaceRail(
         >
           ${icons.eye}
         </button>
-      </openclaw-tooltip>
-      <openclaw-tooltip .content=${t("chat.workspaceFiles.copyPath")}>
+      </marketingclaw-tooltip>
+      <marketingclaw-tooltip .content=${t("chat.workspaceFiles.copyPath")}>
         <button
           class="chat-workspace-rail__row-action"
           type="button"
@@ -625,7 +625,7 @@ export function renderSessionWorkspaceRail(
         >
           ${icons.copy}
         </button>
-      </openclaw-tooltip>
+      </marketingclaw-tooltip>
     </span>
   `;
   const renderSessionSummary = (): TemplateResult | typeof nothing => {
@@ -667,11 +667,11 @@ export function renderSessionWorkspaceRail(
                   >
                     <span class="chat-workspace-rail__file-icon">${icons.fileText}</span>
                     <span class="chat-workspace-rail__file-main">
-                      <openclaw-tooltip .content=${file.path || file.name}>
+                      <marketingclaw-tooltip .content=${file.path || file.name}>
                         <span class="chat-workspace-rail__file-name"
                           >${file.path || file.name}</span
                         >
-                      </openclaw-tooltip>
+                      </marketingclaw-tooltip>
                       ${size
                         ? html`<span class="chat-workspace-rail__file-meta">${size}</span>`
                         : nothing}
@@ -779,9 +779,9 @@ export function renderSessionWorkspaceRail(
                         >${entry.kind === "directory" ? icons.folder : icons.fileText}</span
                       >
                       <span class="chat-workspace-rail__file-main">
-                        <openclaw-tooltip .content=${entry.path || entry.name}>
+                        <marketingclaw-tooltip .content=${entry.path || entry.name}>
                           <span class="chat-workspace-rail__file-name">${entry.name}</span>
-                        </openclaw-tooltip>
+                        </marketingclaw-tooltip>
                         <span class="chat-workspace-rail__file-meta">
                           ${entry.kind === "directory"
                             ? entry.path || t("chat.workspaceFiles.root")
@@ -829,9 +829,9 @@ export function renderSessionWorkspaceRail(
                       >${isImage ? icons.image : icons.paperclip}</span
                     >
                     <span class="chat-workspace-rail__file-main">
-                      <openclaw-tooltip .content=${artifact.title}>
+                      <marketingclaw-tooltip .content=${artifact.title}>
                         <span class="chat-workspace-rail__file-name">${artifact.title}</span>
-                      </openclaw-tooltip>
+                      </marketingclaw-tooltip>
                       ${size || artifact.mimeType
                         ? html`<span class="chat-workspace-rail__file-meta"
                             >${[artifact.mimeType, size].filter(Boolean).join(" / ")}</span
@@ -840,7 +840,7 @@ export function renderSessionWorkspaceRail(
                     </span>
                   </button>
                   <span class="chat-workspace-rail__row-actions">
-                    <openclaw-tooltip .content=${t("chat.workspaceFiles.preview")}>
+                    <marketingclaw-tooltip .content=${t("chat.workspaceFiles.preview")}>
                       <button
                         class="chat-workspace-rail__row-action"
                         type="button"
@@ -852,7 +852,7 @@ export function renderSessionWorkspaceRail(
                       >
                         ${icons.eye}
                       </button>
-                    </openclaw-tooltip>
+                    </marketingclaw-tooltip>
                   </span>
                 </div>
               `;
@@ -868,7 +868,7 @@ export function renderSessionWorkspaceRail(
         </div>
         <div class="chat-workspace-rail__actions">
           ${terminalButton}
-          <openclaw-tooltip .content=${t("chat.workspaceFiles.refresh")}>
+          <marketingclaw-tooltip .content=${t("chat.workspaceFiles.refresh")}>
             <button
               class="btn btn--ghost btn--sm chat-workspace-rail__refresh"
               type="button"
@@ -878,8 +878,8 @@ export function renderSessionWorkspaceRail(
             >
               ${icons.refresh}
             </button>
-          </openclaw-tooltip>
-          <openclaw-tooltip .content=${t("chat.workspaceFiles.collapse")}>
+          </marketingclaw-tooltip>
+          <marketingclaw-tooltip .content=${t("chat.workspaceFiles.collapse")}>
             <button
               type="button"
               class="nav-collapse-toggle chat-workspace-rail__collapse-toggle"
@@ -891,14 +891,14 @@ export function renderSessionWorkspaceRail(
                 >${icons.panelRightClose}</span
               >
             </button>
-          </openclaw-tooltip>
+          </marketingclaw-tooltip>
         </div>
       </div>
       ${sessionWorkspace.list?.root
         ? html`
-            <openclaw-tooltip .content=${sessionWorkspace.list.root}>
+            <marketingclaw-tooltip .content=${sessionWorkspace.list.root}>
               <div class="chat-workspace-rail__path">${sessionWorkspace.list.root}</div>
-            </openclaw-tooltip>
+            </marketingclaw-tooltip>
           `
         : nothing}
       ${renderSessionSummary()}

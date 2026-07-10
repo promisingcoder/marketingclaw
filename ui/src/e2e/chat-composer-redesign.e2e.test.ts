@@ -11,7 +11,7 @@ import {
 
 const chromiumExecutablePath = resolvePlaywrightChromiumExecutablePath(chromium.executablePath());
 const chromiumAvailable = canRunPlaywrightChromium(chromiumExecutablePath);
-const allowMissingChromium = process.env.OPENCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM === "1";
+const allowMissingChromium = process.env.MARKETINGCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM === "1";
 const describeControlUiE2e = chromiumAvailable || !allowMissingChromium ? describe : describe.skip;
 
 let server: ControlUiE2eServer;
@@ -565,7 +565,7 @@ describeControlUiE2e("Control UI chat composer redesign", () => {
       methodResponses: {
         "chat.startup": {
           agentsList: {
-            agents: [{ id: "main", name: "OpenClaw" }],
+            agents: [{ id: "main", name: "MarketingClaw" }],
             defaultId: "main",
             mainKey: "main",
             scope: "agent",
@@ -727,7 +727,7 @@ describeControlUiE2e("Control UI chat composer redesign", () => {
         .poll(() => composer.locator('[data-chat-model-option="openai/work-model"]').count())
         .toBe(1);
 
-      await page.locator("openclaw-chat-pane").evaluate((pane) => {
+      await page.locator("marketingclaw-chat-pane").evaluate((pane) => {
         (pane as HTMLElement & { sessionKey: string }).sessionKey = "agent:other:main";
       });
 
@@ -790,7 +790,7 @@ describeControlUiE2e("Control UI chat composer redesign", () => {
     try {
       await page.goto(`${server.baseUrl}chat?session=agent%3Amain%3Amain`);
       await gateway.waitForRequest("chat.startup");
-      await page.locator("openclaw-chat-pane").evaluate((pane) => {
+      await page.locator("marketingclaw-chat-pane").evaluate((pane) => {
         (pane as HTMLElement & { sessionKey: string }).sessionKey = "agent:work:main";
       });
       await expect

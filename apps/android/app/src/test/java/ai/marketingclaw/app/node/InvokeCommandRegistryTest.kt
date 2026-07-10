@@ -1,18 +1,18 @@
-package ai.openclaw.app.node
+package ai.marketingclaw.app.node
 
-import ai.openclaw.app.protocol.OpenClawCalendarCommand
-import ai.openclaw.app.protocol.OpenClawCallLogCommand
-import ai.openclaw.app.protocol.OpenClawCameraCommand
-import ai.openclaw.app.protocol.OpenClawCapability
-import ai.openclaw.app.protocol.OpenClawContactsCommand
-import ai.openclaw.app.protocol.OpenClawDeviceCommand
-import ai.openclaw.app.protocol.OpenClawLocationCommand
-import ai.openclaw.app.protocol.OpenClawMotionCommand
-import ai.openclaw.app.protocol.OpenClawNotificationsCommand
-import ai.openclaw.app.protocol.OpenClawPhotosCommand
-import ai.openclaw.app.protocol.OpenClawSmsCommand
-import ai.openclaw.app.protocol.OpenClawSystemCommand
-import ai.openclaw.app.protocol.OpenClawTalkCommand
+import ai.marketingclaw.app.protocol.MarketingClawCalendarCommand
+import ai.marketingclaw.app.protocol.MarketingClawCallLogCommand
+import ai.marketingclaw.app.protocol.MarketingClawCameraCommand
+import ai.marketingclaw.app.protocol.MarketingClawCapability
+import ai.marketingclaw.app.protocol.MarketingClawContactsCommand
+import ai.marketingclaw.app.protocol.MarketingClawDeviceCommand
+import ai.marketingclaw.app.protocol.MarketingClawLocationCommand
+import ai.marketingclaw.app.protocol.MarketingClawMotionCommand
+import ai.marketingclaw.app.protocol.MarketingClawNotificationsCommand
+import ai.marketingclaw.app.protocol.MarketingClawPhotosCommand
+import ai.marketingclaw.app.protocol.MarketingClawSmsCommand
+import ai.marketingclaw.app.protocol.MarketingClawSystemCommand
+import ai.marketingclaw.app.protocol.MarketingClawTalkCommand
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
@@ -23,57 +23,57 @@ import org.junit.Test
 class InvokeCommandRegistryTest {
   private val coreCapabilities =
     setOf(
-      OpenClawCapability.Canvas.rawValue,
-      OpenClawCapability.Device.rawValue,
-      OpenClawCapability.Notifications.rawValue,
-      OpenClawCapability.System.rawValue,
-      OpenClawCapability.Talk.rawValue,
-      OpenClawCapability.Contacts.rawValue,
-      OpenClawCapability.Calendar.rawValue,
+      MarketingClawCapability.Canvas.rawValue,
+      MarketingClawCapability.Device.rawValue,
+      MarketingClawCapability.Notifications.rawValue,
+      MarketingClawCapability.System.rawValue,
+      MarketingClawCapability.Talk.rawValue,
+      MarketingClawCapability.Contacts.rawValue,
+      MarketingClawCapability.Calendar.rawValue,
     )
 
   private val optionalCapabilities =
     setOf(
-      OpenClawCapability.Camera.rawValue,
-      OpenClawCapability.Location.rawValue,
-      OpenClawCapability.Sms.rawValue,
-      OpenClawCapability.CallLog.rawValue,
-      OpenClawCapability.VoiceWake.rawValue,
-      OpenClawCapability.Motion.rawValue,
-      OpenClawCapability.Photos.rawValue,
+      MarketingClawCapability.Camera.rawValue,
+      MarketingClawCapability.Location.rawValue,
+      MarketingClawCapability.Sms.rawValue,
+      MarketingClawCapability.CallLog.rawValue,
+      MarketingClawCapability.VoiceWake.rawValue,
+      MarketingClawCapability.Motion.rawValue,
+      MarketingClawCapability.Photos.rawValue,
     )
 
   private val coreCommands =
     setOf(
-      OpenClawDeviceCommand.Status.rawValue,
-      OpenClawDeviceCommand.Info.rawValue,
-      OpenClawDeviceCommand.Permissions.rawValue,
-      OpenClawDeviceCommand.Health.rawValue,
-      OpenClawNotificationsCommand.List.rawValue,
-      OpenClawNotificationsCommand.Actions.rawValue,
-      OpenClawSystemCommand.Notify.rawValue,
-      OpenClawTalkCommand.PttStart.rawValue,
-      OpenClawTalkCommand.PttStop.rawValue,
-      OpenClawTalkCommand.PttCancel.rawValue,
-      OpenClawTalkCommand.PttOnce.rawValue,
-      OpenClawContactsCommand.Search.rawValue,
-      OpenClawContactsCommand.Add.rawValue,
-      OpenClawCalendarCommand.Events.rawValue,
-      OpenClawCalendarCommand.Add.rawValue,
+      MarketingClawDeviceCommand.Status.rawValue,
+      MarketingClawDeviceCommand.Info.rawValue,
+      MarketingClawDeviceCommand.Permissions.rawValue,
+      MarketingClawDeviceCommand.Health.rawValue,
+      MarketingClawNotificationsCommand.List.rawValue,
+      MarketingClawNotificationsCommand.Actions.rawValue,
+      MarketingClawSystemCommand.Notify.rawValue,
+      MarketingClawTalkCommand.PttStart.rawValue,
+      MarketingClawTalkCommand.PttStop.rawValue,
+      MarketingClawTalkCommand.PttCancel.rawValue,
+      MarketingClawTalkCommand.PttOnce.rawValue,
+      MarketingClawContactsCommand.Search.rawValue,
+      MarketingClawContactsCommand.Add.rawValue,
+      MarketingClawCalendarCommand.Events.rawValue,
+      MarketingClawCalendarCommand.Add.rawValue,
     )
 
   private val optionalCommands =
     setOf(
-      OpenClawCameraCommand.Snap.rawValue,
-      OpenClawCameraCommand.Clip.rawValue,
-      OpenClawCameraCommand.List.rawValue,
-      OpenClawLocationCommand.Get.rawValue,
-      OpenClawMotionCommand.Activity.rawValue,
-      OpenClawMotionCommand.Pedometer.rawValue,
-      OpenClawSmsCommand.Send.rawValue,
-      OpenClawSmsCommand.Search.rawValue,
-      OpenClawCallLogCommand.Search.rawValue,
-      OpenClawPhotosCommand.Latest.rawValue,
+      MarketingClawCameraCommand.Snap.rawValue,
+      MarketingClawCameraCommand.Clip.rawValue,
+      MarketingClawCameraCommand.List.rawValue,
+      MarketingClawLocationCommand.Get.rawValue,
+      MarketingClawMotionCommand.Activity.rawValue,
+      MarketingClawMotionCommand.Pedometer.rawValue,
+      MarketingClawSmsCommand.Send.rawValue,
+      MarketingClawSmsCommand.Search.rawValue,
+      MarketingClawCallLogCommand.Search.rawValue,
+      MarketingClawPhotosCommand.Latest.rawValue,
     )
 
   private val debugCommands = setOf("debug.logs", "debug.ed25519")
@@ -120,8 +120,8 @@ class InvokeCommandRegistryTest {
     val disabled = InvokeCommandRegistry.advertisedCommands(defaultFlags(installedAppsSharingEnabled = false))
     val enabled = InvokeCommandRegistry.advertisedCommands(defaultFlags(installedAppsSharingEnabled = true))
 
-    assertFalse(disabled.contains(OpenClawDeviceCommand.Apps.rawValue))
-    assertTrue(enabled.contains(OpenClawDeviceCommand.Apps.rawValue))
+    assertFalse(disabled.contains(MarketingClawDeviceCommand.Apps.rawValue))
+    assertTrue(enabled.contains(MarketingClawDeviceCommand.Apps.rawValue))
   }
 
   @Test
@@ -165,8 +165,8 @@ class InvokeCommandRegistryTest {
         ),
       )
 
-    assertTrue(commands.contains(OpenClawMotionCommand.Activity.rawValue))
-    assertFalse(commands.contains(OpenClawMotionCommand.Pedometer.rawValue))
+    assertTrue(commands.contains(MarketingClawMotionCommand.Activity.rawValue))
+    assertFalse(commands.contains(MarketingClawMotionCommand.Pedometer.rawValue))
   }
 
   @Test
@@ -184,11 +184,11 @@ class InvokeCommandRegistryTest {
         defaultFlags(smsSearchPossible = true),
       )
 
-    assertTrue(readOnlyCommands.contains(OpenClawSmsCommand.Search.rawValue))
-    assertFalse(readOnlyCommands.contains(OpenClawSmsCommand.Send.rawValue))
-    assertTrue(sendOnlyCommands.contains(OpenClawSmsCommand.Send.rawValue))
-    assertFalse(sendOnlyCommands.contains(OpenClawSmsCommand.Search.rawValue))
-    assertTrue(requestableSearchCommands.contains(OpenClawSmsCommand.Search.rawValue))
+    assertTrue(readOnlyCommands.contains(MarketingClawSmsCommand.Search.rawValue))
+    assertFalse(readOnlyCommands.contains(MarketingClawSmsCommand.Send.rawValue))
+    assertTrue(sendOnlyCommands.contains(MarketingClawSmsCommand.Send.rawValue))
+    assertFalse(sendOnlyCommands.contains(MarketingClawSmsCommand.Search.rawValue))
+    assertTrue(requestableSearchCommands.contains(MarketingClawSmsCommand.Search.rawValue))
   }
 
   @Test
@@ -206,23 +206,23 @@ class InvokeCommandRegistryTest {
         defaultFlags(smsSearchPossible = true),
       )
 
-    assertTrue(readOnlyCapabilities.contains(OpenClawCapability.Sms.rawValue))
-    assertTrue(sendOnlyCapabilities.contains(OpenClawCapability.Sms.rawValue))
-    assertFalse(requestableSearchCapabilities.contains(OpenClawCapability.Sms.rawValue))
+    assertTrue(readOnlyCapabilities.contains(MarketingClawCapability.Sms.rawValue))
+    assertTrue(sendOnlyCapabilities.contains(MarketingClawCapability.Sms.rawValue))
+    assertFalse(requestableSearchCapabilities.contains(MarketingClawCapability.Sms.rawValue))
   }
 
   @Test
   fun advertisedCommands_excludesCallLogWhenUnavailable() {
     val commands = InvokeCommandRegistry.advertisedCommands(defaultFlags(callLogAvailable = false))
 
-    assertFalse(commands.contains(OpenClawCallLogCommand.Search.rawValue))
+    assertFalse(commands.contains(MarketingClawCallLogCommand.Search.rawValue))
   }
 
   @Test
   fun advertisedCapabilities_excludesCallLogWhenUnavailable() {
     val capabilities = InvokeCommandRegistry.advertisedCapabilities(defaultFlags(callLogAvailable = false))
 
-    assertFalse(capabilities.contains(OpenClawCapability.CallLog.rawValue))
+    assertFalse(capabilities.contains(MarketingClawCapability.CallLog.rawValue))
   }
 
   @Test
@@ -230,10 +230,10 @@ class InvokeCommandRegistryTest {
     val disabledFlags = defaultFlags(photosAvailable = false)
     val enabledFlags = defaultFlags(photosAvailable = true)
 
-    assertFalse(InvokeCommandRegistry.advertisedCapabilities(disabledFlags).contains(OpenClawCapability.Photos.rawValue))
-    assertFalse(InvokeCommandRegistry.advertisedCommands(disabledFlags).contains(OpenClawPhotosCommand.Latest.rawValue))
-    assertTrue(InvokeCommandRegistry.advertisedCapabilities(enabledFlags).contains(OpenClawCapability.Photos.rawValue))
-    assertTrue(InvokeCommandRegistry.advertisedCommands(enabledFlags).contains(OpenClawPhotosCommand.Latest.rawValue))
+    assertFalse(InvokeCommandRegistry.advertisedCapabilities(disabledFlags).contains(MarketingClawCapability.Photos.rawValue))
+    assertFalse(InvokeCommandRegistry.advertisedCommands(disabledFlags).contains(MarketingClawPhotosCommand.Latest.rawValue))
+    assertTrue(InvokeCommandRegistry.advertisedCapabilities(enabledFlags).contains(MarketingClawCapability.Photos.rawValue))
+    assertTrue(InvokeCommandRegistry.advertisedCommands(enabledFlags).contains(MarketingClawPhotosCommand.Latest.rawValue))
   }
 
   @Test
@@ -241,18 +241,18 @@ class InvokeCommandRegistryTest {
     val capabilities = InvokeCommandRegistry.advertisedCapabilities(defaultFlags(voiceWakeEnabled = true))
     val commands = InvokeCommandRegistry.advertisedCommands(defaultFlags(voiceWakeEnabled = true))
 
-    assertTrue(capabilities.contains(OpenClawCapability.VoiceWake.rawValue))
+    assertTrue(capabilities.contains(MarketingClawCapability.VoiceWake.rawValue))
     assertFalse(commands.any { it.contains("voice", ignoreCase = true) })
   }
 
   @Test
   fun find_returnsForegroundMetadataForCameraCommands() {
-    val list = InvokeCommandRegistry.find(OpenClawCameraCommand.List.rawValue)
-    val location = InvokeCommandRegistry.find(OpenClawLocationCommand.Get.rawValue)
-    val pttStart = InvokeCommandRegistry.find(OpenClawTalkCommand.PttStart.rawValue)
-    val pttStop = InvokeCommandRegistry.find(OpenClawTalkCommand.PttStop.rawValue)
-    val pttCancel = InvokeCommandRegistry.find(OpenClawTalkCommand.PttCancel.rawValue)
-    val pttOnce = InvokeCommandRegistry.find(OpenClawTalkCommand.PttOnce.rawValue)
+    val list = InvokeCommandRegistry.find(MarketingClawCameraCommand.List.rawValue)
+    val location = InvokeCommandRegistry.find(MarketingClawLocationCommand.Get.rawValue)
+    val pttStart = InvokeCommandRegistry.find(MarketingClawTalkCommand.PttStart.rawValue)
+    val pttStop = InvokeCommandRegistry.find(MarketingClawTalkCommand.PttStop.rawValue)
+    val pttCancel = InvokeCommandRegistry.find(MarketingClawTalkCommand.PttCancel.rawValue)
+    val pttOnce = InvokeCommandRegistry.find(MarketingClawTalkCommand.PttOnce.rawValue)
 
     assertNotNull(list)
     assertEquals(true, list?.requiresForeground)

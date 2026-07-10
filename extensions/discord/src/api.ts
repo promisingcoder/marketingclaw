@@ -1,13 +1,13 @@
 // Discord API module exposes the plugin public contract.
-import { resolveFetch } from "openclaw/plugin-sdk/fetch-runtime";
-import { resolveTimerTimeoutMs } from "openclaw/plugin-sdk/number-runtime";
-import { readResponseTextLimited } from "openclaw/plugin-sdk/provider-http";
-import { readResponseWithLimit } from "openclaw/plugin-sdk/response-limit-runtime";
+import { resolveFetch } from "marketingclaw/plugin-sdk/fetch-runtime";
+import { resolveTimerTimeoutMs } from "marketingclaw/plugin-sdk/number-runtime";
+import { readResponseTextLimited } from "marketingclaw/plugin-sdk/provider-http";
+import { readResponseWithLimit } from "marketingclaw/plugin-sdk/response-limit-runtime";
 import {
   resolveRetryConfig,
   retryAsync,
   type RetryConfig,
-} from "openclaw/plugin-sdk/retry-runtime";
+} from "marketingclaw/plugin-sdk/retry-runtime";
 import { isDiscordHtmlResponseBody, summarizeDiscordResponseBody } from "./error-body.js";
 import { parseDiscordRetryAfterBodySeconds, parseRetryAfterHeaderSeconds } from "./retry-after.js";
 
@@ -206,10 +206,7 @@ export async function requestDiscord<T>(
       try {
         return JSON.parse(text) as T;
       } catch {
-        throw new DiscordApiError(
-          `Discord API ${path} returned malformed JSON`,
-          0,
-        );
+        throw new DiscordApiError(`Discord API ${path} returned malformed JSON`, 0);
       }
     },
     {

@@ -1,5 +1,5 @@
 ---
-summary: "Adds OpenCode Go model provider support to OpenClaw."
+summary: "Adds OpenCode Go model provider support to MarketingClaw."
 read_when:
   - You are installing, configuring, or auditing the opencode-go plugin
 title: "OpenCode Go plugin"
@@ -7,12 +7,12 @@ title: "OpenCode Go plugin"
 
 # OpenCode Go plugin
 
-Adds OpenCode Go model provider support to OpenClaw.
+Adds OpenCode Go model provider support to MarketingClaw.
 
 ## Distribution
 
-- Package: `@openclaw/opencode-go-provider`
-- Install route: included in OpenClaw
+- Package: `@marketingclaw/opencode-go-provider`
+- Install route: included in MarketingClaw
 
 ## Surface
 

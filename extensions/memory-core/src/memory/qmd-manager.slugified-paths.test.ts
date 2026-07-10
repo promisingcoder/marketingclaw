@@ -44,10 +44,10 @@ function emitAndClose(child: MockChild, stream: "stdout" | "stderr", data: strin
   });
 }
 
-vi.mock("openclaw/plugin-sdk/memory-core-host-engine-foundation", async () => {
+vi.mock("marketingclaw/plugin-sdk/memory-core-host-engine-foundation", async () => {
   const actual = await vi.importActual<
-    typeof import("openclaw/plugin-sdk/memory-core-host-engine-foundation")
-  >("openclaw/plugin-sdk/memory-core-host-engine-foundation");
+    typeof import("marketingclaw/plugin-sdk/memory-core-host-engine-foundation")
+  >("marketingclaw/plugin-sdk/memory-core-host-engine-foundation");
   return {
     ...actual,
     createSubsystemLogger: () => {
@@ -71,22 +71,22 @@ vi.mock("node:child_process", async () => {
 });
 
 import { spawn as mockedSpawn } from "node:child_process";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/memory-core-host-engine-foundation";
-import { resolveMemoryBackendConfig } from "openclaw/plugin-sdk/memory-core-host-engine-storage";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/memory-core-host-engine-foundation";
+import { resolveMemoryBackendConfig } from "marketingclaw/plugin-sdk/memory-core-host-engine-storage";
 import { QmdMemoryManager } from "./qmd-manager.js";
 
 const spawnMock = mockedSpawn as unknown as Mock;
-const originalQmdStateDir = process.env.OPENCLAW_STATE_DIR;
+const originalQmdStateDir = process.env.MARKETINGCLAW_STATE_DIR;
 
 function setQmdStateDir(stateDir: string): void {
-  Reflect.set(process.env, "OPENCLAW_STATE_DIR", stateDir);
+  Reflect.set(process.env, "MARKETINGCLAW_STATE_DIR", stateDir);
 }
 
 function restoreQmdStateDir(): void {
   if (originalQmdStateDir === undefined) {
-    Reflect.deleteProperty(process.env, "OPENCLAW_STATE_DIR");
+    Reflect.deleteProperty(process.env, "MARKETINGCLAW_STATE_DIR");
   } else {
-    Reflect.set(process.env, "OPENCLAW_STATE_DIR", originalQmdStateDir);
+    Reflect.set(process.env, "MARKETINGCLAW_STATE_DIR", originalQmdStateDir);
   }
 }
 
@@ -94,7 +94,7 @@ describe("QmdMemoryManager slugified path resolution", () => {
   let tmpRoot: string;
   let workspaceDir: string;
   let stateDir: string;
-  let cfg: OpenClawConfig;
+  let cfg: MarketingClawConfig;
   const agentId = "main";
   const openManagers = new Set<QmdMemoryManager>();
 
@@ -105,7 +105,7 @@ describe("QmdMemoryManager slugified path resolution", () => {
     return manager;
   }
 
-  async function createManager(params?: { cfg?: OpenClawConfig }) {
+  async function createManager(params?: { cfg?: MarketingClawConfig }) {
     const cfgToUse = params?.cfg ?? cfg;
     const resolved = resolveMemoryBackendConfig({ cfg: cfgToUse, agentId });
     const manager = trackManager(
@@ -181,7 +181,7 @@ describe("QmdMemoryManager slugified path resolution", () => {
     logDebugMock.mockClear();
     logInfoMock.mockClear();
 
-    tmpRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-qmd-slugified-"));
+    tmpRoot = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-qmd-slugified-"));
     workspaceDir = path.join(tmpRoot, "workspace");
     stateDir = path.join(tmpRoot, "state");
     await fs.mkdir(workspaceDir, { recursive: true });
@@ -199,7 +199,7 @@ describe("QmdMemoryManager slugified path resolution", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
   });
 
   afterEach(async () => {
@@ -281,7 +281,7 @@ describe("QmdMemoryManager slugified path resolution", () => {
           paths: [{ path: extraRoot, pattern: "**/*.md", name: "vault" }],
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     const actualRelative = "Topics/Sub Category/Topic Name.md";
     const actualFile = path.join(extraRoot, actualRelative);

@@ -1,32 +1,32 @@
-package ai.openclaw.app.ui.chat
+package ai.marketingclaw.app.ui.chat
 
-import ai.openclaw.app.chat.ChatMessage
-import ai.openclaw.app.chat.ChatMessageContent
-import ai.openclaw.app.chat.ChatOutboxItem
-import ai.openclaw.app.chat.ChatOutboxStatus
-import ai.openclaw.app.chat.ChatPendingToolCall
-import ai.openclaw.app.chat.MessageSpeechPhase
-import ai.openclaw.app.chat.MessageSpeechState
-import ai.openclaw.app.chat.normalizeVisibleChatMessageRole
-import ai.openclaw.app.tools.ToolDisplayRegistry
-import ai.openclaw.app.ui.MobileColorsAccessor
-import ai.openclaw.app.ui.design.ClawTheme
-import ai.openclaw.app.ui.mobileAccent
-import ai.openclaw.app.ui.mobileAccentSoft
-import ai.openclaw.app.ui.mobileBorder
-import ai.openclaw.app.ui.mobileBorderStrong
-import ai.openclaw.app.ui.mobileCallout
-import ai.openclaw.app.ui.mobileCaption1
-import ai.openclaw.app.ui.mobileCaption2
-import ai.openclaw.app.ui.mobileCardSurface
-import ai.openclaw.app.ui.mobileCodeBg
-import ai.openclaw.app.ui.mobileCodeBorder
-import ai.openclaw.app.ui.mobileCodeText
-import ai.openclaw.app.ui.mobileDanger
-import ai.openclaw.app.ui.mobileText
-import ai.openclaw.app.ui.mobileTextSecondary
-import ai.openclaw.app.ui.mobileWarning
-import ai.openclaw.app.ui.mobileWarningSoft
+import ai.marketingclaw.app.chat.ChatMessage
+import ai.marketingclaw.app.chat.ChatMessageContent
+import ai.marketingclaw.app.chat.ChatOutboxItem
+import ai.marketingclaw.app.chat.ChatOutboxStatus
+import ai.marketingclaw.app.chat.ChatPendingToolCall
+import ai.marketingclaw.app.chat.MessageSpeechPhase
+import ai.marketingclaw.app.chat.MessageSpeechState
+import ai.marketingclaw.app.chat.normalizeVisibleChatMessageRole
+import ai.marketingclaw.app.tools.ToolDisplayRegistry
+import ai.marketingclaw.app.ui.MobileColorsAccessor
+import ai.marketingclaw.app.ui.design.ClawTheme
+import ai.marketingclaw.app.ui.mobileAccent
+import ai.marketingclaw.app.ui.mobileAccentSoft
+import ai.marketingclaw.app.ui.mobileBorder
+import ai.marketingclaw.app.ui.mobileBorderStrong
+import ai.marketingclaw.app.ui.mobileCallout
+import ai.marketingclaw.app.ui.mobileCaption1
+import ai.marketingclaw.app.ui.mobileCaption2
+import ai.marketingclaw.app.ui.mobileCardSurface
+import ai.marketingclaw.app.ui.mobileCodeBg
+import ai.marketingclaw.app.ui.mobileCodeBorder
+import ai.marketingclaw.app.ui.mobileCodeText
+import ai.marketingclaw.app.ui.mobileDanger
+import ai.marketingclaw.app.ui.mobileText
+import ai.marketingclaw.app.ui.mobileTextSecondary
+import ai.marketingclaw.app.ui.mobileWarning
+import ai.marketingclaw.app.ui.mobileWarningSoft
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -482,7 +482,7 @@ private fun ChatOutboxAction(
 fun ChatStreamingAssistantBubble(text: String) {
   ChatBubbleContainer(
     style = bubbleStyle("assistant").copy(borderColor = mobileAccent),
-    roleLabel = "OpenClaw · Live",
+    roleLabel = "MarketingClaw · Live",
   ) {
     ChatMarkdown(text = text, textColor = mobileText, isStreaming = true)
   }
@@ -520,7 +520,7 @@ private fun roleLabel(role: String): String =
   when (role) {
     "user" -> "You"
     "system" -> "System"
-    else -> "OpenClaw"
+    else -> "MarketingClaw"
   }
 
 @Composable

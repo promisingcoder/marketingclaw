@@ -1,12 +1,12 @@
-# OpenClaw Firecrawl Plugin
+# MarketingClaw Firecrawl Plugin
 
-Official OpenClaw plugin for Firecrawl.
+Official MarketingClaw plugin for Firecrawl.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugins install @openclaw/firecrawl-plugin
-openclaw gateway restart
+marketingclaw plugins install @marketingclaw/firecrawl-plugin
+marketingclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/tools/firecrawl> for setup and configuration.
+See <https://docs.marketingclaw.ai/tools/firecrawl> for setup and configuration.

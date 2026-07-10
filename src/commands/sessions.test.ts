@@ -186,7 +186,7 @@ describe("sessionsCommand", () => {
       "agent:child:main": {
         sessionId: "child-session",
         updatedAt: Date.now() - 10 * 60_000,
-        sessionFile: "/tmp/openclaw/child-session.jsonl",
+        sessionFile: "/tmp/marketingclaw/child-session.jsonl",
         spawnedBy: "agent:main:main",
         spawnedWorkspaceDir: "/workspace/project",
         spawnedCwd: "/workspace/project/tasks",
@@ -224,7 +224,7 @@ describe("sessionsCommand", () => {
 
     const child = payload.sessions?.find((row) => row.key === "agent:child:main");
     expect(child).toMatchObject({
-      sessionFile: "/tmp/openclaw/child-session.jsonl",
+      sessionFile: "/tmp/marketingclaw/child-session.jsonl",
       spawnedBy: "agent:main:main",
       spawnedWorkspaceDir: "/workspace/project",
       spawnedCwd: "/workspace/project/tasks",

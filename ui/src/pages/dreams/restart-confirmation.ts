@@ -26,7 +26,11 @@ export function renderDreamingRestartConfirmation(props: DreamingRestartConfirma
   };
 
   return html`
-    <openclaw-modal-dialog label=${title} description=${description} @modal-cancel=${handleCancel}>
+    <marketingclaw-modal-dialog
+      label=${title}
+      description=${description}
+      @modal-cancel=${handleCancel}
+    >
       <div class="exec-approval-card">
         <div class="exec-approval-header">
           <div>
@@ -51,6 +55,6 @@ export function renderDreamingRestartConfirmation(props: DreamingRestartConfirma
           </button>
         </div>
       </div>
-    </openclaw-modal-dialog>
+    </marketingclaw-modal-dialog>
   `;
 }

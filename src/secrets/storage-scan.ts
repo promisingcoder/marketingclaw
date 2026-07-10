@@ -1,9 +1,9 @@
 /** Filesystem discovery and bounded JSON readers for local secret storage audits. */
 import fs from "node:fs";
 import path from "node:path";
-import { isRecord as isJsonObject } from "@openclaw/normalization-core/record-coerce";
+import { isRecord as isJsonObject } from "@marketingclaw/normalization-core/record-coerce";
 import { listAgentIds, resolveAgentDir } from "../agents/agent-scope.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { resolveUserPath } from "../utils.js";
 import { listAuthProfileStoreAgentDirs as listAuthProfileStoreAgentDirsFromAuthStorePaths } from "./auth-store-paths.js";
@@ -15,7 +15,10 @@ export function parseEnvAssignmentValue(raw: string): string {
 }
 
 /** Lists agent directories that own canonical auth-profile stores. */
-export function listAuthProfileStoreAgentDirs(config: OpenClawConfig, stateDir: string): string[] {
+export function listAuthProfileStoreAgentDirs(
+  config: MarketingClawConfig,
+  stateDir: string,
+): string[] {
   return listAuthProfileStoreAgentDirsFromAuthStorePaths(config, stateDir);
 }
 
@@ -39,7 +42,7 @@ export function listLegacyAuthJsonPaths(stateDir: string): string[] {
 }
 
 function resolveActiveAgentDir(stateDir: string, env: NodeJS.ProcessEnv = process.env): string {
-  const override = env.OPENCLAW_AGENT_DIR?.trim() || env.PI_CODING_AGENT_DIR?.trim();
+  const override = env.MARKETINGCLAW_AGENT_DIR?.trim() || env.PI_CODING_AGENT_DIR?.trim();
   if (override) {
     return resolveUserPath(override, env);
   }
@@ -52,7 +55,7 @@ function resolveActiveAgentDir(stateDir: string, env: NodeJS.ProcessEnv = proces
  * Includes active env override, implicit main agent, discovered state dirs, and configured agents.
  */
 export function listAgentModelsJsonPaths(
-  config: OpenClawConfig,
+  config: MarketingClawConfig,
   stateDir: string,
   env: NodeJS.ProcessEnv = process.env,
 ): string[] {

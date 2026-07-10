@@ -15,22 +15,22 @@ import {
   type WalkDirectoryEntry,
 } from "./fs-utils.js";
 import {
-  buildMemoryMultimodalLabel,
-  classifyMemoryMultimodalPath,
-  type MemoryMultimodalModality,
-  type MemoryMultimodalSettings,
-} from "./multimodal.js";
-import {
   CHARS_PER_TOKEN_ESTIMATE,
   detectMime,
   estimateStringChars,
   runTasksWithConcurrency,
   truncateUtf16Safe,
-} from "./openclaw-runtime-io.js";
+} from "./marketingclaw-runtime-io.js";
 import {
   resolveCanonicalRootMemoryFile,
   shouldSkipRootMemoryAuxiliaryPath,
-} from "./openclaw-runtime-memory.js";
+} from "./marketingclaw-runtime-memory.js";
+import {
+  buildMemoryMultimodalLabel,
+  classifyMemoryMultimodalPath,
+  type MemoryMultimodalModality,
+  type MemoryMultimodalSettings,
+} from "./multimodal.js";
 import { retryTransientMemoryRead } from "./read-retry.js";
 import { normalizeStringEntries, uniqueStrings } from "./string-utils.js";
 
@@ -128,7 +128,7 @@ function shouldDescendMemoryEntry(
   if (shouldSkipPath?.(entry.path)) {
     return false;
   }
-  return entry.kind === "directory" && entry.name !== ".openclaw-repair";
+  return entry.kind === "directory" && entry.name !== ".marketingclaw-repair";
 }
 
 async function collectMemoryFilesFromDir(

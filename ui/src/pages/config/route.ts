@@ -22,7 +22,7 @@ function configPage(id: ConfigPageId, path: string, aliases: readonly string[]) 
     component: () =>
       import("./config-page.ts").then(() => ({
         header: true,
-        render: () => html`<openclaw-config-page .pageId=${id}></openclaw-config-page>`,
+        render: () => html`<marketingclaw-config-page .pageId=${id}></marketingclaw-config-page>`,
       })),
   });
 }

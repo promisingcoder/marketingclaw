@@ -2,29 +2,29 @@ import com.android.build.api.variant.impl.VariantOutputImpl
 import java.util.Properties
 
 val dnsjavaInetAddressResolverService = "META-INF/services/java.net.spi.InetAddressResolverProvider"
-val openClawAndroidVersionFile = rootProject.file("Config/Version.properties")
+val marketingClawAndroidVersionFile = rootProject.file("Config/Version.properties")
 val thirdPartyLicensesDir = rootProject.file("THIRD_PARTY_LICENSES")
-val openClawAndroidVersionProperties =
+val marketingClawAndroidVersionProperties =
   Properties().apply {
-    if (!openClawAndroidVersionFile.isFile) {
+    if (!marketingClawAndroidVersionFile.isFile) {
       error("Missing Android version properties. Run `pnpm android:version:sync`.")
     }
-    openClawAndroidVersionFile.inputStream().use(::load)
+    marketingClawAndroidVersionFile.inputStream().use(::load)
   }
 
-fun requireOpenClawAndroidVersionProperty(name: String): String =
-  openClawAndroidVersionProperties.getProperty(name)?.trim()?.takeIf { it.isNotEmpty() }
+fun requireMarketingClawAndroidVersionProperty(name: String): String =
+  marketingClawAndroidVersionProperties.getProperty(name)?.trim()?.takeIf { it.isNotEmpty() }
     ?: error("Missing $name in Config/Version.properties. Run `pnpm android:version:sync`.")
 
-val openClawAndroidVersionName = requireOpenClawAndroidVersionProperty("OPENCLAW_ANDROID_VERSION_NAME")
-val openClawAndroidVersionCode =
-  requireOpenClawAndroidVersionProperty("OPENCLAW_ANDROID_VERSION_CODE").toIntOrNull()
-    ?: error("OPENCLAW_ANDROID_VERSION_CODE must be an integer in Config/Version.properties.")
+val marketingClawAndroidVersionName = requireMarketingClawAndroidVersionProperty("MARKETINGCLAW_ANDROID_VERSION_NAME")
+val marketingClawAndroidVersionCode =
+  requireMarketingClawAndroidVersionProperty("MARKETINGCLAW_ANDROID_VERSION_CODE").toIntOrNull()
+    ?: error("MARKETINGCLAW_ANDROID_VERSION_CODE must be an integer in Config/Version.properties.")
 
-val androidStoreFile = providers.gradleProperty("OPENCLAW_ANDROID_STORE_FILE").orNull?.takeIf { it.isNotBlank() }
-val androidStorePassword = providers.gradleProperty("OPENCLAW_ANDROID_STORE_PASSWORD").orNull?.takeIf { it.isNotBlank() }
-val androidKeyAlias = providers.gradleProperty("OPENCLAW_ANDROID_KEY_ALIAS").orNull?.takeIf { it.isNotBlank() }
-val androidKeyPassword = providers.gradleProperty("OPENCLAW_ANDROID_KEY_PASSWORD").orNull?.takeIf { it.isNotBlank() }
+val androidStoreFile = providers.gradleProperty("MARKETINGCLAW_ANDROID_STORE_FILE").orNull?.takeIf { it.isNotBlank() }
+val androidStorePassword = providers.gradleProperty("MARKETINGCLAW_ANDROID_STORE_PASSWORD").orNull?.takeIf { it.isNotBlank() }
+val androidKeyAlias = providers.gradleProperty("MARKETINGCLAW_ANDROID_KEY_ALIAS").orNull?.takeIf { it.isNotBlank() }
+val androidKeyPassword = providers.gradleProperty("MARKETINGCLAW_ANDROID_KEY_PASSWORD").orNull?.takeIf { it.isNotBlank() }
 val resolvedAndroidStoreFile =
   androidStoreFile?.let { storeFilePath ->
     if (storeFilePath.startsWith("~/")) {
@@ -45,9 +45,9 @@ val wantsAndroidReleaseBuild =
 
 if (wantsAndroidReleaseBuild && !hasAndroidReleaseSigning) {
   error(
-    "Missing Android release signing properties. Set OPENCLAW_ANDROID_STORE_FILE, " +
-      "OPENCLAW_ANDROID_STORE_PASSWORD, OPENCLAW_ANDROID_KEY_ALIAS, and " +
-      "OPENCLAW_ANDROID_KEY_PASSWORD in ~/.gradle/gradle.properties.",
+    "Missing Android release signing properties. Set MARKETINGCLAW_ANDROID_STORE_FILE, " +
+      "MARKETINGCLAW_ANDROID_STORE_PASSWORD, MARKETINGCLAW_ANDROID_KEY_ALIAS, and " +
+      "MARKETINGCLAW_ANDROID_KEY_PASSWORD in ~/.gradle/gradle.properties.",
   )
 }
 
@@ -60,7 +60,7 @@ plugins {
 }
 
 android {
-  namespace = "ai.openclaw.app"
+  namespace = "ai.marketingclaw.app"
   // AndroidX Core 1.19 and Lifecycle 2.11 require API 37 compilation.
   // targetSdk stays separate so runtime behavior changes remain an explicit migration.
   compileSdk = 37
@@ -79,17 +79,17 @@ android {
 
   sourceSets {
     getByName("main") {
-      assets.directories.add("../../shared/OpenClawKit/Sources/OpenClawKit/Resources")
+      assets.directories.add("../../shared/MarketingClawKit/Sources/MarketingClawKit/Resources")
       assets.directories.add(thirdPartyLicensesDir.path)
     }
   }
 
   defaultConfig {
-    applicationId = "ai.openclaw.app"
+    applicationId = "ai.marketingclaw.app"
     minSdk = 31
     targetSdk = 36
-    versionCode = openClawAndroidVersionCode
-    versionName = openClawAndroidVersionName
+    versionCode = marketingClawAndroidVersionCode
+    versionName = marketingClawAndroidVersionName
     ndk {
       // Support all major ABIs — native libs are tiny (~47 KB per ABI)
       abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
@@ -208,9 +208,9 @@ androidComponents {
         val flavorName = variant.flavorName?.takeIf { it.isNotBlank() }
         val outputFileName =
           if (flavorName == null) {
-            "openclaw-$versionName-$buildType.apk"
+            "marketingclaw-$versionName-$buildType.apk"
           } else {
-            "openclaw-$versionName-$flavorName-$buildType.apk"
+            "marketingclaw-$versionName-$flavorName-$buildType.apk"
           }
         output.outputFileName = outputFileName
       }

@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { FsSafeError } from "openclaw/plugin-sdk/security-runtime";
+import { FsSafeError } from "marketingclaw/plugin-sdk/security-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { applyMemoryWikiMutation } from "./apply.js";
 import { importChatGptConversations } from "./chatgpt-import.js";
@@ -18,8 +18,8 @@ const securityRuntimeMock = vi.hoisted(() => ({
   readTextFailureInjected: false,
 }));
 
-vi.mock("openclaw/plugin-sdk/security-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/security-runtime")>();
+vi.mock("marketingclaw/plugin-sdk/security-runtime", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("marketingclaw/plugin-sdk/security-runtime")>();
   return {
     ...actual,
     root: async (...args: Parameters<typeof actual.root>) => {
@@ -68,8 +68,8 @@ function buildSourcePage(raw: string, updatedAt: string): string {
       renderMarkdownFence(raw, "text"),
       "",
       "## Notes",
-      "<!-- openclaw:human:start -->",
-      "<!-- openclaw:human:end -->",
+      "<!-- marketingclaw:human:start -->",
+      "<!-- marketingclaw:human:end -->",
       "",
     ].join("\n"),
   });
@@ -150,8 +150,8 @@ describe("memory-wiki existing-page read retry", () => {
     const pagePath = path.join(config.vault.path, "sources", "roadmap.md");
     const userNote = "KEY INSIGHT: covers the Q2 roadmap";
     const edited = (await fs.readFile(pagePath, "utf8")).replace(
-      "<!-- openclaw:human:start -->\n<!-- openclaw:human:end -->",
-      `<!-- openclaw:human:start -->\n${userNote}\n<!-- openclaw:human:end -->`,
+      "<!-- marketingclaw:human:start -->\n<!-- marketingclaw:human:end -->",
+      `<!-- marketingclaw:human:start -->\n${userNote}\n<!-- marketingclaw:human:end -->`,
     );
     await fs.writeFile(pagePath, edited, "utf8");
 
@@ -207,8 +207,8 @@ describe("memory-wiki existing-page read retry", () => {
 
       const userNote = "IMPORTED PAGE NOTE FROM HUMAN";
       const edited = (await fs.readFile(absPage, "utf8")).replace(
-        "<!-- openclaw:human:start -->\n<!-- openclaw:human:end -->",
-        `<!-- openclaw:human:start -->\n${userNote}\n<!-- openclaw:human:end -->`,
+        "<!-- marketingclaw:human:start -->\n<!-- marketingclaw:human:end -->",
+        `<!-- marketingclaw:human:start -->\n${userNote}\n<!-- marketingclaw:human:end -->`,
       );
       await fs.writeFile(absPage, edited, "utf8");
 
@@ -378,8 +378,8 @@ describe("memory-wiki existing-page read retry", () => {
     const pagePath = path.join(rootDir, "syntheses", "release-plan.md");
     const userNote = "Ship gate: legal sign-off required before GA.";
     let edited = (await fs.readFile(pagePath, "utf8")).replace(
-      "<!-- openclaw:human:start -->\n<!-- openclaw:human:end -->",
-      `<!-- openclaw:human:start -->\n${userNote}\n<!-- openclaw:human:end -->`,
+      "<!-- marketingclaw:human:start -->\n<!-- marketingclaw:human:end -->",
+      `<!-- marketingclaw:human:start -->\n${userNote}\n<!-- marketingclaw:human:end -->`,
     );
     edited = edited.replace(/^---\n/, "---\nprivacyTier: sensitive\n");
     await fs.writeFile(pagePath, edited, "utf8");
@@ -450,8 +450,8 @@ describe("memory-wiki existing-page read retry", () => {
     );
     const userNote = "HUMAN NOTE: verified against the airline booking.";
     const edited = (await fs.readFile(pagePath, "utf8")).replace(
-      "<!-- openclaw:human:start -->\n<!-- openclaw:human:end -->",
-      `<!-- openclaw:human:start -->\n${userNote}\n<!-- openclaw:human:end -->`,
+      "<!-- marketingclaw:human:start -->\n<!-- marketingclaw:human:end -->",
+      `<!-- marketingclaw:human:start -->\n${userNote}\n<!-- marketingclaw:human:end -->`,
     );
     await fs.writeFile(pagePath, edited, "utf8");
 
@@ -485,12 +485,12 @@ describe("memory-wiki existing-page read retry", () => {
     );
     const userNote = "Energy identity $$E=mc^2$$ and match $& and prefix $` and suffix $' end.";
     const noteBlock = [
-      "<!-- openclaw:human:start -->",
+      "<!-- marketingclaw:human:start -->",
       userNote,
-      "<!-- openclaw:human:end -->",
+      "<!-- marketingclaw:human:end -->",
     ].join("\n");
     const edited = (await fs.readFile(pagePath, "utf8")).replace(
-      "<!-- openclaw:human:start -->\n<!-- openclaw:human:end -->",
+      "<!-- marketingclaw:human:start -->\n<!-- marketingclaw:human:end -->",
       () => noteBlock,
     );
     await fs.writeFile(pagePath, edited, "utf8");

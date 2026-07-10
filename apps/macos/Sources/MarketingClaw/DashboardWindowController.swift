@@ -29,7 +29,7 @@ private final class DashboardLinkMessageHandler: NSObject, WKScriptMessageHandle
 
 @MainActor
 final class DashboardWindowController: NSWindowController, WKNavigationDelegate, WKUIDelegate, NSWindowDelegate {
-    private static let linkMessageHandlerName = "openclawLink"
+    private static let linkMessageHandlerName = "marketingclawLink"
 
     private let webView: WKWebView
     private let linkBrowser: DashboardLinkBrowserView
@@ -461,7 +461,7 @@ final class DashboardWindowController: NSWindowController, WKNavigationDelegate,
             sidebarDragRegion.widthAnchor.constraint(equalToConstant: 176),
             sidebarDragRegion.heightAnchor.constraint(equalToConstant: 46),
         ])
-        window.title = "OpenClaw"
+        window.title = "MarketingClaw"
         window.titleVisibility = .hidden
         window.titlebarAppearsTransparent = true
         window.isMovableByWindowBackground = true
@@ -480,27 +480,27 @@ final class DashboardWindowController: NSWindowController, WKNavigationDelegate,
 
     private static func installNativeChromeScript(into userContentController: WKUserContentController) {
         let css = """
-        html.openclaw-native-macos {
-          --openclaw-native-titlebar-height: 50px;
+        html.marketingclaw-native-macos {
+          --marketingclaw-native-titlebar-height: 50px;
         }
         @media (min-width: 700px) {
           /* Both desktop navigation surfaces must clear AppKit's window controls
              and drag regions or their first interactive row becomes unreachable. */
-          html.openclaw-native-macos .sidebar-shell,
-          html.openclaw-native-macos .settings-sidebar__header {
-            padding-top: max(14px, var(--openclaw-native-titlebar-height)) !important;
+          html.marketingclaw-native-macos .sidebar-shell,
+          html.marketingclaw-native-macos .settings-sidebar__header {
+            padding-top: max(14px, var(--marketingclaw-native-titlebar-height)) !important;
           }
         }
         @media (max-width: 1100px) {
           /* The responsive topbar replaces the sidebar below this breakpoint.
              Move its controls below AppKit's traffic lights and drag overlay. */
-          html.openclaw-native-macos .shell {
-            --shell-topbar-height: calc(58px + var(--openclaw-native-titlebar-height));
+          html.marketingclaw-native-macos .shell {
+            --shell-topbar-height: calc(58px + var(--marketingclaw-native-titlebar-height));
           }
-          html.openclaw-native-macos .topbar {
-            padding: var(--openclaw-native-titlebar-height) 12px 0 !important;
+          html.marketingclaw-native-macos .topbar {
+            padding: var(--marketingclaw-native-titlebar-height) 12px 0 !important;
           }
-          html.openclaw-native-macos .topnav-shell {
+          html.marketingclaw-native-macos .topnav-shell {
             min-height: 58px;
           }
         }
@@ -508,11 +508,11 @@ final class DashboardWindowController: NSWindowController, WKNavigationDelegate,
         let script = """
         (() => {
           try {
-            if (document.getElementById("openclaw-native-macos-chrome")) return;
+            if (document.getElementById("marketingclaw-native-macos-chrome")) return;
             const style = document.createElement("style");
-            style.id = "openclaw-native-macos-chrome";
+            style.id = "marketingclaw-native-macos-chrome";
             style.textContent = \(Self.jsStringLiteral(css));
-            document.documentElement.classList.add("openclaw-native-macos");
+            document.documentElement.classList.add("marketingclaw-native-macos");
             document.head.appendChild(style);
           } catch {}
         })();
@@ -546,7 +546,7 @@ final class DashboardWindowController: NSWindowController, WKNavigationDelegate,
             const allowedPath = \(Self.jsStringLiteral(allowedPath));
             if (location.origin !== allowedOrigin) return;
             if (allowedPath !== "/" && !location.pathname.startsWith(allowedPath)) return;
-            Object.defineProperty(window, "__OPENCLAW_NATIVE_CONTROL_AUTH__", {
+            Object.defineProperty(window, "__MARKETINGCLAW_NATIVE_CONTROL_AUTH__", {
               value: \(json),
               configurable: true,
             });

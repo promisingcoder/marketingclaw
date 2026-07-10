@@ -1,21 +1,21 @@
 /** SQLite-backed Codex app-server thread bindings. */
 import { AsyncLocalStorage } from "node:async_hooks";
 import { createHash, randomUUID } from "node:crypto";
-import { embeddedAgentLog } from "openclaw/plugin-sdk/agent-harness-runtime";
+import { embeddedAgentLog } from "marketingclaw/plugin-sdk/agent-harness-runtime";
 import {
   ensureAuthProfileStore,
   resolveDefaultAgentDir,
   resolveProviderIdForAuth,
   resolveSessionAgentIds,
   type AuthProfileStore,
-} from "openclaw/plugin-sdk/agent-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { PluginStateSyncKeyedStore } from "openclaw/plugin-sdk/plugin-state-runtime";
+} from "marketingclaw/plugin-sdk/agent-runtime";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import type { PluginStateSyncKeyedStore } from "marketingclaw/plugin-sdk/plugin-state-runtime";
 import {
   loadSessionStore,
   resolveSessionStoreEntry,
   resolveStorePath,
-} from "openclaw/plugin-sdk/session-store-runtime";
+} from "marketingclaw/plugin-sdk/session-store-runtime";
 import { z } from "zod";
 import { CODEX_PLUGINS_MARKETPLACE_NAME, normalizeCodexServiceTier } from "./config.js";
 import type { PluginAppPolicyContext } from "./plugin-thread-config.js";
@@ -53,12 +53,12 @@ export type CodexAppServerBindingIdentity =
   | { kind: "session"; agentId: string; sessionId: string; sessionKey?: string }
   | { kind: "conversation"; bindingId: string };
 
-/** Resolves the same agent scope OpenClaw uses for transcript/session ownership. */
+/** Resolves the same agent scope MarketingClaw uses for transcript/session ownership. */
 export function sessionBindingIdentity(params: {
   sessionId: string;
   sessionKey?: string;
   agentId?: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
 }): Extract<CodexAppServerBindingIdentity, { kind: "session" }> {
   const { sessionAgentId } = resolveSessionAgentIds(params);
   const sessionKey = params.sessionKey?.trim();
@@ -322,11 +322,11 @@ export type CodexAppServerBindingStore = {
   withLease<T>(identity: CodexAppServerBindingIdentity, run: () => Promise<T>): Promise<T>;
 };
 
-/** Lets the authoritative OpenClaw session generation claim a stale stable binding row. */
+/** Lets the authoritative MarketingClaw session generation claim a stale stable binding row. */
 export async function reclaimCurrentCodexSessionGeneration(params: {
   bindingStore: CodexAppServerBindingStore;
   identity: Extract<CodexAppServerBindingIdentity, { kind: "session" }>;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
 }): Promise<boolean> {
   const sessionKey = params.identity.sessionKey?.trim();
   if (!sessionKey) {
@@ -604,7 +604,7 @@ export function createCodexAppServerBindingStore(
       if (!expectedSessionId) {
         throw new Error("Codex session generation adoption requires the previous session id");
       }
-      // Context-engine compaction rotates the physical OpenClaw session before
+      // Context-engine compaction rotates the physical MarketingClaw session before
       // secondary native compaction. Compare both generations so a delayed hook
       // cannot move a newer binding back to its stale predecessor.
       return await transactKey(key, (current) => {

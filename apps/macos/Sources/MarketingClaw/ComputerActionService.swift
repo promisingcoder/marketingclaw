@@ -1,7 +1,7 @@
 import AppKit
 import CoreGraphics
 import Foundation
-import OpenClawKit
+import MarketingClawKit
 import PeekabooAutomationKit
 import PeekabooFoundation
 @preconcurrency import ScreenCaptureKit
@@ -100,7 +100,7 @@ final class ComputerActionService {
         self.permissions = PermissionsService()
     }
 
-    func perform(_ params: OpenClawComputerActParams) async throws -> OpenClawComputerActResult {
+    func perform(_ params: MarketingClawComputerActParams) async throws -> MarketingClawComputerActResult {
         guard self.permissions.checkAccessibilityPermission() else {
             throw ComputerActionError.accessibilityNotTrusted
         }
@@ -126,13 +126,13 @@ final class ComputerActionService {
             self.releaseHeldInput()
         }
         let cursor = self.automation.currentMouseLocation() ?? CGPoint.zero
-        return OpenClawComputerActResult(ok: true, cursorX: cursor.x, cursorY: cursor.y)
+        return MarketingClawComputerActResult(ok: true, cursorX: cursor.x, cursorY: cursor.y)
     }
 
     // MARK: - Dispatch
 
     private func dispatch(
-        _ params: OpenClawComputerActParams,
+        _ params: MarketingClawComputerActParams,
         display: ResolvedDisplay) async throws
     {
         let modifiers = try ComputerModifiers.parse(params.modifiers)
@@ -216,7 +216,7 @@ final class ComputerActionService {
         }
     }
 
-    private func peekabooClick(at point: CGPoint, action: OpenClawComputerAction) async throws {
+    private func peekabooClick(at point: CGPoint, action: MarketingClawComputerAction) async throws {
         let clickType: ClickType = switch action {
         case .rightClick: .right
         case .doubleClick: .double
@@ -226,7 +226,7 @@ final class ComputerActionService {
     }
 
     private func performScroll(
-        _ params: OpenClawComputerActParams,
+        _ params: MarketingClawComputerActParams,
         display: ResolvedDisplay,
         modifiers: ComputerModifiers) async throws
     {
@@ -251,13 +251,13 @@ final class ComputerActionService {
     /// The target display in global points plus the capture source width used to
     /// derive the captured screenshot pixel width for coordinate scaling.
     private struct ResolvedDisplay {
-        var geometry: OpenClawComputerDisplayGeometry
+        var geometry: MarketingClawComputerDisplayGeometry
         var sourceWidth: Double
         var sourceHeight: Double
     }
 
     private func requiredPoint(
-        _ params: OpenClawComputerActParams,
+        _ params: MarketingClawComputerActParams,
         display: ResolvedDisplay) throws -> CGPoint
     {
         guard let point = try self.point(params.x, params.y, params: params, display: display) else {
@@ -269,7 +269,7 @@ final class ComputerActionService {
     private func point(
         _ x: Double?,
         _ y: Double?,
-        params: OpenClawComputerActParams,
+        params: MarketingClawComputerActParams,
         display: ResolvedDisplay) throws -> CGPoint?
     {
         if x == nil, y == nil {
@@ -286,11 +286,11 @@ final class ComputerActionService {
         if let refWidth = params.refWidth, refWidth <= 0 {
             throw ComputerActionError.invalidReferenceWidth
         }
-        let capturedWidth = OpenClawComputerInputGeometry.capturedWidth(
+        let capturedWidth = MarketingClawComputerInputGeometry.capturedWidth(
             refWidth: params.refWidth,
             sourceWidth: display.sourceWidth,
             sourceHeight: display.sourceHeight)
-        let mapped = OpenClawComputerInputGeometry.mapReferencePointToGlobal(
+        let mapped = MarketingClawComputerInputGeometry.mapReferencePointToGlobal(
             x: x,
             y: y,
             capturedWidthPixels: capturedWidth,
@@ -307,7 +307,7 @@ final class ComputerActionService {
         guard withinX, withinY else { throw ComputerActionError.coordinateOutOfBounds }
         // Clamp the epsilon-tolerated rounding to strictly inside the selected
         // display so a far-edge coordinate cannot post onto an adjacent screen.
-        let clamped = OpenClawComputerInputGeometry.clampToDisplay(
+        let clamped = MarketingClawComputerInputGeometry.clampToDisplay(
             x: mapped.x,
             y: mapped.y,
             display: geometry)
@@ -379,7 +379,7 @@ final class ComputerActionService {
         // the source aspect ratio needed for portrait longest-edge scaling.
         let bounds = CGDisplayBounds(displays[idx].displayID)
         return ResolvedDisplay(
-            geometry: OpenClawComputerDisplayGeometry(
+            geometry: MarketingClawComputerDisplayGeometry(
                 originX: bounds.origin.x,
                 originY: bounds.origin.y,
                 widthPoints: bounds.width,
@@ -396,7 +396,7 @@ final class ComputerActionService {
     }
 
     private static func scrollDirection(
-        _ direction: OpenClawComputerScrollDirection) -> PeekabooFoundation.ScrollDirection
+        _ direction: MarketingClawComputerScrollDirection) -> PeekabooFoundation.ScrollDirection
     {
         switch direction {
         case .up: .up
@@ -450,7 +450,7 @@ final class ComputerActionService {
         event.post(tap: .cghidEventTap)
     }
 
-    private func rawScroll(direction: OpenClawComputerScrollDirection, amount: Int, flags: CGEventFlags) throws {
+    private func rawScroll(direction: MarketingClawComputerScrollDirection, amount: Int, flags: CGEventFlags) throws {
         // Line units per tick match Peekaboo's non-smooth scroll (~5 lines).
         let lines = Int32(amount * 5)
         let (wheel1, wheel2): (Int32, Int32) = switch direction {

@@ -27,7 +27,7 @@ function titleParams(entry: SessionEntry | undefined = baseEntry) {
     entry,
     sessionId: "session-1",
     sessionKey: "agent:main:dashboard:chat-1",
-    storePath: "/tmp/openclaw/sessions.json",
+    storePath: "/tmp/marketingclaw/sessions.json",
     userMessage: "Help me plan the release",
   };
 }
@@ -75,7 +75,7 @@ describe("maybeGenerateDashboardSessionTitle", () => {
       {
         agentId: "main",
         sessionKey: "agent:main:dashboard:chat-1",
-        storePath: "/tmp/openclaw/sessions.json",
+        storePath: "/tmp/marketingclaw/sessions.json",
       },
       expect.any(Function),
       { requireWriteSuccess: true },

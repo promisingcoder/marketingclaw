@@ -7,8 +7,8 @@ import type {
   ChannelIngressQueueClaim,
   ChannelIngressQueueClaimRef,
   ChannelIngressQueueRecord,
-} from "openclaw/plugin-sdk/channel-outbound";
-import { resolveStateDir } from "openclaw/plugin-sdk/state-paths";
+} from "marketingclaw/plugin-sdk/channel-outbound";
+import { resolveStateDir } from "marketingclaw/plugin-sdk/state-paths";
 import type { TelegramBotInfo } from "./bot-info.js";
 import { getTelegramRuntime } from "./runtime.js";
 import { getTelegramSequentialKey } from "./sequential-key.js";

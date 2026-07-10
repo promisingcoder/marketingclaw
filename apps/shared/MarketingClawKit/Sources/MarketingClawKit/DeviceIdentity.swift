@@ -47,13 +47,13 @@ public struct DeviceIdentity: Codable, Sendable {
 }
 
 enum DeviceIdentityPaths {
-    private static let stateDirEnv = ["OPENCLAW_STATE_DIR"]
+    private static let stateDirEnv = ["MARKETINGCLAW_STATE_DIR"]
 
     /// Entitlements are baked into the code signature, so resolve the gate once per process.
     /// Every identity load and DeviceAuthStore read/write resolves the state dir through here;
     /// re-creating a SecTask each time is wasted work for a process-immutable fact.
     private static let appGroupStateDirAvailable =
-        DeviceIdentityPaths.hasAppGroupEntitlement(OpenClawAppGroup.identifier)
+        DeviceIdentityPaths.hasAppGroupEntitlement(MarketingClawAppGroup.identifier)
 
     static func stateDirURL() -> URL {
         self.stateDirURL(
@@ -80,7 +80,7 @@ enum DeviceIdentityPaths {
         if let legacyStateDirURL {
             return legacyStateDirURL
         }
-        return temporaryDirectory.appendingPathComponent("openclaw", isDirectory: true)
+        return temporaryDirectory.appendingPathComponent("marketingclaw", isDirectory: true)
     }
 
     private static func stateDirOverrideURL() -> URL? {
@@ -97,7 +97,7 @@ enum DeviceIdentityPaths {
 
     private static func legacyStateDirURL() -> URL? {
         if let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
-            return appSupport.appendingPathComponent("OpenClaw", isDirectory: true)
+            return appSupport.appendingPathComponent("MarketingClaw", isDirectory: true)
         }
         return nil
     }
@@ -129,11 +129,11 @@ enum DeviceIdentityPaths {
     private static func appGroupStateDirURL() -> URL? {
         guard
             let containerURL = FileManager.default
-                .containerURL(forSecurityApplicationGroupIdentifier: OpenClawAppGroup.identifier)
+                .containerURL(forSecurityApplicationGroupIdentifier: MarketingClawAppGroup.identifier)
         else {
             return nil
         }
-        return containerURL.appendingPathComponent("OpenClaw", isDirectory: true)
+        return containerURL.appendingPathComponent("MarketingClaw", isDirectory: true)
     }
 
     /// Files a one-time fallback migration may carry from the App Group container into the
@@ -157,7 +157,7 @@ enum DeviceIdentityPaths {
 
     /// Non-nil only for unentitled builds whose store selection fell back to legacy storage;
     /// entitled builds keep using the App Group container and must never migrate out of it.
-    /// An explicit OPENCLAW_STATE_DIR override selects a caller-chosen store, not the legacy
+    /// An explicit MARKETINGCLAW_STATE_DIR override selects a caller-chosen store, not the legacy
     /// fallback; importing container identity/tokens there would leak the machine's real
     /// pairing into unrelated stores (test dirs, relocated installs).
     static func appGroupMigrationSource(

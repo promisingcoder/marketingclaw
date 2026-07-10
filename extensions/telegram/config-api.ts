@@ -2,7 +2,7 @@
 export {
   buildChannelConfigSchema,
   TelegramConfigSchema,
-} from "openclaw/plugin-sdk/bundled-channel-config-schema";
+} from "marketingclaw/plugin-sdk/bundled-channel-config-schema";
 export {
   normalizeTelegramCommandDescription,
   normalizeTelegramCommandName,

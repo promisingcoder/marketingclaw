@@ -1,9 +1,9 @@
-// Applies persisted state migrations across OpenClaw config files.
+// Applies persisted state migrations across MarketingClaw config files.
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import type { DatabaseSync, SQLInputValue } from "node:sqlite";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@marketingclaw/normalization-core/string-coerce";
 import { writeAcpSessionMetaForMigration } from "../acp/runtime/session-meta.js";
 import { resolveDefaultAgentId } from "../agents/agent-scope.js";
 import {
@@ -26,7 +26,7 @@ import {
   resolveAllAgentSessionStoreTargetsSync,
 } from "../config/sessions/targets.js";
 import type { SessionScope } from "../config/sessions/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import {
   countPluginStateLiveEntries,
@@ -64,12 +64,12 @@ import {
   resolveAgentIdFromSessionKey,
 } from "../routing/session-key.js";
 import { normalizeSessionKeyPreservingOpaquePeerIds } from "../sessions/session-key-utils.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
+import type { DB as MarketingClawStateKyselyDatabase } from "../state/marketingclaw-state-db.generated.js";
 import {
-  detectOpenClawStateDatabaseSchemaMigrations,
-  repairOpenClawStateDatabaseSchema,
-  runOpenClawStateWriteTransaction,
-} from "../state/openclaw-state-db.js";
+  detectMarketingClawStateDatabaseSchemaMigrations,
+  repairMarketingClawStateDatabaseSchema,
+  runMarketingClawStateWriteTransaction,
+} from "../state/marketingclaw-state-db.js";
 import { assertNoSymlinkParentsSync, sameFileIdentity } from "./fs-safe-advanced.js";
 import { expandHomePrefix, resolveRequiredHomeDir } from "./home-dir.js";
 import {
@@ -219,19 +219,25 @@ type LegacyPluginStateSidecarRow = {
   expires_at: number | bigint | null;
 };
 
-type LegacyPluginStateImportDatabase = Pick<OpenClawStateKyselyDatabase, "plugin_state_entries">;
+type LegacyPluginStateImportDatabase = Pick<
+  MarketingClawStateKyselyDatabase,
+  "plugin_state_entries"
+>;
 type LegacyVoiceWakeImportDatabase = Pick<
-  OpenClawStateKyselyDatabase,
+  MarketingClawStateKyselyDatabase,
   "voicewake_routing_config" | "voicewake_routing_routes" | "voicewake_triggers"
 >;
-type LegacyUpdateCheckImportDatabase = Pick<OpenClawStateKyselyDatabase, "update_check_state">;
-type LegacyConfigHealthImportDatabase = Pick<OpenClawStateKyselyDatabase, "config_health_entries">;
+type LegacyUpdateCheckImportDatabase = Pick<MarketingClawStateKyselyDatabase, "update_check_state">;
+type LegacyConfigHealthImportDatabase = Pick<
+  MarketingClawStateKyselyDatabase,
+  "config_health_entries"
+>;
 type LegacyPluginBindingApprovalsImportDatabase = Pick<
-  OpenClawStateKyselyDatabase,
+  MarketingClawStateKyselyDatabase,
   "plugin_binding_approvals"
 >;
 type LegacyCurrentConversationBindingsImportDatabase = Pick<
-  OpenClawStateKyselyDatabase,
+  MarketingClawStateKyselyDatabase,
   "current_conversation_bindings"
 >;
 type SqliteBindRow = Record<string, SQLInputValue>;
@@ -322,7 +328,7 @@ function resolveDefaultExecApprovalsStateDir(
   env: NodeJS.ProcessEnv,
   homedir: () => string,
 ): string {
-  return path.join(resolveRequiredHomeDir(env, homedir), ".openclaw");
+  return path.join(resolveRequiredHomeDir(env, homedir), ".marketingclaw");
 }
 
 function resolveDefaultExecApprovalsPath(env: NodeJS.ProcessEnv, homedir: () => string): string {
@@ -348,7 +354,7 @@ function detectLegacyExecApprovalsMigration(params: {
     sourcePath,
     targetPath,
     hasLegacy:
-      Boolean(params.env.OPENCLAW_STATE_DIR?.trim()) &&
+      Boolean(params.env.MARKETINGCLAW_STATE_DIR?.trim()) &&
       path.resolve(sourcePath) !== path.resolve(targetPath) &&
       fileExists(sourcePath) &&
       !fileExists(targetPath),
@@ -1133,7 +1139,7 @@ async function migrateLegacyTaskRunsSidecar(params: {
     let importedTasks = 0;
     let importedDeliveryStates = 0;
     let skippedOrphanDeliveryStates = 0;
-    runOpenClawStateWriteTransaction(
+    runMarketingClawStateWriteTransaction(
       ({ db }) => {
         const taskColumns = [
           "runtime",
@@ -1203,7 +1209,7 @@ async function migrateLegacyTaskRunsSidecar(params: {
           throw new LegacyTaskStateSidecarConflictError(conflicts);
         }
       },
-      { env: { ...process.env, OPENCLAW_STATE_DIR: params.stateDir } },
+      { env: { ...process.env, MARKETINGCLAW_STATE_DIR: params.stateDir } },
     );
     if (importedTasks > 0) {
       changes.push(
@@ -1266,7 +1272,7 @@ async function migrateLegacyFlowRunsSidecar(params: {
   try {
     const conflicts: string[] = [];
     let imported = 0;
-    runOpenClawStateWriteTransaction(
+    runMarketingClawStateWriteTransaction(
       ({ db }) => {
         const columns = [
           "shape",
@@ -1305,7 +1311,7 @@ async function migrateLegacyFlowRunsSidecar(params: {
           throw new LegacyTaskStateSidecarConflictError(conflicts);
         }
       },
-      { env: { ...process.env, OPENCLAW_STATE_DIR: params.stateDir } },
+      { env: { ...process.env, MARKETINGCLAW_STATE_DIR: params.stateDir } },
     );
     if (imported > 0) {
       changes.push(
@@ -1530,7 +1536,7 @@ async function migrateLegacyDeliveryQueues(params: {
     let skipped = 0;
     const conflicts: string[] = [];
     try {
-      runOpenClawStateWriteTransaction(
+      runMarketingClawStateWriteTransaction(
         ({ db }) => {
           const insert = db.prepare(
             `
@@ -1582,7 +1588,7 @@ async function migrateLegacyDeliveryQueues(params: {
             imported++;
           }
         },
-        { env: { ...process.env, OPENCLAW_STATE_DIR: params.stateDir } },
+        { env: { ...process.env, MARKETINGCLAW_STATE_DIR: params.stateDir } },
       );
     } catch (err) {
       warnings.push(`Failed migrating ${queue.label} ${queueDir}: ${String(err)}`);
@@ -1621,7 +1627,7 @@ async function migrateLegacyDeliveryQueues(params: {
 }
 
 const VOICEWAKE_CONFIG_KEY = "default";
-const DEFAULT_VOICEWAKE_TRIGGERS = ["openclaw", "claude", "computer"];
+const DEFAULT_VOICEWAKE_TRIGGERS = ["marketingclaw", "claude", "computer"];
 
 function resolveLegacyVoiceWakeTriggersPath(stateDir: string): string {
   return path.join(stateDir, "settings", "voicewake.json");
@@ -1729,7 +1735,7 @@ function migrateLegacyVoiceWakeSettings(params: {
 }): { changes: string[]; warnings: string[] } {
   const changes: string[] = [];
   const warnings: string[] = [];
-  const env = { ...process.env, OPENCLAW_STATE_DIR: params.stateDir };
+  const env = { ...process.env, MARKETINGCLAW_STATE_DIR: params.stateDir };
   if (fileExists(params.detected.triggersPath)) {
     let triggers: string[];
     try {
@@ -1746,7 +1752,7 @@ function migrateLegacyVoiceWakeSettings(params: {
       let imported = false;
       let shouldArchive = false;
       try {
-        runOpenClawStateWriteTransaction(
+        runMarketingClawStateWriteTransaction(
           ({ db }) => {
             const stateDb = getNodeSqliteKysely<LegacyVoiceWakeImportDatabase>(db);
             const existing = executeSqliteQuerySync(
@@ -1818,7 +1824,7 @@ function migrateLegacyVoiceWakeSettings(params: {
       let imported = false;
       let shouldArchive = false;
       try {
-        runOpenClawStateWriteTransaction(
+        runMarketingClawStateWriteTransaction(
           ({ db }) => {
             const stateDb = getNodeSqliteKysely<LegacyVoiceWakeImportDatabase>(db);
             const existing = executeSqliteQueryTakeFirstSync(
@@ -2013,7 +2019,7 @@ function migrateLegacyUpdateCheckState(params: {
   let imported = false;
   let shouldArchive = false;
   try {
-    runOpenClawStateWriteTransaction(
+    runMarketingClawStateWriteTransaction(
       ({ db }) => {
         const stateDb = getNodeSqliteKysely<LegacyUpdateCheckImportDatabase>(db);
         const existing = executeSqliteQueryTakeFirstSync(
@@ -2056,7 +2062,7 @@ function migrateLegacyUpdateCheckState(params: {
         imported = true;
         shouldArchive = true;
       },
-      { env: { ...process.env, OPENCLAW_STATE_DIR: params.stateDir } },
+      { env: { ...process.env, MARKETINGCLAW_STATE_DIR: params.stateDir } },
     );
   } catch (err) {
     warnings.push(`Failed migrating legacy update-check state: ${String(err)}`);
@@ -2204,7 +2210,7 @@ function migrateLegacyConfigHealth(params: {
   let reconciledCount = 0;
   let shouldArchive = false;
   try {
-    const result = runOpenClawStateWriteTransaction(
+    const result = runMarketingClawStateWriteTransaction(
       ({ db }) => {
         const stateDb = getNodeSqliteKysely<LegacyConfigHealthImportDatabase>(db);
         const existing = executeSqliteQuerySync(
@@ -2263,7 +2269,7 @@ function migrateLegacyConfigHealth(params: {
           reconciledCount: transactionReconciledCount,
         };
       },
-      { env: { ...process.env, OPENCLAW_STATE_DIR: params.stateDir } },
+      { env: { ...process.env, MARKETINGCLAW_STATE_DIR: params.stateDir } },
     );
     importedCount = result.importedCount;
     reconciledCount = result.reconciledCount;
@@ -2311,7 +2317,7 @@ function resolveLegacyPluginBindingApprovalsPath(
 ): string {
   return path.join(
     resolveRequiredHomeDir(env, homedir),
-    ".openclaw",
+    ".marketingclaw",
     "plugin-binding-approvals.json",
   );
 }
@@ -2422,7 +2428,7 @@ function migrateLegacyPluginBindingApprovals(params: {
   let importedCount = 0;
   let shouldArchive = approvals.length === 0;
   try {
-    runOpenClawStateWriteTransaction(
+    runMarketingClawStateWriteTransaction(
       ({ db }) => {
         const stateDb = getNodeSqliteKysely<LegacyPluginBindingApprovalsImportDatabase>(db);
         const existing = executeSqliteQuerySync(
@@ -2485,7 +2491,7 @@ function migrateLegacyPluginBindingApprovals(params: {
           );
         }
       },
-      { env: { ...process.env, OPENCLAW_STATE_DIR: params.stateDir } },
+      { env: { ...process.env, MARKETINGCLAW_STATE_DIR: params.stateDir } },
     );
   } catch (err) {
     warnings.push(`Failed migrating legacy plugin binding approvals: ${String(err)}`);
@@ -2646,7 +2652,7 @@ function migrateLegacyCurrentConversationBindings(params: {
   let importedCount = 0;
   let shouldArchive = records.length === 0;
   try {
-    runOpenClawStateWriteTransaction(
+    runMarketingClawStateWriteTransaction(
       ({ db }) => {
         const stateDb = getNodeSqliteKysely<LegacyCurrentConversationBindingsImportDatabase>(db);
         const existing = executeSqliteQuerySync(
@@ -2692,7 +2698,7 @@ function migrateLegacyCurrentConversationBindings(params: {
           );
         }
       },
-      { env: { ...process.env, OPENCLAW_STATE_DIR: params.stateDir } },
+      { env: { ...process.env, MARKETINGCLAW_STATE_DIR: params.stateDir } },
     );
   } catch (err) {
     warnings.push(`Failed migrating legacy current-conversation bindings: ${String(err)}`);
@@ -2744,7 +2750,7 @@ async function migrateLegacyPluginStateSidecar(params: {
     let imported = 0;
     let skippedExpired = 0;
     const now = Date.now();
-    runOpenClawStateWriteTransaction(
+    runMarketingClawStateWriteTransaction(
       ({ db }) => {
         const stateDb = getNodeSqliteKysely<LegacyPluginStateImportDatabase>(db);
         for (const row of rows) {
@@ -2804,7 +2810,7 @@ async function migrateLegacyPluginStateSidecar(params: {
           imported += 1;
         }
       },
-      { env: { ...process.env, OPENCLAW_STATE_DIR: params.stateDir } },
+      { env: { ...process.env, MARKETINGCLAW_STATE_DIR: params.stateDir } },
     );
     if (imported > 0) {
       changes.push(
@@ -2919,15 +2925,15 @@ async function withPluginStateImportEnv<T>(
   if (!plan.stateDir) {
     return await run();
   }
-  const previous = process.env.OPENCLAW_STATE_DIR;
-  process.env.OPENCLAW_STATE_DIR = plan.stateDir;
+  const previous = process.env.MARKETINGCLAW_STATE_DIR;
+  process.env.MARKETINGCLAW_STATE_DIR = plan.stateDir;
   try {
     return await run();
   } finally {
     if (previous === undefined) {
-      delete process.env.OPENCLAW_STATE_DIR;
+      delete process.env.MARKETINGCLAW_STATE_DIR;
     } else {
-      process.env.OPENCLAW_STATE_DIR = previous;
+      process.env.MARKETINGCLAW_STATE_DIR = previous;
     }
   }
 }
@@ -3425,15 +3431,15 @@ function aliasedSessionStoreMigrationWarning(params: {
   count: number;
   storePath: string;
 }): string {
-  return `Deferred ${params.subject} ${params.count} ambiguous session key(s) in aliased store ${params.storePath}; remove filesystem aliases or configure one canonical session.store path, then rerun openclaw doctor --fix`;
+  return `Deferred ${params.subject} ${params.count} ambiguous session key(s) in aliased store ${params.storePath}; remove filesystem aliases or configure one canonical session.store path, then rerun marketingclaw doctor --fix`;
 }
 
 function unresolvedSessionStoreIdentityWarning(subject: string, storePath: string): string {
-  return `Deferred ${subject} for ${storePath}; filesystem identity could not be established for every configured store path. Restore path access or configure one canonical session.store path, then rerun openclaw doctor --fix`;
+  return `Deferred ${subject} for ${storePath}; filesystem identity could not be established for every configured store path. Restore path access or configure one canonical session.store path, then rerun marketingclaw doctor --fix`;
 }
 
 function distinctSessionStoreAliasWarning(subject: string, storePath: string): string {
-  return `Deferred ${subject} in aliased store ${storePath}; atomic replacement cannot update distinct filesystem aliases as one operation. Remove filesystem aliases or configure one canonical session.store path, then rerun openclaw doctor --fix`;
+  return `Deferred ${subject} in aliased store ${storePath}; atomic replacement cannot update distinct filesystem aliases as one operation. Remove filesystem aliases or configure one canonical session.store path, then rerun marketingclaw doctor --fix`;
 }
 
 function resolveStaleLegacySessionFile(params: {
@@ -3891,7 +3897,7 @@ export async function autoMigrateLegacyStateDir(params: {
   const env = params.env ?? process.env;
   const warnings: string[] = [];
   const changes: string[] = [];
-  const hasCustomStateDir = Boolean(env.OPENCLAW_STATE_DIR?.trim());
+  const hasCustomStateDir = Boolean(env.MARKETINGCLAW_STATE_DIR?.trim());
   const targetDir = hasCustomStateDir ? resolveStateDir(env, homedir) : resolveNewStateDir(homedir);
   const migratePluginInstallIndex = async () => {
     const result = await migrateLegacyInstalledPluginIndex({ stateDir: targetDir });
@@ -4029,7 +4035,7 @@ export async function autoMigrateLegacyStateDir(params: {
           `State dir moved but failed to link legacy path (${legacyDir ?? "unknown"} → ${targetDir}): ${String(fallbackErr)}`,
         );
         warnings.push(
-          `Rollback failed; set OPENCLAW_STATE_DIR=${targetDir} to avoid split state: ${String(rollbackErr)}`,
+          `Rollback failed; set MARKETINGCLAW_STATE_DIR=${targetDir} to avoid split state: ${String(rollbackErr)}`,
         );
         changes.push(`State dir: ${legacyDir ?? "unknown"} → ${targetDir}`);
       }
@@ -4085,7 +4091,7 @@ export async function autoMigrateLegacyTaskStateSidecars(params: {
 }
 
 async function collectChannelLegacyStateMigrationPlans(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   env: NodeJS.ProcessEnv;
   stateDir: string;
   oauthDir: string;
@@ -4115,8 +4121,8 @@ async function collectChannelLegacyStateMigrationPlans(params: {
 }
 
 async function collectPluginDoctorStateMigrationPlans(params: {
-  cfg: OpenClawConfig;
-  pluginDoctorConfig?: OpenClawConfig;
+  cfg: MarketingClawConfig;
+  pluginDoctorConfig?: MarketingClawConfig;
   env: NodeJS.ProcessEnv;
   stateDir: string;
   oauthDir: string;
@@ -4167,8 +4173,8 @@ function createPluginDoctorStateMigrationContext(
 }
 
 export async function detectLegacyStateMigrations(params: {
-  cfg: OpenClawConfig;
-  pluginDoctorConfig?: OpenClawConfig;
+  cfg: MarketingClawConfig;
+  pluginDoctorConfig?: MarketingClawConfig;
   env?: NodeJS.ProcessEnv;
   homedir?: () => string;
   pluginSessionStoreAgentIds?: readonly string[];
@@ -4262,8 +4268,8 @@ export async function detectLegacyStateMigrations(params: {
   const pluginInstallIndexPath = resolveLegacyInstalledPluginIndexStorePath({ stateDir });
   const hasPluginInstallIndex = fileExists(pluginInstallIndexPath);
   const debugProxyCaptureSidecar = detectLegacyDebugProxyCaptureSidecar(stateDir, env);
-  const stateSchemaMigrations = detectOpenClawStateDatabaseSchemaMigrations({
-    env: { ...env, OPENCLAW_STATE_DIR: stateDir },
+  const stateSchemaMigrations = detectMarketingClawStateDatabaseSchemaMigrations({
+    env: { ...env, MARKETINGCLAW_STATE_DIR: stateDir },
   });
   const taskRunsSidecarPath = resolveLegacyTaskRunsSidecarPath(stateDir);
   const flowRunsSidecarPath = resolveLegacyFlowRunsSidecarPath(stateDir);
@@ -4509,7 +4515,7 @@ async function migrateLegacySessions(
   }
   if (detected.sessions.targetStoreAliases.hasFinalSymlink) {
     warnings.push(
-      `Deferred legacy session migration in final-component symlink store ${detected.sessions.targetStorePath}; configure one canonical session.store path, then rerun openclaw doctor --fix`,
+      `Deferred legacy session migration in final-component symlink store ${detected.sessions.targetStorePath}; configure one canonical session.store path, then rerun marketingclaw doctor --fix`,
     );
     return { changes, warnings };
   }
@@ -4624,7 +4630,7 @@ async function migrateLegacySessions(
       }
     } else {
       warnings.push(
-        `Target sessions store unreadable; left untouched to avoid overwriting at ${detected.sessions.targetStorePath}. Run openclaw doctor --fix to archive it and retry the legacy merge.`,
+        `Target sessions store unreadable; left untouched to avoid overwriting at ${detected.sessions.targetStorePath}. Run marketingclaw doctor --fix to archive it and retry the legacy merge.`,
       );
     }
   }
@@ -4793,7 +4799,7 @@ export async function migrateLegacyAgentDir(
 
 async function runPluginDoctorStateMigrationPlans(params: {
   detected: LegacyStateDetection;
-  config: OpenClawConfig;
+  config: MarketingClawConfig;
   env: NodeJS.ProcessEnv;
 }): Promise<MigrationMessages> {
   const changes: string[] = [];
@@ -4833,7 +4839,7 @@ async function runPluginDoctorStateMigrationPlans(params: {
 }
 
 export async function autoMigrateLegacyPluginDoctorState(params: {
-  config: OpenClawConfig;
+  config: MarketingClawConfig;
   env?: NodeJS.ProcessEnv;
   homedir?: () => string;
   log?: MigrationLogger;
@@ -4852,8 +4858,8 @@ export async function autoMigrateLegacyPluginDoctorState(params: {
   });
   const stateDir = resolveStateDir(env, params.homedir ?? os.homedir);
   const oauthDir = resolveOAuthDir(env, stateDir);
-  const stateSchema = repairOpenClawStateDatabaseSchema({
-    env: { ...env, OPENCLAW_STATE_DIR: stateDir },
+  const stateSchema = repairMarketingClawStateDatabaseSchema({
+    env: { ...env, MARKETINGCLAW_STATE_DIR: stateDir },
   });
   const changes = [...stateDirResult.changes, ...stateSchema.changes];
   const warnings = [...stateDirResult.warnings, ...stateSchema.warnings];
@@ -5092,14 +5098,14 @@ function migrateLegacyStateSchema(
   changes: string[];
   warnings: string[];
 } {
-  return repairOpenClawStateDatabaseSchema({
-    env: { ...env, OPENCLAW_STATE_DIR: detected.stateDir },
+  return repairMarketingClawStateDatabaseSchema({
+    env: { ...env, MARKETINGCLAW_STATE_DIR: detected.stateDir },
   });
 }
 
 export async function runLegacyStateMigrations(params: {
   detected: LegacyStateDetection;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   env?: NodeJS.ProcessEnv;
   now?: () => number;
   recoverCorruptTargetStore?: boolean;
@@ -5155,15 +5161,15 @@ export async function runLegacyStateMigrations(params: {
     ? { changes: [], warnings: [] }
     : await runPluginDoctorStateMigrationPlans({
         detected,
-        config: params.config ?? ({} as OpenClawConfig),
+        config: params.config ?? ({} as MarketingClawConfig),
         env,
       });
   const sessions = await migrateLegacySessions(detected, now, {
     recoverCorruptTargetStore: params.recoverCorruptTargetStore,
   });
   const acpSessionMetadata = await migrateLegacyAcpSessionMetadata({
-    cfg: params.config ?? ({} as OpenClawConfig),
-    env: { ...env, OPENCLAW_STATE_DIR: detected.stateDir },
+    cfg: params.config ?? ({} as MarketingClawConfig),
+    env: { ...env, MARKETINGCLAW_STATE_DIR: detected.stateDir },
     now,
   });
   const agentDir = await migrateLegacyAgentDir(detected, now);
@@ -5230,7 +5236,7 @@ export async function runLegacyStateMigrations(params: {
  * Safe to run multiple times (idempotent). See #29683.
  */
 export async function migrateOrphanedSessionKeys(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   env?: NodeJS.ProcessEnv;
   additionalAgentIds?: readonly string[];
 }): Promise<{ changes: string[]; warnings: string[] }> {
@@ -5374,7 +5380,7 @@ export async function migrateOrphanedSessionKeys(params: {
     }
     if (storeAliases.hasFinalSymlink) {
       warnings.push(
-        `Deferred session key migration in final-component symlink store ${storePath}; configure one canonical session.store path, then rerun openclaw doctor --fix`,
+        `Deferred session key migration in final-component symlink store ${storePath}; configure one canonical session.store path, then rerun marketingclaw doctor --fix`,
       );
       continue;
     }
@@ -5425,7 +5431,7 @@ export async function migrateOrphanedSessionKeys(params: {
 }
 
 async function migrateLegacyAcpSessionMetadata(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   env?: NodeJS.ProcessEnv;
   now?: () => number;
   pluginSessionStoreAgentIds?: readonly string[];
@@ -5473,7 +5479,7 @@ async function migrateLegacyAcpSessionMetadata(params: {
               .map((id) => ({ id })),
           ],
         },
-      } as OpenClawConfig)
+      } as MarketingClawConfig)
     : params.cfg;
   // Reuse the validated resolver for every declared owner. Owner multiplicity
   // is restored below as metadata without re-adding rejected raw paths.
@@ -5548,7 +5554,7 @@ async function migrateLegacyAcpSessionMetadata(params: {
     }
     if (hasLegacyAcpMetadata && storeAliases.hasFinalSymlink) {
       warnings.push(
-        `Deferred ACP metadata migration in final-component symlink store ${storePath}; configure one canonical session.store path, then rerun openclaw doctor --fix`,
+        `Deferred ACP metadata migration in final-component symlink store ${storePath}; configure one canonical session.store path, then rerun marketingclaw doctor --fix`,
       );
       continue;
     }
@@ -5781,7 +5787,7 @@ type SessionStoreOwnership = {
 };
 
 function resolveSessionStoreOwnership(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   env: NodeJS.ProcessEnv;
   stateDir: string;
   targetAgentId: string;
@@ -5827,8 +5833,8 @@ function resolveSessionStoreOwnership(params: {
 }
 
 export async function autoMigrateLegacyState(params: {
-  cfg: OpenClawConfig;
-  pluginDoctorConfig?: OpenClawConfig;
+  cfg: MarketingClawConfig;
+  pluginDoctorConfig?: MarketingClawConfig;
   env?: NodeJS.ProcessEnv;
   homedir?: () => string;
   log?: MigrationLogger;
@@ -5853,8 +5859,8 @@ export async function autoMigrateLegacyState(params: {
     log: params.log,
   });
   const stateDir = resolveStateDir(env, params.homedir ?? os.homedir);
-  const stateSchema = repairOpenClawStateDatabaseSchema({
-    env: { ...env, OPENCLAW_STATE_DIR: stateDir },
+  const stateSchema = repairMarketingClawStateDatabaseSchema({
+    env: { ...env, MARKETINGCLAW_STATE_DIR: stateDir },
   });
   const pluginDoctorConfig = params.pluginDoctorConfig ?? params.cfg;
   const pluginSessionStoreAgentIds = listPluginDoctorSessionStoreAgentIds({
@@ -5913,7 +5919,7 @@ export async function autoMigrateLegacyState(params: {
     env,
     homedir: params.homedir,
   });
-  const hasCustomAgentDir = env.OPENCLAW_AGENT_DIR?.trim() || env.PI_CODING_AGENT_DIR?.trim();
+  const hasCustomAgentDir = env.MARKETINGCLAW_AGENT_DIR?.trim() || env.PI_CODING_AGENT_DIR?.trim();
   if (hasCustomAgentDir) {
     const pluginStateSidecar = await migrateLegacyPluginStateSidecar({
       stateDir: detected.stateDir,

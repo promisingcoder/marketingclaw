@@ -1,16 +1,16 @@
 /**
  * Shared A2UI/Canvas host paths and live-reload injection helpers.
  */
-import { lowercasePreservingWhitespace } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { lowercasePreservingWhitespace } from "marketingclaw/plugin-sdk/string-coerce-runtime";
 
 /** Hosted path prefix for bundled A2UI assets. */
-export const A2UI_PATH = "/__openclaw__/a2ui";
+export const A2UI_PATH = "/__marketingclaw__/a2ui";
 
 /** Hosted path prefix for Canvas document/static assets. */
-export const CANVAS_HOST_PATH = "/__openclaw__/canvas";
+export const CANVAS_HOST_PATH = "/__marketingclaw__/canvas";
 
 /** Hosted WebSocket path for Canvas live reload. */
-export const CANVAS_WS_PATH = "/__openclaw__/ws";
+export const CANVAS_WS_PATH = "/__marketingclaw__/ws";
 
 /** Returns whether a URL path targets the hosted A2UI asset surface. */
 export function isA2uiPath(pathname: string): boolean {
@@ -24,9 +24,9 @@ export function injectCanvasLiveReload(html: string): string {
 (() => {
   // Cross-platform action bridge helper.
   // Works on:
-  // - iOS: window.webkit.messageHandlers.openclawCanvasA2UIAction.postMessage(...)
-  // - Android: window.openclawCanvasA2UIAction.postMessage(...)
-  const handlerNames = ["openclawCanvasA2UIAction"];
+  // - iOS: window.webkit.messageHandlers.marketingclawCanvasA2UIAction.postMessage(...)
+  // - Android: window.marketingclawCanvasA2UIAction.postMessage(...)
+  const handlerNames = ["marketingclawCanvasA2UIAction"];
   function postToNode(payload) {
     try {
       const raw = typeof payload === "string" ? payload : JSON.stringify(payload);
@@ -53,11 +53,11 @@ export function injectCanvasLiveReload(html: string): string {
     const action = { ...userAction, id };
     return postToNode({ userAction: action });
   }
-  globalThis.OpenClaw = globalThis.OpenClaw ?? {};
-  globalThis.OpenClaw.postMessage = postToNode;
-  globalThis.OpenClaw.sendUserAction = sendUserAction;
-  globalThis.openclawPostMessage = postToNode;
-  globalThis.openclawSendUserAction = sendUserAction;
+  globalThis.MarketingClaw = globalThis.MarketingClaw ?? {};
+  globalThis.MarketingClaw.postMessage = postToNode;
+  globalThis.MarketingClaw.sendUserAction = sendUserAction;
+  globalThis.marketingclawPostMessage = postToNode;
+  globalThis.marketingclawSendUserAction = sendUserAction;
 
   try {
     const cap = new URLSearchParams(location.search).get("oc_cap");

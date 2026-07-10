@@ -2,9 +2,9 @@
 import type {
   ChannelDoctorConfigMutation,
   ChannelDoctorLegacyConfigRule,
-} from "openclaw/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "marketingclaw/plugin-sdk/channel-contract";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import { isRecord } from "marketingclaw/plugin-sdk/string-coerce-runtime";
 
 // Disabled `channels.imessage.catchup` blocks are retired. Enabled blocks stay
 // as a compatibility contract: older configs that opted into replay still get
@@ -36,7 +36,7 @@ export const legacyConfigRules: ChannelDoctorLegacyConfigRule[] = [
     path: ["channels", "imessage"],
     message:
       "disabled channels.imessage.catchup config is retired; iMessage now recovers via always-on inbound dedupe and a stale-backlog age fence. " +
-      'Run "openclaw doctor --fix" to remove disabled catchup blocks.',
+      'Run "marketingclaw doctor --fix" to remove disabled catchup blocks.',
     match: (value) => imessageEntryHasRetiredCatchup(value),
   },
 ];
@@ -44,7 +44,7 @@ export const legacyConfigRules: ChannelDoctorLegacyConfigRule[] = [
 export function normalizeCompatibilityConfig({
   cfg,
 }: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
 }): ChannelDoctorConfigMutation {
   const channels = cfg.channels as Record<string, unknown> | undefined;
   const imessage = channels?.imessage;
@@ -81,7 +81,7 @@ export function normalizeCompatibilityConfig({
     config: {
       ...cfg,
       channels: { ...channels, imessage: nextImessage },
-    } as OpenClawConfig,
+    } as MarketingClawConfig,
     changes,
   };
 }

@@ -383,31 +383,33 @@ export function clearActiveMcpLoopbackRuntimeByOwnerToken(ownerToken: string): v
 }
 
 const MCP_AUTH_HEADERS = {
-  Authorization: "Bearer ${OPENCLAW_MCP_TOKEN}",
+  Authorization: "Bearer ${MARKETINGCLAW_MCP_TOKEN}",
 } as const;
 
 const MCP_CONTEXT_HEADERS = {
-  "x-session-key": "${OPENCLAW_MCP_SESSION_KEY}",
-  "x-openclaw-session-id": "${OPENCLAW_MCP_SESSION_ID}",
-  "x-openclaw-agent-id": "${OPENCLAW_MCP_AGENT_ID}",
-  "x-openclaw-account-id": "${OPENCLAW_MCP_ACCOUNT_ID}",
-  "x-openclaw-message-channel": "${OPENCLAW_MCP_MESSAGE_CHANNEL}",
-  "x-openclaw-client-caps": "${OPENCLAW_MCP_CLIENT_CAPS}",
-  "x-openclaw-current-channel-id": "${OPENCLAW_MCP_CURRENT_CHANNEL_ID}",
-  "x-openclaw-current-thread-ts": "${OPENCLAW_MCP_CURRENT_THREAD_TS}",
-  "x-openclaw-current-message-id": "${OPENCLAW_MCP_CURRENT_MESSAGE_ID}",
-  "x-openclaw-current-inbound-audio": "${OPENCLAW_MCP_CURRENT_INBOUND_AUDIO}",
-  "x-openclaw-inbound-event-kind": "${OPENCLAW_MCP_INBOUND_EVENT_KIND}",
-  "x-openclaw-source-reply-delivery-mode": "${OPENCLAW_MCP_SOURCE_REPLY_DELIVERY_MODE}",
-  "x-openclaw-task-suggestion-delivery-mode": "${OPENCLAW_MCP_TASK_SUGGESTION_DELIVERY_MODE}",
-  "x-openclaw-require-explicit-message-target": "${OPENCLAW_MCP_REQUIRE_EXPLICIT_MESSAGE_TARGET}",
-  "x-openclaw-cli-capture-key": "${OPENCLAW_MCP_CLI_CAPTURE_KEY}",
+  "x-session-key": "${MARKETINGCLAW_MCP_SESSION_KEY}",
+  "x-marketingclaw-session-id": "${MARKETINGCLAW_MCP_SESSION_ID}",
+  "x-marketingclaw-agent-id": "${MARKETINGCLAW_MCP_AGENT_ID}",
+  "x-marketingclaw-account-id": "${MARKETINGCLAW_MCP_ACCOUNT_ID}",
+  "x-marketingclaw-message-channel": "${MARKETINGCLAW_MCP_MESSAGE_CHANNEL}",
+  "x-marketingclaw-client-caps": "${MARKETINGCLAW_MCP_CLIENT_CAPS}",
+  "x-marketingclaw-current-channel-id": "${MARKETINGCLAW_MCP_CURRENT_CHANNEL_ID}",
+  "x-marketingclaw-current-thread-ts": "${MARKETINGCLAW_MCP_CURRENT_THREAD_TS}",
+  "x-marketingclaw-current-message-id": "${MARKETINGCLAW_MCP_CURRENT_MESSAGE_ID}",
+  "x-marketingclaw-current-inbound-audio": "${MARKETINGCLAW_MCP_CURRENT_INBOUND_AUDIO}",
+  "x-marketingclaw-inbound-event-kind": "${MARKETINGCLAW_MCP_INBOUND_EVENT_KIND}",
+  "x-marketingclaw-source-reply-delivery-mode": "${MARKETINGCLAW_MCP_SOURCE_REPLY_DELIVERY_MODE}",
+  "x-marketingclaw-task-suggestion-delivery-mode":
+    "${MARKETINGCLAW_MCP_TASK_SUGGESTION_DELIVERY_MODE}",
+  "x-marketingclaw-require-explicit-message-target":
+    "${MARKETINGCLAW_MCP_REQUIRE_EXPLICIT_MESSAGE_TARGET}",
+  "x-marketingclaw-cli-capture-key": "${MARKETINGCLAW_MCP_CLI_CAPTURE_KEY}",
 } as const;
 
 function createMcpServerConfig(port: number, headers: Record<string, string>) {
   return {
     mcpServers: {
-      openclaw: {
+      marketingclaw: {
         type: "http",
         url: `http://127.0.0.1:${port}/mcp`,
         alwaysLoad: true,

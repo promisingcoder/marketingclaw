@@ -1,14 +1,14 @@
-package ai.openclaw.app.ui
+package ai.marketingclaw.app.ui
 
-import ai.openclaw.app.GatewayHealthLogsSummary
-import ai.openclaw.app.GatewayLogEntry
-import ai.openclaw.app.MainViewModel
-import ai.openclaw.app.ui.design.ClawPanel
-import ai.openclaw.app.ui.design.ClawSecondaryButton
-import ai.openclaw.app.ui.design.ClawStatus
-import ai.openclaw.app.ui.design.ClawStatusPill
-import ai.openclaw.app.ui.design.ClawStatusRow
-import ai.openclaw.app.ui.design.ClawTheme
+import ai.marketingclaw.app.GatewayHealthLogsSummary
+import ai.marketingclaw.app.GatewayLogEntry
+import ai.marketingclaw.app.MainViewModel
+import ai.marketingclaw.app.ui.design.ClawPanel
+import ai.marketingclaw.app.ui.design.ClawSecondaryButton
+import ai.marketingclaw.app.ui.design.ClawStatus
+import ai.marketingclaw.app.ui.design.ClawStatusPill
+import ai.marketingclaw.app.ui.design.ClawStatusRow
+import ai.marketingclaw.app.ui.design.ClawTheme
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

@@ -13,7 +13,7 @@ import { getSessionEntry, upsertSessionEntry } from "./store.js";
 import { useTempSessionsFixture } from "./test-helpers.js";
 
 describe("session goals", () => {
-  const fixture = useTempSessionsFixture("openclaw-session-goals-");
+  const fixture = useTempSessionsFixture("marketingclaw-session-goals-");
   const sessionKey = "agent:main:telegram:direct:123";
 
   async function writeSession(totalTokens = 0) {

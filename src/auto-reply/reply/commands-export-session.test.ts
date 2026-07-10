@@ -274,7 +274,7 @@ describe("buildExportSessionReply", () => {
     expect(html).not.toContain("{{SESSION_DATA}}");
     expect(html).not.toContain("{{MARKED_JS}}");
     expect(html).not.toContain("{{HIGHLIGHT_JS}}");
-    expect(html).not.toContain("data-openclaw-export-placeholder");
+    expect(html).not.toContain("data-marketingclaw-export-placeholder");
     expect(html).toContain(
       Buffer.from(
         JSON.stringify({
@@ -488,11 +488,11 @@ describe("buildExportSessionReply", () => {
 
     const expectedBase = path.join(
       "/tmp/workspace",
-      "openclaw-session-session--2026-05-05T10-11-12.html",
+      "marketingclaw-session-session--2026-05-05T10-11-12.html",
     );
     const expectedSuffix = path.join(
       "/tmp/workspace",
-      "openclaw-session-session--2026-05-05T10-11-12-2.html",
+      "marketingclaw-session-session--2026-05-05T10-11-12-2.html",
     );
     expect(writeFilePath(0)).toBe(expectedBase);
     expect(writeFileArg(0, 2)).toEqual({
@@ -500,18 +500,20 @@ describe("buildExportSessionReply", () => {
       flag: "wx",
     });
     expect(writeFilePath(1)).toBe(expectedSuffix);
-    expect(reply.text).toContain("📄 File: openclaw-session-session--2026-05-05T10-11-12-2.html");
+    expect(reply.text).toContain(
+      "📄 File: marketingclaw-session-session--2026-05-05T10-11-12-2.html",
+    );
   });
 
   it("preserves replacement text with dollar sequences", async () => {
     hoisted.exportHtmlTemplateContents.set(
       "template.html",
       [
-        '<style data-openclaw-export-placeholder="CSS"></style>',
-        '<script id="session-data" type="application/json" data-openclaw-export-placeholder="SESSION_DATA"></script>',
-        '<script data-openclaw-export-placeholder="MARKED_JS"></script>',
-        '<script data-openclaw-export-placeholder="HIGHLIGHT_JS"></script>',
-        '<script data-openclaw-export-placeholder="JS"></script>',
+        '<style data-marketingclaw-export-placeholder="CSS"></style>',
+        '<script id="session-data" type="application/json" data-marketingclaw-export-placeholder="SESSION_DATA"></script>',
+        '<script data-marketingclaw-export-placeholder="MARKED_JS"></script>',
+        '<script data-marketingclaw-export-placeholder="HIGHLIGHT_JS"></script>',
+        '<script data-marketingclaw-export-placeholder="JS"></script>',
       ].join(""),
     );
     hoisted.exportHtmlTemplateContents.set("template.css", "/* {{THEME_VARS}} */$&$1");

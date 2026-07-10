@@ -1,4 +1,4 @@
-import OpenClawKit
+import MarketingClawKit
 
 enum GatewayPushSubscription {
     @MainActor

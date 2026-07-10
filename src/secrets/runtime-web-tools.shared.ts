@@ -1,6 +1,6 @@
 /** Shared helpers for web-tool secret metadata resolution. */
-import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { normalizeOptionalLowercaseString } from "@marketingclaw/normalization-core/string-coerce";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { resolveSecretInputRef } from "../config/types.secrets.js";
 import { createLazyRuntimeNamedExport } from "../shared/lazy-runtime.js";
 import { setPathExistingStrict } from "./path-utils.js";
@@ -62,8 +62,8 @@ export type RuntimeWebProviderSelectionParams<
   configuredProvider?: string;
   metadata: TMetadata;
   diagnostics: RuntimeWebDiagnostic[];
-  sourceConfig: OpenClawConfig;
-  resolvedConfig: OpenClawConfig;
+  sourceConfig: MarketingClawConfig;
+  resolvedConfig: MarketingClawConfig;
   context: ResolverContext;
   defaults: SecretDefaults | undefined;
   /** Allow keyless providers to be selected when no provider is explicitly configured. */
@@ -76,12 +76,12 @@ export type RuntimeWebProviderSelectionParams<
   /** Reads the primary credential location for a provider from source config. */
   readConfiguredCredential: (params: {
     provider: TProvider;
-    config: OpenClawConfig;
+    config: MarketingClawConfig;
     toolConfig: TToolConfig;
   }) => unknown;
   readConfiguredCredentialFallback?: (params: {
     provider: TProvider;
-    config: OpenClawConfig;
+    config: MarketingClawConfig;
     toolConfig: TToolConfig;
   }) => { path: string; value: unknown } | undefined;
   /** Resolves inline/env/SecretRef credentials and reports the winning source. */
@@ -92,7 +92,7 @@ export type RuntimeWebProviderSelectionParams<
   }) => Promise<SecretResolutionResult<TSource>>;
   /** Writes the selected credential into the resolved runtime config snapshot. */
   setResolvedCredential: (params: {
-    resolvedConfig: OpenClawConfig;
+    resolvedConfig: MarketingClawConfig;
     provider: TProvider;
     value: string;
   }) => void;
@@ -188,7 +188,7 @@ function getProviderEnvVars(provider: object): string[] {
 }
 
 function setResolvedCredentialPath(params: {
-  resolvedConfig: OpenClawConfig;
+  resolvedConfig: MarketingClawConfig;
   path: string;
   value: string;
 }): void {
@@ -237,7 +237,7 @@ export type ResolveRuntimeWebProviderSurfaceParams<
   diagnostics: RuntimeWebDiagnostic[];
   metadataDiagnostics: RuntimeWebDiagnostic[];
   invalidAutoDetectCode: RuntimeWebWarningCode;
-  sourceConfig: OpenClawConfig;
+  sourceConfig: MarketingClawConfig;
   context: ResolverContext;
   /** Bundled plugin id already known from caller context, avoiding duplicate manifest lookup. */
   configuredBundledPluginIdHint?: string;
@@ -245,12 +245,12 @@ export type ResolveRuntimeWebProviderSurfaceParams<
   sortProviders: (providers: TProvider[]) => TProvider[];
   readConfiguredCredential: (params: {
     provider: TProvider;
-    config: OpenClawConfig;
+    config: MarketingClawConfig;
     toolConfig: TToolConfig;
   }) => unknown;
   readConfiguredCredentialFallback?: (params: {
     provider: TProvider;
-    config: OpenClawConfig;
+    config: MarketingClawConfig;
     toolConfig: TToolConfig;
   }) => { path: string; value: unknown } | undefined;
   ignoreKeylessProvidersForConfiguredSurface?: boolean;

@@ -1,6 +1,6 @@
 // Context engine host compatibility tests cover doctor warnings for host/context mismatches.
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../../config/types.marketingclaw.js";
 import {
   getContextEngineFactory,
   getContextEngineRegistration,
@@ -51,7 +51,7 @@ function registerEngine(requiredCapabilities: ContextEngineHostCapability[]): st
   return id;
 }
 
-function configWithEngine(engineId: string, cfg: OpenClawConfig = {}): OpenClawConfig {
+function configWithEngine(engineId: string, cfg: MarketingClawConfig = {}): MarketingClawConfig {
   return {
     ...cfg,
     plugins: {
@@ -82,14 +82,14 @@ describe("doctor context-engine host compatibility", () => {
     expect(getContextEngineFactory(id)).toBeUndefined();
   });
 
-  it("collects native Codex and OpenClaw as compatible agent-run hosts", () => {
+  it("collects native Codex and MarketingClaw as compatible agent-run hosts", () => {
     const hosts = collectConfiguredContextEngineAgentRunHosts({
       cfg: {
         agents: {
           defaults: {
             models: {
               "openai/gpt-5.5": { agentRuntime: { id: "codex" } },
-              "anthropic/claude-sonnet-4-6": { agentRuntime: { id: "openclaw" } },
+              "anthropic/claude-sonnet-4-6": { agentRuntime: { id: "marketingclaw" } },
             },
           },
         },
@@ -98,7 +98,7 @@ describe("doctor context-engine host compatibility", () => {
 
     expect(hosts.map((host) => host.host.id).toSorted()).toEqual([
       "codex-app-server",
-      "openclaw-embedded",
+      "marketingclaw-embedded",
     ]);
   });
 
@@ -115,7 +115,7 @@ describe("doctor context-engine host compatibility", () => {
           },
         },
       }),
-      doctorFixCommand: "openclaw doctor --fix",
+      doctorFixCommand: "marketingclaw doctor --fix",
     });
 
     expect(warnings).toEqual([]);
@@ -134,7 +134,7 @@ describe("doctor context-engine host compatibility", () => {
           },
         },
       }),
-      doctorFixCommand: "openclaw doctor --fix",
+      doctorFixCommand: "marketingclaw doctor --fix",
     });
 
     expect(result.config.plugins?.slots?.contextEngine).toBe("legacy");
@@ -156,7 +156,7 @@ describe("doctor context-engine host compatibility", () => {
     });
     const result = await maybeRepairContextEngineHostCompatibility({
       cfg,
-      doctorFixCommand: "openclaw doctor --fix",
+      doctorFixCommand: "marketingclaw doctor --fix",
     });
 
     expect(result.config).toBe(cfg);
@@ -177,7 +177,7 @@ describe("doctor context-engine host compatibility", () => {
     });
     const result = await maybeRepairContextEngineHostCompatibility({
       cfg,
-      doctorFixCommand: "openclaw doctor --fix",
+      doctorFixCommand: "marketingclaw doctor --fix",
     });
 
     expect(result.config).toBe(cfg);

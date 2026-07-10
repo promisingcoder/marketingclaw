@@ -10,7 +10,7 @@ import {
   validateExtendedStableNpmReleaseRequest,
   validateExtendedStableRunIdentity,
   verifyExtendedStableRegistryReadback,
-} from "../../scripts/openclaw-npm-extended-stable-release.mjs";
+} from "../../scripts/marketingclaw-npm-extended-stable-release.mjs";
 
 const sha = "a".repeat(40);
 const branch = "extended-stable/2026.6.33";
@@ -61,7 +61,7 @@ describe("npm extended-stable publication boundary", () => {
   it("prints exactly channel then publish tag from the dependency-free CLI", () => {
     const result = spawnSync(
       process.execPath,
-      ["scripts/openclaw-npm-extended-stable-release.mjs", "publish-plan"],
+      ["scripts/marketingclaw-npm-extended-stable-release.mjs", "publish-plan"],
       {
         encoding: "utf8",
         env: {
@@ -117,7 +117,7 @@ describe("npm extended-stable publication boundary", () => {
   ])("rejects %s in the dependency-free CLI", (_label, distTag, bypass, error) => {
     const result = spawnSync(
       process.execPath,
-      ["scripts/openclaw-npm-extended-stable-release.mjs", "publish-plan"],
+      ["scripts/marketingclaw-npm-extended-stable-release.mjs", "publish-plan"],
       {
         encoding: "utf8",
         env: {
@@ -290,7 +290,7 @@ describe("extended-stable npm release request", () => {
 
 describe("extended-stable npm run identity", () => {
   const validPreflight = {
-    workflowName: "OpenClaw NPM Release",
+    workflowName: "MarketingClaw NPM Release",
     event: "workflow_dispatch",
     conclusion: "success",
     headBranch: branch,
@@ -342,7 +342,7 @@ describe("extended-stable npm run identity", () => {
       }),
     ).toBe(pluginRun);
     for (const changes of [
-      { workflowName: "OpenClaw NPM Release" },
+      { workflowName: "MarketingClaw NPM Release" },
       { displayTitle: `Plugin NPM Release [default] ${sha}` },
       { displayTitle: `Plugin NPM Release [extended-stable] ${"b".repeat(40)}` },
       { status: "in_progress" },

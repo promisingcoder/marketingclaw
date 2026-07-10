@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { runHeartbeatOnce } from "./heartbeat-runner.js";
 import { installHeartbeatRunnerTestRuntime } from "./heartbeat-runner.test-harness.js";
 import { seedMainSessionStore, withTempHeartbeatSandbox } from "./heartbeat-runner.test-utils.js";
@@ -12,7 +12,7 @@ describe("runHeartbeatOnce identity", () => {
     { name: "heartbeat ok", replyText: "HEARTBEAT_OK", showOk: true },
   ])("forwards agent identity on $name delivery", async ({ replyText, showOk }) => {
     await withTempHeartbeatSandbox(async ({ tmpDir, storePath, replySpy }) => {
-      const cfg: OpenClawConfig = {
+      const cfg: MarketingClawConfig = {
         agents: {
           defaults: {
             workspace: tmpDir,

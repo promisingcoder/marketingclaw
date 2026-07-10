@@ -417,7 +417,7 @@ function annotateToolTurnOutcome(
 }
 
 function isPendingSendMessage(message: unknown): boolean {
-  return asRecord(asRecord(message)?.["__openclaw"])?.kind === "pending-send";
+  return asRecord(asRecord(message)?.["__marketingclaw"])?.kind === "pending-send";
 }
 
 function sourceMessageId(message: unknown): string | null {
@@ -425,9 +425,9 @@ function sourceMessageId(message: unknown): string | null {
   if (!record) {
     return null;
   }
-  const openclawId = asRecord(record["__openclaw"])?.id;
-  if (typeof openclawId === "string" && openclawId.trim()) {
-    return openclawId.trim();
+  const marketingclawId = asRecord(record["__marketingclaw"])?.id;
+  if (typeof marketingclawId === "string" && marketingclawId.trim()) {
+    return marketingclawId.trim();
   }
   const messageId = typeof record.messageId === "string" ? record.messageId.trim() : "";
   if (messageId) {
@@ -632,7 +632,7 @@ function queuedSendThreadMessage(item: ChatQueueItem): Record<string, unknown> |
     role: "user",
     content,
     timestamp: item.createdAt,
-    __openclaw: {
+    __marketingclaw: {
       kind: "pending-send",
       id: item.id,
       state: item.sendState,
@@ -899,7 +899,7 @@ export function buildChatItems(props: BuildChatItemsProps): Array<ChatItem | Mes
       continue;
     }
     const raw = asRecord(msg) ?? {};
-    const marker = raw["__openclaw"] as Record<string, unknown> | undefined;
+    const marker = raw["__marketingclaw"] as Record<string, unknown> | undefined;
     if (marker && marker.kind === "compaction") {
       items.push({
         kind: "divider",

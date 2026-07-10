@@ -1,14 +1,14 @@
 /**
- * Locates local OpenClaw docs/source roots for references shown to agents.
+ * Locates local MarketingClaw docs/source roots for references shown to agents.
  */
 import fs from "node:fs";
 import path from "node:path";
-import { resolveOpenClawPackageRoot } from "../infra/openclaw-root.js";
+import { resolveMarketingClawPackageRoot } from "../infra/marketingclaw-root.js";
 
-export const OPENCLAW_DOCS_URL = "https://docs.openclaw.ai";
-export const OPENCLAW_SOURCE_URL = "https://github.com/openclaw/openclaw";
+export const MARKETINGCLAW_DOCS_URL = "https://docs.marketingclaw.ai";
+export const MARKETINGCLAW_SOURCE_URL = "https://github.com/promisingcoder/marketingclaw";
 
-type ResolveOpenClawReferencePathParams = {
+type ResolveMarketingClawReferencePathParams = {
   workspaceDir?: string;
   argv1?: string;
   cwd?: string;
@@ -24,7 +24,7 @@ function isGitCheckout(rootDir: string): boolean {
 }
 
 /** Resolve a usable local docs directory, preferring the active workspace. */
-async function resolveOpenClawDocsPath(params: {
+async function resolveMarketingClawDocsPath(params: {
   workspaceDir?: string;
   argv1?: string;
   cwd?: string;
@@ -38,7 +38,7 @@ async function resolveOpenClawDocsPath(params: {
     }
   }
 
-  const packageRoot = await resolveOpenClawPackageRoot({
+  const packageRoot = await resolveMarketingClawPackageRoot({
     cwd: params.cwd,
     argv1: params.argv1,
     moduleUrl: params.moduleUrl,
@@ -52,10 +52,10 @@ async function resolveOpenClawDocsPath(params: {
 }
 
 /** Resolve the package root only when it is a Git checkout. */
-async function resolveOpenClawSourcePath(
-  params: ResolveOpenClawReferencePathParams,
+async function resolveMarketingClawSourcePath(
+  params: ResolveMarketingClawReferencePathParams,
 ): Promise<string | null> {
-  const packageRoot = await resolveOpenClawPackageRoot({
+  const packageRoot = await resolveMarketingClawPackageRoot({
     cwd: params.cwd,
     argv1: params.argv1,
     moduleUrl: params.moduleUrl,
@@ -67,15 +67,15 @@ async function resolveOpenClawSourcePath(
 }
 
 /** Resolve docs and source roots concurrently for prompt/reference injection. */
-export async function resolveOpenClawReferencePaths(
-  params: ResolveOpenClawReferencePathParams,
+export async function resolveMarketingClawReferencePaths(
+  params: ResolveMarketingClawReferencePathParams,
 ): Promise<{
   docsPath: string | null;
   sourcePath: string | null;
 }> {
   const [docsPath, sourcePath] = await Promise.all([
-    resolveOpenClawDocsPath(params),
-    resolveOpenClawSourcePath(params),
+    resolveMarketingClawDocsPath(params),
+    resolveMarketingClawSourcePath(params),
   ]);
   return { docsPath, sourcePath };
 }

@@ -3,4 +3,4 @@ export {
   DEFAULT_COPILOT_API_BASE_URL,
   deriveCopilotApiBaseUrlFromToken,
   resolveCopilotApiToken,
-} from "openclaw/plugin-sdk/provider-auth";
+} from "marketingclaw/plugin-sdk/provider-auth";

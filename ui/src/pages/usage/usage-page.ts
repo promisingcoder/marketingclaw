@@ -24,7 +24,7 @@ import {
   requestSessionUsageTimeSeries,
 } from "../../lib/sessions/index.ts";
 import { normalizeLowercaseStringOrEmpty } from "../../lib/string-coerce.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { MarketingClawLightDomElement } from "../../lit/marketingclaw-element.ts";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
 import { mergeUsageCacheStatus } from "./cache-status.ts";
 import type { ProviderUsageSummary } from "./data-types.ts";
@@ -82,7 +82,7 @@ function toErrorMessage(error: unknown): string {
   return "request failed";
 }
 
-class UsagePage extends OpenClawLightDomElement {
+class UsagePage extends MarketingClawLightDomElement {
   @consume({ context: applicationContext, subscribe: true })
   private context!: ApplicationContext;
 
@@ -668,4 +668,4 @@ class UsagePage extends OpenClawLightDomElement {
   }
 }
 
-customElements.define("openclaw-usage-page", UsagePage);
+customElements.define("marketingclaw-usage-page", UsagePage);

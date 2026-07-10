@@ -1,7 +1,7 @@
 import Foundation
-import OpenClawKit
+import MarketingClawKit
 import Testing
-@testable import OpenClaw
+@testable import MarketingClaw
 
 struct GatewayChannelRequestTests {
     private func makeSession(requestSendDelayMs: Int) -> GatewayTestWebSocketSession {

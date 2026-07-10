@@ -1,5 +1,5 @@
 // Context-engine delegates bridge custom engines to built-in compaction and memory prompt paths.
-import { normalizeStructuredPromptSection } from "@openclaw/ai/internal/shared";
+import { normalizeStructuredPromptSection } from "@marketingclaw/ai/internal/shared";
 import type { MemoryCitationsMode } from "../config/types.memory.js";
 import { buildMemoryPromptSection } from "../plugins/memory-state.js";
 import { createLazyRuntimeModule } from "../shared/lazy-runtime.js";
@@ -10,7 +10,7 @@ const loadCompactRuntime = createLazyRuntimeModule(
 );
 
 /**
- * Delegate a context-engine compaction request to OpenClaw's built-in runtime compaction path.
+ * Delegate a context-engine compaction request to MarketingClaw's built-in runtime compaction path.
  *
  * This is the same bridge used by the legacy context engine. Third-party
  * engines can call it from their own `compact()` implementations when they do

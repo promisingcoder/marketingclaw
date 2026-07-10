@@ -1,8 +1,8 @@
 {
-  "name": "@openclaw/telegram",
+  "name": "@marketingclaw/telegram",
   "version": "2026.6.11",
   "private": true,
-  "description": "OpenClaw Telegram channel plugin",
+  "description": "MarketingClaw Telegram channel plugin",
   "type": "module",
   "dependencies": {
     "@grammyjs/runner": "2.0.3",
@@ -12,9 +12,9 @@
     "undici": "8.5.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@marketingclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "marketingclaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -35,7 +35,7 @@
       "selectionDocsPrefix": "",
       "selectionDocsOmitLabel": true,
       "selectionExtras": [
-        "https://openclaw.ai"
+        "https://marketingclaw.ai"
       ],
       "markdownCapable": true,
       "commands": {

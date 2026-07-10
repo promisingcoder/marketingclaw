@@ -1,13 +1,13 @@
-# Z.AI OpenClaw provider
+# Z.AI MarketingClaw provider
 
-Official OpenClaw provider plugin for Z.AI.
+Official MarketingClaw provider plugin for Z.AI.
 
 ## Install
 
 ```sh
-openclaw plugins install @openclaw/zai-provider
+marketingclaw plugins install @marketingclaw/zai-provider
 ```
 
 ## Docs
 
-See `docs/providers/zai.md` in the OpenClaw repository, or the published docs at `https://docs.openclaw.ai/providers/zai`.
+See `docs/providers/zai.md` in the MarketingClaw repository, or the published docs at `https://docs.marketingclaw.ai/providers/zai`.

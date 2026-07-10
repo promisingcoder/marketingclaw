@@ -114,7 +114,7 @@ describe("resolveClaudeCliExecutionArgs", () => {
     ).toEqual(["-p", "--output-format", "stream-json"]);
   });
 
-  it("maps OpenClaw thinking levels to Claude effort args", () => {
+  it("maps MarketingClaw thinking levels to Claude effort args", () => {
     expect(
       resolveClaudeCliExecutionArgs({
         workspaceDir: "/tmp",
@@ -173,7 +173,7 @@ describe("resolveClaudeCliExecutionArgs", () => {
           "-p",
           "--output-format",
           "stream-json",
-          "--allowedTools=mcp__openclaw__*",
+          "--allowedTools=mcp__marketingclaw__*",
           "--allowedTools",
           "Read",
           "Grep",
@@ -251,7 +251,7 @@ describe("normalizeClaudeBackendConfig", () => {
     expect(normalized.input).toBe("stdin");
   });
 
-  it("derives Claude bypass from OpenClaw YOLO policy and disables it for safer policy", () => {
+  it("derives Claude bypass from MarketingClaw YOLO policy and disables it for safer policy", () => {
     expect(resolveClaudePermissionMode({ backendId: "claude-cli" })).toEqual({
       mode: "bypassPermissions",
       overrideExisting: false,
@@ -264,7 +264,7 @@ describe("normalizeClaudeBackendConfig", () => {
     ).toEqual({ overrideExisting: false });
   });
 
-  it("derives Claude bypass from per-agent OpenClaw exec policy", () => {
+  it("derives Claude bypass from per-agent MarketingClaw exec policy", () => {
     expect(
       resolveClaudePermissionMode({
         backendId: "claude-cli",
@@ -351,7 +351,7 @@ describe("normalizeClaudeBackendConfig", () => {
 
   it("passes system prompt on every turn (issue #80374 — systemPromptWhen must be 'always')", () => {
     // Before fix this was hardcoded to "first", which silently dropped updated
-    // OpenClaw system prompt context on resumed / compacted claude-cli sessions.
+    // MarketingClaw system prompt context on resumed / compacted claude-cli sessions.
     const backend = buildAnthropicCliBackend();
     expect(backend.config.systemPromptWhen).toBe("always");
   });

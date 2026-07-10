@@ -1,5 +1,5 @@
 // Chat-owned composer, queue, status, context, and run controls.
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { truncateUtf16Safe } from "@marketingclaw/normalization-core/utf16-slice";
 import { html, nothing, type TemplateResult } from "lit";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { ref } from "lit/directives/ref.js";
@@ -385,7 +385,7 @@ function renderChatGoalActionButton(options: {
   onClick: () => void;
 }): TemplateResult {
   return html`
-    <openclaw-tooltip content=${options.label}>
+    <marketingclaw-tooltip content=${options.label}>
       <button
         class="agent-chat__goal-action ${options.className}"
         type="button"
@@ -394,7 +394,7 @@ function renderChatGoalActionButton(options: {
       >
         ${options.icon}
       </button>
-    </openclaw-tooltip>
+    </marketingclaw-tooltip>
   `;
 }
 
@@ -994,7 +994,7 @@ export function renderChatQueue(props: ChatQueueProps) {
                       </button>
                     `
                   : nothing}
-                <openclaw-tooltip content="Remove queued message">
+                <marketingclaw-tooltip content="Remove queued message">
                   <button
                     class="btn chat-queue__remove"
                     type="button"
@@ -1003,7 +1003,7 @@ export function renderChatQueue(props: ChatQueueProps) {
                   >
                     ${icons.x}
                   </button>
-                </openclaw-tooltip>
+                </marketingclaw-tooltip>
               </div>
             </div>
           `;
@@ -1032,7 +1032,7 @@ export function renderSideResult(
           <span class="chat-side-result__label">BTW</span>
           <span class="chat-side-result__meta">Not saved to chat history</span>
         </div>
-        <openclaw-tooltip content="Dismiss">
+        <marketingclaw-tooltip content="Dismiss">
           <button
             class="btn chat-side-result__dismiss"
             type="button"
@@ -1041,7 +1041,7 @@ export function renderSideResult(
           >
             ${icons.x}
           </button>
-        </openclaw-tooltip>
+        </marketingclaw-tooltip>
       </div>
       <div class="chat-side-result__question">${sideResult.question}</div>
       <div class="chat-side-result__body" dir=${detectTextDirection(sideResult.text)}>
@@ -1236,16 +1236,16 @@ function renderAttachmentPreview(props: ChatAttachmentControlsProps) {
             ${isImageAttachment(att) && getChatAttachmentPreviewUrl(att)
               ? html`<img src=${getChatAttachmentPreviewUrl(att)!} alt="Attachment preview" />`
               : html`
-                  <openclaw-tooltip .content=${att.fileName ?? "Attached file"}>
+                  <marketingclaw-tooltip .content=${att.fileName ?? "Attached file"}>
                     <div class="chat-attachment-file">
                       <span class="chat-attachment-file__icon">${icons.paperclip}</span>
                       <span class="chat-attachment-file__name"
                         >${att.fileName ?? "Attached file"}</span
                       >
                     </div>
-                  </openclaw-tooltip>
+                  </marketingclaw-tooltip>
                 `}
-            <openclaw-tooltip content="Remove attachment">
+            <marketingclaw-tooltip content="Remove attachment">
               <button
                 class="chat-attachment-remove"
                 type="button"
@@ -1258,7 +1258,7 @@ function renderAttachmentPreview(props: ChatAttachmentControlsProps) {
               >
                 &times;
               </button>
-            </openclaw-tooltip>
+            </marketingclaw-tooltip>
           </div>
         `,
       )}
@@ -1370,11 +1370,11 @@ export function renderFallbackIndicator(status: FallbackStatus | null | undefine
       : "compaction-indicator compaction-indicator--fallback";
   const icon = phase === "cleared" ? icons.check : icons.brain;
   return html`
-    <openclaw-tooltip .content=${details}>
+    <marketingclaw-tooltip .content=${details}>
       <div class=${className} role="status" aria-live="polite" aria-label=${details}>
         ${icon} ${message}
       </div>
-    </openclaw-tooltip>
+    </marketingclaw-tooltip>
   `;
 }
 
@@ -1917,7 +1917,7 @@ function renderChatPrimaryActions(props: ChatRunControlsProps) {
   };
   const abortAction = props.canAbort
     ? html`
-        <openclaw-tooltip .content=${t("chat.runControls.stop")}>
+        <marketingclaw-tooltip .content=${t("chat.runControls.stop")}>
           <button
             class="chat-send-btn chat-send-btn--stop"
             @click=${props.onAbort}
@@ -1926,7 +1926,7 @@ function renderChatPrimaryActions(props: ChatRunControlsProps) {
             ${icons.stop}
             <span class="agent-chat__control-label">${t("chat.runControls.stop")}</span>
           </button>
-        </openclaw-tooltip>
+        </marketingclaw-tooltip>
       `
     : nothing;
 
@@ -1938,7 +1938,7 @@ function renderChatPrimaryActions(props: ChatRunControlsProps) {
   return html`
     ${props.voiceActive && props.onToggleVoice
       ? html`
-          <openclaw-tooltip .content=${t("chat.composer.stopVoiceInput")}>
+          <marketingclaw-tooltip .content=${t("chat.composer.stopVoiceInput")}>
             <button
               class="chat-send-btn chat-send-btn--voice-live${voiceErrored
                 ? " chat-send-btn--voice-error"
@@ -1954,7 +1954,7 @@ function renderChatPrimaryActions(props: ChatRunControlsProps) {
                   })}
               <span class="chat-send-btn__voice-stop-glyph">${icons.stop}</span>
             </button>
-          </openclaw-tooltip>
+          </marketingclaw-tooltip>
           ${voiceErrored
             ? nothing
             : html`
@@ -1972,7 +1972,7 @@ function renderChatPrimaryActions(props: ChatRunControlsProps) {
         ? html`
             ${hasComposedContent
               ? html`
-                  <openclaw-tooltip .content=${t("chat.runControls.queue")}>
+                  <marketingclaw-tooltip .content=${t("chat.runControls.queue")}>
                     <button
                       class="chat-send-btn"
                       @click=${storeDraftAndSend}
@@ -1982,10 +1982,10 @@ function renderChatPrimaryActions(props: ChatRunControlsProps) {
                       ${icons.send}
                       <span class="agent-chat__control-label">${t("chat.runControls.queue")}</span>
                     </button>
-                  </openclaw-tooltip>
+                  </marketingclaw-tooltip>
                 `
               : nothing}
-            <openclaw-tooltip .content=${t("chat.runControls.stop")}>
+            <marketingclaw-tooltip .content=${t("chat.runControls.stop")}>
               <button
                 class="chat-send-btn chat-send-btn--stop"
                 @click=${props.onAbort}
@@ -1994,11 +1994,11 @@ function renderChatPrimaryActions(props: ChatRunControlsProps) {
                 ${icons.stop}
                 <span class="agent-chat__control-label">${t("chat.runControls.stop")}</span>
               </button>
-            </openclaw-tooltip>
+            </marketingclaw-tooltip>
           `
         : hasComposedContent || !props.onToggleVoice
           ? html`
-              <openclaw-tooltip
+              <marketingclaw-tooltip
                 .content=${props.isBusy ? t("chat.runControls.queue") : t("chat.runControls.send")}
               >
                 <button
@@ -2016,10 +2016,10 @@ function renderChatPrimaryActions(props: ChatRunControlsProps) {
                       : t("chat.runControls.send")}</span
                   >
                 </button>
-              </openclaw-tooltip>
+              </marketingclaw-tooltip>
             `
           : html`
-              <openclaw-tooltip .content=${t("chat.composer.startVoiceInput")}>
+              <marketingclaw-tooltip .content=${t("chat.composer.startVoiceInput")}>
                 <button
                   class="chat-send-btn chat-send-btn--voice"
                   @click=${props.onToggleVoice}
@@ -2031,7 +2031,7 @@ function renderChatPrimaryActions(props: ChatRunControlsProps) {
                     >${t("chat.composer.startVoiceInput")}</span
                   >
                 </button>
-              </openclaw-tooltip>
+              </marketingclaw-tooltip>
             `}
   `;
 }
@@ -2044,7 +2044,7 @@ export function renderChatRunControls(props: ChatRunControlsProps) {
     <div class="agent-chat__toolbar-right">
       ${showSecondary && !props.canAbort
         ? html`
-            <openclaw-tooltip .content=${t("chat.runControls.newSession")}>
+            <marketingclaw-tooltip .content=${t("chat.runControls.newSession")}>
               <button
                 class="btn btn--ghost"
                 @click=${props.onNewSession}
@@ -2053,12 +2053,12 @@ export function renderChatRunControls(props: ChatRunControlsProps) {
                 ${icons.plus}
                 <span class="agent-chat__control-label">${t("chat.runControls.newSession")}</span>
               </button>
-            </openclaw-tooltip>
+            </marketingclaw-tooltip>
           `
         : nothing}
       ${showSecondary
         ? html`
-            <openclaw-tooltip .content=${t("chat.runControls.export")}>
+            <marketingclaw-tooltip .content=${t("chat.runControls.export")}>
               <button
                 class="btn btn--ghost"
                 @click=${props.onExport}
@@ -2068,7 +2068,7 @@ export function renderChatRunControls(props: ChatRunControlsProps) {
                 ${icons.download}
                 <span class="agent-chat__control-label">${t("chat.runControls.export")}</span>
               </button>
-            </openclaw-tooltip>
+            </marketingclaw-tooltip>
           `
         : nothing}
       ${showPrimary ? renderChatPrimaryActions(props) : nothing}
@@ -2113,7 +2113,7 @@ export function renderChatComposer(props: ChatComposerProps) {
     },
   );
   const composerControls = props.composerControls ?? nothing;
-  const assistantName = props.assistantName || "OpenClaw";
+  const assistantName = props.assistantName || "MarketingClaw";
   const inProgressLabel =
     submittedProgress?.sendState === "waiting-model"
       ? "Preparing model..."

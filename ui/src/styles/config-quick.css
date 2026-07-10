@@ -17,11 +17,11 @@
   margin-top: 20px;
 }
 
-.content:has(openclaw-logs-page) {
+.content:has(marketingclaw-logs-page) {
   overflow: hidden;
 }
 
-.content:has(openclaw-logs-page) > openclaw-router-outlet {
+.content:has(marketingclaw-logs-page) > marketingclaw-router-outlet {
   display: flex;
   flex-direction: column;
   margin-top: 0;
@@ -30,11 +30,11 @@
   width: 100%;
 }
 
-openclaw-logs-page {
+marketingclaw-logs-page {
   display: contents;
 }
 
-.content:has(openclaw-logs-page) .content-header {
+.content:has(marketingclaw-logs-page) .content-header {
   flex: 0 0 auto;
 }
 

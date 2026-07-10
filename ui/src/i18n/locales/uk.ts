@@ -144,18 +144,19 @@ export const uk: TranslationMap = {
     pairing: {
       button: "Під’єднати мобільний пристрій",
       adminRequired: "Для створення кодів налаштування потрібен доступ адміністратора.",
-      title: "OpenClaw mobile",
+      title: "MarketingClaw mobile",
       subtitle: "Відскануйте цей QR-код у мобільному застосунку, щоб підключити новий телефон.",
       generating: "Створення безпечного коду налаштування…",
       failed: "Не вдалося створити код налаштування.",
-      qrAlt: "QR-код сполучення OpenClaw mobile",
+      qrAlt: "QR-код сполучення MarketingClaw mobile",
       qrUnavailable: "QR-код недоступний. Натомість скопіюйте код налаштування.",
       copySetupCode: "Скопіювати код налаштування",
       newCode: "Новий код",
       showSetupCode: "Показати код налаштування",
       pending: "Запити пристроїв, що очікують на перегляд: {count}",
       review: "Перегляд",
-      waiting: "Офіційні мобільні застосунки OpenClaw підключаються автоматично після сканування.",
+      waiting:
+        "Офіційні мобільні застосунки MarketingClaw підключаються автоматично після сканування.",
       help: "Довідка щодо сполучення",
       manageDevices: "Керувати пристроями",
     },
@@ -182,7 +183,7 @@ export const uk: TranslationMap = {
   },
   worktrees: {
     title: "Керовані Worktrees",
-    subtitle: "Ізольовані копії репозиторію, що належать OpenClaw.",
+    subtitle: "Ізольовані копії репозиторію, що належать MarketingClaw.",
     cleanNow: "Очистити зараз",
     name: "Назва",
     repo: "Репозиторій",
@@ -556,7 +557,7 @@ export const uk: TranslationMap = {
       "Переглядайте, уточнюйте й застосовуйте пропозиції, перш ніж вони стануть активними Skills.",
     nodes: "Спарені пристрої та команди.",
     chat: "Чат шлюзу для швидких втручань.",
-    config: "Редагування openclaw.json.",
+    config: "Редагування marketingclaw.json.",
     profile: "Статистика, серії та життя вашого агента на рифі.",
     communications: "Канали, повідомлення та налаштування аудіо.",
     appearance: "Тема, інтерфейс і налаштування майстра налаштування.",
@@ -1077,7 +1078,7 @@ export const uk: TranslationMap = {
       metadataUpgradeSummary:
         "Цей пристрій уже сполучено, але зміна метаданих очікує на схвалення.",
       mobileHint:
-        "На мобільному? Скопіюйте повний URL (включно з #token=...) з openclaw dashboard --no-open на вашому комп’ютері.",
+        "На мобільному? Скопіюйте повний URL (включно з #token=...) з marketingclaw dashboard --no-open на вашому комп’ютері.",
       docsTitle: "Документація щодо сполучення пристроїв (відкривається в новій вкладці)",
       docsLink: "Документація: Сполучення пристроїв",
     },
@@ -1116,7 +1117,7 @@ export const uk: TranslationMap = {
       modelAuthAttentionExpiredTitle: "Авторизація моделей прострочена",
       modelAuthAttentionExpiringTitle: "Термін авторизації моделей скоро спливає",
       modelAuthAttentionExpiredDesc:
-        "{providers} — повторно виконайте авторизацію через openclaw models auth",
+        "{providers} — повторно виконайте авторизацію через marketingclaw models auth",
       modelAuthAttentionExpiringEntry: "{provider} ({when})",
     },
     attention: {
@@ -1569,9 +1570,10 @@ export const uk: TranslationMap = {
         title: "Потрібна автентифікація",
         summary:
           "Gateway доступний, але цьому браузеру потрібен відповідний токен або пароль перед підключенням.",
-        stepPaste: "Вставте токен з openclaw dashboard --no-open або введіть налаштований пароль.",
+        stepPaste:
+          "Вставте токен з marketingclaw dashboard --no-open або введіть налаштований пароль.",
         stepGenerate:
-          "Якщо токен не налаштовано, виконайте openclaw doctor --generate-gateway-token на хості Gateway.",
+          "Якщо токен не налаштовано, виконайте marketingclaw doctor --generate-gateway-token на хості Gateway.",
         stepConnect: "Після оновлення облікових даних знову натисніть Connect.",
       },
       authFailed: {
@@ -1579,7 +1581,7 @@ export const uk: TranslationMap = {
         summary:
           "Надані облікові дані відхилено. Найпоширеніша причина — застарілий токен або токен, скопійований з іншого Gateway URL.",
         stepDashboard:
-          "Виконайте openclaw dashboard --no-open і відкрийте свіжий URL або вставте його токен.",
+          "Виконайте marketingclaw dashboard --no-open і відкрийте свіжий URL або вставте його токен.",
         stepReplace:
           "Замініть застарілі значення токена/пароля; не використовуйте повторно токен з іншого Gateway URL.",
         stepMode:
@@ -1603,8 +1605,8 @@ export const uk: TranslationMap = {
           "Цей браузер потребує одноразового схвалення від хоста Gateway перед використанням Control UI.",
         upgradeSummary:
           "Цей браузер уже відомий, але запитаний доступ змінився і потребує нового схвалення.",
-        stepList: "Виконайте openclaw devices list на хості Gateway.",
-        stepApproveId: "Схваліть цей запит: openclaw devices approve {requestId}.",
+        stepList: "Виконайте marketingclaw devices list на хості Gateway.",
+        stepApproveId: "Схваліть цей запит: marketingclaw devices approve {requestId}.",
         stepApprove: "Схваліть запит браузера/пристрою, що очікує, з цього списку.",
         stepReconnect: "Підключіться знову після завершення схвалення.",
       },
@@ -1631,22 +1633,22 @@ export const uk: TranslationMap = {
         summary:
           "Надана Control UI і запущений Gateway не узгоджуються щодо підтримуваного протоколу з’єднання.",
         stepDashboard:
-          "Знову відкрийте наданий dashboard через openclaw dashboard, щоб UI і Gateway походили з однієї інсталяції.",
+          "Знову відкрийте наданий dashboard через marketingclaw dashboard, щоб UI і Gateway походили з однієї інсталяції.",
         stepDevUi:
           "Якщо використовуєте pnpm ui:dev, перебудуйте або перезапустіть dev UI з поточного checkout.",
         stepRestart:
-          "Перезапустіть Gateway після оновлення OpenClaw, щоб він надавав поточний протокол.",
+          "Перезапустіть Gateway після оновлення MarketingClaw, щоб він надавав поточний протокол.",
       },
       network: {
         title: "Не вдалося підключитися",
         summary:
           "Браузер не зміг завершити з’єднання з Gateway. Перевірте ціль і транспорт перед повторною спробою з обліковими даними.",
         stepGateway:
-          "Підтвердьте, що Gateway працює, через openclaw status або openclaw gateway run.",
+          "Підтвердьте, що Gateway працює, через marketingclaw status або marketingclaw gateway run.",
         stepUrl:
           "Перевірте WebSocket URL і використовуйте wss://, коли Gateway знаходиться за HTTPS/Tailscale Serve.",
         stepDashboard:
-          "Знову відкрийте dashboard через openclaw dashboard --no-open, щоб повторно скопіювати поточний URL і деталі auth.",
+          "Знову відкрийте dashboard через marketingclaw dashboard --no-open, щоб повторно скопіювати поточний URL і деталі auth.",
       },
     },
   },

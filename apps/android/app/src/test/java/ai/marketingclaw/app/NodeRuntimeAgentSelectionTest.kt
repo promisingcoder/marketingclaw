@@ -1,4 +1,4 @@
-package ai.openclaw.app
+package ai.marketingclaw.app
 
 import android.content.Context
 import org.junit.Assert.assertEquals
@@ -17,7 +17,7 @@ class NodeRuntimeAgentSelectionTest {
     val app = RuntimeEnvironment.getApplication()
     val securePrefs =
       app.getSharedPreferences(
-        "openclaw.node.secure.test.${UUID.randomUUID()}",
+        "marketingclaw.node.secure.test.${UUID.randomUUID()}",
         Context.MODE_PRIVATE,
       )
     val runtime = NodeRuntime(app, SecurePrefs(app, securePrefsOverride = securePrefs))

@@ -1,7 +1,7 @@
 import Foundation
 import Testing
 import UserNotifications
-@testable import OpenClaw
+@testable import MarketingClaw
 
 private final class MockNotificationCenter: NotificationCentering, @unchecked Sendable {
     var authorization: NotificationAuthorizationStatus = .authorized
@@ -36,7 +36,7 @@ private final class MockNotificationCenter: NotificationCentering, @unchecked Se
         let prompt = ExecApprovalNotificationBridge.parsePrompt(
             actionIdentifier: UNNotificationDefaultActionIdentifier,
             userInfo: [
-                "openclaw": [
+                "marketingclaw": [
                     "kind": ExecApprovalNotificationBridge.requestedKind,
                     "approvalId": "approval-123",
                     "gatewayDeviceId": "gateway-a",
@@ -52,7 +52,7 @@ private final class MockNotificationCenter: NotificationCentering, @unchecked Se
         let prompt = ExecApprovalNotificationBridge.parsePrompt(
             actionIdentifier: ExecApprovalNotificationBridge.reviewActionIdentifier,
             userInfo: [
-                "openclaw": [
+                "marketingclaw": [
                     "kind": ExecApprovalNotificationBridge.requestedKind,
                     "approvalId": "approval-456",
                     "gatewayDeviceId": "gateway-b",
@@ -66,9 +66,9 @@ private final class MockNotificationCenter: NotificationCentering, @unchecked Se
 
     @Test func `parse prompt ignores unexpected action identifiers`() {
         let prompt = ExecApprovalNotificationBridge.parsePrompt(
-            actionIdentifier: "openclaw.exec-approval.allow-once",
+            actionIdentifier: "marketingclaw.exec-approval.allow-once",
             userInfo: [
-                "openclaw": [
+                "marketingclaw": [
                     "kind": ExecApprovalNotificationBridge.requestedKind,
                     "approvalId": "approval-789",
                 ],
@@ -83,7 +83,7 @@ private final class MockNotificationCenter: NotificationCentering, @unchecked Se
             NotificationSnapshot(
                 identifier: "remote-approval-1",
                 userInfo: [
-                    "openclaw": [
+                    "marketingclaw": [
                         "kind": ExecApprovalNotificationBridge.requestedKind,
                         "approvalId": "approval-123",
                         "gatewayDeviceId": "gateway-a",
@@ -92,7 +92,7 @@ private final class MockNotificationCenter: NotificationCentering, @unchecked Se
             NotificationSnapshot(
                 identifier: "remote-other",
                 userInfo: [
-                    "openclaw": [
+                    "marketingclaw": [
                         "kind": ExecApprovalNotificationBridge.requestedKind,
                         "approvalId": "approval-123",
                         "gatewayDeviceId": "gateway-b",
@@ -113,7 +113,7 @@ private final class MockNotificationCenter: NotificationCentering, @unchecked Se
 
     @Test func `legacy ownerless approval pushes remain parseable for authenticated route validation`() {
         let userInfo: [AnyHashable: Any] = [
-            "openclaw": [
+            "marketingclaw": [
                 "kind": ExecApprovalNotificationBridge.requestedKind,
                 "approvalId": "approval-ownerless",
             ],
@@ -132,7 +132,7 @@ private final class MockNotificationCenter: NotificationCentering, @unchecked Se
             NotificationSnapshot(
                 identifier: "legacy-ownerless",
                 userInfo: [
-                    "openclaw": [
+                    "marketingclaw": [
                         "kind": ExecApprovalNotificationBridge.requestedKind,
                         "approvalId": "approval-shared",
                     ],
@@ -140,7 +140,7 @@ private final class MockNotificationCenter: NotificationCentering, @unchecked Se
             NotificationSnapshot(
                 identifier: "other-owner",
                 userInfo: [
-                    "openclaw": [
+                    "marketingclaw": [
                         "kind": ExecApprovalNotificationBridge.requestedKind,
                         "approvalId": "approval-shared",
                         "gatewayDeviceId": "gateway-b",

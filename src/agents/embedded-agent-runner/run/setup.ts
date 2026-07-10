@@ -1,7 +1,7 @@
 /**
  * Resolves hook-selected model state and pre-model attachments for a run.
  */
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../../config/types.marketingclaw.js";
 import type { ProviderRuntimeModel } from "../../../plugins/provider-runtime-model.types.js";
 import type {
   PluginHookBeforeAgentStartResult,
@@ -135,7 +135,7 @@ export function buildBeforeModelResolveAttachments(
  * limit as the guard.
  */
 export function resolveEffectiveRuntimeModel(params: {
-  cfg: OpenClawConfig | undefined;
+  cfg: MarketingClawConfig | undefined;
   provider: string;
   contextConfigProvider?: string;
   modelId: string;

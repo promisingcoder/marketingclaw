@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { SubagentRunRecord } from "../../agents/subagent-registry.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { MarketingClawConfig } from "../../config/config.js";
 import type { SessionAbortTargetResult } from "../../config/sessions/session-accessor.js";
 import { createSuiteTempRootTracker } from "../../test-helpers/temp-dir.js";
 import {
@@ -84,7 +84,7 @@ vi.mock("../../acp/control-plane/manager.js", () => ({
   }),
 }));
 
-const suiteTempDirs = createSuiteTempRootTracker({ prefix: "openclaw-abort-" });
+const suiteTempDirs = createSuiteTempRootTracker({ prefix: "marketingclaw-abort-" });
 
 describe("abort detection", () => {
   beforeAll(async () => {
@@ -121,7 +121,7 @@ describe("abort detection", () => {
       ...(typeof params?.commandsTextEnabled === "boolean"
         ? { commands: { text: params.commandsTextEnabled } }
         : {}),
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
     if (params?.sessionIdsByKey) {
       await writeSessionStore(storePath, params.sessionIdsByKey, params.nowMs);
     }
@@ -129,7 +129,7 @@ describe("abort detection", () => {
   }
 
   async function runStopCommand(params: {
-    cfg: OpenClawConfig;
+    cfg: MarketingClawConfig;
     sessionKey?: string;
     parentSessionKey?: string;
     from: string;
@@ -163,7 +163,7 @@ describe("abort detection", () => {
 
   function enqueueQueuedFollowupRun(params: {
     root: string;
-    cfg: OpenClawConfig;
+    cfg: MarketingClawConfig;
     sessionId: string;
     sessionKey: string;
   }) {
@@ -240,8 +240,8 @@ describe("abort detection", () => {
       "abort",
       "exit",
       "interrupt",
-      "stop openclaw",
-      "openclaw stop",
+      "stop marketingclaw",
+      "marketingclaw stop",
       "stop action",
       "stop current action",
       "stop run",
@@ -255,8 +255,8 @@ describe("abort detection", () => {
       "do not do that",
       "please stop",
       "stop please",
-      "STOP OPENCLAW",
-      "stop openclaw!!!",
+      "STOP MARKETINGCLAW",
+      "stop marketingclaw!!!",
       "stop don’t do anything",
       "detente",
       "detén",
@@ -302,7 +302,7 @@ describe("abort detection", () => {
     expect(isAbortRequestText("Stop")).toBe(true);
     expect(isAbortRequestText("STOP")).toBe(true);
     expect(isAbortRequestText("stop action")).toBe(true);
-    expect(isAbortRequestText("stop openclaw!!!")).toBe(true);
+    expect(isAbortRequestText("stop marketingclaw!!!")).toBe(true);
     expect(isAbortRequestText("停下来")).toBe(true);
     expect(isAbortRequestText("暂停")).toBe(true);
     expect(isAbortRequestText("やめて")).toBe(true);
@@ -311,8 +311,12 @@ describe("abort detection", () => {
     expect(isAbortRequestText("stopp")).toBe(true);
     expect(isAbortRequestText("pare")).toBe(true);
     expect(isAbortRequestText(" توقف ")).toBe(true);
-    expect(isAbortRequestText("/stop@openclaw_bot", { botUsername: "openclaw_bot" })).toBe(true);
-    expect(isAbortRequestText("/Stop@openclaw_bot", { botUsername: "openclaw_bot" })).toBe(true);
+    expect(
+      isAbortRequestText("/stop@marketingclaw_bot", { botUsername: "marketingclaw_bot" }),
+    ).toBe(true);
+    expect(
+      isAbortRequestText("/Stop@marketingclaw_bot", { botUsername: "marketingclaw_bot" }),
+    ).toBe(true);
 
     expect(isAbortRequestText("/status")).toBe(false);
     expect(isAbortRequestText("wait")).toBe(false);
@@ -1237,7 +1241,7 @@ describe("abort detection", () => {
 
     expect(
       stopSubagentsForRequester({
-        cfg: {} as OpenClawConfig,
+        cfg: {} as MarketingClawConfig,
         requesterSessionKey: sessionKey,
       }),
     ).toEqual({ stopped: 2 });
@@ -1325,7 +1329,7 @@ describe("abort detection", () => {
       .mockReturnValueOnce([]);
 
     const result = stopSubagentsForRequester({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       requesterSessionKey: sessionKey,
     });
 
@@ -1567,7 +1571,7 @@ describe("abort detection", () => {
     });
 
     const result = stopSubagentsForRequester({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       requesterSessionKey: oldParentKey,
     });
 

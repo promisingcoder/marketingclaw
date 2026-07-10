@@ -1,9 +1,9 @@
 // File Transfer plugin module implements file fetch tool behavior.
 import crypto from "node:crypto";
-import type { AnyAgentTool } from "openclaw/plugin-sdk/agent-harness-runtime";
-import { saveMediaBuffer } from "openclaw/plugin-sdk/media-store";
-import { readPositiveIntegerParam } from "openclaw/plugin-sdk/param-readers";
-import { wrapExternalContent } from "openclaw/plugin-sdk/security-runtime";
+import type { AnyAgentTool } from "marketingclaw/plugin-sdk/agent-harness-runtime";
+import { saveMediaBuffer } from "marketingclaw/plugin-sdk/media-store";
+import { readPositiveIntegerParam } from "marketingclaw/plugin-sdk/param-readers";
+import { wrapExternalContent } from "marketingclaw/plugin-sdk/security-runtime";
 import { appendFileTransferAudit } from "../shared/audit.js";
 import {
   IMAGE_MIME_INLINE_SET,

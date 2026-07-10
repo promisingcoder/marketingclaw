@@ -2,7 +2,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { withTempHome } from "openclaw/plugin-sdk/test-env";
+import { withTempHome } from "marketingclaw/plugin-sdk/test-env";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { normalizeTestText } from "../../../test/helpers/normalize-text.js";
 import { saveAuthProfileStore } from "../../agents/auth-profiles/store.js";
@@ -72,10 +72,10 @@ vi.mock("../../infra/provider-usage.js", async (importOriginal) => {
 
 vi.mock("../../status/status-plugin-health.runtime.js", () => pluginHealthRuntimeMock);
 
-vi.mock("../../agents/harness/builtin-openclaw.js", () => ({
-  createOpenClawAgentHarness: () => ({
-    id: "openclaw",
-    label: "OpenClaw Default",
+vi.mock("../../agents/harness/builtin-marketingclaw.js", () => ({
+  createMarketingClawAgentHarness: () => ({
+    id: "marketingclaw",
+    label: "MarketingClaw Default",
     supports: () => ({ supported: true, priority: 0 }),
     runAttempt: async () => {
       throw new Error("not used in status tests");
@@ -160,7 +160,7 @@ function saveStatusTestAuthProfiles(params: {
   dir: string;
   profiles: Array<{ profileId: string; provider: "openai" | "openai-codex" | "anthropic" }>;
 }): void {
-  const agentDir = path.join(params.dir, ".openclaw", "agents", "main", "agent");
+  const agentDir = path.join(params.dir, ".marketingclaw", "agents", "main", "agent");
   fs.mkdirSync(agentDir, { recursive: true });
   saveAuthProfileStore(
     {
@@ -229,7 +229,7 @@ function writeTranscriptUsageLog(params: {
 }) {
   const logPath = path.join(
     params.dir,
-    ".openclaw",
+    ".marketingclaw",
     "agents",
     params.agentId,
     "sessions",
@@ -498,7 +498,7 @@ describe("buildStatusReply subagent summary", () => {
       runId: "run-status-task-leak",
       endedAt: Date.now(),
       error: [
-        "OpenClaw runtime context (internal):",
+        "MarketingClaw runtime context (internal):",
         "This context is runtime-generated, not user-authored. Keep internal details private.",
         "",
         "[Internal task completion event]",
@@ -510,7 +510,7 @@ describe("buildStatusReply subagent summary", () => {
 
     expect(reply?.text).toContain("📌 Tasks: 1 recent failure");
     expect(reply?.text).toContain("leaked context task");
-    expect(reply?.text).not.toContain("OpenClaw runtime context (internal):");
+    expect(reply?.text).not.toContain("MarketingClaw runtime context (internal):");
     expect(reply?.text).not.toContain("Internal task completion event");
   });
 
@@ -805,7 +805,7 @@ describe("buildStatusReply subagent summary", () => {
     expect(pluginHealthRuntimeMock.collectInstalledPluginHealthSnapshot).not.toHaveBeenCalled();
   });
 
-  it("shows the effective non-OpenClaw embedded harness in /status", async () => {
+  it("shows the effective non-MarketingClaw embedded harness in /status", async () => {
     registerStatusCodexHarness();
 
     const text = await buildStatusText({
@@ -855,7 +855,7 @@ describe("buildStatusReply subagent summary", () => {
 
     await withTempHome(
       async (dir) => {
-        const agentDir = path.join(dir, ".openclaw", "agents", "main", "agent");
+        const agentDir = path.join(dir, ".marketingclaw", "agents", "main", "agent");
         fs.mkdirSync(agentDir, { recursive: true });
         saveAuthProfileStore(
           {
@@ -968,7 +968,7 @@ describe("buildStatusReply subagent summary", () => {
 
     await withTempHome(
       async (dir) => {
-        const agentDir = path.join(dir, ".openclaw", "agents", "main", "agent");
+        const agentDir = path.join(dir, ".marketingclaw", "agents", "main", "agent");
         const codexHome = path.join(agentDir, "codex-home");
         fs.mkdirSync(codexHome, { recursive: true });
         fs.writeFileSync(
@@ -1031,7 +1031,7 @@ describe("buildStatusReply subagent summary", () => {
 
     await withTempHome(
       async (dir) => {
-        const agentDir = path.join(dir, ".openclaw", "agents", "main", "agent");
+        const agentDir = path.join(dir, ".marketingclaw", "agents", "main", "agent");
         fs.mkdirSync(agentDir, { recursive: true });
         saveAuthProfileStore(
           {
@@ -1846,10 +1846,10 @@ describe("buildStatusReply subagent summary", () => {
     );
   });
 
-  it("uses Codex OAuth auth labels for explicit OpenAI OpenClaw auth order", async () => {
+  it("uses Codex OAuth auth labels for explicit OpenAI MarketingClaw auth order", async () => {
     await withTempHome(
       async (dir) => {
-        const agentDir = path.join(dir, ".openclaw", "agents", "main", "agent");
+        const agentDir = path.join(dir, ".marketingclaw", "agents", "main", "agent");
         fs.mkdirSync(agentDir, { recursive: true });
         saveAuthProfileStore(
           {
@@ -1880,7 +1880,7 @@ describe("buildStatusReply subagent summary", () => {
               defaults: {
                 models: {
                   "openai/gpt-5.5": {
-                    agentRuntime: { id: "openclaw" },
+                    agentRuntime: { id: "marketingclaw" },
                   },
                 },
               },
@@ -1902,7 +1902,7 @@ describe("buildStatusReply subagent summary", () => {
           provider: "openai",
           model: "gpt-5.5",
           contextTokens: 32_000,
-          resolvedHarness: "openclaw",
+          resolvedHarness: "marketingclaw",
           resolvedFastMode: false,
           resolvedVerboseLevel: "off",
           resolvedReasoningLevel: "off",
@@ -2117,9 +2117,14 @@ describe("buildStatusReply subagent summary", () => {
   });
 
   it("uses workspace-scoped auth evidence in /status auth labels", async () => {
-    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-status-auth-label-"));
+    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-status-auth-label-"));
     const workspaceDir = path.join(tempRoot, "workspace");
-    const pluginDir = path.join(workspaceDir, ".openclaw", "extensions", "workspace-auth-label");
+    const pluginDir = path.join(
+      workspaceDir,
+      ".marketingclaw",
+      "extensions",
+      "workspace-auth-label",
+    );
     const bundledDir = path.join(tempRoot, "bundled");
     const stateDir = path.join(tempRoot, "state");
     const credentialPath = path.join(tempRoot, "credentials.json");
@@ -2129,7 +2134,7 @@ describe("buildStatusReply subagent summary", () => {
     fs.writeFileSync(path.join(pluginDir, "index.ts"), "export default {}\n", "utf8");
     fs.writeFileSync(credentialPath, "{}", "utf8");
     fs.writeFileSync(
-      path.join(pluginDir, "openclaw.plugin.json"),
+      path.join(pluginDir, "marketingclaw.plugin.json"),
       JSON.stringify({
         id: "workspace-auth-label",
         configSchema: { type: "object" },
@@ -2155,8 +2160,8 @@ describe("buildStatusReply subagent summary", () => {
     try {
       await withEnvAsync(
         {
-          OPENCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
-          OPENCLAW_STATE_DIR: stateDir,
+          MARKETINGCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
+          MARKETINGCLAW_STATE_DIR: stateDir,
           ANTHROPIC_API_KEY: undefined,
           ANTHROPIC_OAUTH_TOKEN: undefined,
           WORKSPACE_STATUS_CREDENTIALS: credentialPath,
@@ -2195,7 +2200,7 @@ describe("buildStatusReply subagent summary", () => {
     }
   });
 
-  it("keeps /status on a session-pinned OpenClaw harness after config changes", async () => {
+  it("keeps /status on a session-pinned MarketingClaw harness after config changes", async () => {
     registerStatusCodexHarness();
 
     const text = await buildStatusText({
@@ -2211,7 +2216,7 @@ describe("buildStatusReply subagent summary", () => {
         sessionId: "sess-status-pinned-agent",
         updatedAt: 0,
         fastMode: true,
-        agentHarnessId: "openclaw",
+        agentHarnessId: "marketingclaw",
       },
       sessionKey: "agent:main:main",
       parentSessionKey: "agent:main:main",

@@ -7,7 +7,7 @@ import { afterAll, afterEach, beforeAll, expect, vi } from "vitest";
 import { clearRuntimeAuthProfileStoreSnapshots } from "../../../src/agents/auth-profiles.js";
 import type { EmbeddedAgentQueueMessageOutcome } from "../../../src/agents/embedded-agent-runner/runs.js";
 import { withFastReplyConfig } from "../../../src/auto-reply/reply/get-reply-fast-path.js";
-import type { OpenClawConfig } from "../../../src/config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../../src/config/types.marketingclaw.js";
 
 // Avoid exporting vitest mock types (TS2742 under pnpm + d.ts emit).
 type AnyMock = any;
@@ -22,22 +22,29 @@ function getSharedMocks<T>(key: string, create: () => T): T {
   return store[symbol];
 }
 
-const embeddedAgentMocks = getSharedMocks("openclaw.trigger-handling.embedded-agent-mocks", () => ({
-  abortEmbeddedAgentRun: vi.fn().mockReturnValue(false),
-  compactEmbeddedAgentSession: vi.fn(),
-  runEmbeddedAgent: vi.fn(),
-  queueEmbeddedAgentMessageWithOutcome: vi.fn(
-    (sessionId: string, _text?: string, _options?: unknown): EmbeddedAgentQueueMessageOutcome => ({
-      queued: false,
-      sessionId,
-      reason: "not_streaming",
-      gatewayHealth: "live",
-    }),
-  ),
-  resolveActiveEmbeddedRunSessionId: vi.fn().mockReturnValue(undefined),
-  isEmbeddedAgentRunActive: vi.fn().mockReturnValue(false),
-  isEmbeddedAgentRunStreaming: vi.fn().mockReturnValue(false),
-}));
+const embeddedAgentMocks = getSharedMocks(
+  "marketingclaw.trigger-handling.embedded-agent-mocks",
+  () => ({
+    abortEmbeddedAgentRun: vi.fn().mockReturnValue(false),
+    compactEmbeddedAgentSession: vi.fn(),
+    runEmbeddedAgent: vi.fn(),
+    queueEmbeddedAgentMessageWithOutcome: vi.fn(
+      (
+        sessionId: string,
+        _text?: string,
+        _options?: unknown,
+      ): EmbeddedAgentQueueMessageOutcome => ({
+        queued: false,
+        sessionId,
+        reason: "not_streaming",
+        gatewayHealth: "live",
+      }),
+    ),
+    resolveActiveEmbeddedRunSessionId: vi.fn().mockReturnValue(undefined),
+    isEmbeddedAgentRunActive: vi.fn().mockReturnValue(false),
+    isEmbeddedAgentRunStreaming: vi.fn().mockReturnValue(false),
+  }),
+);
 
 export function getAbortEmbeddedAgentRunMock(): AnyMock {
   return embeddedAgentMocks.abortEmbeddedAgentRun;
@@ -118,11 +125,14 @@ const DEFAULT_MODEL_CATALOG = [
   { provider: "minimax", id: "MiniMax-M2.7", name: "MiniMax M2.7" },
 ];
 
-const modelCatalogMocks = getSharedMocks("openclaw.trigger-handling.model-catalog-mocks", () => ({
-  loadManifestModelCatalog: vi.fn(() => DEFAULT_MODEL_CATALOG),
-  loadModelCatalog: vi.fn().mockResolvedValue(DEFAULT_MODEL_CATALOG),
-  resetModelCatalogCacheForTest: vi.fn(),
-}));
+const modelCatalogMocks = getSharedMocks(
+  "marketingclaw.trigger-handling.model-catalog-mocks",
+  () => ({
+    loadManifestModelCatalog: vi.fn(() => DEFAULT_MODEL_CATALOG),
+    loadModelCatalog: vi.fn().mockResolvedValue(DEFAULT_MODEL_CATALOG),
+    resetModelCatalogCacheForTest: vi.fn(),
+  }),
+);
 
 const installModelCatalogMock = () =>
   vi.doMock("../../../src/agents/model-catalog.js", () => modelCatalogMocks);
@@ -144,20 +154,23 @@ vi.doMock("../../../src/plugins/provider-runtime.runtime.js", () => ({
   refreshProviderOAuthCredentialWithPlugin: async () => undefined,
 }));
 
-const modelFallbackMocks = getSharedMocks("openclaw.trigger-handling.model-fallback-mocks", () => ({
-  runWithModelFallback: vi.fn(
-    async (params: {
-      provider: string;
-      model: string;
-      run: (provider: string, model: string, runOptions?: unknown) => Promise<unknown>;
-    }) => ({
-      result: await params.run(params.provider, params.model),
-      provider: params.provider,
-      model: params.model,
-      attempts: [],
-    }),
-  ),
-}));
+const modelFallbackMocks = getSharedMocks(
+  "marketingclaw.trigger-handling.model-fallback-mocks",
+  () => ({
+    runWithModelFallback: vi.fn(
+      async (params: {
+        provider: string;
+        model: string;
+        run: (provider: string, model: string, runOptions?: unknown) => Promise<unknown>;
+      }) => ({
+        result: await params.run(params.provider, params.model),
+        provider: params.provider,
+        model: params.model,
+        attempts: [],
+      }),
+    ),
+  }),
+);
 
 const installModelFallbackMock = () =>
   vi.doMock("../../../src/agents/model-fallback.js", () => modelFallbackMocks);
@@ -168,7 +181,7 @@ vi.doMock("../../../src/infra/git-commit.js", () => ({
   resolveCommitHash: vi.fn(() => "abcdef0"),
 }));
 
-const webSessionMocks = getSharedMocks("openclaw.trigger-handling.web-session-mocks", () => ({
+const webSessionMocks = getSharedMocks("marketingclaw.trigger-handling.web-session-mocks", () => ({
   webAuthExists: vi.fn().mockResolvedValue(true),
   getWebAuthAgeMs: vi.fn().mockReturnValue(120_000),
   readWebSelfId: vi.fn().mockReturnValue({ e164: "+1999" }),
@@ -190,7 +203,7 @@ type TempHomeEnvSnapshot = {
   userProfile: string | undefined;
   homeDrive: string | undefined;
   homePath: string | undefined;
-  openclawHome: string | undefined;
+  marketingclawHome: string | undefined;
   stateDir: string | undefined;
 };
 
@@ -203,8 +216,8 @@ function snapshotTempHomeEnv(): TempHomeEnvSnapshot {
     userProfile: process.env.USERPROFILE,
     homeDrive: process.env.HOMEDRIVE,
     homePath: process.env.HOMEPATH,
-    openclawHome: process.env.OPENCLAW_HOME,
-    stateDir: process.env.OPENCLAW_STATE_DIR,
+    marketingclawHome: process.env.MARKETINGCLAW_HOME,
+    stateDir: process.env.MARKETINGCLAW_STATE_DIR,
   };
 }
 
@@ -221,15 +234,15 @@ function restoreTempHomeEnv(snapshot: TempHomeEnvSnapshot): void {
   restoreKey("USERPROFILE", snapshot.userProfile);
   restoreKey("HOMEDRIVE", snapshot.homeDrive);
   restoreKey("HOMEPATH", snapshot.homePath);
-  restoreKey("OPENCLAW_HOME", snapshot.openclawHome);
-  restoreKey("OPENCLAW_STATE_DIR", snapshot.stateDir);
+  restoreKey("MARKETINGCLAW_HOME", snapshot.marketingclawHome);
+  restoreKey("MARKETINGCLAW_STATE_DIR", snapshot.stateDir);
 }
 
 function setTempHomeEnv(home: string): void {
   process.env.HOME = home;
   process.env.USERPROFILE = home;
-  delete process.env.OPENCLAW_HOME;
-  process.env.OPENCLAW_STATE_DIR = join(home, ".openclaw");
+  delete process.env.MARKETINGCLAW_HOME;
+  process.env.MARKETINGCLAW_STATE_DIR = join(home, ".marketingclaw");
 
   if (process.platform !== "win32") {
     return;
@@ -243,7 +256,7 @@ function setTempHomeEnv(home: string): void {
 }
 
 beforeAll(async () => {
-  suiteTempHomeRoot = await fs.mkdtemp(join(os.tmpdir(), "openclaw-triggers-suite-"));
+  suiteTempHomeRoot = await fs.mkdtemp(join(os.tmpdir(), "marketingclaw-triggers-suite-"));
 });
 
 afterAll(async () => {
@@ -262,7 +275,7 @@ afterAll(async () => {
 export async function withTempHome<T>(fn: (home: string) => Promise<T>): Promise<T> {
   const home = join(suiteTempHomeRoot, `case-${++suiteTempHomeId}`);
   const snapshot = snapshotTempHomeEnv();
-  await fs.mkdir(join(home, ".openclaw", "agents", "main", "sessions"), { recursive: true });
+  await fs.mkdir(join(home, ".marketingclaw", "agents", "main", "sessions"), { recursive: true });
   setTempHomeEnv(home);
 
   try {
@@ -287,12 +300,12 @@ export async function withTempHome<T>(fn: (home: string) => Promise<T>): Promise
   }
 }
 
-export function makeCfg(home: string): OpenClawConfig {
+export function makeCfg(home: string): MarketingClawConfig {
   return withFastReplyConfig({
     agents: {
       defaults: {
         model: { primary: "anthropic/claude-opus-4-7" },
-        workspace: join(home, "openclaw"),
+        workspace: join(home, "marketingclaw"),
         // Test harness: avoid 1s coalescer idle sleeps that dominate trigger suites.
         blockStreamingCoalesce: { idleMs: 1 },
         // Trigger tests assert routing/authorization behavior, not delivery pacing.
@@ -310,7 +323,7 @@ export function makeCfg(home: string): OpenClawConfig {
       },
     },
     session: { store: join(home, "sessions.json") },
-  } as OpenClawConfig);
+  } as MarketingClawConfig);
 }
 
 async function loadGetReplyFromConfig() {

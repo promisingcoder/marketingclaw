@@ -14,9 +14,9 @@ export const page = definePage({
   component: () =>
     import("./skill-workshop-page.ts").then(() => ({
       render: (data: unknown) => html`
-        <openclaw-skill-workshop-page
+        <marketingclaw-skill-workshop-page
           .data=${data as SkillWorkshopRouteData | undefined}
-        ></openclaw-skill-workshop-page>
+        ></marketingclaw-skill-workshop-page>
       `,
     })),
   loader: async (context: ApplicationContext) => {

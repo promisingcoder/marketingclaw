@@ -1,15 +1,15 @@
 import Foundation
 
 enum CommandResolver {
-    private static let projectRootDefaultsKey = "openclaw.gatewayProjectRootPath"
-    private static let helperName = "openclaw"
+    private static let projectRootDefaultsKey = "marketingclaw.gatewayProjectRootPath"
+    private static let helperName = "marketingclaw"
 
     static func gatewayEntrypoint(in root: URL) -> String? {
         let distEntry = root.appendingPathComponent("dist/index.js").path
         if FileManager().isReadableFile(atPath: distEntry) { return distEntry }
-        let openclawEntry = root.appendingPathComponent("openclaw.mjs").path
-        if FileManager().isReadableFile(atPath: openclawEntry) { return openclawEntry }
-        let binEntry = root.appendingPathComponent("bin/openclaw.js").path
+        let marketingclawEntry = root.appendingPathComponent("marketingclaw.mjs").path
+        if FileManager().isReadableFile(atPath: marketingclawEntry) { return marketingclawEntry }
+        let binEntry = root.appendingPathComponent("bin/marketingclaw.js").path
         if FileManager().isReadableFile(atPath: binEntry) { return binEntry }
         return nil
     }
@@ -38,9 +38,9 @@ enum CommandResolver {
 
     static func errorCommand(with message: String) -> [String] {
         let script = """
-        cat <<'__OPENCLAW_ERR__' >&2
+        cat <<'__MARKETINGCLAW_ERR__' >&2
         \(message)
-        __OPENCLAW_ERR__
+        __MARKETINGCLAW_ERR__
         exit 1
         """
         return ["/bin/sh", "-c", script]
@@ -54,7 +54,7 @@ enum CommandResolver {
             return url
         }
         let fallback = FileManager().homeDirectoryForCurrentUser
-            .appendingPathComponent("Projects/openclaw")
+            .appendingPathComponent("Projects/marketingclaw")
         if FileManager().fileExists(atPath: fallback.path) {
             return fallback
         }
@@ -74,7 +74,7 @@ enum CommandResolver {
             .split(separator: ":").map(String.init) ?? []
         let home = FileManager().homeDirectoryForCurrentUser
         let projectRoot = self.projectRoot()
-        let validatedExecutable = self.validatedOpenClawExecutable(
+        let validatedExecutable = self.validatedMarketingClawExecutable(
             defaults: .standard,
             fileManager: .default,
             requiredVersion: GatewayEnvironment.expectedGatewayVersionString())
@@ -92,7 +92,7 @@ enum CommandResolver {
         validatedExecutable: String? = nil) -> [String]
     {
         var preferredPaths: [String] = []
-        let managedPaths = self.openclawManagedPaths(home: home)
+        let managedPaths = self.marketingclawManagedPaths(home: home)
         if let validatedExecutable {
             let validatedBin = URL(fileURLWithPath: validatedExecutable).deletingLastPathComponent().path
             if managedPaths.contains(validatedBin) {
@@ -119,7 +119,7 @@ enum CommandResolver {
         return (preferredPaths + fallbackPaths + current).filter { seen.insert($0).inserted }
     }
 
-    static func validatedOpenClawExecutable(
+    static func validatedMarketingClawExecutable(
         defaults: UserDefaults,
         fileManager: FileManager,
         requiredVersion: String?) -> String?
@@ -134,9 +134,9 @@ enum CommandResolver {
         return validatedVersion.compatible(with: required) ? executable : nil
     }
 
-    private static func openclawManagedPaths(home: URL) -> [String] {
+    private static func marketingclawManagedPaths(home: URL) -> [String] {
         let bases = [
-            home.appendingPathComponent(".openclaw"),
+            home.appendingPathComponent(".marketingclaw"),
         ]
         var paths: [String] = []
         for base in bases {
@@ -228,11 +228,11 @@ enum CommandResolver {
         return nil
     }
 
-    static func openclawExecutable(searchPaths: [String]? = nil) -> String? {
+    static func marketingclawExecutable(searchPaths: [String]? = nil) -> String? {
         self.findExecutable(named: self.helperName, searchPaths: searchPaths)
     }
 
-    static func projectOpenClawExecutable(projectRoot: URL? = nil) -> String? {
+    static func projectMarketingClawExecutable(projectRoot: URL? = nil) -> String? {
         #if DEBUG
         let root = projectRoot ?? self.projectRoot()
         let candidate = root.appendingPathComponent("node_modules/.bin").appendingPathComponent(self.helperName).path
@@ -245,8 +245,8 @@ enum CommandResolver {
     static func nodeCliPath() -> String? {
         let root = self.projectRoot()
         let candidates = [
-            root.appendingPathComponent("openclaw.mjs").path,
-            root.appendingPathComponent("bin/openclaw.js").path,
+            root.appendingPathComponent("marketingclaw.mjs").path,
+            root.appendingPathComponent("bin/marketingclaw.js").path,
         ]
         for candidate in candidates where FileManager().isReadableFile(atPath: candidate) {
             return candidate
@@ -254,8 +254,8 @@ enum CommandResolver {
         return nil
     }
 
-    static func hasAnyOpenClawInvoker(searchPaths: [String]? = nil) -> Bool {
-        if self.openclawExecutable(searchPaths: searchPaths) != nil { return true }
+    static func hasAnyMarketingClawInvoker(searchPaths: [String]? = nil) -> Bool {
+        if self.marketingclawExecutable(searchPaths: searchPaths) != nil { return true }
         if self.findExecutable(named: "pnpm", searchPaths: searchPaths) != nil { return true }
         if self.findExecutable(named: "node", searchPaths: searchPaths) != nil,
            self.nodeCliPath() != nil
@@ -265,7 +265,7 @@ enum CommandResolver {
         return false
     }
 
-    static func openclawNodeCommand(
+    static func marketingclawNodeCommand(
         subcommand: String,
         extraArgs: [String] = [],
         defaults: UserDefaults = .standard,
@@ -283,11 +283,11 @@ enum CommandResolver {
         }
 
         let root = projectRoot ?? self.projectRoot()
-        if let openclawPath = self.projectOpenClawExecutable(projectRoot: root) {
-            return [openclawPath, subcommand] + extraArgs
+        if let marketingclawPath = self.projectMarketingClawExecutable(projectRoot: root) {
+            return [marketingclawPath, subcommand] + extraArgs
         }
-        if let openclawPath = self.openclawExecutable(searchPaths: searchPaths) {
-            return [openclawPath, subcommand] + extraArgs
+        if let marketingclawPath = self.marketingclawExecutable(searchPaths: searchPaths) {
+            return [marketingclawPath, subcommand] + extraArgs
         }
 
         let runtimeResult = self.runtimeResolution(searchPaths: searchPaths)
@@ -306,13 +306,13 @@ enum CommandResolver {
 
         if let pnpm = self.findExecutable(named: "pnpm", searchPaths: searchPaths) {
             // Use --silent to avoid pnpm lifecycle banners that would corrupt JSON outputs.
-            return [pnpm, "--silent", "openclaw", subcommand] + extraArgs
+            return [pnpm, "--silent", "marketingclaw", subcommand] + extraArgs
         }
 
         switch runtimeResult {
         case .success:
             let missingEntry = """
-            openclaw entrypoint missing (looked for dist/index.js or openclaw.mjs); run pnpm build.
+            marketingclaw entrypoint missing (looked for dist/index.js or marketingclaw.mjs); run pnpm build.
             """
             return self.errorCommand(with: missingEntry)
         case let .failure(error):
@@ -320,7 +320,7 @@ enum CommandResolver {
         }
     }
 
-    static func openclawCommand(
+    static func marketingclawCommand(
         subcommand: String,
         extraArgs: [String] = [],
         defaults: UserDefaults = .standard,
@@ -328,7 +328,7 @@ enum CommandResolver {
         searchPaths: [String]? = nil,
         projectRoot: URL? = nil) -> [String]
     {
-        self.openclawNodeCommand(
+        self.marketingclawNodeCommand(
             subcommand: subcommand,
             extraArgs: extraArgs,
             defaults: defaults,
@@ -352,7 +352,7 @@ enum CommandResolver {
         guard !settings.target.isEmpty else { return nil }
         guard let parsed = self.parseSSHTarget(settings.target) else { return nil }
 
-        // Run the real openclaw CLI on the remote host.
+        // Run the real marketingclaw CLI on the remote host.
         let exportedPath = [
             "/opt/homebrew/bin",
             "/usr/local/bin",
@@ -369,7 +369,7 @@ enum CommandResolver {
 
         let projectSection = if userPRJ.isEmpty {
             """
-            DEFAULT_PRJ="$HOME/Projects/openclaw"
+            DEFAULT_PRJ="$HOME/Projects/marketingclaw"
             if [ -d "$DEFAULT_PRJ" ]; then
               PRJ="$DEFAULT_PRJ"
               cd "$PRJ" || { echo "Project root not found: $PRJ"; exit 127; }
@@ -408,9 +408,9 @@ enum CommandResolver {
         CLI="";
         \(cliSection)
         \(projectSection)
-        if command -v openclaw >/dev/null 2>&1; then
-          CLI="$(command -v openclaw)"
-          openclaw \(quotedArgs);
+        if command -v marketingclaw >/dev/null 2>&1; then
+          CLI="$(command -v marketingclaw)"
+          marketingclaw \(quotedArgs);
         elif [ -n "${PRJ:-}" ] && [ -f "$PRJ/dist/index.js" ]; then
           if command -v node >/dev/null 2>&1; then
             CLI="node $PRJ/dist/index.js"
@@ -418,25 +418,25 @@ enum CommandResolver {
           else
             echo "Node >=22 required on remote host"; exit 127;
           fi
-        elif [ -n "${PRJ:-}" ] && [ -f "$PRJ/openclaw.mjs" ]; then
+        elif [ -n "${PRJ:-}" ] && [ -f "$PRJ/marketingclaw.mjs" ]; then
           if command -v node >/dev/null 2>&1; then
-            CLI="node $PRJ/openclaw.mjs"
-            node "$PRJ/openclaw.mjs" \(quotedArgs);
+            CLI="node $PRJ/marketingclaw.mjs"
+            node "$PRJ/marketingclaw.mjs" \(quotedArgs);
           else
             echo "Node >=22 required on remote host"; exit 127;
           fi
-        elif [ -n "${PRJ:-}" ] && [ -f "$PRJ/bin/openclaw.js" ]; then
+        elif [ -n "${PRJ:-}" ] && [ -f "$PRJ/bin/marketingclaw.js" ]; then
           if command -v node >/dev/null 2>&1; then
-            CLI="node $PRJ/bin/openclaw.js"
-            node "$PRJ/bin/openclaw.js" \(quotedArgs);
+            CLI="node $PRJ/bin/marketingclaw.js"
+            node "$PRJ/bin/marketingclaw.js" \(quotedArgs);
           else
             echo "Node >=22 required on remote host"; exit 127;
           fi
         elif command -v pnpm >/dev/null 2>&1; then
-          CLI="pnpm --silent openclaw"
-          pnpm --silent openclaw \(quotedArgs);
+          CLI="pnpm --silent marketingclaw"
+          pnpm --silent marketingclaw \(quotedArgs);
         else
-          echo "openclaw CLI missing on remote host"; exit 127;
+          echo "marketingclaw CLI missing on remote host"; exit 127;
         fi
         """
         // Remote credentials require strict host verification unless config explicitly opts into OpenSSH policy.
@@ -490,7 +490,7 @@ enum CommandResolver {
         defaults: UserDefaults = .standard,
         configRoot: [String: Any]? = nil) -> RemoteSettings
     {
-        let root = configRoot ?? OpenClawConfigFile.loadDict()
+        let root = configRoot ?? MarketingClawConfigFile.loadDict()
         let mode = ConnectionModeResolver.resolve(root: root, defaults: defaults).mode
         let remote = (root["gateway"] as? [String: Any])?["remote"] as? [String: Any]
         let configuredTarget = self.sanitizedTarget(remote?["sshTarget"] as? String ?? "")

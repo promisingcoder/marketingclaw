@@ -1,41 +1,41 @@
 import Foundation
-import OpenClawKit
+import MarketingClawKit
 import Testing
-@testable import OpenClawChatUI
+@testable import MarketingClawChatUI
 
 private final class HapticRecorder: @unchecked Sendable {
     private let lock = NSLock()
-    private var recordedEvents: [OpenClawChatHaptics.Event] = []
+    private var recordedEvents: [MarketingClawChatHaptics.Event] = []
 
-    var events: [OpenClawChatHaptics.Event] {
+    var events: [MarketingClawChatHaptics.Event] {
         self.lock.lock()
         defer { self.lock.unlock() }
         return self.recordedEvents
     }
 
-    func record(_ event: OpenClawChatHaptics.Event) {
+    func record(_ event: MarketingClawChatHaptics.Event) {
         self.lock.lock()
         defer { self.lock.unlock() }
         self.recordedEvents.append(event)
     }
 }
 
-private final class HapticsTestTransport: @unchecked Sendable, OpenClawChatTransport {
-    private let response: OpenClawChatSendResponse
+private final class HapticsTestTransport: @unchecked Sendable, MarketingClawChatTransport {
+    private let response: MarketingClawChatSendResponse
     private let historyMessages: [AnyCodable]
-    private let stream: AsyncStream<OpenClawChatTransportEvent>
-    private let continuation: AsyncStream<OpenClawChatTransportEvent>.Continuation
+    private let stream: AsyncStream<MarketingClawChatTransportEvent>
+    private let continuation: AsyncStream<MarketingClawChatTransportEvent>.Continuation
 
     init(status: String, historyMessages: [AnyCodable] = []) {
-        self.response = OpenClawChatSendResponse(runId: "run-1", status: status)
+        self.response = MarketingClawChatSendResponse(runId: "run-1", status: status)
         self.historyMessages = historyMessages
-        var continuation: AsyncStream<OpenClawChatTransportEvent>.Continuation!
+        var continuation: AsyncStream<MarketingClawChatTransportEvent>.Continuation!
         self.stream = AsyncStream { continuation = $0 }
         self.continuation = continuation
     }
 
-    func requestHistory(sessionKey: String) async throws -> OpenClawChatHistoryPayload {
-        OpenClawChatHistoryPayload(
+    func requestHistory(sessionKey: String) async throws -> MarketingClawChatHistoryPayload {
+        MarketingClawChatHistoryPayload(
             sessionKey: sessionKey,
             sessionId: "session-1",
             messages: self.historyMessages,
@@ -47,7 +47,7 @@ private final class HapticsTestTransport: @unchecked Sendable, OpenClawChatTrans
         message _: String,
         thinking _: String,
         idempotencyKey _: String,
-        attachments _: [OpenClawChatAttachmentPayload]) async throws -> OpenClawChatSendResponse
+        attachments _: [MarketingClawChatAttachmentPayload]) async throws -> MarketingClawChatSendResponse
     {
         self.response
     }
@@ -56,30 +56,30 @@ private final class HapticsTestTransport: @unchecked Sendable, OpenClawChatTrans
         true
     }
 
-    func events() -> AsyncStream<OpenClawChatTransportEvent> {
+    func events() -> AsyncStream<MarketingClawChatTransportEvent> {
         self.stream
     }
 
-    func emit(_ event: OpenClawChatTransportEvent) {
+    func emit(_ event: MarketingClawChatTransportEvent) {
         self.continuation.yield(event)
     }
 }
 
 private func makeHapticsViewModel(status: String, historyMessages: [AnyCodable] = []) async -> (
     HapticsTestTransport,
-    OpenClawChatViewModel,
+    MarketingClawChatViewModel,
     HapticRecorder)
 {
     let transport = HapticsTestTransport(status: status, historyMessages: historyMessages)
     let recorder = HapticRecorder()
-    let haptics = OpenClawChatHaptics(performer: recorder.record)
+    let haptics = MarketingClawChatHaptics(performer: recorder.record)
     let viewModel = await MainActor.run {
-        OpenClawChatViewModel(sessionKey: "main", transport: transport, haptics: haptics)
+        MarketingClawChatViewModel(sessionKey: "main", transport: transport, haptics: haptics)
     }
     return (transport, viewModel, recorder)
 }
 
-private func sendHapticsTestMessage(_ viewModel: OpenClawChatViewModel) async {
+private func sendHapticsTestMessage(_ viewModel: MarketingClawChatViewModel) async {
     await MainActor.run {
         viewModel.input = "hello"
         viewModel.send()
@@ -100,7 +100,7 @@ struct ChatHapticsTests {
         await sendHapticsTestMessage(viewModel)
         try await waitUntil("message accepted") { recorder.events == [.messageSent] }
 
-        let final = OpenClawChatTransportEvent.chat(OpenClawChatEventPayload(
+        let final = MarketingClawChatTransportEvent.chat(MarketingClawChatEventPayload(
             runId: "run-1",
             sessionKey: "main",
             state: "final",

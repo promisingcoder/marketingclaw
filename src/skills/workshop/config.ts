@@ -1,6 +1,6 @@
-// Workshop config helpers resolve skill workshop settings from OpenClaw config.
-import { asNullableRecord } from "@openclaw/normalization-core/record-coerce";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+// Workshop config helpers resolve skill workshop settings from MarketingClaw config.
+import { asNullableRecord } from "@marketingclaw/normalization-core/record-coerce";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 
 /** Runtime configuration for the skill workshop proposal flow. */
 export type SkillWorkshopConfig = {
@@ -37,7 +37,7 @@ function readApprovalPolicy(value: unknown, fallback: SkillWorkshopConfig["appro
   return value === "auto" ? "auto" : fallback;
 }
 
-export function resolveSkillWorkshopConfig(config?: OpenClawConfig): SkillWorkshopConfig {
+export function resolveSkillWorkshopConfig(config?: MarketingClawConfig): SkillWorkshopConfig {
   const raw = asNullableRecord(config?.skills?.workshop) ?? {};
   const autonomous = asNullableRecord(raw.autonomous) ?? {};
   return {

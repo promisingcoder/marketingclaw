@@ -1,4 +1,4 @@
-// Sync Moonshot Docs script supports OpenClaw repository automation.
+// Sync Moonshot Docs script supports MarketingClaw repository automation.
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";

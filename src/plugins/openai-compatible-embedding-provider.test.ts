@@ -479,7 +479,7 @@ describe("openai-compatible generic embedding provider", () => {
 
   it("resolves env SecretRef API keys on the memory search secret surface", async () => {
     const token = "env-secret-token";
-    const envVar = "OPENCLAW_TEST_OPENAI_COMPATIBLE_EMBEDDING_API_KEY";
+    const envVar = "MARKETINGCLAW_TEST_OPENAI_COMPATIBLE_EMBEDDING_API_KEY";
     const server = await startEmbeddingServer({ token });
 
     await withEnvAsync({ [envVar]: token }, async () => {
@@ -499,7 +499,7 @@ describe("openai-compatible generic embedding provider", () => {
   });
 
   it("enforces configured env SecretRef allowlists for API keys", async () => {
-    const envVar = "OPENCLAW_TEST_OPENAI_COMPATIBLE_BLOCKED_API_KEY";
+    const envVar = "MARKETINGCLAW_TEST_OPENAI_COMPATIBLE_BLOCKED_API_KEY";
     const server = await startEmbeddingServer();
 
     await withEnvAsync({ [envVar]: "blocked-token" }, async () => {
@@ -509,7 +509,7 @@ describe("openai-compatible generic embedding provider", () => {
             config: {
               secrets: {
                 providers: {
-                  default: { source: "env", allowlist: ["OPENCLAW_ALLOWED_ONLY"] },
+                  default: { source: "env", allowlist: ["MARKETINGCLAW_ALLOWED_ONLY"] },
                 },
               },
             } as EmbeddingProviderCreateOptions["config"],
@@ -526,7 +526,7 @@ describe("openai-compatible generic embedding provider", () => {
   });
 
   it("enforces configured env SecretRef allowlists for custom headers", async () => {
-    const envVar = "OPENCLAW_TEST_OPENAI_COMPATIBLE_BLOCKED_HEADER";
+    const envVar = "MARKETINGCLAW_TEST_OPENAI_COMPATIBLE_BLOCKED_HEADER";
     const server = await startEmbeddingServer();
 
     await withEnvAsync({ [envVar]: "blocked-header" }, async () => {
@@ -536,7 +536,7 @@ describe("openai-compatible generic embedding provider", () => {
             config: {
               secrets: {
                 providers: {
-                  default: { source: "env", allowlist: ["OPENCLAW_ALLOWED_ONLY"] },
+                  default: { source: "env", allowlist: ["MARKETINGCLAW_ALLOWED_ONLY"] },
                 },
               },
             } as EmbeddingProviderCreateOptions["config"],
@@ -560,7 +560,7 @@ describe("openai-compatible generic embedding provider", () => {
 
   it("resolves env-template API key strings before treating them as inline secrets", async () => {
     const token = "env-template-token";
-    const envVar = "OPENCLAW_TEST_OPENAI_COMPATIBLE_EMBEDDING_TEMPLATE_KEY";
+    const envVar = "MARKETINGCLAW_TEST_OPENAI_COMPATIBLE_EMBEDDING_TEMPLATE_KEY";
     const server = await startEmbeddingServer({ token });
 
     await withEnvAsync({ [envVar]: token }, async () => {
@@ -580,7 +580,7 @@ describe("openai-compatible generic embedding provider", () => {
   });
 
   it("does not treat missing env-template API key strings as inline secrets", async () => {
-    const envVar = "OPENCLAW_TEST_OPENAI_COMPATIBLE_EMBEDDING_MISSING_TEMPLATE_KEY";
+    const envVar = "MARKETINGCLAW_TEST_OPENAI_COMPATIBLE_EMBEDDING_MISSING_TEMPLATE_KEY";
     const server = await startEmbeddingServer();
 
     await withEnvAsync({ [envVar]: undefined }, async () => {

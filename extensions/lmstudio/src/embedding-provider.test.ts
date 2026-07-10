@@ -1,5 +1,5 @@
 // LM Studio embedding provider tests cover preload context-length precedence.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/plugin-entry";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/plugin-entry";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createLmstudioEmbeddingProvider } from "./embedding-provider.js";
 
@@ -38,7 +38,7 @@ const EMBEDDING_MODEL = "text-embedding-nomic-embed-text-v1.5";
 function buildConfig(params: {
   model?: Record<string, unknown>;
   provider?: Record<string, unknown>;
-}): OpenClawConfig {
+}): MarketingClawConfig {
   return {
     models: {
       providers: {
@@ -49,10 +49,10 @@ function buildConfig(params: {
         },
       },
     },
-  } as unknown as OpenClawConfig;
+  } as unknown as MarketingClawConfig;
 }
 
-async function readRequestedContextLength(config: OpenClawConfig): Promise<unknown> {
+async function readRequestedContextLength(config: MarketingClawConfig): Promise<unknown> {
   await createLmstudioEmbeddingProvider({
     config,
     provider: "lmstudio",

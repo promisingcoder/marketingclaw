@@ -144,7 +144,7 @@ describe("GatewayClient", () => {
     ).toBe(30_000);
     expect(
       resolveGatewayClientConnectChallengeTimeoutMs({
-        env: { OPENCLAW_CONNECT_CHALLENGE_TIMEOUT_MS: "6000" },
+        env: { MARKETINGCLAW_CONNECT_CHALLENGE_TIMEOUT_MS: "6000" },
       }),
     ).toBe(6_000);
   });

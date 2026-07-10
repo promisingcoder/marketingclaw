@@ -1,6 +1,6 @@
 // Legacy X search migration tests cover doctor repair of old X search config.
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../../../config/config.js";
+import type { MarketingClawConfig } from "../../../config/config.js";
 import { migrateLegacyXSearchConfig } from "./legacy-x-search-migrate.js";
 
 describe("legacy x_search config migration", () => {
@@ -15,7 +15,7 @@ describe("legacy x_search config migration", () => {
           },
         } as Record<string, unknown>,
       },
-    } as OpenClawConfig);
+    } as MarketingClawConfig);
 
     expect((res.config.tools?.web as Record<string, unknown> | undefined)?.x_search).toEqual({
       enabled: true,
@@ -61,7 +61,7 @@ describe("legacy x_search config migration", () => {
           },
         },
       },
-    } as OpenClawConfig);
+    } as MarketingClawConfig);
 
     expect((res.config.tools?.web as Record<string, unknown> | undefined)?.x_search).toEqual({
       enabled: true,
@@ -92,7 +92,7 @@ describe("legacy x_search config migration", () => {
           },
         } as Record<string, unknown>,
       },
-    } as OpenClawConfig);
+    } as MarketingClawConfig);
 
     expect((res.config.tools?.web as Record<string, unknown> | undefined)?.x_search).toEqual({
       enabled: true,
@@ -124,7 +124,7 @@ describe("legacy x_search config migration", () => {
           },
         } as Record<string, unknown>,
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     const res = migrateLegacyXSearchConfig(config);
 
@@ -132,5 +132,4 @@ describe("legacy x_search config migration", () => {
     expect(res.changes).toStrictEqual([]);
     expect(res.config.plugins?.entries?.xai).toBeUndefined();
   });
-
 });

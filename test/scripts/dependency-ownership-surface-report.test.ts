@@ -20,7 +20,7 @@ afterEach(() => {
 });
 
 function makeTempRepo() {
-  const dir = mkdtempSync(path.join(tmpdir(), "openclaw-ownership-surface-"));
+  const dir = mkdtempSync(path.join(tmpdir(), "marketingclaw-ownership-surface-"));
   tempDirs.push(dir);
   return dir;
 }
@@ -62,9 +62,9 @@ describe("parseArgs", () => {
     expect(() => parseArgs(["--json", "first.json", "--json", "second.json"])).toThrow(
       "--json was provided more than once.",
     );
-    expect(() =>
-      parseArgs(["--markdown", "first.md", "--markdown", "second.md"]),
-    ).toThrow("--markdown was provided more than once.");
+    expect(() => parseArgs(["--markdown", "first.md", "--markdown", "second.md"])).toThrow(
+      "--markdown was provided more than once.",
+    );
   });
 });
 

@@ -1,13 +1,13 @@
-# OpenClaw Cohere Provider
+# MarketingClaw Cohere Provider
 
-Official OpenClaw provider plugin for Cohere's OpenAI-compatible Compatibility
+Official MarketingClaw provider plugin for Cohere's OpenAI-compatible Compatibility
 API.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugins install @openclaw/cohere-provider
-openclaw gateway restart
+marketingclaw plugins install @marketingclaw/cohere-provider
+marketingclaw gateway restart
 ```
 
 Configure a Cohere API key, then select `cohere/command-a-plus-05-2026`,

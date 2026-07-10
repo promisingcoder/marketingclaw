@@ -1,6 +1,6 @@
 // Applies Crestodian's conversational setup: config, workspace files, gateway.
 import { resolveGatewayPort } from "../config/config.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import type { RuntimeEnv } from "../runtime.js";
 import { shortenHomePath } from "../utils.js";
 import type { WizardPrompter } from "../wizard/prompts.js";
@@ -60,7 +60,7 @@ export function createQuickstartNotePrompter(runtime: RuntimeEnv): WizardPrompte
   };
 }
 
-function applySecurityAcknowledgement(config: OpenClawConfig): OpenClawConfig {
+function applySecurityAcknowledgement(config: MarketingClawConfig): MarketingClawConfig {
   if (config.wizard?.securityAcknowledgedAt) {
     return config;
   }
@@ -87,7 +87,7 @@ export async function applyCrestodianSetup(
   ]);
 
   const snapshot = await readSetupConfigFileSnapshot();
-  const baseConfig: OpenClawConfig =
+  const baseConfig: MarketingClawConfig =
     snapshot.valid && snapshot.exists ? (snapshot.sourceConfig ?? snapshot.config) : {};
 
   let nextConfig = applyLocalSetupWorkspaceConfig(baseConfig, workspace);

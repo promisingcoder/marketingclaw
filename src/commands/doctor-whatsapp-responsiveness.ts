@@ -3,7 +3,7 @@ import { spawnSync } from "node:child_process";
 import path from "node:path";
 import { note } from "../../packages/terminal-core/src/note.js";
 import { formatCliCommand } from "../cli/command-format.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import type { HealthFinding } from "../flows/health-checks.js";
 import { sleep } from "../utils/sleep.js";
 import type { StatusSummary } from "./status.types.js";
@@ -33,10 +33,10 @@ function normalizeExecutableName(value: string | undefined): string {
 function isLocalTuiCommand(command: string): boolean {
   const argv = tokenizeCommandLine(command);
   const executable = normalizeExecutableName(argv[0]);
-  if (executable === "openclaw-tui") {
+  if (executable === "marketingclaw-tui") {
     return true;
   }
-  return executable === "openclaw" && LOCAL_TUI_SUBCOMMANDS.has(argv[1] ?? "");
+  return executable === "marketingclaw" && LOCAL_TUI_SUBCOMMANDS.has(argv[1] ?? "");
 }
 
 function parsePsPidLine(line: string): LocalTuiProcess | null {
@@ -55,7 +55,7 @@ function parsePsPidLine(line: string): LocalTuiProcess | null {
   return { pid, command };
 }
 
-/** Lists local OpenClaw TUI processes that can contend with gateway responsiveness. */
+/** Lists local MarketingClaw TUI processes that can contend with gateway responsiveness. */
 export function listLocalTuiProcesses(): LocalTuiProcess[] {
   if (process.platform === "win32") {
     return [];
@@ -80,7 +80,7 @@ export function listLocalTuiProcesses(): LocalTuiProcess[] {
   return processes;
 }
 
-function hasWhatsappEnabled(cfg: OpenClawConfig): boolean {
+function hasWhatsappEnabled(cfg: MarketingClawConfig): boolean {
   const whatsapp = cfg.channels?.whatsapp;
   if (!whatsapp || whatsapp.enabled === false) {
     return false;
@@ -98,7 +98,7 @@ function formatPidList(processes: LocalTuiProcess[]): string {
 
 /** Collects read-only structured findings for WhatsApp responsiveness pressure. */
 export function collectWhatsappResponsivenessHealthFindings(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   status?: Pick<StatusSummary, "eventLoop"> | null;
   listLocalTuiProcesses?: () => LocalTuiProcess[];
 }): readonly HealthFinding[] {
@@ -127,7 +127,7 @@ export function collectWhatsappResponsivenessHealthFindings(params: {
       target: pids,
       requirement: "local-tui-event-loop-pressure",
       fixHint: `Close local TUI sessions (${pids}), or run ${formatCliCommand(
-        "openclaw doctor --fix",
+        "marketingclaw doctor --fix",
       )}.`,
     },
   ];
@@ -184,7 +184,7 @@ export async function terminateLocalTuiProcesses(params: {
 
 /** Emits WhatsApp responsiveness warnings and optionally stops contending local TUI clients. */
 export async function noteWhatsappResponsivenessHealth(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   status?: Pick<StatusSummary, "eventLoop"> | null;
   shouldRepair: boolean;
   listLocalTuiProcesses?: () => LocalTuiProcess[];
@@ -223,7 +223,7 @@ export async function noteWhatsappResponsivenessHealth(params: {
       }
     } else {
       warnings.push(
-        `Fix: close those TUI sessions, or run ${formatCliCommand("openclaw doctor --fix")}.`,
+        `Fix: close those TUI sessions, or run ${formatCliCommand("marketingclaw doctor --fix")}.`,
       );
     }
   }

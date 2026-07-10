@@ -42,7 +42,7 @@ describe("doctor session transcript repair", () => {
 
   beforeEach(async () => {
     note.mockClear();
-    root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-doctor-transcripts-"));
+    root = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-doctor-transcripts-"));
   });
 
   afterEach(async () => {
@@ -75,9 +75,9 @@ describe("doctor session transcript repair", () => {
           content: [
             "visible ask",
             "",
-            "<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>",
+            "<<<BEGIN_MARKETINGCLAW_INTERNAL_CONTEXT>>>",
             "secret",
-            "<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+            "<<<END_MARKETINGCLAW_INTERNAL_CONTEXT>>>",
           ].join("\n"),
         },
       },
@@ -131,7 +131,7 @@ describe("doctor session transcript repair", () => {
         message: {
           role: "user",
           content:
-            "visible ask\n\n<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>\nsecret\n<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+            "visible ask\n\n<<<BEGIN_MARKETINGCLAW_INTERNAL_CONTEXT>>>\nsecret\n<<<END_MARKETINGCLAW_INTERNAL_CONTEXT>>>",
         },
       },
       {
@@ -149,7 +149,7 @@ describe("doctor session transcript repair", () => {
     const [message, title] = requireFirstMockCall(note, "doctor note") as [string, string];
     expect(title).toBe("Session transcripts");
     expect(message).toContain("legacy state");
-    expect(message).toContain('Run "openclaw doctor --fix"');
+    expect(message).toContain('Run "marketingclaw doctor --fix"');
     expect(countNonEmptyLines(await fs.readFile(filePath, "utf-8"))).toBe(3);
   });
 
@@ -180,7 +180,7 @@ describe("doctor session transcript repair", () => {
       checkId: "core/doctor/session-transcripts",
       severity: "info",
       path: filePath,
-      fixHint: expect.stringContaining("openclaw doctor --fix"),
+      fixHint: expect.stringContaining("marketingclaw doctor --fix"),
     });
     expect(sessionTranscriptIssueToRepairEffect(issue)).toEqual({
       kind: "file",
@@ -201,7 +201,7 @@ describe("doctor session transcript repair", () => {
         message: {
           role: "user",
           content:
-            "visible ask\n\n<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>\nsecret\n<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+            "visible ask\n\n<<<BEGIN_MARKETINGCLAW_INTERNAL_CONTEXT>>>\nsecret\n<<<END_MARKETINGCLAW_INTERNAL_CONTEXT>>>",
         },
       },
       {
@@ -238,7 +238,7 @@ describe("doctor session transcript repair", () => {
         message: {
           role: "user",
           content:
-            "visible ask\n\n<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>\nsecret\n<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+            "visible ask\n\n<<<BEGIN_MARKETINGCLAW_INTERNAL_CONTEXT>>>\nsecret\n<<<END_MARKETINGCLAW_INTERNAL_CONTEXT>>>",
         },
       },
       {
@@ -336,7 +336,7 @@ describe("doctor session transcript repair", () => {
         message: {
           role: "user",
           content:
-            "visible ask\n\n<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>\nsecret\n<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+            "visible ask\n\n<<<BEGIN_MARKETINGCLAW_INTERNAL_CONTEXT>>>\nsecret\n<<<END_MARKETINGCLAW_INTERNAL_CONTEXT>>>",
         },
       },
       {
@@ -394,7 +394,7 @@ describe("doctor session transcript repair", () => {
         message: {
           role: "user",
           content:
-            "visible ask\n\n<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>\nsecret\n<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+            "visible ask\n\n<<<BEGIN_MARKETINGCLAW_INTERNAL_CONTEXT>>>\nsecret\n<<<END_MARKETINGCLAW_INTERNAL_CONTEXT>>>",
         },
       },
       {

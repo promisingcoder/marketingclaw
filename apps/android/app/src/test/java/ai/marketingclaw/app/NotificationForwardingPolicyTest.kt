@@ -1,4 +1,4 @@
-package ai.openclaw.app
+package ai.marketingclaw.app
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -83,16 +83,16 @@ class NotificationForwardingPolicyTest {
       NotificationForwardingPolicy(
         enabled = true,
         mode = NotificationPackageFilterMode.Allowlist,
-        packages = setOf("ai.openclaw.app", "com.other.app"),
+        packages = setOf("ai.marketingclaw.app", "com.other.app"),
         quietHoursEnabled = false,
         quietStart = "22:00",
         quietEnd = "07:00",
         maxEventsPerMinute = 20,
         sessionKey = null,
-        selfPackageName = "ai.openclaw.app",
+        selfPackageName = "ai.marketingclaw.app",
       )
 
-    assertFalse(policy.allowsPackage("ai.openclaw.app"))
+    assertFalse(policy.allowsPackage("ai.marketingclaw.app"))
     assertTrue(policy.allowsPackage("com.other.app"))
   }
 

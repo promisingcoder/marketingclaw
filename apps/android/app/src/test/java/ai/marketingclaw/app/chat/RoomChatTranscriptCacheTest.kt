@@ -1,4 +1,4 @@
-package ai.openclaw.app.chat
+package ai.marketingclaw.app.chat
 
 import androidx.room.Room
 import kotlinx.coroutines.test.runTest

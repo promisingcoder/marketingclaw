@@ -1,11 +1,11 @@
-// Openclaw E2E Instance tests cover openclaw e2e instance script behavior.
+// Marketingclaw E2E Instance tests cover marketingclaw e2e instance script behavior.
 import { execFileSync, spawnSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 
-const helperPath = path.resolve("scripts/lib/openclaw-e2e-instance.sh");
+const helperPath = path.resolve("scripts/lib/marketingclaw-e2e-instance.sh");
 const hostPath = [
   path.dirname(process.execPath),
   "/usr/local/bin",
@@ -26,8 +26,8 @@ function runHelper(payload: string) {
       [
         "set -euo pipefail",
         `source ${shellQuote(helperPath)}`,
-        `openclaw_e2e_eval_test_state_from_b64 ${shellQuote(payload)}`,
-        'printf "value=%s" "${OPENCLAW_E2E_INSTANCE_TEST:-unset}"',
+        `marketingclaw_e2e_eval_test_state_from_b64 ${shellQuote(payload)}`,
+        'printf "value=%s" "${MARKETINGCLAW_E2E_INSTANCE_TEST:-unset}"',
       ].join("; "),
     ],
     { encoding: "utf8" },
@@ -69,13 +69,13 @@ function expectShellSuccess(result: ReturnType<typeof spawnSync>) {
 }
 
 function writePackageFixture(packagePath: string): void {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-e2e-package-"));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-e2e-package-"));
   try {
     const packageDir = path.join(root, "package");
     fs.mkdirSync(packageDir);
     fs.writeFileSync(
       path.join(packageDir, "package.json"),
-      JSON.stringify({ name: "openclaw-e2e-fixture", version: "0.0.0" }),
+      JSON.stringify({ name: "marketingclaw-e2e-fixture", version: "0.0.0" }),
     );
     execFileSync("tar", ["-czf", packagePath, "-C", root, "package"]);
   } finally {
@@ -99,7 +99,7 @@ function writeFakeTimeout(filePath: string, supportsKillAfter: boolean): void {
     'if [ "${1:-}" = "--kill-after=1s" ]; then',
     `  exit ${supportsKillAfter ? 0 : 1}`,
     "fi",
-    'printf "%s\\n" "$*" >"$OPENCLAW_TEST_TIMEOUT_ARGS"',
+    'printf "%s\\n" "$*" >"$MARKETINGCLAW_TEST_TIMEOUT_ARGS"',
     'while [ "$#" -gt 0 ]; do',
     '  case "$1" in',
     "    --)",
@@ -123,7 +123,7 @@ function writeFakeTimeout(filePath: string, supportsKillAfter: boolean): void {
 }
 
 function writeFakeNpm(filePath: string): void {
-  writeBashExecutable(filePath, ['printf "%s\\n" "$*" >"$OPENCLAW_TEST_NPM_ARGS"']);
+  writeBashExecutable(filePath, ['printf "%s\\n" "$*" >"$MARKETINGCLAW_TEST_NPM_ARGS"']);
 }
 
 function expectNpmInstallObserved(argsPath: string, expectedArgs: string, prefix: string): void {
@@ -132,13 +132,13 @@ function expectNpmInstallObserved(argsPath: string, expectedArgs: string, prefix
     return;
   }
   expect(
-    fs.existsSync(path.join(prefix, "lib/node_modules/openclaw-e2e-fixture/package.json")),
+    fs.existsSync(path.join(prefix, "lib/node_modules/marketingclaw-e2e-fixture/package.json")),
   ).toBe(true);
 }
 
-describe("scripts/lib/openclaw-e2e-instance.sh", () => {
+describe("scripts/lib/marketingclaw-e2e-instance.sh", () => {
   it("sources decoded test-state scripts", () => {
-    const result = runHelper(base64('export OPENCLAW_E2E_INSTANCE_TEST="ok"\n'));
+    const result = runHelper(base64('export MARKETINGCLAW_E2E_INSTANCE_TEST="ok"\n'));
 
     expect(result.status).toBe(0);
     expect(result.stdout).toBe("value=ok");
@@ -149,7 +149,7 @@ describe("scripts/lib/openclaw-e2e-instance.sh", () => {
 
     expect(result.status).not.toBe(0);
     expect(result.stdout).not.toContain("value=");
-    expect(result.stderr).toContain("Invalid OpenClaw test-state base64 payload");
+    expect(result.stderr).toContain("Invalid MarketingClaw test-state base64 payload");
   });
 
   it("fails when the test-state payload decodes to an empty script", () => {
@@ -162,15 +162,15 @@ describe("scripts/lib/openclaw-e2e-instance.sh", () => {
 
   it("reads positive integer env values without treating decimal input as durations", () => {
     const fallback = runSourcedHelper(
-      'printf "%s" "$(openclaw_e2e_read_positive_int_env OPENCLAW_E2E_SAMPLE_SECONDS 180)"',
+      'printf "%s" "$(marketingclaw_e2e_read_positive_int_env MARKETINGCLAW_E2E_SAMPLE_SECONDS 180)"',
     );
     const leadingZero = runSourcedHelper(
-      'printf "%s" "$(openclaw_e2e_read_positive_int_env OPENCLAW_E2E_SAMPLE_SECONDS 180)"',
-      { OPENCLAW_E2E_SAMPLE_SECONDS: "008" },
+      'printf "%s" "$(marketingclaw_e2e_read_positive_int_env MARKETINGCLAW_E2E_SAMPLE_SECONDS 180)"',
+      { MARKETINGCLAW_E2E_SAMPLE_SECONDS: "008" },
     );
     const duration = runSourcedHelper(
-      "openclaw_e2e_read_positive_int_env OPENCLAW_E2E_SAMPLE_SECONDS 180",
-      { OPENCLAW_E2E_SAMPLE_SECONDS: "30s" },
+      "marketingclaw_e2e_read_positive_int_env MARKETINGCLAW_E2E_SAMPLE_SECONDS 180",
+      { MARKETINGCLAW_E2E_SAMPLE_SECONDS: "30s" },
     );
 
     expectShellSuccess(fallback);
@@ -178,20 +178,20 @@ describe("scripts/lib/openclaw-e2e-instance.sh", () => {
     expectShellSuccess(leadingZero);
     expect(leadingZero.stdout).toBe("008");
     expect(duration.status).toBe(2);
-    expect(duration.stderr).toContain("invalid OPENCLAW_E2E_SAMPLE_SECONDS: 30s");
+    expect(duration.stderr).toContain("invalid MARKETINGCLAW_E2E_SAMPLE_SECONDS: 30s");
   });
 
   it("reads non-negative integer env values without accepting shell-style sizes", () => {
     const fallback = runSourcedHelper(
-      'printf "%s" "$(openclaw_e2e_read_nonnegative_int_env OPENCLAW_E2E_SAMPLE_BYTES 262144)"',
+      'printf "%s" "$(marketingclaw_e2e_read_nonnegative_int_env MARKETINGCLAW_E2E_SAMPLE_BYTES 262144)"',
     );
     const zero = runSourcedHelper(
-      'printf "%s" "$(openclaw_e2e_read_nonnegative_int_env OPENCLAW_E2E_SAMPLE_BYTES 262144)"',
-      { OPENCLAW_E2E_SAMPLE_BYTES: "0" },
+      'printf "%s" "$(marketingclaw_e2e_read_nonnegative_int_env MARKETINGCLAW_E2E_SAMPLE_BYTES 262144)"',
+      { MARKETINGCLAW_E2E_SAMPLE_BYTES: "0" },
     );
     const size = runSourcedHelper(
-      "openclaw_e2e_read_nonnegative_int_env OPENCLAW_E2E_SAMPLE_BYTES 262144",
-      { OPENCLAW_E2E_SAMPLE_BYTES: "64kb" },
+      "marketingclaw_e2e_read_nonnegative_int_env MARKETINGCLAW_E2E_SAMPLE_BYTES 262144",
+      { MARKETINGCLAW_E2E_SAMPLE_BYTES: "64kb" },
     );
 
     expectShellSuccess(fallback);
@@ -199,11 +199,11 @@ describe("scripts/lib/openclaw-e2e-instance.sh", () => {
     expectShellSuccess(zero);
     expect(zero.stdout).toBe("0");
     expect(size.status).toBe(2);
-    expect(size.stderr).toContain("invalid OPENCLAW_E2E_SAMPLE_BYTES: 64kb");
+    expect(size.stderr).toContain("invalid MARKETINGCLAW_E2E_SAMPLE_BYTES: 64kb");
   });
 
   it("requires /readyz after the gateway ready log", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-e2e-readyz-required-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-e2e-readyz-required-"));
     try {
       const logPath = path.join(tempDir, "gateway.log");
       const result = spawnSync(
@@ -213,12 +213,12 @@ describe("scripts/lib/openclaw-e2e-instance.sh", () => {
           [
             "set -euo pipefail",
             `source ${shellQuote(helperPath)}`,
-            "openclaw_e2e_probe_http() { return 1; }",
+            "marketingclaw_e2e_probe_http() { return 1; }",
             "sleep 30 &",
             'gateway_pid="$!"',
             "trap 'kill \"$gateway_pid\" >/dev/null 2>&1 || true' EXIT",
             `printf '[gateway] ready ws://127.0.0.1:23456\\n' >${shellQuote(logPath)}`,
-            `if openclaw_e2e_wait_gateway_ready "$gateway_pid" ${shellQuote(logPath)} 2; then`,
+            `if marketingclaw_e2e_wait_gateway_ready "$gateway_pid" ${shellQuote(logPath)} 2; then`,
             '  echo "gateway readiness passed without /readyz" >&2',
             "  exit 1",
             "fi",
@@ -241,7 +241,7 @@ describe("scripts/lib/openclaw-e2e-instance.sh", () => {
   });
 
   it("probes /readyz on the explicit gateway port", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-e2e-readyz-port-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-e2e-readyz-port-"));
     try {
       const logPath = path.join(tempDir, "gateway.log");
       const probePath = path.join(tempDir, "probe-url.txt");
@@ -252,12 +252,12 @@ describe("scripts/lib/openclaw-e2e-instance.sh", () => {
           [
             "set -euo pipefail",
             `source ${shellQuote(helperPath)}`,
-            `openclaw_e2e_probe_http() { printf "%s\\n" "$1" >${shellQuote(probePath)}; return 0; }`,
+            `marketingclaw_e2e_probe_http() { printf "%s\\n" "$1" >${shellQuote(probePath)}; return 0; }`,
             "sleep 30 &",
             'gateway_pid="$!"',
             "trap 'kill \"$gateway_pid\" >/dev/null 2>&1 || true' EXIT",
             `printf '[gateway] ready\\n' >${shellQuote(logPath)}`,
-            `openclaw_e2e_wait_gateway_ready "$gateway_pid" ${shellQuote(logPath)} 2 23456`,
+            `marketingclaw_e2e_wait_gateway_ready "$gateway_pid" ${shellQuote(logPath)} 2 23456`,
           ].join("\n"),
         ],
         {
@@ -275,7 +275,7 @@ describe("scripts/lib/openclaw-e2e-instance.sh", () => {
   });
 
   it("allows explicit legacy ready-log mode without /readyz", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-e2e-readyz-legacy-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-e2e-readyz-legacy-"));
     try {
       const logPath = path.join(tempDir, "gateway.log");
       const result = spawnSync(
@@ -285,12 +285,12 @@ describe("scripts/lib/openclaw-e2e-instance.sh", () => {
           [
             "set -euo pipefail",
             `source ${shellQuote(helperPath)}`,
-            "openclaw_e2e_probe_http() { return 1; }",
+            "marketingclaw_e2e_probe_http() { return 1; }",
             "sleep 30 &",
             'gateway_pid="$!"',
             "trap 'kill \"$gateway_pid\" >/dev/null 2>&1 || true' EXIT",
             `printf '[gateway] ready\\n' >${shellQuote(logPath)}`,
-            `openclaw_e2e_wait_gateway_ready "$gateway_pid" ${shellQuote(logPath)} 2 23456 legacy-ready-log-ok`,
+            `marketingclaw_e2e_wait_gateway_ready "$gateway_pid" ${shellQuote(logPath)} 2 23456 legacy-ready-log-ok`,
           ].join("\n"),
         ],
         {
@@ -307,12 +307,12 @@ describe("scripts/lib/openclaw-e2e-instance.sh", () => {
   });
 
   it("wraps package installs with the configured timeout", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-e2e-instance-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-e2e-instance-"));
     try {
       const timeoutArgsPath = path.join(tempDir, "timeout-args.txt");
       const npmArgsPath = path.join(tempDir, "npm-args.txt");
       const logPath = path.join(tempDir, "install.log");
-      const packagePath = path.join(tempDir, "openclaw.tgz");
+      const packagePath = path.join(tempDir, "marketingclaw.tgz");
       const prefixPath = path.join(tempDir, "prefix");
       writePackageFixture(packagePath);
       writeFakeTimeout(path.join(tempDir, "timeout"), true);
@@ -325,18 +325,18 @@ describe("scripts/lib/openclaw-e2e-instance.sh", () => {
           [
             "set -euo pipefail",
             `source ${shellQuote(helperPath)}`,
-            `openclaw_e2e_install_package ${shellQuote(logPath)} ${shellQuote("fixture package")} ${shellQuote(prefixPath)}`,
+            `marketingclaw_e2e_install_package ${shellQuote(logPath)} ${shellQuote("fixture package")} ${shellQuote(prefixPath)}`,
           ].join("; "),
         ],
         {
           encoding: "utf8",
           env: shellTestEnv({
             PATH: `${tempDir}${path.delimiter}${hostPath}`,
-            OPENCLAW_CURRENT_PACKAGE_TGZ: packagePath,
-            OPENCLAW_E2E_NPM_INSTALL_TIMEOUT: "42s",
-            OPENCLAW_TEST_TIMEOUT_ARGS: timeoutArgsPath,
-            OPENCLAW_TEST_NPM_ARGS: npmArgsPath,
-            OPENCLAW_TEST_NPM_BIN: path.join(tempDir, "npm"),
+            MARKETINGCLAW_CURRENT_PACKAGE_TGZ: packagePath,
+            MARKETINGCLAW_E2E_NPM_INSTALL_TIMEOUT: "42s",
+            MARKETINGCLAW_TEST_TIMEOUT_ARGS: timeoutArgsPath,
+            MARKETINGCLAW_TEST_NPM_ARGS: npmArgsPath,
+            MARKETINGCLAW_TEST_NPM_BIN: path.join(tempDir, "npm"),
           }),
         },
       );
@@ -357,12 +357,14 @@ describe("scripts/lib/openclaw-e2e-instance.sh", () => {
   });
 
   it("falls back to plain timeout when kill-after is unavailable", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-e2e-instance-plain-timeout-"));
+    const tempDir = fs.mkdtempSync(
+      path.join(os.tmpdir(), "marketingclaw-e2e-instance-plain-timeout-"),
+    );
     try {
       const timeoutArgsPath = path.join(tempDir, "timeout-args.txt");
       const npmArgsPath = path.join(tempDir, "npm-args.txt");
       const logPath = path.join(tempDir, "install.log");
-      const packagePath = path.join(tempDir, "openclaw.tgz");
+      const packagePath = path.join(tempDir, "marketingclaw.tgz");
       const prefixPath = path.join(tempDir, "prefix");
       writePackageFixture(packagePath);
       writeFakeTimeout(path.join(tempDir, "timeout"), false);
@@ -375,18 +377,18 @@ describe("scripts/lib/openclaw-e2e-instance.sh", () => {
           [
             "set -euo pipefail",
             `source ${shellQuote(helperPath)}`,
-            `openclaw_e2e_install_package ${shellQuote(logPath)} ${shellQuote("fixture package")} ${shellQuote(prefixPath)}`,
+            `marketingclaw_e2e_install_package ${shellQuote(logPath)} ${shellQuote("fixture package")} ${shellQuote(prefixPath)}`,
           ].join("; "),
         ],
         {
           encoding: "utf8",
           env: shellTestEnv({
             PATH: `${tempDir}${path.delimiter}${hostPath}`,
-            OPENCLAW_CURRENT_PACKAGE_TGZ: packagePath,
-            OPENCLAW_E2E_NPM_INSTALL_TIMEOUT: "42s",
-            OPENCLAW_TEST_TIMEOUT_ARGS: timeoutArgsPath,
-            OPENCLAW_TEST_NPM_ARGS: npmArgsPath,
-            OPENCLAW_TEST_NPM_BIN: path.join(tempDir, "npm"),
+            MARKETINGCLAW_CURRENT_PACKAGE_TGZ: packagePath,
+            MARKETINGCLAW_E2E_NPM_INSTALL_TIMEOUT: "42s",
+            MARKETINGCLAW_TEST_TIMEOUT_ARGS: timeoutArgsPath,
+            MARKETINGCLAW_TEST_NPM_ARGS: npmArgsPath,
+            MARKETINGCLAW_TEST_NPM_BIN: path.join(tempDir, "npm"),
           }),
         },
       );
@@ -406,12 +408,12 @@ describe("scripts/lib/openclaw-e2e-instance.sh", () => {
   });
 
   it("uses gtimeout when GNU timeout is not on PATH", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-e2e-instance-gtimeout-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-e2e-instance-gtimeout-"));
     try {
       const timeoutArgsPath = path.join(tempDir, "timeout-args.txt");
       const npmArgsPath = path.join(tempDir, "npm-args.txt");
       const logPath = path.join(tempDir, "install.log");
-      const packagePath = path.join(tempDir, "openclaw.tgz");
+      const packagePath = path.join(tempDir, "marketingclaw.tgz");
       const prefixPath = path.join(tempDir, "prefix");
       writePackageFixture(packagePath);
       writeFakeTimeout(path.join(tempDir, "gtimeout"), true);
@@ -424,18 +426,18 @@ describe("scripts/lib/openclaw-e2e-instance.sh", () => {
           [
             "set -euo pipefail",
             `source ${shellQuote(helperPath)}`,
-            `openclaw_e2e_install_package ${shellQuote(logPath)} ${shellQuote("fixture package")} ${shellQuote(prefixPath)}`,
+            `marketingclaw_e2e_install_package ${shellQuote(logPath)} ${shellQuote("fixture package")} ${shellQuote(prefixPath)}`,
           ].join("; "),
         ],
         {
           encoding: "utf8",
           env: shellTestEnv({
             PATH: tempDir,
-            OPENCLAW_CURRENT_PACKAGE_TGZ: packagePath,
-            OPENCLAW_E2E_NPM_INSTALL_TIMEOUT: "42s",
-            OPENCLAW_TEST_TIMEOUT_ARGS: timeoutArgsPath,
-            OPENCLAW_TEST_NPM_ARGS: npmArgsPath,
-            OPENCLAW_TEST_NPM_BIN: path.join(tempDir, "npm"),
+            MARKETINGCLAW_CURRENT_PACKAGE_TGZ: packagePath,
+            MARKETINGCLAW_E2E_NPM_INSTALL_TIMEOUT: "42s",
+            MARKETINGCLAW_TEST_TIMEOUT_ARGS: timeoutArgsPath,
+            MARKETINGCLAW_TEST_NPM_ARGS: npmArgsPath,
+            MARKETINGCLAW_TEST_NPM_BIN: path.join(tempDir, "npm"),
           }),
         },
       );
@@ -455,11 +457,13 @@ describe("scripts/lib/openclaw-e2e-instance.sh", () => {
   });
 
   it("uses the Node watchdog when timeout is unavailable", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-e2e-instance-no-timeout-"));
+    const tempDir = fs.mkdtempSync(
+      path.join(os.tmpdir(), "marketingclaw-e2e-instance-no-timeout-"),
+    );
     try {
       const npmArgsPath = path.join(tempDir, "npm-args.txt");
       const logPath = path.join(tempDir, "install.log");
-      const packagePath = path.join(tempDir, "openclaw.tgz");
+      const packagePath = path.join(tempDir, "marketingclaw.tgz");
       const prefixPath = path.join(tempDir, "prefix");
       writePackageFixture(packagePath);
       writeNodeShim(tempDir);
@@ -472,16 +476,16 @@ describe("scripts/lib/openclaw-e2e-instance.sh", () => {
           [
             "set -euo pipefail",
             `source ${shellQuote(helperPath)}`,
-            `openclaw_e2e_install_package ${shellQuote(logPath)} ${shellQuote("fixture package")} ${shellQuote(prefixPath)}`,
+            `marketingclaw_e2e_install_package ${shellQuote(logPath)} ${shellQuote("fixture package")} ${shellQuote(prefixPath)}`,
           ].join("; "),
         ],
         {
           encoding: "utf8",
           env: shellTestEnv({
             PATH: tempDir,
-            OPENCLAW_CURRENT_PACKAGE_TGZ: packagePath,
-            OPENCLAW_E2E_NPM_INSTALL_TIMEOUT: "42s",
-            OPENCLAW_TEST_NPM_ARGS: npmArgsPath,
+            MARKETINGCLAW_CURRENT_PACKAGE_TGZ: packagePath,
+            MARKETINGCLAW_E2E_NPM_INSTALL_TIMEOUT: "42s",
+            MARKETINGCLAW_TEST_NPM_ARGS: npmArgsPath,
           }),
         },
       );
@@ -499,11 +503,13 @@ describe("scripts/lib/openclaw-e2e-instance.sh", () => {
   });
 
   it("bounds npm install failure logs to the configured tail", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-e2e-instance-install-log-"));
+    const tempDir = fs.mkdtempSync(
+      path.join(os.tmpdir(), "marketingclaw-e2e-instance-install-log-"),
+    );
     try {
       const timeoutArgsPath = path.join(tempDir, "timeout-args.txt");
       const logPath = path.join(tempDir, "install.log");
-      const packagePath = path.join(tempDir, "openclaw.tgz");
+      const packagePath = path.join(tempDir, "marketingclaw.tgz");
       const prefixPath = path.join(tempDir, "prefix");
       writePackageFixture(packagePath);
       writeFakeTimeout(path.join(tempDir, "timeout"), true);
@@ -521,17 +527,17 @@ describe("scripts/lib/openclaw-e2e-instance.sh", () => {
           [
             "set -euo pipefail",
             `source ${shellQuote(helperPath)}`,
-            `openclaw_e2e_install_package ${shellQuote(logPath)} ${shellQuote("fixture package")} ${shellQuote(prefixPath)}`,
+            `marketingclaw_e2e_install_package ${shellQuote(logPath)} ${shellQuote("fixture package")} ${shellQuote(prefixPath)}`,
           ].join("; "),
         ],
         {
           encoding: "utf8",
           env: shellTestEnv({
             PATH: `${tempDir}${path.delimiter}${hostPath}`,
-            OPENCLAW_CURRENT_PACKAGE_TGZ: packagePath,
-            OPENCLAW_E2E_LOG_TAIL_BYTES: "80",
-            OPENCLAW_E2E_NPM_INSTALL_TIMEOUT: "42s",
-            OPENCLAW_TEST_TIMEOUT_ARGS: timeoutArgsPath,
+            MARKETINGCLAW_CURRENT_PACKAGE_TGZ: packagePath,
+            MARKETINGCLAW_E2E_LOG_TAIL_BYTES: "80",
+            MARKETINGCLAW_E2E_NPM_INSTALL_TIMEOUT: "42s",
+            MARKETINGCLAW_TEST_TIMEOUT_ARGS: timeoutArgsPath,
           }),
         },
       );
@@ -547,15 +553,15 @@ describe("scripts/lib/openclaw-e2e-instance.sh", () => {
   });
 
   it.each([
-    ["bytes", "OPENCLAW_E2E_LOG_TAIL_BYTES", "64kb"],
-    ["lines", "OPENCLAW_E2E_LOG_TAIL_LINES", "25 lines"],
+    ["bytes", "MARKETINGCLAW_E2E_LOG_TAIL_BYTES", "64kb"],
+    ["lines", "MARKETINGCLAW_E2E_LOG_TAIL_LINES", "25 lines"],
   ])("rejects invalid E2E log tail %s before invoking tail", (_label, envName, value) => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-e2e-instance-log-tail-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-e2e-instance-log-tail-"));
     try {
       const logPath = path.join(tempDir, "install.log");
       fs.writeFileSync(logPath, "old log\nrecent log\n", "utf8");
 
-      const result = runSourcedHelper(`openclaw_e2e_print_log ${shellQuote(logPath)}`, {
+      const result = runSourcedHelper(`marketingclaw_e2e_print_log ${shellQuote(logPath)}`, {
         [envName]: value,
       });
 
@@ -568,7 +574,9 @@ describe("scripts/lib/openclaw-e2e-instance.sh", () => {
   });
 
   it("bounds commands with the Node watchdog when timeout is unavailable", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-e2e-instance-node-watchdog-"));
+    const tempDir = fs.mkdtempSync(
+      path.join(os.tmpdir(), "marketingclaw-e2e-instance-node-watchdog-"),
+    );
     try {
       writeNodeShim(tempDir);
       const startedAt = Date.now();
@@ -579,7 +587,7 @@ describe("scripts/lib/openclaw-e2e-instance.sh", () => {
           [
             "set -euo pipefail",
             `source ${shellQuote(helperPath)}`,
-            `openclaw_e2e_maybe_timeout 200ms ${shellQuote(process.execPath)} -e ${shellQuote("setInterval(() => {}, 1000)")}`,
+            `marketingclaw_e2e_maybe_timeout 200ms ${shellQuote(process.execPath)} -e ${shellQuote("setInterval(() => {}, 1000)")}`,
           ].join("; "),
         ],
         {
@@ -595,7 +603,7 @@ describe("scripts/lib/openclaw-e2e-instance.sh", () => {
       expect(result.status).toBe(124);
       expect(elapsedMs).toBeLessThan(4_000);
       expect(result.stderr).toContain("using Node watchdog");
-      expect(result.stderr).toContain("OpenClaw E2E command timed out after 200ms");
+      expect(result.stderr).toContain("MarketingClaw E2E command timed out after 200ms");
     } finally {
       fs.rmSync(tempDir, { force: true, recursive: true });
     }
@@ -607,7 +615,7 @@ describe("scripts/lib/openclaw-e2e-instance.sh", () => {
   ] as const) {
     it(`escalates Node watchdog children that ignore parent SIG${shellSignal}`, () => {
       const tempDir = fs.mkdtempSync(
-        path.join(os.tmpdir(), "openclaw-e2e-instance-node-watchdog-signal-"),
+        path.join(os.tmpdir(), "marketingclaw-e2e-instance-node-watchdog-signal-"),
       );
       try {
         writeNodeShim(tempDir);
@@ -630,8 +638,8 @@ describe("scripts/lib/openclaw-e2e-instance.sh", () => {
         const script = `
 set -euo pipefail
 source ${shellQuote(helperPath)}
-export OPENCLAW_E2E_TIMEOUT_KILL_GRACE_MS=100
-openclaw_e2e_maybe_timeout 30s node ${shellQuote(childPath)} ${shellQuote(pidPath)} ${shellQuote(watchdogPidPath)} &
+export MARKETINGCLAW_E2E_TIMEOUT_KILL_GRACE_MS=100
+marketingclaw_e2e_maybe_timeout 30s node ${shellQuote(childPath)} ${shellQuote(pidPath)} ${shellQuote(watchdogPidPath)} &
 wrapper_pid="$!"
 for ((i = 0; i < 100; i += 1)); do
   [ -s ${shellQuote(pidPath)} ] && [ -s ${shellQuote(watchdogPidPath)} ] && break
@@ -670,38 +678,38 @@ exit 1
   }
 
   it("terminates only the tracked gateway process", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-e2e-gateway-terminate-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-e2e-gateway-terminate-"));
     try {
       const forbiddenToolLog = path.join(tempDir, "process-tools.log");
       fs.writeFileSync(forbiddenToolLog, "");
       writeBashExecutable(path.join(tempDir, "pkill"), [
-        'printf "pkill %s\\n" "$*" >>"$OPENCLAW_TEST_FORBIDDEN_PROCESS_TOOL_LOG"',
+        'printf "pkill %s\\n" "$*" >>"$MARKETINGCLAW_TEST_FORBIDDEN_PROCESS_TOOL_LOG"',
         "exit 42",
       ]);
       writeBashExecutable(path.join(tempDir, "pgrep"), [
-        'printf "pgrep %s\\n" "$*" >>"$OPENCLAW_TEST_FORBIDDEN_PROCESS_TOOL_LOG"',
+        'printf "pgrep %s\\n" "$*" >>"$MARKETINGCLAW_TEST_FORBIDDEN_PROCESS_TOOL_LOG"',
         "exit 42",
       ]);
 
       const script = `
 set -euo pipefail
 source ${shellQuote(helperPath)}
-openclaw_e2e_terminate_gateways ""
+marketingclaw_e2e_terminate_gateways ""
 /bin/sleep 30 &
 tracked_pid="$!"
-openclaw_e2e_terminate_gateways "$tracked_pid"
+marketingclaw_e2e_terminate_gateways "$tracked_pid"
 if kill -0 "$tracked_pid" 2>/dev/null; then
   echo "tracked gateway process still alive" >&2
   exit 1
 fi
-[ ! -s "$OPENCLAW_TEST_FORBIDDEN_PROCESS_TOOL_LOG" ]
+[ ! -s "$MARKETINGCLAW_TEST_FORBIDDEN_PROCESS_TOOL_LOG" ]
 `;
 
       const result = spawnSync("/bin/bash", ["-c", script], {
         encoding: "utf8",
         env: shellTestEnv({
           PATH: `${tempDir}:${hostPath}`,
-          OPENCLAW_TEST_FORBIDDEN_PROCESS_TOOL_LOG: forbiddenToolLog,
+          MARKETINGCLAW_TEST_FORBIDDEN_PROCESS_TOOL_LOG: forbiddenToolLog,
         }),
         timeout: 5_000,
       });
@@ -713,7 +721,7 @@ fi
   });
 
   it("terminates descendants in the tracked process group", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-e2e-process-group-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-e2e-process-group-"));
     const parentPidPath = path.join(tempDir, "parent.pid");
     const childPidPath = path.join(tempDir, "child.pid");
     const childTermPath = path.join(tempDir, "child.term");
@@ -753,7 +761,7 @@ fi
       const script = `
 set -euo pipefail
 source ${shellQuote(helperPath)}
-tracked_pid="$(openclaw_e2e_start_tracked_process ${shellQuote(logPath)} ${shellQuote(process.execPath)} ${shellQuote(parentPath)} ${shellQuote(childPath)} ${shellQuote(parentPidPath)} ${shellQuote(childPidPath)} ${shellQuote(childTermPath)})"
+tracked_pid="$(marketingclaw_e2e_start_tracked_process ${shellQuote(logPath)} ${shellQuote(process.execPath)} ${shellQuote(parentPath)} ${shellQuote(childPath)} ${shellQuote(parentPidPath)} ${shellQuote(childPidPath)} ${shellQuote(childTermPath)})"
 for ((i = 0; i < 100; i += 1)); do
   [ -s ${shellQuote(parentPidPath)} ] && [ -s ${shellQuote(childPidPath)} ] && break
   /bin/sleep 0.02
@@ -761,7 +769,7 @@ done
 [ -s ${shellQuote(parentPidPath)} ]
 [ -s ${shellQuote(childPidPath)} ]
 child_pid="$(/bin/cat ${shellQuote(childPidPath)})"
-openclaw_e2e_stop_process "$tracked_pid"
+marketingclaw_e2e_stop_process "$tracked_pid"
 for ((i = 0; i < 100; i += 1)); do
   [ -s ${shellQuote(childTermPath)} ] && break
   /bin/sleep 0.02
@@ -804,7 +812,7 @@ exit 1
   });
 
   it("bounds HTTP readiness probes when a server accepts connections but never responds", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-e2e-http-probe-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-e2e-http-probe-"));
     try {
       const portPath = path.join(tempDir, "port.txt");
       const serverPath = path.join(tempDir, "stalling-server.cjs");
@@ -834,7 +842,7 @@ exit 1
             `for _ in $(seq 1 50); do [ -s ${shellQuote(portPath)} ] && break; sleep 0.02; done`,
             `port="$(cat ${shellQuote(portPath)})"`,
             `source ${shellQuote(helperPath)}`,
-            'openclaw_e2e_probe_http_status "http://127.0.0.1:${port}/health" 200 100',
+            'marketingclaw_e2e_probe_http_status "http://127.0.0.1:${port}/health" 200 100',
           ].join("; "),
         ],
         { encoding: "utf8", timeout: 3_000 },
@@ -856,7 +864,7 @@ exit 1
   });
 
   it("does not repeatedly grep the full gateway log while waiting for readiness", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-e2e-readyz-incremental-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-e2e-readyz-incremental-"));
     try {
       const logPath = path.join(tempDir, "gateway.log");
       const grepArgsPath = path.join(tempDir, "grep-args.txt");
@@ -867,7 +875,7 @@ exit 1
           [
             "set -euo pipefail",
             `source ${shellQuote(helperPath)}`,
-            "openclaw_e2e_probe_http() { return 0; }",
+            "marketingclaw_e2e_probe_http() { return 0; }",
             "grep() {",
             `  printf '%s\\n' "$*" >>${shellQuote(grepArgsPath)}`,
             '  for arg in "$@"; do',
@@ -880,7 +888,7 @@ exit 1
             "trap 'kill \"$gateway_pid\" >/dev/null 2>&1 || true' EXIT",
             `printf 'old log line\\n' >${shellQuote(logPath)}`,
             `printf '[gateway] ready ws://127.0.0.1:23456\\n' >>${shellQuote(logPath)}`,
-            `openclaw_e2e_wait_gateway_ready "$gateway_pid" ${shellQuote(logPath)} 2`,
+            `marketingclaw_e2e_wait_gateway_ready "$gateway_pid" ${shellQuote(logPath)} 2`,
           ].join("\n"),
         ],
         {
@@ -899,7 +907,9 @@ exit 1
   });
 
   it("detects gateway ready markers split across incremental log reads", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-e2e-readyz-split-marker-"));
+    const tempDir = fs.mkdtempSync(
+      path.join(os.tmpdir(), "marketingclaw-e2e-readyz-split-marker-"),
+    );
     try {
       const logPath = path.join(tempDir, "gateway.log");
       const result = spawnSync(
@@ -909,13 +919,13 @@ exit 1
           [
             "set -euo pipefail",
             `source ${shellQuote(helperPath)}`,
-            "openclaw_e2e_probe_http() { return 0; }",
+            "marketingclaw_e2e_probe_http() { return 0; }",
             "sleep 30 &",
             'gateway_pid="$!"',
             "trap 'kill \"$gateway_pid\" >/dev/null 2>&1 || true' EXIT",
             `printf '[gateway] rea' >${shellQuote(logPath)}`,
             `(sleep 0.35; printf 'dy ws://127.0.0.1:23456\\n' >>${shellQuote(logPath)}) &`,
-            `openclaw_e2e_wait_gateway_ready "$gateway_pid" ${shellQuote(logPath)} 8`,
+            `marketingclaw_e2e_wait_gateway_ready "$gateway_pid" ${shellQuote(logPath)} 8`,
           ].join("\n"),
         ],
         {
@@ -933,7 +943,7 @@ exit 1
   });
 
   it("derives the readiness port only from gateway ready log lines", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-e2e-readyz-port-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-e2e-readyz-port-"));
     try {
       const logPath = path.join(tempDir, "gateway.log");
       const probePath = path.join(tempDir, "probe-url.txt");
@@ -944,12 +954,12 @@ exit 1
           [
             "set -euo pipefail",
             `source ${shellQuote(helperPath)}`,
-            `openclaw_e2e_probe_http() { printf '%s' "$1" >${shellQuote(probePath)}; [[ "$1" = "http://127.0.0.1:23456/readyz" ]]; }`,
+            `marketingclaw_e2e_probe_http() { printf '%s' "$1" >${shellQuote(probePath)}; [[ "$1" = "http://127.0.0.1:23456/readyz" ]]; }`,
             "sleep 30 &",
             'gateway_pid="$!"',
             "trap 'kill \"$gateway_pid\" >/dev/null 2>&1 || true' EXIT",
             `printf '[gateway] ready ws://127.0.0.1:23456\\nunrelated localhost:9999\\n' >${shellQuote(logPath)}`,
-            `openclaw_e2e_wait_gateway_ready "$gateway_pid" ${shellQuote(logPath)} 2`,
+            `marketingclaw_e2e_wait_gateway_ready "$gateway_pid" ${shellQuote(logPath)} 2`,
           ].join("\n"),
         ],
         {
@@ -967,8 +977,10 @@ exit 1
     }
   });
 
-  it("wraps logged OpenClaw E2E commands with the configured timeout", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-e2e-instance-run-logged-"));
+  it("wraps logged MarketingClaw E2E commands with the configured timeout", () => {
+    const tempDir = fs.mkdtempSync(
+      path.join(os.tmpdir(), "marketingclaw-e2e-instance-run-logged-"),
+    );
     const logLabel = path.basename(tempDir);
     const logDir = path.join(tempDir, "logs");
     const logPathFile = path.join(tempDir, "log-path.txt");
@@ -981,11 +993,11 @@ exit 1
           "#!/usr/bin/env bash",
           "set -euo pipefail",
           'if [ "${1:-}" = "--kill-after=1s" ]; then exit 0; fi',
-          'printf "%s\\n" "$*" >"$OPENCLAW_TEST_TIMEOUT_ARGS"',
+          'printf "%s\\n" "$*" >"$MARKETINGCLAW_TEST_TIMEOUT_ARGS"',
           'while [ "$#" -gt 0 ] && [ "$1" != "fixture-command" ]; do shift; done',
           '[ "$#" -gt 0 ] || exit 127',
           "shift",
-          'exec "$OPENCLAW_TEST_COMMAND_BIN" "$@"',
+          'exec "$MARKETINGCLAW_TEST_COMMAND_BIN" "$@"',
           "",
         ].join("\n"),
       );
@@ -994,7 +1006,7 @@ exit 1
         [
           "#!/usr/bin/env bash",
           "set -euo pipefail",
-          'printf "%s\\n" "$*" >"$OPENCLAW_TEST_COMMAND_ARGS"',
+          'printf "%s\\n" "$*" >"$MARKETINGCLAW_TEST_COMMAND_ARGS"',
           'printf "fixture output\\n"',
           "",
         ].join("\n"),
@@ -1009,19 +1021,19 @@ exit 1
           [
             "set -euo pipefail",
             `source ${shellQuote(helperPath)}`,
-            `openclaw_e2e_run_logged ${shellQuote(logLabel)} fixture-command one two`,
-            `printf "%s" "$OPENCLAW_E2E_LAST_LOG_PATH" > ${shellQuote(logPathFile)}`,
+            `marketingclaw_e2e_run_logged ${shellQuote(logLabel)} fixture-command one two`,
+            `printf "%s" "$MARKETINGCLAW_E2E_LAST_LOG_PATH" > ${shellQuote(logPathFile)}`,
           ].join("; "),
         ],
         {
           encoding: "utf8",
           env: shellTestEnv({
             PATH: `${tempDir}:${hostPath}`,
-            OPENCLAW_E2E_LOG_DIR: logDir,
-            OPENCLAW_E2E_COMMAND_TIMEOUT: "17s",
-            OPENCLAW_TEST_TIMEOUT_ARGS: timeoutArgsPath,
-            OPENCLAW_TEST_COMMAND_ARGS: commandArgsPath,
-            OPENCLAW_TEST_COMMAND_BIN: path.join(tempDir, "fixture-command"),
+            MARKETINGCLAW_E2E_LOG_DIR: logDir,
+            MARKETINGCLAW_E2E_COMMAND_TIMEOUT: "17s",
+            MARKETINGCLAW_TEST_TIMEOUT_ARGS: timeoutArgsPath,
+            MARKETINGCLAW_TEST_COMMAND_ARGS: commandArgsPath,
+            MARKETINGCLAW_TEST_COMMAND_BIN: path.join(tempDir, "fixture-command"),
           }),
         },
       );
@@ -1033,7 +1045,9 @@ exit 1
       expect(fs.readFileSync(commandArgsPath, "utf8").trim()).toBe("one two");
       const logPath = fs.readFileSync(logPathFile, "utf8");
       expect(logPath.startsWith(`${logDir}${path.sep}`)).toBe(true);
-      expect(path.basename(logPath)).toMatch(new RegExp(`^openclaw-${logLabel}\\..+\\.log$`, "u"));
+      expect(path.basename(logPath)).toMatch(
+        new RegExp(`^marketingclaw-${logLabel}\\..+\\.log$`, "u"),
+      );
       expect(fs.readFileSync(logPath, "utf8")).toContain("fixture output");
     } finally {
       fs.rmSync(tempDir, { force: true, recursive: true });
@@ -1041,7 +1055,9 @@ exit 1
   });
 
   it("bounds logged command failure output to the configured tail", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-e2e-instance-run-log-tail-"));
+    const tempDir = fs.mkdtempSync(
+      path.join(os.tmpdir(), "marketingclaw-e2e-instance-run-log-tail-"),
+    );
     const logLabel = path.basename(tempDir);
     const logDir = path.join(tempDir, "logs");
     try {
@@ -1061,17 +1077,17 @@ exit 1
           [
             "set -euo pipefail",
             `source ${shellQuote(helperPath)}`,
-            `openclaw_e2e_run_logged ${shellQuote(logLabel)} fixture-command`,
+            `marketingclaw_e2e_run_logged ${shellQuote(logLabel)} fixture-command`,
           ].join("; "),
         ],
         {
           encoding: "utf8",
           env: shellTestEnv({
             PATH: `${tempDir}${path.delimiter}${hostPath}`,
-            OPENCLAW_E2E_COMMAND_TIMEOUT: "17s",
-            OPENCLAW_E2E_LOG_DIR: logDir,
-            OPENCLAW_E2E_LOG_TAIL_BYTES: "80",
-            OPENCLAW_TEST_TIMEOUT_ARGS: timeoutArgsPath,
+            MARKETINGCLAW_E2E_COMMAND_TIMEOUT: "17s",
+            MARKETINGCLAW_E2E_LOG_DIR: logDir,
+            MARKETINGCLAW_E2E_LOG_TAIL_BYTES: "80",
+            MARKETINGCLAW_TEST_TIMEOUT_ARGS: timeoutArgsPath,
           }),
         },
       );
@@ -1089,7 +1105,7 @@ exit 1
   });
 
   it("installs the trash shim under isolated test state", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-e2e-trash-shim-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-e2e-trash-shim-"));
     try {
       const homeDir = path.join(tempDir, "home");
       const stateDir = path.join(tempDir, "state");
@@ -1105,10 +1121,10 @@ exit 1
           [
             "set -euo pipefail",
             `source ${shellQuote(helperPath)}`,
-            "openclaw_e2e_install_trash_shim",
-            "openclaw_e2e_install_trash_shim",
+            "marketingclaw_e2e_install_trash_shim",
+            "marketingclaw_e2e_install_trash_shim",
             `printf "%s" "$PATH" > ${shellQuote(pathFile)}`,
-            `printf "%s" "$OPENCLAW_E2E_BIN_DIR" > ${shellQuote(binDirFile)}`,
+            `printf "%s" "$MARKETINGCLAW_E2E_BIN_DIR" > ${shellQuote(binDirFile)}`,
             "command -v trash >/dev/null",
           ].join("; "),
         ],
@@ -1116,7 +1132,7 @@ exit 1
           encoding: "utf8",
           env: shellTestEnv({
             HOME: homeDir,
-            OPENCLAW_STATE_DIR: stateDir,
+            MARKETINGCLAW_STATE_DIR: stateDir,
             PATH: hostPath,
           }),
         },
@@ -1126,7 +1142,7 @@ exit 1
       const binDir = fs.readFileSync(binDirFile, "utf8");
       const pathEntries = fs.readFileSync(pathFile, "utf8").split(path.delimiter);
       expect(binDir).toBe(path.join(stateDir, "e2e-bin"));
-      expect(binDir).not.toBe("/tmp/openclaw-bin");
+      expect(binDir).not.toBe("/tmp/marketingclaw-bin");
       expect(pathEntries.filter((entry) => entry === binDir)).toHaveLength(1);
       expect(fs.existsSync(path.join(binDir, "trash"))).toBe(true);
     } finally {
@@ -1134,36 +1150,38 @@ exit 1
     }
   });
 
-  it("wraps package-installed OpenClaw CLI calls with the configured timeout", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-e2e-instance-openclaw-cli-"));
+  it("wraps package-installed MarketingClaw CLI calls with the configured timeout", () => {
+    const tempDir = fs.mkdtempSync(
+      path.join(os.tmpdir(), "marketingclaw-e2e-instance-marketingclaw-cli-"),
+    );
     try {
       const timeoutArgsPath = path.join(tempDir, "timeout-args.txt");
-      const commandArgsPath = path.join(tempDir, "openclaw-args.txt");
+      const commandArgsPath = path.join(tempDir, "marketingclaw-args.txt");
       fs.writeFileSync(
         path.join(tempDir, "timeout"),
         [
           "#!/usr/bin/env bash",
           "set -euo pipefail",
           'if [ "${1:-}" = "--kill-after=1s" ]; then exit 0; fi',
-          'printf "%s\\n" "$*" >"$OPENCLAW_TEST_TIMEOUT_ARGS"',
-          `while [ "$#" -gt 0 ] && [ "$1" != ${shellQuote(path.join(tempDir, "openclaw"))} ]; do shift; done`,
+          'printf "%s\\n" "$*" >"$MARKETINGCLAW_TEST_TIMEOUT_ARGS"',
+          `while [ "$#" -gt 0 ] && [ "$1" != ${shellQuote(path.join(tempDir, "marketingclaw"))} ]; do shift; done`,
           '[ "$#" -gt 0 ] || exit 127',
           "shift",
-          'exec "$OPENCLAW_TEST_OPENCLAW_BIN" "$@"',
+          'exec "$MARKETINGCLAW_TEST_MARKETINGCLAW_BIN" "$@"',
           "",
         ].join("\n"),
       );
       fs.writeFileSync(
-        path.join(tempDir, "openclaw"),
+        path.join(tempDir, "marketingclaw"),
         [
           "#!/usr/bin/env bash",
           "set -euo pipefail",
-          'printf "%s\\n" "$*" >"$OPENCLAW_TEST_COMMAND_ARGS"',
+          'printf "%s\\n" "$*" >"$MARKETINGCLAW_TEST_COMMAND_ARGS"',
           "",
         ].join("\n"),
       );
       fs.chmodSync(path.join(tempDir, "timeout"), 0o755);
-      fs.chmodSync(path.join(tempDir, "openclaw"), 0o755);
+      fs.chmodSync(path.join(tempDir, "marketingclaw"), 0o755);
 
       const result = spawnSync(
         "/bin/bash",
@@ -1172,26 +1190,26 @@ exit 1
           [
             "set -euo pipefail",
             `source ${shellQuote(helperPath)}`,
-            "openclaw_e2e_enable_openclaw_cli_timeout",
-            "openclaw_e2e_enable_openclaw_cli_timeout",
-            "openclaw plugins list --json",
+            "marketingclaw_e2e_enable_marketingclaw_cli_timeout",
+            "marketingclaw_e2e_enable_marketingclaw_cli_timeout",
+            "marketingclaw plugins list --json",
           ].join("; "),
         ],
         {
           encoding: "utf8",
           env: shellTestEnv({
             PATH: `${tempDir}:${hostPath}`,
-            OPENCLAW_E2E_COMMAND_TIMEOUT: "23s",
-            OPENCLAW_TEST_TIMEOUT_ARGS: timeoutArgsPath,
-            OPENCLAW_TEST_COMMAND_ARGS: commandArgsPath,
-            OPENCLAW_TEST_OPENCLAW_BIN: path.join(tempDir, "openclaw"),
+            MARKETINGCLAW_E2E_COMMAND_TIMEOUT: "23s",
+            MARKETINGCLAW_TEST_TIMEOUT_ARGS: timeoutArgsPath,
+            MARKETINGCLAW_TEST_COMMAND_ARGS: commandArgsPath,
+            MARKETINGCLAW_TEST_MARKETINGCLAW_BIN: path.join(tempDir, "marketingclaw"),
           }),
         },
       );
 
       expect(result.status).toBe(0);
       expect(fs.readFileSync(timeoutArgsPath, "utf8").trim()).toBe(
-        `--kill-after=30s 23s ${path.join(tempDir, "openclaw")} plugins list --json`,
+        `--kill-after=30s 23s ${path.join(tempDir, "marketingclaw")} plugins list --json`,
       );
       expect(fs.readFileSync(commandArgsPath, "utf8").trim()).toBe("plugins list --json");
     } finally {
@@ -1200,7 +1218,9 @@ exit 1
   });
 
   it("wraps interactive PTY scripts with the configured timeout", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-e2e-instance-pty-timeout-"));
+    const tempDir = fs.mkdtempSync(
+      path.join(os.tmpdir(), "marketingclaw-e2e-instance-pty-timeout-"),
+    );
     try {
       const timeoutArgsPath = path.join(tempDir, "timeout-args.txt");
       const scriptArgsPath = path.join(tempDir, "script-args.txt");
@@ -1211,11 +1231,11 @@ exit 1
           "#!/usr/bin/env bash",
           "set -euo pipefail",
           'if [ "${1:-}" = "--kill-after=1s" ]; then exit 0; fi',
-          'printf "%s\\n" "$*" >"$OPENCLAW_TEST_TIMEOUT_ARGS"',
+          'printf "%s\\n" "$*" >"$MARKETINGCLAW_TEST_TIMEOUT_ARGS"',
           'while [ "$#" -gt 0 ] && [ "$1" != "script" ]; do shift; done',
           '[ "$#" -gt 0 ] || exit 127',
           "shift",
-          'exec "$OPENCLAW_TEST_SCRIPT_BIN" "$@"',
+          'exec "$MARKETINGCLAW_TEST_SCRIPT_BIN" "$@"',
           "",
         ].join("\n"),
       );
@@ -1225,7 +1245,7 @@ exit 1
           "#!/usr/bin/env bash",
           "set -euo pipefail",
           'if [ "${1:-}" = "--version" ]; then exit 0; fi',
-          'printf "%s\\n" "$*" >"$OPENCLAW_TEST_SCRIPT_ARGS"',
+          'printf "%s\\n" "$*" >"$MARKETINGCLAW_TEST_SCRIPT_ARGS"',
           "",
         ].join("\n"),
       );
@@ -1239,17 +1259,17 @@ exit 1
           [
             "set -euo pipefail",
             `source ${shellQuote(helperPath)}`,
-            `openclaw_e2e_run_script_with_pty ${shellQuote("node /tmp/entry onboard")} ${shellQuote(logPath)}`,
+            `marketingclaw_e2e_run_script_with_pty ${shellQuote("node /tmp/entry onboard")} ${shellQuote(logPath)}`,
           ].join("; "),
         ],
         {
           encoding: "utf8",
           env: shellTestEnv({
             PATH: `${tempDir}:${hostPath}`,
-            OPENCLAW_E2E_COMMAND_TIMEOUT: "31s",
-            OPENCLAW_TEST_TIMEOUT_ARGS: timeoutArgsPath,
-            OPENCLAW_TEST_SCRIPT_ARGS: scriptArgsPath,
-            OPENCLAW_TEST_SCRIPT_BIN: path.join(tempDir, "script"),
+            MARKETINGCLAW_E2E_COMMAND_TIMEOUT: "31s",
+            MARKETINGCLAW_TEST_TIMEOUT_ARGS: timeoutArgsPath,
+            MARKETINGCLAW_TEST_SCRIPT_ARGS: scriptArgsPath,
+            MARKETINGCLAW_TEST_SCRIPT_BIN: path.join(tempDir, "script"),
           }),
         },
       );

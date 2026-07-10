@@ -4,4 +4,4 @@ export {
   dispatchReplyWithBufferedBlockDispatcher,
   dispatchInboundMessage,
   settleReplyDispatcher,
-} from "openclaw/plugin-sdk/reply-runtime";
+} from "marketingclaw/plugin-sdk/reply-runtime";

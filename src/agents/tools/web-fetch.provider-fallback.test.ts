@@ -2,7 +2,7 @@
 // before exposing it to agents or cache entries.
 import { rm } from "node:fs/promises";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { MarketingClawConfig } from "../../config/config.js";
 import { withFetchPreconnect } from "../../test-utils/fetch-mock.js";
 import { createWebFetchTool } from "./web-fetch.js";
 
@@ -75,7 +75,7 @@ describe("web_fetch provider fallback normalization", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       sandboxed: false,
     });
 
@@ -133,7 +133,7 @@ describe("web_fetch provider fallback normalization", () => {
     });
 
     const tool = createWebFetchTool({
-      config: {} as OpenClawConfig,
+      config: {} as MarketingClawConfig,
       sandboxed: false,
     });
 
@@ -166,7 +166,7 @@ describe("web_fetch provider fallback normalization", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
     runtimeState.activeSecretsRuntimeSnapshot = { config: runtimeConfig };
     runtimeState.activeRuntimeWebToolsMetadata = {
       fetch: {
@@ -199,7 +199,7 @@ describe("web_fetch provider fallback normalization", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       sandboxed: false,
       runtimeWebFetch: {
         providerConfigured: "stale",
@@ -231,7 +231,7 @@ describe("web_fetch provider fallback normalization", () => {
     }
     const definitionInput = resolveWebFetchDefinitionMock.mock.calls.at(0)?.[0] as
       | {
-          config?: OpenClawConfig;
+          config?: MarketingClawConfig;
           runtimeWebFetch?: { selectedProvider?: string };
         }
       | undefined;
@@ -286,7 +286,7 @@ describe("web_fetch provider fallback normalization", () => {
         diagnostics: [],
       };
       const tool = createWebFetchTool({
-        config: {} as OpenClawConfig,
+        config: {} as MarketingClawConfig,
         sandboxed: false,
         lateBindRuntimeConfig: true,
       });

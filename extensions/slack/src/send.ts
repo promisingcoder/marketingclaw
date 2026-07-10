@@ -9,23 +9,23 @@ import {
   type MessageReceipt,
   type MessageReceiptPartKind,
   type MessageReceiptSourceResult,
-} from "openclaw/plugin-sdk/channel-outbound";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { KeyedAsyncQueue } from "openclaw/plugin-sdk/keyed-async-queue";
-import { resolveMarkdownTableMode } from "openclaw/plugin-sdk/markdown-table-runtime";
-import { requireRuntimeConfig } from "openclaw/plugin-sdk/plugin-config-runtime";
+} from "marketingclaw/plugin-sdk/channel-outbound";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import { KeyedAsyncQueue } from "marketingclaw/plugin-sdk/keyed-async-queue";
+import { resolveMarkdownTableMode } from "marketingclaw/plugin-sdk/markdown-table-runtime";
+import { requireRuntimeConfig } from "marketingclaw/plugin-sdk/plugin-config-runtime";
 import {
   chunkMarkdownTextWithMode,
   isSilentReplyText,
   resolveChunkMode,
   resolveTextChunkLimit,
-} from "openclaw/plugin-sdk/reply-chunking";
-import { resolveTextChunksWithFallback } from "openclaw/plugin-sdk/reply-payload";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
+} from "marketingclaw/plugin-sdk/reply-chunking";
+import { resolveTextChunksWithFallback } from "marketingclaw/plugin-sdk/reply-payload";
+import { logVerbose } from "marketingclaw/plugin-sdk/runtime-env";
 import {
   normalizeOptionalString,
   normalizeOptionalString as normalizeSlackApiString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import type { SlackTokenSource } from "./accounts.js";
 import { resolveSlackAccount, resolveSlackOperationToken } from "./accounts.js";
 import { buildSlackBlocksFallbackText } from "./blocks-fallback.js";
@@ -45,11 +45,11 @@ import { normalizeSlackThreadTsCandidate, resolveSlackThreadTsValue } from "./th
 import { resolveSlackBotToken } from "./token.js";
 import { truncateSlackText } from "./truncate.js";
 const SLACK_DM_CHANNEL_CACHE_MAX = 1024;
-const SLACK_DELIVERY_METADATA_EVENT = "openclaw_delivery";
-const SLACK_DELIVERY_METADATA_KEY = "openclaw_delivery_id";
-const SLACK_DELIVERY_METADATA_PART_INDEX_KEY = "openclaw_delivery_part_index";
-const SLACK_DELIVERY_METADATA_PART_COUNT_KEY = "openclaw_delivery_part_count";
-const SLACK_DELIVERY_METADATA_SIGNATURE_KEY = "openclaw_delivery_signature";
+const SLACK_DELIVERY_METADATA_EVENT = "marketingclaw_delivery";
+const SLACK_DELIVERY_METADATA_KEY = "marketingclaw_delivery_id";
+const SLACK_DELIVERY_METADATA_PART_INDEX_KEY = "marketingclaw_delivery_part_index";
+const SLACK_DELIVERY_METADATA_PART_COUNT_KEY = "marketingclaw_delivery_part_count";
+const SLACK_DELIVERY_METADATA_SIGNATURE_KEY = "marketingclaw_delivery_signature";
 const SLACK_RECONCILE_LOOKBACK_MS = 30_000;
 const SLACK_RECONCILE_CLOCK_SKEW_MS = 5 * 60_000;
 const SLACK_RECONCILE_LIMIT = 100;
@@ -90,7 +90,7 @@ type SlackEnterpriseDelivery = Readonly<{
 const slackDefaultSendIdentities = new Map<string, SlackSendIdentity>();
 
 type SlackSendOpts = {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   token?: string;
   accountId?: string;
   mediaUrl?: string;
@@ -359,7 +359,7 @@ function resolveEnterpriseEventScope(params: {
 }
 
 function resolveSlackTextChunks(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   accountId?: string;
   text: string;
   textLimit?: number;
@@ -510,7 +510,7 @@ function createSlackDeliveryMetadataId(queueId?: string): string | undefined {
     return undefined;
   }
   // Slack metadata is visible to workspace apps and members. Keep the durable
-  // store key inside OpenClaw while retaining a stable provider-side marker.
+  // store key inside MarketingClaw while retaining a stable provider-side marker.
   return createHash("sha256").update(normalized).digest("base64url");
 }
 
@@ -998,7 +998,7 @@ export async function sendMessageSlack(
 async function sendMessageSlackQueued(params: {
   trimmedMessage: string;
   opts: SlackSendOpts;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   account: ReturnType<typeof resolveSlackAccount>;
   token: string;
   recipient: SlackRecipient;
@@ -1015,7 +1015,7 @@ async function sendMessageSlackQueued(params: {
 async function sendMessageSlackQueuedInner(params: {
   trimmedMessage: string;
   opts: SlackSendOpts;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   account: ReturnType<typeof resolveSlackAccount>;
   token: string;
   recipient: SlackRecipient;

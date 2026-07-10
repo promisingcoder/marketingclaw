@@ -1,12 +1,12 @@
 // Microsoft Foundry provider module implements model/runtime integration.
-import type { ProviderNormalizeResolvedModelContext } from "openclaw/plugin-sdk/core";
+import type { ProviderNormalizeResolvedModelContext } from "marketingclaw/plugin-sdk/core";
 import {
   resolveClaudeThinkingProfile,
   supportsClaudeNativeMaxEffort,
   type ModelProviderConfig,
   type ProviderPlugin,
-} from "openclaw/plugin-sdk/provider-model-shared";
-import { OPENAI_RESPONSES_STREAM_HOOKS } from "openclaw/plugin-sdk/provider-stream-family";
+} from "marketingclaw/plugin-sdk/provider-model-shared";
+import { OPENAI_RESPONSES_STREAM_HOOKS } from "marketingclaw/plugin-sdk/provider-stream-family";
 import { apiKeyAuthMethod, entraIdAuthMethod } from "./auth.js";
 import { prepareFoundryRuntimeAuth } from "./runtime.js";
 import {

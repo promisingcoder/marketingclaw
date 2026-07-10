@@ -7,14 +7,14 @@ import {
   executeSqliteQueryTakeFirstSync,
   getNodeSqliteKysely,
 } from "../infra/kysely-sync.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
+import type { DB as MarketingClawStateKyselyDatabase } from "../state/marketingclaw-state-db.generated.js";
 import {
-  closeOpenClawStateDatabase,
-  openOpenClawStateDatabase,
-} from "../state/openclaw-state-db.js";
-import { resolveOpenClawStateSqlitePath } from "../state/openclaw-state-db.paths.js";
+  closeMarketingClawStateDatabase,
+  openMarketingClawStateDatabase,
+} from "../state/marketingclaw-state-db.js";
+import { resolveMarketingClawStateSqlitePath } from "../state/marketingclaw-state-db.paths.js";
 import { captureEnv } from "../test-utils/env.js";
-import { withOpenClawTestState } from "../test-utils/openclaw-test-state.js";
+import { withMarketingClawTestState } from "../test-utils/marketingclaw-test-state.js";
 import {
   createManagedTaskFlow as createManagedTaskFlowOrNull,
   resetTaskFlowRegistryForTests,
@@ -49,7 +49,7 @@ import {
   parseTaskStatus,
 } from "./task-registry.types.js";
 
-const ORIGINAL_ENV = captureEnv(["OPENCLAW_STATE_DIR"]);
+const ORIGINAL_ENV = captureEnv(["MARKETINGCLAW_STATE_DIR"]);
 
 function createTaskRecord(params: Parameters<typeof createTaskRecordOrNull>[0]): TaskRecord {
   const task = createTaskRecordOrNull(params);
@@ -69,7 +69,7 @@ function createManagedTaskFlow(
   return flow;
 }
 type TaskRegistryTestDatabase = Pick<
-  OpenClawStateKyselyDatabase,
+  MarketingClawStateKyselyDatabase,
   "task_delivery_state" | "task_runs"
 >;
 
@@ -195,8 +195,8 @@ describe("task-registry store runtime", () => {
   });
 
   it("rejects corrupt persisted task rows during sqlite restore", async () => {
-    await withOpenClawTestState(
-      { layout: "state-only", prefix: "openclaw-task-store-corrupt-" },
+    await withMarketingClawTestState(
+      { layout: "state-only", prefix: "marketingclaw-task-store-corrupt-" },
       async () => {
         resetTaskRegistryForTests();
         const created = createTaskRecord({
@@ -211,7 +211,7 @@ describe("task-registry store runtime", () => {
           notifyPolicy: "silent",
         });
 
-        const database = openOpenClawStateDatabase();
+        const database = openMarketingClawStateDatabase();
         const db = getNodeSqliteKysely<TaskRegistryTestDatabase>(database.db);
         executeSqliteQuerySync(
           database.db,
@@ -224,8 +224,8 @@ describe("task-registry store runtime", () => {
   });
 
   it("drops invalid requester origins during sqlite restore", async () => {
-    await withOpenClawTestState(
-      { layout: "state-only", prefix: "openclaw-task-store-invalid-origin-" },
+    await withMarketingClawTestState(
+      { layout: "state-only", prefix: "marketingclaw-task-store-invalid-origin-" },
       async () => {
         resetTaskRegistryForTests();
         const created = createTaskRecord({
@@ -243,7 +243,7 @@ describe("task-registry store runtime", () => {
           },
         });
 
-        const database = openOpenClawStateDatabase();
+        const database = openMarketingClawStateDatabase();
         const db = getNodeSqliteKysely<TaskRegistryTestDatabase>(database.db);
         executeSqliteQuerySync(
           database.db,
@@ -522,8 +522,8 @@ describe("task-registry store runtime", () => {
   });
 
   it("persists executor and requester agent ids in sqlite task rows", async () => {
-    await withOpenClawTestState(
-      { layout: "state-only", prefix: "openclaw-task-agent-id-" },
+    await withMarketingClawTestState(
+      { layout: "state-only", prefix: "marketingclaw-task-agent-id-" },
       async () => {
         const created = createTaskRecord({
           runtime: "subagent",
@@ -538,7 +538,7 @@ describe("task-registry store runtime", () => {
           deliveryStatus: "pending",
         });
 
-        const database = openOpenClawStateDatabase();
+        const database = openMarketingClawStateDatabase();
         const db = getNodeSqliteKysely<TaskRegistryTestDatabase>(database.db);
         const row = executeSqliteQueryTakeFirstSync(
           database.db,
@@ -566,8 +566,8 @@ describe("task-registry store runtime", () => {
   });
 
   it("persists requester origin atomically when creating sqlite tasks", async () => {
-    await withOpenClawTestState(
-      { layout: "state-only", prefix: "openclaw-task-create-origin-" },
+    await withMarketingClawTestState(
+      { layout: "state-only", prefix: "marketingclaw-task-create-origin-" },
       async () => {
         const created = createTaskRecord({
           runtime: "acp",
@@ -674,8 +674,8 @@ describe("task-registry store runtime", () => {
   });
 
   it("prunes stale sqlite delivery state while retaining current rows", async () => {
-    await withOpenClawTestState(
-      { layout: "state-only", prefix: "openclaw-task-delivery-prune-" },
+    await withMarketingClawTestState(
+      { layout: "state-only", prefix: "marketingclaw-task-delivery-prune-" },
       async () => {
         const taskA = createStoredTask();
         const taskB: TaskRecord = {
@@ -719,8 +719,8 @@ describe("task-registry store runtime", () => {
   });
 
   it("prunes large sqlite snapshots without binding every task id at once", async () => {
-    await withOpenClawTestState(
-      { layout: "state-only", prefix: "openclaw-task-large-prune-" },
+    await withMarketingClawTestState(
+      { layout: "state-only", prefix: "marketingclaw-task-large-prune-" },
       async () => {
         const tasks = new Map<string, TaskRecord>();
         const deliveryStates = new Map<string, TaskDeliveryState>();
@@ -757,8 +757,8 @@ describe("task-registry store runtime", () => {
   });
 
   it("reopens after the shared state database is closed", async () => {
-    await withOpenClawTestState(
-      { layout: "state-only", prefix: "openclaw-task-store-" },
+    await withMarketingClawTestState(
+      { layout: "state-only", prefix: "marketingclaw-task-store-" },
       async () => {
         const task = createStoredTask();
         saveTaskRegistryStateToSqlite({
@@ -766,7 +766,7 @@ describe("task-registry store runtime", () => {
           deliveryStates: new Map(),
         });
 
-        closeOpenClawStateDatabase();
+        closeMarketingClawStateDatabase();
 
         const restored = loadTaskRegistryStateFromSqlite();
         expect(restored.tasks.get(task.taskId)).toEqual(task);
@@ -778,8 +778,8 @@ describe("task-registry store runtime", () => {
     if (process.platform === "win32") {
       return;
     }
-    await withOpenClawTestState(
-      { layout: "state-only", prefix: "openclaw-task-store-" },
+    await withMarketingClawTestState(
+      { layout: "state-only", prefix: "marketingclaw-task-store-" },
       async () => {
         createTaskRecord({
           runtime: "cron",
@@ -793,9 +793,9 @@ describe("task-registry store runtime", () => {
           notifyPolicy: "silent",
         });
 
-        const databasePath = resolveOpenClawStateSqlitePath(process.env);
+        const databasePath = resolveMarketingClawStateSqlitePath(process.env);
         const registryDir = path.dirname(databasePath);
-        expect(databasePath.endsWith(path.join("state", "openclaw.sqlite"))).toBe(true);
+        expect(databasePath.endsWith(path.join("state", "marketingclaw.sqlite"))).toBe(true);
         expect(statSync(registryDir).mode & 0o777).toBe(0o700);
         expect(statSync(databasePath).mode & 0o777).toBe(0o600);
       },

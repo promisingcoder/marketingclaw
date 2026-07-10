@@ -33,17 +33,17 @@ function deleteEnvValue(key: string): void {
 }
 
 async function withStateDir<T>(name: string, fn: (stateDir: string) => Promise<T>): Promise<T> {
-  const root = await fs.mkdtemp(path.join(os.tmpdir(), `openclaw-${name}-`));
-  const previousStateDir = process.env.OPENCLAW_STATE_DIR;
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), `marketingclaw-${name}-`));
+  const previousStateDir = process.env.MARKETINGCLAW_STATE_DIR;
   try {
-    setEnvValue("OPENCLAW_STATE_DIR", root);
+    setEnvValue("MARKETINGCLAW_STATE_DIR", root);
     return await fn(root);
   } finally {
     resetCommitmentExtractionRuntimeForTests();
     if (previousStateDir === undefined) {
-      deleteEnvValue("OPENCLAW_STATE_DIR");
+      deleteEnvValue("MARKETINGCLAW_STATE_DIR");
     } else {
-      setEnvValue("OPENCLAW_STATE_DIR", previousStateDir);
+      setEnvValue("MARKETINGCLAW_STATE_DIR", previousStateDir);
     }
     await fs.rm(root, { recursive: true, force: true });
   }

@@ -3,19 +3,19 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
 import {
   ensureMemoryIndexSchema,
   loadSqliteVecExtension,
-} from "openclaw/plugin-sdk/memory-core-host-engine-storage";
+} from "marketingclaw/plugin-sdk/memory-core-host-engine-storage";
 import {
   createPluginStateKeyedStoreForTests,
   resetPluginStateStoreForTests,
-} from "openclaw/plugin-sdk/plugin-state-test-runtime";
+} from "marketingclaw/plugin-sdk/plugin-state-test-runtime";
 import type {
   OpenKeyedStoreOptions,
   PluginDoctorStateMigrationContext,
-} from "openclaw/plugin-sdk/runtime-doctor";
+} from "marketingclaw/plugin-sdk/runtime-doctor";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { stateMigrations } from "./doctor-contract-api.js";
 import { testing as dreamingTesting } from "./src/dreaming-phases.js";
@@ -389,10 +389,10 @@ describe("memory-core doctor dreaming migration", () => {
 
   beforeEach(async () => {
     resetPluginStateStoreForTests();
-    rootDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-memory-core-doctor-"));
+    rootDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-memory-core-doctor-"));
     workspaceDir = path.join(rootDir, "workspace");
     await fs.mkdir(path.join(workspaceDir, "memory", ".dreams"), { recursive: true });
-    env = { ...process.env, OPENCLAW_STATE_DIR: path.join(rootDir, "state") };
+    env = { ...process.env, MARKETINGCLAW_STATE_DIR: path.join(rootDir, "state") };
   });
 
   afterEach(async () => {
@@ -405,7 +405,7 @@ describe("memory-core doctor dreaming migration", () => {
   }
 
   function migrationParams(
-    config: OpenClawConfig = {
+    config: MarketingClawConfig = {
       agents: {
         list: [{ id: "main", workspace: workspaceDir }],
       },
@@ -568,7 +568,7 @@ describe("memory-core doctor dreaming migration", () => {
   });
 
   it("uses migration env when resolving default workspaces", async () => {
-    env = { ...env, OPENCLAW_WORKSPACE_DIR: workspaceDir };
+    env = { ...env, MARKETINGCLAW_WORKSPACE_DIR: workspaceDir };
     const recallPath = path.join(workspaceDir, "memory", ".dreams", "short-term-recall.json");
     await fs.writeFile(
       recallPath,
@@ -614,7 +614,7 @@ describe("memory-core doctor dreaming migration", () => {
   it("migrates the legacy memory sidecar index to the per-agent SQLite database", async () => {
     const stateDir = path.join(rootDir, "state");
     const legacyPath = path.join(stateDir, "memory", "main.sqlite");
-    const agentPath = path.join(stateDir, "agents", "main", "agent", "openclaw-agent.sqlite");
+    const agentPath = path.join(stateDir, "agents", "main", "agent", "marketingclaw-agent.sqlite");
     await writeLegacyMemorySidecar(legacyPath);
 
     const migration = legacyMemoryIndexMigration();
@@ -641,7 +641,7 @@ describe("memory-core doctor dreaming migration", () => {
   it("creates migrated FTS tables with the configured legacy tokenizer", async () => {
     const stateDir = path.join(rootDir, "state");
     const legacyPath = path.join(stateDir, "memory", "main.sqlite");
-    const agentPath = path.join(stateDir, "agents", "main", "agent", "openclaw-agent.sqlite");
+    const agentPath = path.join(stateDir, "agents", "main", "agent", "marketingclaw-agent.sqlite");
     await writeLegacyMemorySidecar(legacyPath);
     const config = {
       agents: {
@@ -654,7 +654,7 @@ describe("memory-core doctor dreaming migration", () => {
         },
         list: [{ id: "main", workspace: workspaceDir }],
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
 
     const result = await legacyMemoryIndexMigration().migrateLegacyState(migrationParams(config));
 
@@ -666,7 +666,7 @@ describe("memory-core doctor dreaming migration", () => {
   it("migrates retired configured legacy memory sidecar paths", async () => {
     const stateDir = path.join(rootDir, "state");
     const legacyPath = path.join(rootDir, "custom-memory", "main.sqlite");
-    const agentPath = path.join(stateDir, "agents", "main", "agent", "openclaw-agent.sqlite");
+    const agentPath = path.join(stateDir, "agents", "main", "agent", "marketingclaw-agent.sqlite");
     await writeLegacyMemorySidecar(legacyPath);
     const config = {
       agents: {
@@ -679,7 +679,7 @@ describe("memory-core doctor dreaming migration", () => {
         },
         list: [{ id: "main", workspace: workspaceDir }],
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
 
     const migration = legacyMemoryIndexMigration();
     const preview = await migration.detectLegacyState(migrationParams(config));
@@ -706,7 +706,7 @@ describe("memory-core doctor dreaming migration", () => {
     const stateDir = path.join(rootDir, "state");
     const topLevelPath = path.join(rootDir, "top-memory", "main.sqlite");
     const defaultsPath = path.join(rootDir, "default-memory", "main.sqlite");
-    const agentPath = path.join(stateDir, "agents", "main", "agent", "openclaw-agent.sqlite");
+    const agentPath = path.join(stateDir, "agents", "main", "agent", "marketingclaw-agent.sqlite");
     await writeLegacyMemorySidecar(topLevelPath, {
       chunkId: "chunk-top",
       chunkHash: "chunk-hash-top",
@@ -737,7 +737,7 @@ describe("memory-core doctor dreaming migration", () => {
         },
         list: [{ id: "main", workspace: workspaceDir }],
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
 
     const migration = legacyMemoryIndexMigration();
     const preview = await migration.detectLegacyState(migrationParams(config));
@@ -767,13 +767,19 @@ describe("memory-core doctor dreaming migration", () => {
   it("does not infer agent ownership from configured sidecar filenames", async () => {
     const stateDir = path.join(rootDir, "state");
     const legacyPath = path.join(stateDir, "memory", "shared.sqlite");
-    const mainAgentPath = path.join(stateDir, "agents", "main", "agent", "openclaw-agent.sqlite");
+    const mainAgentPath = path.join(
+      stateDir,
+      "agents",
+      "main",
+      "agent",
+      "marketingclaw-agent.sqlite",
+    );
     const sharedAgentPath = path.join(
       stateDir,
       "agents",
       "shared",
       "agent",
-      "openclaw-agent.sqlite",
+      "marketingclaw-agent.sqlite",
     );
     await writeLegacyMemorySidecar(legacyPath);
     const config = {
@@ -787,7 +793,7 @@ describe("memory-core doctor dreaming migration", () => {
         },
         list: [{ id: "main", workspace: workspaceDir }],
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
 
     const migration = legacyMemoryIndexMigration();
     const preview = await migration.detectLegacyState(migrationParams(config));
@@ -828,8 +834,20 @@ describe("memory-core doctor dreaming migration", () => {
   it("copies shared retired configured legacy sidecars to each configured agent", async () => {
     const stateDir = path.join(rootDir, "state");
     const legacyPath = path.join(rootDir, "custom-memory", "shared.sqlite");
-    const mainAgentPath = path.join(stateDir, "agents", "main", "agent", "openclaw-agent.sqlite");
-    const workAgentPath = path.join(stateDir, "agents", "work", "agent", "openclaw-agent.sqlite");
+    const mainAgentPath = path.join(
+      stateDir,
+      "agents",
+      "main",
+      "agent",
+      "marketingclaw-agent.sqlite",
+    );
+    const workAgentPath = path.join(
+      stateDir,
+      "agents",
+      "work",
+      "agent",
+      "marketingclaw-agent.sqlite",
+    );
     await writeLegacyMemorySidecar(legacyPath);
     const config = {
       agents: {
@@ -845,7 +863,7 @@ describe("memory-core doctor dreaming migration", () => {
           { id: "work", workspace: path.join(rootDir, "work") },
         ],
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
 
     const migration = legacyMemoryIndexMigration();
     const preview = await migration.detectLegacyState(migrationParams(config));
@@ -875,7 +893,7 @@ describe("memory-core doctor dreaming migration", () => {
   it("restores legacy sidecar vector rows for vector-backed search", async () => {
     const stateDir = path.join(rootDir, "state");
     const legacyPath = path.join(stateDir, "memory", "main.sqlite");
-    const agentPath = path.join(stateDir, "agents", "main", "agent", "openclaw-agent.sqlite");
+    const agentPath = path.join(stateDir, "agents", "main", "agent", "marketingclaw-agent.sqlite");
     await writeLegacyMemorySidecar(legacyPath, { vector: true });
 
     const result = await legacyMemoryIndexMigration().migrateLegacyState(migrationParams());
@@ -899,7 +917,7 @@ describe("memory-core doctor dreaming migration", () => {
     } finally {
       db.close();
     }
-    const config: OpenClawConfig = {
+    const config: MarketingClawConfig = {
       agents: {
         defaults: {
           memorySearch: {
@@ -955,9 +973,9 @@ describe("memory-core doctor dreaming migration", () => {
   it("keeps legacy vector sidecars retryable when sqlite-vec cannot load", async () => {
     const stateDir = path.join(rootDir, "state");
     const legacyPath = path.join(stateDir, "memory", "main.sqlite");
-    const agentPath = path.join(stateDir, "agents", "main", "agent", "openclaw-agent.sqlite");
+    const agentPath = path.join(stateDir, "agents", "main", "agent", "marketingclaw-agent.sqlite");
     await writeLegacyMemorySidecar(legacyPath, { vector: "vec0" });
-    const config: OpenClawConfig = {
+    const config: MarketingClawConfig = {
       agents: {
         defaults: {
           memorySearch: {
@@ -996,9 +1014,9 @@ describe("memory-core doctor dreaming migration", () => {
   it("archives legacy vector sidecars when vector search is disabled", async () => {
     const stateDir = path.join(rootDir, "state");
     const legacyPath = path.join(stateDir, "memory", "main.sqlite");
-    const agentPath = path.join(stateDir, "agents", "main", "agent", "openclaw-agent.sqlite");
+    const agentPath = path.join(stateDir, "agents", "main", "agent", "marketingclaw-agent.sqlite");
     await writeLegacyMemorySidecar(legacyPath, { vector: "vec0" });
-    const config: OpenClawConfig = {
+    const config: MarketingClawConfig = {
       agents: {
         defaults: {
           memorySearch: {
@@ -1029,9 +1047,9 @@ describe("memory-core doctor dreaming migration", () => {
   it("archives legacy vector sidecars when memory search provider is none", async () => {
     const stateDir = path.join(rootDir, "state");
     const legacyPath = path.join(stateDir, "memory", "main.sqlite");
-    const agentPath = path.join(stateDir, "agents", "main", "agent", "openclaw-agent.sqlite");
+    const agentPath = path.join(stateDir, "agents", "main", "agent", "marketingclaw-agent.sqlite");
     await writeLegacyMemorySidecar(legacyPath, { vector: "vec0" });
-    const config: OpenClawConfig = {
+    const config: MarketingClawConfig = {
       agents: {
         defaults: {
           memorySearch: {
@@ -1078,10 +1096,10 @@ describe("memory-core doctor dreaming migration", () => {
         },
         list: [{ id: "main", workspace: workspaceDir }],
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
 
     const result = await legacyMemoryIndexMigration().migrateLegacyState(migrationParams(config));
-    const repairedConfig: OpenClawConfig = {
+    const repairedConfig: MarketingClawConfig = {
       agents: {
         list: [{ id: "main", workspace: workspaceDir }],
       },
@@ -1104,7 +1122,7 @@ describe("memory-core doctor dreaming migration", () => {
         "agents",
         "main",
         "agent",
-        "openclaw-agent.sqlite",
+        "marketingclaw-agent.sqlite",
       )}`,
     ]);
     await expect(fs.access(legacyPath)).resolves.toBeUndefined();
@@ -1132,7 +1150,7 @@ describe("memory-core doctor dreaming migration", () => {
         },
         list: [{ id: "main", workspace: workspaceDir }],
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
 
     const result = await legacyMemoryIndexMigration().migrateLegacyState(migrationParams(config));
     const retryEntries = await fs.readdir(path.join(stateDir, "memory"));
@@ -1141,7 +1159,7 @@ describe("memory-core doctor dreaming migration", () => {
     );
     expect(alternateRetry).toBeDefined();
     const alternateRetryPath = path.join(stateDir, "memory", alternateRetry ?? "");
-    const repairedConfig: OpenClawConfig = {
+    const repairedConfig: MarketingClawConfig = {
       agents: {
         defaults: {
           memorySearch: {
@@ -1169,14 +1187,14 @@ describe("memory-core doctor dreaming migration", () => {
           "agents",
           "main",
           "agent",
-          "openclaw-agent.sqlite",
+          "marketingclaw-agent.sqlite",
         )}`,
         `- Memory Core legacy memory index: ${alternateRetryPath} -> ${path.join(
           stateDir,
           "agents",
           "main",
           "agent",
-          "openclaw-agent.sqlite",
+          "marketingclaw-agent.sqlite",
         )}`,
       ]),
     );
@@ -1203,7 +1221,7 @@ describe("memory-core doctor dreaming migration", () => {
   it("leaves the legacy memory sidecar in place when canonical rows conflict", async () => {
     const stateDir = path.join(rootDir, "state");
     const legacyPath = path.join(stateDir, "memory", "main.sqlite");
-    const agentPath = path.join(stateDir, "agents", "main", "agent", "openclaw-agent.sqlite");
+    const agentPath = path.join(stateDir, "agents", "main", "agent", "marketingclaw-agent.sqlite");
     await writeLegacyMemorySidecar(legacyPath);
     await createCanonicalMemoryIndex(agentPath, "canonical memory remains authoritative");
 
@@ -1228,7 +1246,7 @@ describe("memory-core doctor dreaming migration", () => {
     const stateDir = path.join(rootDir, "state");
     const legacyPath = path.join(rootDir, "custom-memory", "main.sqlite");
     const retryPath = path.join(stateDir, "memory", "main.sqlite");
-    const agentPath = path.join(stateDir, "agents", "main", "agent", "openclaw-agent.sqlite");
+    const agentPath = path.join(stateDir, "agents", "main", "agent", "marketingclaw-agent.sqlite");
     await writeLegacyMemorySidecar(legacyPath);
     await createCanonicalMemoryIndex(agentPath, "canonical memory remains authoritative");
     const config = {
@@ -1242,10 +1260,10 @@ describe("memory-core doctor dreaming migration", () => {
         },
         list: [{ id: "main", workspace: workspaceDir }],
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
 
     const result = await legacyMemoryIndexMigration().migrateLegacyState(migrationParams(config));
-    const repairedConfig: OpenClawConfig = {
+    const repairedConfig: MarketingClawConfig = {
       agents: {
         list: [{ id: "main", workspace: workspaceDir }],
       },
@@ -1274,7 +1292,7 @@ describe("memory-core doctor dreaming migration", () => {
     const stateDir = path.join(rootDir, "state");
     const legacyPath = path.join(rootDir, "custom-memory", "main.sqlite");
     const retryPath = path.join(stateDir, "memory", "main.sqlite");
-    const agentPath = path.join(stateDir, "agents", "main", "agent", "openclaw-agent.sqlite");
+    const agentPath = path.join(stateDir, "agents", "main", "agent", "marketingclaw-agent.sqlite");
     await writeLegacyMemorySidecar(legacyPath);
     await fs.mkdir(agentPath, { recursive: true });
     const config = {
@@ -1288,10 +1306,10 @@ describe("memory-core doctor dreaming migration", () => {
         },
         list: [{ id: "main", workspace: workspaceDir }],
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
 
     const result = await legacyMemoryIndexMigration().migrateLegacyState(migrationParams(config));
-    const repairedConfig: OpenClawConfig = {
+    const repairedConfig: MarketingClawConfig = {
       agents: {
         list: [{ id: "main", workspace: workspaceDir }],
       },
@@ -1318,7 +1336,7 @@ describe("memory-core doctor dreaming migration", () => {
   it("leaves the legacy memory sidecar in place when metadata conflicts", async () => {
     const stateDir = path.join(rootDir, "state");
     const legacyPath = path.join(stateDir, "memory", "main.sqlite");
-    const agentPath = path.join(stateDir, "agents", "main", "agent", "openclaw-agent.sqlite");
+    const agentPath = path.join(stateDir, "agents", "main", "agent", "marketingclaw-agent.sqlite");
     await writeLegacyMemorySidecar(legacyPath);
     await createUnrelatedCanonicalMemoryIndex(agentPath, { vectorDims: 4 });
 
@@ -1340,7 +1358,7 @@ describe("memory-core doctor dreaming migration", () => {
   it("merges legacy sidecar rows into a non-empty canonical index when rows do not conflict", async () => {
     const stateDir = path.join(rootDir, "state");
     const legacyPath = path.join(stateDir, "memory", "main.sqlite");
-    const agentPath = path.join(stateDir, "agents", "main", "agent", "openclaw-agent.sqlite");
+    const agentPath = path.join(stateDir, "agents", "main", "agent", "marketingclaw-agent.sqlite");
     await writeLegacyMemorySidecar(legacyPath);
     await createUnrelatedCanonicalMemoryIndex(agentPath);
 
@@ -1370,7 +1388,7 @@ describe("memory-core doctor dreaming migration", () => {
   it("leaves legacy vector sidecars in place when vector dimensions conflict", async () => {
     const stateDir = path.join(rootDir, "state");
     const legacyPath = path.join(stateDir, "memory", "main.sqlite");
-    const agentPath = path.join(stateDir, "agents", "main", "agent", "openclaw-agent.sqlite");
+    const agentPath = path.join(stateDir, "agents", "main", "agent", "marketingclaw-agent.sqlite");
     await writeLegacyMemorySidecar(legacyPath, { vector: true });
     await createMismatchedCanonicalVectorIndex(agentPath);
 
@@ -1389,7 +1407,7 @@ describe("memory-core doctor dreaming migration", () => {
   it("leaves legacy vector sidecars in place when canonical vector rows conflict", async () => {
     const stateDir = path.join(rootDir, "state");
     const legacyPath = path.join(stateDir, "memory", "main.sqlite");
-    const agentPath = path.join(stateDir, "agents", "main", "agent", "openclaw-agent.sqlite");
+    const agentPath = path.join(stateDir, "agents", "main", "agent", "marketingclaw-agent.sqlite");
     await writeLegacyMemorySidecar(legacyPath, { vector: true });
     await createConflictingCanonicalVectorIndex(agentPath);
 
@@ -1431,7 +1449,7 @@ describe("memory-core doctor dreaming migration", () => {
   it("leaves legacy sidecars in place when canonical FTS rows conflict", async () => {
     const stateDir = path.join(rootDir, "state");
     const legacyPath = path.join(stateDir, "memory", "main.sqlite");
-    const agentPath = path.join(stateDir, "agents", "main", "agent", "openclaw-agent.sqlite");
+    const agentPath = path.join(stateDir, "agents", "main", "agent", "marketingclaw-agent.sqlite");
     await writeLegacyMemorySidecar(legacyPath);
     await createCanonicalLegacyMemoryRowsWithFts(agentPath, "stale text");
 
@@ -1450,7 +1468,7 @@ describe("memory-core doctor dreaming migration", () => {
   it("leaves legacy vector sidecars in place when canonical metadata dimensions conflict", async () => {
     const stateDir = path.join(rootDir, "state");
     const legacyPath = path.join(stateDir, "memory", "main.sqlite");
-    const agentPath = path.join(stateDir, "agents", "main", "agent", "openclaw-agent.sqlite");
+    const agentPath = path.join(stateDir, "agents", "main", "agent", "marketingclaw-agent.sqlite");
     await writeLegacyMemorySidecar(legacyPath, { vector: true });
     await createUnrelatedCanonicalMemoryIndex(agentPath, { vectorDims: 4 });
 

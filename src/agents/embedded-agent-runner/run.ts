@@ -6,9 +6,9 @@ import fs from "node:fs/promises";
 import {
   addTimerTimeoutGraceMs,
   MAX_TIMER_TIMEOUT_MS,
-} from "@openclaw/normalization-core/number-coercion";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+} from "@marketingclaw/normalization-core/number-coercion";
+import { normalizeOptionalString } from "@marketingclaw/normalization-core/string-coerce";
+import { truncateUtf16Safe } from "@marketingclaw/normalization-core/utf16-slice";
 import { sanitizeForLog } from "../../../packages/terminal-core/src/ansi.js";
 import { FAST_MODE_AUTO_PROGRESS_KIND, type ReplyPayload } from "../../auto-reply/reply-payload.js";
 import type { ThinkLevel } from "../../auto-reply/thinking.js";
@@ -16,7 +16,7 @@ import { SILENT_REPLY_TOKEN } from "../../auto-reply/tokens.js";
 import { getRuntimeConfigSnapshot } from "../../config/config.js";
 import { resolveStorePath } from "../../config/sessions.js";
 import { updateSessionEntry } from "../../config/sessions/session-accessor.js";
-import { OPENCLAW_EMBEDDED_CONTEXT_ENGINE_HOST } from "../../context-engine/host-compat.js";
+import { MARKETINGCLAW_EMBEDDED_CONTEXT_ENGINE_HOST } from "../../context-engine/host-compat.js";
 import { ensureContextEnginesInitialized } from "../../context-engine/init.js";
 import {
   resolveContextEngine,
@@ -104,7 +104,7 @@ import {
   resolveFastModeForElapsed,
 } from "../fast-mode.js";
 import { ensureSelectedAgentHarnessPlugin } from "../harness/runtime-plugin.js";
-import { agentHarnessBuildsOpenClawTools, selectAgentHarness } from "../harness/selection.js";
+import { agentHarnessBuildsMarketingClawTools, selectAgentHarness } from "../harness/selection.js";
 import { LiveSessionModelSwitchError } from "../live-model-switch-error.js";
 import { shouldSwitchToLiveModel, clearLiveModelSwitchPending } from "../live-model-switch.js";
 import {
@@ -122,7 +122,7 @@ import {
   resolveModelRefFromString,
 } from "../model-selection.js";
 import { resolveThinkingDefault } from "../model-thinking-default.js";
-import { ensureOpenClawModelsJson } from "../models-config.js";
+import { ensureMarketingClawModelsJson } from "../models-config.js";
 import {
   OPENAI_PROVIDER_ID,
   listOpenAIAuthProfileProvidersForAgentRuntime,
@@ -524,7 +524,7 @@ function buildTraceToolSummary(params: {
  * The return value is normalized: whitespace-only inputs collapse to undefined, and
  * successful resolution returns a trimmed session key. This is a read-only lookup
  * with no side effects.
- * See: https://github.com/openclaw/openclaw/issues/60552
+ * See: https://github.com/promisingcoder/marketingclaw/issues/60552
  */
 function backfillSessionKey(params: {
   config: RunEmbeddedAgentParams["config"];
@@ -881,7 +881,7 @@ async function runEmbeddedAgentInternal(
         try {
           await params.onToolResult?.({
             text: summary,
-            channelData: { openclawProgressKind: FAST_MODE_AUTO_PROGRESS_KIND },
+            channelData: { marketingclawProgressKind: FAST_MODE_AUTO_PROGRESS_KIND },
           });
         } catch (error) {
           log.debug(`embedded run fast mode auto progress failed: ${formatErrorMessage(error)}`);
@@ -1079,7 +1079,7 @@ async function runEmbeddedAgentInternal(
         agentHarnessId: params.agentHarnessId,
         agentHarnessRuntimeOverride: params.agentHarnessRuntimeOverride,
       });
-      const pluginHarnessOwnsTransport = agentHarness.id !== "openclaw";
+      const pluginHarnessOwnsTransport = agentHarness.id !== "marketingclaw";
       const modelConfigProvider = provider;
       const selectedRuntimeProvider = resolveSelectedOpenAIRuntimeProvider({
         provider,
@@ -1103,7 +1103,7 @@ async function runEmbeddedAgentInternal(
           params.config,
           {
             // Plugin dynamic model hooks can resolve explicit model refs without
-            // first generating OpenClaw models.json. This keeps one-shot model runs from
+            // first generating MarketingClaw models.json. This keeps one-shot model runs from
             // blocking on unrelated provider discovery.
             skipAgentDiscovery: true,
             allowBundledStaticCatalogFallback: pluginHarnessOwnsTransport,
@@ -1123,7 +1123,7 @@ async function runEmbeddedAgentInternal(
         modelResolution ??= firstModelResolution;
       }
       if (!modelResolution) {
-        await ensureOpenClawModelsJson(params.config, agentDir, {
+        await ensureMarketingClawModelsJson(params.config, agentDir, {
           workspaceDir: resolvedWorkspace,
         });
         for (const candidateProvider of modelResolutionProviders) {
@@ -1188,17 +1188,17 @@ async function runEmbeddedAgentInternal(
       startupStages.mark("model-resolution");
       notifyExecutionPhase("model_resolution", { provider, model: modelId });
 
-      const pluginHarnessNeedsOpenClawAuthBootstrap =
+      const pluginHarnessNeedsMarketingClawAuthBootstrap =
         pluginHarnessOwnsTransport &&
         provider === OPENAI_PROVIDER_ID &&
         effectiveModel.api === "openai-chatgpt-responses";
-      const openClawNativeCodexResponsesNeedsAuthBootstrap =
+      const marketingClawNativeCodexResponsesNeedsAuthBootstrap =
         !pluginHarnessOwnsTransport &&
         provider === OPENAI_PROVIDER_ID &&
         effectiveModel.api === "openai-chatgpt-responses";
       let piExternalCliAuthScope = pluginHarnessOwnsTransport
         ? { ignoreAutoPreferredProfile: false }
-        : openClawNativeCodexResponsesNeedsAuthBootstrap
+        : marketingClawNativeCodexResponsesNeedsAuthBootstrap
           ? {
               providerIds: [OPENAI_PROVIDER_ID],
               ignoreAutoPreferredProfile: false,
@@ -1215,7 +1215,7 @@ async function runEmbeddedAgentInternal(
       let noExternalAuthStore: AuthProfileStore | undefined;
       if (
         !pluginHarnessOwnsTransport &&
-        !pluginHarnessNeedsOpenClawAuthBootstrap &&
+        !pluginHarnessNeedsMarketingClawAuthBootstrap &&
         !piExternalCliAuthScope.providerIds
       ) {
         noExternalAuthStore = ensureAuthProfileStoreWithoutExternalProfiles(agentDir, {
@@ -1233,9 +1233,9 @@ async function runEmbeddedAgentInternal(
         });
       }
       const authStore =
-        pluginHarnessOwnsTransport && !pluginHarnessNeedsOpenClawAuthBootstrap
+        pluginHarnessOwnsTransport && !pluginHarnessNeedsMarketingClawAuthBootstrap
           ? createEmptyAuthProfileStore()
-          : pluginHarnessNeedsOpenClawAuthBootstrap
+          : pluginHarnessNeedsMarketingClawAuthBootstrap
             ? ensureAuthProfileStore(agentDir, {
                 externalCliProviderIds: [OPENAI_PROVIDER_ID],
                 allowKeychainPrompt: false,
@@ -1250,7 +1250,7 @@ async function runEmbeddedAgentInternal(
                   allowKeychainPrompt: false,
                 }));
       const attemptAuthProfileStore =
-        pluginHarnessOwnsTransport && !pluginHarnessNeedsOpenClawAuthBootstrap
+        pluginHarnessOwnsTransport && !pluginHarnessNeedsMarketingClawAuthBootstrap
           ? ensureAuthProfileStoreWithoutExternalProfiles(agentDir, {
               allowKeychainPrompt: false,
             })
@@ -1437,7 +1437,7 @@ async function runEmbeddedAgentInternal(
       }) => {
         const fallbackReason = resolveRuntimeFallbackReason();
         return buildContextEngineRuntimeSettings({
-          contextEngineHost: OPENCLAW_EMBEDDED_CONTEXT_ENGINE_HOST,
+          contextEngineHost: MARKETINGCLAW_EMBEDDED_CONTEXT_ENGINE_HOST,
           provider,
           requestedModel: requestedModelId,
           resolvedModel: modelId,
@@ -1540,14 +1540,14 @@ async function runEmbeddedAgentInternal(
         return false;
       };
       const advanceAttemptAuthProfile =
-        pluginHarnessOwnsTransport && !pluginHarnessNeedsOpenClawAuthBootstrap
+        pluginHarnessOwnsTransport && !pluginHarnessNeedsMarketingClawAuthBootstrap
           ? advancePluginHarnessAuthProfile
           : advanceAuthProfile;
 
-      // Plugin harnesses own their model transport/auth. Running OpenClaw's generic
+      // Plugin harnesses own their model transport/auth. Running MarketingClaw's generic
       // auth bootstrap here can turn synthetic provider markers into real
       // vendor-token refresh attempts before the plugin gets control.
-      if (!pluginHarnessOwnsTransport || pluginHarnessNeedsOpenClawAuthBootstrap) {
+      if (!pluginHarnessOwnsTransport || pluginHarnessNeedsMarketingClawAuthBootstrap) {
         await initializeAuthProfile();
       } else if (lockedProfileId) {
         lastProfileId = lockedProfileId;
@@ -1564,7 +1564,7 @@ async function runEmbeddedAgentInternal(
               : lastProfileId,
           )
         : attemptAuthProfileStore;
-      const harnessBuildsOpenClawTools = agentHarnessBuildsOpenClawTools(agentHarness.id);
+      const harnessBuildsMarketingClawTools = agentHarnessBuildsMarketingClawTools(agentHarness.id);
       const { sessionAgentId } = resolveSessionAgentIds({
         sessionKey: params.sessionKey,
         config: params.config,
@@ -1744,7 +1744,7 @@ async function runEmbeddedAgentInternal(
         }
         if (pluginHarnessOwnsTransport && reason === "timeout") {
           // Harness-owned transport timeouts are lifecycle failures, not
-          // credential evidence. Do not poison OpenClaw auth cooldowns.
+          // credential evidence. Do not poison MarketingClaw auth cooldowns.
           return;
         }
         await markAuthProfileFailure({
@@ -2181,8 +2181,8 @@ async function runEmbeddedAgentInternal(
             fallbackReason: resolveRuntimeFallbackReason(),
             isFinalFallbackAttempt: params.isFinalFallbackAttempt,
             // Use the harness selected before model/auth setup for the actual
-            // attempt too. Otherwise plugin-owned transports can skip OpenClaw auth
-            // bootstrap but drift back to OpenClaw when the attempt is created.
+            // attempt too. Otherwise plugin-owned transports can skip MarketingClaw auth
+            // bootstrap but drift back to MarketingClaw when the attempt is created.
             agentHarnessId: agentHarness.id,
             ...(params.sessionKey
               ? {
@@ -2207,9 +2207,11 @@ async function runEmbeddedAgentInternal(
             initialReplayState: accumulatedReplayState,
             authStorage,
             authProfileStore: runAttemptAuthProfileStore,
-            // These harnesses build OpenClaw tools internally. Keep transport auth
+            // These harnesses build MarketingClaw tools internally. Keep transport auth
             // scoped while letting tool construction see plugin/provider creds.
-            toolAuthProfileStore: harnessBuildsOpenClawTools ? attemptAuthProfileStore : undefined,
+            toolAuthProfileStore: harnessBuildsMarketingClawTools
+              ? attemptAuthProfileStore
+              : undefined,
             modelRegistry,
             agentId: workspaceResolution.agentId,
             beforeAgentStartResult,

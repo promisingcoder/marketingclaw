@@ -1,6 +1,6 @@
-package ai.openclaw.app.chat
+package ai.marketingclaw.app.chat
 
-import ai.openclaw.app.voice.smoothedAudioLevel
+import ai.marketingclaw.app.voice.smoothedAudioLevel
 import android.content.Context
 import android.media.MediaRecorder
 import android.os.SystemClock

@@ -20,7 +20,7 @@ import {
 
 describe("ensureDir", () => {
   it("creates nested directory", async () => {
-    await withTempDir({ prefix: "openclaw-test-" }, async (tmp) => {
+    await withTempDir({ prefix: "marketingclaw-test-" }, async (tmp) => {
       const target = path.join(tmp, "nested", "dir");
       await ensureDir(target);
       expect(fs.existsSync(target)).toBe(true);
@@ -71,79 +71,81 @@ describe("normalizeE164", () => {
 });
 
 describe("resolveConfigDir", () => {
-  it("prefers ~/.openclaw when legacy dir is missing", async () => {
-    await withTempDir({ prefix: "openclaw-config-dir-" }, async (root) => {
-      const newDir = path.join(root, ".openclaw");
+  it("prefers ~/.marketingclaw when legacy dir is missing", async () => {
+    await withTempDir({ prefix: "marketingclaw-config-dir-" }, async (root) => {
+      const newDir = path.join(root, ".marketingclaw");
       await fs.promises.mkdir(newDir, { recursive: true });
       const resolved = resolveConfigDir({} as NodeJS.ProcessEnv, () => root);
       expect(resolved).toBe(newDir);
     });
   });
 
-  it("expands OPENCLAW_STATE_DIR using the provided env", () => {
+  it("expands MARKETINGCLAW_STATE_DIR using the provided env", () => {
     const env = {
-      HOME: "/tmp/openclaw-home",
-      OPENCLAW_STATE_DIR: "~/state",
+      HOME: "/tmp/marketingclaw-home",
+      MARKETINGCLAW_STATE_DIR: "~/state",
     } as NodeJS.ProcessEnv;
 
-    expect(resolveConfigDir(env)).toBe(path.resolve("/tmp/openclaw-home", "state"));
+    expect(resolveConfigDir(env)).toBe(path.resolve("/tmp/marketingclaw-home", "state"));
   });
 
-  it("falls back to the config file directory when only OPENCLAW_CONFIG_PATH is set", () => {
+  it("falls back to the config file directory when only MARKETINGCLAW_CONFIG_PATH is set", () => {
     const env = {
-      HOME: "/tmp/openclaw-home",
-      OPENCLAW_CONFIG_PATH: "~/profiles/dev/openclaw.json",
+      HOME: "/tmp/marketingclaw-home",
+      MARKETINGCLAW_CONFIG_PATH: "~/profiles/dev/marketingclaw.json",
     } as NodeJS.ProcessEnv;
 
-    expect(resolveConfigDir(env)).toBe(path.resolve("/tmp/openclaw-home", "profiles", "dev"));
+    expect(resolveConfigDir(env)).toBe(path.resolve("/tmp/marketingclaw-home", "profiles", "dev"));
   });
 
   it("re-pins the exported configuration root after startup environment selection", () => {
     const originalConfigDir = CONFIG_DIR;
-    const selectedConfigDir = path.resolve("/tmp/openclaw-selected-config-root");
+    const selectedConfigDir = path.resolve("/tmp/marketingclaw-selected-config-root");
     try {
       expect(
         pinConfigDir({
-          OPENCLAW_STATE_DIR: selectedConfigDir,
-          OPENCLAW_TEST_FAST: "1",
+          MARKETINGCLAW_STATE_DIR: selectedConfigDir,
+          MARKETINGCLAW_TEST_FAST: "1",
         }),
       ).toBe(selectedConfigDir);
       expect(CONFIG_DIR).toBe(selectedConfigDir);
     } finally {
       pinConfigDir({
-        OPENCLAW_STATE_DIR: originalConfigDir,
-        OPENCLAW_TEST_FAST: "1",
+        MARKETINGCLAW_STATE_DIR: originalConfigDir,
+        MARKETINGCLAW_TEST_FAST: "1",
       });
     }
   });
 });
 
 describe("resolveHomeDir", () => {
-  it("prefers OPENCLAW_HOME over HOME", () => {
-    withEnv({ OPENCLAW_HOME: "/srv/openclaw-home", HOME: "/home/other" }, () => {
-      expect(resolveHomeDir()).toBe(path.resolve("/srv/openclaw-home"));
+  it("prefers MARKETINGCLAW_HOME over HOME", () => {
+    withEnv({ MARKETINGCLAW_HOME: "/srv/marketingclaw-home", HOME: "/home/other" }, () => {
+      expect(resolveHomeDir()).toBe(path.resolve("/srv/marketingclaw-home"));
     });
   });
 });
 
 describe("shortenHomePath", () => {
-  it("uses $OPENCLAW_HOME prefix when OPENCLAW_HOME is set", () => {
-    withEnv({ OPENCLAW_HOME: "/srv/openclaw-home", HOME: "/home/other" }, () => {
-      expect(shortenHomePath(`${path.resolve("/srv/openclaw-home")}/.openclaw/openclaw.json`)).toBe(
-        "$OPENCLAW_HOME/.openclaw/openclaw.json",
-      );
+  it("uses $MARKETINGCLAW_HOME prefix when MARKETINGCLAW_HOME is set", () => {
+    withEnv({ MARKETINGCLAW_HOME: "/srv/marketingclaw-home", HOME: "/home/other" }, () => {
+      expect(
+        shortenHomePath(
+          `${path.resolve("/srv/marketingclaw-home")}/.marketingclaw/marketingclaw.json`,
+        ),
+      ).toBe("$MARKETINGCLAW_HOME/.marketingclaw/marketingclaw.json");
     });
   });
 });
 
 describe("shortenHomeInString", () => {
-  it("uses $OPENCLAW_HOME replacement when OPENCLAW_HOME is set", () => {
-    withEnv({ OPENCLAW_HOME: "/srv/openclaw-home", HOME: "/home/other" }, () => {
+  it("uses $MARKETINGCLAW_HOME replacement when MARKETINGCLAW_HOME is set", () => {
+    withEnv({ MARKETINGCLAW_HOME: "/srv/marketingclaw-home", HOME: "/home/other" }, () => {
       expect(
         shortenHomeInString(
-          `config: ${path.resolve("/srv/openclaw-home")}/.openclaw/openclaw.json`,
+          `config: ${path.resolve("/srv/marketingclaw-home")}/.marketingclaw/marketingclaw.json`,
         ),
-      ).toBe("config: $OPENCLAW_HOME/.openclaw/openclaw.json");
+      ).toBe("config: $MARKETINGCLAW_HOME/.marketingclaw/marketingclaw.json");
     });
   });
 });
@@ -154,8 +156,8 @@ describe("resolveUserPath", () => {
   });
 
   it("expands ~/ to home dir", () => {
-    expect(resolveUserPath("~/openclaw", {}, () => "/Users/thoffman")).toBe(
-      path.resolve("/Users/thoffman", "openclaw"),
+    expect(resolveUserPath("~/marketingclaw", {}, () => "/Users/thoffman")).toBe(
+      path.resolve("/Users/thoffman", "marketingclaw"),
     );
   });
 
@@ -163,19 +165,23 @@ describe("resolveUserPath", () => {
     expect(resolveUserPath("tmp/dir")).toBe(path.resolve("tmp/dir"));
   });
 
-  it("prefers OPENCLAW_HOME for tilde expansion", () => {
-    withEnv({ OPENCLAW_HOME: "/srv/openclaw-home", HOME: "/home/other" }, () => {
-      expect(resolveUserPath("~/openclaw")).toBe(path.resolve("/srv/openclaw-home", "openclaw"));
+  it("prefers MARKETINGCLAW_HOME for tilde expansion", () => {
+    withEnv({ MARKETINGCLAW_HOME: "/srv/marketingclaw-home", HOME: "/home/other" }, () => {
+      expect(resolveUserPath("~/marketingclaw")).toBe(
+        path.resolve("/srv/marketingclaw-home", "marketingclaw"),
+      );
     });
   });
 
   it("uses the provided env for tilde expansion", () => {
     const env = {
-      HOME: "/tmp/openclaw-home",
-      OPENCLAW_HOME: "/srv/openclaw-home",
+      HOME: "/tmp/marketingclaw-home",
+      MARKETINGCLAW_HOME: "/srv/marketingclaw-home",
     } as NodeJS.ProcessEnv;
 
-    expect(resolveUserPath("~/openclaw", env)).toBe(path.resolve("/srv/openclaw-home", "openclaw"));
+    expect(resolveUserPath("~/marketingclaw", env)).toBe(
+      path.resolve("/srv/marketingclaw-home", "marketingclaw"),
+    );
   });
 
   it("keeps blank paths blank", () => {

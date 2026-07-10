@@ -1,16 +1,16 @@
 ---
-summary: "CLI reference for `openclaw directory` (self, peers, groups)"
+summary: "CLI reference for `marketingclaw directory` (self, peers, groups)"
 read_when:
   - You want to look up contacts/groups/self ids for a channel
   - You are developing a channel directory adapter
 title: "Directory"
 ---
 
-# `openclaw directory`
+# `marketingclaw directory`
 
 Directory lookups for channels that support them: contacts/peers, groups, and "me" (self).
 
-Results are meant to be pasted into other commands, especially `openclaw message send --target ...`.
+Results are meant to be pasted into other commands, especially `marketingclaw message send --target ...`.
 
 ## Common flags
 
@@ -28,8 +28,8 @@ Default (non-JSON) output is `id` (and sometimes `name`) separated by a tab.
 ## Using results with `message send`
 
 ```bash
-openclaw directory peers list --channel slack --query "U0"
-openclaw message send --channel slack --target user:U012ABCDEF --message "hello"
+marketingclaw directory peers list --channel slack --query "U0"
+marketingclaw message send --channel slack --target user:U012ABCDEF --message "hello"
 ```
 
 ## ID formats by channel
@@ -49,23 +49,23 @@ openclaw message send --channel slack --target user:U012ABCDEF --message "hello"
 ## Self ("me")
 
 ```bash
-openclaw directory self --channel zalouser
+marketingclaw directory self --channel zalouser
 ```
 
 ## Peers (contacts/users)
 
 ```bash
-openclaw directory peers list --channel zalouser
-openclaw directory peers list --channel zalouser --query "name"
-openclaw directory peers list --channel zalouser --limit 50
+marketingclaw directory peers list --channel zalouser
+marketingclaw directory peers list --channel zalouser --query "name"
+marketingclaw directory peers list --channel zalouser --limit 50
 ```
 
 ## Groups
 
 ```bash
-openclaw directory groups list --channel zalouser
-openclaw directory groups list --channel zalouser --query "work"
-openclaw directory groups members --channel zalouser --group-id <id>
+marketingclaw directory groups list --channel zalouser
+marketingclaw directory groups list --channel zalouser --query "work"
+marketingclaw directory groups members --channel zalouser --group-id <id>
 ```
 
 ## Related

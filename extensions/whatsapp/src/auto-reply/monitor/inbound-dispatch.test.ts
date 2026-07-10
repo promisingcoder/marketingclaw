@@ -44,8 +44,8 @@ const {
   ),
 }));
 
-vi.mock("openclaw/plugin-sdk/channel-outbound", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/channel-outbound")>();
+vi.mock("marketingclaw/plugin-sdk/channel-outbound", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("marketingclaw/plugin-sdk/channel-outbound")>();
   return {
     ...actual,
     deliverInboundReplyWithMessageSendContext: deliverInboundReplyWithMessageSendContextMock,
@@ -54,8 +54,8 @@ vi.mock("openclaw/plugin-sdk/channel-outbound", async (importOriginal) => {
 
 vi.mock("./runtime-api.js", async () => {
   const { finalizeInboundContext } = await vi.importActual<
-    typeof import("openclaw/plugin-sdk/reply-runtime")
-  >("openclaw/plugin-sdk/reply-runtime");
+    typeof import("marketingclaw/plugin-sdk/reply-runtime")
+  >("marketingclaw/plugin-sdk/reply-runtime");
   return {
     dispatchReplyWithBufferedBlockDispatcher: dispatchReplyWithBufferedBlockDispatcherMock,
     finalizeInboundContext,
@@ -774,7 +774,7 @@ describe("whatsapp inbound dispatch", () => {
         Body: "incoming",
         ReplyToId: "quoted-bot-message",
         ReplyToBody: "Earlier bot reply",
-        ReplyToSender: "OpenClaw",
+        ReplyToSender: "MarketingClaw",
       },
       deliverReply,
       msg: makeMsg({
@@ -797,7 +797,7 @@ describe("whatsapp inbound dispatch", () => {
     expectRecordFields(requireRecord(durableParams.ctxPayload, "durable context"), {
       ReplyToId: "quoted-bot-message",
       ReplyToBody: "Earlier bot reply",
-      ReplyToSender: "OpenClaw",
+      ReplyToSender: "MarketingClaw",
     });
     expect(deliverReply).not.toHaveBeenCalled();
   });

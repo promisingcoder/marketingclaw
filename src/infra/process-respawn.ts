@@ -1,9 +1,9 @@
 // Respawns the gateway process when no supervisor handles restart.
 import { spawn, type ChildProcess } from "node:child_process";
-import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalLowercaseString } from "@marketingclaw/normalization-core/string-coerce";
 import { isContainerEnvironment } from "./container-environment.js";
 import { formatErrorMessage } from "./errors.js";
-import { triggerOpenClawRestart } from "./restart.js";
+import { triggerMarketingClawRestart } from "./restart.js";
 import { detectRespawnSupervisor } from "./supervisor-markers.js";
 
 type RespawnMode = "spawned" | "supervised" | "disabled" | "failed";
@@ -26,15 +26,15 @@ function isTruthy(value: string | undefined): boolean {
   return normalized === "1" || normalized === "true" || normalized === "yes" || normalized === "on";
 }
 
-const PNPM_VERSIONED_OPENCLAW_ENTRY_PATTERN =
-  /^(.*?)([\\/])node_modules\2\.pnpm\2openclaw@[^\\/]+\2node_modules\2openclaw\2.+$/;
+const PNPM_VERSIONED_MARKETINGCLAW_ENTRY_PATTERN =
+  /^(.*?)([\\/])node_modules\2\.pnpm\2marketingclaw@[^\\/]+\2node_modules\2marketingclaw\2.+$/;
 
-function rewritePnpmVersionedOpenClawEntryPath(entryPath: string): string {
+function rewritePnpmVersionedMarketingClawEntryPath(entryPath: string): string {
   // pnpm can expose argv[1] as a versioned realpath that self-update removes.
-  // Respawn through the stable OpenClaw package wrapper instead.
+  // Respawn through the stable MarketingClaw package wrapper instead.
   return entryPath.replace(
-    PNPM_VERSIONED_OPENCLAW_ENTRY_PATTERN,
-    "$1$2node_modules$2openclaw$2openclaw.mjs",
+    PNPM_VERSIONED_MARKETINGCLAW_ENTRY_PATTERN,
+    "$1$2node_modules$2marketingclaw$2marketingclaw.mjs",
   );
 }
 
@@ -45,7 +45,7 @@ function spawnDetachedGatewayProcess(opts: GatewayRespawnOptions = {}): {
   const [entryArg, ...entryArgs] = process.argv.slice(1);
   const args = [
     ...process.execArgv,
-    ...(entryArg ? [rewritePnpmVersionedOpenClawEntryPath(entryArg)] : []),
+    ...(entryArg ? [rewritePnpmVersionedMarketingClawEntryPath(entryArg)] : []),
     ...entryArgs,
   ];
   const child = spawn(process.execPath, args, {
@@ -63,14 +63,14 @@ function spawnDetachedGatewayProcess(opts: GatewayRespawnOptions = {}): {
 /**
  * Attempt to restart this process with a fresh PID.
  * - supervised environments (launchd/systemd/schtasks): caller should exit and let supervisor restart
- * - OPENCLAW_NO_RESPAWN=1: caller should keep in-process restart behavior (tests/dev)
+ * - MARKETINGCLAW_NO_RESPAWN=1: caller should keep in-process restart behavior (tests/dev)
  * - unmanaged environments: caller should keep in-process restart behavior so
  *   custom supervisors keep tracking the same gateway PID
  */
 export function restartGatewayProcessWithFreshPid(
   _opts: GatewayRespawnOptions = {},
 ): GatewayRespawnResult {
-  if (isTruthy(process.env.OPENCLAW_NO_RESPAWN)) {
+  if (isTruthy(process.env.MARKETINGCLAW_NO_RESPAWN)) {
     return { mode: "disabled" };
   }
   const supervisor = detectRespawnSupervisor(process.env);
@@ -79,7 +79,7 @@ export function restartGatewayProcessWithFreshPid(
     // Avoid detached kickstart/start handoffs here so restart timing stays tied
     // to launchd's native supervision rather than a second helper process.
     if (supervisor === "schtasks") {
-      const restart = triggerOpenClawRestart();
+      const restart = triggerMarketingClawRestart();
       if (!restart.ok) {
         return {
           mode: "failed",
@@ -122,13 +122,13 @@ export function respawnGatewayProcessForUpdate(
   opts: GatewayRespawnOptions = {},
 ): GatewayUpdateRespawnResult {
   const supervisor = detectRespawnSupervisor(process.env, process.platform, {
-    includeLinuxOpenClawGatewayServiceMarker: true,
+    includeLinuxMarketingClawGatewayServiceMarker: true,
   });
   if (supervisor) {
     // Managed update handoffs require the original PID to exit before the
     // detached helper can mutate the install, even when respawn is disabled.
     if (supervisor === "schtasks") {
-      const restart = triggerOpenClawRestart();
+      const restart = triggerMarketingClawRestart();
       if (!restart.ok) {
         return {
           mode: "failed",
@@ -138,8 +138,8 @@ export function respawnGatewayProcessForUpdate(
     }
     return { mode: "supervised" };
   }
-  if (isTruthy(process.env.OPENCLAW_NO_RESPAWN)) {
-    return { mode: "disabled", detail: "OPENCLAW_NO_RESPAWN" };
+  if (isTruthy(process.env.MARKETINGCLAW_NO_RESPAWN)) {
+    return { mode: "disabled", detail: "MARKETINGCLAW_NO_RESPAWN" };
   }
   try {
     const { child, pid } = spawnDetachedGatewayProcess(opts);

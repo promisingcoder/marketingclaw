@@ -15,7 +15,7 @@ vi.mock("./install-source-utils.js", async () => {
   return {
     ...actual,
     withTempDir: vi.fn(async (_prefix: string, fn: (tmpDir: string) => Promise<unknown>) => {
-      return await fn("/tmp/openclaw-npm-pack-install-test");
+      return await fn("/tmp/marketingclaw-npm-pack-install-test");
     }),
     packNpmSpecToArchive: vi.fn(),
   };
@@ -23,7 +23,7 @@ vi.mock("./install-source-utils.js", async () => {
 
 describe("installFromNpmSpecArchive", () => {
   const baseSpec = "@openclaw/test@1.0.0";
-  const baseArchivePath = "/tmp/openclaw-test.tgz";
+  const baseArchivePath = "/tmp/marketingclaw-test.tgz";
 
   const mockPackedSuccess = (overrides?: {
     resolvedSpec?: string;
@@ -52,7 +52,7 @@ describe("installFromNpmSpecArchive", () => {
     }) => Promise<{ ok: boolean; [k: string]: unknown }>;
   }) =>
     await installFromNpmSpecArchive({
-      tempDirPrefix: "openclaw-test-",
+      tempDirPrefix: "marketingclaw-test-",
       spec: baseSpec,
       timeoutMs: 1000,
       expectedIntegrity: overrides.expectedIntegrity,
@@ -83,7 +83,7 @@ describe("installFromNpmSpecArchive", () => {
     const installFromArchive = vi.fn(async () => ({ ok: true as const }));
 
     const result = await installFromNpmSpecArchive({
-      tempDirPrefix: "openclaw-test-",
+      tempDirPrefix: "marketingclaw-test-",
       spec: "@openclaw/test@1.0.0",
       timeoutMs: 1000,
       installFromArchive,
@@ -98,7 +98,7 @@ describe("installFromNpmSpecArchive", () => {
       throw new Error("expected temp dir call");
     }
     const [tempDirPrefix, tempDirCallback] = tempDirCall;
-    expect(tempDirPrefix).toBe("openclaw-test-");
+    expect(tempDirPrefix).toBe("marketingclaw-test-");
     expect(tempDirCallback).toBeTypeOf("function");
   });
 
@@ -106,8 +106,8 @@ describe("installFromNpmSpecArchive", () => {
     const installFromArchive = vi.fn(async () => ({ ok: true as const }));
 
     const result = await installFromNpmSpecArchive({
-      tempDirPrefix: "openclaw-test-",
-      spec: "file:/tmp/openclaw.tgz",
+      tempDirPrefix: "marketingclaw-test-",
+      spec: "file:/tmp/marketingclaw.tgz",
       timeoutMs: 1000,
       installFromArchive,
     });
@@ -137,7 +137,7 @@ describe("installFromNpmSpecArchive", () => {
       throw new Error("expected npm resolution timestamp");
     }
     expect(Date.parse(resolvedAt)).not.toBeNaN();
-    expect(installFromArchive).toHaveBeenCalledWith({ archivePath: "/tmp/openclaw-test.tgz" });
+    expect(installFromArchive).toHaveBeenCalledWith({ archivePath: "/tmp/marketingclaw-test.tgz" });
   });
 
   it("proceeds when integrity drift callback accepts drift", async () => {
@@ -223,7 +223,7 @@ describe("installFromNpmSpecArchive", () => {
     const installFromArchive = vi.fn(async () => ({ ok: true as const }));
 
     const result = await installFromNpmSpecArchive({
-      tempDirPrefix: "openclaw-test-",
+      tempDirPrefix: "marketingclaw-test-",
       spec: "@openclaw/test@latest",
       timeoutMs: 1000,
       installFromArchive,
@@ -250,7 +250,7 @@ describe("installFromNpmSpecArchive", () => {
     const installFromArchive = vi.fn(async () => ({ ok: true as const, pluginId: "beta-plugin" }));
 
     const result = await installFromNpmSpecArchive({
-      tempDirPrefix: "openclaw-test-",
+      tempDirPrefix: "marketingclaw-test-",
       spec: "@openclaw/test@beta",
       timeoutMs: 1000,
       installFromArchive,
@@ -269,9 +269,9 @@ describe("installFromNpmSpecArchiveWithInstaller", () => {
   it("passes archive path and installer params to installFromArchive", async () => {
     vi.mocked(packNpmSpecToArchive).mockResolvedValue({
       ok: true,
-      archivePath: "/tmp/openclaw-plugin.tgz",
+      archivePath: "/tmp/marketingclaw-plugin.tgz",
       metadata: {
-        resolvedSpec: "@openclaw/voice-call@1.0.0",
+        resolvedSpec: "@marketingclaw/voice-call@1.0.0",
         integrity: "sha512-same",
       },
     });
@@ -281,8 +281,8 @@ describe("installFromNpmSpecArchiveWithInstaller", () => {
     );
 
     const result = await installFromNpmSpecArchiveWithInstaller({
-      tempDirPrefix: "openclaw-test-",
-      spec: "@openclaw/voice-call@1.0.0",
+      tempDirPrefix: "marketingclaw-test-",
+      spec: "@marketingclaw/voice-call@1.0.0",
       timeoutMs: 1000,
       installFromArchive,
       archiveInstallParams: { pluginId: "voice-call" },
@@ -293,7 +293,7 @@ describe("installFromNpmSpecArchiveWithInstaller", () => {
       return;
     }
     expect(installFromArchive).toHaveBeenCalledWith({
-      archivePath: "/tmp/openclaw-plugin.tgz",
+      archivePath: "/tmp/marketingclaw-plugin.tgz",
       pluginId: "voice-call",
     });
     expect(result.installResult).toEqual({ ok: true, pluginId: "voice-call" });
@@ -331,7 +331,7 @@ describe("finalizeNpmSpecArchiveInstall", () => {
       ok: true,
       installResult: { ok: true, pluginId: "voice-call" },
       npmResolution: {
-        resolvedSpec: "@openclaw/voice-call@1.0.0",
+        resolvedSpec: "@marketingclaw/voice-call@1.0.0",
         integrity: "sha512-same",
         resolvedAt: "2026-01-01T00:00:00.000Z",
       },
@@ -345,7 +345,7 @@ describe("finalizeNpmSpecArchiveInstall", () => {
       ok: true,
       pluginId: "voice-call",
       npmResolution: {
-        resolvedSpec: "@openclaw/voice-call@1.0.0",
+        resolvedSpec: "@marketingclaw/voice-call@1.0.0",
         integrity: "sha512-same",
         resolvedAt: "2026-01-01T00:00:00.000Z",
       },

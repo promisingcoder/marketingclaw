@@ -54,8 +54,8 @@ function readReleaseAssets(release) {
 function isCloseoutEvidenceAsset(assetName, tag) {
   const releaseVersion = tag.slice(1);
   return (
-    assetName === `openclaw-${releaseVersion}-stable-main-closeout.json` ||
-    assetName === `openclaw-${releaseVersion}-stable-main-closeout.json.sha256`
+    assetName === `marketingclaw-${releaseVersion}-stable-main-closeout.json` ||
+    assetName === `marketingclaw-${releaseVersion}-stable-main-closeout.json.sha256`
   );
 }
 
@@ -139,9 +139,9 @@ export function verifyStableMainCloseout(params) {
 
   const macAssetVersion = version;
   const expectedMacAssets = [
-    `OpenClaw-${macAssetVersion}.zip`,
-    `OpenClaw-${macAssetVersion}.dmg`,
-    `OpenClaw-${macAssetVersion}.dSYM.zip`,
+    `MarketingClaw-${macAssetVersion}.zip`,
+    `MarketingClaw-${macAssetVersion}.dmg`,
+    `MarketingClaw-${macAssetVersion}.dSYM.zip`,
   ];
   const assetNames = new Set(readReleaseAssets(params.release).map((asset) => asset.name));
   const missingMacAssets = expectedMacAssets.filter((asset) => !assetNames.has(asset));

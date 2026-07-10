@@ -1,25 +1,25 @@
 {
-  "name": "@openclaw/workboard",
+  "name": "@marketingclaw/workboard",
   "version": "2026.6.11",
   "private": true,
-  "description": "OpenClaw dashboard workboard plugin",
+  "description": "MarketingClaw dashboard workboard plugin",
   "type": "module",
   "dependencies": {
     "typebox": "1.3.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@marketingclaw/plugin-sdk": "workspace:*",
+    "marketingclaw": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.6.11"
+    "marketingclaw": ">=2026.6.11"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "marketingclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "marketingclaw": {
     "extensions": [
       "./index.ts"
     ]

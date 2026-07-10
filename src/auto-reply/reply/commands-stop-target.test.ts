@@ -1,6 +1,6 @@
 // Tests stop command target resolution across active sessions and channel routes.
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { MarketingClawConfig } from "../../config/config.js";
 import {
   getActivePluginRegistry,
   resetPluginRuntimeStateForTest,
@@ -105,7 +105,7 @@ function buildStopParams(): HandleCommandsParams {
     cfg: {
       commands: { text: true },
       channels: { telegram: { allowFrom: ["*"] } },
-    } as OpenClawConfig,
+    } as MarketingClawConfig,
     ctx: {
       Provider: "telegram",
       Surface: "telegram",
@@ -220,7 +220,7 @@ describe("handleStopCommand target fallback", () => {
     const cfg = {
       commands: { text: true, allowFrom: { "*": ["*"] } },
       channels: { telegram: { allowFrom: ["*"] } },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
     const ctx = {
       Provider: "telegram",
       Surface: "telegram",

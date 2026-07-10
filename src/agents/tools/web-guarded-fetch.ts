@@ -3,7 +3,7 @@
  *
  * Applies SSRF policy, timeout normalization, and trusted/self-hosted endpoint modes.
  */
-import { finiteSecondsToTimerSafeMilliseconds } from "@openclaw/normalization-core/number-coercion";
+import { finiteSecondsToTimerSafeMilliseconds } from "@marketingclaw/normalization-core/number-coercion";
 import {
   fetchWithSsrFGuard,
   type GuardedFetchOptions,

@@ -1,10 +1,10 @@
-// Resolve OpenClaw ref tests cover the release workflow ref resolver script.
+// Resolve MarketingClaw ref tests cover the release workflow ref resolver script.
 import { execFileSync, spawnSync } from "node:child_process";
 import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { createTempDirTracker } from "../helpers/temp-dir.js";
 
-const SCRIPT_PATH = "scripts/github/resolve-openclaw-ref.sh";
+const SCRIPT_PATH = "scripts/github/resolve-marketingclaw-ref.sh";
 const tempDirs = createTempDirTracker();
 
 afterEach(() => {
@@ -20,7 +20,7 @@ function git(cwd: string, args: string[]): string {
 }
 
 function createRemoteRepo() {
-  const repo = tempDirs.make("openclaw-ref-remote-");
+  const repo = tempDirs.make("marketingclaw-ref-remote-");
   git(repo, ["init", "-q", "-b", "main"]);
   git(repo, ["config", "user.email", "test-user"]);
   git(repo, ["config", "user.name", "Test User"]);
@@ -42,7 +42,7 @@ function runResolver(remote: string, args: string[]) {
     env: {
       ...process.env,
       GITHUB_OUTPUT: "",
-      OPENCLAW_REF_REMOTE: remote,
+      MARKETINGCLAW_REF_REMOTE: remote,
     },
   });
 }
@@ -66,7 +66,7 @@ function expectSuccessfulOutput(result: ReturnType<typeof runResolver>): Record<
   return parseOutput(result.stdout);
 }
 
-describe("scripts/github/resolve-openclaw-ref.sh", () => {
+describe("scripts/github/resolve-marketingclaw-ref.sh", () => {
   it("resolves branch and tag refs with git ls-remote", () => {
     const { repo, sha } = createRemoteRepo();
 
@@ -98,7 +98,7 @@ describe("scripts/github/resolve-openclaw-ref.sh", () => {
 
   it("writes fallback outputs for unresolved refs when a caller supplies an expected SHA", () => {
     const { repo, sha } = createRemoteRepo();
-    const outputPath = join(tempDirs.make("openclaw-ref-output-"), "github-output.txt");
+    const outputPath = join(tempDirs.make("marketingclaw-ref-output-"), "github-output.txt");
     const result = runResolver(repo, [
       "--ref",
       "missing-ref",
@@ -120,7 +120,7 @@ describe("scripts/github/resolve-openclaw-ref.sh", () => {
   });
 
   it("does not let fallback mode hide remote lookup failures", () => {
-    const missingRemote = join(tempDirs.make("openclaw-ref-missing-"), "missing.git");
+    const missingRemote = join(tempDirs.make("marketingclaw-ref-missing-"), "missing.git");
     const result = runResolver(missingRemote, [
       "--ref",
       "missing-ref",

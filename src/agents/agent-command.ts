@@ -1,5 +1,5 @@
 /** Main agent command orchestration for sessions, model selection, delivery, and attempts. */
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@marketingclaw/normalization-core/string-coerce";
 import { sanitizeForLog } from "../../packages/terminal-core/src/ansi.js";
 import { resolveInlineAgentImageAttachments } from "../auto-reply/reply/agent-turn-attachments.js";
 import { sanitizePendingFinalDeliveryText } from "../auto-reply/reply/pending-final-delivery.js";
@@ -17,7 +17,7 @@ import type { CliDeps } from "../cli/deps.types.js";
 import { getRuntimeConfig } from "../config/io.js";
 import { resolveSessionWorkStartError } from "../config/sessions/lifecycle.js";
 import type { SessionEntry } from "../config/sessions/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { withLocalGatewayRequestScope } from "../gateway/local-request-context.js";
 import {
   assertAgentRunLifecycleGenerationCurrent,
@@ -155,7 +155,7 @@ import { ensureAgentWorkspace } from "./workspace.js";
 const log = createSubsystemLogger("agents/agent-command");
 
 function hasExactConfiguredProviderModel(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   provider: string;
   model: string;
 }): boolean {
@@ -173,7 +173,7 @@ function hasExactConfiguredProviderModel(params: {
   return false;
 }
 
-function hasConfiguredProvider(params: { cfg: OpenClawConfig; provider: string }): boolean {
+function hasConfiguredProvider(params: { cfg: MarketingClawConfig; provider: string }): boolean {
   const normalizedProvider = normalizeProviderId(params.provider);
   if (!normalizedProvider) {
     return false;
@@ -184,7 +184,7 @@ function hasConfiguredProvider(params: { cfg: OpenClawConfig; provider: string }
 }
 
 function allowPluginModelNormalizationForRef(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   provider: string;
   model: string;
 }): boolean {
@@ -195,7 +195,7 @@ function allowPluginModelNormalizationForRef(params: {
 }
 
 function normalizeAgentCommandModelRef(
-  cfg: OpenClawConfig,
+  cfg: MarketingClawConfig,
   provider: string,
   model: string,
   modelManifestContext: ModelManifestNormalizationContext,
@@ -207,7 +207,7 @@ function normalizeAgentCommandModelRef(
 }
 
 function normalizeAgentCommandDefaultModelRef(
-  cfg: OpenClawConfig,
+  cfg: MarketingClawConfig,
   provider: string,
   model: string,
   modelManifestContext: ModelManifestNormalizationContext,
@@ -225,7 +225,7 @@ function normalizeAgentCommandDefaultModelRef(
 }
 
 function parseAgentCommandModelRef(
-  cfg: OpenClawConfig,
+  cfg: MarketingClawConfig,
   raw: string,
   defaultProvider: string,
   modelManifestContext: ModelManifestNormalizationContext,
@@ -301,7 +301,8 @@ function applyAgentRunAbortMetadata<T extends { meta: object }>(
 type AcpManagerRuntime = typeof import("../acp/control-plane/manager.js");
 type AcpPolicyRuntime = typeof import("../acp/policy.js");
 type AcpRuntimeErrorsRuntime = typeof import("../acp/runtime/errors.js");
-type AcpSessionIdentifiersRuntime = typeof import("@openclaw/acp-core/runtime/session-identifiers");
+type AcpSessionIdentifiersRuntime =
+  typeof import("@marketingclaw/acp-core/runtime/session-identifiers");
 type DeliveryRuntime = typeof import("./command/delivery.runtime.js");
 type SessionStoreRuntime = typeof import("./command/session-store.runtime.js");
 type CliCompactionRuntime = typeof import("./command/cli-compaction.js");
@@ -326,7 +327,7 @@ const acpRuntimeErrorsRuntimeLoader = createLazyImportLoader<AcpRuntimeErrorsRun
   () => import("../acp/runtime/errors.js"),
 );
 const acpSessionIdentifiersRuntimeLoader = createLazyImportLoader<AcpSessionIdentifiersRuntime>(
-  () => import("@openclaw/acp-core/runtime/session-identifiers"),
+  () => import("@marketingclaw/acp-core/runtime/session-identifiers"),
 );
 const deliveryRuntimeLoader = createLazyImportLoader<DeliveryRuntime>(
   () => import("./command/delivery.runtime.js"),
@@ -445,7 +446,7 @@ function clearPendingFinalDeliveryFields(entry: SessionEntry, updatedAt: number)
 }
 
 async function resolveCurrentRunDeliveryContext(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   opts: AgentCommandOpts;
   sessionEntry?: SessionEntry;
 }): Promise<DeliveryContext | undefined> {
@@ -609,7 +610,7 @@ function resolveExplicitAgentCommandSessionKey(params: {
   rawExplicitSessionKey?: string;
   agentIdOverride?: string;
   shouldScopeDefaultAgentKey?: boolean;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
 }): string | undefined {
   if (
     isUnscopedSessionKeySentinel(params.rawExplicitSessionKey) &&
@@ -676,7 +677,7 @@ async function prepareAgentCommandExecution(opts: AgentCommandOpts, runtime: Run
     const knownAgents = listAgentIds(cfg);
     if (!knownAgents.includes(agentIdOverride)) {
       throw new Error(
-        `Unknown agent id "${agentIdOverrideRaw}". Use "${formatCliCommand("openclaw agents list")}" to see configured agents.`,
+        `Unknown agent id "${agentIdOverrideRaw}". Use "${formatCliCommand("marketingclaw agents list")}" to see configured agents.`,
       );
     }
   }
@@ -2668,7 +2669,7 @@ function ingressDiagnosticChannel(opts: AgentCommandIngressOpts): string {
  *
  * Unlike channel/cron paths which emit model.usage in runReplyAgent /
  * finalizeCronRun, the ingress path has no such existing emission — without
- * this every diagnostics consumer (Langfuse bridge, @openclaw/diagnostics-otel,
+ * this every diagnostics consumer (Langfuse bridge, @marketingclaw/diagnostics-otel,
  * diagnostics-prometheus) sees usage/cost only for webchat/cli/cron turns
  * and is blind to HTTP API traffic (POST /v1/responses, POST /v1/chat/completions,
  * and node-event dispatch).

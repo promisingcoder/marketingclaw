@@ -6,7 +6,7 @@ import { detectBundleManifestFormat, loadBundleManifest } from "../../plugins/bu
 import type { PluginBundleFormat } from "../../plugins/manifest-types.js";
 import { resolvePackageExtensionEntries, type PackageManifest } from "../../plugins/manifest.js";
 import { validatePackageExtensionEntriesForInstall } from "../../plugins/package-entry-resolution.js";
-import { auditOpenClawPeerDependencyLink } from "../../plugins/plugin-peer-link.js";
+import { auditMarketingClawPeerDependencyLink } from "../../plugins/plugin-peer-link.js";
 import { resolveUserPath } from "../../utils.js";
 
 export type PluginPayloadSmokeFailureReason =
@@ -18,7 +18,7 @@ export type PluginPayloadSmokeFailureReason =
   | "invalid-bundle-manifest"
   | "missing-main-entry"
   | "missing-extension-entry"
-  | "missing-openclaw-peer-link";
+  | "missing-marketingclaw-peer-link";
 
 export type PluginPayloadSmokeFailure = {
   pluginId: string;
@@ -179,8 +179,8 @@ async function validatePackagePayload(params: {
 }): Promise<PluginPayloadSmokeFailure[]> {
   const failures: PluginPayloadSmokeFailure[] = [];
 
-  if (manifestDeclaresOpenClawPeer(params.manifest)) {
-    const peerIssue = await auditOpenClawPeerDependencyLink({
+  if (manifestDeclaresMarketingClawPeer(params.manifest)) {
+    const peerIssue = await auditMarketingClawPeerDependencyLink({
       packageDir: params.installPath,
       packageName: params.manifest.name ?? params.pluginId,
     });
@@ -188,8 +188,8 @@ async function validatePackagePayload(params: {
       failures.push({
         pluginId: params.pluginId,
         installPath: params.installPath,
-        reason: "missing-openclaw-peer-link",
-        detail: `Plugin declares peerDependency "openclaw" but peer link audit failed: ${peerIssue.reason}.`,
+        reason: "missing-marketingclaw-peer-link",
+        detail: `Plugin declares peerDependency "marketingclaw" but peer link audit failed: ${peerIssue.reason}.`,
       });
     }
   }
@@ -203,7 +203,7 @@ async function validatePackagePayload(params: {
       detail: `Plugin extension entry validation failed: ${
         extensionResolution.status === "invalid"
           ? extensionResolution.error
-          : "package.json openclaw.extensions is empty"
+          : "package.json marketingclaw.extensions is empty"
       }`,
     });
     return failures;
@@ -304,13 +304,13 @@ export function validateBundleInstallRecordPayload(params: {
   };
 }
 
-function manifestDeclaresOpenClawPeer(manifest: PackageManifest): boolean {
+function manifestDeclaresMarketingClawPeer(manifest: PackageManifest): boolean {
   const peerDependencies = (manifest as { peerDependencies?: unknown }).peerDependencies;
   return (
     typeof peerDependencies === "object" &&
     peerDependencies !== null &&
     !Array.isArray(peerDependencies) &&
-    typeof (peerDependencies as Record<string, unknown>).openclaw === "string"
+    typeof (peerDependencies as Record<string, unknown>).marketingclaw === "string"
   );
 }
 

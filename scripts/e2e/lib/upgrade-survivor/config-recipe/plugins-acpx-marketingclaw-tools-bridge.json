@@ -5,7 +5,7 @@
     "acpx": {
       "enabled": true,
       "config": {
-        "openClawToolsMcpBridge": true
+        "marketingClawToolsMcpBridge": true
       }
     },
     "discord": {

@@ -1,5 +1,5 @@
 ---
-summary: "Overview of OpenClaw onboarding options and flows"
+summary: "Overview of MarketingClaw onboarding options and flows"
 read_when:
   - Choosing an onboarding path
   - Setting up a new environment
@@ -7,7 +7,7 @@ title: "Onboarding overview"
 sidebarTitle: "Onboarding Overview"
 ---
 
-OpenClaw has terminal and macOS app onboarding. Both can detect existing AI
+MarketingClaw has terminal and macOS app onboarding. Both can detect existing AI
 access, verify it with a live completion, and configure a workspace and Gateway.
 The terminal flow also offers the full classic wizard for detailed setup.
 
@@ -19,7 +19,7 @@ The terminal flow also offers the full classic wizard for detailed setup.
 | **Interface**  | Guided, classic, and Crestodian chat   | Guided UI + Crestodian chat |
 | **Best for**   | Servers, headless, full control        | Desktop Mac, visual setup   |
 | **Automation** | `--non-interactive` for scripts        | Manual only                 |
-| **Command**    | `openclaw onboard`                     | Launch the app              |
+| **Command**    | `marketingclaw onboard`                | Launch the app              |
 
 Most users should start with **CLI onboarding** — it works everywhere and gives
 you the most control.
@@ -45,30 +45,30 @@ The classic CLI wizard can additionally configure:
 Run in any terminal:
 
 ```bash
-openclaw onboard
+marketingclaw onboard
 ```
 
 The guided flow detects existing AI access, live-tests candidates in order,
 falls through on failure, and offers masked manual key entry. It saves the
 model and credential only after a passing completion. From the same flow you
-can open Crestodian chat, switch to `openclaw onboard --classic`, or skip AI
+can open Crestodian chat, switch to `marketingclaw onboard --classic`, or skip AI
 setup for now.
 
 These CLI interfaces switch both ways: guided onboarding offers Crestodian and
 the classic wizard, while Crestodian can open guided setup, classic setup, or a
 masked channel wizard without making you restart the command manually.
 
-Use `openclaw onboard --classic` for detailed model/auth, channel, skill,
+Use `marketingclaw onboard --classic` for detailed model/auth, channel, skill,
 remote Gateway, or import setup. Adding `--install-daemon` also selects the
-classic flow and installs the background service in one step. Use `openclaw
-onboard --modern` or `openclaw crestodian` for conversational setup and repair.
+classic flow and installs the background service in one step. Use `marketingclaw
+onboard --modern` or `marketingclaw crestodian` for conversational setup and repair.
 
 Full reference: [Onboarding (CLI)](/start/wizard)
-CLI command docs: [`openclaw onboard`](/cli/onboard)
+CLI command docs: [`marketingclaw onboard`](/cli/onboard)
 
 ## macOS app onboarding
 
-Open the OpenClaw app. For local setup, the first-run flow starts the Gateway,
+Open the MarketingClaw app. For local setup, the first-run flow starts the Gateway,
 detects existing AI access (Claude Code, Codex, Gemini CLI, or API keys),
 live-tests the best option, and saves it only after a real reply — falling
 back automatically and offering a verified manual API-key step when nothing is

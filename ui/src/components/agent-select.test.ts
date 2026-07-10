@@ -35,7 +35,7 @@ function createIdentity(
 async function createAgentSelect(
   overrides: Partial<Omit<AgentSelectElement, keyof HTMLElement>> = {},
 ): Promise<AgentSelectElement> {
-  const element = document.createElement("openclaw-agent-select") as AgentSelectElement;
+  const element = document.createElement("marketingclaw-agent-select") as AgentSelectElement;
   element.agents = agents;
   element.selectedId = "alpha";
   Object.assign(element, overrides);

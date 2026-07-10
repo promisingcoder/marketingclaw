@@ -1,4 +1,4 @@
-// Resolve Openclaw Package Candidate tests cover resolve openclaw package candidate script behavior.
+// Resolve Marketingclaw Package Candidate tests cover resolve marketingclaw package candidate script behavior.
 import { execFile, spawn } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { access, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
@@ -10,7 +10,7 @@ import { resolveWindowsTaskkillPath } from "../../scripts/lib/windows-taskkill.m
 import {
   assertExpectedSha256ForTest,
   cleanupPackageSourceWorktreeForTest,
-  cleanPackedOpenClawTarballsForTest,
+  cleanPackedMarketingClawTarballsForTest,
   downloadUrl,
   findSingleTarballForTest,
   loadTrustedPackageSource,
@@ -21,8 +21,8 @@ import {
   resolveNpmPackageCandidatePackRunner,
   runCommandForTest,
   signalChildProcessTree,
-  validateOpenClawPackageSpec,
-} from "../../scripts/resolve-openclaw-package-candidate.mjs";
+  validateMarketingClawPackageSpec,
+} from "../../scripts/resolve-marketingclaw-package-candidate.mjs";
 
 function expectedTaskkillPath(): string {
   return resolveWindowsTaskkillPath();
@@ -108,8 +108,8 @@ afterEach(async () => {
   await Promise.all(tempDirs.splice(0).map((dir) => rm(dir, { recursive: true, force: true })));
 });
 
-describe("resolve-openclaw-package-candidate", () => {
-  it("accepts only OpenClaw release package specs for npm candidates", () => {
+describe("resolve-marketingclaw-package-candidate", () => {
+  it("accepts only MarketingClaw release package specs for npm candidates", () => {
     for (const spec of [
       "openclaw@beta",
       "openclaw@alpha",
@@ -120,22 +120,22 @@ describe("resolve-openclaw-package-candidate", () => {
       "openclaw@2026.4.27-beta.2",
       "openclaw@2026.4.27-alpha.2",
     ]) {
-      expect(validateOpenClawPackageSpec(spec), spec).toBeUndefined();
+      expect(validateMarketingClawPackageSpec(spec), spec).toBeUndefined();
     }
 
-    expect(() => validateOpenClawPackageSpec("@evil/openclaw@1.0.0")).toThrow(
+    expect(() => validateMarketingClawPackageSpec("@evil/openclaw@1.0.0")).toThrow(
       "package_spec must be openclaw@alpha",
     );
-    expect(() => validateOpenClawPackageSpec("openclaw@canary")).toThrow(
+    expect(() => validateMarketingClawPackageSpec("openclaw@canary")).toThrow(
       "package_spec must be openclaw@alpha",
     );
-    expect(() => validateOpenClawPackageSpec("openclaw@2026.04.27")).toThrow(
+    expect(() => validateMarketingClawPackageSpec("openclaw@2026.04.27")).toThrow(
       "package_spec must be openclaw@alpha",
     );
-    expect(() => validateOpenClawPackageSpec("openclaw@npm:other-package")).toThrow(
+    expect(() => validateMarketingClawPackageSpec("openclaw@npm:other-package")).toThrow(
       "package_spec must be openclaw@alpha",
     );
-    expect(() => validateOpenClawPackageSpec("openclaw@file:../other-package.tgz")).toThrow(
+    expect(() => validateMarketingClawPackageSpec("openclaw@file:../other-package.tgz")).toThrow(
       "package_spec must be openclaw@alpha",
     );
   });
@@ -163,7 +163,7 @@ describe("resolve-openclaw-package-candidate", () => {
       githubOutput: "",
       metadata: "",
       outputDir: ".artifacts/docker-e2e-package",
-      outputName: "openclaw-current.tgz",
+      outputName: "marketingclaw-current.tgz",
       packageSha256: "",
       packageRef: "release/2026.4.27",
       packageSpec: "openclaw@beta",
@@ -214,7 +214,13 @@ describe("resolve-openclaw-package-candidate", () => {
       ],
       [
         "--package-url",
-        [...requiredArgs, "--package-url", "", "--package-url", "https://example.com/openclaw.tgz"],
+        [
+          ...requiredArgs,
+          "--package-url",
+          "",
+          "--package-url",
+          "https://example.com/marketingclaw.tgz",
+        ],
       ],
       ["--package-sha256", [...requiredArgs, "--package-sha256", "", "--package-sha256", "abc123"]],
       [
@@ -251,18 +257,18 @@ describe("resolve-openclaw-package-candidate", () => {
 
   it("rejects package candidate output names that escape the output directory", () => {
     for (const outputName of [
-      "../openclaw-current.tgz",
-      "nested/openclaw-current.tgz",
-      "openclaw-current.zip",
-      ".openclaw-current.tgz",
+      "../marketingclaw-current.tgz",
+      "nested/marketingclaw-current.tgz",
+      "marketingclaw-current.zip",
+      ".marketingclaw-current.tgz",
     ]) {
       expect(() => parseArgs(["--output-name", outputName])).toThrow(
         `--output-name must be a tarball filename, not a path: ${outputName}`,
       );
     }
 
-    expect(parseArgs(["--output-name", "openclaw-current.tar.gz"]).outputName).toBe(
-      "openclaw-current.tar.gz",
+    expect(parseArgs(["--output-name", "marketingclaw-current.tar.gz"]).outputName).toBe(
+      "marketingclaw-current.tar.gz",
     );
   });
 
@@ -272,7 +278,7 @@ describe("resolve-openclaw-package-candidate", () => {
 
     const runner = resolveNpmPackageCandidatePackRunner(
       "openclaw@2026.5.26-beta.1",
-      "C:\\openclaw\\.artifacts\\docker-e2e-package",
+      "C:\\marketingclaw\\.artifacts\\docker-e2e-package",
       {
         comSpec: "C:\\Windows\\System32\\cmd.exe",
         env: {},
@@ -288,7 +294,7 @@ describe("resolve-openclaw-package-candidate", () => {
         "/d",
         "/s",
         "/c",
-        `${npmCmdPath} pack openclaw@2026.5.26-beta.1 --ignore-scripts --json --pack-destination C:\\openclaw\\.artifacts\\docker-e2e-package`,
+        `${npmCmdPath} pack openclaw@2026.5.26-beta.1 --ignore-scripts --json --pack-destination C:\\marketingclaw\\.artifacts\\docker-e2e-package`,
       ],
       shell: false,
       windowsVerbatimArguments: true,
@@ -365,71 +371,81 @@ describe("resolve-openclaw-package-candidate", () => {
   });
 
   it("keeps npm pack filenames inside the package candidate output directory", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-npm-pack-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-npm-pack-"));
     tempDirs.push(dir);
-    await writeFile(path.join(dir, "openclaw-2026.6.17.tgz"), "package");
+    await writeFile(path.join(dir, "marketingclaw-2026.6.17.tgz"), "package");
 
     await expect(
       moveNewestPackedTarballForTest(
         dir,
-        JSON.stringify([{ filename: "openclaw-2026.6.17.tgz" }]),
-        "openclaw-current.tgz",
+        JSON.stringify([{ filename: "marketingclaw-2026.6.17.tgz" }]),
+        "marketingclaw-current.tgz",
       ),
-    ).resolves.toBe(path.join(dir, "openclaw-current.tgz"));
-    await expect(readFile(path.join(dir, "openclaw-current.tgz"), "utf8")).resolves.toBe("package");
+    ).resolves.toBe(path.join(dir, "marketingclaw-current.tgz"));
+    await expect(readFile(path.join(dir, "marketingclaw-current.tgz"), "utf8")).resolves.toBe(
+      "package",
+    );
   });
 
   it("rejects path-like npm pack filenames instead of renaming outside the output directory", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-npm-pack-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-npm-pack-"));
     tempDirs.push(dir);
 
     const unsafeFilenames = [
-      "../openclaw-2026.6.17.tgz",
-      "nested/openclaw-2026.6.17.tgz",
-      "nested\\openclaw-2026.6.17.tgz",
-      "/tmp/openclaw-2026.6.17.tgz",
-      "C:\\temp\\openclaw-2026.6.17.tgz",
-      "openclaw-2026.6.17.tar.gz",
+      "../marketingclaw-2026.6.17.tgz",
+      "nested/marketingclaw-2026.6.17.tgz",
+      "nested\\marketingclaw-2026.6.17.tgz",
+      "/tmp/marketingclaw-2026.6.17.tgz",
+      "C:\\temp\\marketingclaw-2026.6.17.tgz",
+      "marketingclaw-2026.6.17.tar.gz",
     ];
 
     for (const filename of unsafeFilenames) {
       await expect(
-        moveNewestPackedTarballForTest(dir, JSON.stringify([{ filename }]), "openclaw-current.tgz"),
-      ).rejects.toThrow("npm pack reported unsafe OpenClaw tarball filename");
+        moveNewestPackedTarballForTest(
+          dir,
+          JSON.stringify([{ filename }]),
+          "marketingclaw-current.tgz",
+        ),
+      ).rejects.toThrow("npm pack reported unsafe MarketingClaw tarball filename");
     }
   });
 
   it("rejects unsafe text npm pack filenames instead of using loose stdout fallback", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-npm-pack-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-npm-pack-"));
     tempDirs.push(dir);
-    await writeFile(path.join(dir, "openclaw-2026.6.17.tgz"), "safe fallback");
+    await writeFile(path.join(dir, "marketingclaw-2026.6.17.tgz"), "safe fallback");
 
-    for (const filename of ["../openclaw-2026.6.17.tgz", "C:openclaw-2026.6.17.tgz"]) {
+    for (const filename of ["../marketingclaw-2026.6.17.tgz", "C:marketingclaw-2026.6.17.tgz"]) {
       await expect(
         moveNewestPackedTarballForTest(
           dir,
           ["npm notice", filename].join("\n"),
-          "openclaw-current.tgz",
+          "marketingclaw-current.tgz",
         ),
-      ).rejects.toThrow("npm pack reported unsafe OpenClaw tarball filename");
+      ).rejects.toThrow("npm pack reported unsafe MarketingClaw tarball filename");
     }
   });
 
   it("cleans stale package tarballs before npm fallback scanning", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-npm-pack-stale-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-npm-pack-stale-"));
     tempDirs.push(dir);
-    await writeFile(path.join(dir, "openclaw-9999.1.1.tgz"), "stale");
-    await writeFile(path.join(dir, "openclaw-C:evil.tgz"), "unsafe");
+    await writeFile(path.join(dir, "marketingclaw-9999.1.1.tgz"), "stale");
+    await writeFile(path.join(dir, "marketingclaw-C:evil.tgz"), "unsafe");
 
-    await cleanPackedOpenClawTarballsForTest(dir);
-    await writeFile(path.join(dir, "openclaw-2026.6.17.tgz"), "current");
+    await cleanPackedMarketingClawTarballsForTest(dir);
+    await writeFile(path.join(dir, "marketingclaw-2026.6.17.tgz"), "current");
 
     await expect(
-      moveNewestPackedTarballForTest(dir, "npm notice\n", "openclaw-current.tgz"),
-    ).resolves.toBe(path.join(dir, "openclaw-current.tgz"));
-    await expect(missing(path.join(dir, "openclaw-9999.1.1.tgz"))).resolves.toBe(true);
-    await expect(readFile(path.join(dir, "openclaw-C:evil.tgz"), "utf8")).resolves.toBe("unsafe");
-    await expect(readFile(path.join(dir, "openclaw-current.tgz"), "utf8")).resolves.toBe("current");
+      moveNewestPackedTarballForTest(dir, "npm notice\n", "marketingclaw-current.tgz"),
+    ).resolves.toBe(path.join(dir, "marketingclaw-current.tgz"));
+    await expect(missing(path.join(dir, "marketingclaw-9999.1.1.tgz"))).resolves.toBe(true);
+    await expect(readFile(path.join(dir, "marketingclaw-C:evil.tgz"), "utf8")).resolves.toBe(
+      "unsafe",
+    );
+    await expect(readFile(path.join(dir, "marketingclaw-current.tgz"), "utf8")).resolves.toBe(
+      "current",
+    );
   });
 
   it("bounds captured command stderr tails on failures", async () => {
@@ -476,7 +492,7 @@ describe("resolve-openclaw-package-candidate", () => {
       return;
     }
 
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-runner-timeout-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-runner-timeout-"));
     tempDirs.push(dir);
     const childPidPath = path.join(dir, "child.pid");
     let childPid: number | undefined;
@@ -487,13 +503,13 @@ describe("resolve-openclaw-package-candidate", () => {
         "const { spawn } = require('node:child_process');",
         "const fs = require('node:fs');",
         `const child = spawn(process.execPath, ['-e', ${JSON.stringify(childScript)}], { stdio: 'ignore' });`,
-        "fs.writeFileSync(process.env.OPENCLAW_TEST_CHILD_PID, String(child.pid));",
+        "fs.writeFileSync(process.env.MARKETINGCLAW_TEST_CHILD_PID, String(child.pid));",
         "setInterval(() => {}, 1000);",
       ].join("");
 
       const timeoutAssertion = expect(
         runCommandForTest(process.execPath, ["-e", parentScript], {
-          env: { ...process.env, OPENCLAW_TEST_CHILD_PID: childPidPath },
+          env: { ...process.env, MARKETINGCLAW_TEST_CHILD_PID: childPidPath },
           killAfterMs: 25,
           timeoutMs: 500,
         }),
@@ -515,7 +531,7 @@ describe("resolve-openclaw-package-candidate", () => {
       return;
     }
 
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-runner-grace-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-runner-grace-"));
     tempDirs.push(dir);
     const childPidPath = path.join(dir, "child.pid");
     const cleanupPath = path.join(dir, "child.cleanup");
@@ -554,7 +570,7 @@ describe("resolve-openclaw-package-candidate", () => {
       return;
     }
 
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-runner-timeout-clean-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-runner-timeout-clean-"));
     tempDirs.push(dir);
     const childPidPath = path.join(dir, "child.pid");
     const readyPath = path.join(dir, "child.ready");
@@ -563,10 +579,10 @@ describe("resolve-openclaw-package-candidate", () => {
     const childScript = [
       "const fs = require('node:fs');",
       "process.on('SIGTERM', () => {",
-      "  fs.writeFileSync(process.env.OPENCLAW_TEST_CHILD_CLEANUP, 'clean');",
+      "  fs.writeFileSync(process.env.MARKETINGCLAW_TEST_CHILD_CLEANUP, 'clean');",
       "  setTimeout(() => process.exit(0), 25);",
       "});",
-      "fs.writeFileSync(process.env.OPENCLAW_TEST_CHILD_READY, 'ready');",
+      "fs.writeFileSync(process.env.MARKETINGCLAW_TEST_CHILD_READY, 'ready');",
       "setInterval(() => {}, 1000);",
     ].join("");
     const parentScript = [
@@ -576,11 +592,11 @@ describe("resolve-openclaw-package-candidate", () => {
       "  stdio: 'ignore',",
       "  env: {",
       "    ...process.env,",
-      "    OPENCLAW_TEST_CHILD_CLEANUP: process.env.OPENCLAW_TEST_CHILD_CLEANUP,",
-      "    OPENCLAW_TEST_CHILD_READY: process.env.OPENCLAW_TEST_CHILD_READY,",
+      "    MARKETINGCLAW_TEST_CHILD_CLEANUP: process.env.MARKETINGCLAW_TEST_CHILD_CLEANUP,",
+      "    MARKETINGCLAW_TEST_CHILD_READY: process.env.MARKETINGCLAW_TEST_CHILD_READY,",
       "  },",
       "});",
-      "fs.writeFileSync(process.env.OPENCLAW_TEST_CHILD_PID, String(child.pid));",
+      "fs.writeFileSync(process.env.MARKETINGCLAW_TEST_CHILD_PID, String(child.pid));",
       "process.on('SIGTERM', () => process.exit(0));",
       "setInterval(() => {}, 1000);",
     ].join("");
@@ -590,9 +606,9 @@ describe("resolve-openclaw-package-candidate", () => {
       runCommandForTest(process.execPath, ["-e", parentScript], {
         env: {
           ...process.env,
-          OPENCLAW_TEST_CHILD_CLEANUP: cleanupPath,
-          OPENCLAW_TEST_CHILD_PID: childPidPath,
-          OPENCLAW_TEST_CHILD_READY: readyPath,
+          MARKETINGCLAW_TEST_CHILD_CLEANUP: cleanupPath,
+          MARKETINGCLAW_TEST_CHILD_PID: childPidPath,
+          MARKETINGCLAW_TEST_CHILD_READY: readyPath,
         },
         killAfterMs: 250,
         timeoutMs: 250,
@@ -611,11 +627,11 @@ describe("resolve-openclaw-package-candidate", () => {
       return;
     }
 
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-runner-signal-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-runner-signal-"));
     tempDirs.push(dir);
     const childPidPath = path.join(dir, "child.pid");
     const scriptUrl = pathToFileURL(
-      path.resolve("scripts/resolve-openclaw-package-candidate.mjs"),
+      path.resolve("scripts/resolve-marketingclaw-package-candidate.mjs"),
     ).href;
     let childPid: number | undefined;
     let runnerPid: number | undefined;
@@ -626,7 +642,7 @@ describe("resolve-openclaw-package-candidate", () => {
         "const { spawn } = require('node:child_process');",
         "const fs = require('node:fs');",
         `const child = spawn(process.execPath, ['-e', ${JSON.stringify(childScript)}], { stdio: 'ignore' });`,
-        "fs.writeFileSync(process.env.OPENCLAW_TEST_CHILD_PID, String(child.pid));",
+        "fs.writeFileSync(process.env.MARKETINGCLAW_TEST_CHILD_PID, String(child.pid));",
         "setInterval(() => {}, 1000);",
       ].join("");
       // Accelerate only the module-level 5s forwarded-signal failsafe in this disposable runner.
@@ -639,7 +655,7 @@ describe("resolve-openclaw-package-candidate", () => {
       ].join("\n");
       const runner = spawn(process.execPath, ["--input-type=module", "-e", runnerScript], {
         cwd: process.cwd(),
-        env: { ...process.env, OPENCLAW_TEST_CHILD_PID: childPidPath },
+        env: { ...process.env, MARKETINGCLAW_TEST_CHILD_PID: childPidPath },
         stdio: ["ignore", "ignore", "pipe"],
       });
       runnerPid = runner.pid;
@@ -663,7 +679,7 @@ describe("resolve-openclaw-package-candidate", () => {
 
   it("fails successful ref candidates when package source worktree cleanup fails", async () => {
     await expect(
-      cleanupPackageSourceWorktreeForTest("/tmp/openclaw-package-source-stuck", {
+      cleanupPackageSourceWorktreeForTest("/tmp/marketingclaw-package-source-stuck", {
         runImpl: async () => {
           throw new Error("worktree remove denied");
         },
@@ -675,7 +691,7 @@ describe("resolve-openclaw-package-candidate", () => {
     const warnings: string[] = [];
 
     await expect(
-      cleanupPackageSourceWorktreeForTest("/tmp/openclaw-package-source-stuck", {
+      cleanupPackageSourceWorktreeForTest("/tmp/marketingclaw-package-source-stuck", {
         consoleError: (message: string) => warnings.push(message),
         resolveError: new Error("package build failed"),
         runImpl: async () => {
@@ -684,12 +700,12 @@ describe("resolve-openclaw-package-candidate", () => {
       }),
     ).resolves.toBeUndefined();
     expect(warnings).toEqual([
-      "warning: failed to remove temporary package source worktree /tmp/openclaw-package-source-stuck: worktree remove denied",
+      "warning: failed to remove temporary package source worktree /tmp/marketingclaw-package-source-stuck: worktree remove denied",
     ]);
   });
 
   it("loads named trusted package URL source policies", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-trusted-package-source-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-trusted-package-source-"));
     tempDirs.push(dir);
     const policy = path.join(dir, "trusted-sources.json");
     await writeFile(
@@ -700,7 +716,7 @@ describe("resolve-openclaw-package-candidate", () => {
           "enterprise-artifactory": {
             allowPrivateNetwork: true,
             hosts: ["packages.internal"],
-            pathPrefixes: ["/artifactory/openclaw/"],
+            pathPrefixes: ["/artifactory/marketingclaw/"],
             ports: [443, 8443],
             redirectHosts: ["packages.internal", "mirror.internal"],
           },
@@ -713,7 +729,7 @@ describe("resolve-openclaw-package-candidate", () => {
       auth: undefined,
       hosts: ["packages.internal"],
       id: "enterprise-artifactory",
-      pathPrefixes: ["/artifactory/openclaw/"],
+      pathPrefixes: ["/artifactory/marketingclaw/"],
       ports: [443, 8443],
       redirectHosts: ["packages.internal", "mirror.internal"],
     });
@@ -723,7 +739,7 @@ describe("resolve-openclaw-package-candidate", () => {
   });
 
   it("rejects loose trusted package source port values", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-trusted-package-source-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-trusted-package-source-"));
     tempDirs.push(dir);
     const policy = path.join(dir, "trusted-sources.json");
     await writeFile(
@@ -733,17 +749,17 @@ describe("resolve-openclaw-package-candidate", () => {
         sources: {
           exponent: {
             hosts: ["packages.example"],
-            pathPrefixes: ["/openclaw/"],
+            pathPrefixes: ["/marketingclaw/"],
             ports: ["1e3"],
           },
           fractional: {
             hosts: ["packages.example"],
-            pathPrefixes: ["/openclaw/"],
+            pathPrefixes: ["/marketingclaw/"],
             ports: [443.5],
           },
           hex: {
             hosts: ["packages.example"],
-            pathPrefixes: ["/openclaw/"],
+            pathPrefixes: ["/marketingclaw/"],
             ports: ["0x1bb"],
           },
         },
@@ -762,36 +778,36 @@ describe("resolve-openclaw-package-candidate", () => {
   });
 
   it("rejects unsafe package_url downloads before fetching private targets", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-download-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-download-"));
     tempDirs.push(dir);
-    const target = path.join(dir, "openclaw.tgz");
+    const target = path.join(dir, "marketingclaw.tgz");
 
     await expect(
-      downloadUrl("http://packages.example/openclaw.tgz", target, {
+      downloadUrl("http://packages.example/marketingclaw.tgz", target, {
         fetchImpl: unexpectedFetch,
         lookupHost: lookupAddresses([{ address: "93.184.216.34", family: 4 }]),
       }),
     ).rejects.toThrow("package_url must use https");
     await expect(
-      downloadUrl("https://user@packages.example/openclaw.tgz", target, {
+      downloadUrl("https://user@packages.example/marketingclaw.tgz", target, {
         fetchImpl: unexpectedFetch,
         lookupHost: lookupAddresses([{ address: "93.184.216.34", family: 4 }]),
       }),
     ).rejects.toThrow("package_url must not include credentials");
     await expect(
-      downloadUrl("https://localhost/openclaw.tgz", target, {
+      downloadUrl("https://localhost/marketingclaw.tgz", target, {
         fetchImpl: unexpectedFetch,
         lookupHost: lookupAddresses([{ address: "127.0.0.1", family: 4 }]),
       }),
     ).rejects.toThrow(/private\/internal\/special-use/iu);
     await expect(
-      downloadUrl("https://packages.example/openclaw.tgz", target, {
+      downloadUrl("https://packages.example/marketingclaw.tgz", target, {
         fetchImpl: unexpectedFetch,
         lookupHost: lookupAddresses([{ address: "10.0.0.8", family: 4 }]),
       }),
     ).rejects.toThrow(/resolves to private\/internal\/special-use/iu);
     await expect(
-      downloadUrl("https://packages.example/openclaw.tgz", target, {
+      downloadUrl("https://packages.example/marketingclaw.tgz", target, {
         fetchImpl: unexpectedFetch,
         lookupHost: lookupAddresses([{ address: "64:ff9b::a9fe:a9fe", family: 6 }]),
       }),
@@ -799,46 +815,54 @@ describe("resolve-openclaw-package-candidate", () => {
   });
 
   it("allows private package_url downloads only through an explicit trusted source policy", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-download-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-download-"));
     tempDirs.push(dir);
-    const target = path.join(dir, "openclaw.tgz");
+    const target = path.join(dir, "marketingclaw.tgz");
     const trustedSource = {
       allowPrivateNetwork: true,
       hosts: ["packages.internal"],
       id: "enterprise-artifactory",
-      pathPrefixes: ["/artifactory/openclaw/"],
+      pathPrefixes: ["/artifactory/marketingclaw/"],
       ports: [8443],
       redirectHosts: ["packages.internal"],
     };
     const requestedUrls: string[] = [];
 
-    await downloadUrl("https://packages.internal:8443/artifactory/openclaw/openclaw.tgz", target, {
-      fetchImpl: async (url: URL) => {
-        requestedUrls.push(url.toString());
-        return new Response(new Uint8Array([4, 5, 6]), {
-          headers: { "content-length": "3" },
-          status: 200,
-        });
+    await downloadUrl(
+      "https://packages.internal:8443/artifactory/marketingclaw/marketingclaw.tgz",
+      target,
+      {
+        fetchImpl: async (url: URL) => {
+          requestedUrls.push(url.toString());
+          return new Response(new Uint8Array([4, 5, 6]), {
+            headers: { "content-length": "3" },
+            status: 200,
+          });
+        },
+        lookupHost: lookupAddresses([{ address: "203.0.113.8", family: 4 }]),
+        maxBytes: 3,
+        trustedSource,
       },
-      lookupHost: lookupAddresses([{ address: "203.0.113.8", family: 4 }]),
-      maxBytes: 3,
-      trustedSource,
-    });
+    );
 
     expect(requestedUrls).toEqual([
-      "https://packages.internal:8443/artifactory/openclaw/openclaw.tgz",
+      "https://packages.internal:8443/artifactory/marketingclaw/marketingclaw.tgz",
     ]);
     await expect(readFile(target)).resolves.toEqual(Buffer.from([4, 5, 6]));
 
     await expect(
-      downloadUrl("https://evil.internal:8443/artifactory/openclaw/openclaw.tgz", target, {
-        fetchImpl: unexpectedFetch,
-        lookupHost: lookupAddresses([{ address: "10.0.0.9", family: 4 }]),
-        trustedSource,
-      }),
+      downloadUrl(
+        "https://evil.internal:8443/artifactory/marketingclaw/marketingclaw.tgz",
+        target,
+        {
+          fetchImpl: unexpectedFetch,
+          lookupHost: lookupAddresses([{ address: "10.0.0.9", family: 4 }]),
+          trustedSource,
+        },
+      ),
     ).rejects.toThrow("is not allowed by trusted package source enterprise-artifactory");
     await expect(
-      downloadUrl("https://packages.internal:8443/other/openclaw.tgz", target, {
+      downloadUrl("https://packages.internal:8443/other/marketingclaw.tgz", target, {
         fetchImpl: unexpectedFetch,
         lookupHost: lookupAddresses([{ address: "203.0.113.8", family: 4 }]),
         trustedSource,
@@ -847,20 +871,20 @@ describe("resolve-openclaw-package-candidate", () => {
   });
 
   it("matches trusted package_url path prefixes on path segment boundaries", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-download-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-download-"));
     tempDirs.push(dir);
-    const target = path.join(dir, "openclaw.tgz");
+    const target = path.join(dir, "marketingclaw.tgz");
     const trustedSource = {
       allowPrivateNetwork: true,
       hosts: ["packages.internal"],
       id: "enterprise-artifactory",
-      pathPrefixes: ["/artifactory/openclaw"],
+      pathPrefixes: ["/artifactory/marketingclaw"],
       ports: [8443],
       redirectHosts: ["packages.internal"],
     };
     const requestedUrls: string[] = [];
 
-    await downloadUrl("https://packages.internal:8443/artifactory/openclaw/pkg.tgz", target, {
+    await downloadUrl("https://packages.internal:8443/artifactory/marketingclaw/pkg.tgz", target, {
       fetchImpl: async (url: URL) => {
         requestedUrls.push(url.toString());
         return new Response(new Uint8Array([1, 2, 3]), {
@@ -873,54 +897,66 @@ describe("resolve-openclaw-package-candidate", () => {
       trustedSource,
     });
 
-    expect(requestedUrls).toEqual(["https://packages.internal:8443/artifactory/openclaw/pkg.tgz"]);
+    expect(requestedUrls).toEqual([
+      "https://packages.internal:8443/artifactory/marketingclaw/pkg.tgz",
+    ]);
     await expect(
-      downloadUrl("https://packages.internal:8443/artifactory/openclaw-malicious/pkg.tgz", target, {
-        fetchImpl: unexpectedFetch,
-        lookupHost: lookupAddresses([{ address: "203.0.113.8", family: 4 }]),
-        trustedSource,
-      }),
+      downloadUrl(
+        "https://packages.internal:8443/artifactory/marketingclaw-malicious/pkg.tgz",
+        target,
+        {
+          fetchImpl: unexpectedFetch,
+          lookupHost: lookupAddresses([{ address: "203.0.113.8", family: 4 }]),
+          trustedSource,
+        },
+      ),
     ).rejects.toThrow("path is not allowed by trusted package source enterprise-artifactory");
   });
 
   it("keeps trusted package_url redirects inside the named source policy", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-download-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-download-"));
     tempDirs.push(dir);
-    const target = path.join(dir, "openclaw.tgz");
+    const target = path.join(dir, "marketingclaw.tgz");
     const trustedSource = {
       allowPrivateNetwork: true,
       hosts: ["packages.internal"],
       id: "enterprise-artifactory",
-      pathPrefixes: ["/artifactory/openclaw/"],
+      pathPrefixes: ["/artifactory/marketingclaw/"],
       ports: [8443],
       redirectHosts: ["packages.internal"],
     };
 
     await expect(
-      downloadUrl("https://packages.internal:8443/artifactory/openclaw/openclaw.tgz", target, {
-        fetchImpl: async () =>
-          new Response(null, {
-            headers: { location: "https://metadata.internal:8443/artifactory/openclaw/pwn.tgz" },
-            status: 302,
-          }),
-        lookupHost: lookupAddresses([{ address: "10.0.0.8", family: 4 }]),
-        trustedSource,
-      }),
+      downloadUrl(
+        "https://packages.internal:8443/artifactory/marketingclaw/marketingclaw.tgz",
+        target,
+        {
+          fetchImpl: async () =>
+            new Response(null, {
+              headers: {
+                location: "https://metadata.internal:8443/artifactory/marketingclaw/pwn.tgz",
+              },
+              status: 302,
+            }),
+          lookupHost: lookupAddresses([{ address: "10.0.0.8", family: 4 }]),
+          trustedSource,
+        },
+      ),
     ).rejects.toThrow("is not allowed by trusted package source enterprise-artifactory");
   });
 
   it("does not forward trusted package auth headers to redirect hosts", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-download-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-download-"));
     tempDirs.push(dir);
-    const target = path.join(dir, "openclaw.tgz");
-    const previousToken = process.env.OPENCLAW_TRUSTED_PACKAGE_TOKEN;
-    process.env.OPENCLAW_TRUSTED_PACKAGE_TOKEN = "token-123";
+    const target = path.join(dir, "marketingclaw.tgz");
+    const previousToken = process.env.MARKETINGCLAW_TRUSTED_PACKAGE_TOKEN;
+    process.env.MARKETINGCLAW_TRUSTED_PACKAGE_TOKEN = "token-123";
     const trustedSource = {
       allowPrivateNetwork: true,
       auth: { type: "bearer" },
       hosts: ["packages.internal"],
       id: "enterprise-artifactory",
-      pathPrefixes: ["/artifactory/openclaw/"],
+      pathPrefixes: ["/artifactory/marketingclaw/"],
       ports: [8443],
       redirectHosts: ["packages.internal", "mirror.internal"],
     };
@@ -928,7 +964,7 @@ describe("resolve-openclaw-package-candidate", () => {
 
     try {
       await downloadUrl(
-        "https://packages.internal:8443/artifactory/openclaw/openclaw.tgz",
+        "https://packages.internal:8443/artifactory/marketingclaw/marketingclaw.tgz",
         target,
         {
           fetchImpl: async (_url: URL, init?: RequestInit) => {
@@ -936,7 +972,8 @@ describe("resolve-openclaw-package-candidate", () => {
             if (requestHeaders.length === 1) {
               return new Response(null, {
                 headers: {
-                  location: "https://mirror.internal:8443/artifactory/openclaw/openclaw.tgz",
+                  location:
+                    "https://mirror.internal:8443/artifactory/marketingclaw/marketingclaw.tgz",
                 },
                 status: 302,
               });
@@ -953,9 +990,9 @@ describe("resolve-openclaw-package-candidate", () => {
       );
     } finally {
       if (previousToken === undefined) {
-        delete process.env.OPENCLAW_TRUSTED_PACKAGE_TOKEN;
+        delete process.env.MARKETINGCLAW_TRUSTED_PACKAGE_TOKEN;
       } else {
-        process.env.OPENCLAW_TRUSTED_PACKAGE_TOKEN = previousToken;
+        process.env.MARKETINGCLAW_TRUSTED_PACKAGE_TOKEN = previousToken;
       }
     }
 
@@ -964,13 +1001,13 @@ describe("resolve-openclaw-package-candidate", () => {
   });
 
   it("validates redirects for package_url downloads", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-download-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-download-"));
     tempDirs.push(dir);
-    const target = path.join(dir, "openclaw.tgz");
+    const target = path.join(dir, "marketingclaw.tgz");
     const requestedUrls: string[] = [];
 
     await expect(
-      downloadUrl("https://packages.example/openclaw.tgz", target, {
+      downloadUrl("https://packages.example/marketingclaw.tgz", target, {
         fetchImpl: async (url: URL) => {
           requestedUrls.push(url.toString());
           return new Response(null, {
@@ -981,17 +1018,17 @@ describe("resolve-openclaw-package-candidate", () => {
         lookupHost: lookupAddresses([{ address: "93.184.216.34", family: 4 }]),
       }),
     ).rejects.toThrow(/private\/internal\/special-use/iu);
-    expect(requestedUrls).toEqual(["https://packages.example/openclaw.tgz"]);
+    expect(requestedUrls).toEqual(["https://packages.example/marketingclaw.tgz"]);
   });
 
   it("cancels redirect response bodies before following the next hop", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-download-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-download-"));
     tempDirs.push(dir);
-    const target = path.join(dir, "openclaw.tgz");
+    const target = path.join(dir, "marketingclaw.tgz");
     const bodyCancelled: string[] = [];
 
     await expect(
-      downloadUrl("https://packages.example/openclaw.tgz", target, {
+      downloadUrl("https://packages.example/marketingclaw.tgz", target, {
         fetchImpl: async (url: URL) => {
           let cancelled = false;
           const body = new ReadableStream({
@@ -1028,13 +1065,13 @@ describe("resolve-openclaw-package-candidate", () => {
   });
 
   it("cancels response body on HTTP error before closing dispatcher", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-download-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-download-"));
     tempDirs.push(dir);
-    const target = path.join(dir, "openclaw.tgz");
+    const target = path.join(dir, "marketingclaw.tgz");
     let bodyCancelled = false;
 
     await expect(
-      downloadUrl("https://packages.example/openclaw.tgz", target, {
+      downloadUrl("https://packages.example/marketingclaw.tgz", target, {
         fetchImpl: async () => {
           const body = new ReadableStream({
             start(controller) {
@@ -1060,13 +1097,13 @@ describe("resolve-openclaw-package-candidate", () => {
   });
 
   it("cancels response body on declared oversize before closing dispatcher", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-download-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-download-"));
     tempDirs.push(dir);
-    const target = path.join(dir, "openclaw.tgz");
+    const target = path.join(dir, "marketingclaw.tgz");
     let bodyCancelled = false;
 
     await expect(
-      downloadUrl("https://packages.example/openclaw.tgz", target, {
+      downloadUrl("https://packages.example/marketingclaw.tgz", target, {
         fetchImpl: async () => {
           const body = new ReadableStream({
             start(controller) {
@@ -1096,14 +1133,14 @@ describe("resolve-openclaw-package-candidate", () => {
   });
 
   it("rejects unsafe decimal package_url content-length values before reading", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-download-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-download-"));
     tempDirs.push(dir);
-    const target = path.join(dir, "openclaw.tgz");
+    const target = path.join(dir, "marketingclaw.tgz");
     let readStarted = false;
     let bodyCancelled = false;
 
     await expect(
-      downloadUrl("https://packages.example/openclaw.tgz", target, {
+      downloadUrl("https://packages.example/marketingclaw.tgz", target, {
         fetchImpl: async () =>
           ({
             body: {
@@ -1140,12 +1177,12 @@ describe("resolve-openclaw-package-candidate", () => {
   });
 
   it("bounds package_url downloads and writes completed files atomically", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-download-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-download-"));
     tempDirs.push(dir);
-    const target = path.join(dir, "openclaw.tgz");
+    const target = path.join(dir, "marketingclaw.tgz");
 
     await expect(
-      downloadUrl("https://packages.example/openclaw.tgz", target, {
+      downloadUrl("https://packages.example/marketingclaw.tgz", target, {
         fetchImpl: async () =>
           new Response(new Uint8Array([1, 2, 3, 4]), {
             headers: { "content-length": "4" },
@@ -1158,7 +1195,7 @@ describe("resolve-openclaw-package-candidate", () => {
     await expect(missing(target)).resolves.toBe(true);
     await expect(missing(`${target}.tmp`)).resolves.toBe(true);
 
-    await downloadUrl("https://packages.example/openclaw.tgz", target, {
+    await downloadUrl("https://packages.example/marketingclaw.tgz", target, {
       fetchImpl: async () =>
         new Response(new Uint8Array([1, 2, 3]), {
           headers: { "content-length": "3" },
@@ -1172,11 +1209,11 @@ describe("resolve-openclaw-package-candidate", () => {
   });
 
   it("clamps oversized package_url download timers before scheduling", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-download-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-download-"));
     tempDirs.push(dir);
-    const target = path.join(dir, "openclaw.tgz");
+    const target = path.join(dir, "marketingclaw.tgz");
 
-    await downloadUrl("https://packages.example/openclaw.tgz", target, {
+    await downloadUrl("https://packages.example/marketingclaw.tgz", target, {
       fetchImpl: async () =>
         new Response(
           new ReadableStream({
@@ -1202,14 +1239,14 @@ describe("resolve-openclaw-package-candidate", () => {
   });
 
   it("times out stalled package_url response bodies", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-download-timeout-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-download-timeout-"));
     tempDirs.push(dir);
-    const target = path.join(dir, "openclaw.tgz");
+    const target = path.join(dir, "marketingclaw.tgz");
     let bodyCancelled = false;
     const startedAt = Date.now();
 
     await expect(
-      downloadUrl("https://packages.example/openclaw.tgz", target, {
+      downloadUrl("https://packages.example/marketingclaw.tgz", target, {
         fetchImpl: async () =>
           new Response(
             new ReadableStream({
@@ -1226,7 +1263,7 @@ describe("resolve-openclaw-package-candidate", () => {
         timeoutMs: 25,
       }),
     ).rejects.toThrow(
-      "package_url download timed out after 25ms: https://packages.example/openclaw.tgz",
+      "package_url download timed out after 25ms: https://packages.example/marketingclaw.tgz",
     );
 
     expect(Date.now() - startedAt).toBeLessThan(1_000);
@@ -1236,14 +1273,14 @@ describe("resolve-openclaw-package-candidate", () => {
   });
 
   it("streams non-decimal package_url content-length values through the download cap", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-download-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-download-"));
     tempDirs.push(dir);
-    const target = path.join(dir, "openclaw.tgz");
+    const target = path.join(dir, "marketingclaw.tgz");
     let readStarted = false;
     let bodyCancelled = false;
 
     await expect(
-      downloadUrl("https://packages.example/openclaw.tgz", target, {
+      downloadUrl("https://packages.example/marketingclaw.tgz", target, {
         fetchImpl: async () => {
           const body = new ReadableStream({
             pull(controller) {
@@ -1270,7 +1307,7 @@ describe("resolve-openclaw-package-candidate", () => {
   });
 
   it("reads package source metadata from package artifacts", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-candidate-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-candidate-"));
     tempDirs.push(dir);
     await writeFile(
       path.join(dir, "package-candidate.json"),
@@ -1295,7 +1332,7 @@ describe("resolve-openclaw-package-candidate", () => {
   });
 
   it("normalizes artifact package source SHAs before workflow output", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-candidate-sha-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-candidate-sha-"));
     tempDirs.push(dir);
     await writeFile(
       path.join(dir, "package-candidate.json"),
@@ -1310,7 +1347,7 @@ describe("resolve-openclaw-package-candidate", () => {
   });
 
   it("normalizes whitespace-only artifact package source SHAs to absent", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-candidate-empty-sha-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-candidate-empty-sha-"));
     tempDirs.push(dir);
     await writeFile(
       path.join(dir, "package-candidate.json"),
@@ -1325,7 +1362,7 @@ describe("resolve-openclaw-package-candidate", () => {
   });
 
   it("rejects malformed artifact package source SHAs", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-candidate-bad-sha-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-candidate-bad-sha-"));
     tempDirs.push(dir);
     await writeFile(
       path.join(dir, "package-candidate.json"),
@@ -1340,17 +1377,17 @@ describe("resolve-openclaw-package-candidate", () => {
   });
 
   it("accepts uppercase package artifact SHA-256 metadata", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-sha-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-sha-"));
     tempDirs.push(dir);
-    const file = path.join(dir, "openclaw.tgz");
-    await writeFile(file, "openclaw package bytes");
+    const file = path.join(dir, "marketingclaw.tgz");
+    await writeFile(file, "marketingclaw package bytes");
     const digest = "ae0b98d18c80dbf9447fa48560a139195595db2d337ad33421ca2183b0dd3e99";
 
     await expect(assertExpectedSha256ForTest(file, digest.toUpperCase())).resolves.toBe(digest);
   });
 
   it("rejects source artifact scans that exceed the filesystem entry limit", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-artifact-scan-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-artifact-scan-"));
     tempDirs.push(dir);
     const maxEntries = 3;
 
@@ -1364,10 +1401,10 @@ describe("resolve-openclaw-package-candidate", () => {
   });
 
   it("rejects source artifact directories with multiple tarballs", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-artifact-duplicates-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-artifact-duplicates-"));
     tempDirs.push(dir);
 
-    await writeFile(path.join(dir, "openclaw-a.tgz"), "a");
+    await writeFile(path.join(dir, "marketingclaw-a.tgz"), "a");
     await writeFile(path.join(dir, "nested.tar.gz"), "b");
 
     const error = await findSingleTarballForTest(dir).catch((caught: unknown) => caught);
@@ -1375,22 +1412,22 @@ describe("resolve-openclaw-package-candidate", () => {
     const message = (error as Error).message;
     expect(message).toContain("source=artifact requires exactly one .tgz");
     expect(message).toContain("nested.tar.gz");
-    expect(message).toContain("openclaw-a.tgz");
+    expect(message).toContain("marketingclaw-a.tgz");
     expect(message).not.toContain(path.join(dir, "nested.tar.gz"));
-    expect(message).not.toContain(path.join(dir, "openclaw-a.tgz"));
+    expect(message).not.toContain(path.join(dir, "marketingclaw-a.tgz"));
   });
 
   it("reads the source SHA from packed npm build metadata", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-package-build-info-"));
+    const dir = await mkdtemp(path.join(tmpdir(), "marketingclaw-package-build-info-"));
     tempDirs.push(dir);
     const root = path.join(dir, "package");
     await mkdir(path.join(root, "dist"), { recursive: true });
-    await writeFile(path.join(root, "package.json"), JSON.stringify({ name: "openclaw" }));
+    await writeFile(path.join(root, "package.json"), JSON.stringify({ name: "marketingclaw" }));
     await writeFile(
       path.join(root, "dist", "build-info.json"),
       JSON.stringify({ commit: "66CE632B9B7C5C7FDD3E66C739687D51638AD6E2" }),
     );
-    const tarball = path.join(dir, "openclaw.tgz");
+    const tarball = path.join(dir, "marketingclaw.tgz");
     await new Promise<void>((resolve, reject) => {
       execFile("tar", ["-czf", tarball, "-C", dir, "package"], (error) => {
         if (error) {

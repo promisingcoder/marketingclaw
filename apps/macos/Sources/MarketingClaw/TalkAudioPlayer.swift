@@ -1,13 +1,13 @@
 import AVFoundation
 import Foundation
-import OpenClawKit
+import MarketingClawKit
 import OSLog
 
 @MainActor
 final class TalkAudioPlayer: NSObject, @preconcurrency AVAudioPlayerDelegate {
     static let shared = TalkAudioPlayer()
 
-    private let logger = Logger(subsystem: "ai.openclaw", category: "talk.tts")
+    private let logger = Logger(subsystem: "ai.marketingclaw", category: "talk.tts")
     private var player: AVAudioPlayer?
     private var playback: Playback?
     private var levelHandler: (@MainActor (Double?) -> Void)?

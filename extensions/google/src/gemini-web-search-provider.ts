@@ -1,14 +1,14 @@
 // Google provider module implements model/runtime integration.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import { createLazyRuntimeModule } from "marketingclaw/plugin-sdk/lazy-runtime";
 import {
   createWebSearchProviderContractFields,
   mergeScopedSearchConfig,
   resolveProviderWebSearchPluginConfig,
   type WebSearchProviderPlugin,
   type WebSearchProviderToolDefinition,
-} from "openclaw/plugin-sdk/provider-web-search-config-contract";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "marketingclaw/plugin-sdk/provider-web-search-config-contract";
+import { isRecord } from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import {
   resolveGeminiApiKey,
   resolveGeminiBaseUrl,
@@ -66,14 +66,14 @@ function createGeminiToolDefinition(
 }
 
 function resolveGoogleModelProviderConfig(
-  config?: OpenClawConfig,
+  config?: MarketingClawConfig,
 ): Record<string, unknown> | undefined {
   const provider = config?.models?.providers?.google;
   return isRecord(provider) ? provider : undefined;
 }
 
 function getGoogleModelProviderCredentialFallback(
-  config?: OpenClawConfig,
+  config?: MarketingClawConfig,
 ): { path: string; value: unknown } | undefined {
   const provider = resolveGoogleModelProviderConfig(config);
   return provider && provider.apiKey !== undefined
@@ -83,7 +83,7 @@ function getGoogleModelProviderCredentialFallback(
 
 function withGoogleModelProviderFallbacks(
   searchConfig: Record<string, unknown> | undefined,
-  config?: OpenClawConfig,
+  config?: MarketingClawConfig,
 ): Record<string, unknown> | undefined {
   const provider = resolveGoogleModelProviderConfig(config);
   if (!provider || (provider.apiKey === undefined && provider.baseUrl === undefined)) {
@@ -127,7 +127,7 @@ export function createGeminiWebSearchProvider(): WebSearchProviderPlugin {
     envVars: ["GEMINI_API_KEY"],
     placeholder: "AIza...",
     signupUrl: "https://aistudio.google.com/apikey",
-    docsUrl: "https://docs.openclaw.ai/tools/web",
+    docsUrl: "https://docs.marketingclaw.ai/tools/web",
     autoDetectOrder: 20,
     credentialPath: GEMINI_CREDENTIAL_PATH,
     ...contractFields,

@@ -614,13 +614,13 @@
     max-height: 380px;
   }
 
-  .content:has(openclaw-logs-page) {
+  .content:has(marketingclaw-logs-page) {
     display: block;
     overflow-y: auto;
   }
 
-  .content:has(openclaw-logs-page) > openclaw-router-outlet,
-  .content openclaw-logs-page,
+  .content:has(marketingclaw-logs-page) > marketingclaw-router-outlet,
+  .content marketingclaw-logs-page,
   .content .settings-workspace--fill-height,
   .content .settings-workspace--fill-height > .settings-workspace__body,
   .content .settings-workspace--fill-height .logs-card {

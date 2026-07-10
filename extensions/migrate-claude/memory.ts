@@ -1,7 +1,10 @@
 // Migrate Claude plugin module implements memory behavior.
 import path from "node:path";
-import { createMigrationItem, MIGRATION_REASON_TARGET_EXISTS } from "openclaw/plugin-sdk/migration";
-import type { MigrationItem } from "openclaw/plugin-sdk/plugin-entry";
+import {
+  createMigrationItem,
+  MIGRATION_REASON_TARGET_EXISTS,
+} from "marketingclaw/plugin-sdk/migration";
+import type { MigrationItem } from "marketingclaw/plugin-sdk/plugin-entry";
 import { exists } from "./helpers.js";
 import type { ClaudeSource } from "./source.js";
 import type { PlannedTargets } from "./targets.js";

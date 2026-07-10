@@ -16,7 +16,7 @@ import { fileURLToPath } from "node:url";
 const repoRoot = path.dirname(path.dirname(path.dirname(fileURLToPath(import.meta.url))));
 const { TranscriptsStore } = await import(path.join(repoRoot, "src/transcripts/store.js"));
 
-const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-proof-transcripts-"));
+const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-proof-transcripts-"));
 
 const session = {
   sessionId: "proof-session",

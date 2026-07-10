@@ -1,21 +1,21 @@
 // Provider catalog helpers normalize, hash, and expose model catalogs for provider plugins.
 import { createHash } from "node:crypto";
-import { normalizeModelCatalog } from "@openclaw/model-catalog-core/model-catalog-normalize";
+import { normalizeModelCatalog } from "@marketingclaw/model-catalog-core/model-catalog-normalize";
 import type {
   ModelCatalogCost,
   ModelCatalogMediaInputConfig,
   ModelCatalogModel,
   ModelCatalogTieredCost,
-} from "@openclaw/model-catalog-core/model-catalog-types";
-import { findNormalizedProviderKey } from "@openclaw/model-catalog-core/provider-id";
+} from "@marketingclaw/model-catalog-core/model-catalog-types";
+import { findNormalizedProviderKey } from "@marketingclaw/model-catalog-core/provider-id";
 import {
   isFutureDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,
 } from "../../packages/normalization-core/src/number-coercion.js";
 import { normalizeConfiguredProviderCatalogModelId } from "../agents/model-ref-shared.js";
 import { resolveProviderRequestCapabilities } from "../agents/provider-attribution.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import type { ModelDefinitionConfig } from "../config/types.models.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
 import type { ModelProviderConfig } from "./provider-model-shared.js";
 
 export type { ProviderCatalogContext, ProviderCatalogResult } from "../plugins/types.js";
@@ -249,7 +249,7 @@ function normalizeConfiguredCatalogModelInput(
 }
 
 function resolveConfiguredProviderModels(
-  config: OpenClawConfig | undefined,
+  config: MarketingClawConfig | undefined,
   providerId: string,
 ): ModelDefinitionConfig[] {
   const providers = config?.models?.providers;
@@ -272,7 +272,7 @@ function resolveConfiguredProviderModels(
  */
 export function readConfiguredProviderCatalogEntries(params: {
   /** Runtime config containing optional user-defined provider model rows. */
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   /** Provider id used to locate configured model rows. */
   providerId: string;
   /** Provider id to publish on emitted catalog entries when it differs from lookup id. */

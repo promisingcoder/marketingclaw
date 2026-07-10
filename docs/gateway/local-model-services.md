@@ -1,27 +1,27 @@
 ---
-summary: "Start local model servers on demand before OpenClaw model requests"
+summary: "Start local model servers on demand before MarketingClaw model requests"
 read_when:
-  - You want OpenClaw to start a local model server only when its model is selected
+  - You want MarketingClaw to start a local model server only when its model is selected
   - You run ds4, inferrs, vLLM, llama.cpp, MLX, or another OpenAI-compatible local server
   - You need to control cold start, readiness, and idle shutdown for local providers
 title: "Local model services"
 ---
 
-`models.providers.<id>.localService` starts a provider-owned local model server on demand. When a request selects a model from that provider, OpenClaw probes the health endpoint, starts the process if it is down, waits for readiness, then sends the request. Use it to avoid keeping expensive local servers running all day.
+`models.providers.<id>.localService` starts a provider-owned local model server on demand. When a request selects a model from that provider, MarketingClaw probes the health endpoint, starts the process if it is down, waits for readiness, then sends the request. Use it to avoid keeping expensive local servers running all day.
 
 ## How it works
 
 1. A model request resolves to a configured provider.
-2. If that provider has `localService`, OpenClaw probes `healthUrl`.
-3. On a successful probe, OpenClaw uses the already-running server.
-4. On a failed probe, OpenClaw spawns `command` with `args`.
-5. OpenClaw polls the health endpoint until `readyTimeoutMs` expires.
+2. If that provider has `localService`, MarketingClaw probes `healthUrl`.
+3. On a successful probe, MarketingClaw uses the already-running server.
+4. On a failed probe, MarketingClaw spawns `command` with `args`.
+5. MarketingClaw polls the health endpoint until `readyTimeoutMs` expires.
 6. The model request goes through the normal provider transport.
-7. If OpenClaw started the process and `idleStopMs` is set, it stops the process after the last in-flight request has been idle that long.
+7. If MarketingClaw started the process and `idleStopMs` is set, it stops the process after the last in-flight request has been idle that long.
 
-OpenClaw does not install launchd, systemd, Docker, or any daemon for this. The server is a plain child process of whichever OpenClaw process first needed it.
+MarketingClaw does not install launchd, systemd, Docker, or any daemon for this. The server is a plain child process of whichever MarketingClaw process first needed it.
 
-Startup is serialized per provider command/argument/env set, so concurrent requests for the same service do not spawn duplicate servers. If another OpenClaw process already has a healthy server at the same `healthUrl`, this process reuses it without adopting it (each process only manages the child it personally started). Active streaming responses hold a lease, so idle shutdown waits until response handling completes.
+Startup is serialized per provider command/argument/env set, so concurrent requests for the same service do not spawn duplicate servers. If another MarketingClaw process already has a healthy server at the same `healthUrl`, this process reuses it without adopting it (each process only manages the child it personally started). Active streaming responses hold a lease, so idle shutdown waits until response handling completes.
 
 ## Config shape
 
@@ -69,10 +69,10 @@ Set `timeoutSeconds` on the provider entry (not `localService`) so slow cold sta
 | `command`        | yes      | Absolute executable path. No shell PATH lookup.                                                                                      |
 | `args`           | no       | Process arguments. No shell expansion, pipes, globbing, or quoting.                                                                  |
 | `cwd`            | no       | Working directory for the process.                                                                                                   |
-| `env`            | no       | Environment variables merged over the OpenClaw process environment.                                                                  |
+| `env`            | no       | Environment variables merged over the MarketingClaw process environment.                                                             |
 | `healthUrl`      | no       | Readiness URL. Defaults to `baseUrl` with `/models` appended (`http://127.0.0.1:8000/v1` becomes `http://127.0.0.1:8000/v1/models`). |
 | `readyTimeoutMs` | no       | Startup readiness deadline. Default: `120000`.                                                                                       |
-| `idleStopMs`     | no       | Idle shutdown delay for an OpenClaw-started process. `0` or omitted keeps it alive until OpenClaw exits.                             |
+| `idleStopMs`     | no       | Idle shutdown delay for an MarketingClaw-started process. `0` or omitted keeps it alive until MarketingClaw exits.                   |
 
 ## Inferrs example
 
@@ -127,7 +127,7 @@ Inferrs is a custom OpenAI-compatible `/v1` backend, so the same `localService` 
 }
 ```
 
-Replace `command` with the result of `which inferrs` on the machine running OpenClaw. Full inferrs setup: [Inferrs](/providers/inferrs).
+Replace `command` with the result of `which inferrs` on the machine running MarketingClaw. Full inferrs setup: [Inferrs](/providers/inferrs).
 
 ## ds4 example
 
@@ -175,6 +175,6 @@ Full setup, context sizing, and verification commands: [ds4](/providers/ds4).
     Local model setup, provider choices, and safety guidance.
   </Card>
   <Card title="Inferrs" href="/providers/inferrs" icon="cpu">
-    Run OpenClaw through the inferrs OpenAI-compatible local server.
+    Run MarketingClaw through the inferrs OpenAI-compatible local server.
   </Card>
 </CardGroup>

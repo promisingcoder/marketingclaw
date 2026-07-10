@@ -5,7 +5,7 @@ import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { clearConfigCache, clearRuntimeConfigSnapshot } from "../config/config.js";
 import { clearSessionStoreCacheForTest } from "../config/sessions/store.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { captureEnv, deleteTestEnvValue, setTestEnvValue } from "../test-utils/env.js";
 import { ADMIN_SCOPE, APPROVALS_SCOPE } from "./method-scopes.js";
 import { withOperatorApprovalsGatewayClient } from "./operator-approvals-client.js";
@@ -18,12 +18,12 @@ import {
 
 const TEST_ENV_KEYS = [
   "HOME",
-  "OPENCLAW_STATE_DIR",
-  "OPENCLAW_CONFIG_PATH",
-  "OPENCLAW_GATEWAY_URL",
-  "OPENCLAW_GATEWAY_TOKEN",
-  "OPENCLAW_GATEWAY_PASSWORD",
-  "OPENCLAW_GATEWAY_PORT",
+  "MARKETINGCLAW_STATE_DIR",
+  "MARKETINGCLAW_CONFIG_PATH",
+  "MARKETINGCLAW_GATEWAY_URL",
+  "MARKETINGCLAW_GATEWAY_TOKEN",
+  "MARKETINGCLAW_GATEWAY_PASSWORD",
+  "MARKETINGCLAW_GATEWAY_PORT",
 ];
 
 type Cleanup = () => Promise<void> | void;
@@ -63,23 +63,23 @@ describe("operator approval gateway client runtime token source", () => {
   it("uses runtime authority only for generated local gateway URLs", async () => {
     const envSnapshot = captureEnv(TEST_ENV_KEYS);
     cleanup.push(() => envSnapshot.restore());
-    deleteTestEnvValue("OPENCLAW_CONFIG_PATH");
-    deleteTestEnvValue("OPENCLAW_GATEWAY_URL");
-    deleteTestEnvValue("OPENCLAW_GATEWAY_TOKEN");
-    deleteTestEnvValue("OPENCLAW_GATEWAY_PASSWORD");
+    deleteTestEnvValue("MARKETINGCLAW_CONFIG_PATH");
+    deleteTestEnvValue("MARKETINGCLAW_GATEWAY_URL");
+    deleteTestEnvValue("MARKETINGCLAW_GATEWAY_TOKEN");
+    deleteTestEnvValue("MARKETINGCLAW_GATEWAY_PASSWORD");
 
-    const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-approval-client-e2e-"));
+    const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-approval-client-e2e-"));
     cleanup.push(() => fs.rm(tempHome, { recursive: true, force: true, maxRetries: 5 }));
 
-    const stateDir = path.join(tempHome, ".openclaw");
+    const stateDir = path.join(tempHome, ".marketingclaw");
     await fs.mkdir(stateDir, { recursive: true });
     setTestEnvValue("HOME", tempHome);
-    setTestEnvValue("OPENCLAW_STATE_DIR", stateDir);
+    setTestEnvValue("MARKETINGCLAW_STATE_DIR", stateDir);
 
     const port = await getFreeGatewayPort();
     const token = "approval-client-e2e-token";
     const url = `ws://127.0.0.1:${port}`;
-    setTestEnvValue("OPENCLAW_GATEWAY_PORT", String(port));
+    setTestEnvValue("MARKETINGCLAW_GATEWAY_PORT", String(port));
 
     const server = await startGatewayServer(port, {
       bind: "loopback",
@@ -112,7 +112,7 @@ describe("operator approval gateway client runtime token source", () => {
         port,
         auth: { mode: "token", token },
       },
-    } satisfies OpenClawConfig;
+    } satisfies MarketingClawConfig;
 
     await requestExecApproval({ requester, id: "local-source-approval" });
     await withOperatorApprovalsGatewayClient(
@@ -135,7 +135,7 @@ describe("operator approval gateway client runtime token source", () => {
         remote: { url },
         auth: { mode: "token", token },
       },
-    } satisfies OpenClawConfig;
+    } satisfies MarketingClawConfig;
 
     await requestExecApproval({ requester, id: "remote-loopback-approval" });
     await expect(

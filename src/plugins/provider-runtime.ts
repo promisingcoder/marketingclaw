@@ -2,12 +2,12 @@
 import {
   findNormalizedProviderValue,
   normalizeProviderId,
-} from "@openclaw/model-catalog-core/provider-id";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+} from "@marketingclaw/model-catalog-core/provider-id";
+import { normalizeOptionalString } from "@marketingclaw/normalization-core/string-coerce";
 import {
   sortUniqueStrings,
   uniqueStrings,
-} from "@openclaw/normalization-core/string-normalization";
+} from "@marketingclaw/normalization-core/string-normalization";
 import { sanitizeForLog } from "../../packages/terminal-core/src/ansi.js";
 import type { AuthProfileCredential, OAuthCredential } from "../agents/auth-profiles/types.js";
 import { resolveGpt5SystemPromptContribution } from "../agents/gpt5-prompt-overlay.js";
@@ -17,7 +17,7 @@ import {
 } from "../agents/plugin-text-transforms.js";
 import type { ProviderSystemPromptContribution } from "../agents/system-prompt-contribution.js";
 import type { ModelProviderConfig } from "../config/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import type { UsageProviderId } from "../infra/provider-usage.types.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import { normalizeProviderModelIdWithManifest } from "./manifest-model-id-normalization.js";
@@ -131,7 +131,7 @@ function matchesAnyProviderPluginRef(provider: ProviderPlugin, providerRefs: rea
 
 function hasExplicitProviderRuntimePluginActivation(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): boolean {
@@ -155,7 +155,7 @@ function hasExplicitProviderRuntimePluginActivation(params: {
 
 function hasConfiguredModelProvider(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
 }): boolean {
   return (
     findNormalizedProviderValue(params.config?.models?.providers, params.provider) !== undefined
@@ -182,7 +182,7 @@ export const testing = {
 } as const;
 
 function resolveProviderPluginsForCatalogHooks(params: {
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): ProviderPlugin[] {
@@ -206,7 +206,7 @@ function resolveProviderPluginsForCatalogHooks(params: {
 
 export function runProviderDynamicModel(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderResolveDynamicModelContext;
@@ -216,7 +216,7 @@ export function runProviderDynamicModel(params: {
 
 export function resolveProviderSystemPromptContribution(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   runtimeHandle?: ProviderRuntimePluginHandle;
@@ -271,7 +271,7 @@ function mergeUniquePromptSections(...sections: Array<string | undefined>): stri
 
 export function transformProviderSystemPrompt(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   runtimeHandle?: ProviderRuntimePluginHandle;
@@ -289,7 +289,7 @@ export function transformProviderSystemPrompt(params: {
 
 export function resolveProviderTextTransforms(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   runtimeHandle?: ProviderRuntimePluginHandle;
@@ -302,7 +302,7 @@ export function resolveProviderTextTransforms(params: {
 
 export async function prepareProviderDynamicModel(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderPrepareDynamicModelContext;
@@ -312,7 +312,7 @@ export async function prepareProviderDynamicModel(params: {
 
 export function shouldPreferProviderRuntimeResolvedModel(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderPreferRuntimeResolvedModelContext;
@@ -325,12 +325,12 @@ export function shouldPreferProviderRuntimeResolvedModel(params: {
 export function normalizeProviderResolvedModelWithPlugin(params: {
   provider: string;
   modelId?: string | null;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   pluginMetadataSnapshot?: PluginMetadataRegistryView;
   context: {
-    config?: OpenClawConfig;
+    config?: MarketingClawConfig;
     agentDir?: string;
     workspaceDir?: string;
     provider: string;
@@ -349,7 +349,7 @@ export function normalizeProviderResolvedModelWithPlugin(params: {
 export function applyProviderResolvedTransportWithPlugin(params: {
   provider: string;
   modelId?: string | null;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderNormalizeResolvedModelContext;
@@ -386,7 +386,7 @@ export function applyProviderResolvedTransportWithPlugin(params: {
 
 export function normalizeProviderModelIdWithPlugin(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   plugins?: readonly Pick<PluginManifestRecord, "modelIdNormalization">[];
@@ -402,7 +402,7 @@ export function normalizeProviderModelIdWithPlugin(params: {
 export function normalizeProviderTransportWithPlugin(params: {
   provider: string;
   modelId?: string | null;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderNormalizeTransportContext;
@@ -434,7 +434,7 @@ export function normalizeProviderTransportWithPlugin(params: {
 
 export function normalizeProviderConfigWithPlugin(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderNormalizeConfigContext;
@@ -460,7 +460,7 @@ export function normalizeProviderConfigWithPlugin(params: {
 
 export function applyProviderNativeStreamingUsageCompatWithPlugin(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderNormalizeConfigContext;
@@ -477,7 +477,7 @@ export function applyProviderNativeStreamingUsageCompatWithPlugin(params: {
 
 export function resolveProviderConfigApiKeyWithPlugin(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderResolveConfigApiKeyContext;
@@ -497,7 +497,7 @@ export function resolveProviderConfigApiKeyWithPlugin(params: {
 
 export function resolveProviderReplayPolicyWithPlugin(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderReplayPolicyContext;
@@ -507,7 +507,7 @@ export function resolveProviderReplayPolicyWithPlugin(params: {
 
 export async function sanitizeProviderReplayHistoryWithPlugin(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderSanitizeReplayHistoryContext;
@@ -517,7 +517,7 @@ export async function sanitizeProviderReplayHistoryWithPlugin(params: {
 
 export async function validateProviderReplayTurnsWithPlugin(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderValidateReplayTurnsContext;
@@ -527,7 +527,7 @@ export async function validateProviderReplayTurnsWithPlugin(params: {
 
 export function normalizeProviderToolSchemasWithPlugin(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   runtimeHandle?: ProviderRuntimePluginHandle;
@@ -543,7 +543,7 @@ export function normalizeProviderToolSchemasWithPlugin(params: {
 
 export function inspectProviderToolSchemasWithPlugin(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   runtimeHandle?: ProviderRuntimePluginHandle;
@@ -559,7 +559,7 @@ export function inspectProviderToolSchemasWithPlugin(params: {
 
 export function resolveProviderReasoningOutputModeWithPlugin(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   runtimeHandle?: ProviderRuntimePluginHandle;
@@ -578,7 +578,7 @@ export function resolveProviderReasoningOutputModeWithPlugin(params: {
 
 export function resolveProviderStreamFn(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   allowRuntimePluginLoad?: boolean;
@@ -594,7 +594,7 @@ export function resolveProviderStreamFn(params: {
 export function resolveProviderTransportTurnStateWithPlugin(params: {
   provider: string;
   modelId?: string | null;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   allowRuntimePluginLoad?: boolean;
@@ -609,7 +609,7 @@ export function resolveProviderTransportTurnStateWithPlugin(params: {
 
 export async function createProviderEmbeddingProvider(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderCreateEmbeddingProviderContext;
@@ -619,7 +619,7 @@ export async function createProviderEmbeddingProvider(params: {
 
 export async function prepareProviderRuntimeAuth(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderPrepareRuntimeAuthContext;
@@ -629,7 +629,7 @@ export async function prepareProviderRuntimeAuth(params: {
 
 export async function resolveProviderUsageAuthWithPlugin(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderResolveUsageAuthContext;
@@ -647,7 +647,7 @@ export async function resolveProviderUsageAuthWithPlugin(params: {
 
 export async function resolveProviderUsageSnapshotWithPlugin(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderFetchUsageSnapshotContext;
@@ -662,7 +662,7 @@ export type ProviderUsagePluginDescriptor = {
 
 /** Lists provider plugins that own the complete usage auth + fetch lifecycle. */
 export function listProviderUsagePluginDescriptors(params: {
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): ProviderUsagePluginDescriptor[] {
@@ -695,7 +695,7 @@ export function listProviderUsagePluginDescriptors(params: {
 
 export function matchesProviderContextOverflowWithPlugin(params: {
   provider?: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderFailoverErrorContext;
@@ -711,7 +711,7 @@ export function matchesProviderContextOverflowWithPlugin(params: {
 
 export function classifyProviderFailoverReasonWithPlugin(params: {
   provider?: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderFailoverErrorContext;
@@ -728,7 +728,7 @@ export function classifyProviderFailoverReasonWithPlugin(params: {
 
 function resolveProviderPluginsForScopedHook(params: {
   provider?: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderFailoverErrorContext;
@@ -758,7 +758,7 @@ function hasStructuredFailoverDescriptor(context: ProviderFailoverErrorContext):
 
 export function formatProviderAuthProfileApiKeyWithPlugin(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: AuthProfileCredential;
@@ -768,7 +768,7 @@ export function formatProviderAuthProfileApiKeyWithPlugin(params: {
 
 export async function refreshProviderOAuthCredentialWithPlugin(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: OAuthCredential;
@@ -778,7 +778,7 @@ export async function refreshProviderOAuthCredentialWithPlugin(params: {
 
 export async function buildProviderAuthDoctorHintWithPlugin(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderAuthDoctorHintContext;
@@ -788,7 +788,7 @@ export async function buildProviderAuthDoctorHintWithPlugin(params: {
 
 export function resolveProviderCacheTtlEligibility(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderCacheTtlEligibilityContext;
@@ -798,7 +798,7 @@ export function resolveProviderCacheTtlEligibility(params: {
 
 export function resolveProviderBinaryThinking(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderThinkingPolicyContext;
@@ -808,7 +808,7 @@ export function resolveProviderBinaryThinking(params: {
 
 export function resolveProviderXHighThinking(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderThinkingPolicyContext;
@@ -818,7 +818,7 @@ export function resolveProviderXHighThinking(params: {
 
 export function resolveProviderThinkingProfile(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderDefaultThinkingPolicyContext;
@@ -832,7 +832,7 @@ export function resolveProviderThinkingProfile(params: {
 
 export function resolveProviderDefaultThinkingLevel(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderDefaultThinkingPolicyContext;
@@ -842,7 +842,7 @@ export function resolveProviderDefaultThinkingLevel(params: {
 
 export function applyProviderConfigDefaultsWithPlugin(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderApplyConfigDefaultsContext;
@@ -856,7 +856,7 @@ export function applyProviderConfigDefaultsWithPlugin(params: {
 
 export function resolveProviderModernModelRef(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderModernModelPolicyContext;
@@ -866,7 +866,7 @@ export function resolveProviderModernModelRef(params: {
 
 export function buildProviderMissingAuthMessageWithPlugin(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderBuildMissingAuthMessageContext;
@@ -878,7 +878,7 @@ export function buildProviderMissingAuthMessageWithPlugin(params: {
 
 export function buildProviderUnknownModelHintWithPlugin(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderBuildUnknownModelHintContext;
@@ -888,7 +888,7 @@ export function buildProviderUnknownModelHintWithPlugin(params: {
 
 export function resolveProviderSyntheticAuthWithPlugin(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderResolveSyntheticAuthContext;
@@ -961,7 +961,7 @@ export function resolveProviderSyntheticAuthWithPlugin(params: {
 }
 
 export function resolveExternalAuthProfilesWithPlugins(params: {
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderResolveExternalAuthProfilesContext;
@@ -1018,7 +1018,7 @@ export function resolveExternalAuthProfilesWithPlugins(params: {
 
 export function shouldDeferProviderSyntheticProfileAuthWithPlugin(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderDeferSyntheticProfileAuthContext;
@@ -1042,7 +1042,7 @@ export function shouldDeferProviderSyntheticProfileAuthWithPlugin(params: {
 }
 
 export async function augmentModelCatalogWithProviderPlugins(params: {
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   context: ProviderAugmentModelCatalogContext;

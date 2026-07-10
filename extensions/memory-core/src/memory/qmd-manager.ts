@@ -6,8 +6,8 @@ import os from "node:os";
 import path from "node:path";
 import readline from "node:readline";
 import chokidar, { type FSWatcher } from "chokidar";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { withFileLock } from "openclaw/plugin-sdk/file-lock";
+import { formatErrorMessage } from "marketingclaw/plugin-sdk/error-runtime";
+import { withFileLock } from "marketingclaw/plugin-sdk/file-lock";
 import {
   createSubsystemLogger,
   isPathInside,
@@ -17,8 +17,8 @@ import {
   resolveAgentWorkspaceDir,
   resolveGlobalSingleton,
   resolveStateDir,
-  type OpenClawConfig,
-} from "openclaw/plugin-sdk/memory-core-host-engine-foundation";
+  type MarketingClawConfig,
+} from "marketingclaw/plugin-sdk/memory-core-host-engine-foundation";
 import {
   buildSessionEntry,
   deriveQmdScopeChannel,
@@ -33,7 +33,7 @@ import {
   type QmdQueryResult,
   type SessionFileEntry,
   type SessionTranscriptCorpusEntry,
-} from "openclaw/plugin-sdk/memory-core-host-engine-qmd";
+} from "marketingclaw/plugin-sdk/memory-core-host-engine-qmd";
 import {
   buildMemoryReadResult,
   buildMemoryReadResultFromSlice,
@@ -52,18 +52,18 @@ import {
   type ResolvedMemoryBackendConfig,
   type ResolvedQmdConfig,
   type ResolvedQmdMcporterConfig,
-} from "openclaw/plugin-sdk/memory-core-host-engine-storage";
+} from "marketingclaw/plugin-sdk/memory-core-host-engine-storage";
 import {
   addTimerTimeoutGraceMs,
   isFutureDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,
-} from "openclaw/plugin-sdk/number-runtime";
-import { formatSessionTranscriptMemoryHitKey } from "openclaw/plugin-sdk/session-transcript-hit";
+} from "marketingclaw/plugin-sdk/number-runtime";
+import { formatSessionTranscriptMemoryHitKey } from "marketingclaw/plugin-sdk/session-transcript-hit";
 import {
   localeLowercasePreservingWhitespace,
   normalizeLowercaseStringOrEmpty,
   uniqueValues,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import { asRecord } from "../dreaming-shared.js";
 import {
   attachQmdSessionArtifactHit,
@@ -132,9 +132,9 @@ const QMD_EMBED_LOCK_RETRY_TEMPLATE = {
   randomize: true,
 } as const;
 const QMD_INDEX_CONFIG_FILE = "index.yml";
-const MCPORTER_STATE_KEY = Symbol.for("openclaw.mcporterState");
-const QMD_EMBED_QUEUE_KEY = Symbol.for("openclaw.qmdEmbedQueueTail");
-const QMD_UPDATE_QUEUE_KEY = Symbol.for("openclaw.qmdUpdateQueueState");
+const MCPORTER_STATE_KEY = Symbol.for("marketingclaw.mcporterState");
+const QMD_EMBED_QUEUE_KEY = Symbol.for("marketingclaw.qmdEmbedQueueTail");
+const QMD_UPDATE_QUEUE_KEY = Symbol.for("marketingclaw.qmdUpdateQueueState");
 const IGNORED_MEMORY_WATCH_DIR_NAMES = new Set([
   ".git",
   ".cache",
@@ -213,7 +213,7 @@ function getQmdUpdateQueueState(): QmdUpdateQueueState {
 
 function normalizeHanBm25Query(query: string): string {
   const trimmed = query.trim();
-  // Keep Han/CJK BM25 queries intact so OpenClaw search semantics match direct qmd search.
+  // Keep Han/CJK BM25 queries intact so MarketingClaw search semantics match direct qmd search.
   return trimmed;
 }
 
@@ -403,7 +403,7 @@ type QmdMcporterAcrossCollectionsParams =
 
 export class QmdMemoryManager implements MemorySearchManager {
   static async create(params: {
-    cfg: OpenClawConfig;
+    cfg: MarketingClawConfig;
     agentId: string;
     resolved: ResolvedMemoryBackendConfig;
     mode?: QmdManagerMode;
@@ -2079,7 +2079,7 @@ export class QmdMemoryManager implements MemorySearchManager {
       this.watchPressureWarning,
       count,
       "paths",
-      "Large QMD collections can make OpenClaw run out of file watchers or open files.",
+      "Large QMD collections can make MarketingClaw run out of file watchers or open files.",
       "Remove large collections, or set memorySearch.sync.watch to false and refresh memory manually or with sync.intervalMinutes.",
       (message) => log.warn(message),
     );
@@ -3897,7 +3897,7 @@ export class QmdMemoryManager implements MemorySearchManager {
 }
 
 function resolveQmdManagerRuntimeConfig(
-  cfg: OpenClawConfig,
+  cfg: MarketingClawConfig,
   agentId: string,
 ): QmdManagerRuntimeConfig {
   return {

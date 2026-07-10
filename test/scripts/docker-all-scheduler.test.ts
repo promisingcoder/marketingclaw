@@ -117,7 +117,7 @@ describe("scripts/test-docker-all scheduler", () => {
     expect(result.status).toBe(0);
     expect(result.stderr).toBe("");
     expect(result.stdout).toContain("Usage: node scripts/test-docker-all.mjs [--plan-json]");
-    expect(result.stdout).toContain("OPENCLAW_DOCKER_ALL_* env vars");
+    expect(result.stdout).toContain("MARKETINGCLAW_DOCKER_ALL_* env vars");
   });
 
   it("rejects unknown CLI options without a stack trace", () => {
@@ -139,36 +139,38 @@ describe("scripts/test-docker-all scheduler", () => {
       encoding: "utf8",
       env: {
         ...process.env,
-        OPENCLAW_DOCKER_ALL_PARALLELISM: "1e3",
+        MARKETINGCLAW_DOCKER_ALL_PARALLELISM: "1e3",
       },
     });
 
     expect(result.status).toBe(1);
     expect(result.stdout).toBe("");
-    expect(result.stderr).toContain("OPENCLAW_DOCKER_ALL_PARALLELISM must be a positive integer");
+    expect(result.stderr).toContain(
+      "MARKETINGCLAW_DOCKER_ALL_PARALLELISM must be a positive integer",
+    );
     expect(result.stderr).not.toContain("at ");
   });
 
   it("rejects loose numeric resource limit env vars before scheduling lanes", () => {
-    const logDir = mkdtempSync(`${tmpdir()}/openclaw-docker-all-`);
+    const logDir = mkdtempSync(`${tmpdir()}/marketingclaw-docker-all-`);
     try {
       const result = spawnSync(process.execPath, ["scripts/test-docker-all.mjs"], {
         cwd: process.cwd(),
         encoding: "utf8",
         env: {
           ...process.env,
-          OPENCLAW_DOCKER_ALL_BUILD: "0",
-          OPENCLAW_DOCKER_ALL_DOCKER_LIMIT: "1e3",
-          OPENCLAW_DOCKER_ALL_DRY_RUN: "1",
-          OPENCLAW_DOCKER_ALL_LOG_DIR: logDir,
-          OPENCLAW_DOCKER_ALL_PREFLIGHT: "0",
-          OPENCLAW_DOCKER_ALL_TIMINGS: "0",
+          MARKETINGCLAW_DOCKER_ALL_BUILD: "0",
+          MARKETINGCLAW_DOCKER_ALL_DOCKER_LIMIT: "1e3",
+          MARKETINGCLAW_DOCKER_ALL_DRY_RUN: "1",
+          MARKETINGCLAW_DOCKER_ALL_LOG_DIR: logDir,
+          MARKETINGCLAW_DOCKER_ALL_PREFLIGHT: "0",
+          MARKETINGCLAW_DOCKER_ALL_TIMINGS: "0",
         },
       });
 
       expect(result.status).toBe(1);
       expect(result.stderr).toContain(
-        "OPENCLAW_DOCKER_ALL_DOCKER_LIMIT must be a positive integer",
+        "MARKETINGCLAW_DOCKER_ALL_DOCKER_LIMIT must be a positive integer",
       );
       expect(result.stderr).not.toContain("at ");
     } finally {
@@ -177,20 +179,20 @@ describe("scripts/test-docker-all scheduler", () => {
   });
 
   it("rejects release-path configs that schedule zero Docker lanes", () => {
-    const logDir = mkdtempSync(`${tmpdir()}/openclaw-docker-all-`);
+    const logDir = mkdtempSync(`${tmpdir()}/marketingclaw-docker-all-`);
     try {
       const result = spawnSync(process.execPath, ["scripts/test-docker-all.mjs"], {
         cwd: process.cwd(),
         encoding: "utf8",
         env: {
           ...process.env,
-          OPENCLAW_DOCKER_ALL_CHUNK: "openwebui",
-          OPENCLAW_DOCKER_ALL_DRY_RUN: "1",
-          OPENCLAW_DOCKER_ALL_INCLUDE_OPENWEBUI: "0",
-          OPENCLAW_DOCKER_ALL_LOG_DIR: logDir,
-          OPENCLAW_DOCKER_ALL_PREFLIGHT: "0",
-          OPENCLAW_DOCKER_ALL_PROFILE: "release-path",
-          OPENCLAW_DOCKER_ALL_TIMINGS: "0",
+          MARKETINGCLAW_DOCKER_ALL_CHUNK: "openwebui",
+          MARKETINGCLAW_DOCKER_ALL_DRY_RUN: "1",
+          MARKETINGCLAW_DOCKER_ALL_INCLUDE_OPENWEBUI: "0",
+          MARKETINGCLAW_DOCKER_ALL_LOG_DIR: logDir,
+          MARKETINGCLAW_DOCKER_ALL_PREFLIGHT: "0",
+          MARKETINGCLAW_DOCKER_ALL_PROFILE: "release-path",
+          MARKETINGCLAW_DOCKER_ALL_TIMINGS: "0",
         },
       });
 
@@ -207,7 +209,7 @@ describe("scripts/test-docker-all scheduler", () => {
   });
 
   posixIt("writes Docker run artifacts when cleanup smoke fails", async () => {
-    const root = mkdtempSync(`${tmpdir()}/openclaw-docker-all-cleanup-`);
+    const root = mkdtempSync(`${tmpdir()}/marketingclaw-docker-all-cleanup-`);
     const logDir = path.join(root, "logs");
     const fakePnpm = path.join(root, "pnpm");
     const phases: Array<Record<string, unknown>> = [];
@@ -229,7 +231,7 @@ process.exit(0);
     try {
       const baseEnv = {
         ...process.env,
-        OPENCLAW_DOCKER_E2E_IMAGE: "openclaw-test-image",
+        MARKETINGCLAW_DOCKER_E2E_IMAGE: "marketingclaw-test-image",
         PATH: `${root}${path.delimiter}${process.env.PATH ?? ""}`,
       };
       const cleanupFailure = await runCleanupSmokePhase(baseEnv, logDir, phases);
@@ -239,10 +241,10 @@ process.exit(0);
       }
       await writeRunSummary(logDir, {
         failures: [cleanupFailure],
-        image: baseEnv.OPENCLAW_DOCKER_E2E_IMAGE,
+        image: baseEnv.MARKETINGCLAW_DOCKER_E2E_IMAGE,
         images: {
-          bare: "openclaw-test-bare",
-          functional: "openclaw-test-image",
+          bare: "marketingclaw-test-bare",
+          functional: "marketingclaw-test-image",
         },
         lanes: [],
         phases,
@@ -429,22 +431,22 @@ process.exit(0);
   it("cleans stale stopped containers from all named Docker E2E lanes", () => {
     expect(
       dockerPreflightContainerNames(`
-openclaw-gateway-e2e-123 Exited (1) 2 minutes ago
-openclaw-config-reload-e2e-234 Created
-openclaw-plugin-binding-command-escape-e2e-345 Dead
-openclaw-kitchen-sink-rpc-e2e-456 Exited (137) 10 seconds ago
-openclaw-openwebui-gateway-567 Exited (1) 3 minutes ago
-openclaw-openwebui-678 Created
-openclaw-not-an-e2e-container Exited (1) 2 minutes ago
+marketingclaw-gateway-e2e-123 Exited (1) 2 minutes ago
+marketingclaw-config-reload-e2e-234 Created
+marketingclaw-plugin-binding-command-escape-e2e-345 Dead
+marketingclaw-kitchen-sink-rpc-e2e-456 Exited (137) 10 seconds ago
+marketingclaw-openwebui-gateway-567 Exited (1) 3 minutes ago
+marketingclaw-openwebui-678 Created
+marketingclaw-not-an-e2e-container Exited (1) 2 minutes ago
 postgres Created
 `),
     ).toEqual([
-      "openclaw-gateway-e2e-123",
-      "openclaw-config-reload-e2e-234",
-      "openclaw-plugin-binding-command-escape-e2e-345",
-      "openclaw-kitchen-sink-rpc-e2e-456",
-      "openclaw-openwebui-gateway-567",
-      "openclaw-openwebui-678",
+      "marketingclaw-gateway-e2e-123",
+      "marketingclaw-config-reload-e2e-234",
+      "marketingclaw-plugin-binding-command-escape-e2e-345",
+      "marketingclaw-kitchen-sink-rpc-e2e-456",
+      "marketingclaw-openwebui-gateway-567",
+      "marketingclaw-openwebui-678",
     ]);
   });
 
@@ -469,7 +471,7 @@ postgres Created
   });
 
   it("reads bounded lane log tails instead of full noisy logs", async () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-docker-all-log-tail-"));
+    const root = mkdtempSync(path.join(tmpdir(), "marketingclaw-docker-all-log-tail-"));
     try {
       const logPath = path.join(root, "lane.log");
       writeFileSync(
@@ -542,7 +544,7 @@ postgres Created
   });
 
   posixIt("kills timed-out shell command groups when the leader exits first", async () => {
-    const root = mkdtempSync(path.join(tmpdir(), "openclaw-docker-all-timeout-"));
+    const root = mkdtempSync(path.join(tmpdir(), "marketingclaw-docker-all-timeout-"));
     const scriptPath = path.join(root, "leader-exits.mjs");
     const grandchildPidPath = path.join(root, "grandchild.pid");
     let grandchildPid = 0;
@@ -591,7 +593,7 @@ setInterval(() => {}, 1000);
   });
 
   posixIt("clamps oversized shell command kill grace before scheduling", async () => {
-    const root = createTempDir("openclaw-docker-all-oversized-grace-");
+    const root = createTempDir("marketingclaw-docker-all-oversized-grace-");
     const scriptPath = path.join(root, "leader-exits.mjs");
     const donePath = path.join(root, "done");
     const readyPath = path.join(root, "ready");
@@ -629,7 +631,7 @@ setInterval(() => {}, 1000);
   });
 
   posixIt("lets timed-out shell command descendants exit during kill grace", async () => {
-    const root = createTempDir("openclaw-docker-all-grace-");
+    const root = createTempDir("marketingclaw-docker-all-grace-");
     const scriptPath = path.join(root, "leader-exits.mjs");
     const donePath = path.join(root, "done");
     const readyPath = path.join(root, "ready");
@@ -669,7 +671,7 @@ setInterval(() => {}, 1000);
   });
 
   posixIt("lets timed-out shell capture descendants exit during kill grace", async () => {
-    const root = createTempDir("openclaw-docker-all-capture-grace-");
+    const root = createTempDir("marketingclaw-docker-all-capture-grace-");
     const scriptPath = path.join(root, "leader-exits.mjs");
     const donePath = path.join(root, "done");
     const readyPath = path.join(root, "ready");
@@ -709,7 +711,7 @@ setInterval(() => {}, 1000);
   });
 
   posixIt("cleans active shell command groups before parent signal exit", async () => {
-    const root = createTempDir("openclaw-docker-all-parent-signal-");
+    const root = createTempDir("marketingclaw-docker-all-parent-signal-");
     const leaderPath = path.join(root, "leader-exits.mjs");
     const runnerPath = path.join(root, "runner.mjs");
     const grandchildPidPath = path.join(root, "grandchild.pid");

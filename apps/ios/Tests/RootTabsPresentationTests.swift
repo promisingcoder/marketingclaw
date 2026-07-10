@@ -1,7 +1,7 @@
 import SwiftUI
 import Testing
 import UIKit
-@testable import OpenClaw
+@testable import MarketingClaw
 
 @MainActor
 struct RootTabsPresentationTests {
@@ -173,33 +173,33 @@ struct RootTabsPresentationTests {
     }
 
     @Test func `app launch defaults to chat tab`() {
-        #expect(RootTabs.initialTab(arguments: ["OpenClaw"]) == .chat)
-        #expect(RootTabs.initialTab(arguments: ["OpenClaw", "--openclaw-initial-tab"]) == .chat)
-        #expect(RootTabs.initialTab(arguments: ["OpenClaw", "--openclaw-initial-tab", "unknown"]) == .chat)
+        #expect(RootTabs.initialTab(arguments: ["MarketingClaw"]) == .chat)
+        #expect(RootTabs.initialTab(arguments: ["MarketingClaw", "--marketingclaw-initial-tab"]) == .chat)
+        #expect(RootTabs.initialTab(arguments: ["MarketingClaw", "--marketingclaw-initial-tab", "unknown"]) == .chat)
     }
 
     @Test func `app launch uses requested destination before chat fallback`() {
-        #expect(RootTabs.initialTab(arguments: ["OpenClaw", "--openclaw-initial-destination", "overview"]) == .control)
-        #expect(RootTabs.initialTab(arguments: ["OpenClaw", "--openclaw-initial-destination", "chat"]) == .chat)
-        #expect(RootTabs.initialTab(arguments: ["OpenClaw", "--openclaw-initial-destination", "agents"]) == .agent)
-        #expect(RootTabs.initialTab(arguments: ["OpenClaw", "--openclaw-initial-destination", "gateway"]) == .settings)
+        #expect(RootTabs.initialTab(arguments: ["MarketingClaw", "--marketingclaw-initial-destination", "overview"]) == .control)
+        #expect(RootTabs.initialTab(arguments: ["MarketingClaw", "--marketingclaw-initial-destination", "chat"]) == .chat)
+        #expect(RootTabs.initialTab(arguments: ["MarketingClaw", "--marketingclaw-initial-destination", "agents"]) == .agent)
+        #expect(RootTabs.initialTab(arguments: ["MarketingClaw", "--marketingclaw-initial-destination", "gateway"]) == .settings)
         #expect(
             RootTabs.initialTab(arguments: [
-                "OpenClaw",
-                "--openclaw-initial-tab",
+                "MarketingClaw",
+                "--marketingclaw-initial-tab",
                 "unknown",
-                "--openclaw-initial-destination",
+                "--marketingclaw-initial-destination",
                 "activity",
             ]) == .control)
     }
 
     @Test func `app launch respects explicit initial tab override`() {
-        #expect(RootTabs.initialTab(arguments: ["OpenClaw", "--openclaw-initial-tab", "control"]) == .control)
-        #expect(RootTabs.initialTab(arguments: ["OpenClaw", "--openclaw-initial-tab", "overview"]) == .control)
-        #expect(RootTabs.initialTab(arguments: ["OpenClaw", "--openclaw-initial-tab", "chat"]) == .chat)
-        #expect(RootTabs.initialTab(arguments: ["OpenClaw", "--openclaw-initial-tab", "voice"]) == .talk)
-        #expect(RootTabs.initialTab(arguments: ["OpenClaw", "--openclaw-initial-tab", "agents"]) == .agent)
-        #expect(RootTabs.initialTab(arguments: ["OpenClaw", "--openclaw-initial-tab", "settings"]) == .settings)
+        #expect(RootTabs.initialTab(arguments: ["MarketingClaw", "--marketingclaw-initial-tab", "control"]) == .control)
+        #expect(RootTabs.initialTab(arguments: ["MarketingClaw", "--marketingclaw-initial-tab", "overview"]) == .control)
+        #expect(RootTabs.initialTab(arguments: ["MarketingClaw", "--marketingclaw-initial-tab", "chat"]) == .chat)
+        #expect(RootTabs.initialTab(arguments: ["MarketingClaw", "--marketingclaw-initial-tab", "voice"]) == .talk)
+        #expect(RootTabs.initialTab(arguments: ["MarketingClaw", "--marketingclaw-initial-tab", "agents"]) == .agent)
+        #expect(RootTabs.initialTab(arguments: ["MarketingClaw", "--marketingclaw-initial-tab", "settings"]) == .settings)
     }
 
     @Test func `legacy initial tabs map to matching sidebar destinations`() {
@@ -361,8 +361,8 @@ struct RootTabsPresentationTests {
         #expect(!routed.showsAgentBadge)
         #expect(!routed.ownsNavigationStack)
         #expect(routed.openSettings != nil)
-        #expect(ChatProTab.defaultHeaderTitle(showsAgentBadge: true, agentDisplayName: "OpenClaw") == "OpenClaw")
-        #expect(ChatProTab.defaultHeaderTitle(showsAgentBadge: false, agentDisplayName: "OpenClaw") == "Chat")
+        #expect(ChatProTab.defaultHeaderTitle(showsAgentBadge: true, agentDisplayName: "MarketingClaw") == "MarketingClaw")
+        #expect(ChatProTab.defaultHeaderTitle(showsAgentBadge: false, agentDisplayName: "MarketingClaw") == "Chat")
     }
 
     @Test func `chat transport identity distinguishes unresolved and resolved agents`() {
@@ -424,7 +424,7 @@ struct RootTabsPresentationTests {
     }
 
     @Test func `talk sidebar destination can receive reveal action`() {
-        let action = OpenClawSidebarHeaderAction(
+        let action = MarketingClawSidebarHeaderAction(
             systemName: "sidebar.left",
             accessibilityLabel: "Show Sidebar",
             action: {})
@@ -491,20 +491,20 @@ struct RootTabsPresentationTests {
     @Test func `initial sidebar visibility parses launch argument`() {
         #expect(
             RootTabs.requestedInitialSidebarVisibility(arguments: [
-                "OpenClaw",
-                "--openclaw-sidebar-visibility",
+                "MarketingClaw",
+                "--marketingclaw-sidebar-visibility",
                 "hidden",
             ]) == false)
         #expect(
             RootTabs.requestedInitialSidebarVisibility(arguments: [
-                "OpenClaw",
-                "--openclaw-sidebar-visibility",
+                "MarketingClaw",
+                "--marketingclaw-sidebar-visibility",
                 "visible",
             ]) == true)
         #expect(
             RootTabs.requestedInitialSidebarVisibility(arguments: [
-                "OpenClaw",
-                "--openclaw-sidebar-visibility",
+                "MarketingClaw",
+                "--marketingclaw-sidebar-visibility",
                 "unknown",
             ]) == nil)
     }

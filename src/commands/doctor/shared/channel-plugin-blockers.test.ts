@@ -1,6 +1,6 @@
 // Channel plugin blocker tests cover doctor diagnostics for blocked channel plugin setup.
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../../config/types.marketingclaw.js";
 import * as manifestRegistry from "../../../plugins/manifest-registry.js";
 import {
   channelPluginBlockerHitToHealthFinding,
@@ -173,7 +173,7 @@ describe("channel plugin blockers", () => {
           enabled: true,
         },
       },
-    } as OpenClawConfig);
+    } as MarketingClawConfig);
 
     expect(hits).toEqual([
       {
@@ -606,7 +606,7 @@ describe("channel plugin blockers", () => {
           origin: "bundled",
           channels: ["twitch"],
           channelEnvVars: {
-            twitch: ["OPENCLAW_TWITCH_ACCESS_TOKEN"],
+            twitch: ["MARKETINGCLAW_TWITCH_ACCESS_TOKEN"],
           },
           enabledByDefault: false,
         },
@@ -615,7 +615,7 @@ describe("channel plugin blockers", () => {
     } as unknown as ReturnType<typeof manifestRegistry.loadPluginManifestRegistry>);
 
     const hits = scanConfiguredChannelPluginBlockers({}, {
-      OPENCLAW_TWITCH_ACCESS_TOKEN: "configured",
+      MARKETINGCLAW_TWITCH_ACCESS_TOKEN: "configured",
     } as NodeJS.ProcessEnv);
 
     expect(hits).toEqual([
@@ -638,7 +638,7 @@ describe("channel plugin blockers", () => {
           origin: "bundled",
           channels: ["twitch"],
           channelEnvVars: {
-            twitch: ["OPENCLAW_TWITCH_ACCESS_TOKEN"],
+            twitch: ["MARKETINGCLAW_TWITCH_ACCESS_TOKEN"],
           },
           enabledByDefault: false,
         },
@@ -653,7 +653,7 @@ describe("channel plugin blockers", () => {
         },
       },
       {
-        OPENCLAW_TWITCH_ACCESS_TOKEN: "configured",
+        MARKETINGCLAW_TWITCH_ACCESS_TOKEN: "configured",
       } as NodeJS.ProcessEnv,
     );
 
@@ -822,7 +822,7 @@ describe("channel plugin blockers", () => {
       diagnostics: [],
     } as unknown as ReturnType<typeof manifestRegistry.loadPluginManifestRegistry>);
 
-    const sourceConfig: OpenClawConfig = {
+    const sourceConfig: MarketingClawConfig = {
       channels: {
         discord: {
           enabled: true,
@@ -863,7 +863,7 @@ describe("channel plugin blockers", () => {
       diagnostics: [],
     } as unknown as ReturnType<typeof manifestRegistry.loadPluginManifestRegistry>);
 
-    const sourceConfig: OpenClawConfig = {
+    const sourceConfig: MarketingClawConfig = {
       channels: {
         "workspace-chat": {
           enabled: true,
@@ -1164,7 +1164,7 @@ describe("channel plugin blockers", () => {
           enabledByDefault: true,
         },
         {
-          id: "openclaw-lark",
+          id: "marketingclaw-lark",
           origin: "config",
           channels: ["feishu"],
           enabledByDefault: false,
@@ -1186,7 +1186,7 @@ describe("channel plugin blockers", () => {
           feishu: {
             enabled: false,
           },
-          "openclaw-lark": {
+          "marketingclaw-lark": {
             enabled: true,
           },
         },
@@ -1213,7 +1213,7 @@ describe("channel plugin blockers", () => {
           enabledByDefault: true,
         },
         {
-          id: "openclaw-lark",
+          id: "marketingclaw-lark",
           origin: "config",
           channels: ["feishu"],
           enabledByDefault: false,
@@ -1254,7 +1254,7 @@ describe("channel plugin blockers", () => {
       },
       {
         channelId: "feishu",
-        pluginId: "openclaw-lark",
+        pluginId: "marketingclaw-lark",
         reason: "missing explicit enablement",
       },
     ]);

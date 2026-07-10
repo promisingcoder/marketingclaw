@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Builds the OpenClaw package artifact used by Docker E2E.
+// Builds the MarketingClaw package artifact used by Docker E2E.
 // The script owns the build/inventory/pack sequence so local scheduler, shell
 // helpers, and GitHub Actions all prepare the exact same npm tarball.
 import { spawn } from "node:child_process";
@@ -19,8 +19,8 @@ const PROCESS_GROUP_EXIT_POLL_MS = 25;
 const POST_FORCE_KILL_WAIT_MS = 1_000;
 const DEFAULT_CAPTURED_STDOUT_MAX_BYTES = 1024 * 1024;
 const MAX_TIMER_TIMEOUT_MS = 2_147_000_000;
-const AI_RUNTIME_PACKAGE = "@openclaw/ai";
-const AI_RUNTIME_BACKUP_DIR = ".openclaw-ai-package-backup";
+const AI_RUNTIME_PACKAGE = "@marketingclaw/ai";
+const AI_RUNTIME_BACKUP_DIR = ".marketingclaw-ai-package-backup";
 const ACTIVE_CHILD_KILLERS = new Set();
 const SIGNAL_EXIT_CODES = {
   SIGHUP: 129,
@@ -107,11 +107,11 @@ function validateOutputName(value) {
   }
 }
 
-function resolvePackedOpenClawFileName(value) {
+function resolvePackedMarketingClawFileName(value) {
   const filename = value.trim();
   if (
     !filename.endsWith(".tgz") ||
-    (!filename.startsWith("openclaw-") &&
+    (!filename.startsWith("marketingclaw-") &&
       !filename.includes(":") &&
       !filename.includes("/") &&
       !filename.includes("\\"))
@@ -119,12 +119,12 @@ function resolvePackedOpenClawFileName(value) {
     return "";
   }
   if (
-    !/^openclaw-[A-Za-z0-9._-]+\.tgz$/u.test(filename) ||
+    !/^marketingclaw-[A-Za-z0-9._-]+\.tgz$/u.test(filename) ||
     filename.includes("\0") ||
     filename !== path.basename(filename) ||
     filename !== path.win32.basename(filename)
   ) {
-    throw new Error(`npm pack reported unsafe OpenClaw tarball filename: ${filename}`);
+    throw new Error(`npm pack reported unsafe MarketingClaw tarball filename: ${filename}`);
   }
   return filename;
 }
@@ -351,7 +351,7 @@ function run(command, args, cwd, options = {}) {
 
 const PACKAGE_ARTIFACT_BUILD_STEPS = [
   {
-    label: "Building OpenClaw package artifacts",
+    label: "Building MarketingClaw package artifacts",
     command: "node",
     args: ["scripts/build-all.mjs", "ciArtifacts"],
   },
@@ -364,11 +364,11 @@ export async function buildPackageArtifacts(sourceDir, options = {}) {
     await runImpl(step.command, step.args, sourceDir, {
       env: {
         ...process.env,
-        OPENCLAW_BUILD_ALL_NO_PNPM: "1",
-        OPENCLAW_RUN_NODE_SKIP_DTS_BUILD: "0",
+        MARKETINGCLAW_BUILD_ALL_NO_PNPM: "1",
+        MARKETINGCLAW_RUN_NODE_SKIP_DTS_BUILD: "0",
       },
       timeoutMs: resolveTimeoutMs(
-        "OPENCLAW_DOCKER_PACKAGE_BUILD_TIMEOUT_MS",
+        "MARKETINGCLAW_DOCKER_PACKAGE_BUILD_TIMEOUT_MS",
         DEFAULT_PACKAGE_BUILD_TIMEOUT_MS,
       ),
     });
@@ -381,7 +381,7 @@ async function runCapture(command, args, cwd, options = {}) {
   return await run(command, args, cwd, { ...options, captureStdout: true });
 }
 
-async function newestOpenClawTarball(outputDir, packOutput) {
+async function newestMarketingClawTarball(outputDir, packOutput) {
   let fromOutput = "";
   try {
     const parsed = JSON.parse(packOutput);
@@ -390,7 +390,7 @@ async function newestOpenClawTarball(outputDir, packOutput) {
         if (typeof entry?.filename !== "string") {
           continue;
         }
-        const filename = resolvePackedOpenClawFileName(entry.filename);
+        const filename = resolvePackedMarketingClawFileName(entry.filename);
         if (filename) {
           fromOutput = filename;
         }
@@ -398,7 +398,7 @@ async function newestOpenClawTarball(outputDir, packOutput) {
     }
   } catch {}
   for (const line of packOutput.split(/\r?\n/u)) {
-    const filename = resolvePackedOpenClawFileName(line);
+    const filename = resolvePackedMarketingClawFileName(line);
     if (filename) {
       fromOutput = filename;
     }
@@ -411,7 +411,7 @@ async function newestOpenClawTarball(outputDir, packOutput) {
   const packed = entries
     .filter((entry) => {
       try {
-        return resolvePackedOpenClawFileName(entry) === entry;
+        return resolvePackedMarketingClawFileName(entry) === entry;
       } catch {
         return false;
       }
@@ -419,7 +419,7 @@ async function newestOpenClawTarball(outputDir, packOutput) {
     .toSorted()
     .at(-1);
   if (!packed) {
-    throw new Error(`missing packed OpenClaw tarball in ${outputDir}`);
+    throw new Error(`missing packed MarketingClaw tarball in ${outputDir}`);
   }
   return path.join(outputDir, packed);
 }
@@ -448,7 +448,7 @@ async function writePackJson(packOutput, tarball, packJsonPath, sourceDir) {
   await fs.writeFile(target, `${JSON.stringify(parsed, null, 2)}\n`);
 }
 
-async function cleanPackedOpenClawTarballs(outputDir) {
+async function cleanPackedMarketingClawTarballs(outputDir) {
   let entries;
   try {
     entries = await fs.readdir(outputDir);
@@ -463,7 +463,7 @@ async function cleanPackedOpenClawTarballs(outputDir) {
     entries
       .filter((entry) => {
         try {
-          return resolvePackedOpenClawFileName(entry) === entry;
+          return resolvePackedMarketingClawFileName(entry) === entry;
         } catch {
           return false;
         }
@@ -473,7 +473,7 @@ async function cleanPackedOpenClawTarballs(outputDir) {
 }
 
 function isPackedAiRuntimeTarball(filename) {
-  return /^openclaw-ai-[A-Za-z0-9._-]+\.tgz$/u.test(filename);
+  return /^marketingclaw-ai-[A-Za-z0-9._-]+\.tgz$/u.test(filename);
 }
 
 export async function prepareBundledAiRuntimePackage(
@@ -484,11 +484,11 @@ export async function prepareBundledAiRuntimePackage(
 ) {
   const packageJsonPath = path.join(sourceDir, "package.json");
   const aiRuntimePackageJsonPath = path.join(sourceDir, "packages", "ai", "package.json");
-  const aiRuntimePath = path.join(sourceDir, "node_modules", "@openclaw", "ai");
+  const aiRuntimePath = path.join(sourceDir, "node_modules", "@marketingclaw", "ai");
   const aiRuntimeBackupPath = path.join(
     sourceDir,
     "node_modules",
-    "@openclaw",
+    "@marketingclaw",
     AI_RUNTIME_BACKUP_DIR,
   );
   const extractAiRuntime =
@@ -517,10 +517,10 @@ export async function prepareBundledAiRuntimePackage(
     return async () => {};
   }
   if (!hasAiRuntimeWorkspace) {
-    throw new Error("@openclaw/ai dependency requires the packages/ai workspace");
+    throw new Error("@marketingclaw/ai dependency requires the packages/ai workspace");
   }
   if (typeof aiRuntimeDependency !== "string") {
-    throw new Error("root package.json must declare @openclaw/ai as a dependency");
+    throw new Error("root package.json must declare @marketingclaw/ai as a dependency");
   }
 
   try {
@@ -574,7 +574,7 @@ export async function prepareBundledAiRuntimePackage(
       {
         deferForwardedSignalExit: true,
         timeoutMs: resolveTimeoutMs(
-          "OPENCLAW_DOCKER_PACKAGE_PACK_TIMEOUT_MS",
+          "MARKETINGCLAW_DOCKER_PACKAGE_PACK_TIMEOUT_MS",
           DEFAULT_PACKAGE_PACK_TIMEOUT_MS,
         ),
       },
@@ -584,7 +584,7 @@ export async function prepareBundledAiRuntimePackage(
       .map((filename) => path.join(outputDir, filename));
     if (packedAiTarballs.length !== 1) {
       throw new Error(
-        `expected one packed @openclaw/ai tarball in ${outputDir}, found ${packedAiTarballs.length}`,
+        `expected one packed @marketingclaw/ai tarball in ${outputDir}, found ${packedAiTarballs.length}`,
       );
     }
 
@@ -604,12 +604,12 @@ export async function prepareBundledAiRuntimePackage(
     const stagedPackageJsonPath = path.join(aiRuntimePath, "package.json");
     const stagedPackageJson = JSON.parse(await fs.readFile(stagedPackageJsonPath, "utf8"));
     if (typeof stagedPackageJson.version !== "string" || !stagedPackageJson.version) {
-      throw new Error("packed @openclaw/ai package must declare a version");
+      throw new Error("packed @marketingclaw/ai package must declare a version");
     }
     for (const [name, version] of Object.entries(stagedPackageJson.dependencies ?? {})) {
       if (packageJson.dependencies[name] !== version) {
         throw new Error(
-          `root package.json must declare ${name}@${version} to bundle @openclaw/ai without duplicate dependencies`,
+          `root package.json must declare ${name}@${version} to bundle @marketingclaw/ai without duplicate dependencies`,
         );
       }
     }
@@ -633,17 +633,17 @@ export async function prepareBundledAiRuntimePackage(
   }
 }
 
-export async function packOpenClawPackageForDocker(sourceDir, outputDir, options = {}) {
+export async function packMarketingClawPackageForDocker(sourceDir, outputDir, options = {}) {
   const runCaptureImpl = options.runCaptureImpl ?? runCapture;
   const prepareChangelog = options.prepareChangelog ?? preparePackageChangelog;
   const restoreChangelog = options.restoreChangelog ?? restorePackageChangelog;
   const prepareBundledAiRuntime = options.prepareBundledAiRuntime ?? prepareBundledAiRuntimePackage;
-  console.error("==> Packing OpenClaw package");
+  console.error("==> Packing MarketingClaw package");
   await prepareChangelog(sourceDir);
   let packOutput;
   let cleanupBundledAiRuntime = async () => {};
   try {
-    await cleanPackedOpenClawTarballs(outputDir);
+    await cleanPackedMarketingClawTarballs(outputDir);
     cleanupBundledAiRuntime = await prepareBundledAiRuntime(sourceDir, outputDir, runCaptureImpl);
     const packArgs = [
       "pack",
@@ -656,7 +656,7 @@ export async function packOpenClawPackageForDocker(sourceDir, outputDir, options
     packOutput = await runCaptureImpl("npm", packArgs, sourceDir, {
       deferForwardedSignalExit: true,
       timeoutMs: resolveTimeoutMs(
-        "OPENCLAW_DOCKER_PACKAGE_PACK_TIMEOUT_MS",
+        "MARKETINGCLAW_DOCKER_PACKAGE_PACK_TIMEOUT_MS",
         DEFAULT_PACKAGE_PACK_TIMEOUT_MS,
       ),
     });
@@ -667,7 +667,7 @@ export async function packOpenClawPackageForDocker(sourceDir, outputDir, options
       await restoreChangelog(sourceDir);
     }
   }
-  let tarball = await newestOpenClawTarball(outputDir, packOutput);
+  let tarball = await newestMarketingClawTarball(outputDir, packOutput);
   if (options.outputName) {
     const target = path.join(outputDir, options.outputName);
     if (target !== tarball) {
@@ -693,7 +693,7 @@ async function main() {
     await buildPackageArtifacts(sourceDir);
   }
 
-  console.error("==> Writing OpenClaw package inventory");
+  console.error("==> Writing MarketingClaw package inventory");
   await run(
     "node",
     [
@@ -706,36 +706,36 @@ async function main() {
     sourceDir,
     {
       timeoutMs: resolveTimeoutMs(
-        "OPENCLAW_DOCKER_PACKAGE_INVENTORY_TIMEOUT_MS",
+        "MARKETINGCLAW_DOCKER_PACKAGE_INVENTORY_TIMEOUT_MS",
         DEFAULT_PACKAGE_INVENTORY_TIMEOUT_MS,
       ),
     },
   );
 
-  const tarball = await packOpenClawPackageForDocker(sourceDir, outputDir, {
+  const tarball = await packMarketingClawPackageForDocker(sourceDir, outputDir, {
     outputName: options.outputName,
     packJsonPath: options.packJson,
   });
 
-  console.error("==> Checking OpenClaw package tarball");
+  console.error("==> Checking MarketingClaw package tarball");
   const checkStartedAt = Date.now();
   await run(
     "node",
     [
-      path.join(ROOT_DIR, "scripts/check-openclaw-package-tarball.mjs"),
+      path.join(ROOT_DIR, "scripts/check-marketingclaw-package-tarball.mjs"),
       "--require-bundled-workspace-deps",
       tarball,
     ],
     sourceDir,
     {
       timeoutMs: resolveTimeoutMs(
-        "OPENCLAW_DOCKER_PACKAGE_TARBALL_CHECK_TIMEOUT_MS",
+        "MARKETINGCLAW_DOCKER_PACKAGE_TARBALL_CHECK_TIMEOUT_MS",
         DEFAULT_PACKAGE_TARBALL_CHECK_TIMEOUT_MS,
       ),
     },
   );
   console.error(
-    `==> OpenClaw package tarball check finished in ${Math.round((Date.now() - checkStartedAt) / 1000)}s`,
+    `==> MarketingClaw package tarball check finished in ${Math.round((Date.now() - checkStartedAt) / 1000)}s`,
   );
 
   process.stdout.write(`${tarball}\n`);

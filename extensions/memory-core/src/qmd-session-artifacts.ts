@@ -1,12 +1,12 @@
 import fsSync from "node:fs";
 import path from "node:path";
 import type { DatabaseSync } from "node:sqlite";
-import { requireNodeSqlite } from "openclaw/plugin-sdk/memory-core-host-engine-storage";
-import type { MemorySearchResult } from "openclaw/plugin-sdk/memory-core-host-runtime-files";
+import { requireNodeSqlite } from "marketingclaw/plugin-sdk/memory-core-host-engine-storage";
+import type { MemorySearchResult } from "marketingclaw/plugin-sdk/memory-core-host-runtime-files";
 
-const QMD_SESSION_ARTIFACT_TABLE = "openclaw_qmd_session_artifacts";
+const QMD_SESSION_ARTIFACT_TABLE = "marketingclaw_qmd_session_artifacts";
 
-const QMD_SESSION_ARTIFACT_HIT: unique symbol = Symbol("openclaw.qmdSessionArtifactHit");
+const QMD_SESSION_ARTIFACT_HIT: unique symbol = Symbol("marketingclaw.qmdSessionArtifactHit");
 
 export type QmdSessionArtifactMapping = {
   agentId: string;
@@ -70,11 +70,11 @@ function ensureQmdSessionArtifactSchema(db: DatabaseSync): void {
     );
   } catch {}
   db.exec(
-    `CREATE INDEX IF NOT EXISTS idx_openclaw_qmd_session_artifacts_docid
+    `CREATE INDEX IF NOT EXISTS idx_marketingclaw_qmd_session_artifacts_docid
      ON ${QMD_SESSION_ARTIFACT_TABLE} (docid)`,
   );
   db.exec(
-    `CREATE INDEX IF NOT EXISTS idx_openclaw_qmd_session_artifacts_search_path
+    `CREATE INDEX IF NOT EXISTS idx_marketingclaw_qmd_session_artifacts_search_path
      ON ${QMD_SESSION_ARTIFACT_TABLE} (search_path)`,
   );
 }

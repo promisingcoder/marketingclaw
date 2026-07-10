@@ -1,13 +1,13 @@
-package ai.openclaw.app.chat
+package ai.marketingclaw.app.chat
 
-import ai.openclaw.app.GatewayModelSummary
-import ai.openclaw.app.gateway.GatewayRequestDefinitiveFailure
-import ai.openclaw.app.gateway.GatewayRequestOutcomeUnknown
-import ai.openclaw.app.gateway.GatewaySession
-import ai.openclaw.app.gateway.parseChatSendAck
-import ai.openclaw.app.parseGatewayModels
-import ai.openclaw.app.resolveAgentIdFromMainSessionKey
-import ai.openclaw.app.ui.chat.thinkingSupportedForSelection
+import ai.marketingclaw.app.GatewayModelSummary
+import ai.marketingclaw.app.gateway.GatewayRequestDefinitiveFailure
+import ai.marketingclaw.app.gateway.GatewayRequestOutcomeUnknown
+import ai.marketingclaw.app.gateway.GatewaySession
+import ai.marketingclaw.app.gateway.parseChatSendAck
+import ai.marketingclaw.app.parseGatewayModels
+import ai.marketingclaw.app.resolveAgentIdFromMainSessionKey
+import ai.marketingclaw.app.ui.chat.thinkingSupportedForSelection
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope

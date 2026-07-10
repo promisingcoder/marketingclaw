@@ -109,7 +109,7 @@ export function renderSkillWorkshop(props: SkillWorkshopProps) {
     </section>
     ${preview && selected
       ? html`
-          <openclaw-file-preview-modal
+          <marketingclaw-file-preview-modal
             .files=${selected.supportFiles}
             .activePath=${preview.path}
             .query=${props.filePreviewQuery}
@@ -119,7 +119,7 @@ export function renderSkillWorkshop(props: SkillWorkshopProps) {
             @file-preview-select=${(event: CustomEvent<string>) =>
               props.onPreviewFile(selected.key, event.detail)}
             @file-preview-close=${props.onClosePreview}
-          ></openclaw-file-preview-modal>
+          ></marketingclaw-file-preview-modal>
         `
       : nothing}
     ${revisionProposal ? renderRevisionDialog(props, revisionProposal) : nothing}
@@ -145,7 +145,7 @@ function renderRevisionDialog(props: SkillWorkshopProps, proposal: SkillWorkshop
             <div class="sw-revision-dialog__eyebrow">${verb} proposal</div>
             <h2 id="sw-revision-title">${proposal.slug}</h2>
           </div>
-          <openclaw-tooltip content="Close">
+          <marketingclaw-tooltip content="Close">
             <button
               class="sw-revision-dialog__close"
               aria-label="Close"
@@ -154,7 +154,7 @@ function renderRevisionDialog(props: SkillWorkshopProps, proposal: SkillWorkshop
             >
               ×
             </button>
-          </openclaw-tooltip>
+          </marketingclaw-tooltip>
         </div>
         <p class="sw-revision-dialog__copy">
           Tell the agent what should change. The proposal stays pending and the workshop will create
@@ -372,12 +372,12 @@ function renderDetail(props: SkillWorkshopProps, proposal: SkillWorkshopProposal
           </div>
         </div>
         <div class="sw-detail__nav">
-          <openclaw-tooltip content="Previous">
+          <marketingclaw-tooltip content="Previous">
             <button aria-label="Previous" @click=${props.onPrev}>↑</button>
-          </openclaw-tooltip>
-          <openclaw-tooltip content="Next">
+          </marketingclaw-tooltip>
+          <marketingclaw-tooltip content="Next">
             <button aria-label="Next" @click=${props.onNext}>↓</button>
-          </openclaw-tooltip>
+          </marketingclaw-tooltip>
         </div>
       </div>
 

@@ -52,7 +52,7 @@ describe("sandbox ssh helpers", () => {
     sessions.push(session);
 
     const config = await fs.readFile(session.configPath, "utf8");
-    expect(config).toContain("Host openclaw-sandbox");
+    expect(config).toContain("Host marketingclaw-sandbox");
     expect(config).toContain("HostName example.com");
     expect(config).toContain("User peter");
     expect(config).toContain("Port 2222");
@@ -193,24 +193,24 @@ describe("sandbox ssh helpers", () => {
   it.runIf(process.platform !== "win32")(
     "allows symlinked ancestors before the trusted remote root",
     async () => {
-      const realParent = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-ssh-real-"));
+      const realParent = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-ssh-real-"));
       tempDirs.push(realParent);
       const linkParent = `${realParent}-link`;
       tempDirs.push(linkParent);
       await fs.symlink(realParent, linkParent);
 
       const root = path.join(linkParent, "runtime");
-      const target = path.join(root, "workspace", ".openclaw", "sandbox-skills");
+      const target = path.join(root, "workspace", ".marketingclaw", "sandbox-skills");
       await execFileAsync("/bin/sh", [
         "-c",
         ENSURE_REMOTE_REAL_DIRECTORY_SCRIPT,
-        "openclaw-remote-dir",
+        "marketingclaw-remote-dir",
         target,
         root,
       ]);
 
       await expect(
-        fs.stat(path.join(realParent, "runtime", "workspace", ".openclaw", "sandbox-skills")),
+        fs.stat(path.join(realParent, "runtime", "workspace", ".marketingclaw", "sandbox-skills")),
       ).resolves.toMatchObject({ dev: expect.any(Number) });
     },
   );
@@ -218,9 +218,9 @@ describe("sandbox ssh helpers", () => {
   it.runIf(process.platform !== "win32")(
     "preserves caller positional args for commands after remote directory validation",
     async () => {
-      const realParent = makeTempDir(tempDirs, "openclaw-ssh-real-");
+      const realParent = makeTempDir(tempDirs, "marketingclaw-ssh-real-");
       const root = path.join(realParent, "runtime");
-      const target = path.join(root, "workspace", ".openclaw", "sandbox-skills");
+      const target = path.join(root, "workspace", ".marketingclaw", "sandbox-skills");
 
       const { stdout } = await execFileAsync("/bin/sh", [
         "-c",
@@ -230,7 +230,7 @@ describe("sandbox ssh helpers", () => {
           'touch "$1/proof"',
           'find "$1" -mindepth 1 -maxdepth 1 -name proof -print',
         ].join("\n"),
-        "openclaw-remote-dir",
+        "marketingclaw-remote-dir",
         target,
         root,
       ]);
@@ -242,7 +242,7 @@ describe("sandbox ssh helpers", () => {
   it.runIf(process.platform !== "win32")(
     "validates exec workdirs without creating missing directories",
     async () => {
-      const root = makeTempDir(tempDirs, "openclaw-ssh-workdir-");
+      const root = makeTempDir(tempDirs, "marketingclaw-ssh-workdir-");
       const project = path.join(root, "workspace", "project");
       await fs.mkdir(project, { recursive: true });
       const canonicalProject = await fs.realpath(project);
@@ -250,7 +250,7 @@ describe("sandbox ssh helpers", () => {
       const { stdout } = await execFileAsync("/bin/sh", [
         "-c",
         VALIDATE_REMOTE_WORKDIR_SCRIPT,
-        "openclaw-validate-workdir",
+        "marketingclaw-validate-workdir",
         project,
         path.join(root, "workspace"),
       ]);
@@ -260,7 +260,7 @@ describe("sandbox ssh helpers", () => {
         execFileAsync("/bin/sh", [
           "-c",
           VALIDATE_REMOTE_WORKDIR_SCRIPT,
-          "openclaw-validate-workdir",
+          "marketingclaw-validate-workdir",
           path.join(root, "workspace", "missing"),
           path.join(root, "workspace"),
         ]),
@@ -272,7 +272,7 @@ describe("sandbox ssh helpers", () => {
   it.runIf(process.platform !== "win32")(
     "rejects symlinked exec workdirs inside the trusted remote root",
     async () => {
-      const root = makeTempDir(tempDirs, "openclaw-ssh-workdir-");
+      const root = makeTempDir(tempDirs, "marketingclaw-ssh-workdir-");
       const workspace = path.join(root, "workspace");
       await fs.mkdir(workspace, { recursive: true });
       await fs.symlink(root, path.join(workspace, "escape"));
@@ -281,7 +281,7 @@ describe("sandbox ssh helpers", () => {
         execFileAsync("/bin/sh", [
           "-c",
           VALIDATE_REMOTE_WORKDIR_SCRIPT,
-          "openclaw-validate-workdir",
+          "marketingclaw-validate-workdir",
           path.join(workspace, "escape"),
           workspace,
         ]),
@@ -292,7 +292,7 @@ describe("sandbox ssh helpers", () => {
   it.runIf(process.platform !== "win32")(
     "validates exec workdirs when the trusted remote root is slash",
     async () => {
-      const root = makeTempDir(tempDirs, "openclaw-ssh-root-");
+      const root = makeTempDir(tempDirs, "marketingclaw-ssh-root-");
       const project = path.join(root, "project");
       await fs.mkdir(project, { recursive: true });
       const canonicalProject = await fs.realpath(project);
@@ -300,7 +300,7 @@ describe("sandbox ssh helpers", () => {
       const { stdout } = await execFileAsync("/bin/sh", [
         "-c",
         VALIDATE_REMOTE_WORKDIR_SCRIPT,
-        "openclaw-validate-workdir",
+        "marketingclaw-validate-workdir",
         canonicalProject,
         "/",
       ]);
@@ -315,7 +315,7 @@ describe("sandbox ssh helpers", () => {
       root: "/remote/workspace",
     });
 
-    expect(command).toContain("openclaw-validate-workdir");
+    expect(command).toContain("marketingclaw-validate-workdir");
     expect(command).toContain("project one");
     expect(command).toContain("remote directory must be absolute");
   });
@@ -323,18 +323,18 @@ describe("sandbox ssh helpers", () => {
   it.runIf(process.platform !== "win32")(
     "rejects symlinked directories inside the trusted remote root",
     async () => {
-      const realParent = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-ssh-real-"));
+      const realParent = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-ssh-real-"));
       tempDirs.push(realParent);
       const root = path.join(realParent, "runtime");
       await fs.mkdir(path.join(root, "workspace"), { recursive: true });
-      await fs.symlink(realParent, path.join(root, "workspace", ".openclaw"));
+      await fs.symlink(realParent, path.join(root, "workspace", ".marketingclaw"));
 
       await expect(
         execFileAsync("/bin/sh", [
           "-c",
           ENSURE_REMOTE_REAL_DIRECTORY_SCRIPT,
-          "openclaw-remote-dir",
-          path.join(root, "workspace", ".openclaw", "sandbox-skills"),
+          "marketingclaw-remote-dir",
+          path.join(root, "workspace", ".marketingclaw", "sandbox-skills"),
           root,
         ]),
       ).rejects.toThrow(/unsafe remote directory symlink/);
@@ -344,7 +344,7 @@ describe("sandbox ssh helpers", () => {
   it.runIf(process.platform !== "win32")(
     "rejects upload trees with symlinks that escape the local workspace",
     async () => {
-      const localDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-ssh-upload-"));
+      const localDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-ssh-upload-"));
       tempDirs.push(localDir);
       await fs.symlink("/etc", path.join(localDir, "escape"));
 
@@ -352,8 +352,8 @@ describe("sandbox ssh helpers", () => {
         uploadDirectoryToSshTarget({
           session: {
             command: "ssh",
-            configPath: "/tmp/openclaw-test-ssh-config",
-            host: "openclaw-sandbox",
+            configPath: "/tmp/marketingclaw-test-ssh-config",
+            host: "marketingclaw-sandbox",
           },
           localDir,
           remoteDir: "/remote/workspace",
@@ -365,7 +365,7 @@ describe("sandbox ssh helpers", () => {
   it.runIf(process.platform !== "win32")(
     "allows in-workspace symlinks that point to hardlinked files",
     async () => {
-      const localDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-ssh-upload-safe-"));
+      const localDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-ssh-upload-safe-"));
       tempDirs.push(localDir);
       const fakeSsh = path.join(localDir, "fake-ssh.sh");
       await fs.writeFile(fakeSsh, "#!/bin/sh\ncat >/dev/null\n", { mode: 0o755 });
@@ -377,8 +377,8 @@ describe("sandbox ssh helpers", () => {
         uploadDirectoryToSshTarget({
           session: {
             command: fakeSsh,
-            configPath: "/tmp/openclaw-test-ssh-config",
-            host: "openclaw-sandbox",
+            configPath: "/tmp/marketingclaw-test-ssh-config",
+            host: "marketingclaw-sandbox",
           },
           localDir,
           remoteDir: "/remote/workspace",

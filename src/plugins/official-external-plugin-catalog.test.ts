@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import officialExternalPluginCatalog from "../../scripts/lib/official-external-plugin-catalog.json" with { type: "json" };
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeMarketingClawStateDatabaseForTest } from "../state/marketingclaw-state-db.js";
 import { createSqliteHostedOfficialExternalPluginCatalogSnapshotStore } from "./official-external-plugin-catalog-snapshot-store.js";
 import {
   type OfficialExternalPluginCatalogEntry,
@@ -53,7 +53,7 @@ describe("official external plugin catalog", () => {
     expect(isOfficialExternalPluginCatalogFeed(officialExternalPluginCatalog)).toBe(true);
     expect(officialExternalPluginCatalog).toMatchObject({
       schemaVersion: 1,
-      id: "openclaw-official-external-plugins",
+      id: "marketingclaw-official-external-plugins",
       sequence: 1,
     });
     expect(officialExternalPluginCatalog.entries.length).toBeGreaterThan(0);
@@ -72,7 +72,7 @@ describe("official external plugin catalog", () => {
     expect(
       isOfficialExternalPluginCatalogFeed({
         schemaVersion: 2,
-        id: "openclaw-official-external-plugins",
+        id: "marketingclaw-official-external-plugins",
         generatedAt: "2026-06-22T00:00:00.000Z",
         sequence: 1,
         entries: [],
@@ -81,7 +81,7 @@ describe("official external plugin catalog", () => {
     expect(
       isOfficialExternalPluginCatalogFeed({
         schemaVersion: 3,
-        id: "openclaw-official-external-plugins",
+        id: "marketingclaw-official-external-plugins",
         generatedAt: "2026-06-22T00:00:00.000Z",
         sequence: 1,
         entries: [],
@@ -110,7 +110,7 @@ describe("official external plugin catalog", () => {
       entries: [
         {
           type: "plugin",
-          id: "@expediagroup/expedia-openclaw",
+          id: "@expediagroup/expedia-marketingclaw",
           title: "Expedia Travel",
           version: "1.0.4",
           state: "available",
@@ -122,7 +122,7 @@ describe("official external plugin catalog", () => {
             candidates: [
               {
                 sourceRef: "public-clawhub",
-                package: "@expediagroup/expedia-openclaw",
+                package: "@expediagroup/expedia-marketingclaw",
                 version: "1.0.4",
                 integrity:
                   "sha256:b355dda04403becaab8bbab069fd1e7b0578262e7459e598cc5b19615b5bdab9",
@@ -138,11 +138,11 @@ describe("official external plugin catalog", () => {
     }
 
     expect(entry).toMatchObject({
-      id: "@expediagroup/expedia-openclaw",
+      id: "@expediagroup/expedia-marketingclaw",
       title: "Expedia Travel",
       version: "1.0.4",
     });
-    expect(resolveOfficialExternalPluginId(entry)).toBe("@expediagroup/expedia-openclaw");
+    expect(resolveOfficialExternalPluginId(entry)).toBe("@expediagroup/expedia-marketingclaw");
     expect(resolveOfficialExternalPluginInstall(entry)).toEqual({
       clawhubSpec: "clawhub:@expediagroup/expedia-openclaw@1.0.4",
       defaultChoice: "clawhub",
@@ -287,14 +287,14 @@ describe("official external plugin catalog", () => {
   it("loads a hosted feed with conditional headers and checksum metadata", async () => {
     const body = JSON.stringify({
       schemaVersion: 1,
-      id: "openclaw-official-external-plugins",
+      id: "marketingclaw-official-external-plugins",
       generatedAt: "2026-06-22T00:00:00.000Z",
       sequence: 2,
       entries: [
         {
           name: "@openclaw/hosted-proof",
           kind: "plugin",
-          openclaw: {
+          marketingclaw: {
             plugin: { id: "hosted-proof", label: "Hosted Proof" },
             install: { npmSpec: "@openclaw/hosted-proof", defaultChoice: "npm" },
           },
@@ -344,7 +344,7 @@ describe("official external plugin catalog", () => {
       entries: [
         {
           type: "plugin",
-          id: "@expediagroup/expedia-openclaw",
+          id: "@expediagroup/expedia-marketingclaw",
           title: "Expedia Travel",
           version: "1.0.4",
           state: "available",
@@ -356,7 +356,7 @@ describe("official external plugin catalog", () => {
             candidates: [
               {
                 sourceRef: "public-clawhub",
-                package: "@expediagroup/expedia-openclaw",
+                package: "@expediagroup/expedia-marketingclaw",
                 version: "1.0.4",
                 integrity:
                   "sha256:b355dda04403becaab8bbab069fd1e7b0578262e7459e598cc5b19615b5bdab9",
@@ -382,7 +382,7 @@ describe("official external plugin catalog", () => {
     expect(result.source).toBe("hosted");
     expect(result.entries).toHaveLength(1);
     expect(result.entries[0]).toMatchObject({
-      id: "@expediagroup/expedia-openclaw",
+      id: "@expediagroup/expedia-marketingclaw",
       title: "Expedia Travel",
       version: "1.0.4",
     });
@@ -391,14 +391,14 @@ describe("official external plugin catalog", () => {
   it("uses the default local feed profile for hosted catalog loading", async () => {
     const body = JSON.stringify({
       schemaVersion: 1,
-      id: "openclaw-official-external-plugins",
+      id: "marketingclaw-official-external-plugins",
       generatedAt: "2026-06-22T00:00:00.000Z",
       sequence: 8,
       entries: [
         {
           name: "@openclaw/default-profile-proof",
           kind: "plugin",
-          openclaw: { plugin: { id: "default-profile-proof" } },
+          marketingclaw: { plugin: { id: "default-profile-proof" } },
         },
       ],
     });
@@ -433,7 +433,7 @@ describe("official external plugin catalog", () => {
           title: "Live Feed Proof",
           version: "1.0.0",
           state: "available",
-          publisher: { id: "openclaw", trust: "official" },
+          publisher: { id: "marketingclaw", trust: "official" },
           install: {
             candidates: [
               {
@@ -466,23 +466,23 @@ describe("official external plugin catalog", () => {
     });
   });
 
-  it("loads hosted catalog profiles from OpenClaw config", async () => {
+  it("loads hosted catalog profiles from MarketingClaw config", async () => {
     const config = {
       marketplaces: {
-        feeds: { acme: { url: "https://packages.acme.example/openclaw/feed" } },
+        feeds: { acme: { url: "https://packages.acme.example/marketingclaw/feed" } },
         sources: { "acme-npm": { type: "npm" as const } },
       },
     };
     const body = JSON.stringify({
       schemaVersion: 1,
-      id: "openclaw-official-external-plugins",
+      id: "marketingclaw-official-external-plugins",
       generatedAt: "2026-06-22T00:00:00.000Z",
       sequence: 14,
       entries: [
         {
           name: "@acme/config-profile-proof",
           kind: "plugin",
-          openclaw: {
+          marketingclaw: {
             plugin: { id: "config-profile-proof" },
             install: { sourceRef: "acme-npm", npmSpec: "@acme/config-profile-proof" },
           },
@@ -497,7 +497,7 @@ describe("official external plugin catalog", () => {
     const result = await loadConfiguredHostedOfficialExternalPluginCatalogEntries(config, {
       feedProfile: "acme",
       fetchImpl: vi.fn(async (url: RequestInfo | URL) => {
-        expect(expectRequestUrl(url)).toBe("https://packages.acme.example/openclaw/feed");
+        expect(expectRequestUrl(url)).toBe("https://packages.acme.example/marketingclaw/feed");
         return new Response(body, { status: 200 });
       }),
       snapshotStore: null,
@@ -510,7 +510,7 @@ describe("official external plugin catalog", () => {
   it("allows named local feed profiles to authorize their configured HTTPS host", async () => {
     const body = JSON.stringify({
       schemaVersion: 1,
-      id: "openclaw-official-external-plugins",
+      id: "marketingclaw-official-external-plugins",
       generatedAt: "2026-06-22T00:00:00.000Z",
       sequence: 9,
       entries: [
@@ -526,7 +526,7 @@ describe("official external plugin catalog", () => {
               },
             ],
           },
-          openclaw: {
+          marketingclaw: {
             plugin: { id: "private-proof" },
             install: { sourceRef: "acme-npm", npmSpec: "@acme/private-proof" },
           },
@@ -534,14 +534,14 @@ describe("official external plugin catalog", () => {
       ],
     });
     const fetchImpl = vi.fn(async (url: RequestInfo | URL) => {
-      expect(expectRequestUrl(url)).toBe("https://packages.acme.example/openclaw/feed");
+      expect(expectRequestUrl(url)).toBe("https://packages.acme.example/marketingclaw/feed");
       return new Response(body, { status: 200 });
     });
 
     const result = await loadHostedOfficialExternalPluginCatalogEntries({
       feedProfile: "acme",
       catalogConfig: {
-        feeds: { acme: { url: "https://packages.acme.example/openclaw/feed" } },
+        feeds: { acme: { url: "https://packages.acme.example/marketingclaw/feed" } },
         sources: { "acme-npm": { type: "npm", registry: "https://packages.acme.example/npm/" } },
       },
       fetchImpl,
@@ -561,7 +561,7 @@ describe("official external plugin catalog", () => {
         catalogConfig: {
           feeds: {
             acme: {
-              url: "https://packages.acme.example/openclaw/feed",
+              url: "https://packages.acme.example/marketingclaw/feed",
               verification: {
                 mode: "signed",
                 keys: [
@@ -586,7 +586,7 @@ describe("official external plugin catalog", () => {
     const fetchImpl = vi.fn(async () => new Response("{}", { status: 200 }));
 
     const result = await loadHostedOfficialExternalPluginCatalogEntries({
-      feedUrl: "https://packages.acme.example/openclaw/feed",
+      feedUrl: "https://packages.acme.example/marketingclaw/feed",
       fetchImpl,
       snapshotStore: null,
     });
@@ -638,14 +638,14 @@ describe("official external plugin catalog", () => {
   it("requires manifest install source refs when the default feed profile URL is overridden", async () => {
     const body = JSON.stringify({
       schemaVersion: 1,
-      id: "openclaw-official-external-plugins",
+      id: "marketingclaw-official-external-plugins",
       generatedAt: "2026-06-22T00:00:00.000Z",
       sequence: 13,
       entries: [
         {
           name: "@acme/default-override-missing-source-ref",
           kind: "plugin",
-          openclaw: {
+          marketingclaw: {
             plugin: { id: "default-override-missing-source-ref" },
             install: { npmSpec: "@acme/default-override-missing-source-ref" },
           },
@@ -653,7 +653,7 @@ describe("official external plugin catalog", () => {
         {
           name: "@acme/default-override-known-source-ref",
           kind: "plugin",
-          openclaw: {
+          marketingclaw: {
             plugin: { id: "default-override-known-source-ref" },
             install: { sourceRef: "acme-npm", npmSpec: "@acme/default-override-known-source-ref" },
           },
@@ -663,11 +663,11 @@ describe("official external plugin catalog", () => {
 
     const result = await loadHostedOfficialExternalPluginCatalogEntries({
       catalogConfig: {
-        feeds: { "clawhub-public": { url: "https://packages.acme.example/openclaw/feed" } },
+        feeds: { "clawhub-public": { url: "https://packages.acme.example/marketingclaw/feed" } },
         sources: { "acme-npm": { type: "npm", registry: "https://packages.acme.example/npm/" } },
       },
       fetchImpl: vi.fn(async (url: RequestInfo | URL) => {
-        expect(expectRequestUrl(url)).toBe("https://packages.acme.example/openclaw/feed");
+        expect(expectRequestUrl(url)).toBe("https://packages.acme.example/marketingclaw/feed");
         return new Response(body, { status: 200 });
       }),
       snapshotStore: null,
@@ -682,14 +682,14 @@ describe("official external plugin catalog", () => {
   it("preserves default feed manifest installs for direct default hosted feed URL refreshes", async () => {
     const body = JSON.stringify({
       schemaVersion: 1,
-      id: "openclaw-official-external-plugins",
+      id: "marketingclaw-official-external-plugins",
       generatedAt: "2026-06-22T00:00:00.000Z",
       sequence: 14,
       entries: [
         {
           name: "@openclaw/direct-default-missing-source-ref",
           kind: "plugin",
-          openclaw: {
+          marketingclaw: {
             plugin: { id: "direct-default-missing-source-ref" },
             install: { npmSpec: "@openclaw/direct-default-missing-source-ref" },
           },
@@ -715,14 +715,14 @@ describe("official external plugin catalog", () => {
   it("requires manifest install source refs for non-default direct hosted feed URL overrides", async () => {
     const body = JSON.stringify({
       schemaVersion: 1,
-      id: "openclaw-official-external-plugins",
+      id: "marketingclaw-official-external-plugins",
       generatedAt: "2026-06-22T00:00:00.000Z",
       sequence: 15,
       entries: [
         {
           name: "@acme/direct-url-missing-source-ref",
           kind: "plugin",
-          openclaw: {
+          marketingclaw: {
             plugin: { id: "direct-url-missing-source-ref" },
             install: { npmSpec: "@acme/direct-url-missing-source-ref" },
           },
@@ -730,7 +730,7 @@ describe("official external plugin catalog", () => {
         {
           name: "@acme/direct-url-known-source-ref",
           kind: "plugin",
-          openclaw: {
+          marketingclaw: {
             plugin: { id: "direct-url-known-source-ref" },
             install: { sourceRef: "acme-npm", npmSpec: "@acme/direct-url-known-source-ref" },
           },
@@ -760,7 +760,7 @@ describe("official external plugin catalog", () => {
     const missingManifestSourceRef = {
       name: "@acme/missing-manifest-source-ref",
       kind: "plugin",
-      openclaw: {
+      marketingclaw: {
         plugin: { id: "missing-manifest-source-ref" },
         install: { npmSpec: "@acme/missing-manifest-source-ref" },
       },
@@ -768,7 +768,7 @@ describe("official external plugin catalog", () => {
     const knownManifestSourceRef = {
       name: "@acme/known-manifest-source-ref",
       kind: "plugin",
-      openclaw: {
+      marketingclaw: {
         plugin: { id: "known-manifest-source-ref" },
         install: {
           sourceRef: "acme-npm",
@@ -779,7 +779,7 @@ describe("official external plugin catalog", () => {
     const implicitNameInstall = {
       name: "@acme/implicit-name-install",
       kind: "plugin",
-      openclaw: { plugin: { id: "implicit-name-install" } },
+      marketingclaw: { plugin: { id: "implicit-name-install" } },
     };
     const topLevelCandidateOnly = {
       name: "@acme/top-level-candidate-only",
@@ -787,14 +787,14 @@ describe("official external plugin catalog", () => {
       install: {
         candidates: [{ sourceRef: "acme-npm", package: "@acme/top-level-candidate-only" }],
       },
-      openclaw: {
+      marketingclaw: {
         plugin: { id: "top-level-candidate-only" },
         install: { npmSpec: "@acme/top-level-candidate-only" },
       },
     };
     const body = JSON.stringify({
       schemaVersion: 1,
-      id: "openclaw-official-external-plugins",
+      id: "marketingclaw-official-external-plugins",
       generatedAt: "2026-06-22T00:00:00.000Z",
       sequence: 11,
       entries: [
@@ -806,7 +806,7 @@ describe("official external plugin catalog", () => {
     });
 
     const catalogConfig = {
-      feeds: { acme: { url: "https://packages.acme.example/openclaw/feed" } },
+      feeds: { acme: { url: "https://packages.acme.example/marketingclaw/feed" } },
       sources: { "acme-npm": { type: "npm" as const } },
     };
 
@@ -853,7 +853,7 @@ describe("official external plugin catalog", () => {
       install: {
         candidates: [{ sourceRef: "public-clawhub", package: "@openclaw/source-ref-known" }],
       },
-      openclaw: { plugin: { id: "source-ref-known" } },
+      marketingclaw: { plugin: { id: "source-ref-known" } },
     };
     const unknownEntry = {
       name: "@openclaw/source-ref-unknown",
@@ -861,13 +861,13 @@ describe("official external plugin catalog", () => {
       install: {
         candidates: [{ sourceRef: "attacker-npm", package: "@openclaw/source-ref-unknown" }],
       },
-      openclaw: { plugin: { id: "source-ref-unknown" } },
+      marketingclaw: { plugin: { id: "source-ref-unknown" } },
     };
     const missingEntry = {
       name: "@openclaw/source-ref-missing",
       kind: "plugin",
       install: { candidates: [{ package: "@openclaw/source-ref-missing" }] },
-      openclaw: { plugin: { id: "source-ref-missing" } },
+      marketingclaw: { plugin: { id: "source-ref-missing" } },
     };
     const manifestInstallWithoutSourceRef = {
       name: "@openclaw/source-ref-manifest-missing",
@@ -877,14 +877,14 @@ describe("official external plugin catalog", () => {
           { sourceRef: "public-clawhub", package: "@openclaw/source-ref-manifest-missing" },
         ],
       },
-      openclaw: {
+      marketingclaw: {
         plugin: { id: "source-ref-manifest-missing" },
         install: { npmSpec: "@openclaw/source-ref-manifest-missing" },
       },
     };
     const body = JSON.stringify({
       schemaVersion: 1,
-      id: "openclaw-official-external-plugins",
+      id: "marketingclaw-official-external-plugins",
       generatedAt: "2026-06-22T00:00:00.000Z",
       sequence: 10,
       entries: [knownEntry, unknownEntry, missingEntry, manifestInstallWithoutSourceRef],
@@ -968,14 +968,14 @@ describe("official external plugin catalog", () => {
     const writeSpy = vi.spyOn(snapshotStore, "write");
     const body = JSON.stringify({
       schemaVersion: 1,
-      id: "openclaw-official-external-plugins",
+      id: "marketingclaw-official-external-plugins",
       generatedAt: "2026-06-22T00:00:00.000Z",
       sequence: 3,
       entries: [
         {
           name: "@openclaw/snapshot-write-proof",
           kind: "plugin",
-          openclaw: { plugin: { id: "snapshot-write-proof" } },
+          marketingclaw: { plugin: { id: "snapshot-write-proof" } },
         },
       ],
     });
@@ -1008,14 +1008,14 @@ describe("official external plugin catalog", () => {
   it("fails explicit refreshes when required snapshot persistence fails", async () => {
     const body = JSON.stringify({
       schemaVersion: 1,
-      id: "openclaw-official-external-plugins",
+      id: "marketingclaw-official-external-plugins",
       generatedAt: "2026-06-22T00:00:00.000Z",
       sequence: 4,
       entries: [
         {
           name: "@openclaw/snapshot-write-fail-proof",
           kind: "plugin",
-          openclaw: { plugin: { id: "snapshot-write-fail-proof" } },
+          marketingclaw: { plugin: { id: "snapshot-write-fail-proof" } },
         },
       ],
     });
@@ -1041,14 +1041,14 @@ describe("official external plugin catalog", () => {
     const snapshotStore = createInMemoryHostedOfficialExternalPluginCatalogSnapshotStore();
     const body = JSON.stringify({
       schemaVersion: 1,
-      id: "openclaw-official-external-plugins",
+      id: "marketingclaw-official-external-plugins",
       generatedAt: "2026-06-22T00:00:00.000Z",
       sequence: 5,
       entries: [
         {
           name: "@openclaw/offline-snapshot-proof",
           kind: "plugin",
-          openclaw: { plugin: { id: "offline-snapshot-proof" } },
+          marketingclaw: { plugin: { id: "offline-snapshot-proof" } },
         },
       ],
     });
@@ -1083,19 +1083,19 @@ describe("official external plugin catalog", () => {
     }
   });
 
-  it("persists hosted feed snapshots in OpenClaw state for HTTP 304 reuse", async () => {
-    const stateDir = mkdtempSync(path.join(os.tmpdir(), "openclaw-hosted-catalog-"));
+  it("persists hosted feed snapshots in MarketingClaw state for HTTP 304 reuse", async () => {
+    const stateDir = mkdtempSync(path.join(os.tmpdir(), "marketingclaw-hosted-catalog-"));
     try {
       const body = JSON.stringify({
         schemaVersion: 1,
-        id: "openclaw-official-external-plugins",
+        id: "marketingclaw-official-external-plugins",
         generatedAt: "2026-06-22T00:00:00.000Z",
         sequence: 7,
         entries: [
           {
             name: "@openclaw/sqlite-snapshot-proof",
             kind: "plugin",
-            openclaw: { plugin: { id: "sqlite-snapshot-proof" } },
+            marketingclaw: { plugin: { id: "sqlite-snapshot-proof" } },
           },
         ],
       });
@@ -1117,7 +1117,7 @@ describe("official external plugin catalog", () => {
       if (seeded.source !== "hosted") {
         throw new Error("expected seeded hosted feed");
       }
-      closeOpenClawStateDatabaseForTest();
+      closeMarketingClawStateDatabaseForTest();
 
       const result = await loadHostedOfficialExternalPluginCatalogEntries({
         stateDir,
@@ -1133,13 +1133,13 @@ describe("official external plugin catalog", () => {
         expect(result.metadata.checksum).toBe(seeded.metadata.checksum);
       }
     } finally {
-      closeOpenClawStateDatabaseForTest();
+      closeMarketingClawStateDatabaseForTest();
       rmSync(stateDir, { recursive: true, force: true });
     }
   });
 
   it("reads and updates hosted catalog snapshots in the SQLite store", async () => {
-    const stateDir = mkdtempSync(path.join(os.tmpdir(), "openclaw-hosted-store-"));
+    const stateDir = mkdtempSync(path.join(os.tmpdir(), "marketingclaw-hosted-store-"));
     try {
       const store = createSqliteHostedOfficialExternalPluginCatalogSnapshotStore({ stateDir });
       const url = "https://clawhub.ai/v1/feeds/plugins";
@@ -1180,7 +1180,7 @@ describe("official external plugin catalog", () => {
         savedAt: "2026-06-22T03:04:05.000Z",
       });
     } finally {
-      closeOpenClawStateDatabaseForTest();
+      closeMarketingClawStateDatabaseForTest();
       rmSync(stateDir, { recursive: true, force: true });
     }
   });
@@ -1188,14 +1188,14 @@ describe("official external plugin catalog", () => {
   it("applies custom source-ref validation to exception snapshot fallback", async () => {
     const body = JSON.stringify({
       schemaVersion: 1,
-      id: "openclaw-official-external-plugins",
+      id: "marketingclaw-official-external-plugins",
       generatedAt: "2026-06-22T00:00:00.000Z",
       sequence: 12,
       entries: [
         {
           name: "@acme/snapshot-missing-source-ref",
           kind: "plugin",
-          openclaw: {
+          marketingclaw: {
             plugin: { id: "snapshot-missing-source-ref" },
             install: { npmSpec: "@acme/snapshot-missing-source-ref" },
           },
@@ -1203,7 +1203,7 @@ describe("official external plugin catalog", () => {
         {
           name: "@acme/snapshot-known-source-ref",
           kind: "plugin",
-          openclaw: {
+          marketingclaw: {
             plugin: { id: "snapshot-known-source-ref" },
             install: { sourceRef: "acme-npm", npmSpec: "@acme/snapshot-known-source-ref" },
           },
@@ -1211,7 +1211,7 @@ describe("official external plugin catalog", () => {
       ],
     });
     const catalogConfig = {
-      feeds: { acme: { url: "https://packages.acme.example/openclaw/feed" } },
+      feeds: { acme: { url: "https://packages.acme.example/marketingclaw/feed" } },
       sources: { "acme-npm": { type: "npm" as const } },
     };
     const seeded = await loadHostedOfficialExternalPluginCatalogEntries({
@@ -1241,14 +1241,14 @@ describe("official external plugin catalog", () => {
   it("uses the last known good snapshot when the hosted feed returns HTTP 304", async () => {
     const body = JSON.stringify({
       schemaVersion: 1,
-      id: "openclaw-official-external-plugins",
+      id: "marketingclaw-official-external-plugins",
       generatedAt: "2026-06-22T00:00:00.000Z",
       sequence: 4,
       entries: [
         {
           name: "@openclaw/snapshot-proof",
           kind: "plugin",
-          openclaw: { plugin: { id: "snapshot-proof" } },
+          marketingclaw: { plugin: { id: "snapshot-proof" } },
         },
       ],
     });
@@ -1297,14 +1297,14 @@ describe("official external plugin catalog", () => {
   it("does not use a stale snapshot when HTTP 304 validators do not match", async () => {
     const body = JSON.stringify({
       schemaVersion: 1,
-      id: "openclaw-official-external-plugins",
+      id: "marketingclaw-official-external-plugins",
       generatedAt: "2026-06-22T00:00:00.000Z",
       sequence: 4,
       entries: [
         {
           name: "@openclaw/stale-snapshot-proof",
           kind: "plugin",
-          openclaw: { plugin: { id: "stale-snapshot-proof" } },
+          marketingclaw: { plugin: { id: "stale-snapshot-proof" } },
         },
       ],
     });
@@ -1351,14 +1351,14 @@ describe("official external plugin catalog", () => {
   it("uses a valid snapshot before bundled fallback when hosted validation fails", async () => {
     const body = JSON.stringify({
       schemaVersion: 1,
-      id: "openclaw-official-external-plugins",
+      id: "marketingclaw-official-external-plugins",
       generatedAt: "2026-06-22T00:00:00.000Z",
       sequence: 5,
       entries: [
         {
           name: "@openclaw/snapshot-validation-proof",
           kind: "plugin",
-          openclaw: { plugin: { id: "snapshot-validation-proof" } },
+          marketingclaw: { plugin: { id: "snapshot-validation-proof" } },
         },
       ],
     });
@@ -1390,14 +1390,14 @@ describe("official external plugin catalog", () => {
   it("does not use a stale snapshot when hosted validation fails with unmatched validators", async () => {
     const body = JSON.stringify({
       schemaVersion: 1,
-      id: "openclaw-official-external-plugins",
+      id: "marketingclaw-official-external-plugins",
       generatedAt: "2026-06-22T00:00:00.000Z",
       sequence: 5,
       entries: [
         {
           name: "@openclaw/stale-validation-snapshot-proof",
           kind: "plugin",
-          openclaw: { plugin: { id: "stale-validation-snapshot-proof" } },
+          marketingclaw: { plugin: { id: "stale-validation-snapshot-proof" } },
         },
       ],
     });
@@ -1432,7 +1432,7 @@ describe("official external plugin catalog", () => {
       {
         body: JSON.stringify({
           schemaVersion: 1,
-          id: "openclaw-official-external-plugins",
+          id: "marketingclaw-official-external-plugins",
           generatedAt: "2026-06-22T00:00:00.000Z",
           sequence: 1,
           entries: [],
@@ -1461,14 +1461,14 @@ describe("official external plugin catalog", () => {
   it("does not use a snapshot that violates the expected checksum", async () => {
     const body = JSON.stringify({
       schemaVersion: 1,
-      id: "openclaw-official-external-plugins",
+      id: "marketingclaw-official-external-plugins",
       generatedAt: "2026-06-22T00:00:00.000Z",
       sequence: 6,
       entries: [
         {
           name: "@openclaw/snapshot-pin-proof",
           kind: "plugin",
-          openclaw: { plugin: { id: "snapshot-pin-proof" } },
+          marketingclaw: { plugin: { id: "snapshot-pin-proof" } },
         },
       ],
     });
@@ -1505,7 +1505,7 @@ describe("official external plugin catalog", () => {
           new Response(
             JSON.stringify({
               schemaVersion: 1,
-              id: "openclaw-official-external-plugins",
+              id: "marketingclaw-official-external-plugins",
               generatedAt: "2026-06-22T00:00:00.000Z",
               sequence: 1,
               entries: [],
@@ -1537,7 +1537,7 @@ describe("official external plugin catalog", () => {
         name: "@legacy/plain-package",
         kind: "plugin",
         state: "available",
-        publisher: { id: "openclaw", trust: "official" },
+        publisher: { id: "marketingclaw", trust: "official" },
         install: {
           candidates: [
             {
@@ -1548,7 +1548,7 @@ describe("official external plugin catalog", () => {
             },
           ],
         },
-        openclaw: {
+        marketingclaw: {
           plugin: { id: "candidate-package" },
           install: {
             npmSpec: "@legacy/plain-package",
@@ -1655,43 +1655,43 @@ describe("official external plugin catalog", () => {
 
   it("lists the externalized provider and capability plugins with install metadata", () => {
     const providers = [
-      ["arcee", "@openclaw/arcee-provider"],
-      ["cerebras", "@openclaw/cerebras-provider"],
-      ["chutes", "@openclaw/chutes-provider"],
-      ["cloudflare-ai-gateway", "@openclaw/cloudflare-ai-gateway-provider"],
-      ["deepinfra", "@openclaw/deepinfra-provider"],
-      ["deepseek", "@openclaw/deepseek-provider"],
-      ["groq", "@openclaw/groq-provider"],
-      ["longcat", "@openclaw/longcat-provider"],
-      ["kilocode", "@openclaw/kilocode-provider"],
-      ["kimi", "@openclaw/kimi-provider"],
-      ["qianfan", "@openclaw/qianfan-provider"],
-      ["qwen", "@openclaw/qwen-provider"],
+      ["arcee", "@marketingclaw/arcee-provider"],
+      ["cerebras", "@marketingclaw/cerebras-provider"],
+      ["chutes", "@marketingclaw/chutes-provider"],
+      ["cloudflare-ai-gateway", "@marketingclaw/cloudflare-ai-gateway-provider"],
+      ["deepinfra", "@marketingclaw/deepinfra-provider"],
+      ["deepseek", "@marketingclaw/deepseek-provider"],
+      ["groq", "@marketingclaw/groq-provider"],
+      ["longcat", "@marketingclaw/longcat-provider"],
+      ["kilocode", "@marketingclaw/kilocode-provider"],
+      ["kimi", "@marketingclaw/kimi-provider"],
+      ["qianfan", "@marketingclaw/qianfan-provider"],
+      ["qwen", "@marketingclaw/qwen-provider"],
     ] as const;
     const plugins = [
-      ["exa", "@openclaw/exa-plugin"],
-      ["firecrawl", "@openclaw/firecrawl-plugin"],
-      ["gradium", "@openclaw/gradium-speech"],
-      ["inworld", "@openclaw/inworld-speech"],
-      ["parallel", "@openclaw/parallel-plugin"],
-      ["perplexity", "@openclaw/perplexity-plugin"],
+      ["exa", "@marketingclaw/exa-plugin"],
+      ["firecrawl", "@marketingclaw/firecrawl-plugin"],
+      ["gradium", "@marketingclaw/gradium-speech"],
+      ["inworld", "@marketingclaw/inworld-speech"],
+      ["parallel", "@marketingclaw/parallel-plugin"],
+      ["perplexity", "@marketingclaw/perplexity-plugin"],
     ] as const;
     const newlyExternalized = [
-      ["clickclack", "@openclaw/clickclack"],
-      ["fireworks", "@openclaw/fireworks-provider"],
-      ["irc", "@openclaw/irc"],
-      ["mattermost", "@openclaw/mattermost"],
-      ["moonshot", "@openclaw/moonshot-provider"],
-      ["searxng", "@openclaw/searxng-plugin"],
-      ["signal", "@openclaw/signal"],
-      ["sms", "@openclaw/sms"],
-      ["tavily", "@openclaw/tavily-plugin"],
-      ["tencent", "@openclaw/tencent-provider"],
-      ["venice", "@openclaw/venice-provider"],
-      ["vercel-ai-gateway", "@openclaw/vercel-ai-gateway-provider"],
-      ["zai", "@openclaw/zai-provider"],
+      ["clickclack", "@marketingclaw/clickclack"],
+      ["fireworks", "@marketingclaw/fireworks-provider"],
+      ["irc", "@marketingclaw/irc"],
+      ["mattermost", "@marketingclaw/mattermost"],
+      ["moonshot", "@marketingclaw/moonshot-provider"],
+      ["searxng", "@marketingclaw/searxng-plugin"],
+      ["signal", "@marketingclaw/signal"],
+      ["sms", "@marketingclaw/sms"],
+      ["tavily", "@marketingclaw/tavily-plugin"],
+      ["tencent", "@marketingclaw/tencent-provider"],
+      ["venice", "@marketingclaw/venice-provider"],
+      ["vercel-ai-gateway", "@marketingclaw/vercel-ai-gateway-provider"],
+      ["zai", "@marketingclaw/zai-provider"],
     ] as const;
-    const currentExternalized = [["featherless", "@openclaw/featherless-provider"]] as const;
+    const currentExternalized = [["featherless", "@marketingclaw/featherless-provider"]] as const;
 
     for (const [id, npmSpec] of [...providers, ...plugins]) {
       expect(resolveOfficialExternalPluginInstall(expectCatalogEntry(id))).toEqual({
@@ -1721,8 +1721,8 @@ describe("official external plugin catalog", () => {
 
   it("advertises StepFun with its ClawHub package and plugin API floor", () => {
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("stepfun"))).toEqual({
-      clawhubSpec: "clawhub:@openclaw/stepfun-provider",
-      npmSpec: "@openclaw/stepfun-provider",
+      clawhubSpec: "clawhub:@marketingclaw/stepfun-provider",
+      npmSpec: "@marketingclaw/stepfun-provider",
       defaultChoice: "npm",
       minHostVersion: ">=2026.6.9",
     });
@@ -1730,40 +1730,40 @@ describe("official external plugin catalog", () => {
 
   it("resolves third-party channel lookup aliases to published plugin ids", () => {
     const wecomByChannel = expectCatalogEntry("wecom");
-    const wecomByPlugin = expectCatalogEntry("wecom-openclaw-plugin");
+    const wecomByPlugin = expectCatalogEntry("wecom-marketingclaw-plugin");
     const yuanbaoByChannel = expectCatalogEntry("yuanbao");
 
-    expect(resolveOfficialExternalPluginId(wecomByChannel)).toBe("wecom-openclaw-plugin");
-    expect(resolveOfficialExternalPluginId(wecomByPlugin)).toBe("wecom-openclaw-plugin");
+    expect(resolveOfficialExternalPluginId(wecomByChannel)).toBe("wecom-marketingclaw-plugin");
+    expect(resolveOfficialExternalPluginId(wecomByPlugin)).toBe("wecom-marketingclaw-plugin");
     expect(resolveOfficialExternalPluginInstall(wecomByChannel)?.npmSpec).toBe(
-      "@wecom/wecom-openclaw-plugin@2026.5.7",
+      "@wecom/wecom-marketingclaw-plugin@2026.5.7",
     );
-    expect(resolveOfficialExternalPluginId(yuanbaoByChannel)).toBe("openclaw-plugin-yuanbao");
+    expect(resolveOfficialExternalPluginId(yuanbaoByChannel)).toBe("marketingclaw-plugin-yuanbao");
     expect(resolveOfficialExternalPluginInstall(yuanbaoByChannel)?.npmSpec).toBe(
-      "openclaw-plugin-yuanbao@2.15.0",
+      "marketingclaw-plugin-yuanbao@2.15.0",
     );
   });
 
   it("keeps official launch package specs on the production package names", () => {
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("acpx"))?.npmSpec).toBe(
-      "@openclaw/acpx",
+      "@marketingclaw/acpx",
     );
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("googlechat"))?.npmSpec).toBe(
-      "@openclaw/googlechat",
+      "@marketingclaw/googlechat",
     );
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("line"))?.npmSpec).toBe(
-      "@openclaw/line",
+      "@marketingclaw/line",
     );
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("diffs-language-pack"))).toEqual(
       {
-        npmSpec: "@openclaw/diffs-language-pack",
-        clawhubSpec: "clawhub:@openclaw/diffs-language-pack",
+        npmSpec: "@marketingclaw/diffs-language-pack",
+        clawhubSpec: "clawhub:@marketingclaw/diffs-language-pack",
         defaultChoice: "npm",
         minHostVersion: ">=2026.5.27",
       },
     );
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("llama-cpp"))?.npmSpec).toBe(
-      "@openclaw/llama-cpp-provider",
+      "@marketingclaw/llama-cpp-provider",
     );
   });
 
@@ -1773,8 +1773,8 @@ describe("official external plugin catalog", () => {
     expect(resolveOfficialExternalPluginId(gmi)).toBe("gmi");
     expect(getOfficialExternalPluginCatalogEntry("gmi-cloud")).toBe(gmi);
     expect(resolveOfficialExternalPluginInstall(gmi)).toEqual({
-      clawhubSpec: "clawhub:@openclaw/gmi-provider",
-      npmSpec: "@openclaw/gmi-provider",
+      clawhubSpec: "clawhub:@marketingclaw/gmi-provider",
+      npmSpec: "@marketingclaw/gmi-provider",
       defaultChoice: "npm",
       minHostVersion: ">=2026.6.8",
     });
@@ -1785,8 +1785,8 @@ describe("official external plugin catalog", () => {
 
     expect(resolveOfficialExternalPluginId(cohere)).toBe("cohere");
     expect(resolveOfficialExternalPluginInstall(cohere)).toEqual({
-      clawhubSpec: "clawhub:@openclaw/cohere-provider",
-      npmSpec: "@openclaw/cohere-provider",
+      clawhubSpec: "clawhub:@marketingclaw/cohere-provider",
+      npmSpec: "@marketingclaw/cohere-provider",
       defaultChoice: "npm",
       minHostVersion: ">=2026.6.8",
     });
@@ -1798,8 +1798,8 @@ describe("official external plugin catalog", () => {
     expect(resolveOfficialExternalPluginId(longcat)).toBe("longcat");
     expect(getOfficialExternalPluginCatalogEntry("meituan-longcat")).toBe(longcat);
     expect(resolveOfficialExternalPluginInstall(longcat)).toEqual({
-      clawhubSpec: "clawhub:@openclaw/longcat-provider",
-      npmSpec: "@openclaw/longcat-provider",
+      clawhubSpec: "clawhub:@marketingclaw/longcat-provider",
+      npmSpec: "@marketingclaw/longcat-provider",
       defaultChoice: "npm",
       minHostVersion: ">=2026.6.8",
     });
@@ -1911,10 +1911,10 @@ describe("official external plugin catalog", () => {
 
   it("keeps Tencent auth choices available through the cold-install auth catalog", () => {
     const tencent = expectCatalogEntry("tencent");
-    const tokenHub = tencent.openclaw?.providers?.find(
+    const tokenHub = tencent.marketingclaw?.providers?.find(
       (provider) => provider.id === "tencent-tokenhub",
     );
-    const tokenPlan = tencent.openclaw?.providers?.find(
+    const tokenPlan = tencent.marketingclaw?.providers?.find(
       (provider) => provider.id === "tencent-tokenplan",
     );
 
@@ -1936,7 +1936,7 @@ describe("official external plugin catalog", () => {
 
   it("keeps Groq available through the cold-install auth catalog", () => {
     const groq = expectCatalogEntry("groq");
-    const authChoice = groq.openclaw?.providers?.find((provider) => provider.id === "groq")
+    const authChoice = groq.marketingclaw?.providers?.find((provider) => provider.id === "groq")
       ?.authChoices?.[0];
 
     expect(authChoice).toMatchObject({
@@ -1949,23 +1949,23 @@ describe("official external plugin catalog", () => {
 
   it("allows invalid-config recovery for externalized stock plugins", () => {
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("brave"))).toMatchObject({
-      npmSpec: "@openclaw/brave-plugin",
+      npmSpec: "@marketingclaw/brave-plugin",
       allowInvalidConfigRecovery: true,
     });
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("slack"))).toMatchObject({
-      npmSpec: "@openclaw/slack",
+      npmSpec: "@marketingclaw/slack",
       allowInvalidConfigRecovery: true,
     });
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("discord"))).toMatchObject({
-      npmSpec: "@openclaw/discord",
+      npmSpec: "@marketingclaw/discord",
       allowInvalidConfigRecovery: true,
     });
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("mattermost"))).toMatchObject({
-      npmSpec: "@openclaw/mattermost",
+      npmSpec: "@marketingclaw/mattermost",
       allowInvalidConfigRecovery: true,
     });
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("tavily"))).toMatchObject({
-      npmSpec: "@openclaw/tavily-plugin",
+      npmSpec: "@marketingclaw/tavily-plugin",
       allowInvalidConfigRecovery: true,
     });
   });
@@ -1982,8 +1982,8 @@ describe("official external plugin catalog", () => {
     expect(ids.has("matrix")).toBe(true);
     expect(ids.has("mattermost")).toBe(true);
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("matrix"))).toEqual({
-      clawhubSpec: "clawhub:@openclaw/matrix",
-      npmSpec: "@openclaw/matrix",
+      clawhubSpec: "clawhub:@marketingclaw/matrix",
+      npmSpec: "@marketingclaw/matrix",
       defaultChoice: "clawhub",
       minHostVersion: ">=2026.4.10",
       allowInvalidConfigRecovery: true,

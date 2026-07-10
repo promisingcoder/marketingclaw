@@ -1,17 +1,17 @@
 // Qa Channel tests cover channel plugin behavior.
 import path from "node:path";
-import { verifyChannelMessageAdapterCapabilityProofs } from "openclaw/plugin-sdk/channel-outbound";
+import { verifyChannelMessageAdapterCapabilityProofs } from "marketingclaw/plugin-sdk/channel-outbound";
 import {
   createPluginRuntimeMock,
   createStartAccountContext,
-} from "openclaw/plugin-sdk/channel-test-helpers";
-import type { PluginRuntime } from "openclaw/plugin-sdk/core";
+} from "marketingclaw/plugin-sdk/channel-test-helpers";
+import type { PluginRuntime } from "marketingclaw/plugin-sdk/core";
 import {
   createTestRegistry,
   resetPluginRuntimeStateForTest,
   setActivePluginRegistry,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
-import { extractToolPayload } from "openclaw/plugin-sdk/tool-payload";
+} from "marketingclaw/plugin-sdk/plugin-test-runtime";
+import { extractToolPayload } from "marketingclaw/plugin-sdk/tool-payload";
 import { afterEach, describe, expect, it } from "vitest";
 import { createQaBusState, startQaBusServer } from "../../qa-lab/bus-api.js";
 import { qaChannelPlugin, setQaChannelRuntime } from "../api.js";
@@ -63,7 +63,7 @@ function createMockQaRuntime(params?: {
     channel: {
       mentions: {
         buildMentionRegexes() {
-          return [/^@openclaw\b/i];
+          return [/^@marketingclaw\b/i];
         },
         matchesMentionPatterns(text: string, patterns: RegExp[]) {
           return patterns.some((pattern) => pattern.test(text));
@@ -179,8 +179,8 @@ function createQaChannelConfig(params: { baseUrl: string; allowFrom?: string[] }
     channels: {
       "qa-channel": {
         baseUrl: params.baseUrl,
-        botUserId: "openclaw",
-        botDisplayName: "OpenClaw QA",
+        botUserId: "marketingclaw",
+        botDisplayName: "MarketingClaw QA",
         allowFrom: params.allowFrom,
       },
     },
@@ -444,12 +444,12 @@ describe("qa-channel plugin", () => {
           conversation: { id: "qa-room", kind: "group", title: "QA Room" },
           senderId: "alice",
           senderName: "Alice",
-          text: "@openclaw hello",
+          text: "@marketingclaw hello",
         });
 
         const outbound = await harness.state.waitFor({
           kind: "message-text",
-          textIncludes: "qa-echo: @openclaw hello",
+          textIncludes: "qa-echo: @marketingclaw hello",
           direction: "outbound",
           timeoutMs: 15_000,
         });

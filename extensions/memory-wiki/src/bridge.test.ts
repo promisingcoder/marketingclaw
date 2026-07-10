@@ -6,13 +6,13 @@ import {
   clearMemoryPluginState,
   type MemoryPluginPublicArtifact,
   registerMemoryCapability,
-} from "openclaw/plugin-sdk/memory-host-core";
+} from "marketingclaw/plugin-sdk/memory-host-core";
 import {
   appendMemoryHostEvent,
   resolveMemoryHostEventLogPath,
-} from "openclaw/plugin-sdk/memory-host-events";
+} from "marketingclaw/plugin-sdk/memory-host-events";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../api.js";
+import type { MarketingClawConfig } from "../api.js";
 import { syncMemoryWikiBridgeSources } from "./bridge.js";
 import { createMemoryWikiTestHarness } from "./test-helpers.js";
 
@@ -112,7 +112,7 @@ describe("syncMemoryWikiBridgeSources", () => {
       },
     ]);
 
-    const appConfig: OpenClawConfig = {
+    const appConfig: MarketingClawConfig = {
       agents: {
         list: [{ id: "main", default: true, workspace: workspaceDir }],
       },
@@ -144,7 +144,9 @@ describe("syncMemoryWikiBridgeSources", () => {
     expect(second.skippedCount).toBe(3);
     expect(second.removedCount).toBe(0);
 
-    const logLines = (await fs.readFile(path.join(vaultDir, ".openclaw-wiki", "log.jsonl"), "utf8"))
+    const logLines = (
+      await fs.readFile(path.join(vaultDir, ".marketingclaw-wiki", "log.jsonl"), "utf8")
+    )
       .trim()
       .split("\n");
     expect(logLines).toHaveLength(2);
@@ -205,7 +207,7 @@ describe("syncMemoryWikiBridgeSources", () => {
       },
     ]);
 
-    const appConfig: OpenClawConfig = {
+    const appConfig: MarketingClawConfig = {
       agents: {
         list: [{ id: "main", default: true, workspace: workspaceDir }],
       },
@@ -247,7 +249,7 @@ describe("syncMemoryWikiBridgeSources", () => {
       } as Omit<MemoryPluginPublicArtifact, "agentIds"> as MemoryPluginPublicArtifact,
     ]);
 
-    const appConfig: OpenClawConfig = {
+    const appConfig: MarketingClawConfig = {
       agents: {
         list: [{ id: "main", default: true, workspace: workspaceDir }],
       },
@@ -292,7 +294,7 @@ describe("syncMemoryWikiBridgeSources", () => {
 
     await fs.writeFile(path.join(workspaceDir, "MEMORY.md"), "# Durable Memory\n", "utf8");
 
-    const appConfig: OpenClawConfig = {
+    const appConfig: MarketingClawConfig = {
       agents: {
         list: [{ id: "main", default: true, workspace: workspaceDir }],
       },
@@ -347,7 +349,7 @@ describe("syncMemoryWikiBridgeSources", () => {
       },
     ]);
 
-    const appConfig: OpenClawConfig = {
+    const appConfig: MarketingClawConfig = {
       agents: {
         list: [{ id: "main", default: true, workspace: workspaceDir }],
       },
@@ -390,7 +392,7 @@ describe("syncMemoryWikiBridgeSources", () => {
         contentType: "markdown",
       },
     ]);
-    const appConfig: OpenClawConfig = {
+    const appConfig: MarketingClawConfig = {
       agents: {
         list: [{ id: "main", default: true, workspace: workspaceDir }],
       },
@@ -439,7 +441,7 @@ describe("syncMemoryWikiBridgeSources", () => {
         contentType: "markdown",
       },
     ]);
-    const appConfig: OpenClawConfig = {
+    const appConfig: MarketingClawConfig = {
       agents: {
         list: [{ id: "main", default: true, workspace: workspaceDir }],
       },
@@ -488,7 +490,7 @@ describe("syncMemoryWikiBridgeSources", () => {
         contentType: "markdown",
       },
     ]);
-    const appConfig: OpenClawConfig = {
+    const appConfig: MarketingClawConfig = {
       agents: {
         list: [{ id: "main", default: true, workspace: workspaceDir }],
       },
@@ -558,7 +560,7 @@ describe("syncMemoryWikiBridgeSources", () => {
         contentType: "markdown",
       },
     ]);
-    const appConfig: OpenClawConfig = {
+    const appConfig: MarketingClawConfig = {
       agents: {
         list: [{ id: "main", default: true, workspace: workspaceDir }],
       },
@@ -608,7 +610,7 @@ describe("syncMemoryWikiBridgeSources", () => {
       },
     ]);
 
-    const appConfig: OpenClawConfig = {
+    const appConfig: MarketingClawConfig = {
       agents: {
         list: [{ id: "main", default: true, workspace: workspaceDir }],
       },

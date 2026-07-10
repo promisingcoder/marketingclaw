@@ -1,7 +1,7 @@
 {
   "id": "memory-lancedb",
   "name": "Memory LanceDB",
-  "description": "OpenClaw LanceDB-backed long-term memory plugin with auto-recall, auto-capture, and vector search.",
+  "description": "MarketingClaw LanceDB-backed long-term memory plugin with auto-recall, auto-capture, and vector search.",
   "commandAliases": [{ "name": "ltm" }],
   "activation": {
     "onStartup": false,
@@ -42,7 +42,7 @@
     },
     "dbPath": {
       "label": "Database Path",
-      "placeholder": "~/.openclaw/memory/lancedb",
+      "placeholder": "~/.marketingclaw/memory/lancedb",
       "advanced": true
     },
     "autoCapture": {

@@ -1,4 +1,4 @@
-package ai.openclaw.app
+package ai.marketingclaw.app
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

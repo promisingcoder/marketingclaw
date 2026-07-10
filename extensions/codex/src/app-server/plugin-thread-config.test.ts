@@ -793,9 +793,7 @@ describe("Codex plugin thread config", () => {
             apps: {
               "chatgpt-meetings": {
                 tools:
-                  configReadCount === 1
-                    ? { import_meeting: { approval_mode: "approve" } }
-                    : {},
+                  configReadCount === 1 ? { import_meeting: { approval_mode: "approve" } } : {},
               },
             },
           },
@@ -1007,7 +1005,7 @@ describe("Codex plugin thread config", () => {
     ]);
   });
 
-  it("re-enables an OpenClaw-allowed app even when app/list reports it disabled", async () => {
+  it("re-enables an MarketingClaw-allowed app even when app/list reports it disabled", async () => {
     const appCache = new CodexAppInventoryCache();
     await appCache.refreshNow({
       key: "runtime",
@@ -1181,7 +1179,7 @@ describe("Codex plugin thread config", () => {
     ]);
   });
 
-  it("does not expose apps for plugins that OpenClaw policy leaves disabled", async () => {
+  it("does not expose apps for plugins that MarketingClaw policy leaves disabled", async () => {
     const appCache = new CodexAppInventoryCache();
     await appCache.refreshNow({
       key: "runtime",
@@ -1673,7 +1671,7 @@ describe("Codex plugin thread config", () => {
     expect(third).not.toBe(second);
   });
 
-  it("uses app-level destructive policy for plugins without OpenClaw tool-name knowledge", async () => {
+  it("uses app-level destructive policy for plugins without MarketingClaw tool-name knowledge", async () => {
     const appCache = new CodexAppInventoryCache();
     await appCache.refreshNow({
       key: "runtime",

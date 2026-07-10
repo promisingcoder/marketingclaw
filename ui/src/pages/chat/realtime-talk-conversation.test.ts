@@ -70,7 +70,9 @@ describe("realtime Talk conversation", () => {
   it("keeps per-character assistant deltas verbatim across punctuation boundaries", () => {
     let state = createRealtimeTalkConversationState();
 
-    for (const [index, char] of "Version 1.2 is on docs.openclaw.ai today.".split("").entries()) {
+    for (const [index, char] of "Version 1.2 is on docs.marketingclaw.ai today."
+      .split("")
+      .entries()) {
       state = updateRealtimeTalkConversation(state, {
         role: "assistant",
         text: char,
@@ -80,7 +82,11 @@ describe("realtime Talk conversation", () => {
     }
 
     expect(state.entries).toMatchObject([
-      { role: "assistant", text: "Version 1.2 is on docs.openclaw.ai today.", isStreaming: true },
+      {
+        role: "assistant",
+        text: "Version 1.2 is on docs.marketingclaw.ai today.",
+        isStreaming: true,
+      },
     ]);
   });
 

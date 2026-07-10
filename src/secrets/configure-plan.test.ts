@@ -1,6 +1,6 @@
 /** Tests secrets configure plan generation and target validation. */
 import { beforeAll, describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { MarketingClawConfig } from "../config/config.js";
 import {
   TALK_TEST_PROVIDER_API_KEY_PATH,
   TALK_TEST_PROVIDER_ID,
@@ -17,7 +17,7 @@ import { resolveConfigSecretTargetByPath } from "./target-registry.js";
 describe("secrets configure plan helpers", () => {
   beforeAll(() => {
     resolveConfigSecretTargetByPath(["channels", "telegram", "botToken"]);
-    buildConfigureCandidates({} as OpenClawConfig);
+    buildConfigureCandidates({} as MarketingClawConfig);
   });
 
   it("builds configure candidates from supported configure targets", () => {
@@ -34,7 +34,7 @@ describe("secrets configure plan helpers", () => {
           botToken: "token", // pragma: allowlist secret
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     const candidates = buildConfigureCandidates(config);
     const paths = candidates.map((entry) => entry.path);
@@ -50,7 +50,7 @@ describe("secrets configure plan helpers", () => {
           legacy: { source: "env" },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
     const next = {
       secrets: {
         providers: {
@@ -58,7 +58,7 @@ describe("secrets configure plan helpers", () => {
           modern: { source: "env" },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     const changes = collectConfigureProviderChanges({ original, next });
     expect(Object.keys(changes.upserts).toSorted()).toEqual(["default", "modern"]);
@@ -67,7 +67,7 @@ describe("secrets configure plan helpers", () => {
 
   it("discovers auth-profiles candidates for the selected agent scope", () => {
     const candidates = buildConfigureCandidatesForScope({
-      config: {} as OpenClawConfig,
+      config: {} as MarketingClawConfig,
       authProfiles: {
         agentId: "main",
         store: {
@@ -105,7 +105,7 @@ describe("secrets configure plan helpers", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       authProfiles: {
         agentId: "main",
         store: {
@@ -156,12 +156,12 @@ describe("secrets configure plan helpers", () => {
           },
           apiKey: "demo-talk-key", // pragma: allowlist secret
         },
-      } as OpenClawConfig,
-      authoredOpenClawConfig: {
+      } as MarketingClawConfig,
+      authoredMarketingClawConfig: {
         talk: {
           apiKey: "demo-talk-key", // pragma: allowlist secret
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
     });
 
     const normalized = candidates.find((entry) => entry.path === TALK_TEST_PROVIDER_API_KEY_PATH);
@@ -177,7 +177,7 @@ describe("secrets configure plan helpers", () => {
           path: TALK_TEST_PROVIDER_API_KEY_PATH,
           pathSegments: ["talk", "providers", TALK_TEST_PROVIDER_ID, "apiKey"],
           label: TALK_TEST_PROVIDER_API_KEY_PATH,
-          configFile: "openclaw.json" as const,
+          configFile: "marketingclaw.json" as const,
           expectedResolvedValue: "string" as const,
           providerId: TALK_TEST_PROVIDER_ID,
           ref: {

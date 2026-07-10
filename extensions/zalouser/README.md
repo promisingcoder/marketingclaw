@@ -1,6 +1,6 @@
-# @openclaw/zalouser
+# @marketingclaw/zalouser
 
-OpenClaw extension for Zalo Personal Account messaging via native `zca-js` integration.
+MarketingClaw extension for Zalo Personal Account messaging via native `zca-js` integration.
 
 > **Warning:** Using Zalo automation may result in account suspension or ban. Use at your own risk. This is an unofficial integration.
 
@@ -14,7 +14,7 @@ OpenClaw extension for Zalo Personal Account messaging via native `zca-js` integ
 
 ## Prerequisites
 
-- OpenClaw Gateway
+- MarketingClaw Gateway
 - Zalo mobile app (for QR login)
 
 No external `zca`, `openzca`, or `zca-cli` binary is required.
@@ -24,14 +24,14 @@ No external `zca`, `openzca`, or `zca-cli` binary is required.
 ### Option A: npm
 
 ```bash
-openclaw plugins install @openclaw/zalouser
+marketingclaw plugins install @marketingclaw/zalouser
 ```
 
 ### Option B: local source checkout
 
 ```bash
 PLUGIN_SRC=./path/to/local/zalouser-plugin
-openclaw plugins install "$PLUGIN_SRC"
+marketingclaw plugins install "$PLUGIN_SRC"
 cd "$PLUGIN_SRC" && pnpm install
 ```
 
@@ -42,7 +42,7 @@ Restart the Gateway after install.
 ### Login (QR)
 
 ```bash
-openclaw channels login --channel zalouser
+marketingclaw channels login --channel zalouser
 ```
 
 Scan the QR code with the Zalo app on your phone.
@@ -59,7 +59,7 @@ channels:
 ### Send a message
 
 ```bash
-openclaw message send --channel zalouser --target <threadId> --message "Hello from OpenClaw"
+marketingclaw message send --channel zalouser --target <threadId> --message "Hello from MarketingClaw"
 ```
 
 ## Configuration
@@ -92,15 +92,15 @@ channels:
 ## Useful commands
 
 ```bash
-openclaw channels login --channel zalouser
-openclaw channels login --channel zalouser --account work
-openclaw channels status --probe
-openclaw channels logout --channel zalouser
+marketingclaw channels login --channel zalouser
+marketingclaw channels login --channel zalouser --account work
+marketingclaw channels status --probe
+marketingclaw channels logout --channel zalouser
 
-openclaw directory self --channel zalouser
-openclaw directory peers list --channel zalouser --query "name"
-openclaw directory groups list --channel zalouser --query "work"
-openclaw directory groups members --channel zalouser --group-id <id>
+marketingclaw directory self --channel zalouser
+marketingclaw directory peers list --channel zalouser --query "name"
+marketingclaw directory groups list --channel zalouser --query "work"
+marketingclaw directory groups members --channel zalouser --group-id <id>
 ```
 
 ## Agent tool
@@ -111,8 +111,8 @@ Available actions: `send`, `image`, `link`, `friends`, `groups`, `me`, `status`
 
 ## Troubleshooting
 
-- Login not persisted: `openclaw channels logout --channel zalouser && openclaw channels login --channel zalouser`
-- Probe status: `openclaw channels status --probe`
+- Login not persisted: `marketingclaw channels logout --channel zalouser && marketingclaw channels login --channel zalouser`
+- Probe status: `marketingclaw channels status --probe`
 - Name resolution issues (allowlist/groups): use numeric IDs or exact Zalo names
 
 ## Credits

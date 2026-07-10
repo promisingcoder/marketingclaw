@@ -14,7 +14,7 @@ if (approvalPath) {
   const expectedApproval = {
     version: 1,
     repository: process.env.GITHUB_REPOSITORY,
-    workflow: "OpenClaw Release Publish",
+    workflow: "MarketingClaw Release Publish",
     parentRunId: releasePublishRunId,
     workflowBranch: expectedBranch,
     releaseTag: process.env.RELEASE_TAG,
@@ -27,7 +27,7 @@ if (approvalPath) {
 }
 
 const checks = [
-  ["workflowName", "OpenClaw Release Publish"],
+  ["workflowName", "MarketingClaw Release Publish"],
   ["headBranch", expectedBranch],
   ["event", "workflow_dispatch"],
 ];

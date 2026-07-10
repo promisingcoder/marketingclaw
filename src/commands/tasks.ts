@@ -1,9 +1,9 @@
 // Human-facing background task commands.
 // Handles task listing/show/cancel/notify/audit plus registry maintenance for tasks, flows, and sessions.
 
-import { timestampMsToIsoString } from "@openclaw/normalization-core/number-coercion";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { timestampMsToIsoString } from "@marketingclaw/normalization-core/number-coercion";
+import { normalizeOptionalString } from "@marketingclaw/normalization-core/string-coerce";
+import { truncateUtf16Safe } from "@marketingclaw/normalization-core/utf16-slice";
 import { isRich, theme } from "../../packages/terminal-core/src/theme.js";
 import { formatCliCommand } from "../cli/command-format.js";
 import { formatLookupMiss } from "../cli/error-format.js";
@@ -62,7 +62,7 @@ function formatTaskLookupMiss(lookup: string): string {
   return formatLookupMiss({
     noun: "Task",
     value: lookup,
-    listCommand: "openclaw tasks list",
+    listCommand: "marketingclaw tasks list",
     valueLabel: "task id",
   });
 }
@@ -387,7 +387,7 @@ export async function tasksListCommand(
   }
   if (tasks.length === 0) {
     runtime.log(
-      `No background tasks found. Run ${formatCliCommand("openclaw tasks audit")} to check for stale task state.`,
+      `No background tasks found. Run ${formatCliCommand("marketingclaw tasks audit")} to check for stale task state.`,
     );
     return;
   }
@@ -662,6 +662,8 @@ export async function tasksMaintenanceCommand(
     );
   }
   if (!opts.apply) {
-    runtime.log("Dry run only. Re-run with `openclaw tasks maintenance --apply` to write changes.");
+    runtime.log(
+      "Dry run only. Re-run with `marketingclaw tasks maintenance --apply` to write changes.",
+    );
   }
 }

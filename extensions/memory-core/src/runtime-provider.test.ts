@@ -1,5 +1,5 @@
 // Memory Core provider tests cover plugin runtime integration.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/memory-core-host-runtime-core";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/memory-core-host-runtime-core";
 import { describe, expect, it, vi } from "vitest";
 
 const managerDebug = {
@@ -28,7 +28,7 @@ import { memoryRuntime } from "./runtime-provider.js";
 
 describe("memoryRuntime", () => {
   it("preserves manager debug metadata", async () => {
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as MarketingClawConfig;
 
     const result = await memoryRuntime.getMemorySearchManager({
       cfg,

@@ -252,11 +252,11 @@ enum PairingCardPresentation {
 
     static func headerSummary(for cards: [PairingApprovalCenter.Card]) -> String {
         guard cards.count == 1, let card = cards.first else {
-            return "\(cards.count) devices want to connect to OpenClaw."
+            return "\(cards.count) devices want to connect to MarketingClaw."
         }
         return card.kind == .node
-            ? "A node wants to connect to OpenClaw."
-            : "A device wants to connect to OpenClaw."
+            ? "A node wants to connect to MarketingClaw."
+            : "A device wants to connect to MarketingClaw."
     }
 
     static func title(for card: PairingApprovalCenter.Card) -> String {
@@ -266,7 +266,7 @@ enum PairingCardPresentation {
         }
         switch card.kind {
         case .node: return "Unnamed node"
-        case .device: return self.isMac(card.platform) ? "OpenClaw Mac app" : "New device"
+        case .device: return self.isMac(card.platform) ? "MarketingClaw Mac app" : "New device"
         }
     }
 
@@ -498,7 +498,7 @@ enum PairingCardPresentation {
             case "operator.admin":
                 return (normalized, "Admin access")
             case "operator.read":
-                return (normalized, "Read OpenClaw data")
+                return (normalized, "Read MarketingClaw data")
             case "operator.write":
                 return (normalized, "Send messages and make changes")
             case "operator.approvals":

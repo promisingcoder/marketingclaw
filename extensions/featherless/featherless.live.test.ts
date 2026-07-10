@@ -4,8 +4,8 @@ import {
   type AssistantMessage,
   type Model,
   type Tool,
-} from "openclaw/plugin-sdk/llm";
-import { extractNonEmptyAssistantText, isLiveTestEnabled } from "openclaw/plugin-sdk/test-env";
+} from "marketingclaw/plugin-sdk/llm";
+import { extractNonEmptyAssistantText, isLiveTestEnabled } from "marketingclaw/plugin-sdk/test-env";
 import { Type } from "typebox";
 import { describe, expect, it } from "vitest";
 import { FEATHERLESS_DEFAULT_MODEL_ID } from "./models.js";

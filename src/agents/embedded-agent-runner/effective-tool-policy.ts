@@ -1,7 +1,7 @@
 /**
  * Applies final effective tool policy to embedded-agent runtime settings.
  */
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import { getPluginToolMeta } from "../../plugins/tools.js";
 import type { ResolvedConversationCapabilityProfile } from "../conversation-capability-profile.js";
 import { buildDeclaredToolAllowlistContext } from "../tool-policy-declared-context.js";
@@ -25,13 +25,13 @@ export { resolveConversationCapabilityProfile } from "../conversation-capability
  * tool construction from ever disagreeing about policy inputs.
  */
 type FinalEffectiveToolPolicyParams = {
-  // Tools appended to the core tool set after `createOpenClawCodingTools()`
+  // Tools appended to the core tool set after `createMarketingClawCodingTools()`
   // has already applied the shared tool-policy pipeline (e.g. bundled
   // MCP/LSP tools). Only these are filtered here; re-running the pipeline over
   // the already-filtered core tools would drop plugin tools whose WeakMap
   // metadata no longer survives core-tool wrapping/normalization.
   bundledTools: AnyAgentTool[];
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   conversationCapabilityProfile: ResolvedConversationCapabilityProfile;
   warn: (message: string) => void;
   toolPolicyAuditLogLevel?: "info" | "debug";
@@ -81,7 +81,7 @@ export function applyFinalEffectiveToolPolicy(
   // it's filtering, and this pass only sees the bundled MCP/LSP subset.
   // Normal core allowlist entries (e.g. `tools.allow: ["read", "exec"]`)
   // would look "unknown" relative to that reduced set even though they are
-  // valid core names already resolved by `createOpenClawCodingTools()` in
+  // valid core names already resolved by `createMarketingClawCodingTools()` in
   // the first pass — keeping those warnings on would pollute logs and evict
   // real diagnostics from the shared warning cache. Genuinely unknown
   // entries (typos) still surface through the `otherEntries` path in

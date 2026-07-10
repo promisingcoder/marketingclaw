@@ -1,19 +1,19 @@
 /**
- * Reads OpenClaw session history for Codex transcript mirroring and sanitizes
+ * Reads MarketingClaw session history for Codex transcript mirroring and sanitizes
  * image payloads before replaying messages into the app-server projector.
  */
 import fs from "node:fs/promises";
-import type { AgentMessage } from "openclaw/plugin-sdk/agent-harness-runtime";
-import type { SessionEntry } from "openclaw/plugin-sdk/agent-sessions";
+import type { AgentMessage } from "marketingclaw/plugin-sdk/agent-harness-runtime";
+import type { SessionEntry } from "marketingclaw/plugin-sdk/agent-sessions";
 import {
   buildSessionContext,
   migrateSessionEntries,
   parseSessionEntries,
-} from "openclaw/plugin-sdk/agent-sessions";
+} from "marketingclaw/plugin-sdk/agent-sessions";
 import {
   resolveSessionTranscriptTarget,
   type SessionTranscriptTargetParams,
-} from "openclaw/plugin-sdk/session-transcript-runtime";
+} from "marketingclaw/plugin-sdk/session-transcript-runtime";
 import { sanitizeCodexHistoryImagePayloads } from "./image-payload-sanitizer.js";
 
 function isMissingFileError(error: unknown): boolean {

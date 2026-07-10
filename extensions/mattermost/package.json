@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/mattermost",
+  "name": "@marketingclaw/mattermost",
   "version": "2026.6.11",
-  "description": "OpenClaw Mattermost channel plugin",
+  "description": "MarketingClaw Mattermost channel plugin",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/promisingcoder/marketingclaw"
   },
   "type": "module",
   "dependencies": {
@@ -12,18 +12,18 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@marketingclaw/plugin-sdk": "workspace:*",
+    "marketingclaw": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.6.11"
+    "marketingclaw": ">=2026.6.11"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "marketingclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "marketingclaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -38,8 +38,8 @@
       "order": 65
     },
     "install": {
-      "clawhubSpec": "clawhub:@openclaw/mattermost",
-      "npmSpec": "@openclaw/mattermost",
+      "clawhubSpec": "clawhub:@marketingclaw/mattermost",
+      "npmSpec": "@marketingclaw/mattermost",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.6.9",
       "allowInvalidConfigRecovery": true
@@ -48,7 +48,7 @@
       "pluginApi": ">=2026.6.11"
     },
     "build": {
-      "openclawVersion": "2026.6.11",
+      "marketingclawVersion": "2026.6.11",
       "bundledDist": false
     },
     "release": {

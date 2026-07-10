@@ -1,7 +1,7 @@
-package ai.openclaw.app.protocol
+package ai.marketingclaw.app.protocol
 
-/** Capability ids advertised by the Android node to the OpenClaw gateway. */
-enum class OpenClawCapability(
+/** Capability ids advertised by the Android node to the MarketingClaw gateway. */
+enum class MarketingClawCapability(
   val rawValue: String,
 ) {
   Canvas("canvas"),
@@ -21,7 +21,7 @@ enum class OpenClawCapability(
 }
 
 /** Canvas command ids mirrored from the gateway tool namespace. */
-enum class OpenClawCanvasCommand(
+enum class MarketingClawCanvasCommand(
   val rawValue: String,
 ) {
   Present("canvas.present"),
@@ -37,7 +37,7 @@ enum class OpenClawCanvasCommand(
 }
 
 /** Streaming canvas commands sent from agents back into the Android UI. */
-enum class OpenClawCanvasA2UICommand(
+enum class MarketingClawCanvasA2UICommand(
   val rawValue: String,
 ) {
   Push("canvas.a2ui.push"),
@@ -51,7 +51,7 @@ enum class OpenClawCanvasA2UICommand(
 }
 
 /** Camera command ids accepted by the Android node. */
-enum class OpenClawCameraCommand(
+enum class MarketingClawCameraCommand(
   val rawValue: String,
 ) {
   List("camera.list"),
@@ -65,7 +65,7 @@ enum class OpenClawCameraCommand(
 }
 
 /** SMS command ids accepted by the Android node. */
-enum class OpenClawSmsCommand(
+enum class MarketingClawSmsCommand(
   val rawValue: String,
 ) {
   Send("sms.send"),
@@ -78,7 +78,7 @@ enum class OpenClawSmsCommand(
 }
 
 /** Push-to-talk command ids accepted by the Android node. */
-enum class OpenClawTalkCommand(
+enum class MarketingClawTalkCommand(
   val rawValue: String,
 ) {
   PttStart("talk.ptt.start"),
@@ -93,7 +93,7 @@ enum class OpenClawTalkCommand(
 }
 
 /** Location command ids accepted by the Android node. */
-enum class OpenClawLocationCommand(
+enum class MarketingClawLocationCommand(
   val rawValue: String,
 ) {
   Get("location.get"),
@@ -105,7 +105,7 @@ enum class OpenClawLocationCommand(
 }
 
 /** Device status and metadata command ids accepted by the Android node. */
-enum class OpenClawDeviceCommand(
+enum class MarketingClawDeviceCommand(
   val rawValue: String,
 ) {
   Status("device.status"),
@@ -121,7 +121,7 @@ enum class OpenClawDeviceCommand(
 }
 
 /** Notification command ids accepted by the Android node. */
-enum class OpenClawNotificationsCommand(
+enum class MarketingClawNotificationsCommand(
   val rawValue: String,
 ) {
   List("notifications.list"),
@@ -134,7 +134,7 @@ enum class OpenClawNotificationsCommand(
 }
 
 /** System command ids accepted by the Android node. */
-enum class OpenClawSystemCommand(
+enum class MarketingClawSystemCommand(
   val rawValue: String,
 ) {
   Notify("system.notify"),
@@ -146,7 +146,7 @@ enum class OpenClawSystemCommand(
 }
 
 /** Photos command ids accepted by the Android node. */
-enum class OpenClawPhotosCommand(
+enum class MarketingClawPhotosCommand(
   val rawValue: String,
 ) {
   Latest("photos.latest"),
@@ -158,7 +158,7 @@ enum class OpenClawPhotosCommand(
 }
 
 /** Contacts command ids accepted by the Android node. */
-enum class OpenClawContactsCommand(
+enum class MarketingClawContactsCommand(
   val rawValue: String,
 ) {
   Search("contacts.search"),
@@ -171,7 +171,7 @@ enum class OpenClawContactsCommand(
 }
 
 /** Calendar command ids accepted by the Android node. */
-enum class OpenClawCalendarCommand(
+enum class MarketingClawCalendarCommand(
   val rawValue: String,
 ) {
   Events("calendar.events"),
@@ -184,7 +184,7 @@ enum class OpenClawCalendarCommand(
 }
 
 /** Motion sensor command ids accepted by the Android node. */
-enum class OpenClawMotionCommand(
+enum class MarketingClawMotionCommand(
   val rawValue: String,
 ) {
   Activity("motion.activity"),
@@ -197,7 +197,7 @@ enum class OpenClawMotionCommand(
 }
 
 /** Call-log command ids accepted by the Android node. */
-enum class OpenClawCallLogCommand(
+enum class MarketingClawCallLogCommand(
   val rawValue: String,
 ) {
   Search("callLog.search"),

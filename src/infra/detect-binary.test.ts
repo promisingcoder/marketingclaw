@@ -25,15 +25,15 @@ describe("detectBinary", () => {
     resetWindowsInstallRootsForTests({ queryRegistryValue: () => null });
     runCommandWithTimeoutMock.mockResolvedValue({
       code: 0,
-      stdout: "D:\\Tools\\openclaw.exe\n",
+      stdout: "D:\\Tools\\marketingclaw.exe\n",
     });
 
     await withMockedWindowsPlatform(async () => {
-      await expect(detectBinary("openclaw")).resolves.toBe(true);
+      await expect(detectBinary("marketingclaw")).resolves.toBe(true);
     });
 
     expect(runCommandWithTimeoutMock).toHaveBeenCalledWith(
-      [path.win32.join("D:\\Windows", "System32", "where.exe"), "openclaw"],
+      [path.win32.join("D:\\Windows", "System32", "where.exe"), "marketingclaw"],
       { timeoutMs: 2000 },
     );
   });

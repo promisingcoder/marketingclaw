@@ -111,7 +111,7 @@ describe("AppSidebar session source lifecycle", () => {
     const gateway = createGateway(client);
     const provider = document.createElement(PROVIDER_ELEMENT_NAME) as AppSidebarContextProvider;
     const sidebar = document.createElement(
-      "openclaw-app-sidebar",
+      "marketingclaw-app-sidebar",
     ) as unknown as SidebarLifecycleState;
     provider.setContext(createContext(gateway, createSessions("first", ["first-a", "first-b"])));
     provider.append(sidebar);

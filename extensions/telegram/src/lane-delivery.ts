@@ -2,7 +2,7 @@
 export {
   isPotentialTruncatedFinal,
   selectLongerFinalText,
-} from "openclaw/plugin-sdk/channel-outbound";
+} from "marketingclaw/plugin-sdk/channel-outbound";
 export {
   createLaneTextDeliverer,
   type DraftLaneState,

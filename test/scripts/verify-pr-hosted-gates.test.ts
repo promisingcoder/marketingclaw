@@ -15,7 +15,7 @@ const nowMs = Date.parse("2026-06-17T10:55:00Z");
 const BUILD_ARTIFACTS_WORKFLOW = "Blacksmith Build Artifacts Testbox";
 const requiredCliArgs = [
   "--repo",
-  "openclaw/openclaw",
+  "marketingclaw/marketingclaw",
   "--sha",
   sha,
   "--pr",
@@ -33,12 +33,12 @@ function successfulRun(name: string, id: number, updatedAt: string) {
     conclusion: "success",
     head_sha: sha,
     head_branch: "codex/clean-expanded-tool-calls",
-    head_repository: { full_name: "openclaw/openclaw" },
+    head_repository: { full_name: "marketingclaw/marketingclaw" },
     pull_requests: [{ number: pr }],
     path: ".github/workflows/ci.yml",
     created_at: "2026-06-17T10:46:24Z",
     updated_at: updatedAt,
-    html_url: `https://github.com/openclaw/openclaw/actions/runs/${id}`,
+    html_url: `https://github.com/promisingcoder/marketingclaw/actions/runs/${id}`,
   };
 }
 
@@ -597,14 +597,14 @@ describe("verify-pr-hosted-gates", () => {
 
   it("parses required CLI arguments", () => {
     expect(parseArgs(requiredCliArgs)).toEqual({
-      repo: "openclaw/openclaw",
+      repo: "marketingclaw/marketingclaw",
       sha,
       pr,
       recentSha: "",
       output: ".local/gates-hosted-checks.json",
       changelogOnly: false,
     });
-    expect(() => parseArgs(["--repo", "openclaw/openclaw"])).toThrow("Usage:");
+    expect(() => parseArgs(["--repo", "marketingclaw/marketingclaw"])).toThrow("Usage:");
     expect(() => parseArgs(requiredCliArgs.with(1, "-h"))).toThrow("Expected --repo <value>.");
     expect(() => parseArgs(requiredCliArgs.with(3, "-h"))).toThrow("Expected --sha <value>.");
     expect(() => parseArgs(requiredCliArgs.with(5, "zero"))).toThrow(
@@ -617,7 +617,7 @@ describe("verify-pr-hosted-gates", () => {
 
   it("rejects duplicate hosted gate verifier CLI arguments", () => {
     const duplicateCases = [
-      ["--repo", [...requiredCliArgs, "--repo", "fork/openclaw"]],
+      ["--repo", [...requiredCliArgs, "--repo", "fork/marketingclaw"]],
       ["--sha", [...requiredCliArgs, "--sha", "other-sha"]],
       ["--pr", [...requiredCliArgs, "--pr", "7"]],
       ["--recent-sha", [...requiredCliArgs, "--recent-sha", "one", "--recent-sha", "other"]],
@@ -641,13 +641,13 @@ describe("verify-pr-hosted-gates", () => {
   it("queries the target and recorded pre-rebase SHAs", () => {
     const previousSha = "8d86c44c6144f8f726a460914cddb8c9c201f119";
     expect(
-      workflowRunQueryPaths("openclaw/openclaw", {
+      workflowRunQueryPaths("marketingclaw/marketingclaw", {
         sha,
         recentSha: previousSha,
       }),
     ).toEqual([
-      `repos/openclaw/openclaw/actions/runs?head_sha=${sha}&per_page=100&page=1`,
-      `repos/openclaw/openclaw/actions/runs?head_sha=${previousSha}&per_page=100&page=1`,
+      `repos/marketingclaw/marketingclaw/actions/runs?head_sha=${sha}&per_page=100&page=1`,
+      `repos/marketingclaw/marketingclaw/actions/runs?head_sha=${previousSha}&per_page=100&page=1`,
     ]);
     expect(HOSTED_GATE_MAX_AGE_HOURS).toBe(24);
   });

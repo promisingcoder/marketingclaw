@@ -1,22 +1,22 @@
-package ai.openclaw.app.ui.chat
+package ai.marketingclaw.app.ui.chat
 
-import ai.openclaw.app.ChatDraft
-import ai.openclaw.app.ChatDraftPlacement
-import ai.openclaw.app.chat.ChatCommandEntry
-import ai.openclaw.app.chat.VoiceNoteRecorderState
-import ai.openclaw.app.ui.mobileAccent
-import ai.openclaw.app.ui.mobileAccentBorderStrong
-import ai.openclaw.app.ui.mobileAccentSoft
-import ai.openclaw.app.ui.mobileBorder
-import ai.openclaw.app.ui.mobileBorderStrong
-import ai.openclaw.app.ui.mobileCallout
-import ai.openclaw.app.ui.mobileCaption1
-import ai.openclaw.app.ui.mobileCardSurface
-import ai.openclaw.app.ui.mobileHeadline
-import ai.openclaw.app.ui.mobileSurface
-import ai.openclaw.app.ui.mobileText
-import ai.openclaw.app.ui.mobileTextSecondary
-import ai.openclaw.app.ui.mobileTextTertiary
+import ai.marketingclaw.app.ChatDraft
+import ai.marketingclaw.app.ChatDraftPlacement
+import ai.marketingclaw.app.chat.ChatCommandEntry
+import ai.marketingclaw.app.chat.VoiceNoteRecorderState
+import ai.marketingclaw.app.ui.mobileAccent
+import ai.marketingclaw.app.ui.mobileAccentBorderStrong
+import ai.marketingclaw.app.ui.mobileAccentSoft
+import ai.marketingclaw.app.ui.mobileBorder
+import ai.marketingclaw.app.ui.mobileBorderStrong
+import ai.marketingclaw.app.ui.mobileCallout
+import ai.marketingclaw.app.ui.mobileCaption1
+import ai.marketingclaw.app.ui.mobileCardSurface
+import ai.marketingclaw.app.ui.mobileHeadline
+import ai.marketingclaw.app.ui.mobileSurface
+import ai.marketingclaw.app.ui.mobileText
+import ai.marketingclaw.app.ui.mobileTextSecondary
+import ai.marketingclaw.app.ui.mobileTextTertiary
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -271,7 +271,7 @@ internal fun ChatComposer(
       Text(
         text = "Gateway is offline. Text messages are queued and sent after reconnecting.",
         style = mobileCallout,
-        color = ai.openclaw.app.ui.mobileWarning,
+        color = ai.marketingclaw.app.ui.mobileWarning,
       )
     }
 
@@ -593,7 +593,7 @@ private fun chatTextFieldColors() =
 @Composable
 private fun mobileBodyStyle() =
   MaterialTheme.typography.bodyMedium.copy(
-    fontFamily = ai.openclaw.app.ui.mobileFontFamily,
+    fontFamily = ai.marketingclaw.app.ui.mobileFontFamily,
     fontWeight = FontWeight.Medium,
     fontSize = 15.sp,
     lineHeight = 22.sp,

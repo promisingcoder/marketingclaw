@@ -15,7 +15,7 @@ async function copyCommand(command: string) {
 export function renderConnectCommand(command: string) {
   const copyLabel = t("overview.connection.copyCommand");
   return html`
-    <openclaw-tooltip .content=${copyLabel}>
+    <marketingclaw-tooltip .content=${copyLabel}>
       <div
         class="login-gate__command"
         role="button"
@@ -38,6 +38,6 @@ export function renderConnectCommand(command: string) {
         <code>${command}</code>
         ${renderCopyButton(command, copyLabel)}
       </div>
-    </openclaw-tooltip>
+    </marketingclaw-tooltip>
   `;
 }

@@ -8,7 +8,7 @@ const tempDirs = useAutoCleanupTempDirTracker(afterEach);
 
 describe("loadSkillsFromDir", () => {
   it("reports directory scan failures as diagnostics", async () => {
-    const tempDir = tempDirs.make("openclaw-skill-scan-");
+    const tempDir = tempDirs.make("marketingclaw-skill-scan-");
     const regularFile = path.join(tempDir, "not-a-directory");
     await fs.writeFile(regularFile, "not a skill directory");
 
@@ -21,7 +21,7 @@ describe("loadSkillsFromDir", () => {
   });
 
   it("does not load dash-prefixed Markdown as frontmatter", async () => {
-    const tempDir = tempDirs.make("openclaw-skill-scan-");
+    const tempDir = tempDirs.make("marketingclaw-skill-scan-");
     const skillDir = path.join(tempDir, "dash-prefix");
     await fs.mkdir(skillDir);
     const skillFile = path.join(skillDir, "SKILL.md");

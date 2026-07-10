@@ -2,7 +2,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { redactMigrationPlan } from "openclaw/plugin-sdk/migration";
+import { redactMigrationPlan } from "marketingclaw/plugin-sdk/migration";
 import { afterEach, describe, expect, it } from "vitest";
 import { resolveHomePath } from "./helpers.js";
 import { buildClaudeMigrationProvider } from "./provider.js";
@@ -36,16 +36,16 @@ describe("Claude migration provider", () => {
     expect(provider.label).toBe("Claude");
   });
 
-  it("resolves tilde source paths against the OS home when OPENCLAW_HOME is set", () => {
-    const previous = process.env.OPENCLAW_HOME;
-    process.env.OPENCLAW_HOME = path.join(path.sep, "tmp", "openclaw-home");
+  it("resolves tilde source paths against the OS home when MARKETINGCLAW_HOME is set", () => {
+    const previous = process.env.MARKETINGCLAW_HOME;
+    process.env.MARKETINGCLAW_HOME = path.join(path.sep, "tmp", "marketingclaw-home");
     try {
       expect(resolveHomePath("~/.claude")).toBe(path.join(os.homedir(), ".claude"));
     } finally {
       if (previous === undefined) {
-        delete process.env.OPENCLAW_HOME;
+        delete process.env.MARKETINGCLAW_HOME;
       } else {
-        process.env.OPENCLAW_HOME = previous;
+        process.env.MARKETINGCLAW_HOME = previous;
       }
     }
   });

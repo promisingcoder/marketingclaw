@@ -10,7 +10,7 @@ import os from "node:os";
 import path from "node:path";
 import { readDockerE2eJsonArtifact } from "./lib/docker-e2e-json-artifacts.mjs";
 
-const DEFAULT_WORKFLOW = "openclaw-live-and-e2e-checks-reusable.yml";
+const DEFAULT_WORKFLOW = "marketingclaw-live-and-e2e-checks-reusable.yml";
 
 function usage() {
   return [
@@ -189,7 +189,7 @@ function groupByReuseInputs(entries) {
 function ghWorkflowCommand(lanes, ref, workflow, reuseInputs = {}) {
   const workflowRef =
     reuseInputs.workflowRef ||
-    process.env.OPENCLAW_DOCKER_E2E_WORKFLOW_REF ||
+    process.env.MARKETINGCLAW_DOCKER_E2E_WORKFLOW_REF ||
     process.env.GITHUB_REF_NAME;
   const releasePath = lanes.some(laneNeedsReleasePath);
   const fields = [
@@ -392,7 +392,9 @@ function safePathSegment(value) {
 }
 
 function defaultOutputDir(input) {
-  return fs.mkdtempSync(path.join(os.tmpdir(), `openclaw-docker-e2e-rerun-${safePathSegment(input)}-`));
+  return fs.mkdtempSync(
+    path.join(os.tmpdir(), `marketingclaw-docker-e2e-rerun-${safePathSegment(input)}-`),
+  );
 }
 
 function printEntries(entries, ref, workflow, runValue) {
@@ -432,13 +434,13 @@ function printEntries(entries, ref, workflow, runValue) {
         );
       }
     }
-      console.log("");
-      console.log("Per-lane GitHub reruns:");
-      for (const entry of workflowEntries) {
-        console.log(
-          `- ${entry.lane}: ${ghWorkflowCommand([entry.lane], ref, workflow, entry.reuseInputs)}`,
-        );
-      }
+    console.log("");
+    console.log("Per-lane GitHub reruns:");
+    for (const entry of workflowEntries) {
+      console.log(
+        `- ${entry.lane}: ${ghWorkflowCommand([entry.lane], ref, workflow, entry.reuseInputs)}`,
+      );
+    }
   } else {
     console.log("");
     console.log("No targetable failed Docker E2E lanes found.");

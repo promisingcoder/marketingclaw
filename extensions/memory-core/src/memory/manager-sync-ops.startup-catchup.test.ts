@@ -3,21 +3,21 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import type { DatabaseSync } from "node:sqlite";
-import { emitSessionTranscriptUpdate } from "openclaw/plugin-sdk/agent-harness-runtime";
+import { emitSessionTranscriptUpdate } from "marketingclaw/plugin-sdk/agent-harness-runtime";
 import {
   resolveSessionTranscriptsDirForAgent,
-  type OpenClawConfig,
+  type MarketingClawConfig,
   type ResolvedMemorySearchConfig,
-} from "openclaw/plugin-sdk/memory-core-host-engine-foundation";
+} from "marketingclaw/plugin-sdk/memory-core-host-engine-foundation";
 import type {
   MemorySource,
   MemorySyncParams,
   MemorySyncProgressUpdate,
-} from "openclaw/plugin-sdk/memory-core-host-engine-storage";
+} from "marketingclaw/plugin-sdk/memory-core-host-engine-storage";
 import {
   clearConfigCache,
   clearRuntimeConfigSnapshot,
-} from "openclaw/plugin-sdk/runtime-config-snapshot";
+} from "marketingclaw/plugin-sdk/runtime-config-snapshot";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { MemoryManagerSyncOps } from "./manager-sync-ops.js";
 
@@ -54,38 +54,38 @@ type MemoryTranscriptUpdateSubscriber = (
 ) => () => void;
 
 const MEMORY_CORE_TRANSCRIPT_UPDATE_SUBSCRIBER_KEY = Symbol.for(
-  "openclaw.memoryCore.sessionTranscriptUpdateSubscriber",
+  "marketingclaw.memoryCore.sessionTranscriptUpdateSubscriber",
 );
-const originalStartupStateDir = process.env.OPENCLAW_STATE_DIR;
-const originalStartupConfigPath = process.env.OPENCLAW_CONFIG_PATH;
+const originalStartupStateDir = process.env.MARKETINGCLAW_STATE_DIR;
+const originalStartupConfigPath = process.env.MARKETINGCLAW_CONFIG_PATH;
 
 type SourceStateRow = { path: string; hash: string; mtime: number; size: number };
 
 function setStartupStateDir(stateDir: string): void {
-  Reflect.set(process.env, "OPENCLAW_STATE_DIR", stateDir);
+  Reflect.set(process.env, "MARKETINGCLAW_STATE_DIR", stateDir);
 }
 
 function setStartupConfigPath(configPath: string): void {
-  Reflect.set(process.env, "OPENCLAW_CONFIG_PATH", configPath);
+  Reflect.set(process.env, "MARKETINGCLAW_CONFIG_PATH", configPath);
 }
 
 function restoreStartupEnv(): void {
   if (originalStartupStateDir === undefined) {
-    Reflect.deleteProperty(process.env, "OPENCLAW_STATE_DIR");
+    Reflect.deleteProperty(process.env, "MARKETINGCLAW_STATE_DIR");
   } else {
-    Reflect.set(process.env, "OPENCLAW_STATE_DIR", originalStartupStateDir);
+    Reflect.set(process.env, "MARKETINGCLAW_STATE_DIR", originalStartupStateDir);
   }
   if (originalStartupConfigPath === undefined) {
-    Reflect.deleteProperty(process.env, "OPENCLAW_CONFIG_PATH");
+    Reflect.deleteProperty(process.env, "MARKETINGCLAW_CONFIG_PATH");
   } else {
-    Reflect.set(process.env, "OPENCLAW_CONFIG_PATH", originalStartupConfigPath);
+    Reflect.set(process.env, "MARKETINGCLAW_CONFIG_PATH", originalStartupConfigPath);
   }
 }
 
 class SessionStartupCatchupHarness extends MemoryManagerSyncOps {
-  protected readonly cfg = {} as OpenClawConfig;
+  protected readonly cfg = {} as MarketingClawConfig;
   protected readonly agentId = "main";
-  protected readonly workspaceDir = "/tmp/openclaw-test-workspace";
+  protected readonly workspaceDir = "/tmp/marketingclaw-test-workspace";
   protected readonly settings = {
     chunking: {
       overlap: 0,
@@ -252,7 +252,7 @@ describe("session startup catch-up", () => {
   let stateDir = "";
 
   beforeEach(async () => {
-    stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-session-startup-"));
+    stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-session-startup-"));
     setStartupStateDir(stateDir);
   });
 
@@ -460,7 +460,7 @@ describe("session startup catch-up", () => {
     const storeDir = path.join(stateDir, "custom-sessions");
     const sessionFile = path.join(storeDir, "custom-thread.jsonl");
     const storePath = path.join(storeDir, "sessions.json");
-    const configPath = path.join(stateDir, "openclaw.json");
+    const configPath = path.join(stateDir, "marketingclaw.json");
     await fs.mkdir(storeDir, { recursive: true });
     await fs.writeFile(
       sessionFile,
@@ -507,7 +507,7 @@ describe("session startup catch-up", () => {
     const storeDir = path.join(stateDir, "custom-sessions");
     const sessionFile = path.join(storeDir, "explicit-target.jsonl");
     const storePath = path.join(storeDir, "sessions.json");
-    const configPath = path.join(stateDir, "openclaw.json");
+    const configPath = path.join(stateDir, "marketingclaw.json");
     await fs.mkdir(storeDir, { recursive: true });
     await fs.writeFile(
       sessionFile,
@@ -543,7 +543,7 @@ describe("session startup catch-up", () => {
     const sessionFile = path.join(storeDir, "cron-thread.jsonl");
     const otherSessionFile = path.join(storeDir, "other-thread.jsonl");
     const storePath = path.join(storeDir, "sessions.json");
-    const configPath = path.join(stateDir, "openclaw.json");
+    const configPath = path.join(stateDir, "marketingclaw.json");
     await fs.mkdir(storeDir, { recursive: true });
     await fs.writeFile(
       sessionFile,
@@ -662,7 +662,7 @@ describe("session startup catch-up", () => {
     const storeDir = path.join(stateDir, "custom-sessions");
     const sessionFile = path.join(storeDir, "custom-update.jsonl");
     const storePath = path.join(storeDir, "sessions.json");
-    const configPath = path.join(stateDir, "openclaw.json");
+    const configPath = path.join(stateDir, "marketingclaw.json");
     await fs.mkdir(storeDir, { recursive: true });
     await fs.writeFile(
       sessionFile,

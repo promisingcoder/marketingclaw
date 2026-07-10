@@ -1,20 +1,20 @@
-// Formats OpenClaw CLI command snippets for chat-facing command responses.
+// Formats MarketingClaw CLI command snippets for chat-facing command responses.
 import fs from "node:fs";
 import { createRequire } from "node:module";
 import path from "node:path";
 import { isBunRuntime } from "../../daemon/runtime-binary.js";
-import { resolveOpenClawPackageRootSync } from "../../infra/openclaw-root.js";
+import { resolveMarketingClawPackageRootSync } from "../../infra/marketingclaw-root.js";
 
 const requireFromHere = createRequire(import.meta.url);
-const OPENCLAW_CLI_ENTRY_BASENAMES = new Set(["openclaw", "openclaw.mjs"]);
-const OPENCLAW_PACKAGE_ENTRY_PATHS = new Set([
+const MARKETINGCLAW_CLI_ENTRY_BASENAMES = new Set(["marketingclaw", "marketingclaw.mjs"]);
+const MARKETINGCLAW_PACKAGE_ENTRY_PATHS = new Set([
   path.join("dist", "entry.js"),
   path.join("dist", "entry.mjs"),
   path.join("dist", "index.js"),
   path.join("dist", "index.mjs"),
   path.join("src", "entry.ts"),
 ]);
-const TEST_RUNNER_ENV_PREFIXES = ["VITEST_", "OPENCLAW_VITEST_"];
+const TEST_RUNNER_ENV_PREFIXES = ["VITEST_", "MARKETINGCLAW_VITEST_"];
 
 function quoteShellArg(value: string): string {
   if (process.platform === "win32") {
@@ -23,13 +23,13 @@ function quoteShellArg(value: string): string {
   return `'${value.replaceAll("'", "'\\''")}'`;
 }
 
-function isOpenClawCliLauncherEntry(entry: string): boolean {
-  return OPENCLAW_CLI_ENTRY_BASENAMES.has(path.basename(entry));
+function isMarketingClawCliLauncherEntry(entry: string): boolean {
+  return MARKETINGCLAW_CLI_ENTRY_BASENAMES.has(path.basename(entry));
 }
 
-function isOpenClawPackageEntry(entry: string, packageRoot: string): boolean {
+function isMarketingClawPackageEntry(entry: string, packageRoot: string): boolean {
   const relativeEntry = path.relative(path.resolve(packageRoot), path.resolve(entry));
-  return OPENCLAW_PACKAGE_ENTRY_PATHS.has(relativeEntry);
+  return MARKETINGCLAW_PACKAGE_ENTRY_PATHS.has(relativeEntry);
 }
 
 function safeCwd(): string | undefined {
@@ -48,9 +48,9 @@ function buildPackageRootCliArgvPrefix(packageRoot: string): string[] {
       ? [process.execPath, sourceEntry]
       : tsxLoader
         ? [process.execPath, "--import", tsxLoader, sourceEntry]
-        : [process.execPath, path.join(packageRoot, "openclaw.mjs")];
+        : [process.execPath, path.join(packageRoot, "marketingclaw.mjs")];
   }
-  return [process.execPath, path.join(packageRoot, "openclaw.mjs")];
+  return [process.execPath, path.join(packageRoot, "marketingclaw.mjs")];
 }
 
 function resolveTrustedTsxLoader(packageRoot: string): string | null {
@@ -61,16 +61,16 @@ function resolveTrustedTsxLoader(packageRoot: string): string | null {
   }
 }
 
-function resolveCurrentOpenClawCliArgvPrefix(): string[] {
+function resolveCurrentMarketingClawCliArgvPrefix(): string[] {
   const entry = process.argv[1]?.trim();
-  if (entry && entry !== process.execPath && isOpenClawCliLauncherEntry(entry)) {
+  if (entry && entry !== process.execPath && isMarketingClawCliLauncherEntry(entry)) {
     return [process.execPath, ...process.execArgv, entry];
   }
-  const entryPackageRoot = entry ? resolveOpenClawPackageRootSync({ argv1: entry }) : null;
-  if (entry && entryPackageRoot && isOpenClawPackageEntry(entry, entryPackageRoot)) {
+  const entryPackageRoot = entry ? resolveMarketingClawPackageRootSync({ argv1: entry }) : null;
+  if (entry && entryPackageRoot && isMarketingClawPackageEntry(entry, entryPackageRoot)) {
     return [process.execPath, ...process.execArgv, entry];
   }
-  const packageRoot = resolveOpenClawPackageRootSync({
+  const packageRoot = resolveMarketingClawPackageRootSync({
     argv1: entry,
     cwd: safeCwd(),
     moduleUrl: import.meta.url,
@@ -81,13 +81,13 @@ function resolveCurrentOpenClawCliArgvPrefix(): string[] {
   return entry && entry !== process.execPath ? [process.execPath, entry] : [process.execPath];
 }
 
-/** Reconstructs the current OpenClaw CLI invocation with extra args. */
-export function buildCurrentOpenClawCliArgv(args: string[]): string[] {
-  return [...resolveCurrentOpenClawCliArgvPrefix(), ...args];
+/** Reconstructs the current MarketingClaw CLI invocation with extra args. */
+export function buildCurrentMarketingClawCliArgv(args: string[]): string[] {
+  return [...resolveCurrentMarketingClawCliArgvPrefix(), ...args];
 }
 
 /** Clears test-runner env inherited by harness-hosted gateways before spawning the CLI. */
-export function buildCurrentOpenClawCliExecEnv(
+export function buildCurrentMarketingClawCliExecEnv(
   env: NodeJS.ProcessEnv = process.env,
 ): Record<string, string> | undefined {
   const overrides: Record<string, string> = {};
@@ -99,7 +99,7 @@ export function buildCurrentOpenClawCliExecEnv(
   return Object.keys(overrides).length > 0 ? overrides : undefined;
 }
 
-/** Builds a shell-quoted command string for rerunning the current OpenClaw CLI. */
-export function buildCurrentOpenClawCliCommand(args: string[]): string {
-  return buildCurrentOpenClawCliArgv(args).map(quoteShellArg).join(" ");
+/** Builds a shell-quoted command string for rerunning the current MarketingClaw CLI. */
+export function buildCurrentMarketingClawCliCommand(args: string[]): string {
+  return buildCurrentMarketingClawCliArgv(args).map(quoteShellArg).join(" ");
 }

@@ -836,21 +836,21 @@ struct ChatLinkPreview: View {
         } label: {
             HStack(spacing: 6) {
                 Text("Preview · \(self.domain)")
-                    .font(OpenClawChatTypography.captionSemiBold)
-                    .foregroundStyle(OpenClawChatTheme.assistantText.opacity(0.65))
+                    .font(MarketingClawChatTypography.captionSemiBold)
+                    .foregroundStyle(MarketingClawChatTheme.assistantText.opacity(0.65))
                     .lineLimit(1)
                 Spacer(minLength: 0)
                 Image(systemName: "chevron.down")
-                    .foregroundStyle(OpenClawChatTheme.assistantText.opacity(0.65))
+                    .foregroundStyle(MarketingClawChatTheme.assistantText.opacity(0.65))
                     .accessibilityHidden(true)
             }
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
-            .background(OpenClawChatTheme.subtleCard)
+            .background(MarketingClawChatTheme.subtleCard)
             .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
             .overlay(
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .strokeBorder(OpenClawChatTheme.divider, lineWidth: 1))
+                    .strokeBorder(MarketingClawChatTheme.divider, lineWidth: 1))
         }
         .buttonStyle(.plain)
         .accessibilityLabel("Expand link preview for \(self.domain)")
@@ -871,29 +871,29 @@ struct ChatLinkPreview: View {
                         .accessibilityHidden(true)
                 }
                 Text(self.domain)
-                    .font(OpenClawChatTypography.caption2)
-                    .foregroundStyle(OpenClawChatTheme.assistantText.opacity(0.65))
+                    .font(MarketingClawChatTypography.caption2)
+                    .foregroundStyle(MarketingClawChatTheme.assistantText.opacity(0.65))
                     .lineLimit(1)
                 switch self.model.result {
                 case nil:
                     Text("Loading preview…")
-                        .font(OpenClawChatTypography.caption)
-                        .foregroundStyle(OpenClawChatTheme.assistantText.opacity(0.65))
+                        .font(MarketingClawChatTypography.caption)
+                        .foregroundStyle(MarketingClawChatTheme.assistantText.opacity(0.65))
                 case .failed:
                     Text("No preview available")
-                        .font(OpenClawChatTypography.callout)
-                        .foregroundStyle(OpenClawChatTheme.assistantText.opacity(0.65))
+                        .font(MarketingClawChatTypography.callout)
+                        .foregroundStyle(MarketingClawChatTheme.assistantText.opacity(0.65))
                 case let .loaded(metadata):
                     if let title = metadata.title {
                         Text(title)
-                            .font(OpenClawChatTypography.footnoteSemiBold)
-                            .foregroundStyle(OpenClawChatTheme.assistantText)
+                            .font(MarketingClawChatTypography.footnoteSemiBold)
+                            .foregroundStyle(MarketingClawChatTheme.assistantText)
                             .lineLimit(2)
                     }
                     if let description = metadata.description {
                         Text(description)
-                            .font(OpenClawChatTypography.caption)
-                            .foregroundStyle(OpenClawChatTheme.assistantText.opacity(0.65))
+                            .font(MarketingClawChatTypography.caption)
+                            .foregroundStyle(MarketingClawChatTheme.assistantText.opacity(0.65))
                             .lineLimit(1)
                     }
                 }
@@ -901,11 +901,11 @@ struct ChatLinkPreview: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 10)
             .padding(.vertical, 8)
-            .background(OpenClawChatTheme.subtleCard)
+            .background(MarketingClawChatTheme.subtleCard)
             .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
             .overlay(
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .strokeBorder(OpenClawChatTheme.divider, lineWidth: 1))
+                    .strokeBorder(MarketingClawChatTheme.divider, lineWidth: 1))
         }
         .buttonStyle(.plain)
         .accessibilityLabel("Open \(self.domain)")

@@ -5,7 +5,7 @@ read_when:
 title: "Agent runtime"
 ---
 
-OpenClaw ships one **embedded agent runtime**: a built-in agent loop, tool
+MarketingClaw ships one **embedded agent runtime**: a built-in agent loop, tool
 wiring, and prompt assembly, distinct from delegating turns to an external
 harness process. Each configured agent (see [Multi-agent routing](/concepts/multi-agent)
 for running several) has its own workspace, bootstrap files, and session
@@ -18,7 +18,7 @@ Each agent uses a single workspace directory (`agents.defaults.workspace`, or
 `agents.list[].workspace` per agent) as its **only** working directory (`cwd`)
 for tools and context.
 
-Recommended: use `openclaw setup` to create `~/.openclaw/openclaw.json` if missing and initialize the workspace files.
+Recommended: use `marketingclaw setup` to create `~/.marketingclaw/marketingclaw.json` if missing and initialize the workspace files.
 
 Full workspace layout + backup guide: [Agent workspace](/concepts/agent-workspace)
 
@@ -28,7 +28,7 @@ per-session workspaces under `agents.defaults.sandbox.workspaceRoot` (see
 
 ## Bootstrap files (injected)
 
-Inside the workspace, OpenClaw expects these user-editable files:
+Inside the workspace, MarketingClaw expects these user-editable files:
 
 | File           | Purpose                                              |
 | -------------- | ---------------------------------------------------- |
@@ -41,13 +41,13 @@ Inside the workspace, OpenClaw expects these user-editable files:
 | `BOOTSTRAP.md` | One-time first-run ritual (deleted after completion) |
 | `MEMORY.md`    | Root long-term memory file, if present               |
 
-On the first turn of a new session, OpenClaw injects the contents of these files into the system prompt's Project Context. `MEMORY.md` is only injected when it exists at the workspace root.
+On the first turn of a new session, MarketingClaw injects the contents of these files into the system prompt's Project Context. `MEMORY.md` is only injected when it exists at the workspace root.
 
-Blank files are skipped. Large files are trimmed and truncated with a marker so prompts stay lean (read the file for full content). A missing file (other than `MEMORY.md`) injects a single "missing file" marker line instead; `openclaw setup` creates a safe default template for it.
+Blank files are skipped. Large files are trimmed and truncated with a marker so prompts stay lean (read the file for full content). A missing file (other than `MEMORY.md`) injects a single "missing file" marker line instead; `marketingclaw setup` creates a safe default template for it.
 
-`BOOTSTRAP.md` is only created for a **brand new workspace** (no other bootstrap files present). While it is pending, OpenClaw keeps it in Project Context and adds system-prompt bootstrap guidance for the initial ritual instead of copying it into the user message. If you delete it after completing the ritual, it is not recreated on later restarts.
+`BOOTSTRAP.md` is only created for a **brand new workspace** (no other bootstrap files present). While it is pending, MarketingClaw keeps it in Project Context and adds system-prompt bootstrap guidance for the initial ritual instead of copying it into the user message. If you delete it after completing the ritual, it is not recreated on later restarts.
 
-After a workspace has been observed, OpenClaw also keeps a state-dir attestation marker for the workspace path. If a recently attested workspace disappears or is wiped, startup refuses to silently reseed `BOOTSTRAP.md`; restore the workspace or use a full onboard reset so the workspace and marker are cleared together.
+After a workspace has been observed, MarketingClaw also keeps a state-dir attestation marker for the workspace path. If a recently attested workspace disappears or is wiped, startup refuses to silently reseed `BOOTSTRAP.md`; restore the workspace or use a full onboard reset so the workspace and marker are cleared together.
 
 To disable bootstrap file creation entirely (for pre-seeded workspaces), set:
 
@@ -64,12 +64,12 @@ guidance for how _you_ want them used.
 
 ## Skills
 
-OpenClaw loads skills from these locations (highest precedence first):
+MarketingClaw loads skills from these locations (highest precedence first):
 
 - Workspace: `<workspace>/skills`
 - Project agent skills: `<workspace>/.agents/skills`
 - Personal agent skills: `~/.agents/skills`
-- Managed/local: `~/.openclaw/skills`
+- Managed/local: `~/.marketingclaw/skills`
 - Bundled (shipped with the install)
 - Extra skill folders: `skills.load.extraDirs`
 
@@ -81,7 +81,7 @@ Skills can be gated by config/env (see `skills` in [Gateway configuration](/gate
 
 ## Runtime boundaries
 
-The embedded agent runtime is OpenClaw-owned: model discovery, tool wiring,
+The embedded agent runtime is MarketingClaw-owned: model discovery, tool wiring,
 prompt assembly, session management, and channel delivery share one integrated
 runtime surface.
 
@@ -89,9 +89,9 @@ runtime surface.
 
 Session transcripts are stored as JSONL at:
 
-- `~/.openclaw/agents/<agentId>/sessions/<SessionId>.jsonl`
+- `~/.marketingclaw/agents/<agentId>/sessions/<SessionId>.jsonl`
 
-The session ID is stable and chosen by OpenClaw. OpenClaw does not read session folders from other tools.
+The session ID is stable and chosen by MarketingClaw. MarketingClaw does not read session folders from other tools.
 
 ## Steering while streaming
 
@@ -123,10 +123,10 @@ Model refs in config (for example `agents.defaults.model` and `agents.defaults.m
 
 - Use `provider/model` when configuring models.
 - If the model ID itself contains `/` (OpenRouter-style), include the provider prefix (example: `openrouter/moonshotai/kimi-k2`).
-- If you omit the provider, OpenClaw tries an alias first, then a unique
+- If you omit the provider, MarketingClaw tries an alias first, then a unique
   configured-provider match for that exact model id, and only then falls back
   to the configured default provider. If that provider no longer exposes the
-  configured default model, OpenClaw falls back to the first configured
+  configured default model, MarketingClaw falls back to the first configured
   provider/model instead of surfacing a stale removed-provider default.
 
 ## Configuration (minimal)

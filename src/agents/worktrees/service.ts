@@ -39,8 +39,8 @@ export const SNAPSHOT_RETENTION_MS = 30 * 24 * 60 * 60 * 1000; // Snapshot refs 
 export const WORKTREE_GC_INTERVAL_MS = 60 * 60 * 1000;
 
 const NAME_PATTERN = /^[a-z0-9][a-z0-9-]{0,63}$/;
-const SNAPSHOT_REF_PREFIX = "refs/openclaw/snapshots";
-const OPENCLAW_LOCK_PATTERN = /^openclaw pid=(\d+)$/;
+const SNAPSHOT_REF_PREFIX = "refs/marketingclaw/snapshots";
+const MARKETINGCLAW_LOCK_PATTERN = /^marketingclaw pid=(\d+)$/;
 const log = createSubsystemLogger("agents/worktrees");
 
 type ServiceOptions = {
@@ -265,7 +265,7 @@ async function canResetFailedWorktreeAdd(
 }
 
 async function runSetupScript(repoRoot: string, worktreePath: string): Promise<void> {
-  const setupScript = path.join(repoRoot, ".openclaw", "worktree-setup.sh");
+  const setupScript = path.join(repoRoot, ".marketingclaw", "worktree-setup.sh");
   const stat = await fs.stat(setupScript).catch(() => undefined);
   if (!stat?.isFile() || (stat.mode & 0o111) === 0) {
     return;
@@ -274,8 +274,8 @@ async function runSetupScript(repoRoot: string, worktreePath: string): Promise<v
     timeoutMs: 120_000,
     cwd: worktreePath,
     env: {
-      OPENCLAW_SOURCE_TREE_PATH: repoRoot,
-      OPENCLAW_WORKTREE_PATH: worktreePath,
+      MARKETINGCLAW_SOURCE_TREE_PATH: repoRoot,
+      MARKETINGCLAW_WORKTREE_PATH: worktreePath,
     },
   });
   if (result.code !== 0) {
@@ -301,7 +301,7 @@ async function lockState(record: ManagedWorktreeRecord): Promise<LockState> {
   if (!entry || entry.lockedReason === undefined) {
     return { kind: "none" };
   }
-  const match = OPENCLAW_LOCK_PATTERN.exec(entry.lockedReason);
+  const match = MARKETINGCLAW_LOCK_PATTERN.exec(entry.lockedReason);
   if (!match) {
     return { kind: "foreign", reason: entry.lockedReason };
   }
@@ -310,15 +310,15 @@ async function lockState(record: ManagedWorktreeRecord): Promise<LockState> {
 }
 
 async function snapshotWorktree(record: ManagedWorktreeRecord, reason: string): Promise<string> {
-  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-worktree-index-"));
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-worktree-index-"));
   const indexPath = path.join(tempDir, "index");
   const snapshotRef = `${SNAPSHOT_REF_PREFIX}/${record.id}`;
   const env: NodeJS.ProcessEnv = {
     GIT_INDEX_FILE: indexPath,
-    GIT_AUTHOR_NAME: "OpenClaw",
-    GIT_AUTHOR_EMAIL: "openclaw@localhost",
-    GIT_COMMITTER_NAME: "OpenClaw",
-    GIT_COMMITTER_EMAIL: "openclaw@localhost",
+    GIT_AUTHOR_NAME: "MarketingClaw",
+    GIT_AUTHOR_EMAIL: "marketingclaw@localhost",
+    GIT_COMMITTER_NAME: "MarketingClaw",
+    GIT_COMMITTER_EMAIL: "marketingclaw@localhost",
   };
   try {
     await requireGit(record.path, ["read-tree", "HEAD"], { env });
@@ -333,7 +333,7 @@ async function snapshotWorktree(record: ManagedWorktreeRecord, reason: string): 
     const parent = await requireGit(record.path, ["rev-parse", "HEAD"]);
     const commit = await requireGit(
       record.path,
-      ["commit-tree", tree, "-p", parent, "-m", `OpenClaw worktree snapshot: ${reason}`],
+      ["commit-tree", tree, "-p", parent, "-m", `MarketingClaw worktree snapshot: ${reason}`],
       { env },
     );
     await requireGit(record.repoRoot, ["update-ref", snapshotRef, commit]);
@@ -368,7 +368,7 @@ export class ManagedWorktreeService {
       return await this.restore({ id: existing.id });
     }
     await fs.mkdir(root, { recursive: true });
-    const branch = `openclaw/${name}`;
+    const branch = `marketingclaw/${name}`;
     const branchExists = await runGit(repository.repoRoot, [
       "show-ref",
       "--quiet",
@@ -473,7 +473,7 @@ export class ManagedWorktreeService {
       "worktree",
       "lock",
       "--reason",
-      `openclaw pid=${process.pid}`,
+      `marketingclaw pid=${process.pid}`,
       record.path,
     ]);
     if (result.code !== 0) {
@@ -517,7 +517,7 @@ export class ManagedWorktreeService {
     if ((state.kind === "live" || state.kind === "foreign") && !params.force) {
       throw new Error(
         state.kind === "live"
-          ? `worktree is locked by live OpenClaw pid ${state.pid}`
+          ? `worktree is locked by live MarketingClaw pid ${state.pid}`
           : `worktree has a foreign lock${state.reason ? `: ${state.reason}` : ""}`,
       );
     }

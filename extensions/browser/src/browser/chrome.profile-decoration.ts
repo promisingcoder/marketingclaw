@@ -1,19 +1,19 @@
 /**
- * OpenClaw-managed Chrome profile decoration.
+ * MarketingClaw-managed Chrome profile decoration.
  *
  * Applies a stable profile name, color, download directory, and clean-exit
  * markers to the managed Chrome profile's Local State and Preferences files.
  */
 import fs from "node:fs";
 import path from "node:path";
-import { loadJsonFile, saveJsonFile } from "openclaw/plugin-sdk/json-store";
+import { loadJsonFile, saveJsonFile } from "marketingclaw/plugin-sdk/json-store";
 import {
-  DEFAULT_OPENCLAW_BROWSER_COLOR,
-  DEFAULT_OPENCLAW_BROWSER_PROFILE_NAME,
+  DEFAULT_MARKETINGCLAW_BROWSER_COLOR,
+  DEFAULT_MARKETINGCLAW_BROWSER_PROFILE_NAME,
 } from "./constants.js";
 
 function decoratedMarkerPath(userDataDir: string) {
-  return path.join(userDataDir, ".openclaw-profile-decorated");
+  return path.join(userDataDir, ".marketingclaw-profile-decorated");
 }
 
 function safeReadJson(filePath: string): Record<string, unknown> | null {
@@ -115,21 +115,21 @@ export function isProfileDecorated(
 }
 
 /** Return whether this profile was initialized with Chromium's automation keychain. */
-export function usesOpenClawMockKeychain(userDataDir: string): boolean {
+export function usesMarketingClawMockKeychain(userDataDir: string): boolean {
   const localState = safeReadJson(path.join(userDataDir, "Local State"));
-  return readDefaultProfileInfo(localState)?.openclaw_mock_keychain === true;
+  return readDefaultProfileInfo(localState)?.marketingclaw_mock_keychain === true;
 }
 
 /**
  * Best-effort profile decoration (name + lobster-orange). Chrome preference keys
  * vary by version; we keep this conservative and idempotent.
  */
-export function decorateOpenClawProfile(
+export function decorateMarketingClawProfile(
   userDataDir: string,
   opts?: { name?: string; color?: string; downloadDir?: string; mockKeychain?: boolean },
 ) {
-  const desiredName = opts?.name ?? DEFAULT_OPENCLAW_BROWSER_PROFILE_NAME;
-  const desiredColor = (opts?.color ?? DEFAULT_OPENCLAW_BROWSER_COLOR).toUpperCase();
+  const desiredName = opts?.name ?? DEFAULT_MARKETINGCLAW_BROWSER_PROFILE_NAME;
+  const desiredColor = (opts?.color ?? DEFAULT_MARKETINGCLAW_BROWSER_COLOR).toUpperCase();
   const desiredColorInt = parseHexRgbToSignedArgbInt(desiredColor);
 
   const localStatePath = path.join(userDataDir, "Local State");
@@ -143,7 +143,7 @@ export function decorateOpenClawProfile(
   if (opts?.mockKeychain) {
     // Chrome preserves extra fields in this per-profile dictionary. Recording
     // the key source here keeps later launches on the same encryption backend.
-    setDeep(localState, ["profile", "info_cache", "Default", "openclaw_mock_keychain"], true);
+    setDeep(localState, ["profile", "info_cache", "Default", "marketingclaw_mock_keychain"], true);
   }
   // Color keys are best-effort (Chrome changes these frequently).
   setDeep(localState, ["profile", "info_cache", "Default", "profile_color"], desiredColor);

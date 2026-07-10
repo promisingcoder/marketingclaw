@@ -1,5 +1,5 @@
 import { generateKeyPairSync, sign } from "node:crypto";
-// OpenClaw npm postpublish tests validate postpublish verification behavior.
+// MarketingClaw npm postpublish tests validate postpublish verification behavior.
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
@@ -16,38 +16,38 @@ import {
   collectInstalledPackageErrors,
   fetchRegistryJson,
   normalizeInstalledBinaryVersion,
-  openClawNpmPostpublishVerifyUsage,
-  parseOpenClawNpmPostpublishVerifyArgs,
+  marketingClawNpmPostpublishVerifyUsage,
+  parseMarketingClawNpmPostpublishVerifyArgs,
   resolveInstalledBinaryCommandInvocation,
   resolveInstalledBinaryPath,
   retryNpmRegistryProvenanceRead,
   verifyNpmProvenanceAttestation,
   verifyNpmRegistrySignatures,
-} from "../scripts/openclaw-npm-postpublish-verify.ts";
+} from "../scripts/marketingclaw-npm-postpublish-verify.ts";
 
 const INSTALLED_ROOT_DIST_JS_FILE_SCAN_LIMIT = 10_000;
 
-describe("parseOpenClawNpmPostpublishVerifyArgs", () => {
+describe("parseMarketingClawNpmPostpublishVerifyArgs", () => {
   it("supports help and package-manager separators", () => {
-    expect(parseOpenClawNpmPostpublishVerifyArgs(["--help"])).toEqual({
+    expect(parseMarketingClawNpmPostpublishVerifyArgs(["--help"])).toEqual({
       help: true,
       version: "",
     });
-    expect(parseOpenClawNpmPostpublishVerifyArgs(["--", "2026.3.23"])).toEqual({
+    expect(parseMarketingClawNpmPostpublishVerifyArgs(["--", "2026.3.23"])).toEqual({
       help: false,
       version: "2026.3.23",
     });
   });
 
   it("rejects missing, option-like, and extra arguments before verification", () => {
-    expect(() => parseOpenClawNpmPostpublishVerifyArgs([])).toThrow(
-      openClawNpmPostpublishVerifyUsage(),
+    expect(() => parseMarketingClawNpmPostpublishVerifyArgs([])).toThrow(
+      marketingClawNpmPostpublishVerifyUsage(),
     );
-    expect(() => parseOpenClawNpmPostpublishVerifyArgs(["--tag"])).toThrow(
-      "Unknown openclaw npm postpublish verifier option: --tag",
+    expect(() => parseMarketingClawNpmPostpublishVerifyArgs(["--tag"])).toThrow(
+      "Unknown marketingclaw npm postpublish verifier option: --tag",
     );
-    expect(() => parseOpenClawNpmPostpublishVerifyArgs(["2026.3.23", "extra"])).toThrow(
-      "Unexpected openclaw npm postpublish verifier argument: extra",
+    expect(() => parseMarketingClawNpmPostpublishVerifyArgs(["2026.3.23", "extra"])).toThrow(
+      "Unexpected marketingclaw npm postpublish verifier argument: extra",
     );
   });
 });
@@ -88,7 +88,7 @@ describe("buildPublishedInstallScenarios", () => {
 });
 
 describe("npm registry provenance verification", () => {
-  const packageName = "openclaw";
+  const packageName = "marketingclaw";
   const version = "2026.3.23";
   const integrity = `sha512-${Buffer.from("registry integrity", "utf8").toString("base64")}`;
   const provenancePayload = {
@@ -104,8 +104,8 @@ describe("npm registry provenance verification", () => {
       buildDefinition: {
         externalParameters: {
           workflow: {
-            repository: "https://github.com/openclaw/openclaw",
-            path: ".github/workflows/openclaw-npm-release.yml",
+            repository: "https://github.com/promisingcoder/marketingclaw",
+            path: ".github/workflows/marketingclaw-npm-release.yml",
             ref: "refs/heads/release/2026.3.23",
           },
         },
@@ -131,7 +131,7 @@ describe("npm registry provenance verification", () => {
     });
 
     await expect(
-      fetchRegistryJson("https://registry.example/openclaw", {
+      fetchRegistryJson("https://registry.example/marketingclaw", {
         fetchImpl,
         timeoutMs: 1234,
       }),
@@ -146,13 +146,13 @@ describe("npm registry provenance verification", () => {
     });
 
     await expect(
-      fetchRegistryJson("https://registry.example/openclaw", {
+      fetchRegistryJson("https://registry.example/marketingclaw", {
         fetchImpl,
         maxBodyBytes: 64,
         timeoutMs: 1234,
       }),
     ).rejects.toThrow(
-      "npm registry https://registry.example/openclaw response body exceeded 64 bytes",
+      "npm registry https://registry.example/marketingclaw response body exceeded 64 bytes",
     );
   });
 
@@ -162,12 +162,12 @@ describe("npm registry provenance verification", () => {
     });
 
     await expect(
-      fetchRegistryJson("https://registry.example/openclaw", {
+      fetchRegistryJson("https://registry.example/marketingclaw", {
         fetchImpl,
         timeoutMs: 5,
       }),
     ).rejects.toThrow(
-      "npm registry request timed out after 5ms: https://registry.example/openclaw",
+      "npm registry request timed out after 5ms: https://registry.example/marketingclaw",
     );
   });
 
@@ -225,7 +225,7 @@ describe("npm registry provenance verification", () => {
     expect(verificationPolicy).toEqual({
       certificateIssuer: "https://token.actions.githubusercontent.com",
       certificateIdentityURI:
-        "https://github.com/openclaw/openclaw/.github/workflows/openclaw-npm-release.yml@refs/heads/release/2026.3.23",
+        "https://github.com/promisingcoder/marketingclaw/.github/workflows/marketingclaw-npm-release.yml@refs/heads/release/2026.3.23",
     });
 
     await expect(
@@ -293,7 +293,9 @@ describe("npm registry provenance verification", () => {
           verificationCalls += 1;
         },
       }),
-    ).rejects.toThrow("does not bind 2026.3.23 to the trusted OpenClaw GitHub release workflow");
+    ).rejects.toThrow(
+      "does not bind 2026.3.23 to the trusted MarketingClaw GitHub release workflow",
+    );
     expect(verificationCalls).toBe(0);
   });
 
@@ -350,13 +352,16 @@ describe("npm registry provenance verification", () => {
 
 describe("buildPublishedInstallCommandArgs", () => {
   it("runs lifecycle scripts for published install verification", () => {
-    const args = buildPublishedInstallCommandArgs("/tmp/openclaw-prefix", "openclaw@2026.4.10");
+    const args = buildPublishedInstallCommandArgs(
+      "/tmp/marketingclaw-prefix",
+      "openclaw@2026.4.10",
+    );
 
     expect(args).toEqual([
       "install",
       "-g",
       "--prefix",
-      "/tmp/openclaw-prefix",
+      "/tmp/marketingclaw-prefix",
       "openclaw@2026.4.10",
       "--no-fund",
       "--no-audit",
@@ -367,14 +372,14 @@ describe("buildPublishedInstallCommandArgs", () => {
 
 describe("collectInstalledPackageErrors", () => {
   function makeInstalledPackageRoot(): string {
-    return mkdtempSync(join(tmpdir(), "openclaw-postpublish-package-"));
+    return mkdtempSync(join(tmpdir(), "marketingclaw-postpublish-package-"));
   }
 
   it("flags version mismatches", () => {
     const errors = collectInstalledPackageErrors({
       expectedVersion: "2026.3.23-2",
       installedVersion: "2026.3.23",
-      packageRoot: "/tmp/empty-openclaw",
+      packageRoot: "/tmp/empty-marketingclaw",
     });
 
     expect(errors[0]).toBe(
@@ -450,7 +455,7 @@ describe("collectInstalledPackageErrors", () => {
 
 describe("collectInstalledAlwaysAllowedRuntimeFacadeErrors", () => {
   function withInstalledPackageRoot(run: (packageRoot: string) => void): void {
-    const packageRoot = mkdtempSync(join(tmpdir(), "openclaw-postpublish-facade-runtime-"));
+    const packageRoot = mkdtempSync(join(tmpdir(), "marketingclaw-postpublish-facade-runtime-"));
     try {
       run(packageRoot);
     } finally {
@@ -487,7 +492,7 @@ describe("collectInstalledAlwaysAllowedRuntimeFacadeErrors", () => {
 
 describe("collectInstalledContextEngineRuntimeErrors", () => {
   function makeInstalledPackageRoot(): string {
-    return mkdtempSync(join(tmpdir(), "openclaw-postpublish-context-engine-"));
+    return mkdtempSync(join(tmpdir(), "marketingclaw-postpublish-context-engine-"));
   }
 
   it("rejects packaged bundles with unresolved legacy context engine runtime loaders", () => {
@@ -543,7 +548,7 @@ describe("collectInstalledContextEngineRuntimeErrors", () => {
 
 describe("collectInstalledPluginSdkZodArtifactErrors", () => {
   function withInstalledPackageRoot(run: (packageRoot: string) => void): void {
-    const packageRoot = mkdtempSync(join(tmpdir(), "openclaw-postpublish-zod-sdk-"));
+    const packageRoot = mkdtempSync(join(tmpdir(), "marketingclaw-postpublish-zod-sdk-"));
     try {
       run(packageRoot);
     } finally {
@@ -614,11 +619,11 @@ describe("collectInstalledPluginSdkZodArtifactErrors", () => {
 
 describe("normalizeInstalledBinaryVersion", () => {
   it("accepts decorated CLI version output", () => {
-    expect(normalizeInstalledBinaryVersion("OpenClaw 2026.4.8 (9ece252)")).toBe("2026.4.8");
-    expect(normalizeInstalledBinaryVersion("OpenClaw 2026.4.8-beta.1 (9ece252)")).toBe(
+    expect(normalizeInstalledBinaryVersion("MarketingClaw 2026.4.8 (9ece252)")).toBe("2026.4.8");
+    expect(normalizeInstalledBinaryVersion("MarketingClaw 2026.4.8-beta.1 (9ece252)")).toBe(
       "2026.4.8-beta.1",
     );
-    expect(normalizeInstalledBinaryVersion("OpenClaw 2026.4.8-alpha.1 (9ece252)")).toBe(
+    expect(normalizeInstalledBinaryVersion("MarketingClaw 2026.4.8-alpha.1 (9ece252)")).toBe(
       "2026.4.8-alpha.1",
     );
   });
@@ -626,14 +631,14 @@ describe("normalizeInstalledBinaryVersion", () => {
 
 describe("resolveInstalledBinaryPath", () => {
   it("uses the Unix global bin path on non-Windows platforms", () => {
-    expect(resolveInstalledBinaryPath("/tmp/openclaw-prefix", "darwin")).toBe(
-      "/tmp/openclaw-prefix/bin/openclaw",
+    expect(resolveInstalledBinaryPath("/tmp/marketingclaw-prefix", "darwin")).toBe(
+      "/tmp/marketingclaw-prefix/bin/marketingclaw",
     );
   });
 
   it("uses the Windows npm shim path on win32", () => {
-    expect(resolveInstalledBinaryPath("C:/openclaw-prefix", "win32")).toBe(
-      "C:\\openclaw-prefix\\openclaw.cmd",
+    expect(resolveInstalledBinaryPath("C:/marketingclaw-prefix", "win32")).toBe(
+      "C:\\marketingclaw-prefix\\marketingclaw.cmd",
     );
   });
 });
@@ -641,11 +646,11 @@ describe("resolveInstalledBinaryPath", () => {
 describe("resolveInstalledBinaryCommandInvocation", () => {
   it("runs the Unix installed binary directly", () => {
     expect(
-      resolveInstalledBinaryCommandInvocation("/tmp/openclaw-prefix", ["--version"], {
+      resolveInstalledBinaryCommandInvocation("/tmp/marketingclaw-prefix", ["--version"], {
         platform: "linux",
       }),
     ).toEqual({
-      command: "/tmp/openclaw-prefix/bin/openclaw",
+      command: "/tmp/marketingclaw-prefix/bin/marketingclaw",
       args: ["--version"],
     });
   });
@@ -653,7 +658,7 @@ describe("resolveInstalledBinaryCommandInvocation", () => {
   it("wraps the Windows installed npm shim without Node shell argv", () => {
     expect(
       resolveInstalledBinaryCommandInvocation(
-        "C:/openclaw prefix",
+        "C:/marketingclaw prefix",
         ["agent", "--message", "hello world"],
         {
           comSpec: "C:\\Windows\\System32\\cmd.exe",
@@ -666,7 +671,7 @@ describe("resolveInstalledBinaryCommandInvocation", () => {
         "/d",
         "/s",
         "/c",
-        '""C:\\openclaw prefix\\openclaw.cmd" agent --message "hello world""',
+        '""C:\\marketingclaw prefix\\marketingclaw.cmd" agent --message "hello world""',
       ],
       windowsVerbatimArguments: true,
     });
@@ -675,7 +680,7 @@ describe("resolveInstalledBinaryCommandInvocation", () => {
 
 describe("collectInstalledRootDependencyManifestErrors", () => {
   function makeInstalledPackageRoot(): string {
-    return mkdtempSync(join(tmpdir(), "openclaw-postpublish-root-deps-"));
+    return mkdtempSync(join(tmpdir(), "marketingclaw-postpublish-root-deps-"));
   }
 
   function writePackageFile(root: string, relativePath: string, value: unknown): void {

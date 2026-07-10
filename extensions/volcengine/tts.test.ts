@@ -9,7 +9,7 @@ const { fetchWithSsrFGuardMock } = vi.hoisted(() => ({
 
 const PROVIDER_RESPONSE_MAX_BYTES = 16 * 1024 * 1024;
 
-vi.mock("openclaw/plugin-sdk/ssrf-runtime", () => ({
+vi.mock("marketingclaw/plugin-sdk/ssrf-runtime", () => ({
   fetchWithSsrFGuard: fetchWithSsrFGuardMock,
 }));
 
@@ -206,7 +206,7 @@ describe("Volcengine speech provider", () => {
           "X-Api-App-Key": "aGjiRDfUWi",
         },
         body: JSON.stringify({
-          user: { uid: "openclaw" },
+          user: { uid: "marketingclaw" },
           req_params: {
             text: "hello",
             speaker: "zh_male_aojiao_mars_bigtts",

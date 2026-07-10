@@ -2,7 +2,7 @@
 import { css, html, nothing } from "lit";
 import { property, query } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
-import { OpenClawLitElement } from "../lit/openclaw-element.ts";
+import { MarketingClawLitElement } from "../lit/marketingclaw-element.ts";
 
 const FOCUSABLE_SELECTOR = [
   "a[href]",
@@ -14,7 +14,7 @@ const FOCUSABLE_SELECTOR = [
   "[tabindex]:not([tabindex='-1'])",
 ].join(",");
 
-export class OpenClawModalDialog extends OpenClawLitElement {
+export class MarketingClawModalDialog extends MarketingClawLitElement {
   @property() label = "";
   @property() description = "";
 
@@ -103,8 +103,8 @@ export class OpenClawModalDialog extends OpenClawLitElement {
   }
 
   override render() {
-    const labelId = this.label ? "openclaw-modal-dialog-label" : "";
-    const descriptionId = this.description ? "openclaw-modal-dialog-description" : "";
+    const labelId = this.label ? "marketingclaw-modal-dialog-label" : "";
+    const descriptionId = this.description ? "marketingclaw-modal-dialog-description" : "";
     return html`
       <dialog
         role="dialog"
@@ -275,12 +275,12 @@ export class OpenClawModalDialog extends OpenClawLitElement {
   }
 }
 
-if (!customElements.get("openclaw-modal-dialog")) {
-  customElements.define("openclaw-modal-dialog", OpenClawModalDialog);
+if (!customElements.get("marketingclaw-modal-dialog")) {
+  customElements.define("marketingclaw-modal-dialog", MarketingClawModalDialog);
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "openclaw-modal-dialog": OpenClawModalDialog;
+    "marketingclaw-modal-dialog": MarketingClawModalDialog;
   }
 }

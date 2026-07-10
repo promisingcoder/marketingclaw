@@ -1,5 +1,5 @@
 /** Resolves cron job wall-clock timeout policy. */
-import { finiteSecondsToTimerSafeMilliseconds } from "@openclaw/normalization-core/number-coercion";
+import { finiteSecondsToTimerSafeMilliseconds } from "@marketingclaw/normalization-core/number-coercion";
 import type { CronJob } from "../types.js";
 
 /**

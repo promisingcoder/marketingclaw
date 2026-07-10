@@ -1,5 +1,5 @@
 import AVFoundation
-import OpenClawKit
+import MarketingClawKit
 import ReplayKit
 
 final class ScreenRecordService: @unchecked Sendable {
@@ -36,7 +36,7 @@ final class ScreenRecordService: @unchecked Sendable {
     private let recordQueue: DispatchQueue
 
     init(
-        recordQueue: DispatchQueue = DispatchQueue(label: "ai.openclawfoundation.app.screenrecord"),
+        recordQueue: DispatchQueue = DispatchQueue(label: "ai.marketingclaw.app.screenrecord"),
         startReplayKitCaptureAction: @escaping @Sendable (
             Bool,
             @escaping CaptureHandler,
@@ -145,7 +145,7 @@ final class ScreenRecordService: @unchecked Sendable {
             return URL(fileURLWithPath: outPath)
         }
         return FileManager().temporaryDirectory
-            .appendingPathComponent("openclaw-screen-record-\(UUID().uuidString).mp4")
+            .appendingPathComponent("marketingclaw-screen-record-\(UUID().uuidString).mp4")
     }
 
     private func startCapture(

@@ -1,8 +1,8 @@
-import { readRecentUserAssistantTextForSession } from "openclaw/plugin-sdk/session-store-runtime";
+import { readRecentUserAssistantTextForSession } from "marketingclaw/plugin-sdk/session-store-runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { buildTelegramSessionTranscriptPromptMessages } from "./session-transcript-context.js";
 
-vi.mock("openclaw/plugin-sdk/session-store-runtime", () => ({
+vi.mock("marketingclaw/plugin-sdk/session-store-runtime", () => ({
   readRecentUserAssistantTextForSession: vi.fn(),
 }));
 
@@ -48,7 +48,7 @@ describe("buildTelegramSessionTranscriptPromptMessages", () => {
       },
       {
         message_id: "session:a1",
-        sender: "OpenClaw",
+        sender: "MarketingClaw",
         timestamp_ms: 2_000,
         body: "The chart is range-bound; want an alert?",
       },

@@ -14,7 +14,7 @@ const MIN_NODE_23_MINOR = 11;
 const RECOMMENDED_NODE_MAJOR = 24;
 const SUPPORTED_NODE_RANGE = ">=22.19.0 <23 or >=23.11.0";
 const MIN_COMPILE_CACHE_NODE_24_MINOR = 15;
-const COMPILE_CACHE_DISABLED_RESPAWNED_ENV = "OPENCLAW_COMPILE_CACHE_DISABLED_RESPAWNED";
+const COMPILE_CACHE_DISABLED_RESPAWNED_ENV = "MARKETINGCLAW_COMPILE_CACHE_DISABLED_RESPAWNED";
 
 const parseNodeVersion = (rawVersion) => {
   const [majorRaw = "0", minorRaw = "0"] = rawVersion.split(".");
@@ -49,7 +49,7 @@ const ensureSupportedNodeVersion = () => {
   }
 
   process.stderr.write(
-    `openclaw: Node.js ${SUPPORTED_NODE_RANGE} is required (current: v${process.versions.node}).\n` +
+    `marketingclaw: Node.js ${SUPPORTED_NODE_RANGE} is required (current: v${process.versions.node}).\n` +
       "If you use nvm, run:\n" +
       `  nvm install ${RECOMMENDED_NODE_MAJOR}\n` +
       `  nvm use ${RECOMMENDED_NODE_MAJOR}\n` +
@@ -101,7 +101,7 @@ const resolvePackagedCompileCacheDirectory = () => {
     : path.join(os.tmpdir(), "node-compile-cache");
   return path.join(
     baseDirectory,
-    "openclaw",
+    "marketingclaw",
     version,
     sanitizeCompileCachePathSegment(installMarker),
   );
@@ -203,7 +203,7 @@ const runRespawnedChild = (command, args, env) => {
   child.once("error", (error) => {
     detach();
     process.stderr.write(
-      `[openclaw] Failed to respawn launcher: ${
+      `[marketingclaw] Failed to respawn launcher: ${
         error instanceof Error ? (error.stack ?? error.message) : String(error)
       }\n`,
     );
@@ -245,7 +245,7 @@ const respawnWithPackagedCompileCacheIfNeeded = () => {
   ) {
     return false;
   }
-  if (process.env.OPENCLAW_PACKAGED_COMPILE_CACHE_RESPAWNED === "1") {
+  if (process.env.MARKETINGCLAW_PACKAGED_COMPILE_CACHE_RESPAWNED === "1") {
     return false;
   }
   const currentDirectory = module.getCompileCacheDir?.();
@@ -259,7 +259,7 @@ const respawnWithPackagedCompileCacheIfNeeded = () => {
   const env = {
     ...process.env,
     NODE_COMPILE_CACHE: desiredDirectory,
-    OPENCLAW_PACKAGED_COMPILE_CACHE_RESPAWNED: "1",
+    MARKETINGCLAW_PACKAGED_COMPILE_CACHE_RESPAWNED: "1",
   };
   return runRespawnedChild(
     process.execPath,
@@ -360,7 +360,7 @@ const exists = async (specifier) => {
 };
 
 const buildMissingEntryErrorMessage = async () => {
-  const lines = ["openclaw: missing dist/entry.(m)js (build output)."];
+  const lines = ["marketingclaw: missing dist/entry.(m)js (build output)."];
   if (!(await exists("./src/entry.ts"))) {
     return lines.join("\n");
   }
@@ -370,7 +370,7 @@ const buildMissingEntryErrorMessage = async () => {
     "Build locally with `pnpm install && pnpm build`, or install a built package instead.",
   );
   lines.push(
-    "For pinned GitHub installs, use `npm install -g github:openclaw/openclaw#<ref>` instead of a raw `/archive/<ref>.tar.gz` URL.",
+    "For pinned GitHub installs, use `npm install -g github:marketingclaw/marketingclaw#<ref>` instead of a raw `/archive/<ref>.tar.gz` URL.",
   );
   lines.push("For releases, use `npm install -g openclaw@latest`.");
   return lines.join("\n");
@@ -428,7 +428,7 @@ const consumeLauncherRootOptionToken = (args, index) => {
 };
 
 const hasLauncherContainerTarget = (argv) => {
-  if (normalizeLauncherMetadataValue(process.env.OPENCLAW_CONTAINER)) {
+  if (normalizeLauncherMetadataValue(process.env.MARKETINGCLAW_CONTAINER)) {
     return true;
   }
   const args = argv.slice(2);
@@ -494,7 +494,7 @@ const resolvePrecomputedCommandHelp = (argv) => {
 };
 
 const isHelpFastPathDisabled = () =>
-  process.env.OPENCLAW_DISABLE_CLI_STARTUP_HELP_FAST_PATH === "1";
+  process.env.MARKETINGCLAW_DISABLE_CLI_STARTUP_HELP_FAST_PATH === "1";
 
 const normalizeLauncherHomeValue = (value) => {
   const trimmed = value?.trim();
@@ -507,7 +507,7 @@ const resolveLauncherOsHomeDir = () =>
   os.homedir();
 
 const resolveLauncherHomeDir = () => {
-  const explicit = normalizeLauncherHomeValue(process.env.OPENCLAW_HOME);
+  const explicit = normalizeLauncherHomeValue(process.env.MARKETINGCLAW_HOME);
   const rawHome =
     explicit && (explicit === "~" || explicit.startsWith("~/") || explicit.startsWith("~\\"))
       ? explicit.replace(/^~(?=$|[\\/])/, resolveLauncherOsHomeDir())
@@ -526,28 +526,28 @@ const resolveLauncherUserPath = (input) => {
 };
 
 const resolveLauncherConfigPaths = () => {
-  const explicit = process.env.OPENCLAW_CONFIG_PATH?.trim();
+  const explicit = process.env.MARKETINGCLAW_CONFIG_PATH?.trim();
   if (explicit) {
     return [resolveLauncherUserPath(explicit)];
   }
-  const stateOverride = process.env.OPENCLAW_STATE_DIR?.trim();
+  const stateOverride = process.env.MARKETINGCLAW_STATE_DIR?.trim();
   if (stateOverride) {
     const stateDir = resolveLauncherUserPath(stateOverride);
-    return [path.join(stateDir, "openclaw.json"), path.join(stateDir, "clawdbot.json")];
+    return [path.join(stateDir, "marketingclaw.json"), path.join(stateDir, "clawdbot.json")];
   }
   const homeDir = resolveLauncherHomeDir();
   return [
-    path.join(homeDir, ".openclaw", "openclaw.json"),
-    path.join(homeDir, ".openclaw", "clawdbot.json"),
-    path.join(homeDir, ".clawdbot", "openclaw.json"),
+    path.join(homeDir, ".marketingclaw", "marketingclaw.json"),
+    path.join(homeDir, ".marketingclaw", "clawdbot.json"),
+    path.join(homeDir, ".clawdbot", "marketingclaw.json"),
     path.join(homeDir, ".clawdbot", "clawdbot.json"),
   ];
 };
 
 const shouldDeferRootHelpToRuntimeEntry = () => {
   if (
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR?.trim() ||
-    process.env.OPENCLAW_DISABLE_BUNDLED_PLUGINS?.trim()
+    process.env.MARKETINGCLAW_BUNDLED_PLUGINS_DIR?.trim() ||
+    process.env.MARKETINGCLAW_DISABLE_BUNDLED_PLUGINS?.trim()
   ) {
     return true;
   }
@@ -575,7 +575,7 @@ const loadPrecomputedHelpText = (key, subkey) => {
 
 function tryOutputLauncherVersion(argv) {
   try {
-    if (normalizeLauncherMetadataValue(process.env.OPENCLAW_CONTAINER)) {
+    if (normalizeLauncherMetadataValue(process.env.MARKETINGCLAW_CONTAINER)) {
       return false;
     }
     if (!isLauncherVersionFastPathArgv(argv)) {
@@ -583,7 +583,9 @@ function tryOutputLauncherVersion(argv) {
     }
     const version = resolveLauncherVersion();
     const commit = resolveLauncherCommit();
-    process.stdout.write(commit ? `OpenClaw ${version} (${commit})\n` : `OpenClaw ${version}\n`);
+    process.stdout.write(
+      commit ? `MarketingClaw ${version} (${commit})\n` : `MarketingClaw ${version}\n`,
+    );
     return true;
   } catch {
     return false;
@@ -618,7 +620,7 @@ function resolveLauncherVersion() {
   if (buildVersion) {
     return buildVersion;
   }
-  return normalizeLauncherMetadataValue(process.env.OPENCLAW_BUNDLED_VERSION) ?? "0.0.0";
+  return normalizeLauncherMetadataValue(process.env.MARKETINGCLAW_BUNDLED_VERSION) ?? "0.0.0";
 }
 
 function resolveLauncherCommit() {

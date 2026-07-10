@@ -4,7 +4,7 @@ import {
   CODEX_APP_SERVER_DEFAULT_MODEL_REF,
   GEMINI_CLI_DEFAULT_MODEL_REF,
 } from "../commands/onboard-inference.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import type { CrestodianOverview } from "./overview.js";
 
 /**
@@ -20,7 +20,7 @@ type CrestodianLocalPlannerBackend = {
   runner: "cli" | "embedded";
   provider: string;
   model: string;
-  buildConfig: (workspaceDir: string) => OpenClawConfig;
+  buildConfig: (workspaceDir: string) => MarketingClawConfig;
 };
 
 function splitModelRef(modelRef: string): { provider: string; model: string } {
@@ -70,7 +70,7 @@ export function selectCrestodianLocalPlannerBackends(
 }
 
 /** Minimal run config for a CLI-harness model scoped to one workspace. */
-export function buildCliPlannerConfig(workspaceDir: string, modelRef: string): OpenClawConfig {
+export function buildCliPlannerConfig(workspaceDir: string, modelRef: string): MarketingClawConfig {
   return {
     agents: {
       defaults: {
@@ -82,7 +82,7 @@ export function buildCliPlannerConfig(workspaceDir: string, modelRef: string): O
 }
 
 /** Run config for the Codex app-server harness (exec must be allowed to spawn it). */
-export function buildCodexAppServerPlannerConfig(workspaceDir: string): OpenClawConfig {
+export function buildCodexAppServerPlannerConfig(workspaceDir: string): MarketingClawConfig {
   return {
     agents: {
       defaults: {

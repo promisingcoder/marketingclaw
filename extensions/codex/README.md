@@ -1,11 +1,11 @@
-# OpenClaw Codex
+# MarketingClaw Codex
 
-Official OpenClaw provider and harness plugin for OpenAI Codex app-server integration. It exposes the Codex-managed GPT model catalog and the Codex runtime surfaces used by OpenClaw agents.
+Official MarketingClaw provider and harness plugin for OpenAI Codex app-server integration. It exposes the Codex-managed GPT model catalog and the Codex runtime surfaces used by MarketingClaw agents.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugin add @openclaw/codex
+marketingclaw plugin add @marketingclaw/codex
 ```
 
-Use this plugin when you want OpenClaw to run Codex-backed model turns, media understanding, and prompt overlays through the Codex app-server harness.
+Use this plugin when you want MarketingClaw to run Codex-backed model turns, media understanding, and prompt overlays through the Codex app-server harness.

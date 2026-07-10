@@ -2,7 +2,7 @@ import CoreText
 import SwiftUI
 import UIKit
 
-enum OpenClawType {
+enum MarketingClawType {
     // MARK: - Display — Red Hat Display
 
     static var title1: Font {

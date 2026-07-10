@@ -4,7 +4,7 @@
  * Node hosts load the active plugin registry, expose registered capabilities
  * and commands, and dispatch incoming node-host commands by exact command id.
  */
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { getActivePluginRegistry } from "../plugins/runtime.js";
 import { createLazyRuntimeModule } from "../shared/lazy-runtime.js";
 
@@ -14,7 +14,7 @@ const loadPluginRegistryLoaderModule = createLazyRuntimeModule(
 
 /** Ensure plugin registry data is loaded before node-host command dispatch. */
 export async function ensureNodeHostPluginRegistry(params: {
-  config: OpenClawConfig;
+  config: MarketingClawConfig;
   env?: NodeJS.ProcessEnv;
 }): Promise<void> {
   (await loadPluginRegistryLoaderModule()).ensurePluginRegistryLoaded({

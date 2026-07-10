@@ -15,7 +15,7 @@ import {
 describe("route-args", () => {
   it("parses health and status route args", () => {
     expect(
-      parseHealthRouteArgs(["node", "openclaw", "health", "--json", "--timeout", "5000"]),
+      parseHealthRouteArgs(["node", "marketingclaw", "health", "--json", "--timeout", "5000"]),
     ).toEqual({
       json: true,
       verbose: false,
@@ -24,7 +24,7 @@ describe("route-args", () => {
     expect(
       parseStatusRouteArgs([
         "node",
-        "openclaw",
+        "marketingclaw",
         "status",
         "--json",
         "--deep",
@@ -41,7 +41,7 @@ describe("route-args", () => {
       verbose: false,
       timeoutMs: 5000,
     });
-    expect(parseStatusRouteArgs(["node", "openclaw", "status", "--timeout"])).toBeNull();
+    expect(parseStatusRouteArgs(["node", "marketingclaw", "status", "--timeout"])).toBeNull();
   });
 
   it("defers status/health --timeout with a present-but-invalid value to Commander", () => {
@@ -51,13 +51,17 @@ describe("route-args", () => {
     // them with a non-zero exit. Returning null defers to Commander so both
     // paths share the same validation.
     for (const bad of ["0", "-5", "nope", "5s"]) {
-      expect(parseStatusRouteArgs(["node", "openclaw", "status", "--timeout", bad])).toBeNull();
-      expect(parseHealthRouteArgs(["node", "openclaw", "health", "--timeout", bad])).toBeNull();
+      expect(
+        parseStatusRouteArgs(["node", "marketingclaw", "status", "--timeout", bad]),
+      ).toBeNull();
+      expect(
+        parseHealthRouteArgs(["node", "marketingclaw", "health", "--timeout", bad]),
+      ).toBeNull();
     }
     expect(
       parseStatusRouteArgs([
         "node",
-        "openclaw",
+        "marketingclaw",
         "status",
         "--timeout",
         "5000",
@@ -68,7 +72,7 @@ describe("route-args", () => {
     expect(
       parseHealthRouteArgs([
         "node",
-        "openclaw",
+        "marketingclaw",
         "health",
         "--timeout",
         "nope",
@@ -77,11 +81,11 @@ describe("route-args", () => {
       ]),
     ).toMatchObject({ timeoutMs: 5000 });
     // A valid positive integer still parses on the fast path.
-    expect(parseStatusRouteArgs(["node", "openclaw", "status", "--timeout", "5000"])).toMatchObject(
-      { timeoutMs: 5000 },
-    );
+    expect(
+      parseStatusRouteArgs(["node", "marketingclaw", "status", "--timeout", "5000"]),
+    ).toMatchObject({ timeoutMs: 5000 });
     // No --timeout flag at all still uses the fast path (undefined timeout).
-    expect(parseStatusRouteArgs(["node", "openclaw", "status"])).toMatchObject({
+    expect(parseStatusRouteArgs(["node", "marketingclaw", "status"])).toMatchObject({
       timeoutMs: undefined,
     });
   });
@@ -90,7 +94,7 @@ describe("route-args", () => {
     expect(
       parseGatewayStatusRouteArgs([
         "node",
-        "openclaw",
+        "marketingclaw",
         "gateway",
         "status",
         "--url",
@@ -118,10 +122,10 @@ describe("route-args", () => {
       json: true,
     });
     expect(
-      parseGatewayStatusRouteArgs(["node", "openclaw", "gateway", "status", "--ssh", "host"]),
+      parseGatewayStatusRouteArgs(["node", "marketingclaw", "gateway", "status", "--ssh", "host"]),
     ).toBeNull();
     expect(
-      parseGatewayStatusRouteArgs(["node", "openclaw", "gateway", "status", "--ssh-auto"]),
+      parseGatewayStatusRouteArgs(["node", "marketingclaw", "gateway", "status", "--ssh-auto"]),
     ).toBeNull();
   });
 
@@ -129,7 +133,7 @@ describe("route-args", () => {
     expect(
       parseSessionsRouteArgs([
         "node",
-        "openclaw",
+        "marketingclaw",
         "sessions",
         "--json",
         "--all-agents",
@@ -150,15 +154,15 @@ describe("route-args", () => {
       active: "true",
       limit: "25",
     });
-    expect(parseSessionsRouteArgs(["node", "openclaw", "sessions", "--agent"])).toBeNull();
-    expect(parseSessionsRouteArgs(["node", "openclaw", "sessions", "--limit"])).toBeNull();
+    expect(parseSessionsRouteArgs(["node", "marketingclaw", "sessions", "--agent"])).toBeNull();
+    expect(parseSessionsRouteArgs(["node", "marketingclaw", "sessions", "--limit"])).toBeNull();
     expect(
-      parseAgentsListRouteArgs(["node", "openclaw", "agents", "list", "--json", "--bindings"]),
+      parseAgentsListRouteArgs(["node", "marketingclaw", "agents", "list", "--json", "--bindings"]),
     ).toEqual({
       json: true,
       bindings: true,
     });
-    expect(parseAgentsListRouteArgs(["node", "openclaw", "agents"])).toEqual({
+    expect(parseAgentsListRouteArgs(["node", "marketingclaw", "agents"])).toEqual({
       json: false,
       bindings: false,
     });
@@ -168,7 +172,7 @@ describe("route-args", () => {
     expect(
       parseConfigGetRouteArgs([
         "node",
-        "openclaw",
+        "marketingclaw",
         "--log-level",
         "debug",
         "config",
@@ -183,7 +187,7 @@ describe("route-args", () => {
     expect(
       parseConfigUnsetRouteArgs([
         "node",
-        "openclaw",
+        "marketingclaw",
         "config",
         "unset",
         "--profile",
@@ -201,7 +205,7 @@ describe("route-args", () => {
     expect(
       parseConfigUnsetRouteArgs([
         "node",
-        "openclaw",
+        "marketingclaw",
         "config",
         "unset",
         "--dry-run",
@@ -217,14 +221,16 @@ describe("route-args", () => {
         json: true,
       },
     });
-    expect(parseConfigGetRouteArgs(["node", "openclaw", "config", "get", "--json"])).toBeNull();
+    expect(
+      parseConfigGetRouteArgs(["node", "marketingclaw", "config", "get", "--json"]),
+    ).toBeNull();
   });
 
   it("parses models list and models status route args", () => {
     expect(
       parseModelsListRouteArgs([
         "node",
-        "openclaw",
+        "marketingclaw",
         "models",
         "list",
         "--provider",
@@ -244,7 +250,7 @@ describe("route-args", () => {
     expect(
       parseModelsStatusRouteArgs([
         "node",
-        "openclaw",
+        "marketingclaw",
         "models",
         "status",
         "--probe-provider",
@@ -279,7 +285,7 @@ describe("route-args", () => {
       probe: true,
     });
     expect(
-      parseModelsStatusRouteArgs(["node", "openclaw", "models", "status", "--probe-profile"]),
+      parseModelsStatusRouteArgs(["node", "marketingclaw", "models", "status", "--probe-profile"]),
     ).toBeNull();
   });
 });

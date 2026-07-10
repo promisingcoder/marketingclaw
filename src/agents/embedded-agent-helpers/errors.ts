@@ -1,13 +1,13 @@
-import { isConfiguredContextSizeOverflowError } from "@openclaw/ai/internal/runtime";
+import { isConfiguredContextSizeOverflowError } from "@marketingclaw/ai/internal/runtime";
 /**
  * Classifies provider/runtime failures and formats assistant-facing error text.
  */
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
-} from "@openclaw/normalization-core/string-coerce";
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+} from "@marketingclaw/normalization-core/string-coerce";
+import { truncateUtf16Safe } from "@marketingclaw/normalization-core/utf16-slice";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import type { AssistantMessage } from "../../llm/types.js";
 import { createSubsystemLogger } from "../../logging/subsystem.js";
 import {
@@ -627,7 +627,7 @@ function isOAuthRefreshContentionMessage(raw: string): boolean {
   return (
     /\brefresh_contention\b/i.test(raw) ||
     (/\bfile lock timeout\b/i.test(raw) &&
-      /(?:\/|\\|^)(?:oauth-refresh|openclaw-oauth-refresh)[^/\n\\]*?(?:\.lock)?\b/i.test(raw))
+      /(?:\/|\\|^)(?:oauth-refresh|marketingclaw-oauth-refresh)[^/\n\\]*?(?:\.lock)?\b/i.test(raw))
   );
 }
 
@@ -1373,7 +1373,7 @@ export function classifyAssistantFailoverReason(
 export function formatAssistantErrorText(
   msg: AssistantMessage,
   opts?: {
-    cfg?: OpenClawConfig;
+    cfg?: MarketingClawConfig;
     sessionKey?: string;
     provider?: string;
     model?: string;
@@ -1613,7 +1613,7 @@ function isRawAssistantErrorPassthrough(params: {
 export function formatUserFacingAssistantErrorText(
   msg: AssistantMessage,
   opts?: {
-    cfg?: OpenClawConfig;
+    cfg?: MarketingClawConfig;
     sessionKey?: string;
     provider?: string;
     model?: string;

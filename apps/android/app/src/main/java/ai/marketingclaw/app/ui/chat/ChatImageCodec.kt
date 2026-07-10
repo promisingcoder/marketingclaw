@@ -1,6 +1,6 @@
-package ai.openclaw.app.ui.chat
+package ai.marketingclaw.app.ui.chat
 
-import ai.openclaw.app.node.JpegSizeLimiter
+import ai.marketingclaw.app.node.JpegSizeLimiter
 import android.content.ContentResolver
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

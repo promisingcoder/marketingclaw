@@ -1,6 +1,6 @@
 // Outbound bridge tests cover channel message handoff from core to outbound adapters.
 import { describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import {
   createChannelMessageAdapterFromOutbound,
   type ChannelMessageOutboundBridgeResult,
@@ -12,7 +12,7 @@ import type {
   MessageReceipt,
 } from "./types.js";
 
-const cfg = {} as OpenClawConfig;
+const cfg = {} as MarketingClawConfig;
 
 function requireFirstCallArg(mock: {
   mock: { calls: readonly unknown[][] };

@@ -1,5 +1,5 @@
 import path from "node:path";
-import { withTempDir } from "openclaw/plugin-sdk/test-env";
+import { withTempDir } from "marketingclaw/plugin-sdk/test-env";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import {
   configureMemoryCoreDreamingState,
@@ -77,7 +77,7 @@ function collectionValidationContext(
     workspaceDir,
     agentId: "agent-a",
     qmdCommand: "qmd",
-    qmdIndexPath: path.join(workspaceDir, ".openclaw", "index.sqlite"),
+    qmdIndexPath: path.join(workspaceDir, ".marketingclaw", "index.sqlite"),
     searchMode: "search",
     collections: managedCollections(),
     sources: ["memory", "sessions"],
@@ -91,7 +91,7 @@ function multiCollectionProbeContext(
     workspaceDir,
     agentId: "agent-a",
     qmdCommand: "qmd",
-    qmdIndexPath: path.join(workspaceDir, ".openclaw", "index.sqlite"),
+    qmdIndexPath: path.join(workspaceDir, ".marketingclaw", "index.sqlite"),
     searchMode: "search",
     sources: ["memory", "sessions"],
   };
@@ -152,7 +152,7 @@ describe("qmd-runtime-cache", () => {
         const sameLogicalDifferentWorkspace: QmdRuntimeCollectionValidationCacheContext = {
           ...context,
           workspaceDir: secondWorkspace,
-          qmdIndexPath: path.join(secondWorkspace, ".openclaw", "index.sqlite"),
+          qmdIndexPath: path.join(secondWorkspace, ".marketingclaw", "index.sqlite"),
         };
 
         const miss = await readQmdCollectionValidationCache(sameLogicalDifferentWorkspace, 3_001);

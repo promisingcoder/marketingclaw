@@ -1,7 +1,7 @@
 // Qa Lab plugin module implements Telegram live transport adapter behavior.
-import type { TelegramBotUpdate } from "@openclaw/telegram/api.js";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { QaRunnerCliRegistration } from "openclaw/plugin-sdk/qa-runner-runtime";
+import type { TelegramBotUpdate } from "@marketingclaw/telegram/api.js";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import type { QaRunnerCliRegistration } from "marketingclaw/plugin-sdk/qa-runner-runtime";
 import {
   acquireQaCredentialLease,
   startQaCredentialLeaseHeartbeat,
@@ -114,7 +114,7 @@ export async function createTelegramQaTransportAdapter(
       logicalConversationId = input.conversation.id;
       logicalConversationKind = input.conversation.kind;
       const text = sutIdentity.username
-        ? input.text.replaceAll("@openclaw", `@${sutIdentity.username}`)
+        ? input.text.replaceAll("@marketingclaw", `@${sutIdentity.username}`)
         : input.text;
       const nativeReplyToId = input.replyToId ? nativeMessageIds.get(input.replyToId) : undefined;
       const sent = await telegramLive.callTelegramApi<{ message_id: number }>(
@@ -151,7 +151,7 @@ export async function createTelegramQaTransportAdapter(
       busMessageIds.clear();
     },
     createGatewayConfig: () =>
-      telegramLive.buildTelegramQaConfig({} as OpenClawConfig, {
+      telegramLive.buildTelegramQaConfig({} as MarketingClawConfig, {
         groupId: runtimeEnv.groupId,
         sutToken: runtimeEnv.sutToken,
         driverBotId: driverIdentity.id,

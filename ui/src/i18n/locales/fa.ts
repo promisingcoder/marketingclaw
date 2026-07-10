@@ -144,18 +144,18 @@ export const fa: TranslationMap = {
     pairing: {
       button: "جفت‌سازی دستگاه همراه",
       adminRequired: "برای ایجاد کدهای راه‌اندازی، دسترسی مدیر لازم است.",
-      title: "موبایل OpenClaw",
+      title: "موبایل MarketingClaw",
       subtitle: "برای اتصال یک تلفن جدید، این کد QR را در برنامه موبایل اسکن کنید.",
       generating: "در حال ایجاد کد راه‌اندازی امن…",
       failed: "امکان ایجاد کد راه‌اندازی وجود نداشت.",
-      qrAlt: "کد QR جفت‌سازی موبایل OpenClaw",
+      qrAlt: "کد QR جفت‌سازی موبایل MarketingClaw",
       qrUnavailable: "کد QR در دسترس نیست. به‌جای آن کد راه‌اندازی را کپی کنید.",
       copySetupCode: "کپی کد راه‌اندازی",
       newCode: "کد جدید",
       showSetupCode: "نمایش کد راه‌اندازی",
       pending: "درخواست‌های دستگاه در انتظار بررسی: {count}",
       review: "بازبینی",
-      waiting: "برنامه‌های رسمی موبایل OpenClaw پس از اسکن به‌صورت خودکار متصل می‌شوند.",
+      waiting: "برنامه‌های رسمی موبایل MarketingClaw پس از اسکن به‌صورت خودکار متصل می‌شوند.",
       help: "راهنمای جفت‌سازی",
       manageDevices: "مدیریت دستگاه‌ها",
     },
@@ -182,7 +182,7 @@ export const fa: TranslationMap = {
   },
   worktrees: {
     title: "Worktreeهای مدیریت‌شده",
-    subtitle: "checkoutهای ایزولهٔ مخزن که متعلق به OpenClaw هستند.",
+    subtitle: "checkoutهای ایزولهٔ مخزن که متعلق به MarketingClaw هستند.",
     cleanNow: "اکنون پاک‌سازی کن",
     name: "نام",
     repo: "مخزن",
@@ -555,7 +555,7 @@ export const fa: TranslationMap = {
     skillWorkshop: "پیشنهادها را پیش از تبدیل‌شدن به مهارت‌های فعال، بررسی، اصلاح و اعمال کنید.",
     nodes: "دستگاه‌های جفت‌شده و فرمان‌ها.",
     chat: "چت Gateway برای مداخله‌های سریع.",
-    config: "ویرایش openclaw.json.",
+    config: "ویرایش marketingclaw.json.",
     profile: "آمار، زنجیره‌ها، و زندگی عامل شما در صخره.",
     communications: "کانال‌ها، پیام‌ها و تنظیمات صوتی.",
     appearance: "تنظیمات پوسته، UI و جادوگر راه‌اندازی.",
@@ -1075,7 +1075,7 @@ export const fa: TranslationMap = {
       metadataUpgradeTitle: "تغییر فراداده دستگاه در انتظار تأیید است.",
       metadataUpgradeSummary: "این دستگاه قبلاً جفت شده است، اما تغییر فراداده در انتظار تأیید است.",
       mobileHint:
-        "روی موبایل هستید؟ URL کامل (شامل #token=...) را از openclaw dashboard --no-open روی دسکتاپ خود کپی کنید.",
+        "روی موبایل هستید؟ URL کامل (شامل #token=...) را از marketingclaw dashboard --no-open روی دسکتاپ خود کپی کنید.",
       docsTitle: "مستندات جفت‌سازی دستگاه (در زبانه جدید باز می‌شود)",
       docsLink: "مستندات: جفت‌سازی دستگاه",
     },
@@ -1113,7 +1113,8 @@ export const fa: TranslationMap = {
       modelAuthExpiresIn: "انقضا {when}",
       modelAuthAttentionExpiredTitle: "احراز هویت مدل منقضی شده است",
       modelAuthAttentionExpiringTitle: "احراز هویت مدل به‌زودی منقضی می‌شود",
-      modelAuthAttentionExpiredDesc: "{providers} — با openclaw models auth دوباره احراز هویت کنید",
+      modelAuthAttentionExpiredDesc:
+        "{providers} — با marketingclaw models auth دوباره احراز هویت کنید",
       modelAuthAttentionExpiringEntry: "{provider} ({when})",
     },
     attention: {
@@ -1566,9 +1567,9 @@ export const fa: TranslationMap = {
         summary:
           "Gateway در دسترس است، اما قبل از اتصال این مرورگر به یک توکن یا گذرواژه منطبق نیاز دارد.",
         stepPaste:
-          "توکن openclaw dashboard --no-open را جای گذاری کنید یا گذرواژه پیکربندی شده را وارد کنید.",
+          "توکن marketingclaw dashboard --no-open را جای گذاری کنید یا گذرواژه پیکربندی شده را وارد کنید.",
         stepGenerate:
-          "اگر توکنی پیکربندی نشده است، openclaw doctor --generate-gateway-token را روی میزبان Gateway اجرا کنید.",
+          "اگر توکنی پیکربندی نشده است، marketingclaw doctor --generate-gateway-token را روی میزبان Gateway اجرا کنید.",
         stepConnect: "پس از به روز کردن اعتبارنامه، دوباره روی Connect کلیک کنید.",
       },
       authFailed: {
@@ -1576,7 +1577,7 @@ export const fa: TranslationMap = {
         summary:
           "اعتبارنامه ارائه شده رد شد. رایج ترین علت، توکن قدیمی یا توکنی است که از URL یک Gateway دیگر کپی شده است.",
         stepDashboard:
-          "openclaw dashboard --no-open را اجرا کنید و URL تازه را باز کنید یا توکن آن را جای گذاری کنید.",
+          "marketingclaw dashboard --no-open را اجرا کنید و URL تازه را باز کنید یا توکن آن را جای گذاری کنید.",
         stepReplace:
           "مقادیر قدیمی توکن/گذرواژه را جایگزین کنید؛ از توکن URL یک Gateway دیگر دوباره استفاده نکنید.",
         stepMode:
@@ -1600,8 +1601,8 @@ export const fa: TranslationMap = {
           "این مرورگر قبل از استفاده از Control UI به تأیید یک باره از میزبان Gateway نیاز دارد.",
         upgradeSummary:
           "این مرورگر از قبل شناخته شده است، اما دسترسی درخواستی تغییر کرده و به تأیید تازه نیاز دارد.",
-        stepList: "openclaw devices list را روی میزبان Gateway اجرا کنید.",
-        stepApproveId: "این درخواست را تأیید کنید: openclaw devices approve {requestId}.",
+        stepList: "marketingclaw devices list را روی میزبان Gateway اجرا کنید.",
+        stepApproveId: "این درخواست را تأیید کنید: marketingclaw devices approve {requestId}.",
         stepApprove: "درخواست در انتظار مرورگر/دستگاه را از آن فهرست تأیید کنید.",
         stepReconnect: "پس از تکمیل تأیید، دوباره وصل شوید.",
       },
@@ -1629,22 +1630,22 @@ export const fa: TranslationMap = {
         summary:
           "Control UI سرو شده و Gateway در حال اجرا درباره پروتکل اتصال پشتیبانی شده توافق ندارند.",
         stepDashboard:
-          "داشبورد سرو شده را با openclaw dashboard دوباره باز کنید تا UI و Gateway از همان نصب باشند.",
+          "داشبورد سرو شده را با marketingclaw dashboard دوباره باز کنید تا UI و Gateway از همان نصب باشند.",
         stepDevUi:
           "اگر از pnpm ui:dev استفاده می کنید، UI توسعه را بر اساس checkout فعلی دوباره بسازید یا راه اندازی کنید.",
         stepRestart:
-          "پس از به روزرسانی OpenClaw، Gateway را دوباره راه اندازی کنید تا پروتکل فعلی را سرو کند.",
+          "پس از به روزرسانی MarketingClaw، Gateway را دوباره راه اندازی کنید تا پروتکل فعلی را سرو کند.",
       },
       network: {
         title: "اتصال برقرار نشد",
         summary:
           "مرورگر نتوانست اتصال Gateway را کامل کند. پیش از تلاش دوباره با اعتبارنامه ها، هدف و انتقال را بررسی کنید.",
         stepGateway:
-          "با openclaw status یا openclaw gateway run تأیید کنید که Gateway در حال اجرا است.",
+          "با marketingclaw status یا marketingclaw gateway run تأیید کنید که Gateway در حال اجرا است.",
         stepUrl:
           "URL WebSocket را بررسی کنید و وقتی Gateway پشت HTTPS/Tailscale Serve است از wss:// استفاده کنید.",
         stepDashboard:
-          "داشبورد را با openclaw dashboard --no-open دوباره باز کنید تا URL و جزئیات احراز هویت فعلی را دوباره کپی کنید.",
+          "داشبورد را با marketingclaw dashboard --no-open دوباره باز کنید تا URL و جزئیات احراز هویت فعلی را دوباره کپی کنید.",
       },
     },
   },

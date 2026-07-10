@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import OpenClaw
+@testable import MarketingClaw
 
 @Suite(.serialized)
 @MainActor
@@ -69,15 +69,15 @@ struct ConfigStoreTests {
 
     @Test func `local save does not fall back to direct write after stale gateway rejection`() async throws {
         let stateDir = FileManager().temporaryDirectory
-            .appendingPathComponent("openclaw-state-\(UUID().uuidString)", isDirectory: true)
-        let configPath = stateDir.appendingPathComponent("openclaw.json")
+            .appendingPathComponent("marketingclaw-state-\(UUID().uuidString)", isDirectory: true)
+        let configPath = stateDir.appendingPathComponent("marketingclaw.json")
         defer { try? FileManager().removeItem(at: stateDir) }
 
         try await TestIsolation.withEnvValues([
-            "OPENCLAW_STATE_DIR": stateDir.path,
-            "OPENCLAW_CONFIG_PATH": configPath.path,
+            "MARKETINGCLAW_STATE_DIR": stateDir.path,
+            "MARKETINGCLAW_CONFIG_PATH": configPath.path,
         ]) {
-            OpenClawConfigFile.saveDict([
+            MarketingClawConfigFile.saveDict([
                 "gateway": [
                     "mode": "local",
                     "auth": [
@@ -111,13 +111,13 @@ struct ConfigStoreTests {
 
     @Test func `local save can fall back to protected direct write when gateway is unavailable`() async throws {
         let stateDir = FileManager().temporaryDirectory
-            .appendingPathComponent("openclaw-state-\(UUID().uuidString)", isDirectory: true)
-        let configPath = stateDir.appendingPathComponent("openclaw.json")
+            .appendingPathComponent("marketingclaw-state-\(UUID().uuidString)", isDirectory: true)
+        let configPath = stateDir.appendingPathComponent("marketingclaw.json")
         defer { try? FileManager().removeItem(at: stateDir) }
 
         try await TestIsolation.withEnvValues([
-            "OPENCLAW_STATE_DIR": stateDir.path,
-            "OPENCLAW_CONFIG_PATH": configPath.path,
+            "MARKETINGCLAW_STATE_DIR": stateDir.path,
+            "MARKETINGCLAW_CONFIG_PATH": configPath.path,
         ]) {
             await ConfigStore._testSetOverrides(.init(
                 isRemoteMode: { false },

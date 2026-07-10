@@ -1,14 +1,14 @@
 // LongCat tests cover provider registration, onboarding, and wire compatibility.
 import { readFileSync } from "node:fs";
-import type { StreamFn } from "openclaw/plugin-sdk/agent-core";
+import type { StreamFn } from "marketingclaw/plugin-sdk/agent-core";
 import {
   createAssistantMessageEventStream,
   type Context,
   type Model,
-} from "openclaw/plugin-sdk/llm";
-import { registerSingleProviderPlugin } from "openclaw/plugin-sdk/plugin-test-runtime";
-import { resolveAgentModelPrimaryValue } from "openclaw/plugin-sdk/provider-onboard";
-import { buildOpenAICompletionsParams } from "openclaw/plugin-sdk/provider-transport-runtime";
+} from "marketingclaw/plugin-sdk/llm";
+import { registerSingleProviderPlugin } from "marketingclaw/plugin-sdk/plugin-test-runtime";
+import { resolveAgentModelPrimaryValue } from "marketingclaw/plugin-sdk/provider-onboard";
+import { buildOpenAICompletionsParams } from "marketingclaw/plugin-sdk/provider-transport-runtime";
 import { describe, expect, it } from "vitest";
 import plugin from "./index.js";
 import { LONGCAT_DEFAULT_MODEL_REF } from "./models.js";
@@ -17,7 +17,9 @@ import { buildLongCatProvider } from "./provider-catalog.js";
 import { createLongCatThinkingWrapper } from "./stream.js";
 
 function readManifest() {
-  return JSON.parse(readFileSync(new URL("./openclaw.plugin.json", import.meta.url), "utf8")) as {
+  return JSON.parse(
+    readFileSync(new URL("./marketingclaw.plugin.json", import.meta.url), "utf8"),
+  ) as {
     providerAuthChoices?: Array<{ choiceId?: string; optionKey?: string; cliFlag?: string }>;
     setup?: { providers?: Array<{ id?: string; envVars?: string[] }> };
   };

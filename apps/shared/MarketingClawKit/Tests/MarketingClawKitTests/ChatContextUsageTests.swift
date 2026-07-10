@@ -1,9 +1,9 @@
 import Foundation
 import Testing
-@testable import OpenClawChatUI
+@testable import MarketingClawChatUI
 
-private final class ContextUsageTestTransport: @unchecked Sendable, OpenClawChatTransport {
-    func requestHistory(sessionKey _: String) async throws -> OpenClawChatHistoryPayload {
+private final class ContextUsageTestTransport: @unchecked Sendable, MarketingClawChatTransport {
+    func requestHistory(sessionKey _: String) async throws -> MarketingClawChatHistoryPayload {
         throw CancellationError()
     }
 
@@ -12,7 +12,7 @@ private final class ContextUsageTestTransport: @unchecked Sendable, OpenClawChat
         message _: String,
         thinking _: String,
         idempotencyKey _: String,
-        attachments _: [OpenClawChatAttachmentPayload]) async throws -> OpenClawChatSendResponse
+        attachments _: [MarketingClawChatAttachmentPayload]) async throws -> MarketingClawChatSendResponse
     {
         throw CancellationError()
     }
@@ -21,7 +21,7 @@ private final class ContextUsageTestTransport: @unchecked Sendable, OpenClawChat
         false
     }
 
-    func events() -> AsyncStream<OpenClawChatTransportEvent> {
+    func events() -> AsyncStream<MarketingClawChatTransportEvent> {
         AsyncStream { continuation in
             continuation.finish()
         }
@@ -31,12 +31,12 @@ private final class ContextUsageTestTransport: @unchecked Sendable, OpenClawChat
 struct ChatContextUsageTests {
     private func message(
         role: String = "assistant",
-        usage: OpenClawChatUsage? = nil) -> OpenClawChatMessage
+        usage: MarketingClawChatUsage? = nil) -> MarketingClawChatMessage
     {
-        OpenClawChatMessage(
+        MarketingClawChatMessage(
             id: UUID(),
             role: role,
-            content: [OpenClawChatMessageContent(
+            content: [MarketingClawChatMessageContent(
                 type: "text",
                 text: "hi",
                 thinking: nil,
@@ -56,7 +56,7 @@ struct ChatContextUsageTests {
         output: Int? = nil,
         cacheRead: Int? = nil,
         total: Int? = nil,
-        costTotal: Double? = nil) throws -> OpenClawChatUsage
+        costTotal: Double? = nil) throws -> MarketingClawChatUsage
     {
         var payload: [String: Any] = [:]
         payload["input"] = input
@@ -67,7 +67,7 @@ struct ChatContextUsageTests {
             payload["cost"] = ["total": costTotal]
         }
         let data = try JSONSerialization.data(withJSONObject: payload.compactMapValues { $0 })
-        return try JSONDecoder().decode(OpenClawChatUsage.self, from: data)
+        return try JSONDecoder().decode(MarketingClawChatUsage.self, from: data)
     }
 
     @Test func `uses newest usage-bearing message, not a sum of runs`() throws {
@@ -101,7 +101,7 @@ struct ChatContextUsageTests {
     }
 
     @Test func `falls back to session totals without message usage`() {
-        let entry = OpenClawChatSessionEntry(
+        let entry = MarketingClawChatSessionEntry(
             key: "main",
             kind: nil,
             displayName: nil,
@@ -133,7 +133,7 @@ struct ChatContextUsageTests {
     }
 
     @Test func `ignores stale session totals without message usage`() {
-        let entry = OpenClawChatSessionEntry(
+        let entry = MarketingClawChatSessionEntry(
             key: "main",
             kind: nil,
             displayName: nil,
@@ -188,11 +188,11 @@ struct ChatContextUsageTests {
     }
 
     @Test @MainActor func `view model resolves context totals through a selected global alias`() {
-        let vm = OpenClawChatViewModel(
+        let vm = MarketingClawChatViewModel(
             sessionKey: "global",
             transport: ContextUsageTestTransport(),
             activeAgentId: "ops")
-        vm.sessions = [OpenClawChatSessionEntry(
+        vm.sessions = [MarketingClawChatSessionEntry(
             key: "agent:ops:global",
             kind: nil,
             displayName: nil,

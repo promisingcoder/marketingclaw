@@ -23,7 +23,7 @@ describe("plugin runtime session work admission", () => {
   const sessionId = "voice-session-id";
 
   beforeEach(async () => {
-    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-plugin-session-admission-"));
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-plugin-session-admission-"));
     storePath = path.join(tempDir, "sessions.json");
     await createRuntimeAgent().session.upsertSessionEntry({
       storePath,

@@ -8,7 +8,7 @@ import { RELEASE_METADATA_PATHS } from "./changed-lanes.mjs";
 const VERSION_ONLY_TEXT_PATHS = new Set([
   "apps/android/Config/Version.properties",
   "apps/android/version.json",
-  "apps/macos/Sources/OpenClaw/Resources/Info.plist",
+  "apps/macos/Sources/MarketingClaw/Resources/Info.plist",
 ]);
 
 function normalizePath(input) {
@@ -124,8 +124,8 @@ function stableJson(value) {
 
 function normalizeVersionText(raw) {
   return raw
-    .replace(/\b20\d{2}\.\d{1,2}\.\d{1,2}(?:-beta\.\d+|-\d+)?\b/gu, "<OPENCLAW_VERSION>")
-    .replace(/\b20\d{6}(?:\d{2})?\b/gu, "<OPENCLAW_BUILD>");
+    .replace(/\b20\d{2}\.\d{1,2}\.\d{1,2}(?:-beta\.\d+|-\d+)?\b/gu, "<MARKETINGCLAW_VERSION>")
+    .replace(/\b20\d{6}(?:\d{2})?\b/gu, "<MARKETINGCLAW_BUILD>");
 }
 
 function fail(message) {

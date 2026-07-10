@@ -23,13 +23,13 @@
  * vitest (which resolves bare specifiers via `resolve.alias`, not Node CJS).
  */
 
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
+import { createLazyRuntimeModule } from "marketingclaw/plugin-sdk/lazy-runtime";
 import {
   hasConfiguredSecretInput,
   normalizeResolvedSecretInputString,
   normalizeSecretInputString,
-} from "openclaw/plugin-sdk/secret-input";
-import { resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
+} from "marketingclaw/plugin-sdk/secret-input";
+import { resolvePreferredMarketingClawTmpDir } from "marketingclaw/plugin-sdk/temp-path";
 import {
   registerPlatformAdapter,
   registerPlatformAdapterFactory,
@@ -40,7 +40,7 @@ import type { FetchMediaOptions, FetchMediaResult } from "../engine/adapter/type
 import { getBridgeLogger } from "./logger.js";
 
 const loadMediaRuntimeModule = createLazyRuntimeModule(
-  () => import("openclaw/plugin-sdk/media-runtime"),
+  () => import("marketingclaw/plugin-sdk/media-runtime"),
 );
 
 function createBuiltinAdapter(): PlatformAdapter {
@@ -83,7 +83,7 @@ function createBuiltinAdapter(): PlatformAdapter {
     },
 
     getTempDir(): string {
-      return resolvePreferredOpenClawTmpDir();
+      return resolvePreferredMarketingClawTmpDir();
     },
 
     hasConfiguredSecret(value: unknown): boolean {
@@ -100,9 +100,10 @@ function createBuiltinAdapter(): PlatformAdapter {
 
     async resolveApproval(approvalId: string, decision: string): Promise<boolean> {
       try {
-        const { getRuntimeConfig } = await import("openclaw/plugin-sdk/runtime-config-snapshot");
+        const { getRuntimeConfig } =
+          await import("marketingclaw/plugin-sdk/runtime-config-snapshot");
         const { resolveApprovalOverGateway } =
-          await import("openclaw/plugin-sdk/approval-gateway-runtime");
+          await import("marketingclaw/plugin-sdk/approval-gateway-runtime");
         const cfg = getRuntimeConfig();
         await resolveApprovalOverGateway({
           cfg,

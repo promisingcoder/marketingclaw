@@ -3,14 +3,14 @@ import MLXAudioTTS
 
 // swiftformat:disable wrap wrapMultilineStatementBraces trailingCommas redundantSelf extensionAccessControl
 @main
-enum OpenClawMLXTTSHelper {
+enum MarketingClawMLXTTSHelper {
     static func main() async {
         do {
             let options = try Options.parse(CommandLine.arguments.dropFirst())
             let data = try await synthesize(options)
             try data.write(to: options.outputURL, options: [.atomic])
         } catch {
-            FileHandle.standardError.write(Data("openclaw-mlx-tts: \(error)\n".utf8))
+            FileHandle.standardError.write(Data("marketingclaw-mlx-tts: \(error)\n".utf8))
             exit(1)
         }
     }
@@ -95,9 +95,9 @@ enum OpenClawMLXTTSHelper {
         var description: String {
             switch self {
             case .requested:
-                "usage: openclaw-mlx-tts --text <text> --output <wav> [--model <hf-repo>] [--language <id>] [--voice <name>]"
+                "usage: marketingclaw-mlx-tts --text <text> --output <wav> [--model <hf-repo>] [--language <id>] [--voice <name>]"
             case let .invalid(message):
-                "\(message)\nusage: openclaw-mlx-tts --text <text> --output <wav> [--model <hf-repo>] [--language <id>] [--voice <name>]"
+                "\(message)\nusage: marketingclaw-mlx-tts --text <text> --output <wav> [--model <hf-repo>] [--language <id>] [--voice <name>]"
             }
         }
     }

@@ -1,11 +1,11 @@
 // Slack tests cover setup surface plugin behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
 import {
   createTestWizardPrompter,
   runSetupWizardPrepare,
   runSetupWizardFinalize,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
-import type { WizardPrompter } from "openclaw/plugin-sdk/plugin-test-runtime";
+} from "marketingclaw/plugin-sdk/plugin-test-runtime";
+import type { WizardPrompter } from "marketingclaw/plugin-sdk/plugin-test-runtime";
 import { describe, expect, it, vi } from "vitest";
 import { createSlackSetupWizardBase } from "./setup-core.js";
 import { buildSlackSetupLines } from "./setup-shared.js";
@@ -28,7 +28,7 @@ const baseCfg = {
       appToken: "xapp-test",
     },
   },
-} as OpenClawConfig;
+} as MarketingClawConfig;
 
 function requireFirstStringArg(mock: ReturnType<typeof vi.fn>, label: string): string {
   const [call] = mock.mock.calls;
@@ -101,7 +101,7 @@ describe("slackSetupWizard.prepare", () => {
 
     await runSetupWizardPrepare({
       prepare: slackSetupWizard.prepare,
-      cfg: { channels: { slack: {} } } as OpenClawConfig,
+      cfg: { channels: { slack: {} } } as MarketingClawConfig,
       prompter: createTestWizardPrompter({
         plain,
         note,
@@ -113,12 +113,12 @@ describe("slackSetupWizard.prepare", () => {
     const manifest = requireFirstStringArg(plain, "Slack manifest plain text");
     expect(JSON.parse(manifest)).toEqual({
       display_information: {
-        name: "OpenClaw",
-        description: "OpenClaw connector for OpenClaw",
+        name: "MarketingClaw",
+        description: "MarketingClaw connector for MarketingClaw",
       },
       features: {
         bot_user: {
-          display_name: "OpenClaw",
+          display_name: "MarketingClaw",
           always_online: true,
         },
         app_home: {
@@ -127,7 +127,8 @@ describe("slackSetupWizard.prepare", () => {
           messages_tab_read_only_enabled: false,
         },
         assistant_view: {
-          assistant_description: "OpenClaw connects Slack assistant threads to OpenClaw agents.",
+          assistant_description:
+            "MarketingClaw connects Slack assistant threads to MarketingClaw agents.",
           suggested_prompts: [
             {
               title: "What can you do?",
@@ -145,8 +146,8 @@ describe("slackSetupWizard.prepare", () => {
         },
         slash_commands: [
           {
-            command: "/openclaw",
-            description: "Send a message to OpenClaw",
+            command: "/marketingclaw",
+            description: "Send a message to MarketingClaw",
             should_escape: false,
           },
         ],
@@ -237,7 +238,7 @@ describe("slackSetupWizard.dmPolicy", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as MarketingClawConfig,
         "alerts",
       ),
     ).toBe("allowlist");
@@ -264,7 +265,7 @@ describe("slackSetupWizard.dmPolicy", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       "open",
       "alerts",
     );
@@ -296,7 +297,7 @@ describe("slackSetupWizard.status", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
     });
 
     expect(configured).toBe(false);

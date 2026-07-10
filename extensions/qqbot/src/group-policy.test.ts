@@ -1,5 +1,5 @@
 // Qqbot tests cover shared group tool policy behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import { qqbotPlugin } from "./channel.js";
 import { resolveQQBotGroupToolPolicy } from "./group-policy.js";
@@ -14,7 +14,7 @@ describe("qqbot group tool policy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(resolveQQBotGroupToolPolicy({ cfg, groupId: "G1" })).toStrictEqual({
       deny: ["*"],
@@ -35,7 +35,7 @@ describe("qqbot group tool policy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(
       resolveQQBotGroupToolPolicy({
@@ -60,7 +60,7 @@ describe("qqbot group tool policy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(
       resolveQQBotGroupToolPolicy({
@@ -80,7 +80,7 @@ describe("qqbot group tool policy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(qqbotPlugin.groups?.resolveToolPolicy?.({ cfg, groupId: "G1" })).toStrictEqual({
       deny: ["*"],

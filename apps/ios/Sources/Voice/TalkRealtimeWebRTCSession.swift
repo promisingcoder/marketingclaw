@@ -1,8 +1,8 @@
 import AVFAudio
 import Foundation
-import OpenClawChatUI
-import OpenClawKit
-import OpenClawProtocol
+import MarketingClawChatUI
+import MarketingClawKit
+import MarketingClawProtocol
 import OSLog
 @preconcurrency import WebRTC
 
@@ -20,12 +20,12 @@ protocol TalkRealtimeWebRTCSessionDelegate: AnyObject {
 
 @MainActor
 final class TalkRealtimeWebRTCSession: NSObject {
-    private static let logger = Logger(subsystem: "ai.openclawfoundation.app", category: "TalkRealtimeWebRTC")
-    private static let consultToolName = "openclaw_agent_consult"
-    private static let controlToolName = "openclaw_agent_control"
+    private static let logger = Logger(subsystem: "ai.marketingclaw.app", category: "TalkRealtimeWebRTC")
+    private static let consultToolName = "marketingclaw_agent_consult"
+    private static let controlToolName = "marketingclaw_agent_control"
     private static let defaultOfferURL = "https://api.openai.com/v1/realtime/calls"
-    private static let mediaStreamID = "openclaw-ios-realtime"
-    private static let audioTrackID = "openclaw-ios-audio"
+    private static let mediaStreamID = "marketingclaw-ios-realtime"
+    private static let audioTrackID = "marketingclaw-ios-audio"
     private static let dataChannelLabel = "oai-events"
     private static let toolCallTimeoutSeconds = 12
     private static let toolResultTimeoutSeconds = 45
@@ -551,7 +551,7 @@ final class TalkRealtimeWebRTCSession: NSObject {
         self.assistantAudioFinishTask = nil
         self.delegate?.realtimeSession(
             self,
-            didChangeStatus: name == Self.controlToolName ? "Updating OpenClaw" : "Asking OpenClaw")
+            didChangeStatus: name == Self.controlToolName ? "Updating MarketingClaw" : "Asking MarketingClaw")
         let task = Task { @MainActor [weak self] in
             guard let self else { return }
             if name == Self.controlToolName {
@@ -572,7 +572,7 @@ final class TalkRealtimeWebRTCSession: NSObject {
         let statusTask = Task { @MainActor [weak self] in
             try? await Task.sleep(nanoseconds: UInt64(Self.stillWorkingDelaySeconds) * 1_000_000_000)
             guard let self, !Task.isCancelled, !self.stopped else { return }
-            self.delegate?.realtimeSession(self, didChangeStatus: "Still asking OpenClaw")
+            self.delegate?.realtimeSession(self, didChangeStatus: "Still asking MarketingClaw")
         }
         defer {
             statusTask.cancel()
@@ -631,11 +631,11 @@ final class TalkRealtimeWebRTCSession: NSObject {
             if let runId = activeToolRunIds[callId] {
                 await self.abortChatRun(runId: runId)
             }
-            self.delegate?.realtimeSession(self, didChangeStatus: "OpenClaw unavailable")
+            self.delegate?.realtimeSession(self, didChangeStatus: "MarketingClaw unavailable")
             let fallbackMessage = [
-                "OpenClaw consult did not finish quickly enough.",
+                "MarketingClaw consult did not finish quickly enough.",
                 "Give a brief spoken fallback from the realtime conversation",
-                "and ask the user to try again if they need OpenClaw-specific context.",
+                "and ask the user to try again if they need MarketingClaw-specific context.",
             ].joined(separator: " ")
             self.submitToolResult(callId: callId, result: [
                 "error": fallbackMessage,
@@ -662,7 +662,7 @@ final class TalkRealtimeWebRTCSession: NSObject {
                 method: "talk.client.steer",
                 paramsJSON: json,
                 timeoutSeconds: Self.toolCallTimeoutSeconds)
-            let message = Self.controlResultMessage(from: res) ?? "OpenClaw updated the active run."
+            let message = Self.controlResultMessage(from: res) ?? "MarketingClaw updated the active run."
             self.trace("control tool gateway request done callId=\(callId) messageBytes=\(message.utf8.count)")
             self.submitToolResult(callId: callId, result: ["result": message])
         } catch is CancellationError {
@@ -672,7 +672,7 @@ final class TalkRealtimeWebRTCSession: NSObject {
             Self.logger.error("realtime control tool failed: \(error.localizedDescription, privacy: .public)")
             self.trace("control tool failed callId=\(callId) error=\(error.localizedDescription)")
             self.submitToolResult(callId: callId, result: [
-                "error": "OpenClaw could not update the active run.",
+                "error": "MarketingClaw could not update the active run.",
             ])
         }
         guard !Task.isCancelled, !self.stopped else { return }
@@ -690,7 +690,7 @@ final class TalkRealtimeWebRTCSession: NSObject {
             ?? Self.nonEmptyString(record["query"])
         guard let text else {
             throw NSError(domain: "TalkRealtimeWebRTC", code: 20, userInfo: [
-                NSLocalizedDescriptionKey: "OpenClaw control tool call missing text",
+                NSLocalizedDescriptionKey: "MarketingClaw control tool call missing text",
             ])
         }
         var params: [String: Any] = [
@@ -744,7 +744,7 @@ final class TalkRealtimeWebRTCSession: NSObject {
                     guard evt.event == "chat", let payload = evt.payload else { continue }
                     guard let chatEvent = try? GatewayPayloadDecoding.decode(
                         payload,
-                        as: OpenClawChatEventPayload.self)
+                        as: MarketingClawChatEventPayload.self)
                     else {
                         continue
                     }
@@ -758,21 +758,21 @@ final class TalkRealtimeWebRTCSession: NSObject {
                         self.trace("chat event runId=\(runId) state=\(chatEvent.state ?? "unknown")")
                     }
                     if chatEvent.state == "final" {
-                        return OpenClawChatEventText.assistantText(from: chatEvent) ?? "OpenClaw finished with no text."
+                        return MarketingClawChatEventText.assistantText(from: chatEvent) ?? "MarketingClaw finished with no text."
                     }
                     if chatEvent.state == "aborted" {
                         throw NSError(domain: "TalkRealtimeWebRTC", code: 9, userInfo: [
-                            NSLocalizedDescriptionKey: "OpenClaw realtime tool call aborted",
+                            NSLocalizedDescriptionKey: "MarketingClaw realtime tool call aborted",
                         ])
                     }
                     if chatEvent.state == "error" {
                         throw NSError(domain: "TalkRealtimeWebRTC", code: 10, userInfo: [
-                            NSLocalizedDescriptionKey: "OpenClaw realtime tool call failed",
+                            NSLocalizedDescriptionKey: "MarketingClaw realtime tool call failed",
                         ])
                     }
                 }
                 throw NSError(domain: "TalkRealtimeWebRTC", code: 11, userInfo: [
-                    NSLocalizedDescriptionKey: "OpenClaw realtime tool event stream ended",
+                    NSLocalizedDescriptionKey: "MarketingClaw realtime tool event stream ended",
                 ])
             }
             group.addTask { [gateway, sessionKey] in
@@ -786,12 +786,12 @@ final class TalkRealtimeWebRTCSession: NSObject {
             group.addTask {
                 try await Task.sleep(nanoseconds: UInt64(timeoutSeconds) * 1_000_000_000)
                 throw NSError(domain: "TalkRealtimeWebRTC", code: 12, userInfo: [
-                    NSLocalizedDescriptionKey: "OpenClaw realtime tool call timed out",
+                    NSLocalizedDescriptionKey: "MarketingClaw realtime tool call timed out",
                 ])
             }
             guard let result = try await group.next() else {
                 throw NSError(domain: "TalkRealtimeWebRTC", code: 13, userInfo: [
-                    NSLocalizedDescriptionKey: "OpenClaw realtime tool call did not finish",
+                    NSLocalizedDescriptionKey: "MarketingClaw realtime tool call did not finish",
                 ])
             }
             group.cancelAll()
@@ -845,11 +845,11 @@ final class TalkRealtimeWebRTCSession: NSObject {
                 }
             case "error":
                 throw NSError(domain: "TalkRealtimeWebRTC", code: 14, userInfo: [
-                    NSLocalizedDescriptionKey: wait.error ?? "OpenClaw realtime tool call failed",
+                    NSLocalizedDescriptionKey: wait.error ?? "MarketingClaw realtime tool call failed",
                 ])
             case "aborted", "cancelled", "canceled":
                 throw NSError(domain: "TalkRealtimeWebRTC", code: 15, userInfo: [
-                    NSLocalizedDescriptionKey: wait.stopReason ?? "OpenClaw realtime tool call aborted",
+                    NSLocalizedDescriptionKey: wait.stopReason ?? "MarketingClaw realtime tool call aborted",
                 ])
             case "timeout":
                 break
@@ -859,7 +859,7 @@ final class TalkRealtimeWebRTCSession: NSObject {
         }
         let phase = sawProviderStart ? "provider" : "queue"
         throw NSError(domain: "TalkRealtimeWebRTC", code: 16, userInfo: [
-            NSLocalizedDescriptionKey: "OpenClaw realtime tool call timed out in \(phase)",
+            NSLocalizedDescriptionKey: "MarketingClaw realtime tool call timed out in \(phase)",
         ])
     }
 
@@ -876,7 +876,7 @@ final class TalkRealtimeWebRTCSession: NSObject {
         let data = try JSONSerialization.data(withJSONObject: params)
         guard let json = String(data: data, encoding: .utf8) else {
             throw NSError(domain: "TalkRealtimeWebRTC", code: 17, userInfo: [
-                NSLocalizedDescriptionKey: "Failed to encode OpenClaw wait request",
+                NSLocalizedDescriptionKey: "Failed to encode MarketingClaw wait request",
             ])
         }
         let response = try await gateway.request(
@@ -915,15 +915,15 @@ final class TalkRealtimeWebRTCSession: NSObject {
         let data = try JSONSerialization.data(withJSONObject: params)
         guard let json = String(data: data, encoding: .utf8) else {
             throw NSError(domain: "TalkRealtimeWebRTC", code: 18, userInfo: [
-                NSLocalizedDescriptionKey: "Failed to encode OpenClaw history request",
+                NSLocalizedDescriptionKey: "Failed to encode MarketingClaw history request",
             ])
         }
         let response = try await gateway.request(method: "chat.history", paramsJSON: json, timeoutSeconds: 15)
-        let history = try JSONDecoder().decode(OpenClawChatHistoryPayload.self, from: response)
+        let history = try JSONDecoder().decode(MarketingClawChatHistoryPayload.self, from: response)
         let messages = history.messages ?? []
-        let decoded: [OpenClawChatMessage] = messages.compactMap { item in
+        let decoded: [MarketingClawChatMessage] = messages.compactMap { item in
             guard let data = try? JSONEncoder().encode(item) else { return nil }
-            return try? JSONDecoder().decode(OpenClawChatMessage.self, from: data)
+            return try? JSONDecoder().decode(MarketingClawChatMessage.self, from: data)
         }
         let assistant = decoded.last { message in
             guard message.role == "assistant" else { return false }

@@ -8,12 +8,15 @@ import {
   startWhatsAppQaDriverSession,
   type WhatsAppQaDriverObservedMessage,
   type WhatsAppQaDriverSession,
-} from "@openclaw/whatsapp/api.js";
-import { normalizeE164 } from "openclaw/plugin-sdk/account-resolution";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { normalizeStringEntries, uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
+} from "@marketingclaw/whatsapp/api.js";
+import { normalizeE164 } from "marketingclaw/plugin-sdk/account-resolution";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "marketingclaw/plugin-sdk/error-runtime";
+import {
+  normalizeStringEntries,
+  uniqueStrings,
+} from "marketingclaw/plugin-sdk/string-coerce-runtime";
+import { resolvePreferredMarketingClawTmpDir } from "marketingclaw/plugin-sdk/temp-path";
 import { z } from "zod";
 import { createQaArtifactRunId } from "../../artifact-run-id.js";
 import { QA_EVIDENCE_FILENAME, buildLiveTransportEvidenceSummary } from "../../evidence-summary.js";
@@ -306,7 +309,9 @@ type WhatsAppQaConfigOverrides = {
     | boolean
     | {
         removeAckAfterReply?: boolean;
-        timing?: NonNullable<NonNullable<OpenClawConfig["messages"]>["statusReactions"]>["timing"];
+        timing?: NonNullable<
+          NonNullable<MarketingClawConfig["messages"]>["statusReactions"]
+        >["timing"];
       };
 };
 
@@ -407,18 +412,18 @@ type WhatsAppQaPreScenarioPhase =
   | "driver session start"
   | "scenario execution";
 
-const WHATSAPP_QA_CAPTURE_CONTENT_ENV = "OPENCLAW_QA_WHATSAPP_CAPTURE_CONTENT";
-const QA_REDACT_PUBLIC_METADATA_ENV = "OPENCLAW_QA_REDACT_PUBLIC_METADATA";
+const WHATSAPP_QA_CAPTURE_CONTENT_ENV = "MARKETINGCLAW_QA_WHATSAPP_CAPTURE_CONTENT";
+const QA_REDACT_PUBLIC_METADATA_ENV = "MARKETINGCLAW_QA_REDACT_PUBLIC_METADATA";
 const WHATSAPP_QA_TRANSIENT_DRIVER_ATTEMPTS = 5;
 const WHATSAPP_QA_READY_TIMEOUT_MS = 150_000;
 const WHATSAPP_QA_READY_STABILITY_MS = 20_000;
 const WHATSAPP_QA_DRIVER_RECONNECT_DELAY_MS = 10_000;
 const WHATSAPP_QA_APPROVAL_DECISION_TIMEOUT_MS = 60_000;
 const WHATSAPP_QA_ENV_KEYS = [
-  "OPENCLAW_QA_WHATSAPP_DRIVER_PHONE_E164",
-  "OPENCLAW_QA_WHATSAPP_SUT_PHONE_E164",
-  "OPENCLAW_QA_WHATSAPP_DRIVER_AUTH_ARCHIVE_BASE64",
-  "OPENCLAW_QA_WHATSAPP_SUT_AUTH_ARCHIVE_BASE64",
+  "MARKETINGCLAW_QA_WHATSAPP_DRIVER_PHONE_E164",
+  "MARKETINGCLAW_QA_WHATSAPP_SUT_PHONE_E164",
+  "MARKETINGCLAW_QA_WHATSAPP_DRIVER_AUTH_ARCHIVE_BASE64",
+  "MARKETINGCLAW_QA_WHATSAPP_SUT_AUTH_ARCHIVE_BASE64",
 ] as const;
 const WHATSAPP_QA_ONE_PIXEL_PNG = Buffer.from(
   "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAFgwJ/lzK4ZQAAAABJRU5ErkJggg==",
@@ -561,7 +566,7 @@ function buildWhatsAppQuoteReplyRun(target: "dm" | "group"): WhatsAppQaMessageSc
   const token = `WHATSAPP_QA_REPLY_TO_${target.toUpperCase()}_${randomUUID().slice(0, 8).toUpperCase()}`;
   const input =
     target === "group"
-      ? `openclawqa reply with only this exact marker: ${token}`
+      ? `marketingclawqa reply with only this exact marker: ${token}`
       : `Reply with only this exact marker: ${token}`;
   return {
     configMode: "allowlist",
@@ -611,7 +616,7 @@ const WHATSAPP_QA_SCENARIOS: WhatsAppQaScenarioDefinition[] = [
       return {
         configMode: "allowlist",
         expectReply: true,
-        input: `openclawqa reply with only this exact marker: ${replyToken}`,
+        input: `marketingclawqa reply with only this exact marker: ${replyToken}`,
         matchText: replyToken,
         quietInput: `This group message is intentionally unmentioned. If you respond, include ${quietToken}.`,
         quietMatchText: quietToken,
@@ -643,7 +648,7 @@ const WHATSAPP_QA_SCENARIOS: WhatsAppQaScenarioDefinition[] = [
         expectReply: true,
         expectedSutMessageCount: 1,
         input:
-          `openclawqa pending history context check ${triggerMarker}. ` +
+          `marketingclawqa pending history context check ${triggerMarker}. ` +
           `Reply with only ${okMarker} only if the previous quiet group message containing ` +
           `${quietMarker} is present in prior group context with its context-only sentinel. ` +
           "Do not use current-message text as proof.",
@@ -687,7 +692,7 @@ const WHATSAPP_QA_SCENARIOS: WhatsAppQaScenarioDefinition[] = [
         },
         configMode: "open",
         expectReply: true,
-        input: `openclawqa broadcast fanout check ${token}`,
+        input: `marketingclawqa broadcast fanout check ${token}`,
         matchText: mainMarker,
         target: "group",
       };
@@ -833,7 +838,7 @@ const WHATSAPP_QA_SCENARIOS: WhatsAppQaScenarioDefinition[] = [
         },
         configMode: "allowlist",
         expectReply: true,
-        input: `openclawqa Mentioned group seed marker ${seedMarker}`,
+        input: `marketingclawqa Mentioned group seed marker ${seedMarker}`,
         matchText: seedMarker,
         target: "group",
       };
@@ -1020,7 +1025,7 @@ const WHATSAPP_QA_SCENARIOS: WhatsAppQaScenarioDefinition[] = [
         configMode: "allowlist",
         expectReply: false,
         input:
-          `openclawqa react to this WhatsApp group message with thumbs up for QA action check ${token}. ` +
+          `marketingclawqa react to this WhatsApp group message with thumbs up for QA action check ${token}. ` +
           "Do not send any visible text reply after the reaction.",
         matchText: token,
         quietWindowMs: 8_000,
@@ -1060,7 +1065,7 @@ const WHATSAPP_QA_SCENARIOS: WhatsAppQaScenarioDefinition[] = [
         configMode: "allowlist",
         expectReply: false,
         input:
-          `openclawqa use the WhatsApp message tool upload-file action to send a PNG with caption ${token}. ` +
+          `marketingclawqa use the WhatsApp message tool upload-file action to send a PNG with caption ${token}. ` +
           "Do not send any visible text reply after the upload.",
         matchText: token,
         quietWindowMs: 8_000,
@@ -1474,7 +1479,7 @@ const WHATSAPP_QA_SCENARIOS: WhatsAppQaScenarioDefinition[] = [
         },
         configMode: "allowlist",
         expectReply: true,
-        input: `openclawqa reply with only this exact marker before group outbound media checks: ${token}`,
+        input: `marketingclawqa reply with only this exact marker before group outbound media checks: ${token}`,
         matchText: token,
         target: "group",
       };
@@ -1518,7 +1523,7 @@ const WHATSAPP_QA_SCENARIOS: WhatsAppQaScenarioDefinition[] = [
         },
         configMode: "allowlist",
         expectReply: true,
-        input: `openclawqa reply with only this exact marker before group outbound audio check: ${token}`,
+        input: `marketingclawqa reply with only this exact marker before group outbound audio check: ${token}`,
         matchText: token,
         target: "group",
       };
@@ -1554,7 +1559,7 @@ const WHATSAPP_QA_SCENARIOS: WhatsAppQaScenarioDefinition[] = [
         },
         configMode: "allowlist",
         expectReply: true,
-        input: `openclawqa reply with only this exact marker before group outbound poll check: ${token}`,
+        input: `marketingclawqa reply with only this exact marker before group outbound poll check: ${token}`,
         matchText: token,
         target: "group",
       };
@@ -1888,7 +1893,7 @@ const WHATSAPP_QA_SCENARIOS: WhatsAppQaScenarioDefinition[] = [
       return {
         configMode: "allowlist",
         expectReply: false,
-        input: `openclawqa blocked group should not reply with ${quietToken}`,
+        input: `marketingclawqa blocked group should not reply with ${quietToken}`,
         matchText: quietToken,
         target: "group",
       };
@@ -2013,16 +2018,19 @@ function validateWhatsAppQaRuntimeEnv(
 function resolveWhatsAppQaRuntimeEnv(env: NodeJS.ProcessEnv = process.env): WhatsAppQaRuntimeEnv {
   return validateWhatsAppQaRuntimeEnv(
     {
-      driverPhoneE164: resolveEnvValue(env, "OPENCLAW_QA_WHATSAPP_DRIVER_PHONE_E164"),
-      sutPhoneE164: resolveEnvValue(env, "OPENCLAW_QA_WHATSAPP_SUT_PHONE_E164"),
+      driverPhoneE164: resolveEnvValue(env, "MARKETINGCLAW_QA_WHATSAPP_DRIVER_PHONE_E164"),
+      sutPhoneE164: resolveEnvValue(env, "MARKETINGCLAW_QA_WHATSAPP_SUT_PHONE_E164"),
       driverAuthArchiveBase64: resolveEnvValue(
         env,
-        "OPENCLAW_QA_WHATSAPP_DRIVER_AUTH_ARCHIVE_BASE64",
+        "MARKETINGCLAW_QA_WHATSAPP_DRIVER_AUTH_ARCHIVE_BASE64",
       ),
-      sutAuthArchiveBase64: resolveEnvValue(env, "OPENCLAW_QA_WHATSAPP_SUT_AUTH_ARCHIVE_BASE64"),
-      groupJid: env.OPENCLAW_QA_WHATSAPP_GROUP_JID?.trim() || undefined,
+      sutAuthArchiveBase64: resolveEnvValue(
+        env,
+        "MARKETINGCLAW_QA_WHATSAPP_SUT_AUTH_ARCHIVE_BASE64",
+      ),
+      groupJid: env.MARKETINGCLAW_QA_WHATSAPP_GROUP_JID?.trim() || undefined,
     },
-    "OPENCLAW_QA_WHATSAPP",
+    "MARKETINGCLAW_QA_WHATSAPP",
   );
 }
 
@@ -2076,7 +2084,9 @@ function buildNonMatchingWhatsAppQaAllowFrom(existingAllowFrom: string[]) {
   throw new Error("Unable to derive a WhatsApp QA groupAllowFrom entry outside allowFrom.");
 }
 
-type WhatsAppQaAgentConfig = NonNullable<NonNullable<OpenClawConfig["agents"]>["list"]>[number];
+type WhatsAppQaAgentConfig = NonNullable<
+  NonNullable<MarketingClawConfig["agents"]>["list"]
+>[number];
 
 function buildWhatsAppQaScenarioAgent(agentId: string): WhatsAppQaAgentConfig {
   const identityName =
@@ -2094,9 +2104,9 @@ function buildWhatsAppQaScenarioAgent(agentId: string): WhatsAppQaAgentConfig {
 }
 
 function appendWhatsAppQaAgents(
-  agents: OpenClawConfig["agents"],
+  agents: MarketingClawConfig["agents"],
   agentIds: readonly string[],
-): OpenClawConfig["agents"] {
+): MarketingClawConfig["agents"] {
   if (agentIds.length === 0) {
     return agents;
   }
@@ -2115,12 +2125,12 @@ function appendWhatsAppQaAgents(
 }
 
 function buildWhatsAppQaBroadcastConfig(
-  baseCfg: OpenClawConfig,
+  baseCfg: MarketingClawConfig,
   params: {
     broadcast?: WhatsAppQaConfigOverrides["broadcast"];
     groupJid?: string;
   },
-): Pick<OpenClawConfig, "agents" | "broadcast"> {
+): Pick<MarketingClawConfig, "agents" | "broadcast"> {
   if (!params.broadcast) {
     return {};
   }
@@ -2152,7 +2162,7 @@ function buildWhatsAppQaMockAuthAgentIds(scenario: WhatsAppQaScenarioDefinition)
 }
 
 function buildWhatsAppQaConfig(
-  baseCfg: OpenClawConfig,
+  baseCfg: MarketingClawConfig,
   params: {
     allowFrom: string[];
     authDir: string;
@@ -2161,7 +2171,7 @@ function buildWhatsAppQaConfig(
     overrides?: WhatsAppQaConfigOverrides;
     sutAccountId: string;
   },
-): OpenClawConfig {
+): MarketingClawConfig {
   const pluginAllow = uniqueStrings([...(baseCfg.plugins?.allow ?? []), "whatsapp"]);
   const approvalOverrides = params.overrides?.approvals;
   const groupPolicy = params.overrides?.groupPolicy ?? "open";
@@ -2332,7 +2342,7 @@ function buildWhatsAppQaConfig(
                     mentionPatterns: [
                       ...new Set([
                         ...(baseCfg.messages?.groupChat?.mentionPatterns ?? []),
-                        "\\bopenclawqa\\b",
+                        "\\bmarketingclawqa\\b",
                       ]),
                     ],
                   },
@@ -2663,7 +2673,7 @@ async function writeWhatsAppQaWorkspaceFixture(
     fileName: string;
   },
 ) {
-  const fixtureDir = path.join(context.gatewayWorkspaceDir, ".openclaw", "qa-whatsapp-media");
+  const fixtureDir = path.join(context.gatewayWorkspaceDir, ".marketingclaw", "qa-whatsapp-media");
   await fs.mkdir(fixtureDir, { recursive: true });
   const filePath = path.join(fixtureDir, params.fileName);
   await fs.writeFile(filePath, params.buffer);
@@ -4180,7 +4190,7 @@ export async function runWhatsAppQaLive(params: {
     };
     runtimeEnv = credentialLease.payload;
     tempAuthRoot = await fs.mkdtemp(
-      path.join(resolvePreferredOpenClawTmpDir(), "openclaw-whatsapp-qa-"),
+      path.join(resolvePreferredMarketingClawTmpDir(), "marketingclaw-whatsapp-qa-"),
     );
     preScenarioPhase = "auth archive unpack";
     const [driverAuthDir, sutAuthDir] = await Promise.all([

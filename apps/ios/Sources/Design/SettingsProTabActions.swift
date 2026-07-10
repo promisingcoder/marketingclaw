@@ -1,5 +1,5 @@
 import CoreLocation
-import OpenClawKit
+import MarketingClawKit
 import SwiftUI
 import UIKit
 import UserNotifications
@@ -17,15 +17,15 @@ extension SettingsProTab {
                 SettingsIcon(systemName: icon, color: color)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title)
-                        .font(OpenClawType.headline)
+                        .font(MarketingClawType.headline)
                     Text(detail)
-                        .font(OpenClawType.caption)
+                        .font(MarketingClawType.caption)
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 Spacer(minLength: 8)
                 Text(value)
-                    .font(OpenClawType.subheadMedium)
+                    .font(MarketingClawType.subheadMedium)
                     .foregroundStyle(color)
             }
         }
@@ -50,7 +50,7 @@ extension SettingsProTab {
                 title: "Discovery",
                 detail: self.gatewayController.discoveryStatusText,
                 value: "\(self.gatewayController.gateways.count)",
-                color: self.gatewayController.gateways.isEmpty ? .secondary : OpenClawBrand.accent)
+                color: self.gatewayController.gateways.isEmpty ? .secondary : MarketingClawBrand.accent)
             self.diagnosticCheckRow(
                 icon: "waveform",
                 title: "Talk Config",
@@ -68,13 +68,13 @@ extension SettingsProTab {
                 title: "Screen Capture",
                 detail: "Live foreground capture state",
                 value: self.appModel.screenRecordActive ? "live" : "idle",
-                color: self.appModel.screenRecordActive ? OpenClawBrand.ok : .secondary)
+                color: self.appModel.screenRecordActive ? MarketingClawBrand.ok : .secondary)
             self.diagnosticCheckRow(
                 icon: "mic",
                 title: "Voice Wake",
                 detail: self.appModel.voiceWake.statusText,
                 value: self.voiceWakeEnabled ? "on" : "off",
-                color: self.voiceWakeEnabled ? OpenClawBrand.ok : .secondary)
+                color: self.voiceWakeEnabled ? MarketingClawBrand.ok : .secondary)
         }
     }
 
@@ -89,15 +89,15 @@ extension SettingsProTab {
             SettingsIcon(systemName: icon, color: color)
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
-                    .font(OpenClawType.subheadSemiBold)
+                    .font(MarketingClawType.subheadSemiBold)
                 Text(detail)
-                    .font(OpenClawType.caption)
+                    .font(MarketingClawType.caption)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
             }
             Spacer(minLength: 8)
             Text(value)
-                .font(OpenClawType.subhead)
+                .font(MarketingClawType.subhead)
                 .foregroundStyle(.secondary)
         }
     }
@@ -215,8 +215,8 @@ extension SettingsProTab {
             targetStableID: stableID)
     }
 
-    func refreshLocationPermissionSummary(desiredMode modeOverride: OpenClawLocationMode? = nil) {
-        let mode = modeOverride ?? OpenClawLocationMode(rawValue: self.locationModeRaw) ?? .off
+    func refreshLocationPermissionSummary(desiredMode modeOverride: MarketingClawLocationMode? = nil) {
+        let mode = modeOverride ?? MarketingClawLocationMode(rawValue: self.locationModeRaw) ?? .off
         let manager = CLLocationManager()
         self.locationPermissionRefreshID &+= 1
         let refreshID = self.locationPermissionRefreshID
@@ -230,7 +230,7 @@ extension SettingsProTab {
             let locationServicesEnabled = await Self.locationServicesEnabled()
             guard refreshID == self.locationPermissionRefreshID else { return }
             let latestManager = CLLocationManager()
-            let latestMode = modeOverride ?? OpenClawLocationMode(rawValue: self.locationModeRaw) ?? .off
+            let latestMode = modeOverride ?? MarketingClawLocationMode(rawValue: self.locationModeRaw) ?? .off
             self.locationPermissionSummary = LocationPermissionSummary(
                 desiredMode: latestMode,
                 locationServicesEnabled: locationServicesEnabled,
@@ -561,7 +561,7 @@ extension SettingsProTab {
     func handleLocationModeChange(_ newValue: String) {
         guard !self.isChangingLocationMode else { return }
         guard newValue != self.previousLocationModeRaw else { return }
-        guard let mode = OpenClawLocationMode(rawValue: newValue) else { return }
+        guard let mode = MarketingClawLocationMode(rawValue: newValue) else { return }
         let previous = self.previousLocationModeRaw
         Task {
             await self.applyLocationMode(mode, rawValue: newValue, previous: previous)
@@ -570,7 +570,7 @@ extension SettingsProTab {
 
     @MainActor
     func applyLocationMode(
-        _ mode: OpenClawLocationMode,
+        _ mode: MarketingClawLocationMode,
         rawValue: String,
         previous: String) async
     {
@@ -597,7 +597,7 @@ extension SettingsProTab {
             self.previousLocationModeRaw = previous
             self.locationStatusText = "Location permission was not granted."
             self.refreshLocationPermissionSummary(
-                desiredMode: OpenClawLocationMode(rawValue: previous) ?? .off)
+                desiredMode: MarketingClawLocationMode(rawValue: previous) ?? .off)
         }
     }
 
@@ -635,7 +635,7 @@ extension SettingsProTab {
     }
 
     private func prepareNotificationEnrollment() -> Bool {
-        if PushBuildConfig.current.usesOpenClawHostedRelay,
+        if PushBuildConfig.current.usesMarketingClawHostedRelay,
            !PushEnrollmentConsent.disclosureAccepted
         {
             self.showNotificationRelayDisclosure = true
@@ -689,7 +689,7 @@ extension SettingsProTab {
     @MainActor
     func registerForRemoteNotificationsIfEnrollmentReady() {
         guard self.notificationServingEnabled else { return }
-        guard !PushBuildConfig.current.usesOpenClawHostedRelay
+        guard !PushBuildConfig.current.usesMarketingClawHostedRelay
             || PushEnrollmentConsent.disclosureAccepted
         else { return }
         guard self.notificationStatus.allowsNotifications else { return }
@@ -827,8 +827,8 @@ extension SettingsProTab {
         do {
             let result = try await self.appModel.sendDirectWatchSetup()
             self.watchDirectSetupStatusText = result.deliveredImmediately
-                ? "Setup sent. Open OpenClaw on the watch to connect."
-                : "Setup queued for the watch. Open OpenClaw before the code expires."
+                ? "Setup sent. Open MarketingClaw on the watch to connect."
+                : "Setup queued for the watch. Open MarketingClaw before the code expires."
         } catch {
             self.watchDirectSetupStatusText = error.localizedDescription
         }
@@ -921,7 +921,7 @@ extension SettingsProTab {
     func friendlyGatewayMessage(from raw: String) -> String? {
         let lower = raw.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         if lower.contains("pairing required") {
-            return "Pairing required. Run /pair approve in your OpenClaw chat, then connect again."
+            return "Pairing required. Run /pair approve in your MarketingClaw chat, then connect again."
         }
         if lower.contains("device nonce required") || lower.contains("device nonce mismatch") {
             return "Secure handshake failed. Check Tailscale, then connect again."
@@ -1029,8 +1029,8 @@ extension SettingsProTab {
     }
 
     var gatewayStatusColor: Color {
-        if self.appModel.isAppleReviewDemoModeEnabled { return OpenClawBrand.accent }
-        return self.gatewayConnected ? OpenClawBrand.ok : .secondary
+        if self.appModel.isAppleReviewDemoModeEnabled { return MarketingClawBrand.accent }
+        return self.gatewayConnected ? MarketingClawBrand.ok : .secondary
     }
 
     var gatewayDiagnosticConnected: Bool {
@@ -1046,7 +1046,7 @@ extension SettingsProTab {
             return "Live gateway requests are disabled in demo mode."
         }
         if self.notificationsNeedAttention {
-            return "Foreground approvals still appear while OpenClaw is connected."
+            return "Foreground approvals still appear while MarketingClaw is connected."
         }
         return self.gatewayConnected ? "Gateway requests will appear here." : "Connect to the gateway."
     }
@@ -1063,7 +1063,7 @@ extension SettingsProTab {
 
     var gatewayTalkConfigColor: Color {
         if self.appModel.isAppleReviewDemoModeEnabled { return .secondary }
-        return self.appModel.talkMode.gatewayTalkConfigLoaded ? OpenClawBrand.ok : .secondary
+        return self.appModel.talkMode.gatewayTalkConfigLoaded ? MarketingClawBrand.ok : .secondary
     }
 
     var gatewayAddress: String {
@@ -1071,7 +1071,7 @@ extension SettingsProTab {
     }
 
     var gatewayServer: String {
-        self.appModel.gatewayServerName ?? "OpenClaw Gateway"
+        self.appModel.gatewayServerName ?? "MarketingClaw Gateway"
     }
 
     var pendingApproval: NodeAppModel.ExecApprovalPrompt? {
@@ -1091,14 +1091,14 @@ extension SettingsProTab {
                 title: pendingApproval.commandPreview ?? "Review gateway action",
                 detail: "Agent: \(self.appModel.activeAgentName)",
                 priority: self.appModel.pendingExecApprovalPromptResolving ? "Resolving" : "High",
-                color: OpenClawBrand.danger),
+                color: MarketingClawBrand.danger),
             SettingsApprovalItem(
                 id: "pending-context",
                 icon: "doc.text.fill",
                 title: pendingApproval.allowsAllowAlways ? "Permission can be saved" : "One-time approval",
                 detail: "Gateway request",
                 priority: pendingApproval.allowsAllowAlways ? "Medium" : "Review",
-                color: OpenClawBrand.warn),
+                color: MarketingClawBrand.warn),
         ]
     }
 
@@ -1123,11 +1123,11 @@ extension SettingsProTab {
 
     var diagnosticsRunColor: Color {
         guard let diagnosticsIssueCount else { return .secondary }
-        return diagnosticsIssueCount == 0 ? OpenClawBrand.ok : OpenClawBrand.warn
+        return diagnosticsIssueCount == 0 ? MarketingClawBrand.ok : MarketingClawBrand.warn
     }
 
     var privacyDetail: String {
-        let location = OpenClawLocationMode(rawValue: self.locationModeRaw) ?? .off
+        let location = MarketingClawLocationMode(rawValue: self.locationModeRaw) ?? .off
         return switch (location, self.locationPermissionSummary.effectiveMode) {
         case (.off, _):
             "Location off"
@@ -1172,7 +1172,7 @@ extension SettingsProTab {
     }
 
     var notificationDisclosureAccepted: Bool {
-        !PushBuildConfig.current.usesOpenClawHostedRelay
+        !PushBuildConfig.current.usesMarketingClawHostedRelay
             || PushEnrollmentConsent.disclosureAccepted
     }
 
@@ -1208,19 +1208,19 @@ extension SettingsProTab {
     }
 
     var notificationRelayDetail: String {
-        if PushBuildConfig.current.usesOpenClawHostedRelay {
+        if PushBuildConfig.current.usesMarketingClawHostedRelay {
             let host = PushBuildConfig.current.relayBaseURL.flatMap {
                 URLComponents(url: $0, resolvingAgainstBaseURL: false)?.host
-            } ?? "ios-push-relay.openclaw.ai"
+            } ?? "ios-push-relay.marketingclaw.ai"
             return """
-            This build uses OpenClaw's hosted push relay at \(host) for notification \
+            This build uses MarketingClaw's hosted push relay at \(host) for notification \
             delivery data.
             """
         }
-        return "This build is not configured to use OpenClaw's hosted push relay."
+        return "This build is not configured to use MarketingClaw's hosted push relay."
     }
 
     var notificationRelayDisclosureMessage: String {
-        "Enabling this sends delivery data through OpenClaw's hosted push relay."
+        "Enabling this sends delivery data through MarketingClaw's hosted push relay."
     }
 }

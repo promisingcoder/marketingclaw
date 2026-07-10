@@ -2,7 +2,7 @@ import ActivityKit
 import Foundation
 
 /// Shared schema used by iOS app + Live Activity widget extension.
-struct OpenClawActivityAttributes: ActivityAttributes {
+struct MarketingClawActivityAttributes: ActivityAttributes {
     var agentName: String
     var sessionKey: String
 

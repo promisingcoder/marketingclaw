@@ -1,17 +1,17 @@
 {
-  "name": "@openclaw/google-plugin",
+  "name": "@marketingclaw/google-plugin",
   "version": "2026.6.11",
   "private": true,
-  "description": "OpenClaw Google plugin",
+  "description": "MarketingClaw Google plugin",
   "type": "module",
   "dependencies": {
     "@google/genai": "2.10.0",
     "google-auth-library": "10.9.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@marketingclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "marketingclaw": {
     "extensions": [
       "./index.ts"
     ]

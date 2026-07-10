@@ -1,5 +1,5 @@
 // Imessage tests cover monitor.media policy plugin behavior.
-import type { waitForTransportReady } from "openclaw/plugin-sdk/transport-ready-runtime";
+import type { waitForTransportReady } from "marketingclaw/plugin-sdk/transport-ready-runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { createIMessageRpcClient } from "./client.js";
 import { monitorIMessageProvider } from "./monitor.js";
@@ -16,12 +16,13 @@ const createIMessageRpcClientMock = vi.hoisted(() => vi.fn<typeof createIMessage
 const stageIMessageAttachmentsMock = vi.hoisted(() => vi.fn<typeof stageIMessageAttachments>());
 const readChannelAllowFromStoreMock = vi.hoisted(() => vi.fn(async () => [] as string[]));
 
-vi.mock("openclaw/plugin-sdk/transport-ready-runtime", () => ({
+vi.mock("marketingclaw/plugin-sdk/transport-ready-runtime", () => ({
   waitForTransportReady: waitForTransportReadyMock,
 }));
 
-vi.mock("openclaw/plugin-sdk/conversation-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/conversation-runtime")>();
+vi.mock("marketingclaw/plugin-sdk/conversation-runtime", async (importOriginal) => {
+  const actual =
+    await importOriginal<typeof import("marketingclaw/plugin-sdk/conversation-runtime")>();
   return {
     ...actual,
     readChannelAllowFromStore: readChannelAllowFromStoreMock,
@@ -30,8 +31,8 @@ vi.mock("openclaw/plugin-sdk/conversation-runtime", async (importOriginal) => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/channel-inbound", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/channel-inbound")>();
+vi.mock("marketingclaw/plugin-sdk/channel-inbound", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("marketingclaw/plugin-sdk/channel-inbound")>();
   return {
     ...actual,
     createChannelInboundDebouncer: vi.fn((opts) => ({
@@ -66,7 +67,7 @@ describe("iMessage monitor attachment policy", () => {
     stageIMessageAttachmentsMock.mockResolvedValue({ attachments: [], unavailableCount: 0 });
     readChannelAllowFromStoreMock.mockResolvedValue([]);
 
-    const attachmentPath = "/Users/openclaw/Library/Messages/Attachments/AA/BB/photo.heic";
+    const attachmentPath = "/Users/marketingclaw/Library/Messages/Attachments/AA/BB/photo.heic";
     let onNotification:
       | ((message: { method: string; params: unknown }) => void | Promise<void>)
       | undefined;
@@ -117,7 +118,7 @@ describe("iMessage monitor attachment policy", () => {
             groups: { "*": { requireMention: true } },
           },
         },
-        messages: { groupChat: { mentionPatterns: ["@openclaw"] } },
+        messages: { groupChat: { mentionPatterns: ["@marketingclaw"] } },
         session: { mainKey: "main" },
       } as never,
     });
@@ -128,7 +129,7 @@ describe("iMessage monitor attachment policy", () => {
 
   it("admits attachment-only messages that are marked missing", async () => {
     const attachment = {
-      original_path: "/Users/openclaw/Library/Messages/Attachments/missing.heic",
+      original_path: "/Users/marketingclaw/Library/Messages/Attachments/missing.heic",
       mime_type: "image/heic",
       missing: true,
     };
@@ -148,12 +149,12 @@ describe("iMessage monitor attachment policy", () => {
 
   it("uses the first materialized attachment type when earlier media is unavailable", () => {
     const missingImage = {
-      original_path: "/Users/openclaw/Library/Messages/Attachments/missing.heic",
+      original_path: "/Users/marketingclaw/Library/Messages/Attachments/missing.heic",
       mime_type: "image/heic",
       missing: true,
     };
     const availableDocument = {
-      original_path: "/Users/openclaw/Library/Messages/Attachments/report.pdf",
+      original_path: "/Users/marketingclaw/Library/Messages/Attachments/report.pdf",
       mime_type: "application/pdf",
       missing: false,
     };
@@ -162,7 +163,7 @@ describe("iMessage monitor attachment policy", () => {
       resolveIMessageInboundMediaInput({
         messageText: "",
         attachments: [missingImage, availableDocument],
-        effectiveAttachmentRoots: ["/Users/openclaw/Library/Messages/Attachments"],
+        effectiveAttachmentRoots: ["/Users/marketingclaw/Library/Messages/Attachments"],
       }),
     ).toMatchObject({
       bodyText: "<media:document>",

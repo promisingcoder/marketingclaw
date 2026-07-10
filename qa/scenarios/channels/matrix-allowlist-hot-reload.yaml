@@ -40,7 +40,7 @@ flow:
                     accounts:
                       sut:
                         groupAllowFrom:
-                          expr: "[env.gateway.runtimeEnv.OPENCLAW_QA_MATRIX_DRIVER_USER_ID, env.gateway.runtimeEnv.OPENCLAW_QA_MATRIX_OBSERVER_USER_ID]"
+                          expr: "[env.gateway.runtimeEnv.MARKETINGCLAW_QA_MATRIX_DRIVER_USER_ID, env.gateway.runtimeEnv.MARKETINGCLAW_QA_MATRIX_OBSERVER_USER_ID]"
                 gateway:
                   reload:
                     mode: "off"
@@ -56,7 +56,7 @@ flow:
             senderId: observer
             senderName: QA Observer
             text:
-              expr: "`@openclaw Reply with only this exact marker: ${acceptedMarker}`"
+              expr: "`@marketingclaw Reply with only this exact marker: ${acceptedMarker}`"
         - waitForOutbound:
             textIncludes: { ref: acceptedMarker }
             timeoutMs: 60000
@@ -72,7 +72,7 @@ flow:
                     accounts:
                       sut:
                         groupAllowFrom:
-                          expr: "[env.gateway.runtimeEnv.OPENCLAW_QA_MATRIX_DRIVER_USER_ID]"
+                          expr: "[env.gateway.runtimeEnv.MARKETINGCLAW_QA_MATRIX_DRIVER_USER_ID]"
                 gateway:
                   reload:
                     mode: "off"
@@ -87,7 +87,7 @@ flow:
             senderId: observer
             senderName: QA Observer
             text:
-              expr: "`@openclaw Reply with only this exact marker: ${blockedMarker}`"
+              expr: "`@marketingclaw Reply with only this exact marker: ${blockedMarker}`"
         - waitForNoOutbound:
             quietMs: 8000
             sinceIndex: { ref: outboundCount }

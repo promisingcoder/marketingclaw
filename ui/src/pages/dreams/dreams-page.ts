@@ -16,7 +16,7 @@ import {
   resolveSessionAgentFilterId,
   resolveSessionAgentFilterOptions,
 } from "../../lib/sessions/session-options.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { MarketingClawLightDomElement } from "../../lit/marketingclaw-element.ts";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
 import {
   backfillDreamDiary,
@@ -109,7 +109,7 @@ function readWikiPagePreview(value: unknown, lookup: string): WikiPagePreview {
   };
 }
 
-class DreamsPage extends OpenClawLightDomElement {
+class DreamsPage extends MarketingClawLightDomElement {
   @consume({ context: applicationContext, subscribe: true })
   private context!: ApplicationContext;
 
@@ -578,6 +578,6 @@ class DreamsPage extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-dreams-page")) {
-  customElements.define("openclaw-dreams-page", DreamsPage);
+if (!customElements.get("marketingclaw-dreams-page")) {
+  customElements.define("marketingclaw-dreams-page", DreamsPage);
 }

@@ -168,12 +168,12 @@ merge_verify() {
       # green at the prepared head and GitHub's mergeable state still blocks
       # true conflicts. The hard fail serialized every landing behind a full
       # CI cycle per merged sibling, which collapses under multi-session
-      # traffic. Set OPENCLAW_PR_STRICT_DRIFT=1 to restore the hard gate.
-      if [ "${OPENCLAW_PR_STRICT_DRIFT:-}" = "1" ]; then
+      # traffic. Set MARKETINGCLAW_PR_STRICT_DRIFT=1 to restore the hard gate.
+      if [ "${MARKETINGCLAW_PR_STRICT_DRIFT:-}" = "1" ]; then
         echo "Merge verify failed: mainline drift is relevant to this PR; run scripts/pr prepare-sync-head $pr before merge."
         exit 1
       fi
-      echo "Merge verify: WARNING — mainline drift is relevant to this PR; proceeding (OPENCLAW_PR_STRICT_DRIFT=1 restores the hard gate)."
+      echo "Merge verify: WARNING — mainline drift is relevant to this PR; proceeding (MARKETINGCLAW_PR_STRICT_DRIFT=1 restores the hard gate)."
     else
       echo "Merge verify: continuing without prep-head sync because behind-main drift is unrelated."
     fi

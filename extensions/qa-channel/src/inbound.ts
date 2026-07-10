@@ -1,18 +1,18 @@
 // Qa Channel plugin module implements inbound behavior.
-import { resolveStableChannelMessageIngress } from "openclaw/plugin-sdk/channel-ingress-runtime";
-import { resolveNativeCommandSessionTargets } from "openclaw/plugin-sdk/command-auth-native";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { resolveInboundRouteEnvelopeBuilderWithRuntime } from "openclaw/plugin-sdk/inbound-envelope";
+import { resolveStableChannelMessageIngress } from "marketingclaw/plugin-sdk/channel-ingress-runtime";
+import { resolveNativeCommandSessionTargets } from "marketingclaw/plugin-sdk/command-auth-native";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "marketingclaw/plugin-sdk/error-runtime";
+import { resolveInboundRouteEnvelopeBuilderWithRuntime } from "marketingclaw/plugin-sdk/inbound-envelope";
 import {
   buildAgentMediaPayload,
   saveMediaBuffer,
   saveMediaSource,
-} from "openclaw/plugin-sdk/media-runtime";
+} from "marketingclaw/plugin-sdk/media-runtime";
 import {
   sanitizeQaBusToolCallArguments,
   type QaBusToolCall,
-} from "openclaw/plugin-sdk/qa-channel-protocol";
+} from "marketingclaw/plugin-sdk/qa-channel-protocol";
 import {
   buildQaTarget,
   deleteQaBusMessage,
@@ -220,7 +220,7 @@ export async function handleQaInbound(params: {
     toolCalls,
   });
   const { route, buildEnvelope } = resolveInboundRouteEnvelopeBuilderWithRuntime({
-    cfg: params.config as OpenClawConfig,
+    cfg: params.config as MarketingClawConfig,
     channel: params.channelId,
     accountId: params.account.accountId,
     peer: {
@@ -240,7 +240,7 @@ export async function handleQaInbound(params: {
     ? runtime.channel.mentions.matchesMentionPatterns(
         inbound.text,
         runtime.channel.mentions.buildMentionRegexes(
-          params.config as OpenClawConfig,
+          params.config as MarketingClawConfig,
           route.agentId,
         ),
       )
@@ -353,7 +353,7 @@ export async function handleQaInbound(params: {
   });
 
   await runtime.channel.inbound.dispatchReply({
-    cfg: params.config as OpenClawConfig,
+    cfg: params.config as MarketingClawConfig,
     channel: params.channelId,
     accountId: params.account.accountId,
     agentId: route.agentId,

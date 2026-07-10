@@ -1,6 +1,6 @@
 // Imessage plugin module implements runtime behavior.
-import type { PluginRuntime } from "openclaw/plugin-sdk/core";
-import { createPluginRuntimeStore } from "openclaw/plugin-sdk/runtime-store";
+import type { PluginRuntime } from "marketingclaw/plugin-sdk/core";
+import { createPluginRuntimeStore } from "marketingclaw/plugin-sdk/runtime-store";
 
 const {
   clearRuntime: clearIMessageRuntime,

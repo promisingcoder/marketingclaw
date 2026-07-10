@@ -1,21 +1,21 @@
 ---
-summary: "CLI reference for `openclaw config` (get/set/patch/unset/file/schema/validate)"
+summary: "CLI reference for `marketingclaw config` (get/set/patch/unset/file/schema/validate)"
 read_when:
   - You want to read or edit config non-interactively
 title: "Config"
 sidebarTitle: "Config"
 ---
 
-Non-interactive helpers for `openclaw.json`: get/set/patch/unset a value by path, print the schema, validate, or print the active file path. Run `openclaw config` with no subcommand to open the same guided wizard as `openclaw configure`.
+Non-interactive helpers for `marketingclaw.json`: get/set/patch/unset a value by path, print the schema, validate, or print the active file path. Run `marketingclaw config` with no subcommand to open the same guided wizard as `marketingclaw configure`.
 
 <Note>
-When `OPENCLAW_NIX_MODE=1`, OpenClaw treats `openclaw.json` as immutable. Read-only commands (`config get`, `config file`, `config schema`, `config validate`) still work; config writers refuse. Edit the Nix source for the install instead; for the first-party nix-openclaw distribution, use the [nix-openclaw Quick Start](https://github.com/openclaw/nix-openclaw#quick-start) and set values under `programs.openclaw.config` or `instances.<name>.config`.
+When `MARKETINGCLAW_NIX_MODE=1`, MarketingClaw treats `marketingclaw.json` as immutable. Read-only commands (`config get`, `config file`, `config schema`, `config validate`) still work; config writers refuse. Edit the Nix source for the install instead; for the first-party nix-marketingclaw distribution, use the [nix-marketingclaw Quick Start](https://github.com/openclaw/nix-openclaw#quick-start) and set values under `programs.marketingclaw.config` or `instances.<name>.config`.
 </Note>
 
 ## Root options
 
 <ParamField path="--section <section>" type="string">
-  Repeatable guided-setup section filter when you run `openclaw config` without a subcommand.
+  Repeatable guided-setup section filter when you run `marketingclaw config` without a subcommand.
 </ParamField>
 
 Guided sections: `workspace`, `model`, `web`, `gateway`, `daemon`, `channels`, `plugins`, `skills`, `health`.
@@ -23,23 +23,23 @@ Guided sections: `workspace`, `model`, `web`, `gateway`, `daemon`, `channels`, `
 ## Examples
 
 ```bash
-openclaw config file
-openclaw config --section model
-openclaw config --section gateway --section daemon
-openclaw config schema
-openclaw config get browser.executablePath
-openclaw config set browser.executablePath "/usr/bin/google-chrome"
-openclaw config set browser.profiles.work.executablePath "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-openclaw config set agents.defaults.heartbeat.every "2h"
-openclaw config set 'agents.list[0].tools.exec.node' "node-id-or-name"
-openclaw config set agents.defaults.models '{"openai/gpt-5.4":{}}' --strict-json --merge
-openclaw config set channels.discord.token --ref-provider default --ref-source env --ref-id DISCORD_BOT_TOKEN
-openclaw config set secrets.providers.vaultfile --provider-source file --provider-path /etc/openclaw/secrets.json --provider-mode json
-openclaw config patch --file ./openclaw.patch.json5 --dry-run
-openclaw config unset plugins.entries.brave.config.webSearch.apiKey
-openclaw config set channels.discord.token --ref-provider default --ref-source env --ref-id DISCORD_BOT_TOKEN --dry-run
-openclaw config validate
-openclaw config validate --json
+marketingclaw config file
+marketingclaw config --section model
+marketingclaw config --section gateway --section daemon
+marketingclaw config schema
+marketingclaw config get browser.executablePath
+marketingclaw config set browser.executablePath "/usr/bin/google-chrome"
+marketingclaw config set browser.profiles.work.executablePath "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+marketingclaw config set agents.defaults.heartbeat.every "2h"
+marketingclaw config set 'agents.list[0].tools.exec.node' "node-id-or-name"
+marketingclaw config set agents.defaults.models '{"openai/gpt-5.4":{}}' --strict-json --merge
+marketingclaw config set channels.discord.token --ref-provider default --ref-source env --ref-id DISCORD_BOT_TOKEN
+marketingclaw config set secrets.providers.vaultfile --provider-source file --provider-path /etc/marketingclaw/secrets.json --provider-mode json
+marketingclaw config patch --file ./marketingclaw.patch.json5 --dry-run
+marketingclaw config unset plugins.entries.brave.config.webSearch.apiKey
+marketingclaw config set channels.discord.token --ref-provider default --ref-source env --ref-id DISCORD_BOT_TOKEN --dry-run
+marketingclaw config validate
+marketingclaw config validate --json
 ```
 
 ### Paths
@@ -47,10 +47,10 @@ openclaw config validate --json
 Dot or bracket notation. Quote bracket paths in shell examples so zsh does not glob-expand `[0]`:
 
 ```bash
-openclaw config get agents.defaults.workspace
-openclaw config get 'agents.list[0].id'
-openclaw config get agents.list
-openclaw config set 'agents.list[1].tools.exec.node' "node-id-or-name"
+marketingclaw config get agents.defaults.workspace
+marketingclaw config get 'agents.list[0].id'
+marketingclaw config get agents.list
+marketingclaw config set 'agents.list[1].tools.exec.node' "node-id-or-name"
 ```
 
 ### `config get`
@@ -58,17 +58,17 @@ openclaw config set 'agents.list[1].tools.exec.node' "node-id-or-name"
 Reads a value from the redacted config snapshot (secrets never print). `--json` prints the raw value as JSON; otherwise strings/numbers/booleans print bare and objects/arrays print as formatted JSON.
 
 ```bash
-openclaw config get browser.executablePath
-openclaw config get agents.defaults.model --json
+marketingclaw config get browser.executablePath
+marketingclaw config get agents.defaults.model --json
 ```
 
 ### `config file`
 
-Prints the active config file path, resolved from `OPENCLAW_CONFIG_PATH` or the default location. The path names a regular file, not a symlink; see [Write safety](#write-safety).
+Prints the active config file path, resolved from `MARKETINGCLAW_CONFIG_PATH` or the default location. The path names a regular file, not a symlink; see [Write safety](#write-safety).
 
 ### `config schema`
 
-Prints the generated JSON schema for `openclaw.json` to stdout.
+Prints the generated JSON schema for `marketingclaw.json` to stdout.
 
 <AccordionGroup>
   <Accordion title="What it includes">
@@ -86,8 +86,8 @@ Prints the generated JSON schema for `openclaw.json` to stdout.
 </AccordionGroup>
 
 ```bash
-openclaw config schema
-openclaw config schema > openclaw.schema.json
+marketingclaw config schema
+marketingclaw config schema > marketingclaw.schema.json
 ```
 
 ### `config validate`
@@ -95,12 +95,12 @@ openclaw config schema > openclaw.schema.json
 Validates the current config against the active schema without starting the gateway.
 
 ```bash
-openclaw config validate
-openclaw config validate --json
+marketingclaw config validate
+marketingclaw config validate --json
 ```
 
 <Note>
-If validation is already failing, start with `openclaw configure` or `openclaw doctor --fix`. `openclaw chat` does not bypass the invalid-config guard.
+If validation is already failing, start with `marketingclaw configure` or `marketingclaw doctor --fix`. `marketingclaw chat` does not bypass the invalid-config guard.
 </Note>
 
 ## Values
@@ -108,9 +108,9 @@ If validation is already failing, start with `openclaw configure` or `openclaw d
 Values parse as JSON5 when possible; otherwise they are treated as raw strings. Use `--strict-json` to require standard JSON with no string fallback (JSON5-only syntax such as comments, trailing commas, or unquoted keys is then rejected). `--json` is a legacy alias for `--strict-json` on `config set`.
 
 ```bash
-openclaw config set agents.defaults.heartbeat.every "0m"
-openclaw config set gateway.port 19001 --strict-json
-openclaw config set channels.whatsapp.groups '["*"]' --strict-json
+marketingclaw config set agents.defaults.heartbeat.every "0m"
+marketingclaw config set gateway.port 19001 --strict-json
+marketingclaw config set channels.whatsapp.groups '["*"]' --strict-json
 ```
 
 `config get <path> --json` prints the raw value as JSON instead of terminal-formatted text.
@@ -122,8 +122,8 @@ Object assignment replaces the target path by default. Protected paths that comm
 Use `--merge` when adding entries to those maps:
 
 ```bash
-openclaw config set agents.defaults.models '{"openai/gpt-5.4":{}}' --strict-json --merge
-openclaw config set models.providers.ollama.models '[{"id":"llama3.2","name":"Llama 3.2"}]' --strict-json --merge
+marketingclaw config set agents.defaults.models '{"openai/gpt-5.4":{}}' --strict-json --merge
+marketingclaw config set models.providers.ollama.models '[{"id":"llama3.2","name":"Llama 3.2"}]' --strict-json --merge
 ```
 
 Use `--replace` only when the provided value should intentionally become the complete target value.
@@ -133,12 +133,12 @@ Use `--replace` only when the provided value should intentionally become the com
 <Tabs>
   <Tab title="Value mode">
     ```bash
-    openclaw config set <path> <value>
+    marketingclaw config set <path> <value>
     ```
   </Tab>
   <Tab title="SecretRef builder mode">
     ```bash
-    openclaw config set channels.discord.token \
+    marketingclaw config set channels.discord.token \
       --ref-provider default \
       --ref-source env \
       --ref-id DISCORD_BOT_TOKEN
@@ -148,9 +148,9 @@ Use `--replace` only when the provided value should intentionally become the com
     Targets `secrets.providers.<alias>` paths only:
 
     ```bash
-    openclaw config set secrets.providers.vault \
+    marketingclaw config set secrets.providers.vault \
       --provider-source exec \
-      --provider-command /usr/local/bin/openclaw-vault \
+      --provider-command /usr/local/bin/marketingclaw-vault \
       --provider-arg read \
       --provider-arg openai/api-key \
       --provider-timeout-ms 5000
@@ -159,7 +159,7 @@ Use `--replace` only when the provided value should intentionally become the com
   </Tab>
   <Tab title="Batch mode">
     ```bash
-    openclaw config set --batch-json '[
+    marketingclaw config set --batch-json '[
       {
         "path": "secrets.providers.default",
         "provider": { "source": "env" }
@@ -172,7 +172,7 @@ Use `--replace` only when the provided value should intentionally become the com
     ```
 
     ```bash
-    openclaw config set --batch-file ./config-set.batch.json --dry-run
+    marketingclaw config set --batch-file ./config-set.batch.json --dry-run
     ```
 
   </Tab>
@@ -187,12 +187,12 @@ Batch parsing always uses the batch payload (`--batch-json`/`--batch-file`) as t
 JSON path/value mode also works for SecretRefs and providers directly:
 
 ```bash
-openclaw config set channels.discord.token \
+marketingclaw config set channels.discord.token \
   '{"source":"env","provider":"default","id":"DISCORD_BOT_TOKEN"}' \
   --strict-json
 
-openclaw config set secrets.providers.vaultfile \
-  '{"source":"file","path":"/etc/openclaw/secrets.json","mode":"json"}' \
+marketingclaw config set secrets.providers.vaultfile \
+  '{"source":"file","path":"/etc/marketingclaw/secrets.json","mode":"json"}' \
   --strict-json
 ```
 
@@ -235,9 +235,9 @@ Provider builder targets must use `secrets.providers.<alias>` as the path.
 Hardened exec provider example:
 
 ```bash
-openclaw config set secrets.providers.vault \
+marketingclaw config set secrets.providers.vault \
   --provider-source exec \
-  --provider-command /usr/local/bin/openclaw-vault \
+  --provider-command /usr/local/bin/marketingclaw-vault \
   --provider-arg read \
   --provider-arg openai/api-key \
   --provider-json-only \
@@ -251,15 +251,15 @@ openclaw config set secrets.providers.vault \
 Paste or pipe a config-shaped JSON5 patch instead of running many path-based `config set` commands. Objects merge recursively; arrays and scalar values replace the target; `null` deletes the target path.
 
 ```bash
-openclaw config patch --file ./openclaw.patch.json5 --dry-run
-openclaw config patch --file ./openclaw.patch.json5
+marketingclaw config patch --file ./marketingclaw.patch.json5 --dry-run
+marketingclaw config patch --file ./marketingclaw.patch.json5
 ```
 
 Pipe a patch over stdin for remote setup scripts:
 
 ```bash
-ssh user@gateway-host 'openclaw config patch --stdin --dry-run' < ./openclaw.patch.json5
-ssh user@gateway-host 'openclaw config patch --stdin' < ./openclaw.patch.json5
+ssh user@gateway-host 'marketingclaw config patch --stdin --dry-run' < ./marketingclaw.patch.json5
+ssh user@gateway-host 'marketingclaw config patch --stdin' < ./marketingclaw.patch.json5
 ```
 
 Example patch:
@@ -297,24 +297,24 @@ Example patch:
 Use `--replace-path <path>` when one object or array must become exactly the provided value instead of being recursively patched:
 
 ```bash
-openclaw config patch --file ./discord.patch.json5 --replace-path 'channels.discord.guilds["123"].channels'
+marketingclaw config patch --file ./discord.patch.json5 --replace-path 'channels.discord.guilds["123"].channels'
 ```
 
 `--dry-run` runs schema and SecretRef resolvability checks without writing. Exec-backed SecretRefs are skipped by default during dry-run; add `--allow-exec` when you intentionally want dry-run to execute provider commands.
 
 ## Dry run
 
-`--dry-run` validates changes without writing `openclaw.json`. Available on `config set`, `config patch`, and `config unset`.
+`--dry-run` validates changes without writing `marketingclaw.json`. Available on `config set`, `config patch`, and `config unset`.
 
 ```bash
-openclaw config set channels.discord.token \
+marketingclaw config set channels.discord.token \
   --ref-provider default \
   --ref-source env \
   --ref-id DISCORD_BOT_TOKEN \
   --dry-run \
   --json
 
-openclaw config set channels.discord.token \
+marketingclaw config set channels.discord.token \
   --ref-provider vault \
   --ref-source exec \
   --ref-id discord/token \
@@ -373,7 +373,7 @@ openclaw config set channels.discord.token \
     {
       "ok": true,
       "operations": 1,
-      "configPath": "~/.openclaw/openclaw.json",
+      "configPath": "~/.marketingclaw/marketingclaw.json",
       "inputModes": ["builder"],
       "checks": {
         "schema": false,
@@ -390,7 +390,7 @@ openclaw config set channels.discord.token \
     {
       "ok": false,
       "operations": 1,
-      "configPath": "~/.openclaw/openclaw.json",
+      "configPath": "~/.marketingclaw/marketingclaw.json",
       "inputModes": ["builder"],
       "checks": {
         "schema": false,
@@ -436,47 +436,47 @@ Writes to `plugins.entries` (or any subpath) always require a restart, since the
 
 ## Write safety
 
-`openclaw config set` and other OpenClaw-owned config writers validate the full post-change config before committing it to disk. If the new payload fails schema validation or looks like a destructive clobber, the active config is left alone and the rejected payload is saved beside it as `openclaw.json.rejected.*`.
+`marketingclaw config set` and other MarketingClaw-owned config writers validate the full post-change config before committing it to disk. If the new payload fails schema validation or looks like a destructive clobber, the active config is left alone and the rejected payload is saved beside it as `marketingclaw.json.rejected.*`.
 
 <Warning>
-The active config path must be a regular file. Symlinked `openclaw.json` layouts are unsupported for writes; use `OPENCLAW_CONFIG_PATH` to point directly at the real file instead.
+The active config path must be a regular file. Symlinked `marketingclaw.json` layouts are unsupported for writes; use `MARKETINGCLAW_CONFIG_PATH` to point directly at the real file instead.
 </Warning>
 
 Prefer CLI writes for small edits:
 
 ```bash
-openclaw config set gateway.reload.mode hybrid --dry-run
-openclaw config set gateway.reload.mode hybrid
-openclaw config validate
+marketingclaw config set gateway.reload.mode hybrid --dry-run
+marketingclaw config set gateway.reload.mode hybrid
+marketingclaw config validate
 ```
 
 If a write is rejected, inspect the saved payload and fix the full config shape:
 
 ```bash
-CONFIG="$(openclaw config file)"
+CONFIG="$(marketingclaw config file)"
 ls -lt "$CONFIG".rejected.* 2>/dev/null | head
-openclaw config validate
+marketingclaw config validate
 ```
 
-Direct editor writes are still allowed, but the running Gateway treats them as untrusted until they validate. Invalid direct edits fail startup or are skipped by hot reload; Gateway does not rewrite `openclaw.json`. Run `openclaw doctor --fix` to repair prefixed/clobbered config or restore the last-known-good copy. See [Gateway troubleshooting](/gateway/troubleshooting#gateway-rejected-invalid-config).
+Direct editor writes are still allowed, but the running Gateway treats them as untrusted until they validate. Invalid direct edits fail startup or are skipped by hot reload; Gateway does not rewrite `marketingclaw.json`. Run `marketingclaw doctor --fix` to repair prefixed/clobbered config or restore the last-known-good copy. See [Gateway troubleshooting](/gateway/troubleshooting#gateway-rejected-invalid-config).
 
 Whole-file recovery is reserved for doctor repair. Plugin schema changes or `minHostVersion` skew stay loud instead of rolling back unrelated user settings such as models, providers, auth profiles, channels, gateway exposure, tools, memory, browser, or cron config.
 
 ## Repair loop
 
-After `openclaw config validate` passes, use the local TUI to have an embedded agent compare the active config against the docs while you validate each change from the same terminal:
+After `marketingclaw config validate` passes, use the local TUI to have an embedded agent compare the active config against the docs while you validate each change from the same terminal:
 
 ```bash
-openclaw chat
+marketingclaw chat
 ```
 
 Inside the TUI, a leading `!` runs a literal local shell command (after a one-time per-session confirmation prompt):
 
 ```text
-!openclaw config file
-!openclaw docs gateway auth token secretref
-!openclaw config validate
-!openclaw doctor
+!marketingclaw config file
+!marketingclaw docs gateway auth token secretref
+!marketingclaw config validate
+!marketingclaw doctor
 ```
 
 <Steps>
@@ -484,13 +484,13 @@ Inside the TUI, a leading `!` runs a literal local shell command (after a one-ti
     Ask the agent to compare your current config with the relevant docs page and suggest the smallest fix.
   </Step>
   <Step title="Apply targeted edits">
-    Apply targeted edits with `openclaw config set` or `openclaw configure`.
+    Apply targeted edits with `marketingclaw config set` or `marketingclaw configure`.
   </Step>
   <Step title="Re-validate">
-    Rerun `openclaw config validate` after each change.
+    Rerun `marketingclaw config validate` after each change.
   </Step>
   <Step title="Doctor for runtime issues">
-    If validation passes but the runtime is still unhealthy, run `openclaw doctor` or `openclaw doctor --fix` for migration and repair help.
+    If validation passes but the runtime is still unhealthy, run `marketingclaw doctor` or `marketingclaw doctor --fix` for migration and repair help.
   </Step>
 </Steps>
 

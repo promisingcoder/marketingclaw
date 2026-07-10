@@ -1,14 +1,14 @@
 ---
-summary: "Export redacted trajectory bundles for debugging an OpenClaw agent session"
+summary: "Export redacted trajectory bundles for debugging an MarketingClaw agent session"
 read_when:
   - Debugging why an agent answered, failed, or called tools a certain way
-  - Exporting a support bundle for an OpenClaw session
+  - Exporting a support bundle for an MarketingClaw session
   - Investigating prompt context, tool calls, runtime errors, or usage metadata
   - Disabling or relocating trajectory capture
 title: "Trajectory bundles"
 ---
 
-Trajectory capture is OpenClaw's per-session flight recorder. It records a
+Trajectory capture is MarketingClaw's per-session flight recorder. It records a
 structured timeline for each agent run, then `/export-trajectory` packages the
 current session into a redacted support bundle covering:
 
@@ -32,10 +32,10 @@ Send in the active session (alias `/trajectory`):
 /export-trajectory
 ```
 
-OpenClaw writes the bundle under the workspace:
+MarketingClaw writes the bundle under the workspace:
 
 ```text
-.openclaw/trajectory-exports/openclaw-trajectory-<session>-<timestamp>/
+.marketingclaw/trajectory-exports/marketingclaw-trajectory-<session>-<timestamp>/
 ```
 
 Pass a relative output directory name to override it:
@@ -44,13 +44,13 @@ Pass a relative output directory name to override it:
 /export-trajectory bug-1234
 ```
 
-The name resolves inside `.openclaw/trajectory-exports/`. Absolute paths and
+The name resolves inside `.marketingclaw/trajectory-exports/`. Absolute paths and
 `~` paths are rejected.
 
 Trajectory bundles can contain prompts, model messages, tool schemas, tool
 results, runtime events, and local paths, so the chat command always runs
 through exec approval. Approve the export once when you intend to create the
-bundle; do not use allow-all. In group chats, OpenClaw sends the approval
+bundle; do not use allow-all. In group chats, MarketingClaw sends the approval
 prompt and export result to the owner privately instead of posting trajectory
 details back to the shared room.
 
@@ -58,11 +58,11 @@ For local inspection or support workflows, run the underlying CLI command
 directly:
 
 ```bash
-openclaw sessions export-trajectory --session-key "agent:main:telegram:direct:123" --workspace .
+marketingclaw sessions export-trajectory --session-key "agent:main:telegram:direct:123" --workspace .
 ```
 
 Other flags: `--output <path>` (directory name inside
-`.openclaw/trajectory-exports`), `--store <path>` (session store override),
+`.marketingclaw/trajectory-exports`), `--store <path>` (session store override),
 `--agent <id>` (agent id for store resolution), `--json` (structured output).
 
 ## Access
@@ -72,7 +72,7 @@ authorization checks plus the owner check for the channel.
 
 ## What gets recorded
 
-Trajectory capture is on by default for OpenClaw agent runs.
+Trajectory capture is on by default for MarketingClaw agent runs.
 
 Runtime events include:
 
@@ -93,23 +93,23 @@ Events are written as JSON Lines with this schema marker:
 
 ```json
 {
-  "traceSchema": "openclaw-trajectory",
+  "traceSchema": "marketingclaw-trajectory",
   "schemaVersion": 1
 }
 ```
 
 ## Bundle files
 
-| File                  | Contents                                                                                       |
-| --------------------- | ---------------------------------------------------------------------------------------------- |
-| `manifest.json`       | Bundle schema, source files, event counts, and generated file list                             |
-| `events.jsonl`        | Ordered runtime and transcript timeline                                                        |
-| `session-branch.json` | Redacted active transcript branch and session header                                           |
-| `metadata.json`       | OpenClaw version, OS/runtime, model, config snapshot, plugins, skills, and prompt metadata     |
-| `artifacts.json`      | Final status, errors, usage, prompt cache, compaction count, assistant text, and tool metadata |
-| `prompts.json`        | Submitted prompts and selected prompt-building details                                         |
-| `system-prompt.txt`   | Latest compiled system prompt, when captured                                                   |
-| `tools.json`          | Tool definitions sent to the model, when captured                                              |
+| File                  | Contents                                                                                        |
+| --------------------- | ----------------------------------------------------------------------------------------------- |
+| `manifest.json`       | Bundle schema, source files, event counts, and generated file list                              |
+| `events.jsonl`        | Ordered runtime and transcript timeline                                                         |
+| `session-branch.json` | Redacted active transcript branch and session header                                            |
+| `metadata.json`       | MarketingClaw version, OS/runtime, model, config snapshot, plugins, skills, and prompt metadata |
+| `artifacts.json`      | Final status, errors, usage, prompt cache, compaction count, assistant text, and tool metadata  |
+| `prompts.json`        | Submitted prompts and selected prompt-building details                                          |
+| `system-prompt.txt`   | Latest compiled system prompt, when captured                                                    |
+| `tools.json`          | Tool definitions sent to the model, when captured                                               |
 
 `manifest.json` lists the files present in a given bundle; some files are
 omitted when the session did not capture the corresponding runtime data.
@@ -122,17 +122,17 @@ By default, runtime trajectory events are written beside the session file:
 <session>.trajectory.jsonl
 ```
 
-OpenClaw also writes a best-effort pointer file beside the session:
+MarketingClaw also writes a best-effort pointer file beside the session:
 
 ```text
 <session>.trajectory-path.json
 ```
 
-Set `OPENCLAW_TRAJECTORY_DIR` to store runtime trajectory sidecars in a
+Set `MARKETINGCLAW_TRAJECTORY_DIR` to store runtime trajectory sidecars in a
 dedicated directory instead, one JSONL file per session id:
 
 ```bash
-export OPENCLAW_TRAJECTORY_DIR=/var/lib/openclaw/trajectories
+export MARKETINGCLAW_TRAJECTORY_DIR=/var/lib/marketingclaw/trajectories
 ```
 
 Session maintenance removes trajectory sidecars when their owning session
@@ -143,32 +143,32 @@ proves it belongs to that session.
 ## Disable capture
 
 ```bash
-export OPENCLAW_TRAJECTORY=0
+export MARKETINGCLAW_TRAJECTORY=0
 ```
 
-This disables runtime trajectory capture before starting OpenClaw.
+This disables runtime trajectory capture before starting MarketingClaw.
 `/export-trajectory` can still export the transcript branch, but runtime-only
 files such as compiled context, provider artifacts, and prompt metadata may be
 missing.
 
 ## Tune flush timeout
 
-OpenClaw flushes runtime trajectory sidecars during agent cleanup. The default
+MarketingClaw flushes runtime trajectory sidecars during agent cleanup. The default
 cleanup timeout is 10,000 ms. On slow disks or large stores, set
-`OPENCLAW_TRAJECTORY_FLUSH_TIMEOUT_MS` before starting OpenClaw:
+`MARKETINGCLAW_TRAJECTORY_FLUSH_TIMEOUT_MS` before starting MarketingClaw:
 
 ```bash
-export OPENCLAW_TRAJECTORY_FLUSH_TIMEOUT_MS=30000
+export MARKETINGCLAW_TRAJECTORY_FLUSH_TIMEOUT_MS=30000
 ```
 
-This controls when OpenClaw logs an `openclaw-trajectory-flush` timeout and
+This controls when MarketingClaw logs an `marketingclaw-trajectory-flush` timeout and
 continues; it does not change the trajectory size caps. To tune all agent
 cleanup steps that do not pass an explicit timeout, set
-`OPENCLAW_AGENT_CLEANUP_TIMEOUT_MS`.
+`MARKETINGCLAW_AGENT_CLEANUP_TIMEOUT_MS`.
 
 ## Privacy and limits
 
-Trajectory bundles are for support and debugging, not public posting. OpenClaw
+Trajectory bundles are for support and debugging, not public posting. MarketingClaw
 redacts sensitive values before writing export files:
 
 - credentials and known secret-like payload fields
@@ -192,8 +192,8 @@ and cannot know every application-specific secret.
 
 If the export has no runtime events:
 
-- confirm OpenClaw was started without `OPENCLAW_TRAJECTORY=0`
-- check whether `OPENCLAW_TRAJECTORY_DIR` points to a writable directory
+- confirm MarketingClaw was started without `MARKETINGCLAW_TRAJECTORY=0`
+- check whether `MARKETINGCLAW_TRAJECTORY_DIR` points to a writable directory
 - run another message in the session, then export again
 - inspect `manifest.json` for `runtimeEventCount`
 
@@ -201,7 +201,7 @@ If the command rejects the output path:
 
 - use a relative name like `bug-1234`
 - do not pass `/tmp/...` or `~/...`
-- keep the export inside `.openclaw/trajectory-exports/`
+- keep the export inside `.marketingclaw/trajectory-exports/`
 
 If the export fails with a size error, the session or sidecar exceeded the
 export safety limits above. Start a new session or export a smaller

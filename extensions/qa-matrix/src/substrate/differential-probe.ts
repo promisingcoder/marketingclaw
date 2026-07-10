@@ -118,7 +118,7 @@ export async function runMatrixQaDifferentialProbe(params: {
   if (!incrementalToken) {
     throw new Error("Matrix differential probe incremental sync did not return next_batch");
   }
-  const missingStateEndpoint = `/_matrix/client/v3/rooms/${encodeURIComponent(params.roomId)}/state/org.openclaw.qa.missing/${encodeURIComponent(params.userId)}`;
+  const missingStateEndpoint = `/_matrix/client/v3/rooms/${encodeURIComponent(params.roomId)}/state/org.marketingclaw.qa.missing/${encodeURIComponent(params.userId)}`;
   const missingState = await requestMatrixJson<Record<string, unknown>>({
     accessToken: params.accessToken,
     baseUrl: params.baseUrl,

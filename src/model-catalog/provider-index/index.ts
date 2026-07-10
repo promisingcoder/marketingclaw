@@ -1,10 +1,10 @@
 // Provider-index public facade for normalized provider discovery metadata.
-export { loadOpenClawProviderIndex } from "./load.js";
-export { normalizeOpenClawProviderIndex } from "./normalize.js";
+export { loadMarketingClawProviderIndex } from "./load.js";
+export { normalizeMarketingClawProviderIndex } from "./normalize.js";
 export type {
-  OpenClawProviderIndex,
-  OpenClawProviderIndexPluginInstall,
-  OpenClawProviderIndexPlugin,
-  OpenClawProviderIndexProviderAuthChoice,
-  OpenClawProviderIndexProvider,
+  MarketingClawProviderIndex,
+  MarketingClawProviderIndexPluginInstall,
+  MarketingClawProviderIndexPlugin,
+  MarketingClawProviderIndexProviderAuthChoice,
+  MarketingClawProviderIndexProvider,
 } from "./types.js";

@@ -2,7 +2,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { collectCronDeliveryTargetAdvisory } from "./warnings.js";
 
-const STORE_PATH = "/tmp/openclaw/cron/jobs.sqlite";
+const STORE_PATH = "/tmp/marketingclaw/cron/jobs.sqlite";
 
 function job(overrides: Record<string, unknown>): Record<string, unknown> {
   return { id: "job", schedule: "0 * * * *", ...overrides };

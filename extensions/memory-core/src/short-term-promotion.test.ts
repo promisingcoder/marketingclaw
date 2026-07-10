@@ -2,11 +2,11 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { OpenKeyedStoreOptions } from "openclaw/plugin-sdk/plugin-state-runtime";
-import { createPluginStateKeyedStoreForTests } from "openclaw/plugin-sdk/plugin-state-test-runtime";
+import type { OpenKeyedStoreOptions } from "marketingclaw/plugin-sdk/plugin-state-runtime";
+import { createPluginStateKeyedStoreForTests } from "marketingclaw/plugin-sdk/plugin-state-test-runtime";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
-vi.mock("openclaw/plugin-sdk/memory-host-events", () => ({
+vi.mock("marketingclaw/plugin-sdk/memory-host-events", () => ({
   appendMemoryHostEvent: vi.fn(async () => {}),
 }));
 
@@ -1400,7 +1400,7 @@ describe("short-term promotion", () => {
       expect(secondApply.reconciledExisting).toBe(1);
 
       const memoryText = await fs.readFile(path.join(workspaceDir, "MEMORY.md"), "utf-8");
-      expect(memoryText.match(/openclaw-memory-promotion:/g)?.length).toBe(1);
+      expect(memoryText.match(/marketingclaw-memory-promotion:/g)?.length).toBe(1);
       expect(
         memoryText.match(/The gateway should stay loopback-only on port 18789\./g)?.length,
       ).toBe(1);
@@ -1467,9 +1467,9 @@ describe("short-term promotion", () => {
 
       const memoryText = await fs.readFile(path.join(workspaceDir, "MEMORY.md"), "utf-8");
       expect(memoryText).toContain(
-        "<!-- openclaw-memory-promotion:memory:memory/project alpha/2026-04-01.md:2:2 -->",
+        "<!-- marketingclaw-memory-promotion:memory:memory/project alpha/2026-04-01.md:2:2 -->",
       );
-      expect(memoryText.match(/openclaw-memory-promotion:/g)?.length).toBe(1);
+      expect(memoryText.match(/marketingclaw-memory-promotion:/g)?.length).toBe(1);
       expect(
         memoryText.match(/The project alpha gateway should stay loopback-only on port 18789\./g)
           ?.length,
@@ -1707,9 +1707,9 @@ describe("short-term promotion", () => {
         "## Notes",
         "Real durable content.",
         "## Light Sleep",
-        "<!-- openclaw:dreaming:light:start -->",
+        "<!-- marketingclaw:dreaming:light:start -->",
         "- Candidate: some staged dream content",
-        "<!-- openclaw:dreaming:light:end -->",
+        "<!-- marketingclaw:dreaming:light:end -->",
         "## After",
         "More real content.",
       ];
@@ -1721,9 +1721,9 @@ describe("short-term promotion", () => {
       const lines = [
         "# Daily note",
         "Real durable content.",
-        "<!-- openclaw:dreaming:rem:start -->",
+        "<!-- marketingclaw:dreaming:rem:start -->",
         "staged dream content",
-        "<!-- openclaw:dreaming:rem:end -->",
+        "<!-- marketingclaw:dreaming:rem:end -->",
         "More real content.",
       ];
       expect(testing.lineRangeOverlapsDreamingFence(lines, 2, 2)).toBe(false);
@@ -1733,9 +1733,9 @@ describe("short-term promotion", () => {
     it("returns true when the range straddles a fence boundary", () => {
       const lines = [
         "real line 1",
-        "<!-- openclaw:dreaming:diary:start -->",
+        "<!-- marketingclaw:dreaming:diary:start -->",
         "dream line",
-        "<!-- openclaw:dreaming:diary:end -->",
+        "<!-- marketingclaw:dreaming:diary:end -->",
         "real line 5",
       ];
       expect(testing.lineRangeOverlapsDreamingFence(lines, 2, 4)).toBe(true);
@@ -1743,13 +1743,13 @@ describe("short-term promotion", () => {
 
     it("recovers after a fence end so later real content is not flagged", () => {
       const lines = [
-        "<!-- openclaw:dreaming:light:start -->",
+        "<!-- marketingclaw:dreaming:light:start -->",
         "dream",
-        "<!-- openclaw:dreaming:light:end -->",
+        "<!-- marketingclaw:dreaming:light:end -->",
         "real line 4",
-        "<!-- openclaw:dreaming:rem:start -->",
+        "<!-- marketingclaw:dreaming:rem:start -->",
         "more dream",
-        "<!-- openclaw:dreaming:rem:end -->",
+        "<!-- marketingclaw:dreaming:rem:end -->",
         "real line 8",
       ];
       expect(testing.lineRangeOverlapsDreamingFence(lines, 4, 4)).toBe(false);
@@ -1758,7 +1758,7 @@ describe("short-term promotion", () => {
     });
 
     // Marker lines themselves carry managed-block content. A relocated range
-    // that includes a `<!-- openclaw:dreaming:*:start/end -->` marker would
+    // that includes a `<!-- marketingclaw:dreaming:*:start/end -->` marker would
     // build its snippet from raw lines that contain that marker text, leaking
     // it into MEMORY.md alongside any adjacent fenced content captured by the
     // same window. The guard treats marker lines as inside-fence so those
@@ -1769,18 +1769,18 @@ describe("short-term promotion", () => {
         "- Plan switches use exRule, not abConfig",
         "",
         "## Light Sleep",
-        "<!-- openclaw:dreaming:light:start -->",
+        "<!-- marketingclaw:dreaming:light:start -->",
         "- Candidate: staged dream",
-        "<!-- openclaw:dreaming:light:end -->",
+        "<!-- marketingclaw:dreaming:light:end -->",
       ];
       expect(testing.lineRangeOverlapsDreamingFence(lines, 2, 5)).toBe(true);
     });
 
     it("returns true when the range begins on a Light Sleep end marker", () => {
       const lines = [
-        "<!-- openclaw:dreaming:light:start -->",
+        "<!-- marketingclaw:dreaming:light:start -->",
         "- Candidate: staged dream",
-        "<!-- openclaw:dreaming:light:end -->",
+        "<!-- marketingclaw:dreaming:light:end -->",
         "- normal durable bullet",
       ];
       expect(testing.lineRangeOverlapsDreamingFence(lines, 3, 4)).toBe(true);
@@ -1788,9 +1788,9 @@ describe("short-term promotion", () => {
 
     it("returns true when the range covers only a marker line", () => {
       const lines = [
-        "<!-- openclaw:dreaming:light:start -->",
+        "<!-- marketingclaw:dreaming:light:start -->",
         "- Candidate: staged dream",
-        "<!-- openclaw:dreaming:light:end -->",
+        "<!-- marketingclaw:dreaming:light:end -->",
       ];
       expect(testing.lineRangeOverlapsDreamingFence(lines, 1, 1)).toBe(true);
       expect(testing.lineRangeOverlapsDreamingFence(lines, 3, 3)).toBe(true);
@@ -1799,8 +1799,8 @@ describe("short-term promotion", () => {
     it("returns true for REM marker single-line ranges even with no body between markers", () => {
       const lines = [
         "real line 1",
-        "<!-- openclaw:dreaming:rem:start -->",
-        "<!-- openclaw:dreaming:rem:end -->",
+        "<!-- marketingclaw:dreaming:rem:start -->",
+        "<!-- marketingclaw:dreaming:rem:end -->",
         "real line 4",
       ];
       // No content between the markers, but the marker text itself must not
@@ -1825,10 +1825,10 @@ describe("short-term promotion", () => {
         "- Plan switches use exRule, not abConfig", // 2
         "", // 3
         "## Light Sleep", // 4
-        "<!-- openclaw:dreaming:light:start -->", // 5
+        "<!-- marketingclaw:dreaming:light:start -->", // 5
         "- Candidate: staged dream", // 6
         "  - confidence: 0.95", // 7
-        "<!-- openclaw:dreaming:light:end -->", // 8
+        "<!-- marketingclaw:dreaming:light:end -->", // 8
       ]);
 
       // Stored recall snippet equals the marker text exactly, so relocate's
@@ -1847,7 +1847,7 @@ describe("short-term promotion", () => {
             startLine: 5,
             endLine: 5,
             score: 0.94,
-            snippet: "<!-- openclaw:dreaming:light:start -->",
+            snippet: "<!-- marketingclaw:dreaming:light:start -->",
             source: "memory",
           },
         ],
@@ -1872,7 +1872,7 @@ describe("short-term promotion", () => {
         .readFile(path.join(workspaceDir, "MEMORY.md"), "utf-8")
         .catch(() => "");
       expect(memoryText).not.toContain("Promoted From Short-Term Memory");
-      expect(memoryText).not.toMatch(/openclaw:dreaming/i);
+      expect(memoryText).not.toMatch(/marketingclaw:dreaming/i);
     });
   });
 
@@ -1885,9 +1885,9 @@ describe("short-term promotion", () => {
         "Legitimate durable observation about backups.",
         "",
         "## Light Sleep",
-        "<!-- openclaw:dreaming:light:start -->",
+        "<!-- marketingclaw:dreaming:light:start -->",
         "- Candidate: staged dream scratchwork",
-        "<!-- openclaw:dreaming:light:end -->",
+        "<!-- marketingclaw:dreaming:light:end -->",
       ]);
       expect(dailyPath).toBeTruthy();
 
@@ -2185,7 +2185,7 @@ describe("short-term promotion", () => {
       expect(promotedLine).toMatch(
         /\[score=0\.\d{3} recalls=1 avg=0\.\d{3} source=memory\/2026-04-01\.md:1-1\]/,
       );
-      expect(memoryText).toMatch(/<!-- openclaw-memory-promotion:[^\n]+ -->/);
+      expect(memoryText).toMatch(/<!-- marketingclaw-memory-promotion:[^\n]+ -->/);
     });
   });
 
@@ -2842,9 +2842,9 @@ describe("short-term promotion", () => {
         "# 2026-05-28",
         "",
         "## Light Sleep",
-        "<!-- openclaw:dreaming:light:start -->",
+        "<!-- marketingclaw:dreaming:light:start -->",
         "- Candidate: scratch reflection",
-        "<!-- openclaw:dreaming:light:end -->",
+        "<!-- marketingclaw:dreaming:light:end -->",
         "- Reviewed travel timing before the workshop.",
       ]);
       await recordShortTermRecalls({
@@ -3482,11 +3482,11 @@ describe("short-term promotion", () => {
           "# Long-Term Memory",
           "",
           "## Promoted From Short-Term Memory (2026-04-10)",
-          "<!-- openclaw-memory-promotion:legacy-old -->",
+          "<!-- marketingclaw-memory-promotion:legacy-old -->",
           `- ${filler}`,
           "",
           "## Promoted From Short-Term Memory (2026-04-20)",
-          "<!-- openclaw-memory-promotion:legacy-newer -->",
+          "<!-- marketingclaw-memory-promotion:legacy-newer -->",
           `- ${filler}`,
           "",
         ].join("\n");

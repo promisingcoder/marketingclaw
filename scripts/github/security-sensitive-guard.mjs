@@ -18,7 +18,7 @@ import {
 } from "./guard-shared.mjs";
 
 /** Marker used to identify security-sensitive guard comments. */
-export const securitySensitiveGuardMarker = "<!-- openclaw:security-sensitive-guard -->";
+export const securitySensitiveGuardMarker = "<!-- marketingclaw:security-sensitive-guard -->";
 const securitySensitiveChangedLabel = "security-sensitive-changed";
 export const allowSecuritySensitiveCommand = "/allow-security-sensitive-change";
 export {
@@ -29,7 +29,7 @@ export {
   readBoundedGitHubJson,
 };
 
-const securityTeamSlug = process.env.OPENCLAW_SECURITY_TEAM_SLUG ?? "openclaw-secops";
+const securityTeamSlug = process.env.MARKETINGCLAW_SECURITY_TEAM_SLUG ?? "marketingclaw-secops";
 const maxListedFiles = 25;
 const securitySensitiveFiles = [
   {
@@ -281,7 +281,7 @@ export function renderBlockedSecuritySensitiveComment({ headSha, changes }) {
     "",
     "### Security-sensitive changes are blocked",
     "",
-    "OpenClaw does not accept security-sensitive file changes through PRs unless a repository admin or security explicitly authorizes the current head SHA.",
+    "MarketingClaw does not accept security-sensitive file changes through PRs unless a repository admin or security explicitly authorizes the current head SHA.",
     "",
     "Detected security-sensitive changes:",
     ...renderChangedFileLines(changes),
@@ -323,7 +323,7 @@ export async function findTrustedSecuritySensitiveGuardActor({
 export function githubApi(token, options = {}) {
   return createGitHubApi(token, {
     ...options,
-    userAgent: "openclaw-security-sensitive-guard",
+    userAgent: "marketingclaw-security-sensitive-guard",
   });
 }
 
@@ -352,14 +352,16 @@ async function main() {
   }
 
   const api = githubApi(token);
-  const explicitSecurityApprovers = securityApproverSet(process.env.OPENCLAW_SECURITY_APPROVERS);
+  const explicitSecurityApprovers = securityApproverSet(
+    process.env.MARKETINGCLAW_SECURITY_APPROVERS,
+  );
   const trustedCommentAuthors = securitySensitiveGuardCommentAuthors(
-    process.env.OPENCLAW_SECURITY_SENSITIVE_GUARD_COMMENT_BOTS,
+    process.env.MARKETINGCLAW_SECURITY_SENSITIVE_GUARD_COMMENT_BOTS,
   );
   const issuePath = `/repos/${owner}/${repo}/issues/${eventPullRequest.number}`;
   const pullPath = `/repos/${owner}/${repo}/pulls/${eventPullRequest.number}`;
   const pullRequest = await api.request(pullPath);
-  const mode = process.env.OPENCLAW_SECURITY_SENSITIVE_GUARD_MODE ?? "enforce";
+  const mode = process.env.MARKETINGCLAW_SECURITY_SENSITIVE_GUARD_MODE ?? "enforce";
   const files = await api.paginate(`${pullPath}/files`);
   const securitySensitiveChanges = collectSecuritySensitiveChanges(files);
 

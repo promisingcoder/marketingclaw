@@ -1,6 +1,6 @@
-package ai.openclaw.app.node
+package ai.marketingclaw.app.node
 
-import ai.openclaw.app.gateway.GatewaySession
+import ai.marketingclaw.app.gateway.GatewaySession
 import android.content.Context
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray

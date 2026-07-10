@@ -44,7 +44,7 @@ const getSessionDefaultsMock = vi.fn(() => ({
   contextTokens: null,
 }));
 const loadCombinedSessionStoreForGatewayMock = vi.fn((_options?: unknown) => ({
-  storePath: "/tmp/openclaw-sessions.json",
+  storePath: "/tmp/marketingclaw-sessions.json",
   store: {},
 }));
 const getRuntimeConfigMock = vi.fn(() => ({}));
@@ -70,7 +70,7 @@ const loadSessionEntryMock = vi.fn(
   (sessionKey: string, _opts?: { agentId?: string }): LoadSessionEntryMockResult => ({
     cfg: {},
     canonicalKey: sessionKey,
-    storePath: "/tmp/openclaw-sessions.json",
+    storePath: "/tmp/marketingclaw-sessions.json",
     store: {},
     entry: {},
   }),
@@ -108,7 +108,7 @@ vi.mock("../config/sessions.js", () => ({
     goal ? `Goal: ${goal.objective ?? ""}` : "No goal for this session.",
   getSessionGoal: (...args: unknown[]) => getSessionGoalMock(...args),
   resolveAgentMainSessionKey: () => "agent:main:main",
-  resolveStorePath: () => "/tmp/openclaw-sessions.json",
+  resolveStorePath: () => "/tmp/marketingclaw-sessions.json",
   updateSessionGoalStatus: (...args: unknown[]) => updateSessionGoalStatusMock(...args),
   updateSessionStore: (...args: unknown[]) => updateSessionStoreMock(...args),
 }));
@@ -118,8 +118,9 @@ vi.mock("../config/sessions/session-accessor.js", () => ({
 }));
 
 vi.mock("../agents/agent-scope.js", () => ({
-  resolveAgentDir: (_cfg: unknown, agentId: string) => `/tmp/openclaw-agent-${agentId}/agent`,
-  resolveAgentWorkspaceDir: (_cfg: unknown, agentId: string) => `/tmp/openclaw-agent-${agentId}`,
+  resolveAgentDir: (_cfg: unknown, agentId: string) => `/tmp/marketingclaw-agent-${agentId}/agent`,
+  resolveAgentWorkspaceDir: (_cfg: unknown, agentId: string) =>
+    `/tmp/marketingclaw-agent-${agentId}`,
   resolveDefaultAgentId: (cfg?: {
     agents?: { list?: Array<{ id?: string; default?: boolean }> };
   }) =>
@@ -202,7 +203,7 @@ vi.mock("../gateway/session-utils.js", () => ({
   }),
   resolveGatewaySessionStoreTarget: ({ key }: { key: string }) => ({
     canonicalKey: key,
-    storePath: "/tmp/openclaw-sessions.json",
+    storePath: "/tmp/marketingclaw-sessions.json",
   }),
   resolveSessionModelRef: () => ({ provider: "openai", model: "gpt-5.4" }),
 }));
@@ -307,7 +308,7 @@ describe("EmbeddedTuiBackend", () => {
     listSessionsFromStoreAsyncMock.mockResolvedValue({ sessions: [] });
     loadCombinedSessionStoreForGatewayMock.mockReset();
     loadCombinedSessionStoreForGatewayMock.mockReturnValue({
-      storePath: "/tmp/openclaw-sessions.json",
+      storePath: "/tmp/marketingclaw-sessions.json",
       store: {},
     });
     applySessionPatchProjectionMock.mockReset();
@@ -336,7 +337,7 @@ describe("EmbeddedTuiBackend", () => {
     loadSessionEntryMock.mockImplementation((sessionKey: string) => ({
       cfg: {},
       canonicalKey: sessionKey,
-      storePath: "/tmp/openclaw-sessions.json",
+      storePath: "/tmp/marketingclaw-sessions.json",
       store: {},
       entry: {},
     }));
@@ -701,7 +702,7 @@ describe("EmbeddedTuiBackend", () => {
     expect(loadCombinedSessionStoreForGatewayMock).toHaveBeenCalledWith({}, { agentId: "work" });
     expect(listSessionsFromStoreAsyncMock).toHaveBeenCalledWith({
       cfg: {},
-      storePath: "/tmp/openclaw-sessions.json",
+      storePath: "/tmp/marketingclaw-sessions.json",
       store: {},
       opts: { agentId: "work", includeGlobal: true, search: "global" },
     });
@@ -739,7 +740,7 @@ describe("EmbeddedTuiBackend", () => {
     loadSessionEntryMock.mockReturnValueOnce({
       cfg: {},
       canonicalKey: "agent:main:main",
-      storePath: "/tmp/openclaw-sessions.json",
+      storePath: "/tmp/marketingclaw-sessions.json",
     });
 
     const { EmbeddedTuiBackend } = await import("./embedded-backend.js");
@@ -753,7 +754,7 @@ describe("EmbeddedTuiBackend", () => {
     ).resolves.toEqual({ text: "Goal started: Ship Goal" });
     expect(createSessionGoalMock).toHaveBeenCalledWith({
       sessionKey: "agent:main:main",
-      storePath: "/tmp/openclaw-sessions.json",
+      storePath: "/tmp/marketingclaw-sessions.json",
       objective: "Ship Goal",
       fallbackEntry: {
         sessionId: expect.any(String),
@@ -766,7 +767,7 @@ describe("EmbeddedTuiBackend", () => {
     loadSessionEntryMock.mockReturnValueOnce({
       cfg: {},
       canonicalKey: "global",
-      storePath: "/tmp/openclaw-work-sessions.json",
+      storePath: "/tmp/marketingclaw-work-sessions.json",
       entry: { sessionId: "session-work", updatedAt: embeddedEventTimestamp },
     });
 
@@ -784,7 +785,7 @@ describe("EmbeddedTuiBackend", () => {
     expect(loadSessionEntryMock).toHaveBeenCalledWith("global", { agentId: "work" });
     expect(getSessionGoalMock).toHaveBeenCalledWith({
       sessionKey: "global",
-      storePath: "/tmp/openclaw-work-sessions.json",
+      storePath: "/tmp/marketingclaw-work-sessions.json",
     });
   });
 
@@ -819,7 +820,7 @@ describe("EmbeddedTuiBackend", () => {
     loadSessionEntryMock.mockReturnValue({
       cfg: {},
       canonicalKey: "global",
-      storePath: "/tmp/openclaw-work-sessions.json",
+      storePath: "/tmp/marketingclaw-work-sessions.json",
       entry: { sessionId: "session-work-global" },
     });
 
@@ -840,7 +841,7 @@ describe("EmbeddedTuiBackend", () => {
     loadSessionEntryMock.mockReturnValue({
       cfg: {},
       canonicalKey: "agent:main:main",
-      storePath: "/tmp/openclaw-sessions.json",
+      storePath: "/tmp/marketingclaw-sessions.json",
       entry: { sessionId: "sess-main" },
     });
 
@@ -855,7 +856,7 @@ describe("EmbeddedTuiBackend", () => {
         sessionEntry: { sessionId: "sess-main" },
         sessionId: "sess-main",
         sessionKey: "agent:main:main",
-        storePath: "/tmp/openclaw-sessions.json",
+        storePath: "/tmp/marketingclaw-sessions.json",
       },
       {
         mode: "recent",
@@ -871,8 +872,8 @@ describe("EmbeddedTuiBackend", () => {
     loadSessionEntryMock.mockReturnValue({
       cfg,
       canonicalKey: "agent:main:main",
-      storePath: "/tmp/openclaw-sessions.json",
-      entry: { spawnedWorkspaceDir: "/tmp/openclaw-custom-workspace" },
+      storePath: "/tmp/marketingclaw-sessions.json",
+      entry: { spawnedWorkspaceDir: "/tmp/marketingclaw-custom-workspace" },
     });
 
     const { EmbeddedTuiBackend } = await import("./embedded-backend.js");
@@ -883,7 +884,7 @@ describe("EmbeddedTuiBackend", () => {
     });
     expect(ensureRuntimePluginsLoadedMock).toHaveBeenCalledWith({
       config: cfg,
-      workspaceDir: "/tmp/openclaw-agent-main",
+      workspaceDir: "/tmp/marketingclaw-agent-main",
     });
   });
 
@@ -894,7 +895,7 @@ describe("EmbeddedTuiBackend", () => {
     loadSessionEntryMock.mockReturnValue({
       cfg: {},
       canonicalKey: "agent:main:main",
-      storePath: "/tmp/openclaw-sessions.json",
+      storePath: "/tmp/marketingclaw-sessions.json",
       entry: {},
     });
 
@@ -1045,7 +1046,7 @@ describe("EmbeddedTuiBackend", () => {
   });
 
   it("aborts local post-turn maintenance when stop grace elapses", async () => {
-    await withEnvAsync({ OPENCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS: "5" }, async () => {
+    await withEnvAsync({ MARKETINGCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS: "5" }, async () => {
       const { EmbeddedTuiBackend } = await import("./embedded-backend.js");
       const pending = deferred<{
         payloads: Array<{ text: string }>;
@@ -1143,7 +1144,7 @@ describe("EmbeddedTuiBackend", () => {
   });
 
   it("queues same-session sends behind active local runs", async () => {
-    await withEnvAsync({ OPENCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS: "5" }, async () => {
+    await withEnvAsync({ MARKETINGCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS: "5" }, async () => {
       const { EmbeddedTuiBackend } = await import("./embedded-backend.js");
       const first = deferred<{
         payloads: Array<{ text: string }>;
@@ -1706,7 +1707,7 @@ describe("EmbeddedTuiBackend", () => {
   });
 
   it("fails a queued local send when the previous finishing run does not settle", async () => {
-    await withEnvAsync({ OPENCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS: "5" }, async () => {
+    await withEnvAsync({ MARKETINGCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS: "5" }, async () => {
       const { EmbeddedTuiBackend } = await import("./embedded-backend.js");
       const first = deferred<{
         payloads: Array<{ text: string }>;
@@ -1763,7 +1764,7 @@ describe("EmbeddedTuiBackend", () => {
   });
 
   it("fails a queued local send immediately when shutdown grace is zero", async () => {
-    await withEnvAsync({ OPENCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS: "0" }, async () => {
+    await withEnvAsync({ MARKETINGCLAW_TUI_LOCAL_RUN_SHUTDOWN_GRACE_MS: "0" }, async () => {
       const { EmbeddedTuiBackend } = await import("./embedded-backend.js");
       const first = deferred<{
         payloads: Array<{ text: string }>;
@@ -2106,7 +2107,7 @@ describe("EmbeddedTuiBackend", () => {
     loadSessionEntryMock.mockReturnValueOnce({
       cfg: {},
       canonicalKey: "agent:main:main",
-      storePath: "/tmp/openclaw-sessions.json",
+      storePath: "/tmp/marketingclaw-sessions.json",
       store: {
         "agent:main:main": {
           sessionId: "session-main",
@@ -2178,7 +2179,7 @@ describe("EmbeddedTuiBackend", () => {
     loadSessionEntryMock.mockReturnValueOnce({
       cfg: {},
       canonicalKey: "agent:main:main",
-      storePath: "/tmp/openclaw-sessions.json",
+      storePath: "/tmp/marketingclaw-sessions.json",
       store: {
         "agent:main:main": {
           sessionId: "session-main",
@@ -2341,7 +2342,7 @@ describe("EmbeddedTuiBackend", () => {
     loadSessionEntryMock.mockReturnValue({
       cfg: {},
       canonicalKey: "agent:main:main",
-      storePath: "/tmp/openclaw-sessions.json",
+      storePath: "/tmp/marketingclaw-sessions.json",
       store: {},
       entry: { sessionId: "session-main" },
     });

@@ -1,5 +1,5 @@
-import OpenClawChatUI
-import OpenClawProtocol
+import MarketingClawChatUI
+import MarketingClawProtocol
 import SwiftUI
 
 struct ChatProTab: View {
@@ -9,7 +9,7 @@ struct ChatProTab: View {
     }
 
     @Environment(NodeAppModel.self) private var appModel
-    @State private var viewModel: OpenClawChatViewModel?
+    @State private var viewModel: MarketingClawChatViewModel?
     @State private var viewModelOwnerID = ""
     @State private var transcriptShareItem: TranscriptShareItem?
     @State private var showsTranscriptExportError = false
@@ -21,15 +21,15 @@ struct ChatProTab: View {
     @State private var viewModelPresentationAgentName = "Main"
     @State private var viewModelPresentationAgentBadge = "M"
     @State private var viewModelHasVerifiedOfflineRoutingIdentity = false
-    @State private var speech: OpenClawChatSpeechController?
-    let headerLeadingAction: OpenClawSidebarHeaderAction?
+    @State private var speech: MarketingClawChatSpeechController?
+    let headerLeadingAction: MarketingClawSidebarHeaderAction?
     let headerTitle: String?
     let showsAgentBadge: Bool
     let ownsNavigationStack: Bool
     let openSettings: (() -> Void)?
 
     init(
-        headerLeadingAction: OpenClawSidebarHeaderAction? = nil,
+        headerLeadingAction: MarketingClawSidebarHeaderAction? = nil,
         headerTitle: String? = nil,
         showsAgentBadge: Bool = true,
         ownsNavigationStack: Bool = true,
@@ -59,7 +59,7 @@ struct ChatProTab: View {
             self.syncChatViewModel()
             if self.speech == nil {
                 let gateway = self.appModel.operatorSession
-                self.speech = OpenClawChatSpeechController { text in
+                self.speech = MarketingClawChatSpeechController { text in
                     try await ChatMessageSpeechClient.synthesize(text: text, gateway: gateway)
                 }
             }
@@ -110,7 +110,7 @@ struct ChatProTab: View {
             .toolbar {
                 if let headerLeadingAction {
                     ToolbarItem(placement: .topBarLeading) {
-                        OpenClawSidebarRevealButton(action: headerLeadingAction)
+                        MarketingClawSidebarRevealButton(action: headerLeadingAction)
                     }
                 }
                 if self.showsAgentBadge {
@@ -135,25 +135,25 @@ struct ChatProTab: View {
             {
                 Button(role: .cancel) {} label: {
                     Text("OK")
-                        .font(OpenClawType.body)
+                        .font(MarketingClawType.body)
                 }
             } message: {
-                Text("OpenClaw could not prepare the Markdown file.")
-                    .font(OpenClawType.body)
+                Text("MarketingClaw could not prepare the Markdown file.")
+                    .font(MarketingClawType.body)
             }
     }
 
     @ViewBuilder
     private var chatSurface: some View {
         if let viewModel {
-            OpenClawChatView(
+            MarketingClawChatView(
                 viewModel: viewModel,
                 drawsBackground: false,
                 showsSessionSwitcher: false,
                 userAccent: self.chatUserAccent,
                 assistantName: self.agentDisplayName,
                 assistantAvatarText: self.agentBadge,
-                assistantAvatarTint: OpenClawBrand.accent,
+                assistantAvatarTint: MarketingClawBrand.accent,
                 showsAssistantAvatars: false,
                 composerChrome: .clean,
                 isComposerEnabled: self.gatewayConnected || self.canQueueOffline,
@@ -165,7 +165,7 @@ struct ChatProTab: View {
                 voiceNoteControl: self.voiceNoteControl,
                 speech: self.speech)
                 // iMessage-style grey bubbles for agent replies in the clean chrome.
-                    .environment(\.openClawAssistantBubblesInCleanChrome, true)
+                    .environment(\.marketingClawAssistantBubblesInCleanChrome, true)
                     .id(ObjectIdentifier(viewModel))
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         } else {
@@ -179,12 +179,12 @@ struct ChatProTab: View {
     /// Flat circular avatar for the nav bar — no gradient/shadow, per Apple bar-button sizing.
     private var headerIdentityBadge: some View {
         Text(self.agentBadge)
-            .font(OpenClawType.avatar(size: self.agentBadge.count > 2 ? 12 : 15))
+            .font(MarketingClawType.avatar(size: self.agentBadge.count > 2 ? 12 : 15))
             .foregroundStyle(.white)
             .minimumScaleFactor(0.6)
             .lineLimit(1)
             .frame(width: 30, height: 30)
-            .background(Circle().fill(OpenClawBrand.accent))
+            .background(Circle().fill(MarketingClawBrand.accent))
             .accessibilityLabel(self.agentDisplayName)
     }
 
@@ -237,12 +237,12 @@ struct ChatProTab: View {
         self.viewModelHasVerifiedOfflineRoutingIdentity = self.appModel.hasVerifiedChatOfflineRoutingIdentity
     }
 
-    private func makeChatViewModel(sessionKey: String) -> OpenClawChatViewModel {
+    private func makeChatViewModel(sessionKey: String) -> MarketingClawChatViewModel {
         // One store instance backs both seams so the transcript cache and the
         // offline outbox share a single SQLite connection.
         let offlineStore = self.appModel.makeChatOfflineStore()
         let voiceNoteRecorder = self.appModel.voiceNoteRecorder
-        return OpenClawChatViewModel(
+        return MarketingClawChatViewModel(
             sessionKey: sessionKey,
             // Bind durable rows and their transport lease to the exact same
             // gateway owner even if app state switches between these calls.
@@ -260,8 +260,8 @@ struct ChatProTab: View {
             })
     }
 
-    private var talkControl: OpenClawChatTalkControl {
-        OpenClawChatTalkControl(
+    private var talkControl: MarketingClawChatTalkControl {
+        MarketingClawChatTalkControl(
             isEnabled: self.appModel.talkMode.isEnabled,
             isListening: self.appModel.talkMode.isListening,
             isSpeaking: self.appModel.talkMode.isSpeaking,
@@ -274,8 +274,8 @@ struct ChatProTab: View {
             })
     }
 
-    private var voiceNoteControl: OpenClawChatVoiceNoteControl {
-        OpenClawChatVoiceNoteControl(
+    private var voiceNoteControl: MarketingClawChatVoiceNoteControl {
+        MarketingClawChatVoiceNoteControl(
             recorder: self.appModel.voiceNoteRecorder,
             isTalkActive: self.appModel.isTalkCaptureActive)
     }
@@ -299,7 +299,7 @@ struct ChatProTab: View {
         HStack(spacing: 5) {
             ProStatusDot(color: self.gatewayPillColor)
             Text(Self.gatewayPillTitle(state: self.gatewayDisplayState, isGatewayUsable: self.gatewayConnected))
-                .font(OpenClawType.subheadMedium)
+                .font(MarketingClawType.subheadMedium)
                 .lineLimit(1)
         }
         .foregroundStyle(self.gatewayPillColor)
@@ -314,7 +314,7 @@ struct ChatProTab: View {
             } label: {
                 Label {
                     Text("New Chat")
-                        .font(OpenClawType.body)
+                        .font(MarketingClawType.body)
                 } icon: {
                     Image(systemName: "plus.bubble")
                 }
@@ -327,7 +327,7 @@ struct ChatProTab: View {
                 } label: {
                     Label {
                         Text("New Chat in Worktree")
-                            .font(OpenClawType.body)
+                            .font(MarketingClawType.body)
                     } icon: {
                         Image(systemName: "arrow.triangle.branch")
                     }
@@ -342,7 +342,7 @@ struct ChatProTab: View {
             } label: {
                 Label {
                     Text("Export Transcript")
-                        .font(OpenClawType.body)
+                        .font(MarketingClawType.body)
                 } icon: {
                     Image(systemName: "square.and.arrow.up")
                 }
@@ -361,7 +361,7 @@ struct ChatProTab: View {
             sessionTitle: title,
             sessionKey: viewModel.sessionKey)
         let directory = FileManager.default.temporaryDirectory
-            .appendingPathComponent("OpenClawTranscripts", isDirectory: true)
+            .appendingPathComponent("MarketingClawTranscripts", isDirectory: true)
         let fileURL = directory.appendingPathComponent(filename, isDirectory: false)
 
         do {
@@ -407,11 +407,11 @@ struct ChatProTab: View {
     private var gatewayPillColor: Color {
         switch self.gatewayDisplayState {
         case .connected:
-            self.gatewayConnected ? OpenClawBrand.ok : .secondary
+            self.gatewayConnected ? MarketingClawBrand.ok : .secondary
         case .connecting:
-            OpenClawBrand.accent
+            MarketingClawBrand.accent
         case .error:
-            OpenClawBrand.warn
+            MarketingClawBrand.warn
         case .disconnected:
             .secondary
         }
@@ -457,7 +457,7 @@ struct ChatProTab: View {
     }
 
     private var chatUserAccent: Color {
-        OpenClawBrand.accent
+        MarketingClawBrand.accent
     }
 
     private var isAttachmentOwnerPinned: Bool {
@@ -532,16 +532,16 @@ struct ChatProTab: View {
         currentOwnerID != nextOwnerID || currentTransportAgentID != nextTransportAgentID
     }
 
-    nonisolated static let emptyAssistantPrompts: [OpenClawChatView.StarterPrompt] = [
-        OpenClawChatView.StarterPrompt(
+    nonisolated static let emptyAssistantPrompts: [MarketingClawChatView.StarterPrompt] = [
+        MarketingClawChatView.StarterPrompt(
             id: "summarize-status",
-            title: String(localized: "Check OpenClaw status"),
-            prompt: String(localized: "Summarize the current OpenClaw status and tell me what needs attention.")),
-        OpenClawChatView.StarterPrompt(
+            title: String(localized: "Check MarketingClaw status"),
+            prompt: String(localized: "Summarize the current MarketingClaw status and tell me what needs attention.")),
+        MarketingClawChatView.StarterPrompt(
             id: "show-controls",
             title: String(localized: "What can I control here?"),
             prompt: String(localized: "Show me which phone controls and device capabilities are available right now.")),
-        OpenClawChatView.StarterPrompt(
+        MarketingClawChatView.StarterPrompt(
             id: "start-voice",
             title: String(localized: "Help me start voice chat"),
             prompt: String(localized: "Help me start a realtime voice session from this phone.")),

@@ -43,7 +43,7 @@ describe("enforceChatHistoryFinalBudget", () => {
       role: "assistant",
       timestamp: 1,
       content: [{ type: "text", text: "y".repeat(4000) }],
-      __openclaw: { id: "abc", seq: 7 },
+      __marketingclaw: { id: "abc", seq: 7 },
     };
     const result = enforceChatHistoryFinalBudget({ messages: [last], maxBytes: 2_000 });
     expect(result.messages).toHaveLength(1);
@@ -60,7 +60,7 @@ describe("enforceChatHistoryFinalBudget", () => {
       role: "user",
       timestamp: 1,
       content: [{ type: "text", text: "hi" }],
-      __openclaw: { id: hugeId, seq: 1 },
+      __marketingclaw: { id: hugeId, seq: 1 },
     };
     const result = enforceChatHistoryFinalBudget({ messages: [message], maxBytes: 1_000 });
 
@@ -68,6 +68,6 @@ describe("enforceChatHistoryFinalBudget", () => {
     expect(result.messages).toHaveLength(1);
     expect(firstText(result.messages)).toContain("chat.history unavailable");
     // The sentinel does not carry the oversized source metadata.
-    expect((result.messages[0] as Record<string, unknown>)["__openclaw"]).toBeUndefined();
+    expect((result.messages[0] as Record<string, unknown>)["__marketingclaw"]).toBeUndefined();
   });
 });

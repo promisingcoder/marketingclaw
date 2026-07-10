@@ -1,4 +1,4 @@
-package ai.openclaw.app.chat
+package ai.marketingclaw.app.chat
 
 import java.util.Locale
 

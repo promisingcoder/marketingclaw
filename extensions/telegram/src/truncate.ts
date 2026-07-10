@@ -1,5 +1,5 @@
 // Telegram tests cover progress text clipping behavior.
-import { sliceUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+import { sliceUtf16Safe } from "marketingclaw/plugin-sdk/text-utility-runtime";
 
 export const TELEGRAM_PROGRESS_MAX_CHARS = 300;
 

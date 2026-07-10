@@ -1,6 +1,6 @@
 // Msteams plugin module implements bot framework behavior.
-import { parseMediaContentLength } from "openclaw/plugin-sdk/media-runtime";
-import { readProviderJsonResponse } from "openclaw/plugin-sdk/provider-http";
+import { parseMediaContentLength } from "marketingclaw/plugin-sdk/media-runtime";
+import { readProviderJsonResponse } from "marketingclaw/plugin-sdk/provider-http";
 import { getMSTeamsRuntime } from "../runtime.js";
 import { ensureUserAgentHeader } from "../user-agent.js";
 import {

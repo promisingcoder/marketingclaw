@@ -3,8 +3,8 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/memory-core-host-engine-foundation";
-import { resolveOpenClawAgentSqlitePath } from "openclaw/plugin-sdk/sqlite-runtime";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/memory-core-host-engine-foundation";
+import { resolveMarketingClawAgentSqlitePath } from "marketingclaw/plugin-sdk/sqlite-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { resetEmbeddingMocks } from "./embedding.test-mocks.js";
 import type { MemoryIndexManager } from "./index.js";
@@ -13,17 +13,17 @@ import type { MemoryIndexMeta } from "./manager-reindex-state.js";
 
 type SessionDeltaState = { lastSize: number; pendingBytes: number; pendingMessages: number };
 type SyncSessionParams = { needsFullReindex: boolean; targetSessionFiles?: string[] };
-const originalReindexStateDir = process.env.OPENCLAW_STATE_DIR;
+const originalReindexStateDir = process.env.MARKETINGCLAW_STATE_DIR;
 
 function setReindexStateDir(stateDir: string): void {
-  Reflect.set(process.env, "OPENCLAW_STATE_DIR", stateDir);
+  Reflect.set(process.env, "MARKETINGCLAW_STATE_DIR", stateDir);
 }
 
 function restoreReindexStateDir(): void {
   if (originalReindexStateDir === undefined) {
-    Reflect.deleteProperty(process.env, "OPENCLAW_STATE_DIR");
+    Reflect.deleteProperty(process.env, "MARKETINGCLAW_STATE_DIR");
   } else {
-    Reflect.set(process.env, "OPENCLAW_STATE_DIR", originalReindexStateDir);
+    Reflect.set(process.env, "MARKETINGCLAW_STATE_DIR", originalReindexStateDir);
   }
 }
 
@@ -51,7 +51,7 @@ describe("memory manager reindex recovery", () => {
 
   beforeEach(async () => {
     resetEmbeddingMocks();
-    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-mem-reindex-recovery-"));
+    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-mem-reindex-recovery-"));
     workspaceDir = path.join(fixtureRoot, "workspace");
     memoryDir = path.join(workspaceDir, "memory");
     await fs.mkdir(memoryDir, { recursive: true });
@@ -73,7 +73,7 @@ describe("memory manager reindex recovery", () => {
   function createCfg(params: {
     provider?: string;
     sources?: Array<"memory" | "sessions">;
-  }): OpenClawConfig {
+  }): MarketingClawConfig {
     return {
       memory: { backend: "builtin" },
       agents: {
@@ -96,7 +96,7 @@ describe("memory manager reindex recovery", () => {
     };
   }
 
-  async function openManager(cfg: OpenClawConfig): Promise<MemoryIndexManager> {
+  async function openManager(cfg: MarketingClawConfig): Promise<MemoryIndexManager> {
     const { getMemorySearchManager } = await import("./index.js");
     const result = await getMemorySearchManager({ cfg, agentId: "main" });
     if (!result.manager) {
@@ -214,7 +214,7 @@ describe("memory manager reindex recovery", () => {
   it("rejects a full reindex while another process owns the build lock", async () => {
     const memoryManager = await openManager(createCfg({ provider: "none", sources: ["memory"] }));
     const harness = memoryManager as unknown as ReindexHarness;
-    const databasePath = resolveOpenClawAgentSqlitePath({ agentId: "main" });
+    const databasePath = resolveMarketingClawAgentSqlitePath({ agentId: "main" });
     const lock = acquireMemoryReindexLock(databasePath);
 
     try {
@@ -257,7 +257,7 @@ describe("memory manager reindex recovery", () => {
   });
 
   it("closes the database after constructor schema failure", async () => {
-    const databasePath = resolveOpenClawAgentSqlitePath({ agentId: "main" });
+    const databasePath = resolveMarketingClawAgentSqlitePath({ agentId: "main" });
     await fs.mkdir(path.dirname(databasePath), { recursive: true });
     const db = new DatabaseSync(databasePath);
     db.exec("CREATE TABLE memory_index_chunks (id TEXT PRIMARY KEY)");

@@ -1,11 +1,11 @@
 // Diffs plugin module implements plugin behavior.
 import fs from "node:fs";
 import path from "node:path";
-import { resolveLivePluginConfigObject } from "openclaw/plugin-sdk/plugin-config-runtime";
+import { resolveLivePluginConfigObject } from "marketingclaw/plugin-sdk/plugin-config-runtime";
 import {
-  resolvePreferredOpenClawTmpDir,
-  type OpenClawConfig,
-  type OpenClawPluginApi,
+  resolvePreferredMarketingClawTmpDir,
+  type MarketingClawConfig,
+  type MarketingClawPluginApi,
 } from "../api.js";
 import {
   resolveDiffsPluginDefaults,
@@ -19,21 +19,21 @@ import { createDiffsTool } from "./tool.js";
 
 const DIFFS_LANGUAGE_PACK_PLUGIN_ID = "diffs-language-pack";
 
-export function registerDiffsPlugin(api: OpenClawPluginApi): void {
+export function registerDiffsPlugin(api: MarketingClawPluginApi): void {
   const store = new DiffArtifactStore({
-    rootDir: path.join(resolvePreferredOpenClawTmpDir(), "openclaw-diffs"),
+    rootDir: path.join(resolvePreferredMarketingClawTmpDir(), "marketingclaw-diffs"),
     logger: api.logger,
   });
   const resolveCurrentPluginConfig = () =>
     resolveLivePluginConfigObject(
       api.runtime.config?.current
-        ? () => api.runtime.config.current() as OpenClawConfig
+        ? () => api.runtime.config.current() as MarketingClawConfig
         : undefined,
       "diffs",
       api.pluginConfig as Record<string, unknown>,
     ) ?? {};
   const resolveCurrentAccessConfig = () => {
-    const currentConfig = (api.runtime.config?.current?.() ?? api.config) as OpenClawConfig;
+    const currentConfig = (api.runtime.config?.current?.() ?? api.config) as MarketingClawConfig;
     const pluginConfig = resolveCurrentPluginConfig();
     return {
       allowRemoteViewer: resolveDiffsPluginSecurity(pluginConfig).allowRemoteViewer,
@@ -77,8 +77,8 @@ export function registerDiffsPlugin(api: OpenClawPluginApi): void {
   }));
 }
 
-export function resolveDiffsLanguagePackAvailability(api: OpenClawPluginApi): boolean {
-  const currentConfig = (api.runtime.config?.current?.() ?? api.config) as OpenClawConfig;
+export function resolveDiffsLanguagePackAvailability(api: MarketingClawPluginApi): boolean {
+  const currentConfig = (api.runtime.config?.current?.() ?? api.config) as MarketingClawConfig;
   const plugins = currentConfig.plugins;
   if (plugins?.enabled === false) {
     return false;
@@ -105,7 +105,7 @@ function hasSiblingLanguagePackRuntime(rootDir: string | undefined): boolean {
     path.join(languagePackRoot, "dist", "assets", "viewer-runtime.js"),
   ];
   return (
-    fs.existsSync(path.join(languagePackRoot, "openclaw.plugin.json")) &&
+    fs.existsSync(path.join(languagePackRoot, "marketingclaw.plugin.json")) &&
     runtimePaths.some((runtimePath) => fs.existsSync(runtimePath))
   );
 }

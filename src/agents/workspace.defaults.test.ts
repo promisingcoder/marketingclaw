@@ -6,29 +6,29 @@ import { withEnv } from "../test-utils/env.js";
 import { resolveDefaultAgentWorkspaceDir } from "./workspace.js";
 
 describe("DEFAULT_AGENT_WORKSPACE_DIR", () => {
-  it("uses OPENCLAW_HOME when resolving the default workspace dir", () => {
-    const home = path.join(path.sep, "srv", "openclaw-home");
+  it("uses MARKETINGCLAW_HOME when resolving the default workspace dir", () => {
+    const home = path.join(path.sep, "srv", "marketingclaw-home");
 
     const resolved = withEnv(
       {
-        OPENCLAW_WORKSPACE_DIR: undefined,
-        OPENCLAW_PROFILE: undefined,
-        OPENCLAW_HOME: home,
+        MARKETINGCLAW_WORKSPACE_DIR: undefined,
+        MARKETINGCLAW_PROFILE: undefined,
+        MARKETINGCLAW_HOME: home,
         HOME: path.join(path.sep, "home", "other"),
       },
       () => resolveDefaultAgentWorkspaceDir(),
     );
 
-    expect(resolved).toBe(path.join(path.resolve(home), ".openclaw", "workspace"));
+    expect(resolved).toBe(path.join(path.resolve(home), ".marketingclaw", "workspace"));
   });
 
-  it("uses OPENCLAW_WORKSPACE_DIR before OPENCLAW_HOME", () => {
-    const workspaceDir = path.join(path.sep, "srv", "openclaw-workspace");
+  it("uses MARKETINGCLAW_WORKSPACE_DIR before MARKETINGCLAW_HOME", () => {
+    const workspaceDir = path.join(path.sep, "srv", "marketingclaw-workspace");
 
     const resolved = withEnv(
       {
-        OPENCLAW_WORKSPACE_DIR: workspaceDir,
-        OPENCLAW_HOME: path.join(path.sep, "srv", "openclaw-home"),
+        MARKETINGCLAW_WORKSPACE_DIR: workspaceDir,
+        MARKETINGCLAW_HOME: path.join(path.sep, "srv", "marketingclaw-home"),
       },
       () => resolveDefaultAgentWorkspaceDir(),
     );

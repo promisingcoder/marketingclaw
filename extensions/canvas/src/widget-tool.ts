@@ -1,8 +1,8 @@
 /** Agent-facing inline web chat widget tool. */
 import { createHash } from "node:crypto";
-import { jsonResult, readStringParam } from "openclaw/plugin-sdk/channel-actions";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { AnyAgentTool } from "openclaw/plugin-sdk/plugin-entry";
+import { jsonResult, readStringParam } from "marketingclaw/plugin-sdk/channel-actions";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import type { AnyAgentTool } from "marketingclaw/plugin-sdk/plugin-entry";
 import { resolveCanvasHostConfig } from "./config.js";
 import { createCanvasDocument } from "./documents.js";
 import { SHOW_WIDGET_REQUIRED_CLIENT_CAPS, ShowWidgetToolSchema } from "./tool-schema.js";
@@ -11,7 +11,7 @@ export const WIDGET_CODE_MAX_CHARS = 262_144;
 export const WIDGET_MAX_PER_SCOPE = 32;
 
 type ShowWidgetToolOptions = {
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   sessionId?: string;
   agentId?: string;
   stateDir?: string;
@@ -46,7 +46,7 @@ function buildWidgetDocument(title: string, widgetCode: string): string {
     // measure the body box, which tracks the actual widget height.
     "let last=0;const report=()=>{const b=document.body;if(!b)return;" +
     "const h=Math.ceil(Math.max(b.scrollHeight,b.offsetHeight,b.getBoundingClientRect().height));" +
-    'if(h&&h!==last){last=h;window.parent.postMessage({type:"openclaw:widget-size",height:h},"*");}};' +
+    'if(h&&h!==last){last=h;window.parent.postMessage({type:"marketingclaw:widget-size",height:h},"*");}};' +
     "addEventListener('load',report);new ResizeObserver(report).observe(document.body);" +
     "setTimeout(report,50);setTimeout(report,500);})();</script>";
   return `<!doctype html>

@@ -23,17 +23,17 @@ import { createExecTool } from "./bash-tools.exec.js";
 
 const TEST_ENV_KEYS = [
   "HOME",
-  "OPENCLAW_STATE_DIR",
-  "OPENCLAW_CONFIG_PATH",
-  "OPENCLAW_GATEWAY_TOKEN",
-  "OPENCLAW_GATEWAY_PORT",
-  "OPENCLAW_SKIP_CHANNELS",
-  "OPENCLAW_SKIP_GMAIL_WATCHER",
-  "OPENCLAW_SKIP_CRON",
-  "OPENCLAW_SKIP_CANVAS_HOST",
-  "OPENCLAW_SKIP_BROWSER_CONTROL_SERVER",
-  "OPENCLAW_SKIP_PROVIDERS",
-  "OPENCLAW_TEST_MINIMAL_GATEWAY",
+  "MARKETINGCLAW_STATE_DIR",
+  "MARKETINGCLAW_CONFIG_PATH",
+  "MARKETINGCLAW_GATEWAY_TOKEN",
+  "MARKETINGCLAW_GATEWAY_PORT",
+  "MARKETINGCLAW_SKIP_CHANNELS",
+  "MARKETINGCLAW_SKIP_GMAIL_WATCHER",
+  "MARKETINGCLAW_SKIP_CRON",
+  "MARKETINGCLAW_SKIP_CANVAS_HOST",
+  "MARKETINGCLAW_SKIP_BROWSER_CONTROL_SERVER",
+  "MARKETINGCLAW_SKIP_PROVIDERS",
+  "MARKETINGCLAW_TEST_MINIMAL_GATEWAY",
 ];
 const GATEWAY_CONNECT_TIMEOUT_MS = 120_000;
 const EXEC_APPROVAL_E2E_TIMEOUT_MS = 180_000;
@@ -68,21 +68,21 @@ describe("gateway-hosted exec approvals", () => {
   });
 
   it(
-    "lets OpenClaw-style gateway tool calls request and wait for approval over separate connections",
+    "lets MarketingClaw-style gateway tool calls request and wait for approval over separate connections",
     async () => {
       const envSnapshot = captureEnv(TEST_ENV_KEYS);
       cleanup.push(() => envSnapshot.restore());
 
-      const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-exec-approval-e2e-"));
+      const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-exec-approval-e2e-"));
       cleanup.push(() => fs.rm(tempHome, { recursive: true, force: true, maxRetries: 5 }));
 
-      const stateDir = path.join(tempHome, ".openclaw");
+      const stateDir = path.join(tempHome, ".marketingclaw");
       const workspaceDir = path.join(tempHome, "workspace");
       await fs.mkdir(workspaceDir, { recursive: true });
 
       const port = await getFreeGatewayPort();
       const token = "exec-approval-e2e-token";
-      const configPath = path.join(stateDir, "openclaw.json");
+      const configPath = path.join(stateDir, "marketingclaw.json");
       await fs.mkdir(stateDir, { recursive: true });
       await fs.writeFile(
         configPath,
@@ -107,17 +107,17 @@ describe("gateway-hosted exec approvals", () => {
       );
 
       setTestEnvValue("HOME", tempHome);
-      setTestEnvValue("OPENCLAW_STATE_DIR", stateDir);
-      setTestEnvValue("OPENCLAW_CONFIG_PATH", configPath);
-      setTestEnvValue("OPENCLAW_GATEWAY_TOKEN", token);
-      setTestEnvValue("OPENCLAW_GATEWAY_PORT", String(port));
-      setTestEnvValue("OPENCLAW_SKIP_CHANNELS", "1");
-      setTestEnvValue("OPENCLAW_SKIP_GMAIL_WATCHER", "1");
-      setTestEnvValue("OPENCLAW_SKIP_CRON", "1");
-      setTestEnvValue("OPENCLAW_SKIP_CANVAS_HOST", "1");
-      setTestEnvValue("OPENCLAW_SKIP_BROWSER_CONTROL_SERVER", "1");
-      setTestEnvValue("OPENCLAW_SKIP_PROVIDERS", "1");
-      setTestEnvValue("OPENCLAW_TEST_MINIMAL_GATEWAY", "1");
+      setTestEnvValue("MARKETINGCLAW_STATE_DIR", stateDir);
+      setTestEnvValue("MARKETINGCLAW_CONFIG_PATH", configPath);
+      setTestEnvValue("MARKETINGCLAW_GATEWAY_TOKEN", token);
+      setTestEnvValue("MARKETINGCLAW_GATEWAY_PORT", String(port));
+      setTestEnvValue("MARKETINGCLAW_SKIP_CHANNELS", "1");
+      setTestEnvValue("MARKETINGCLAW_SKIP_GMAIL_WATCHER", "1");
+      setTestEnvValue("MARKETINGCLAW_SKIP_CRON", "1");
+      setTestEnvValue("MARKETINGCLAW_SKIP_CANVAS_HOST", "1");
+      setTestEnvValue("MARKETINGCLAW_SKIP_BROWSER_CONTROL_SERVER", "1");
+      setTestEnvValue("MARKETINGCLAW_SKIP_PROVIDERS", "1");
+      setTestEnvValue("MARKETINGCLAW_TEST_MINIMAL_GATEWAY", "1");
       clearRuntimeConfigSnapshot();
       clearConfigCache();
       clearSessionStoreCacheForTest();

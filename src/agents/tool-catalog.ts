@@ -1,7 +1,7 @@
 /**
  * Core tool catalog and profile defaults.
  * Drives built-in profile allowlists, group expansion, and UI section metadata
- * for OpenClaw-owned tools.
+ * for MarketingClaw-owned tools.
  */
 import {
   CRON_TOOL_DISPLAY_SUMMARY,
@@ -42,7 +42,7 @@ type CoreToolDefinition = {
   description: string;
   sectionId: string;
   profiles: ToolProfileId[];
-  includeInOpenClawGroup?: boolean;
+  includeInMarketingClawGroup?: boolean;
 };
 
 const CORE_TOOL_SECTION_ORDER: Array<{ id: string; label: string }> = [
@@ -108,7 +108,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: "Run sandboxed remote analysis",
     sectionId: "runtime",
     profiles: ["coding"],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "web_search",
@@ -116,7 +116,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: "Search the web",
     sectionId: "web",
     profiles: ["coding"],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "web_fetch",
@@ -124,7 +124,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: "Fetch web content",
     sectionId: "web",
     profiles: ["coding"],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "x_search",
@@ -132,7 +132,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: "Search X posts",
     sectionId: "web",
     profiles: ["coding"],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "memory_search",
@@ -140,7 +140,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: "Semantic search",
     sectionId: "memory",
     profiles: ["coding"],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "memory_get",
@@ -148,7 +148,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: "Read memory files",
     sectionId: "memory",
     profiles: ["coding"],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "sessions_list",
@@ -156,7 +156,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: SESSIONS_LIST_TOOL_DISPLAY_SUMMARY,
     sectionId: "sessions",
     profiles: ["coding", "messaging"],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "sessions_history",
@@ -164,7 +164,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: SESSIONS_HISTORY_TOOL_DISPLAY_SUMMARY,
     sectionId: "sessions",
     profiles: ["coding", "messaging"],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "sessions_send",
@@ -172,7 +172,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: SESSIONS_SEND_TOOL_DISPLAY_SUMMARY,
     sectionId: "sessions",
     profiles: ["coding", "messaging"],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "sessions_spawn",
@@ -180,7 +180,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: SESSIONS_SPAWN_TOOL_DISPLAY_SUMMARY,
     sectionId: "sessions",
     profiles: ["coding"],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "sessions_yield",
@@ -188,7 +188,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: "End turn to receive sub-agent results",
     sectionId: "sessions",
     profiles: ["coding"],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "subagents",
@@ -196,7 +196,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: "Manage sub-agents",
     sectionId: "sessions",
     profiles: ["coding"],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "session_status",
@@ -204,7 +204,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: SESSION_STATUS_TOOL_DISPLAY_SUMMARY,
     sectionId: "sessions",
     profiles: ["minimal", "coding", "messaging"],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "spawn_task",
@@ -212,7 +212,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: SPAWN_TASK_TOOL_DISPLAY_SUMMARY,
     sectionId: "sessions",
     profiles: ["coding"],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "dismiss_task",
@@ -220,7 +220,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: DISMISS_TASK_TOOL_DISPLAY_SUMMARY,
     sectionId: "sessions",
     profiles: ["coding"],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "browser",
@@ -228,7 +228,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: "Control web browser",
     sectionId: "ui",
     profiles: [],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "canvas",
@@ -243,7 +243,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: "Send messages",
     sectionId: "messaging",
     profiles: ["messaging"],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "heartbeat_respond",
@@ -251,7 +251,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: "Record heartbeat outcomes",
     sectionId: "automation",
     profiles: [],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "cron",
@@ -259,7 +259,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: CRON_TOOL_DISPLAY_SUMMARY,
     sectionId: "automation",
     profiles: ["coding"],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "gateway",
@@ -267,7 +267,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: "Gateway control",
     sectionId: "automation",
     profiles: [],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "nodes",
@@ -275,7 +275,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: "Nodes + devices",
     sectionId: "nodes",
     profiles: [],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "computer",
@@ -283,7 +283,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: "Control a paired computer node desktop",
     sectionId: "nodes",
     profiles: [],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "agents_list",
@@ -291,7 +291,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: "List agents",
     sectionId: "agents",
     profiles: [],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "get_goal",
@@ -299,7 +299,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: "Get current thread goal",
     sectionId: "agents",
     profiles: ["coding"],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "create_goal",
@@ -307,7 +307,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: "Create a thread goal",
     sectionId: "agents",
     profiles: ["coding"],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "update_goal",
@@ -315,7 +315,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: "Complete or block a thread goal",
     sectionId: "agents",
     profiles: ["coding"],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "update_plan",
@@ -323,7 +323,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: UPDATE_PLAN_TOOL_DISPLAY_SUMMARY,
     sectionId: "agents",
     profiles: ["coding"],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "skill_workshop",
@@ -332,7 +332,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
       "Create, update, revise, list, inspect, apply, reject, or quarantine Skill Workshop proposals",
     sectionId: "agents",
     profiles: ["coding"],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "image",
@@ -340,7 +340,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: "Image understanding",
     sectionId: "media",
     profiles: ["coding"],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "image_generate",
@@ -348,7 +348,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: "Image generation",
     sectionId: "media",
     profiles: ["coding"],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "music_generate",
@@ -356,7 +356,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: "Music generation",
     sectionId: "media",
     profiles: ["coding"],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "video_generate",
@@ -364,7 +364,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: "Video generation",
     sectionId: "media",
     profiles: ["coding"],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
   {
     id: "tts",
@@ -372,7 +372,7 @@ const CORE_TOOL_DEFINITIONS: CoreToolDefinition[] = [
     description: "Text-to-speech conversion",
     sectionId: "media",
     profiles: [],
-    includeInOpenClawGroup: true,
+    includeInMarketingClawGroup: true,
   },
 ];
 
@@ -409,11 +409,11 @@ function buildCoreToolGroupMap() {
     list.push(tool.id);
     sectionToolMap.set(groupId, list);
   }
-  const openclawTools = CORE_TOOL_DEFINITIONS.filter((tool) => tool.includeInOpenClawGroup).map(
-    (tool) => tool.id,
-  );
+  const marketingclawTools = CORE_TOOL_DEFINITIONS.filter(
+    (tool) => tool.includeInMarketingClawGroup,
+  ).map((tool) => tool.id);
   return {
-    "group:openclaw": openclawTools,
+    "group:marketingclaw": marketingclawTools,
     ...Object.fromEntries(sectionToolMap.entries()),
   };
 }

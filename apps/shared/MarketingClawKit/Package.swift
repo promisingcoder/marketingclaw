@@ -3,16 +3,16 @@
 import PackageDescription
 
 let package = Package(
-    name: "OpenClawKit",
+    name: "MarketingClawKit",
     platforms: [
         .iOS(.v18),
         .macOS(.v15),
         .watchOS(.v11),
     ],
     products: [
-        .library(name: "OpenClawProtocol", targets: ["OpenClawProtocol"]),
-        .library(name: "OpenClawKit", targets: ["OpenClawKit"]),
-        .library(name: "OpenClawChatUI", targets: ["OpenClawChatUI"]),
+        .library(name: "MarketingClawProtocol", targets: ["MarketingClawProtocol"]),
+        .library(name: "MarketingClawKit", targets: ["MarketingClawKit"]),
+        .library(name: "MarketingClawChatUI", targets: ["MarketingClawChatUI"]),
     ],
     traits: [
         .trait(name: "Talk", description: "ElevenLabs cloud TTS / talk support"),
@@ -25,21 +25,21 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "OpenClawProtocol",
-            path: "Sources/OpenClawProtocol",
+            name: "MarketingClawProtocol",
+            path: "Sources/MarketingClawProtocol",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
             ]),
         .target(
-            name: "OpenClawKit",
+            name: "MarketingClawKit",
             dependencies: [
-                "OpenClawProtocol",
+                "MarketingClawProtocol",
                 .product(
                     name: "ElevenLabsKit",
                     package: "ElevenLabsKit",
                     condition: .when(platforms: [.iOS, .macOS], traits: ["Talk"])),
             ],
-            path: "Sources/OpenClawKit",
+            path: "Sources/MarketingClawKit",
             resources: [
                 .process("Resources"),
             ],
@@ -47,20 +47,20 @@ let package = Package(
                 .enableUpcomingFeature("StrictConcurrency"),
             ]),
         .target(
-            name: "OpenClawChatUI",
+            name: "MarketingClawChatUI",
             dependencies: [
-                "OpenClawKit",
+                "MarketingClawKit",
                 .product(name: "Markdown", package: "swift-markdown"),
                 .product(name: "SwiftMath", package: "SwiftMath"),
             ],
-            path: "Sources/OpenClawChatUI",
+            path: "Sources/MarketingClawChatUI",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
             ]),
         .testTarget(
-            name: "OpenClawKitTests",
-            dependencies: ["OpenClawKit", "OpenClawChatUI"],
-            path: "Tests/OpenClawKitTests",
+            name: "MarketingClawKitTests",
+            dependencies: ["MarketingClawKit", "MarketingClawChatUI"],
+            path: "Tests/MarketingClawKitTests",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
                 .enableExperimentalFeature("SwiftTesting"),

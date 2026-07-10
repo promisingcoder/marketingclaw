@@ -6,8 +6,8 @@ import { tmpdir } from "node:os";
 import { delimiter, join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
-const WORKSPACE_DIRS_ENV = "OPENCLAW_OCM_WORKSPACE_DEPENDENCY_DIRS";
-const REAL_NPM_ENV = "OPENCLAW_OCM_REAL_NPM_BIN";
+const WORKSPACE_DIRS_ENV = "MARKETINGCLAW_OCM_WORKSPACE_DEPENDENCY_DIRS";
+const REAL_NPM_ENV = "MARKETINGCLAW_OCM_REAL_NPM_BIN";
 
 export function parseWorkspaceDependencyDirs(
   raw = process.env[WORKSPACE_DIRS_ENV],
@@ -45,7 +45,7 @@ export function buildInstallManifest(rootArchive, workspacePackages) {
   return {
     private: true,
     dependencies: {
-      openclaw: pathToFileURL(rootArchive).href,
+      marketingclaw: pathToFileURL(rootArchive).href,
       ...Object.fromEntries(
         workspacePackages.map(({ name, tarball }) => [name, pathToFileURL(tarball).href]),
       ),
@@ -151,7 +151,7 @@ function patchRootArchiveWorkspaceDependencies(rootArchive, workspacePackages, o
   }
 
   writeFileSync(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`);
-  const patchedArchive = join(outputDir, "openclaw-root-patched.tgz");
+  const patchedArchive = join(outputDir, "marketingclaw-root-patched.tgz");
   runTar(["-czf", patchedArchive, "-C", unpackDir, "package"]);
   return patchedArchive;
 }
@@ -166,7 +166,7 @@ function main() {
     return result.status ?? 1;
   }
 
-  const packDir = mkdtempSync(join(tmpdir(), "openclaw-ocm-workspace-deps-"));
+  const packDir = mkdtempSync(join(tmpdir(), "marketingclaw-ocm-workspace-deps-"));
   try {
     const workspacePackages = packWorkspaceDependencies(npm, workspaceDirs, packDir);
     const rootArchive = patchRootArchiveWorkspaceDependencies(

@@ -23,7 +23,7 @@ function shellQuote(value: string): string {
 }
 
 function runGatewayPortCheck(fakeLsof: string) {
-  const root = mkdtempSync(join(tmpdir(), "openclaw-restart-mac-test-"));
+  const root = mkdtempSync(join(tmpdir(), "marketingclaw-restart-mac-test-"));
   tempRoots.push(root);
 
   const binDir = join(root, "bin");
@@ -46,7 +46,7 @@ function runGatewayPortCheck(fakeLsof: string) {
 }
 
 function runCleanupFunction(fakePs: string) {
-  const root = mkdtempSync(join(tmpdir(), "openclaw-restart-mac-test-"));
+  const root = mkdtempSync(join(tmpdir(), "marketingclaw-restart-mac-test-"));
   tempRoots.push(root);
 
   const binDir = join(root, "bin");
@@ -63,7 +63,7 @@ function runCleanupFunction(fakePs: string) {
 
   const script = readFileSync(restartScriptPath, "utf8");
   const cleanupFunction = script.slice(
-    script.indexOf("kill_all_openclaw()"),
+    script.indexOf("kill_all_marketingclaw()"),
     script.indexOf("stop_launch_agent()"),
   );
   const harnessPath = join(root, "cleanup-harness.sh");
@@ -74,15 +74,15 @@ function runCleanupFunction(fakePs: string) {
       cleanupFunction,
       'ROOT_DIR="/worktree"',
       'APP_BUNDLE=""',
-      'APP_EXECUTABLE_RELATIVE_PATH="Contents/MacOS/OpenClaw"',
-      'DEBUG_PROCESS_PATTERN="/worktree/apps/macos/.build/debug/OpenClaw"',
-      'LOCAL_PROCESS_PATTERN="/worktree/apps/macos/.build-local/debug/OpenClaw"',
-      'RELEASE_PROCESS_PATTERN="/worktree/apps/macos/.build/release/OpenClaw"',
+      'APP_EXECUTABLE_RELATIVE_PATH="Contents/MacOS/MarketingClaw"',
+      'DEBUG_PROCESS_PATTERN="/worktree/apps/macos/.build/debug/MarketingClaw"',
+      'LOCAL_PROCESS_PATTERN="/worktree/apps/macos/.build-local/debug/MarketingClaw"',
+      'RELEASE_PROCESS_PATTERN="/worktree/apps/macos/.build/release/MarketingClaw"',
       "kill() {",
-      '  printf "%s\\n" "$*" >> "$OPENCLAW_TEST_KILL_CALLS"',
+      '  printf "%s\\n" "$*" >> "$MARKETINGCLAW_TEST_KILL_CALLS"',
       "  return 0",
       "}",
-      "kill_all_openclaw",
+      "kill_all_marketingclaw",
     ].join("\n"),
   );
   chmodSync(harnessPath, 0o755);
@@ -91,7 +91,7 @@ function runCleanupFunction(fakePs: string) {
     encoding: "utf8",
     env: {
       ...process.env,
-      OPENCLAW_TEST_KILL_CALLS: killCallsPath,
+      MARKETINGCLAW_TEST_KILL_CALLS: killCallsPath,
       PATH: `${binDir}:${process.env.PATH ?? ""}`,
     },
   });
@@ -100,7 +100,7 @@ function runCleanupFunction(fakePs: string) {
 }
 
 function runCanonicalizeAppBundle(appBundle: string) {
-  const root = mkdtempSync(join(tmpdir(), "openclaw-restart-mac-test-"));
+  const root = mkdtempSync(join(tmpdir(), "marketingclaw-restart-mac-test-"));
   tempRoots.push(root);
 
   const script = readFileSync(restartScriptPath, "utf8");
@@ -133,7 +133,7 @@ function runCanonicalizeAppBundle(appBundle: string) {
 }
 
 function runRestartArgParser(...args: string[]) {
-  const root = mkdtempSync(join(tmpdir(), "openclaw-restart-mac-test-"));
+  const root = mkdtempSync(join(tmpdir(), "marketingclaw-restart-mac-test-"));
   tempRoots.push(root);
 
   const script = readFileSync(restartScriptPath, "utf8");
@@ -164,7 +164,7 @@ function runRestartArgParser(...args: string[]) {
 }
 
 function runRestartLockHarness(lockDir: string) {
-  const root = mkdtempSync(join(tmpdir(), "openclaw-restart-mac-test-"));
+  const root = mkdtempSync(join(tmpdir(), "marketingclaw-restart-mac-test-"));
   tempRoots.push(root);
 
   const script = readFileSync(restartScriptPath, "utf8");
@@ -252,31 +252,35 @@ describe("scripts/restart-mac.sh", () => {
     const script = readFileSync(restartScriptPath, "utf8");
 
     expect(script).toContain(
-      'LOG_PATH="${OPENCLAW_RESTART_LOG:-${TMPDIR:-/tmp}/openclaw-restart-${LOCK_KEY}.log}"',
+      'LOG_PATH="${MARKETINGCLAW_RESTART_LOG:-${TMPDIR:-/tmp}/marketingclaw-restart-${LOCK_KEY}.log}"',
     );
-    expect(script).not.toContain('LOG_PATH="${OPENCLAW_RESTART_LOG:-/tmp/openclaw-restart.log}"');
+    expect(script).not.toContain(
+      'LOG_PATH="${MARKETINGCLAW_RESTART_LOG:-/tmp/marketingclaw-restart.log}"',
+    );
   });
 
   it("does not remove a live restart lock it did not acquire", () => {
-    const root = mkdtempSync(join(tmpdir(), "openclaw-restart-mac-test-"));
+    const root = mkdtempSync(join(tmpdir(), "marketingclaw-restart-mac-test-"));
     tempRoots.push(root);
-    const lockDir = join(root, "openclaw-restart-lock");
+    const lockDir = join(root, "marketingclaw-restart-lock");
     mkdirSync(lockDir);
     writeFileSync(join(lockDir, "pid"), String(process.pid), "utf8");
 
     const result = runRestartLockHarness(lockDir);
 
     expect(result.status).toBe(0);
-    expect(result.stdout).toContain(`Another restart is running (pid ${process.pid}); re-run with --wait.`);
+    expect(result.stdout).toContain(
+      `Another restart is running (pid ${process.pid}); re-run with --wait.`,
+    );
     expect(result.stderr).toBe("");
     expect(existsSync(lockDir)).toBe(true);
     expect(readFileSync(join(lockDir, "pid"), "utf8")).toBe(String(process.pid));
   });
 
   it("removes the restart lock it acquired", () => {
-    const root = mkdtempSync(join(tmpdir(), "openclaw-restart-mac-test-"));
+    const root = mkdtempSync(join(tmpdir(), "marketingclaw-restart-mac-test-"));
     tempRoots.push(root);
-    const lockDir = join(root, "openclaw-restart-lock");
+    const lockDir = join(root, "marketingclaw-restart-lock");
 
     const result = runRestartLockHarness(lockDir);
 
@@ -293,41 +297,43 @@ describe("scripts/restart-mac.sh", () => {
       script.indexOf("choose_app_bundle", script.indexOf("choose_app_bundle()") + 1),
     );
 
-    expect(script).toContain('fail "OPENCLAW_APP_BUNDLE does not exist: ${APP_BUNDLE}"');
+    expect(script).toContain('fail "MARKETINGCLAW_APP_BUNDLE does not exist: ${APP_BUNDLE}"');
     expect(chooseBlock).toContain("canonicalize_app_bundle");
-    expect(chooseBlock.indexOf("${ROOT_DIR}/dist/OpenClaw.app")).toBeGreaterThan(-1);
-    expect(chooseBlock.indexOf("/Applications/OpenClaw.app")).toBeGreaterThan(-1);
-    expect(chooseBlock.indexOf("${ROOT_DIR}/dist/OpenClaw.app")).toBeLessThan(
-      chooseBlock.indexOf("/Applications/OpenClaw.app"),
+    expect(chooseBlock.indexOf("${ROOT_DIR}/dist/MarketingClaw.app")).toBeGreaterThan(-1);
+    expect(chooseBlock.indexOf("/Applications/MarketingClaw.app")).toBeGreaterThan(-1);
+    expect(chooseBlock.indexOf("${ROOT_DIR}/dist/MarketingClaw.app")).toBeLessThan(
+      chooseBlock.indexOf("/Applications/MarketingClaw.app"),
     );
   });
 
-  it("keeps restart cleanup scoped to known OpenClaw app and build paths", () => {
+  it("keeps restart cleanup scoped to known MarketingClaw app and build paths", () => {
     const script = readFileSync(restartScriptPath, "utf8");
     const cleanupBlock = script.slice(
-      script.indexOf("kill_all_openclaw()"),
+      script.indexOf("kill_all_marketingclaw()"),
       script.indexOf("stop_launch_agent()"),
     );
 
     expect(cleanupBlock).toContain("ps axww -o pid=,command=");
     expect(cleanupBlock).toContain(
-      '"${ROOT_DIR}/dist/OpenClaw.app/${APP_EXECUTABLE_RELATIVE_PATH}"',
+      '"${ROOT_DIR}/dist/MarketingClaw.app/${APP_EXECUTABLE_RELATIVE_PATH}"',
     );
-    expect(cleanupBlock).toContain('"/Applications/OpenClaw.app/${APP_EXECUTABLE_RELATIVE_PATH}"');
+    expect(cleanupBlock).toContain(
+      '"/Applications/MarketingClaw.app/${APP_EXECUTABLE_RELATIVE_PATH}"',
+    );
     expect(cleanupBlock).toContain('"${DEBUG_PROCESS_PATTERN}"');
     expect(cleanupBlock).toContain('"${LOCAL_PROCESS_PATTERN}"');
     expect(cleanupBlock).toContain('"${RELEASE_PROCESS_PATTERN}"');
     expect(cleanupBlock).not.toContain("APP_PROCESS_PATTERN");
     expect(cleanupBlock).not.toContain("pkill");
-    expect(cleanupBlock).not.toContain('pkill -x "OpenClaw"');
+    expect(cleanupBlock).not.toContain('pkill -x "MarketingClaw"');
     expect(cleanupBlock).not.toContain("pgrep");
-    expect(cleanupBlock).not.toContain('pgrep -x "OpenClaw"');
+    expect(cleanupBlock).not.toContain('pgrep -x "MarketingClaw"');
   });
 
   it("stops launchd supervision before killing app processes", () => {
     const script = readFileSync(restartScriptPath, "utf8");
     const stopIndex = script.indexOf("stop_launch_agent\nlog");
-    const killIndex = script.indexOf("if ! kill_all_openclaw");
+    const killIndex = script.indexOf("if ! kill_all_marketingclaw");
 
     expect(stopIndex).toBeGreaterThan(-1);
     expect(killIndex).toBeGreaterThan(-1);
@@ -353,12 +359,12 @@ describe("scripts/restart-mac.sh", () => {
   });
 
   it("normalizes custom app bundle paths before process matching", () => {
-    const root = mkdtempSync(join(tmpdir(), "openclaw-restart-mac-test-"));
+    const root = mkdtempSync(join(tmpdir(), "marketingclaw-restart-mac-test-"));
     tempRoots.push(root);
-    const appBundle = join(root, "dist", "OpenClaw.app");
+    const appBundle = join(root, "dist", "MarketingClaw.app");
     mkdirSync(appBundle, { recursive: true });
 
-    const { result } = runCanonicalizeAppBundle(`${appBundle}/../OpenClaw.app/`);
+    const { result } = runCanonicalizeAppBundle(`${appBundle}/../MarketingClaw.app/`);
 
     expect(result.status).toBe(0);
     expect(result.stdout.trim()).toBe(realpathSync(appBundle));
@@ -369,7 +375,7 @@ describe("scripts/restart-mac.sh", () => {
     const { killCalls, result } = runCleanupFunction(
       [
         "#!/usr/bin/env bash",
-        "printf '%s\\n' '  321 /worktree/dist/OpenClaw.app/Contents/MacOS/OpenClaw --attach-only'",
+        "printf '%s\\n' '  321 /worktree/dist/MarketingClaw.app/Contents/MacOS/MarketingClaw --attach-only'",
       ].join("\n"),
     );
 
@@ -383,9 +389,9 @@ describe("scripts/restart-mac.sh", () => {
     const { killCalls, result } = runCleanupFunction(
       [
         "#!/usr/bin/env bash",
-        'kill_count="$(wc -l < "$OPENCLAW_TEST_KILL_CALLS" 2>/dev/null || echo 0)"',
+        'kill_count="$(wc -l < "$MARKETINGCLAW_TEST_KILL_CALLS" 2>/dev/null || echo 0)"',
         'if [[ "$kill_count" -lt 10 ]]; then',
-        "  printf '%s\\n' '  321 /worktree/dist/OpenClaw.app/Contents/MacOS/OpenClaw --attach-only'",
+        "  printf '%s\\n' '  321 /worktree/dist/MarketingClaw.app/Contents/MacOS/MarketingClaw --attach-only'",
         "fi",
       ].join("\n"),
     );
@@ -405,11 +411,11 @@ describe("scripts/restart-mac.sh", () => {
     expect(result.stderr).toBe("");
   });
 
-  it("does not kill unrelated OpenClaw app bundles", () => {
+  it("does not kill unrelated MarketingClaw app bundles", () => {
     const { killCalls, result } = runCleanupFunction(
       [
         "#!/usr/bin/env bash",
-        "printf '%s\\n' '  654 /tmp/Other/OpenClaw.app/Contents/MacOS/OpenClaw'",
+        "printf '%s\\n' '  654 /tmp/Other/MarketingClaw.app/Contents/MacOS/MarketingClaw'",
       ].join("\n"),
     );
 

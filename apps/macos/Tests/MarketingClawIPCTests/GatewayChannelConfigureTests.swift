@@ -1,9 +1,9 @@
 import Foundation
-import OpenClawChatUI
-import OpenClawKit
+import MarketingClawChatUI
+import MarketingClawKit
 import os
 import Testing
-@testable import OpenClaw
+@testable import MarketingClaw
 
 struct GatewayConnectionTests {
     private func makeConnection(
@@ -105,7 +105,7 @@ struct GatewayConnectionTests {
                 ifCurrentRoute: route,
                 distinguishPreDispatchRouteChange: true)
             Issue.record("expected typed stale route rejection")
-        } catch is OpenClawChatTransportSendError {}
+        } catch is MarketingClawChatTransportSendError {}
 
         #expect(session.snapshotMakeCount() == 1)
         #expect(session.snapshotCancelCount() == 0)

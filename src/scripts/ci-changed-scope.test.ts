@@ -3,7 +3,7 @@ import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { bundledPluginFile } from "openclaw/plugin-sdk/test-fixtures";
+import { bundledPluginFile } from "marketingclaw/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it } from "vitest";
 
 const {
@@ -101,10 +101,10 @@ describe("detectChangedScope", () => {
   it("routes only native i18n-owned paths to the native inventory job", () => {
     for (const changedPath of [
       "apps/.i18n/native-source.json",
-      "apps/android/app/src/main/java/ai/openclaw/app/MainActivity.kt",
+      "apps/android/app/src/main/java/ai/marketingclaw/app/MainActivity.kt",
       "apps/ios/Sources/RootTabs.swift",
-      "apps/macos/Sources/OpenClaw/Settings.swift",
-      "apps/shared/OpenClawKit/Sources/OpenClawKit/Client.swift",
+      "apps/macos/Sources/MarketingClaw/Settings.swift",
+      "apps/shared/MarketingClawKit/Sources/MarketingClawKit/Client.swift",
       "scripts/native-app-i18n.ts",
       "scripts/android-app-i18n.ts",
       "scripts/apple-app-i18n.ts",
@@ -170,7 +170,7 @@ describe("detectChangedScope", () => {
       runControlUiI18n: false,
     });
     expect(
-      detectChangedScope(["apps/macos-mlx-tts/Sources/OpenClawMLXTTSHelper/main.swift"]),
+      detectChangedScope(["apps/macos-mlx-tts/Sources/MarketingClawMLXTTSHelper/main.swift"]),
     ).toEqual({
       runNode: false,
       runMacos: true,
@@ -191,7 +191,7 @@ describe("detectChangedScope", () => {
       runChangedSmoke: false,
       runControlUiI18n: false,
     });
-    expect(detectChangedScope(["apps/shared/OpenClawKit/Sources/Foo.swift"])).toEqual({
+    expect(detectChangedScope(["apps/shared/MarketingClawKit/Sources/Foo.swift"])).toEqual({
       runNode: false,
       runMacos: true,
       runIosBuild: true,
@@ -246,7 +246,9 @@ describe("detectChangedScope", () => {
 
   it("runs the iOS build but not macOS for generated protocol model-only changes", () => {
     expect(
-      detectChangedScope(["apps/shared/OpenClawKit/Sources/OpenClawProtocol/GatewayModels.swift"]),
+      detectChangedScope([
+        "apps/shared/MarketingClawKit/Sources/MarketingClawProtocol/GatewayModels.swift",
+      ]),
     ).toEqual({
       runNode: false,
       runMacos: false,
@@ -831,7 +833,7 @@ describe("detectChangedScope", () => {
   it("treats base and head as literal git args", () => {
     const markerPath = path.join(
       os.tmpdir(),
-      `openclaw-ci-changed-scope-${Date.now()}-${Math.random().toString(16).slice(2)}.tmp`,
+      `marketingclaw-ci-changed-scope-${Date.now()}-${Math.random().toString(16).slice(2)}.tmp`,
     );
     markerPaths.push(markerPath);
 
@@ -852,7 +854,7 @@ describe("detectChangedScope", () => {
   });
 
   it("uses the merge commit first parent instead of a stale PR payload base", () => {
-    const { repoDir, staleBase } = createSyntheticMergeRepo("openclaw-ci-scope-merge-");
+    const { repoDir, staleBase } = createSyntheticMergeRepo("marketingclaw-ci-scope-merge-");
 
     expect(
       execFileSync("git", ["diff", "--name-only", staleBase, "HEAD"], {
@@ -868,7 +870,7 @@ describe("detectChangedScope", () => {
   });
 
   it("keeps direct CLI preflight empty diffs as no-op scope", () => {
-    const repoDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-ci-scope-empty-"));
+    const repoDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-ci-scope-empty-"));
     tempDirs.push(repoDir);
     const outputPath = path.join(repoDir, "github-output.txt");
     const scriptPath = path.resolve("scripts/ci-changed-scope.mjs");

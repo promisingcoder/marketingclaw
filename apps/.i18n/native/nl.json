@@ -85,8 +85,8 @@
     },
     {
       "id": "native.android.ff4c22906eac1e9e",
-      "source": "OPENCLAW",
-      "translated": "OPENCLAW"
+      "source": "MARKETINGCLAW",
+      "translated": "MARKETINGCLAW"
     },
     {
       "id": "native.android.dec357dfc9b8c0a5",
@@ -175,8 +175,8 @@
     },
     {
       "id": "native.android.237761be968be3f4",
-      "source": "OpenClaw needs ${labels.joinToString(\", \")} permissions to continue.",
-      "translated": "OpenClaw heeft ${labels.joinToString(\", \")} toestemmingen nodig om door te gaan."
+      "source": "MarketingClaw needs ${labels.joinToString(\", \")} permissions to continue.",
+      "translated": "MarketingClaw heeft ${labels.joinToString(\", \")} toestemmingen nodig om door te gaan."
     },
     {
       "id": "native.android.f9b9d558dc078d96",
@@ -280,8 +280,8 @@
     },
     {
       "id": "native.android.361ab52b02a0a266",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.android.0f5ae5b2db8c1f12",
@@ -495,8 +495,8 @@
     },
     {
       "id": "native.android.53dcd29a9bdd99c0",
-      "source": "Canvas output appears here when OpenClaw opens an app surface.",
-      "translated": "Canvas-uitvoer verschijnt hier wanneer OpenClaw een app-oppervlak opent."
+      "source": "Canvas output appears here when MarketingClaw opens an app surface.",
+      "translated": "Canvas-uitvoer verschijnt hier wanneer MarketingClaw een app-oppervlak opent."
     },
     {
       "id": "native.android.3b37959b1d369a28",
@@ -560,8 +560,8 @@
     },
     {
       "id": "native.android.9f877120690b0c59",
-      "source": "Search OpenClaw",
-      "translated": "Zoeken in OpenClaw"
+      "source": "Search MarketingClaw",
+      "translated": "Zoeken in MarketingClaw"
     },
     {
       "id": "native.android.c142846e7b88306c",
@@ -600,8 +600,8 @@
     },
     {
       "id": "native.android.8f8384286317f5c9",
-      "source": "OpenClaw session",
-      "translated": "OpenClaw-sessie"
+      "source": "MarketingClaw session",
+      "translated": "MarketingClaw-sessie"
     },
     {
       "id": "native.android.23321276a6c8e11e",
@@ -645,8 +645,8 @@
     },
     {
       "id": "native.android.d4cf912850bd01fa",
-      "source": "OpenClaw Android ${openClawAndroidVersionLabel()}",
-      "translated": "OpenClaw Android ${openClawAndroidVersionLabel()}"
+      "source": "MarketingClaw Android ${marketingClawAndroidVersionLabel()}",
+      "translated": "MarketingClaw Android ${marketingClawAndroidVersionLabel()}"
     },
     {
       "id": "native.android.cbff50e93346f3c5",
@@ -1135,18 +1135,18 @@
     },
     {
       "id": "native.android.64c8db13ef91513c",
-      "source": "Welcome to OpenClaw",
-      "translated": "Welkom bij OpenClaw"
+      "source": "Welcome to MarketingClaw",
+      "translated": "Welkom bij MarketingClaw"
     },
     {
       "id": "native.android.c38e106cc8f1e9ff",
-      "source": "Turn this device into a secure OpenClaw node for chat, voice, camera, and device tools.",
-      "translated": "Verander dit apparaat in een beveiligd OpenClaw-knooppunt voor chat, spraak, camera en apparaathulpmiddelen."
+      "source": "Turn this device into a secure MarketingClaw node for chat, voice, camera, and device tools.",
+      "translated": "Verander dit apparaat in een beveiligd MarketingClaw-knooppunt voor chat, spraak, camera en apparaathulpmiddelen."
     },
     {
       "id": "native.android.f941909a3fa51055",
-      "source": "OpenClaw logo",
-      "translated": "OpenClaw-logo"
+      "source": "MarketingClaw logo",
+      "translated": "MarketingClaw-logo"
     },
     {
       "id": "native.android.cc878f72a6b70b23",
@@ -1160,8 +1160,8 @@
     },
     {
       "id": "native.android.3bfe29d4d13d3c3e",
-      "source": "Use OpenClaw from your phone",
-      "translated": "Gebruik OpenClaw vanaf je telefoon"
+      "source": "Use MarketingClaw from your phone",
+      "translated": "Gebruik MarketingClaw vanaf je telefoon"
     },
     {
       "id": "native.android.c0b539eeb4612f5d",
@@ -1170,8 +1170,8 @@
     },
     {
       "id": "native.android.5aed4b5c8d6b246d",
-      "source": "The connected OpenClaw agent can use device capabilities you enable. Continue only if you trust the Gateway and agent you connect to.",
-      "translated": "De verbonden OpenClaw-agent kan apparaatmogelijkheden gebruiken die je inschakelt. Ga alleen door als je de Gateway en agent waarmee je verbinding maakt vertrouwt."
+      "source": "The connected MarketingClaw agent can use device capabilities you enable. Continue only if you trust the Gateway and agent you connect to.",
+      "translated": "De verbonden MarketingClaw-agent kan apparaatmogelijkheden gebruiken die je inschakelt. Ga alleen door als je de Gateway en agent waarmee je verbinding maakt vertrouwt."
     },
     {
       "id": "native.android.63c31ee564d63347",
@@ -1180,8 +1180,8 @@
     },
     {
       "id": "native.android.f50a9c1ee6d47055",
-      "source": "Scan a QR code or use the setup code from your OpenClaw Gateway.",
-      "translated": "Scan een QR-code of gebruik de configuratiecode van je OpenClaw Gateway."
+      "source": "Scan a QR code or use the setup code from your MarketingClaw Gateway.",
+      "translated": "Scan een QR-code of gebruik de configuratiecode van je MarketingClaw Gateway."
     },
     {
       "id": "native.android.58d80589d9d4b7ff",
@@ -1210,8 +1210,8 @@
     },
     {
       "id": "native.android.c8a43dbba02941f0",
-      "source": "Have a terminal open on the device running OpenClaw.",
-      "translated": "Zorg dat er een terminal openstaat op het apparaat waarop OpenClaw draait."
+      "source": "Have a terminal open on the device running MarketingClaw.",
+      "translated": "Zorg dat er een terminal openstaat op het apparaat waarop MarketingClaw draait."
     },
     {
       "id": "native.android.71ce00f359981a0b",
@@ -1240,8 +1240,8 @@
     },
     {
       "id": "native.android.d4b295b5146af4b8",
-      "source": "openclaw gateway",
-      "translated": "openclaw gateway"
+      "source": "marketingclaw gateway",
+      "translated": "marketingclaw gateway"
     },
     {
       "id": "native.android.c6f9da7008df05a6",
@@ -1250,8 +1250,8 @@
     },
     {
       "id": "native.android.db24e4be7a1b5547",
-      "source": "openclaw qr",
-      "translated": "openclaw qr"
+      "source": "marketingclaw qr",
+      "translated": "marketingclaw qr"
     },
     {
       "id": "native.android.96d40475de2885d6",
@@ -1275,8 +1275,8 @@
     },
     {
       "id": "native.android.05987e822ac102ec",
-      "source": "Open the camera and frame the code from openclaw qr.",
-      "translated": "Open de camera en richt op de code van openclaw qr."
+      "source": "Open the camera and frame the code from marketingclaw qr.",
+      "translated": "Open de camera en richt op de code van marketingclaw qr."
     },
     {
       "id": "native.android.90fa932d2e0adbd9",
@@ -1435,8 +1435,8 @@
     },
     {
       "id": "native.android.f43cb6ed03dc6766",
-      "source": "Gateway pairing is complete. Approve this phone as a node so OpenClaw can use the device capabilities you enable.",
-      "translated": "Gateway-koppeling is voltooid. Keur deze telefoon goed als node zodat OpenClaw de apparaatmogelijkheden kan gebruiken die je inschakelt."
+      "source": "Gateway pairing is complete. Approve this phone as a node so MarketingClaw can use the device capabilities you enable.",
+      "translated": "Gateway-koppeling is voltooid. Keur deze telefoon goed als node zodat MarketingClaw de apparaatmogelijkheden kan gebruiken die je inschakelt."
     },
     {
       "id": "native.android.8e49feba12c350ac",
@@ -1480,8 +1480,8 @@
     },
     {
       "id": "native.android.d4c3bcf880727fb3",
-      "source": "Only enable access you are comfortable letting OpenClaw use while this phone is connected. You can change these later in Android Settings.",
-      "translated": "Schakel alleen toegang in waarvan je het prettig vindt dat OpenClaw die gebruikt terwijl deze telefoon verbonden is. Je kunt dit later wijzigen in Android-instellingen."
+      "source": "Only enable access you are comfortable letting MarketingClaw use while this phone is connected. You can change these later in Android Settings.",
+      "translated": "Schakel alleen toegang in waarvan je het prettig vindt dat MarketingClaw die gebruikt terwijl deze telefoon verbonden is. Je kunt dit later wijzigen in Android-instellingen."
     },
     {
       "id": "native.android.d7ea800cc2475013",
@@ -1715,8 +1715,8 @@
     },
     {
       "id": "native.android.8f0482425838ae64",
-      "source": "OpenClaw session",
-      "translated": "OpenClaw-sessie"
+      "source": "MarketingClaw session",
+      "translated": "MarketingClaw-sessie"
     },
     {
       "id": "native.android.786774c8a76e50d7",
@@ -1765,8 +1765,8 @@
     },
     {
       "id": "native.android.b5e4ae7f8c9eca2d",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.android.6637da0312da85f9",
@@ -1865,8 +1865,8 @@
     },
     {
       "id": "native.android.5e3e4cd42004cb28",
-      "source": "Scheduled OpenClaw work from your gateway.",
-      "translated": "Gepland OpenClaw-werk vanaf je Gateway."
+      "source": "Scheduled MarketingClaw work from your gateway.",
+      "translated": "Gepland MarketingClaw-werk vanaf je Gateway."
     },
     {
       "id": "native.android.b043fde2bb211935",
@@ -1885,8 +1885,8 @@
     },
     {
       "id": "native.android.fe85be29a00c5e58",
-      "source": "Create recurring OpenClaw work from the desktop app.",
-      "translated": "Maak terugkerend OpenClaw-werk vanuit de desktop-app."
+      "source": "Create recurring MarketingClaw work from the desktop app.",
+      "translated": "Maak terugkerend MarketingClaw-werk vanuit de desktop-app."
     },
     {
       "id": "native.android.f6dd71419863574c",
@@ -1980,8 +1980,8 @@
     },
     {
       "id": "native.android.fea93eda5bf97d9e",
-      "source": "How this phone appears to OpenClaw.",
-      "translated": "Hoe deze telefoon wordt weergegeven voor OpenClaw."
+      "source": "How this phone appears to MarketingClaw.",
+      "translated": "Hoe deze telefoon wordt weergegeven voor MarketingClaw."
     },
     {
       "id": "native.android.695229fd01afbc2d",
@@ -2015,8 +2015,8 @@
     },
     {
       "id": "native.android.5ff888931aae2738",
-      "source": "Check that OpenClaw can speak clearly on this phone.",
-      "translated": "Controleer of OpenClaw duidelijk kan spreken op deze telefoon."
+      "source": "Check that MarketingClaw can speak clearly on this phone.",
+      "translated": "Controleer of MarketingClaw duidelijk kan spreken op deze telefoon."
     },
     {
       "id": "native.android.f82d5d81f5dc9b43",
@@ -2075,8 +2075,8 @@
     },
     {
       "id": "native.android.9feed8722db5d2cc",
-      "source": "Choose what reaches OpenClaw.",
-      "translated": "Kies wat OpenClaw bereikt."
+      "source": "Choose what reaches MarketingClaw.",
+      "translated": "Kies wat MarketingClaw bereikt."
     },
     {
       "id": "native.android.d32071018de11907",
@@ -2090,8 +2090,8 @@
     },
     {
       "id": "native.android.5a077bf9cf4f47c8",
-      "source": "OpenClaw can receive selected alerts.",
-      "translated": "OpenClaw kan geselecteerde waarschuwingen ontvangen."
+      "source": "MarketingClaw can receive selected alerts.",
+      "translated": "MarketingClaw kan geselecteerde waarschuwingen ontvangen."
     },
     {
       "id": "native.android.ebeec52e498bc128",
@@ -2185,8 +2185,8 @@
     },
     {
       "id": "native.android.bdafaceb7af93f5a",
-      "source": "OpenClaw can list launcher-visible apps.",
-      "translated": "OpenClaw kan apps weergeven die zichtbaar zijn in de launcher."
+      "source": "MarketingClaw can list launcher-visible apps.",
+      "translated": "MarketingClaw kan apps weergeven die zichtbaar zijn in de launcher."
     },
     {
       "id": "native.android.4ea310efb1f0e7ff",
@@ -2195,8 +2195,8 @@
     },
     {
       "id": "native.android.58549715b04997cc",
-      "source": "Always allows requested location checks while OpenClaw is in the background; Android shows this in the persistent node notification.",
-      "translated": "Staat aangevraagde locatiecontroles altijd toe terwijl OpenClaw op de achtergrond actief is; Android toont dit in de permanente node-melding."
+      "source": "Always allows requested location checks while MarketingClaw is in the background; Android shows this in the persistent node notification.",
+      "translated": "Staat aangevraagde locatiecontroles altijd toe terwijl MarketingClaw op de achtergrond actief is; Android toont dit in de permanente node-melding."
     },
     {
       "id": "native.android.d5a8d7f97a7971b1",
@@ -2205,8 +2205,8 @@
     },
     {
       "id": "native.android.9d149d1ad66e42f9",
-      "source": "OpenClaw only checks location when your paired Gateway requests it. ",
-      "translated": "OpenClaw controleert de locatie alleen wanneer je gekoppelde Gateway daarom vraagt. "
+      "source": "MarketingClaw only checks location when your paired Gateway requests it. ",
+      "translated": "MarketingClaw controleert de locatie alleen wanneer je gekoppelde Gateway daarom vraagt. "
     },
     {
       "id": "native.android.c48805f3de1d72ca",
@@ -2240,8 +2240,8 @@
     },
     {
       "id": "native.android.9d658ff26e59274b",
-      "source": "Connection between this phone and OpenClaw.",
-      "translated": "Verbinding tussen deze telefoon en OpenClaw."
+      "source": "Connection between this phone and MarketingClaw.",
+      "translated": "Verbinding tussen deze telefoon en MarketingClaw."
     },
     {
       "id": "native.android.718cb50d1bff3e32",
@@ -2310,8 +2310,8 @@
     },
     {
       "id": "native.android.de12fd162a566974",
-      "source": "Android can scan or paste an existing setup code, but this gateway does not expose setup-code generation to the app yet. Generate the QR/code on the gateway host with openclaw qr, then scan it here or paste the setup code below.",
-      "translated": "Android kan een bestaande setupcode scannen of plakken, maar deze gateway biedt de app nog geen mogelijkheid om setupcodes te genereren. Genereer de QR/code op de gatewayhost met openclaw qr en scan deze vervolgens hier of plak de setupcode hieronder."
+      "source": "Android can scan or paste an existing setup code, but this gateway does not expose setup-code generation to the app yet. Generate the QR/code on the gateway host with marketingclaw qr, then scan it here or paste the setup code below.",
+      "translated": "Android kan een bestaande setupcode scannen of plakken, maar deze gateway biedt de app nog geen mogelijkheid om setupcodes te genereren. Genereer de QR/code op de gatewayhost met marketingclaw qr en scan deze vervolgens hier of plak de setupcode hieronder."
     },
     {
       "id": "native.android.0e8f4c02f7aa20e9",
@@ -2365,8 +2365,8 @@
     },
     {
       "id": "native.android.6f19c75742af5126",
-      "source": "A calm, high-contrast OpenClaw interface.",
-      "translated": "Een rustige OpenClaw-interface met hoog contrast."
+      "source": "A calm, high-contrast MarketingClaw interface.",
+      "translated": "Een rustige MarketingClaw-interface met hoog contrast."
     },
     {
       "id": "native.android.5311e446ce2bf857",
@@ -2390,8 +2390,8 @@
     },
     {
       "id": "native.android.c2d37ac2ad4c9e3c",
-      "source": "OpenClaw for Android.",
-      "translated": "OpenClaw voor Android."
+      "source": "MarketingClaw for Android.",
+      "translated": "MarketingClaw voor Android."
     },
     {
       "id": "native.android.d744d434533ea8ed",
@@ -2410,18 +2410,18 @@
     },
     {
       "id": "native.android.aac3310699b496c8",
-      "source": "© 2026 OpenClaw Foundation — MIT License.",
-      "translated": "© 2026 OpenClaw Foundation — MIT-licentie."
+      "source": "© 2026 MarketingClaw Foundation — MIT License.",
+      "translated": "© 2026 MarketingClaw Foundation — MIT-licentie."
     },
     {
       "id": "native.android.a157bbb606e9b398",
-      "source": "OpenClaw logo",
-      "translated": "OpenClaw-logo"
+      "source": "MarketingClaw logo",
+      "translated": "MarketingClaw-logo"
     },
     {
       "id": "native.android.7b78b4869baf2160",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.android.ad4c14835d1b71ca",
@@ -2435,8 +2435,8 @@
     },
     {
       "id": "native.android.996367534eb94cc2",
-      "source": "OpenClaw appreciates its partners in the open-source community.",
-      "translated": "OpenClaw waardeert zijn partners in de open-sourcecommunity."
+      "source": "MarketingClaw appreciates its partners in the open-source community.",
+      "translated": "MarketingClaw waardeert zijn partners in de open-sourcecommunity."
     },
     {
       "id": "native.android.24da1d2eb750ba07",
@@ -2885,8 +2885,8 @@
     },
     {
       "id": "native.android.3b2109ae1192e191",
-      "source": "Only while OpenClaw is open.",
-      "translated": "Alleen wanneer OpenClaw is geopend."
+      "source": "Only while MarketingClaw is open.",
+      "translated": "Alleen wanneer MarketingClaw is geopend."
     },
     {
       "id": "native.android.b92944ae7d52f9e3",
@@ -2935,8 +2935,8 @@
     },
     {
       "id": "native.android.2e33a4fd5f60b550",
-      "source": "Start a chat and your active OpenClaw conversations will appear here.",
-      "translated": "Start een chat en je actieve OpenClaw-gesprekken verschijnen hier."
+      "source": "Start a chat and your active MarketingClaw conversations will appear here.",
+      "translated": "Start een chat en je actieve MarketingClaw-gesprekken verschijnen hier."
     },
     {
       "id": "native.android.85726cfd4207d48a",
@@ -2945,8 +2945,8 @@
     },
     {
       "id": "native.android.4f369a09c8731092",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.android.097cf19d48e09476",
@@ -3135,8 +3135,8 @@
     },
     {
       "id": "native.android.ca1451df912ed5cf",
-      "source": "OpenClaw ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
-      "translated": "OpenClaw ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
+      "source": "MarketingClaw ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
+      "translated": "MarketingClaw ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
     },
     {
       "id": "native.android.b7d8c506999a68f7",
@@ -3175,8 +3175,8 @@
     },
     {
       "id": "native.android.e197964b10ba02ce",
-      "source": "OpenClaw mobile",
-      "translated": "OpenClaw mobiel"
+      "source": "MarketingClaw mobile",
+      "translated": "MarketingClaw mobiel"
     },
     {
       "id": "native.android.45005deba537cc59",
@@ -3195,8 +3195,8 @@
     },
     {
       "id": "native.android.73a666b0a4a0e617",
-      "source": "Installed capabilities available to OpenClaw.",
-      "translated": "Geïnstalleerde mogelijkheden die beschikbaar zijn voor OpenClaw."
+      "source": "Installed capabilities available to MarketingClaw.",
+      "translated": "Geïnstalleerde mogelijkheden die beschikbaar zijn voor MarketingClaw."
     },
     {
       "id": "native.android.9507bc022dc2e3ed",
@@ -3380,8 +3380,8 @@
     },
     {
       "id": "native.android.253debc9d0714dda",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.android.ece74bf084239d34",
@@ -3430,8 +3430,8 @@
     },
     {
       "id": "native.android.b4fd37573503cf10",
-      "source": "Your words and OpenClaw replies will appear here.",
-      "translated": "Je woorden en antwoorden van OpenClaw verschijnen hier."
+      "source": "Your words and MarketingClaw replies will appear here.",
+      "translated": "Je woorden en antwoorden van MarketingClaw verschijnen hier."
     },
     {
       "id": "native.android.24057bba4bbfa27a",
@@ -3445,8 +3445,8 @@
     },
     {
       "id": "native.android.5b8bd9f2b69b91ea",
-      "source": "OpenClaw is preparing a response.",
-      "translated": "OpenClaw bereidt een antwoord voor."
+      "source": "MarketingClaw is preparing a response.",
+      "translated": "MarketingClaw bereidt een antwoord voor."
     },
     {
       "id": "native.android.420cccbd48298a8d",
@@ -3460,8 +3460,8 @@
     },
     {
       "id": "native.android.285eeed928be0fc1",
-      "source": "OpenClaw only listens when you start Talk or Dictation.",
-      "translated": "OpenClaw luistert alleen wanneer je Gesprek of Dicteren start."
+      "source": "MarketingClaw only listens when you start Talk or Dictation.",
+      "translated": "MarketingClaw luistert alleen wanneer je Gesprek of Dicteren start."
     },
     {
       "id": "native.android.b10a51fe9d4b8d2d",
@@ -3540,8 +3540,8 @@
     },
     {
       "id": "native.android.dd372d2915032feb",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.android.5ec494944bda138e",
@@ -3550,8 +3550,8 @@
     },
     {
       "id": "native.android.09137c880dd8890e",
-      "source": "OpenClaw is thinking…",
-      "translated": "OpenClaw denkt na…"
+      "source": "MarketingClaw is thinking…",
+      "translated": "MarketingClaw denkt na…"
     },
     {
       "id": "native.android.eb6ff96aba8f67b4",
@@ -3780,8 +3780,8 @@
     },
     {
       "id": "native.android.dfbd755eb43b4d26",
-      "source": "OpenClaw · Live",
-      "translated": "OpenClaw · Live"
+      "source": "MarketingClaw · Live",
+      "translated": "MarketingClaw · Live"
     },
     {
       "id": "native.android.d29098025118ce4b",
@@ -3790,8 +3790,8 @@
     },
     {
       "id": "native.android.82e9fe45e93909b6",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.android.09720189ba712747",
@@ -3810,8 +3810,8 @@
     },
     {
       "id": "native.android.25d8575c0063aee5",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.android.4437f3cbdb3c8cbe",
@@ -3865,8 +3865,8 @@
     },
     {
       "id": "native.android.d851a32f367f8b31",
-      "source": "OpenClaw is working",
-      "translated": "OpenClaw is bezig"
+      "source": "MarketingClaw is working",
+      "translated": "MarketingClaw is bezig"
     },
     {
       "id": "native.android.0fd6b75cadc0ce75",
@@ -3880,8 +3880,8 @@
     },
     {
       "id": "native.android.98a0d4d5bba788c4",
-      "source": "OpenClaw is preparing a response.",
-      "translated": "OpenClaw bereidt een antwoord voor."
+      "source": "MarketingClaw is preparing a response.",
+      "translated": "MarketingClaw bereidt een antwoord voor."
     },
     {
       "id": "native.android.76d574acfac94fee",
@@ -3920,8 +3920,8 @@
     },
     {
       "id": "native.android.f1d69eb66c5dfa39",
-      "source": "Message OpenClaw",
-      "translated": "Bericht aan OpenClaw"
+      "source": "Message MarketingClaw",
+      "translated": "Bericht aan MarketingClaw"
     },
     {
       "id": "native.android.19396391033f4fa8",
@@ -3970,8 +3970,8 @@
     },
     {
       "id": "native.android.79d7a1026ef43e80",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.android.e8318a46a213cb91",
@@ -4005,13 +4005,13 @@
     },
     {
       "id": "native.android.794873efdfcdff4f",
-      "source": "OpenClaw gateway",
-      "translated": "OpenClaw-gateway"
+      "source": "MarketingClaw gateway",
+      "translated": "MarketingClaw-gateway"
     },
     {
       "id": "native.android.2d3b6dd9a8f186fe",
-      "source": "Ask OpenClaw anything",
-      "translated": "Vraag OpenClaw alles"
+      "source": "Ask MarketingClaw anything",
+      "translated": "Vraag MarketingClaw alles"
     },
     {
       "id": "native.android.608ccdaeababf056",
@@ -4045,8 +4045,8 @@
     },
     {
       "id": "native.android.3457b4ee28d964ee",
-      "source": "OpenClaw will surface approvals, failed jobs, and channel issues here.",
-      "translated": "OpenClaw toont hier goedkeuringen, mislukte taken en kanaalproblemen."
+      "source": "MarketingClaw will surface approvals, failed jobs, and channel issues here.",
+      "translated": "MarketingClaw toont hier goedkeuringen, mislukte taken en kanaalproblemen."
     },
     {
       "id": "native.android.c5e56f0e8af094fb",
@@ -4125,23 +4125,23 @@
     },
     {
       "id": "native.android.f392ee2d50d6b7ce",
-      "source": "ask OpenClaw $prompt",
-      "translated": "vraag OpenClaw $prompt"
+      "source": "ask MarketingClaw $prompt",
+      "translated": "vraag MarketingClaw $prompt"
     },
     {
       "id": "native.android.ea9d1a78cfa13033",
-      "source": "tell OpenClaw to $prompt",
-      "translated": "zeg tegen OpenClaw om $prompt"
+      "source": "tell MarketingClaw to $prompt",
+      "translated": "zeg tegen MarketingClaw om $prompt"
     },
     {
       "id": "native.android.7f96ac9b9e10abd0",
-      "source": "open OpenClaw and ask $prompt",
-      "translated": "open OpenClaw en vraag $prompt"
+      "source": "open MarketingClaw and ask $prompt",
+      "translated": "open MarketingClaw en vraag $prompt"
     },
     {
       "id": "native.android.a3c395b04ae7a621",
-      "source": "OpenClaw Node",
-      "translated": "OpenClaw Node"
+      "source": "MarketingClaw Node",
+      "translated": "MarketingClaw Node"
     },
     {
       "id": "native.android.55da01a287502809",
@@ -4315,18 +4315,18 @@
     },
     {
       "id": "native.apple.8f741d09cc1d5495",
-      "source": "OpenClaw Activity",
-      "translated": "OpenClaw-activiteit"
+      "source": "MarketingClaw Activity",
+      "translated": "MarketingClaw-activiteit"
     },
     {
       "id": "native.apple.86d546e1f1247028",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.apple.9168fcd110c3019a",
-      "source": "OpenClaw Share",
-      "translated": "OpenClaw Share"
+      "source": "MarketingClaw Share",
+      "translated": "MarketingClaw Share"
     },
     {
       "id": "native.apple.23834d0ff7589921",
@@ -5235,8 +5235,8 @@
     },
     {
       "id": "native.apple.3548c8d1ab43e85e",
-      "source": "OpenClaw could not prepare the Markdown file.",
-      "translated": "OpenClaw kon het Markdown-bestand niet voorbereiden."
+      "source": "MarketingClaw could not prepare the Markdown file.",
+      "translated": "MarketingClaw kon het Markdown-bestand niet voorbereiden."
     },
     {
       "id": "native.apple.202b97e93b938049",
@@ -5300,13 +5300,13 @@
     },
     {
       "id": "native.apple.14492e334b87e4f2",
-      "source": "Check OpenClaw status",
-      "translated": "OpenClaw-status controleren"
+      "source": "Check MarketingClaw status",
+      "translated": "MarketingClaw-status controleren"
     },
     {
       "id": "native.apple.bbf7bd23da1e7865",
-      "source": "Summarize the current OpenClaw status and tell me what needs attention.",
-      "translated": "Vat de huidige OpenClaw-status samen en vertel me wat aandacht nodig heeft."
+      "source": "Summarize the current MarketingClaw status and tell me what needs attention.",
+      "translated": "Vat de huidige MarketingClaw-status samen en vertel me wat aandacht nodig heeft."
     },
     {
       "id": "native.apple.ea8cbb1b4230c652",
@@ -6075,8 +6075,8 @@
     },
     {
       "id": "native.apple.56935c5384889b8e",
-      "source": "Browse the current OpenClaw reference.",
-      "translated": "Blader door de huidige OpenClaw-referentie."
+      "source": "Browse the current MarketingClaw reference.",
+      "translated": "Blader door de huidige MarketingClaw-referentie."
     },
     {
       "id": "native.apple.2ee2f8c71fa2d2cc",
@@ -6105,8 +6105,8 @@
     },
     {
       "id": "native.apple.cf9bb65f8e405cc8",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.apple.51c566ed34b67acf",
@@ -6355,8 +6355,8 @@
     },
     {
       "id": "native.apple.9bb1dae351d0e3a4",
-      "source": "Enable OpenClaw Hosted Push Relay?",
-      "translated": "OpenClaw Hosted Push Relay inschakelen?"
+      "source": "Enable MarketingClaw Hosted Push Relay?",
+      "translated": "MarketingClaw Hosted Push Relay inschakelen?"
     },
     {
       "id": "native.apple.f8c042a923222472",
@@ -6515,8 +6515,8 @@
     },
     {
       "id": "native.apple.ea2016fd75ff79c9",
-      "source": "OpenClaw can show approval prompts and event alerts when the app is not active.",
-      "translated": "OpenClaw kan goedkeuringsprompts en gebeurteniswaarschuwingen tonen wanneer de app niet actief is."
+      "source": "MarketingClaw can show approval prompts and event alerts when the app is not active.",
+      "translated": "MarketingClaw kan goedkeuringsprompts en gebeurteniswaarschuwingen tonen wanneer de app niet actief is."
     },
     {
       "id": "native.apple.408e00d224b5a5ac",
@@ -6530,8 +6530,8 @@
     },
     {
       "id": "native.apple.b525ff6cead949f4",
-      "source": "OpenClaw cannot determine the current notification permission state.",
-      "translated": "OpenClaw kan de huidige status van de meldingstoestemming niet bepalen."
+      "source": "MarketingClaw cannot determine the current notification permission state.",
+      "translated": "MarketingClaw kan de huidige status van de meldingstoestemming niet bepalen."
     },
     {
       "id": "native.apple.80fade864c8ad242",
@@ -6635,8 +6635,8 @@
     },
     {
       "id": "native.apple.2e042499c42824f5",
-      "source": "Enable Notifications to receive approval alerts while OpenClaw is not open.",
-      "translated": "Schakel meldingen in om goedkeuringsmeldingen te ontvangen wanneer OpenClaw niet geopend is."
+      "source": "Enable Notifications to receive approval alerts while MarketingClaw is not open.",
+      "translated": "Schakel meldingen in om goedkeuringsmeldingen te ontvangen wanneer MarketingClaw niet geopend is."
     },
     {
       "id": "native.apple.fc1f2fdbe437cb9d",
@@ -6715,8 +6715,8 @@
     },
     {
       "id": "native.apple.6d2f325ea39a5ee5",
-      "source": "Control what device context OpenClaw can expose to the gateway.",
-      "translated": "Bepaal welke apparaatcontext OpenClaw aan de Gateway kan tonen."
+      "source": "Control what device context MarketingClaw can expose to the gateway.",
+      "translated": "Bepaal welke apparaatcontext MarketingClaw aan de Gateway kan tonen."
     },
     {
       "id": "native.apple.11954b310eb31f5e",
@@ -6750,13 +6750,13 @@
     },
     {
       "id": "native.apple.a82dc4a746268028",
-      "source": "OpenClaw appreciates its partners in the open-source community.",
-      "translated": "OpenClaw waardeert zijn partners in de opensourcecommunity."
+      "source": "MarketingClaw appreciates its partners in the open-source community.",
+      "translated": "MarketingClaw waardeert zijn partners in de opensourcecommunity."
     },
     {
       "id": "native.apple.fc49f9b63e160581",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.apple.eaa4fe72f3730f3f",
@@ -6765,8 +6765,8 @@
     },
     {
       "id": "native.apple.35714980723b430d",
-      "source": "OpenClaw app version",
-      "translated": "OpenClaw-appversie"
+      "source": "MarketingClaw app version",
+      "translated": "MarketingClaw-appversie"
     },
     {
       "id": "native.apple.bbb2c589c2049217",
@@ -6795,8 +6795,8 @@
     },
     {
       "id": "native.apple.b962116ff5bf1905",
-      "source": "© 2026 OpenClaw Foundation — MIT License.",
-      "translated": "© 2026 OpenClaw Foundation — MIT-licentie."
+      "source": "© 2026 MarketingClaw Foundation — MIT License.",
+      "translated": "© 2026 MarketingClaw Foundation — MIT-licentie."
     },
     {
       "id": "native.apple.106434d1305d153b",
@@ -7095,8 +7095,8 @@
     },
     {
       "id": "native.apple.737eb52b08f2640c",
-      "source": "Connected to openclaw-gateway.tailnet.ts.net.",
-      "translated": "Verbonden met openclaw-gateway.tailnet.ts.net."
+      "source": "Connected to marketingclaw-gateway.tailnet.ts.net.",
+      "translated": "Verbonden met marketingclaw-gateway.tailnet.ts.net."
     },
     {
       "id": "native.apple.b59e37e73db49f94",
@@ -7365,8 +7365,8 @@
     },
     {
       "id": "native.apple.c218ef5194d0ee56",
-      "source": "Run OpenClaw agent?",
-      "translated": "OpenClaw-agent uitvoeren?"
+      "source": "Run MarketingClaw agent?",
+      "translated": "MarketingClaw-agent uitvoeren?"
     },
     {
       "id": "native.apple.32dc136ac23fef8c",
@@ -7630,8 +7630,8 @@
     },
     {
       "id": "native.apple.c18f5bd36f119282",
-      "source": "Run openclaw gateway --port 18789.",
-      "translated": "Voer openclaw gateway --port 18789 uit."
+      "source": "Run marketingclaw gateway --port 18789.",
+      "translated": "Voer marketingclaw gateway --port 18789 uit."
     },
     {
       "id": "native.apple.a4eb9a9b02915961",
@@ -7665,8 +7665,8 @@
     },
     {
       "id": "native.apple.8f6f60c9a5196918",
-      "source": "Exec approvals can only be reviewed while OpenClaw is open and connected.\n\nEnable Notifications to receive approval notifications while OpenClaw is not open.",
-      "translated": "Exec-goedkeuringen kunnen alleen worden beoordeeld terwijl OpenClaw geopend en verbonden is.\n\nSchakel meldingen in om goedkeuringsmeldingen te ontvangen terwijl OpenClaw niet geopend is."
+      "source": "Exec approvals can only be reviewed while MarketingClaw is open and connected.\n\nEnable Notifications to receive approval notifications while MarketingClaw is not open.",
+      "translated": "Exec-goedkeuringen kunnen alleen worden beoordeeld terwijl MarketingClaw geopend en verbonden is.\n\nSchakel meldingen in om goedkeuringsmeldingen te ontvangen terwijl MarketingClaw niet geopend is."
     },
     {
       "id": "native.apple.a2378696390cca1e",
@@ -7685,63 +7685,63 @@
     },
     {
       "id": "native.apple.cf820096080f7031",
-      "source": "OpenClaw uses your calendars to show events and scheduling context when you enable calendar access.",
-      "translated": "OpenClaw gebruikt je agenda’s om gebeurtenissen en planningscontext te tonen wanneer je agendatoegang inschakelt."
+      "source": "MarketingClaw uses your calendars to show events and scheduling context when you enable calendar access.",
+      "translated": "MarketingClaw gebruikt je agenda’s om gebeurtenissen en planningscontext te tonen wanneer je agendatoegang inschakelt."
     },
     {
       "id": "native.apple.fe85b609e9a9a144",
-      "source": "OpenClaw uses your calendars to add events when you enable calendar access.",
-      "translated": "OpenClaw gebruikt je agenda’s om gebeurtenissen toe te voegen wanneer je agendatoegang inschakelt."
+      "source": "MarketingClaw uses your calendars to add events when you enable calendar access.",
+      "translated": "MarketingClaw gebruikt je agenda’s om gebeurtenissen toe te voegen wanneer je agendatoegang inschakelt."
     },
     {
       "id": "native.apple.ff5729a17d66ad91",
-      "source": "OpenClaw uses the camera when you scan a Gateway setup QR code or ask your paired Gateway or assistant to capture a photo or short video from this iPhone, for example to connect to your Gateway or show your assistant a document, device screen, or workspace.",
-      "translated": "OpenClaw gebruikt de camera wanneer je een QR-code voor Gateway-configuratie scant of je gekoppelde Gateway of assistent vraagt om een foto of korte video vanaf deze iPhone vast te leggen, bijvoorbeeld om verbinding te maken met je Gateway of om je assistent een document, apparaatscherm of werkruimte te tonen."
+      "source": "MarketingClaw uses the camera when you scan a Gateway setup QR code or ask your paired Gateway or assistant to capture a photo or short video from this iPhone, for example to connect to your Gateway or show your assistant a document, device screen, or workspace.",
+      "translated": "MarketingClaw gebruikt de camera wanneer je een QR-code voor Gateway-configuratie scant of je gekoppelde Gateway of assistent vraagt om een foto of korte video vanaf deze iPhone vast te leggen, bijvoorbeeld om verbinding te maken met je Gateway of om je assistent een document, apparaatscherm of werkruimte te tonen."
     },
     {
       "id": "native.apple.2f21aa6f5cd72915",
-      "source": "OpenClaw uses your contacts so you can search and reference people while using the assistant.",
-      "translated": "OpenClaw gebruikt je contacten zodat je personen kunt zoeken en vermelden terwijl je de assistent gebruikt."
+      "source": "MarketingClaw uses your contacts so you can search and reference people while using the assistant.",
+      "translated": "MarketingClaw gebruikt je contacten zodat je personen kunt zoeken en vermelden terwijl je de assistent gebruikt."
     },
     {
       "id": "native.apple.9d550c77a37bb165",
-      "source": "OpenClaw discovers and connects to your OpenClaw gateway on the local network.",
-      "translated": "OpenClaw vindt en maakt verbinding met je OpenClaw-gateway op het lokale netwerk."
+      "source": "MarketingClaw discovers and connects to your MarketingClaw gateway on the local network.",
+      "translated": "MarketingClaw vindt en maakt verbinding met je MarketingClaw-gateway op het lokale netwerk."
     },
     {
       "id": "native.apple.d822c41a0b7e9739",
-      "source": "OpenClaw can share your location in the background when you enable Always.",
-      "translated": "OpenClaw kan je locatie op de achtergrond delen wanneer je Altijd inschakelt."
+      "source": "MarketingClaw can share your location in the background when you enable Always.",
+      "translated": "MarketingClaw kan je locatie op de achtergrond delen wanneer je Altijd inschakelt."
     },
     {
       "id": "native.apple.441062ce99375692",
-      "source": "OpenClaw uses your location when you allow location sharing.",
-      "translated": "OpenClaw gebruikt je locatie wanneer je locatie delen toestaat."
+      "source": "MarketingClaw uses your location when you allow location sharing.",
+      "translated": "MarketingClaw gebruikt je locatie wanneer je locatie delen toestaat."
     },
     {
       "id": "native.apple.41f58df89e66324e",
-      "source": "OpenClaw uses the microphone for realtime chat, voice wake, and push-to-talk.",
-      "translated": "OpenClaw gebruikt de microfoon voor realtime chat, spraakactivering en push-to-talk."
+      "source": "MarketingClaw uses the microphone for realtime chat, voice wake, and push-to-talk.",
+      "translated": "MarketingClaw gebruikt de microfoon voor realtime chat, spraakactivering en push-to-talk."
     },
     {
       "id": "native.apple.85345f18204d67ec",
-      "source": "OpenClaw may use motion data to support device-aware interactions and automations.",
-      "translated": "OpenClaw kan bewegingsgegevens gebruiken ter ondersteuning van apparaatafhankelijke interacties en automatiseringen."
+      "source": "MarketingClaw may use motion data to support device-aware interactions and automations.",
+      "translated": "MarketingClaw kan bewegingsgegevens gebruiken ter ondersteuning van apparaatafhankelijke interacties en automatiseringen."
     },
     {
       "id": "native.apple.40ed4259ec869f1b",
-      "source": "OpenClaw lets your assistant read photos you allow and lets you choose photos to share.",
-      "translated": "OpenClaw laat je assistent foto’s lezen die je toestaat en laat je foto’s kiezen om te delen."
+      "source": "MarketingClaw lets your assistant read photos you allow and lets you choose photos to share.",
+      "translated": "MarketingClaw laat je assistent foto’s lezen die je toestaat en laat je foto’s kiezen om te delen."
     },
     {
       "id": "native.apple.81b673f0c6fc4371",
-      "source": "OpenClaw uses your reminders to list, add, and complete tasks when you enable reminders access.",
-      "translated": "OpenClaw gebruikt je herinneringen om taken weer te geven, toe te voegen en te voltooien wanneer je toegang tot herinneringen inschakelt."
+      "source": "MarketingClaw uses your reminders to list, add, and complete tasks when you enable reminders access.",
+      "translated": "MarketingClaw gebruikt je herinneringen om taken weer te geven, toe te voegen en te voltooien wanneer je toegang tot herinneringen inschakelt."
     },
     {
       "id": "native.apple.2275552c26460945",
-      "source": "OpenClaw uses on-device speech recognition for talk mode and voice wake.",
-      "translated": "OpenClaw gebruikt spraakherkenning op het apparaat voor de praatmodus en spraakactivering."
+      "source": "MarketingClaw uses on-device speech recognition for talk mode and voice wake.",
+      "translated": "MarketingClaw gebruikt spraakherkenning op het apparaat voor de praatmodus en spraakactivering."
     },
     {
       "id": "native.apple.cf0450b542893fb5",
@@ -7760,18 +7760,18 @@
     },
     {
       "id": "native.apple.2dc593065171c201",
-      "source": "Location sharing is disabled in OpenClaw. Location Services are off in iOS Settings.",
-      "translated": "Locatiedeling is uitgeschakeld in OpenClaw. Locatievoorzieningen zijn uitgeschakeld in iOS-instellingen."
+      "source": "Location sharing is disabled in MarketingClaw. Location Services are off in iOS Settings.",
+      "translated": "Locatiedeling is uitgeschakeld in MarketingClaw. Locatievoorzieningen zijn uitgeschakeld in iOS-instellingen."
     },
     {
       "id": "native.apple.1dc990a9cc0500c5",
-      "source": "Location sharing is disabled in OpenClaw. iOS currently allows Always.",
-      "translated": "Locatiedeling is uitgeschakeld in OpenClaw. iOS staat momenteel Altijd toe."
+      "source": "Location sharing is disabled in MarketingClaw. iOS currently allows Always.",
+      "translated": "Locatiedeling is uitgeschakeld in MarketingClaw. iOS staat momenteel Altijd toe."
     },
     {
       "id": "native.apple.9a4e858d2b218d41",
-      "source": "Location sharing is disabled in OpenClaw. iOS currently allows While Using.",
-      "translated": "Locatiedeling is uitgeschakeld in OpenClaw. iOS staat momenteel Bij gebruik toe."
+      "source": "Location sharing is disabled in MarketingClaw. iOS currently allows While Using.",
+      "translated": "Locatiedeling is uitgeschakeld in MarketingClaw. iOS staat momenteel Bij gebruik toe."
     },
     {
       "id": "native.apple.ab481eb11214797f",
@@ -7845,8 +7845,8 @@
     },
     {
       "id": "native.apple.633f011b81108a8c",
-      "source": "OpenClaw cannot determine the current iOS location permission.",
-      "translated": "OpenClaw kan de huidige iOS-locatietoestemming niet bepalen."
+      "source": "MarketingClaw cannot determine the current iOS location permission.",
+      "translated": "MarketingClaw kan de huidige iOS-locatietoestemming niet bepalen."
     },
     {
       "id": "native.apple.0d030e96f7738497",
@@ -7910,8 +7910,8 @@
     },
     {
       "id": "native.apple.d4d9568dca8ceaa9",
-      "source": "The connected OpenClaw agent can use device capabilities you enable.",
-      "translated": "De verbonden OpenClaw-agent kan apparaatmogelijkheden gebruiken die je inschakelt."
+      "source": "The connected MarketingClaw agent can use device capabilities you enable.",
+      "translated": "De verbonden MarketingClaw-agent kan apparaatmogelijkheden gebruiken die je inschakelt."
     },
     {
       "id": "native.apple.fdd93eb6b6eef525",
@@ -7930,8 +7930,8 @@
     },
     {
       "id": "native.apple.e8b4dc00cd23ae73",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.apple.c9419426ba8c2a2e",
@@ -7950,8 +7950,8 @@
     },
     {
       "id": "native.apple.4109460a5b8927d8",
-      "source": "Use OpenClaw from your phone",
-      "translated": "Gebruik OpenClaw vanaf je telefoon"
+      "source": "Use MarketingClaw from your phone",
+      "translated": "Gebruik MarketingClaw vanaf je telefoon"
     },
     {
       "id": "native.apple.cae311a6e975c879",
@@ -8190,8 +8190,8 @@
     },
     {
       "id": "native.apple.559dccb9f9dfbbad",
-      "source": "OpenClaw is checking gateway and node access.",
-      "translated": "OpenClaw controleert toegang tot Gateway en node."
+      "source": "MarketingClaw is checking gateway and node access.",
+      "translated": "MarketingClaw controleert toegang tot Gateway en node."
     },
     {
       "id": "native.apple.4404f435fb496b62",
@@ -8205,8 +8205,8 @@
     },
     {
       "id": "native.apple.9725443db32f5158",
-      "source": "Approve this device on the gateway.\n1) `\\(commandLine)`\n2) `/pair approve` in your OpenClaw chat\n\\(requestLine)\nOpenClaw will also retry automatically when you return to this app.",
-      "translated": "Keur dit apparaat goed op de gateway.\n1) `\\(commandLine)`\n2) `/pair approve` in je OpenClaw-chat\n\\(requestLine)\nOpenClaw probeert het ook automatisch opnieuw wanneer je terugkeert naar deze app."
+      "source": "Approve this device on the gateway.\n1) `\\(commandLine)`\n2) `/pair approve` in your MarketingClaw chat\n\\(requestLine)\nMarketingClaw will also retry automatically when you return to this app.",
+      "translated": "Keur dit apparaat goed op de gateway.\n1) `\\(commandLine)`\n2) `/pair approve` in je MarketingClaw-chat\n\\(requestLine)\nMarketingClaw probeert het ook automatisch opnieuw wanneer je terugkeert naar deze app."
     },
     {
       "id": "native.apple.af3890b1e07c3084",
@@ -8300,13 +8300,13 @@
     },
     {
       "id": "native.apple.c23d35de8d70863f",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.apple.39042da9fc187030",
-      "source": "OpenClaw \\(self.sidebarGatewayStatusTitle)",
-      "translated": "OpenClaw \\(self.sidebarGatewayStatusTitle)"
+      "source": "MarketingClaw \\(self.sidebarGatewayStatusTitle)",
+      "translated": "MarketingClaw \\(self.sidebarGatewayStatusTitle)"
     },
     {
       "id": "native.apple.f4eea6473f43388d",
@@ -8385,8 +8385,8 @@
     },
     {
       "id": "native.apple.a55a43940452b04b",
-      "source": "OpenClaw iOS",
-      "translated": "OpenClaw iOS"
+      "source": "MarketingClaw iOS",
+      "translated": "MarketingClaw iOS"
     },
     {
       "id": "native.apple.35b6f99d627028f6",
@@ -8635,8 +8635,8 @@
     },
     {
       "id": "native.apple.4ebb39f445d7dbff",
-      "source": "OpenClaw reacts when any trigger appears in a transcription. Keep them short to avoid false positives.",
-      "translated": "OpenClaw reageert wanneer een trigger in een transcriptie voorkomt. Houd ze kort om fout-positieven te voorkomen."
+      "source": "MarketingClaw reacts when any trigger appears in a transcription. Keep them short to avoid false positives.",
+      "translated": "MarketingClaw reageert wanneer een trigger in een transcriptie voorkomt. Houd ze kort om fout-positieven te voorkomen."
     },
     {
       "id": "native.apple.994760420a194561",
@@ -8825,13 +8825,13 @@
     },
     {
       "id": "native.apple.1065cfe92d7c1eb6",
-      "source": "Asking OpenClaw",
-      "translated": "OpenClaw vragen"
+      "source": "Asking MarketingClaw",
+      "translated": "MarketingClaw vragen"
     },
     {
       "id": "native.apple.d2db26b3bb266491",
-      "source": "Updating OpenClaw",
-      "translated": "OpenClaw bijwerken"
+      "source": "Updating MarketingClaw",
+      "translated": "MarketingClaw bijwerken"
     },
     {
       "id": "native.apple.b6bc54876f20104f",
@@ -8985,8 +8985,8 @@
     },
     {
       "id": "native.apple.3fdc651e507de84b",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.apple.337c2164038d1a5a",
@@ -9015,8 +9015,8 @@
     },
     {
       "id": "native.apple.b816e4b9e492ae6c",
-      "source": "Message OpenClaw",
-      "translated": "Bericht aan OpenClaw"
+      "source": "Message MarketingClaw",
+      "translated": "Bericht aan MarketingClaw"
     },
     {
       "id": "native.apple.f3ccbf04d80cf021",
@@ -9055,13 +9055,13 @@
     },
     {
       "id": "native.apple.6fdc607c6178ba31",
-      "source": "OpenClaw on GitHub",
-      "translated": "OpenClaw op GitHub"
+      "source": "MarketingClaw on GitHub",
+      "translated": "MarketingClaw op GitHub"
     },
     {
       "id": "native.apple.5ac0c79487a492b4",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.apple.383d9c0a8f5f4f7e",
@@ -9115,8 +9115,8 @@
     },
     {
       "id": "native.apple.4ec07761308f7f50",
-      "source": "© 2026 OpenClaw Foundation — MIT License.",
-      "translated": "© 2026 OpenClaw Foundation — MIT-licentie."
+      "source": "© 2026 MarketingClaw Foundation — MIT License.",
+      "translated": "© 2026 MarketingClaw Foundation — MIT-licentie."
     },
     {
       "id": "native.apple.c6148a145aa87e36",
@@ -9140,18 +9140,18 @@
     },
     {
       "id": "native.apple.cfc2509b8bbcf1d7",
-      "source": "OpenClaw Gateway \\(version) is ready.",
-      "translated": "OpenClaw Gateway \\(version) is gereed."
+      "source": "MarketingClaw Gateway \\(version) is ready.",
+      "translated": "MarketingClaw Gateway \\(version) is gereed."
     },
     {
       "id": "native.apple.9b767e46895714f9",
-      "source": "OpenClaw Gateway is not installed yet.",
-      "translated": "OpenClaw Gateway is nog niet geïnstalleerd."
+      "source": "MarketingClaw Gateway is not installed yet.",
+      "translated": "MarketingClaw Gateway is nog niet geïnstalleerd."
     },
     {
       "id": "native.apple.b4dc58a1b294e140",
-      "source": "The OpenClaw Gateway could not be verified. Setup will repair it.",
-      "translated": "De OpenClaw Gateway kon niet worden geverifieerd. De configuratie zal dit herstellen."
+      "source": "The MarketingClaw Gateway could not be verified. Setup will repair it.",
+      "translated": "De MarketingClaw Gateway kon niet worden geverifieerd. De configuratie zal dit herstellen."
     },
     {
       "id": "native.apple.4088056ae7b0f3b4",
@@ -9235,8 +9235,8 @@
     },
     {
       "id": "native.apple.81435e60c0b78093",
-      "source": "OpenClaw could not load editable settings for this channel.",
-      "translated": "OpenClaw kon de bewerkbare instellingen voor dit kanaal niet laden."
+      "source": "MarketingClaw could not load editable settings for this channel.",
+      "translated": "MarketingClaw kon de bewerkbare instellingen voor dit kanaal niet laden."
     },
     {
       "id": "native.apple.f74dfc887ee4f936",
@@ -9345,8 +9345,8 @@
     },
     {
       "id": "native.apple.8103e662c0e40760",
-      "source": "Edit ~/.openclaw/openclaw.json using the schema-driven form.",
-      "translated": "Bewerk ~/.openclaw/openclaw.json met het schemagestuurde formulier."
+      "source": "Edit ~/.marketingclaw/marketingclaw.json using the schema-driven form.",
+      "translated": "Bewerk ~/.marketingclaw/marketingclaw.json met het schemagestuurde formulier."
     },
     {
       "id": "native.apple.e7afd1797978a4fd",
@@ -9635,8 +9635,8 @@
     },
     {
       "id": "native.apple.df6243155293f80b",
-      "source": "What should OpenClaw do?",
-      "translated": "Wat moet OpenClaw doen?"
+      "source": "What should MarketingClaw do?",
+      "translated": "Wat moet MarketingClaw doen?"
     },
     {
       "id": "native.apple.81b5ba441a230f07",
@@ -9945,8 +9945,8 @@
     },
     {
       "id": "native.apple.d8b3e55c41a77627",
-      "source": "When enabled, OpenClaw won't install or manage \\(gatewayLaunchdLabel). It will only attach to an existing Gateway.",
-      "translated": "Als dit is ingeschakeld, installeert of beheert OpenClaw \\(gatewayLaunchdLabel) niet. Het koppelt alleen aan een bestaande Gateway."
+      "source": "When enabled, MarketingClaw won't install or manage \\(gatewayLaunchdLabel). It will only attach to an existing Gateway.",
+      "translated": "Als dit is ingeschakeld, installeert of beheert MarketingClaw \\(gatewayLaunchdLabel) niet. Het koppelt alleen aan een bestaande Gateway."
     },
     {
       "id": "native.apple.15e528c55a96394f",
@@ -10030,8 +10030,8 @@
     },
     {
       "id": "native.apple.f8e4e2b25dbdbd44",
-      "source": "Deep links (openclaw://…) are always enabled; the key controls unattended runs.",
-      "translated": "Deep links (openclaw://…) zijn altijd ingeschakeld; de sleutel beheert onbeheerde uitvoeringen."
+      "source": "Deep links (marketingclaw://…) are always enabled; the key controls unattended runs.",
+      "translated": "Deep links (marketingclaw://…) zijn altijd ingeschakeld; de sleutel beheert onbeheerde uitvoeringen."
     },
     {
       "id": "native.apple.aeba5ae43a292c55",
@@ -10080,8 +10080,8 @@
     },
     {
       "id": "native.apple.78ca12c226ea35ef",
-      "source": "Writes a rotating, local-only log under ~/Library/Logs/OpenClaw/. ",
-      "translated": "Schrijft een roterend, alleen lokaal log onder ~/Library/Logs/OpenClaw/. "
+      "source": "Writes a rotating, local-only log under ~/Library/Logs/MarketingClaw/. ",
+      "translated": "Schrijft een roterend, alleen lokaal log onder ~/Library/Logs/MarketingClaw/. "
     },
     {
       "id": "native.apple.5b35a89bea603457",
@@ -10130,13 +10130,13 @@
     },
     {
       "id": "native.apple.5e9e8bf8e35c48ef",
-      "source": "OpenClaw project root",
-      "translated": "OpenClaw-projectroot"
+      "source": "MarketingClaw project root",
+      "translated": "MarketingClaw-projectroot"
     },
     {
       "id": "native.apple.8b01a6daf7a7b94e",
-      "source": "Path to openclaw repo",
-      "translated": "Pad naar openclaw-repo"
+      "source": "Path to marketingclaw repo",
+      "translated": "Pad naar marketingclaw-repo"
     },
     {
       "id": "native.apple.b9e064d213c6b451",
@@ -10165,8 +10165,8 @@
     },
     {
       "id": "native.apple.a8154f17cda71415",
-      "source": "Used by the CLI session loader; stored in ~/.openclaw/openclaw.json.",
-      "translated": "Gebruikt door de CLI-sessielader; opgeslagen in ~/.openclaw/openclaw.json."
+      "source": "Used by the CLI session loader; stored in ~/.marketingclaw/marketingclaw.json.",
+      "translated": "Gebruikt door de CLI-sessielader; opgeslagen in ~/.marketingclaw/marketingclaw.json."
     },
     {
       "id": "native.apple.3e472353e27107af",
@@ -10195,13 +10195,13 @@
     },
     {
       "id": "native.apple.3307505d507faf31",
-      "source": "Note: macOS may require restarting OpenClaw after enabling Accessibility or Screen Recording.",
-      "translated": "Opmerking: macOS kan vereisen dat OpenClaw opnieuw wordt gestart nadat Toegankelijkheid of Schermopname is ingeschakeld."
+      "source": "Note: macOS may require restarting MarketingClaw after enabling Accessibility or Screen Recording.",
+      "translated": "Opmerking: macOS kan vereisen dat MarketingClaw opnieuw wordt gestart nadat Toegankelijkheid of Schermopname is ingeschakeld."
     },
     {
       "id": "native.apple.e52d463773aef1e1",
-      "source": "Restart OpenClaw",
-      "translated": "OpenClaw opnieuw starten"
+      "source": "Restart MarketingClaw",
+      "translated": "MarketingClaw opnieuw starten"
     },
     {
       "id": "native.apple.e299e77f3ad75a75",
@@ -10320,13 +10320,13 @@
     },
     {
       "id": "native.apple.a8af393b84d63ab8",
-      "source": "OpenClaw is paused",
-      "translated": "OpenClaw is gepauzeerd"
+      "source": "MarketingClaw is paused",
+      "translated": "MarketingClaw is gepauzeerd"
     },
     {
       "id": "native.apple.7ba1542539c0d40b",
-      "source": "Unpause OpenClaw to run agent actions.",
-      "translated": "Hervat OpenClaw om agentacties uit te voeren."
+      "source": "Unpause MarketingClaw to run agent actions.",
+      "translated": "Hervat MarketingClaw om agentacties uit te voeren."
     },
     {
       "id": "native.apple.7c1e1dbfde976ab9",
@@ -10345,8 +10345,8 @@
     },
     {
       "id": "native.apple.50f1211af2a1945e",
-      "source": "Run OpenClaw agent?",
-      "translated": "OpenClaw-agent uitvoeren?"
+      "source": "Run MarketingClaw agent?",
+      "translated": "MarketingClaw-agent uitvoeren?"
     },
     {
       "id": "native.apple.4f3841d5de0135c4",
@@ -10390,8 +10390,8 @@
     },
     {
       "id": "native.apple.0702e353696c907f",
-      "source": "OpenClaw Mac app",
-      "translated": "OpenClaw Mac-app"
+      "source": "MarketingClaw Mac app",
+      "translated": "MarketingClaw Mac-app"
     },
     {
       "id": "native.apple.3bed795cded1caa6",
@@ -10455,8 +10455,8 @@
     },
     {
       "id": "native.apple.66ad783199ef9729",
-      "source": "Discover OpenClaw gateways on your LAN",
-      "translated": "OpenClaw-gateways op je LAN ontdekken"
+      "source": "Discover MarketingClaw gateways on your LAN",
+      "translated": "MarketingClaw-gateways op je LAN ontdekken"
     },
     {
       "id": "native.apple.f33dc515a78428f1",
@@ -10485,8 +10485,8 @@
     },
     {
       "id": "native.apple.1c4fca89983d7487",
-      "source": "Everyday OpenClaw app behavior.",
-      "translated": "Dagelijks gedrag van de OpenClaw-app."
+      "source": "Everyday MarketingClaw app behavior.",
+      "translated": "Dagelijks gedrag van de MarketingClaw-app."
     },
     {
       "id": "native.apple.7d03158a40ddb60a",
@@ -10500,8 +10500,8 @@
     },
     {
       "id": "native.apple.405e74c96498b7c0",
-      "source": "Automatically start OpenClaw after you sign in.",
-      "translated": "OpenClaw automatisch starten nadat je bent ingelogd."
+      "source": "Automatically start MarketingClaw after you sign in.",
+      "translated": "MarketingClaw automatisch starten nadat je bent ingelogd."
     },
     {
       "id": "native.apple.927819c087ca3520",
@@ -10510,8 +10510,8 @@
     },
     {
       "id": "native.apple.e7a0819bd2f4e1dc",
-      "source": "Keep OpenClaw visible in the Dock. When off, windows still show the Dock icon while open.",
-      "translated": "Houd OpenClaw zichtbaar in het Dock. Wanneer uitgeschakeld, tonen vensters nog steeds het Dock-icoon terwijl ze open zijn."
+      "source": "Keep MarketingClaw visible in the Dock. When off, windows still show the Dock icon while open.",
+      "translated": "Houd MarketingClaw zichtbaar in het Dock. Wanneer uitgeschakeld, tonen vensters nog steeds het Dock-icoon terwijl ze open zijn."
     },
     {
       "id": "native.apple.af23f7b5fb03a877",
@@ -10590,13 +10590,13 @@
     },
     {
       "id": "native.apple.64e197a4a8b384ef",
-      "source": "OpenClaw paused",
-      "translated": "OpenClaw gepauzeerd"
+      "source": "MarketingClaw paused",
+      "translated": "MarketingClaw gepauzeerd"
     },
     {
       "id": "native.apple.7fe6df69d8050832",
-      "source": "OpenClaw active",
-      "translated": "OpenClaw actief"
+      "source": "MarketingClaw active",
+      "translated": "MarketingClaw actief"
     },
     {
       "id": "native.apple.2f4258fa73e04344",
@@ -10650,8 +10650,8 @@
     },
     {
       "id": "native.apple.8021dcd7963a4cc2",
-      "source": "OpenClaw starts and monitors the Gateway on this Mac.",
-      "translated": "OpenClaw start en bewaakt de Gateway op deze Mac."
+      "source": "MarketingClaw starts and monitors the Gateway on this Mac.",
+      "translated": "MarketingClaw start en bewaakt de Gateway op deze Mac."
     },
     {
       "id": "native.apple.fe2a790f28ffd1ae",
@@ -10665,8 +10665,8 @@
     },
     {
       "id": "native.apple.d261da13966fa812",
-      "source": "OpenClaw runs",
-      "translated": "OpenClaw draait"
+      "source": "MarketingClaw runs",
+      "translated": "MarketingClaw draait"
     },
     {
       "id": "native.apple.397850fa5e803f53",
@@ -10765,8 +10765,8 @@
     },
     {
       "id": "native.apple.c663b8a50de8a7d8",
-      "source": "/home/you/Projects/openclaw",
-      "translated": "/home/you/Projects/openclaw"
+      "source": "/home/you/Projects/marketingclaw",
+      "translated": "/home/you/Projects/marketingclaw"
     },
     {
       "id": "native.apple.938ee646aac4ce66",
@@ -10775,8 +10775,8 @@
     },
     {
       "id": "native.apple.09f99e863e081f9f",
-      "source": "/Applications/OpenClaw.app/.../openclaw",
-      "translated": "/Applications/OpenClaw.app/.../openclaw"
+      "source": "/Applications/MarketingClaw.app/.../marketingclaw",
+      "translated": "/Applications/MarketingClaw.app/.../marketingclaw"
     },
     {
       "id": "native.apple.f588f7dad51aae2e",
@@ -10850,8 +10850,8 @@
     },
     {
       "id": "native.apple.24aa092829f9a3b1",
-      "source": "The current gateway.remote.token value is not plain text. OpenClaw for macOS cannot use it directly; enter a plaintext token here to replace it.",
-      "translated": "De huidige waarde van gateway.remote.token is geen platte tekst. OpenClaw voor macOS kan deze niet rechtstreeks gebruiken; voer hier een plaintext-token in om deze te vervangen."
+      "source": "The current gateway.remote.token value is not plain text. MarketingClaw for macOS cannot use it directly; enter a plaintext token here to replace it.",
+      "translated": "De huidige waarde van gateway.remote.token is geen platte tekst. MarketingClaw voor macOS kan deze niet rechtstreeks gebruiken; voer hier een plaintext-token in om deze te vervangen."
     },
     {
       "id": "native.apple.d0b21bc12ab63cad",
@@ -10990,8 +10990,8 @@
     },
     {
       "id": "native.apple.876c066efa88aee3",
-      "source": "Latest presence beacons from OpenClaw nodes. Updated periodically.",
-      "translated": "Nieuwste aanwezigheidsbeacons van OpenClaw-nodes. Wordt periodiek bijgewerkt."
+      "source": "Latest presence beacons from MarketingClaw nodes. Updated periodically.",
+      "translated": "Nieuwste aanwezigheidsbeacons van MarketingClaw-nodes. Wordt periodiek bijgewerkt."
     },
     {
       "id": "native.apple.8a6bcd51fd9f1f62",
@@ -11075,13 +11075,13 @@
     },
     {
       "id": "native.apple.fae2cf18519da0d5",
-      "source": "OpenClaw",
-      "translated": "OpenClaw"
+      "source": "MarketingClaw",
+      "translated": "MarketingClaw"
     },
     {
       "id": "native.apple.13a7356f48278757",
-      "source": "OpenClaw - Voice Wake live meter active",
-      "translated": "OpenClaw - livemeter voor Voice Wake actief"
+      "source": "MarketingClaw - Voice Wake live meter active",
+      "translated": "MarketingClaw - livemeter voor Voice Wake actief"
     },
     {
       "id": "native.apple.ef59188264be95d4",
@@ -11175,8 +11175,8 @@
     },
     {
       "id": "native.apple.fbab65790d6eca89",
-      "source": "About OpenClaw",
-      "translated": "Over OpenClaw"
+      "source": "About MarketingClaw",
+      "translated": "Over MarketingClaw"
     },
     {
       "id": "native.apple.14c8f4b1a57569f3",
@@ -11190,18 +11190,18 @@
     },
     {
       "id": "native.apple.5021ed413c045620",
-      "source": "OpenClaw Not Configured",
-      "translated": "OpenClaw niet geconfigureerd"
+      "source": "MarketingClaw Not Configured",
+      "translated": "MarketingClaw niet geconfigureerd"
     },
     {
       "id": "native.apple.4d10ab5feb4add3f",
-      "source": "Remote OpenClaw Active",
-      "translated": "Externe OpenClaw actief"
+      "source": "Remote MarketingClaw Active",
+      "translated": "Externe MarketingClaw actief"
     },
     {
       "id": "native.apple.b49dea5c1fdb3dd3",
-      "source": "OpenClaw Active",
-      "translated": "OpenClaw actief"
+      "source": "MarketingClaw Active",
+      "translated": "MarketingClaw actief"
     },
     {
       "id": "native.apple.1df24a30d7963640",
@@ -11535,8 +11535,8 @@
     },
     {
       "id": "native.apple.3863947506f62f17",
-      "source": "Create a key at \\(self.model.manualProvider.consoleName), paste it here, and OpenClaw checks it with a real test question.",
-      "translated": "Maak een sleutel aan bij \\(self.model.manualProvider.consoleName), plak die hier en OpenClaw controleert deze met een echte testvraag."
+      "source": "Create a key at \\(self.model.manualProvider.consoleName), paste it here, and MarketingClaw checks it with a real test question.",
+      "translated": "Maak een sleutel aan bij \\(self.model.manualProvider.consoleName), plak die hier en MarketingClaw controleert deze met een echte testvraag."
     },
     {
       "id": "native.apple.ce55144c35473419",
@@ -11590,8 +11590,8 @@
     },
     {
       "id": "native.apple.ea8beaeecef15e54",
-      "source": "Welcome to OpenClaw",
-      "translated": "Welkom bij OpenClaw"
+      "source": "Welcome to MarketingClaw",
+      "translated": "Welkom bij MarketingClaw"
     },
     {
       "id": "native.apple.0629bbbd6db95199",
@@ -11635,8 +11635,8 @@
     },
     {
       "id": "native.apple.fb64a5b187cfdc15",
-      "source": "OpenClaw can take actions using the permissions and services you enable. Review prompts and only connect tools you trust.",
-      "translated": "OpenClaw kan acties uitvoeren met de machtigingen en diensten die je inschakelt. Controleer prompts en verbind alleen tools die je vertrouwt."
+      "source": "MarketingClaw can take actions using the permissions and services you enable. Review prompts and only connect tools you trust.",
+      "translated": "MarketingClaw kan acties uitvoeren met de machtigingen en diensten die je inschakelt. Controleer prompts en verbind alleen tools die je vertrouwt."
     },
     {
       "id": "native.apple.a5d02aaf6208e924",
@@ -11645,8 +11645,8 @@
     },
     {
       "id": "native.apple.e6acb60b10ef1206",
-      "source": "Most people pick this Mac — OpenClaw installs everything and keeps it running in the background. You can change this anytime in Settings.",
-      "translated": "De meeste mensen kiezen deze Mac — OpenClaw installeert alles en houdt het op de achtergrond draaiend. Je kunt dit op elk moment wijzigen in Instellingen."
+      "source": "Most people pick this Mac — MarketingClaw installs everything and keeps it running in the background. You can change this anytime in Settings.",
+      "translated": "De meeste mensen kiezen deze Mac — MarketingClaw installeert alles en houdt het op de achtergrond draaiend. Je kunt dit op elk moment wijzigen in Instellingen."
     },
     {
       "id": "native.apple.21f1053c1054db24",
@@ -11670,8 +11670,8 @@
     },
     {
       "id": "native.apple.d54084b48f40aa0a",
-      "source": "OK — OpenClaw won’t start anything yet. Pick Local or Remote later in Settings → General.",
-      "translated": "OK — OpenClaw start nog niets. Kies later Lokaal of Extern in Instellingen → Algemeen."
+      "source": "OK — MarketingClaw won’t start anything yet. Pick Local or Remote later in Settings → General.",
+      "translated": "OK — MarketingClaw start nog niets. Kies later Lokaal of Extern in Instellingen → Algemeen."
     },
     {
       "id": "native.apple.8d9eb247d41a0ca7",
@@ -11770,8 +11770,8 @@
     },
     {
       "id": "native.apple.dca75ab0dd73f0a4",
-      "source": "/home/you/Projects/openclaw",
-      "translated": "/home/you/Projects/openclaw"
+      "source": "/home/you/Projects/marketingclaw",
+      "translated": "/home/you/Projects/marketingclaw"
     },
     {
       "id": "native.apple.6998a7754dea6eb1",
@@ -11780,8 +11780,8 @@
     },
     {
       "id": "native.apple.5a3f4f943c8ee86a",
-      "source": "/Applications/OpenClaw.app/.../openclaw",
-      "translated": "/Applications/OpenClaw.app/.../openclaw"
+      "source": "/Applications/MarketingClaw.app/.../marketingclaw",
+      "translated": "/Applications/MarketingClaw.app/.../marketingclaw"
     },
     {
       "id": "native.apple.ab88df30f426b434",
@@ -11825,8 +11825,8 @@
     },
     {
       "id": "native.apple.2a50c3ee94dde35d",
-      "source": "The current gateway.remote.token value is not plain text. OpenClaw for macOS cannot use it directly; enter a plaintext token here to replace it.",
-      "translated": "De huidige waarde van gateway.remote.token is geen platte tekst. OpenClaw voor macOS kan deze niet rechtstreeks gebruiken; voer hier een plaintext-token in om deze te vervangen."
+      "source": "The current gateway.remote.token value is not plain text. MarketingClaw for macOS cannot use it directly; enter a plaintext token here to replace it.",
+      "translated": "De huidige waarde van gateway.remote.token is geen platte tekst. MarketingClaw voor macOS kan deze niet rechtstreeks gebruiken; voer hier een plaintext-token in om deze te vervangen."
     },
     {
       "id": "native.apple.ef011af3c0e22127",
@@ -11845,8 +11845,8 @@
     },
     {
       "id": "native.apple.ce0d1241d7417406",
-      "source": "These macOS permissions let OpenClaw automate apps and capture context on this Mac. Status updates automatically.",
-      "translated": "Met deze macOS-machtigingen kan OpenClaw apps automatiseren en context vastleggen op deze Mac. De status wordt automatisch bijgewerkt."
+      "source": "These macOS permissions let MarketingClaw automate apps and capture context on this Mac. Status updates automatically.",
+      "translated": "Met deze macOS-machtigingen kan MarketingClaw apps automatiseren en context vastleggen op deze Mac. De status wordt automatisch bijgewerkt."
     },
     {
       "id": "native.apple.42af85cdf91d0264",
@@ -11855,13 +11855,13 @@
     },
     {
       "id": "native.apple.183aee003b44ede6",
-      "source": "OpenClaw is setting up its background service on this Mac. This usually takes under a minute — no Terminal, no administrator password.",
-      "translated": "OpenClaw stelt de achtergrondservice in op deze Mac. Dit duurt meestal minder dan een minuut — geen Terminal, geen beheerderswachtwoord."
+      "source": "MarketingClaw is setting up its background service on this Mac. This usually takes under a minute — no Terminal, no administrator password.",
+      "translated": "MarketingClaw stelt de achtergrondservice in op deze Mac. Dit duurt meestal minder dan een minuut — geen Terminal, geen beheerderswachtwoord."
     },
     {
       "id": "native.apple.d0b8cf59f852b3d0",
-      "source": "Install OpenClaw",
-      "translated": "OpenClaw installeren"
+      "source": "Install MarketingClaw",
+      "translated": "MarketingClaw installeren"
     },
     {
       "id": "native.apple.0112e18fa97e7c0c",
@@ -11900,8 +11900,8 @@
     },
     {
       "id": "native.apple.d82e61ae0119bf7c",
-      "source": "OpenClaw runs the agent from a dedicated workspace so it can load `AGENTS.md` and write files there without mixing into your other projects.",
-      "translated": "OpenClaw voert de agent uit vanuit een speciale werkruimte, zodat deze `AGENTS.md` kan laden en daar bestanden kan schrijven zonder ze met je andere projecten te vermengen."
+      "source": "MarketingClaw runs the agent from a dedicated workspace so it can load `AGENTS.md` and write files there without mixing into your other projects.",
+      "translated": "MarketingClaw voert de agent uit vanuit een speciale werkruimte, zodat deze `AGENTS.md` kan laden en daar bestanden kan schrijven zonder ze met je andere projecten te vermengen."
     },
     {
       "id": "native.apple.5a32f8309c1faaee",
@@ -11985,8 +11985,8 @@
     },
     {
       "id": "native.apple.952e85bfb2d4b4f5",
-      "source": "On your gateway host: install/update the `openclaw` package and make sure credentials exist\n(typically `~/.openclaw/credentials/oauth.json`). Then connect again if needed.",
-      "translated": "Op je gateway-host: installeer/update het `openclaw`-pakket en zorg dat er inloggegevens bestaan\n(meestal `~/.openclaw/credentials/oauth.json`). Verbind daarna opnieuw indien nodig."
+      "source": "On your gateway host: install/update the `marketingclaw` package and make sure credentials exist\n(typically `~/.marketingclaw/credentials/oauth.json`). Then connect again if needed.",
+      "translated": "Op je gateway-host: installeer/update het `marketingclaw`-pakket en zorg dat er inloggegevens bestaan\n(meestal `~/.marketingclaw/credentials/oauth.json`). Verbind daarna opnieuw indien nodig."
     },
     {
       "id": "native.apple.4e5ccb411db3e80f",
@@ -11995,8 +11995,8 @@
     },
     {
       "id": "native.apple.f99e39e248dbc8ed",
-      "source": "Click the OpenClaw menu bar icon for quick chat and status.",
-      "translated": "Klik op het OpenClaw-menubalkpictogram voor snelle chat en status."
+      "source": "Click the MarketingClaw menu bar icon for quick chat and status.",
+      "translated": "Klik op het MarketingClaw-menubalkpictogram voor snelle chat en status."
     },
     {
       "id": "native.apple.1b6cfcf3be8765c2",
@@ -12130,8 +12130,8 @@
     },
     {
       "id": "native.apple.4344ff6c0e9d7187",
-      "source": "OpenClaw only asks for macOS capabilities when a feature needs them.",
-      "translated": "OpenClaw vraagt alleen om macOS-mogelijkheden wanneer een functie ze nodig heeft."
+      "source": "MarketingClaw only asks for macOS capabilities when a feature needs them.",
+      "translated": "MarketingClaw vraagt alleen om macOS-mogelijkheden wanneer een functie ze nodig heeft."
     },
     {
       "id": "native.apple.4fecdab98e2f6a11",
@@ -12330,8 +12330,8 @@
     },
     {
       "id": "native.apple.bbb87d21ce8a291e",
-      "source": "Check `gateway.auth.token` or `OPENCLAW_GATEWAY_TOKEN` on the gateway host and try again.",
-      "translated": "Controleer `gateway.auth.token` of `OPENCLAW_GATEWAY_TOKEN` op de gatewayhost en probeer het opnieuw."
+      "source": "Check `gateway.auth.token` or `MARKETINGCLAW_GATEWAY_TOKEN` on the gateway host and try again.",
+      "translated": "Controleer `gateway.auth.token` of `MARKETINGCLAW_GATEWAY_TOKEN` op de gatewayhost en probeer het opnieuw."
     },
     {
       "id": "native.apple.d517136ce6599ed7",
@@ -12340,8 +12340,8 @@
     },
     {
       "id": "native.apple.83145f8f53d7be34",
-      "source": "Scan or paste a fresh setup code from an already-paired OpenClaw client, then try again.",
-      "translated": "Scan of plak een nieuwe instelcode van een al gekoppelde OpenClaw-client en probeer het opnieuw."
+      "source": "Scan or paste a fresh setup code from an already-paired MarketingClaw client, then try again.",
+      "translated": "Scan of plak een nieuwe instelcode van een al gekoppelde MarketingClaw-client en probeer het opnieuw."
     },
     {
       "id": "native.apple.4230f873600b819e",
@@ -12350,8 +12350,8 @@
     },
     {
       "id": "native.apple.5123702739aace5f",
-      "source": "Approve this device from an already-paired OpenClaw client. ",
-      "translated": "Keur dit apparaat goed vanuit een al gekoppelde OpenClaw-client. "
+      "source": "Approve this device from an already-paired MarketingClaw client. ",
+      "translated": "Keur dit apparaat goed vanuit een al gekoppelde MarketingClaw-client. "
     },
     {
       "id": "native.apple.e73170e4ab1dbe8f",
@@ -12360,8 +12360,8 @@
     },
     {
       "id": "native.apple.e3f983b8c517da29",
-      "source": "Gateway token mismatch. Check gateway.auth.token or OPENCLAW_GATEWAY_TOKEN on the gateway host.",
-      "translated": "Gateway-token komt niet overeen. Controleer gateway.auth.token of OPENCLAW_GATEWAY_TOKEN op de gatewayhost."
+      "source": "Gateway token mismatch. Check gateway.auth.token or MARKETINGCLAW_GATEWAY_TOKEN on the gateway host.",
+      "translated": "Gateway-token komt niet overeen. Controleer gateway.auth.token of MARKETINGCLAW_GATEWAY_TOKEN op de gatewayhost."
     },
     {
       "id": "native.apple.cd96754a96e5aa35",
@@ -12380,8 +12380,8 @@
     },
     {
       "id": "native.apple.37d1f4842869452a",
-      "source": "Pairing required. In an already-paired OpenClaw client, ",
-      "translated": "Koppeling vereist. In een al gekoppelde OpenClaw-client, "
+      "source": "Pairing required. In an already-paired MarketingClaw client, ",
+      "translated": "Koppeling vereist. In een al gekoppelde MarketingClaw-client, "
     },
     {
       "id": "native.apple.58e76e9c8b04290a",
@@ -12425,48 +12425,48 @@
     },
     {
       "id": "native.apple.2d7556d00f123112",
-      "source": "OpenClaw needs notification permission to show alerts for agent actions.",
-      "translated": "OpenClaw heeft toestemming voor meldingen nodig om waarschuwingen voor agentacties weer te geven."
+      "source": "MarketingClaw needs notification permission to show alerts for agent actions.",
+      "translated": "MarketingClaw heeft toestemming voor meldingen nodig om waarschuwingen voor agentacties weer te geven."
     },
     {
       "id": "native.apple.d9e7be03543b508f",
-      "source": "OpenClaw captures the screen when the agent needs screenshots for context.",
-      "translated": "OpenClaw legt het scherm vast wanneer de agent schermafbeeldingen nodig heeft voor context."
+      "source": "MarketingClaw captures the screen when the agent needs screenshots for context.",
+      "translated": "MarketingClaw legt het scherm vast wanneer de agent schermafbeeldingen nodig heeft voor context."
     },
     {
       "id": "native.apple.eca927767423799c",
-      "source": "OpenClaw can capture photos or short video clips when requested by the agent.",
-      "translated": "OpenClaw kan foto's of korte videoclips vastleggen wanneer de agent daarom vraagt."
+      "source": "MarketingClaw can capture photos or short video clips when requested by the agent.",
+      "translated": "MarketingClaw kan foto's of korte videoclips vastleggen wanneer de agent daarom vraagt."
     },
     {
       "id": "native.apple.9389d1100944a1fd",
-      "source": "OpenClaw can share your location when requested by the agent.",
-      "translated": "OpenClaw kan je locatie delen wanneer de agent daarom vraagt."
+      "source": "MarketingClaw can share your location when requested by the agent.",
+      "translated": "MarketingClaw kan je locatie delen wanneer de agent daarom vraagt."
     },
     {
       "id": "native.apple.59da76aed1cb07ee",
-      "source": "OpenClaw uses the local network to connect to your remote OpenClaw gateway over LAN, Tailnet, or SSH.",
-      "translated": "OpenClaw gebruikt het lokale netwerk om via LAN, Tailnet of SSH verbinding te maken met je externe OpenClaw-gateway."
+      "source": "MarketingClaw uses the local network to connect to your remote MarketingClaw gateway over LAN, Tailnet, or SSH.",
+      "translated": "MarketingClaw gebruikt het lokale netwerk om via LAN, Tailnet of SSH verbinding te maken met je externe MarketingClaw-gateway."
     },
     {
       "id": "native.apple.5db9a976fd1c7fcb",
-      "source": "OpenClaw needs the mic for Voice Wake tests and agent audio capture.",
-      "translated": "OpenClaw heeft de microfoon nodig voor Voice Wake-tests en audio-opname door de agent."
+      "source": "MarketingClaw needs the mic for Voice Wake tests and agent audio capture.",
+      "translated": "MarketingClaw heeft de microfoon nodig voor Voice Wake-tests en audio-opname door de agent."
     },
     {
       "id": "native.apple.b7aba524ef867e7f",
-      "source": "OpenClaw uses speech recognition to detect your Voice Wake trigger phrase.",
-      "translated": "OpenClaw gebruikt spraakherkenning om je Voice Wake-triggerzin te detecteren."
+      "source": "MarketingClaw uses speech recognition to detect your Voice Wake trigger phrase.",
+      "translated": "MarketingClaw gebruikt spraakherkenning om je Voice Wake-triggerzin te detecteren."
     },
     {
       "id": "native.apple.2d5411b5cc54a93e",
-      "source": "OpenClaw needs Automation (AppleScript) permission to drive Terminal and other apps for agent actions.",
-      "translated": "OpenClaw heeft toestemming voor Automation (AppleScript) nodig om Terminal en andere apps aan te sturen voor agentacties."
+      "source": "MarketingClaw needs Automation (AppleScript) permission to drive Terminal and other apps for agent actions.",
+      "translated": "MarketingClaw heeft toestemming voor Automation (AppleScript) nodig om Terminal en andere apps aan te sturen voor agentacties."
     },
     {
       "id": "native.apple.e16fc45de0f2bb86",
-      "source": "OpenClaw can access Reminders when requested by the agent for the apple-reminders skill.",
-      "translated": "OpenClaw heeft toegang tot Herinneringen wanneer de agent daarom vraagt voor de apple-reminders-skill."
+      "source": "MarketingClaw can access Reminders when requested by the agent for the apple-reminders skill.",
+      "translated": "MarketingClaw heeft toegang tot Herinneringen wanneer de agent daarom vraagt voor de apple-reminders-skill."
     },
     {
       "id": "native.apple.6f7c6ef00a40a571",
@@ -12820,8 +12820,8 @@
     },
     {
       "id": "native.apple.d769a8ac65441d48",
-      "source": "Saved to openclaw.json under skills.entries.\\(self.editor.skillKey)",
-      "translated": "Opgeslagen in openclaw.json onder skills.entries.\\(self.editor.skillKey)"
+      "source": "Saved to marketingclaw.json under skills.entries.\\(self.editor.skillKey)",
+      "translated": "Opgeslagen in marketingclaw.json onder skills.entries.\\(self.editor.skillKey)"
     },
     {
       "id": "native.apple.af47aadb262d225d",
@@ -13165,8 +13165,8 @@
     },
     {
       "id": "native.apple.800bb607f45c05e4",
-      "source": "Stored in ~/.openclaw/openclaw.json. Prefer OPENCLAW_GATEWAY_PASSWORD for production.",
-      "translated": "Opgeslagen in ~/.openclaw/openclaw.json. Gebruik bij voorkeur OPENCLAW_GATEWAY_PASSWORD voor productie."
+      "source": "Stored in ~/.marketingclaw/marketingclaw.json. Prefer MARKETINGCLAW_GATEWAY_PASSWORD for production.",
+      "translated": "Opgeslagen in ~/.marketingclaw/marketingclaw.json. Gebruik bij voorkeur MARKETINGCLAW_GATEWAY_PASSWORD voor productie."
     },
     {
       "id": "native.apple.3942d43ca047de29",
@@ -13435,8 +13435,8 @@
     },
     {
       "id": "native.apple.237e9371a693b0ff",
-      "source": "OpenClaw reacts when any trigger appears in a transcription. Keep phrases short to avoid false positives.",
-      "translated": "OpenClaw reageert wanneer er een trigger in een transcriptie verschijnt. Houd zinnen kort om fout-positieven te voorkomen."
+      "source": "MarketingClaw reacts when any trigger appears in a transcription. Keep phrases short to avoid false positives.",
+      "translated": "MarketingClaw reageert wanneer er een trigger in een transcriptie verschijnt. Houd zinnen kort om fout-positieven te voorkomen."
     },
     {
       "id": "native.apple.2bcc6f4eca98f7f2",

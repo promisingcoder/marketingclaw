@@ -3,19 +3,19 @@ import path from "node:path";
 import {
   createPluginRegistryFixture,
   registerVirtualTestPlugin,
-} from "openclaw/plugin-sdk/plugin-test-contracts";
+} from "marketingclaw/plugin-sdk/plugin-test-contracts";
 import {
   clearEmbeddingProviders,
   clearMemoryEmbeddingProviders,
   getRegisteredEmbeddingProvider,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
+} from "marketingclaw/plugin-sdk/plugin-test-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 const memoryHostEmbeddingMocks = vi.hoisted(() => ({
   createLocalEmbeddingProvider: vi.fn(),
 }));
 
-vi.mock("openclaw/plugin-sdk/memory-core-host-engine-embeddings", () => ({
+vi.mock("marketingclaw/plugin-sdk/memory-core-host-engine-embeddings", () => ({
   createLocalEmbeddingProvider: memoryHostEmbeddingMocks.createLocalEmbeddingProvider,
 }));
 
@@ -439,7 +439,7 @@ describe("llama.cpp provider plugin", () => {
     });
 
     expect(formatLlamaCppSetupError(err)).toContain(
-      "openclaw plugins install @openclaw/llama-cpp-provider",
+      "marketingclaw plugins install @marketingclaw/llama-cpp-provider",
     );
   });
 });

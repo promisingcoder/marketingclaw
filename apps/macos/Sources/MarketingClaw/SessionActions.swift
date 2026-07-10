@@ -1,6 +1,6 @@
 import AppKit
 import Foundation
-import OpenClawKit
+import MarketingClawKit
 
 enum SessionActions {
     static func patchSession(
@@ -38,7 +38,7 @@ enum SessionActions {
             params: ["key": AnyHashable(key), "maxLines": AnyHashable(maxLines)],
             timeoutMs: 0,
             retryTransportFailures: false)
-        try OpenClawSessionsCompactResponse.requireSuccess(from: response)
+        try MarketingClawSessionsCompactResponse.requireSuccess(from: response)
     }
 
     @MainActor
@@ -70,7 +70,7 @@ enum SessionActions {
                 let dir = URL(fileURLWithPath: storePath).deletingLastPathComponent()
                 urls.append(dir.appendingPathComponent("\(sessionId).jsonl"))
             }
-            urls.append(OpenClawPaths.stateDirURL.appendingPathComponent("sessions/\(sessionId).jsonl"))
+            urls.append(MarketingClawPaths.stateDirURL.appendingPathComponent("sessions/\(sessionId).jsonl"))
             return urls
         }()
 

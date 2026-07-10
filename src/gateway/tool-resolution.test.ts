@@ -2,13 +2,13 @@
  * Gateway tool-resolution tests.
  */
 import { beforeAll, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { resolveGatewayScopedTools } from "./tool-resolution.js";
 
 describe("resolveGatewayScopedTools", () => {
   beforeAll(() => {
     resolveGatewayScopedTools({
-      cfg: { tools: { profile: "minimal" } } as OpenClawConfig,
+      cfg: { tools: { profile: "minimal" } } as MarketingClawConfig,
       sessionKey: "agent:main:telegram:group:-100123",
       messageProvider: "telegram",
       inboundEventKind: "room_event",
@@ -18,7 +18,7 @@ describe("resolveGatewayScopedTools", () => {
 
   it("force-allows the message tool for room-event loopback turns", () => {
     const result = resolveGatewayScopedTools({
-      cfg: { tools: { profile: "minimal" } } as OpenClawConfig,
+      cfg: { tools: { profile: "minimal" } } as MarketingClawConfig,
       sessionKey: "agent:main:telegram:group:-100123",
       messageProvider: "telegram",
       inboundEventKind: "room_event",
@@ -33,7 +33,7 @@ describe("resolveGatewayScopedTools", () => {
 
   it("keeps webchat room-event turns on automatic source delivery", () => {
     const result = resolveGatewayScopedTools({
-      cfg: { tools: { profile: "minimal" } } as OpenClawConfig,
+      cfg: { tools: { profile: "minimal" } } as MarketingClawConfig,
       sessionKey: "agent:main:webchat:forge-main",
       messageProvider: "webchat",
       inboundEventKind: "room_event",
@@ -45,7 +45,7 @@ describe("resolveGatewayScopedTools", () => {
 
   it("force-allows the message tool for routed webchat room-event turns", () => {
     const result = resolveGatewayScopedTools({
-      cfg: { tools: { profile: "minimal" } } as OpenClawConfig,
+      cfg: { tools: { profile: "minimal" } } as MarketingClawConfig,
       sessionKey: "agent:main:telegram:group:-100123",
       messageProvider: "webchat",
       inboundEventKind: "room_event",
@@ -61,7 +61,7 @@ describe("resolveGatewayScopedTools", () => {
 
   it("keeps ordinary loopback turns under the configured profile", () => {
     const result = resolveGatewayScopedTools({
-      cfg: { tools: { profile: "minimal" } } as OpenClawConfig,
+      cfg: { tools: { profile: "minimal" } } as MarketingClawConfig,
       sessionKey: "agent:main:telegram:group:-100123",
       messageProvider: "telegram",
       inboundEventKind: "user_request",
@@ -73,12 +73,12 @@ describe("resolveGatewayScopedTools", () => {
 
   it("exposes task suggestion tools only for actionable loopback turns", () => {
     const withoutActions = resolveGatewayScopedTools({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       sessionKey: "agent:main:main",
       surface: "loopback",
     });
     const withActions = resolveGatewayScopedTools({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       sessionKey: "agent:main:main",
       taskSuggestionDeliveryMode: "gateway",
       surface: "loopback",
@@ -93,7 +93,7 @@ describe("resolveGatewayScopedTools", () => {
   it("passes loopback yield context into sessions_yield", async () => {
     const onYield = vi.fn();
     const result = resolveGatewayScopedTools({
-      cfg: { tools: { profile: "minimal", alsoAllow: ["sessions_yield"] } } as OpenClawConfig,
+      cfg: { tools: { profile: "minimal", alsoAllow: ["sessions_yield"] } } as MarketingClawConfig,
       sessionKey: "agent:main:telegram:group:-100123",
       sessionId: "session-123",
       onYield,

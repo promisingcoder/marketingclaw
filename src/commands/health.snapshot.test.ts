@@ -447,7 +447,7 @@ function createIMessageHealthPlugin(): HealthTestPlugin {
       probeAccount: async () => ({
         ok: false,
         error:
-          "imsg cannot access /Users/alice/Library/Messages/chat.db. Grant Full Disk Access to the Gateway/launcher process and restart Gateway. privateApi=/tmp/openclaw/private.sock",
+          "imsg cannot access /Users/alice/Library/Messages/chat.db. Grant Full Disk Access to the Gateway/launcher process and restart Gateway. privateApi=/tmp/marketingclaw/private.sock",
         privateApi: {
           rpcCommand: "imsg rpc --json",
           diagnostics: "sensitive transport details",
@@ -556,9 +556,9 @@ describe("getHealthSnapshot", () => {
     testConfig = { session: { store: "/tmp/x" } };
     testStore = {};
     setActivePluginRegistry(createTestRegistry([]));
-    const tmpStateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-health-dq-"));
-    const previousStateDir = process.env.OPENCLAW_STATE_DIR;
-    process.env.OPENCLAW_STATE_DIR = tmpStateDir;
+    const tmpStateDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-health-dq-"));
+    const previousStateDir = process.env.MARKETINGCLAW_STATE_DIR;
+    process.env.MARKETINGCLAW_STATE_DIR = tmpStateDir;
     try {
       const { moveDeliveryQueueEntryToFailed, upsertDeliveryQueueEntry } =
         await import("../infra/delivery-queue-sqlite.js");
@@ -577,9 +577,9 @@ describe("getHealthSnapshot", () => {
       ]);
     } finally {
       if (previousStateDir === undefined) {
-        delete process.env.OPENCLAW_STATE_DIR;
+        delete process.env.MARKETINGCLAW_STATE_DIR;
       } else {
-        process.env.OPENCLAW_STATE_DIR = previousStateDir;
+        process.env.MARKETINGCLAW_STATE_DIR = previousStateDir;
       }
       fs.rmSync(tmpStateDir, { recursive: true, force: true });
     }
@@ -642,7 +642,7 @@ describe("getHealthSnapshot", () => {
     expect(calls.join("\n")).toContain("/getMe");
     expect(calls.join("\n")).toContain("/getWebhookInfo");
 
-    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-health-"));
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-health-"));
     const tokenFile = path.join(tmpDir, "telegram-token");
     try {
       fs.writeFileSync(tokenFile, "t-file\n", "utf-8");

@@ -1,6 +1,6 @@
 /** Tests dotted-path get/set/delete helpers used by secrets migration. */
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { MarketingClawConfig } from "../config/config.js";
 import {
   deletePathStrict,
   getPath,
@@ -8,11 +8,11 @@ import {
   setPathExistingStrict,
 } from "./path-utils.js";
 
-function asConfig(value: unknown): OpenClawConfig {
-  return value as OpenClawConfig;
+function asConfig(value: unknown): MarketingClawConfig {
+  return value as MarketingClawConfig;
 }
 
-function createAgentListConfig(): OpenClawConfig {
+function createAgentListConfig(): MarketingClawConfig {
   return asConfig({
     agents: {
       list: [{ id: "a" }],

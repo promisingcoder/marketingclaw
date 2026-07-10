@@ -1,8 +1,8 @@
 // Msteams plugin module implements feedback reflection behavior.
-import { normalizeOptionalLowercaseString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { normalizeOptionalLowercaseString } from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import {
   dispatchReplyFromConfigWithSettledDispatcher,
-  type OpenClawConfig,
+  type MarketingClawConfig,
 } from "../runtime-api.js";
 import { resolveMSTeamsSdkCloudOptions } from "./cloud.js";
 import type { StoredConversationReference } from "./conversation-store.js";
@@ -57,7 +57,7 @@ export function buildFeedbackEvent(params: {
 }
 
 type RunFeedbackReflectionParams = {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   app: MSTeamsApp;
   appId: string;
   conversationRef: StoredConversationReference;
@@ -71,7 +71,7 @@ type RunFeedbackReflectionParams = {
 };
 
 function buildReflectionContext(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   conversationId: string;
   sessionKey: string;
   reflectionPrompt: string;
@@ -109,7 +109,7 @@ function buildReflectionContext(params: {
 }
 
 function createReflectionCaptureDispatcher(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   agentId: string;
   log: MSTeamsMonitorLogger;
 }) {
@@ -142,7 +142,7 @@ function createReflectionCaptureDispatcher(params: {
 }
 
 async function sendReflectionFollowUp(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   app: MSTeamsApp;
   conversationRef: StoredConversationReference;
   userMessage: string;

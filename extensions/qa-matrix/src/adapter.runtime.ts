@@ -1,9 +1,9 @@
 // Qa Matrix plugin module implements Matrix live transport adapter behavior.
 import { randomUUID } from "node:crypto";
 import path from "node:path";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { buildQaTarget } from "openclaw/plugin-sdk/qa-channel";
-import type { QaRunnerCliRegistration } from "openclaw/plugin-sdk/qa-runner-runtime";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import { buildQaTarget } from "marketingclaw/plugin-sdk/qa-channel";
+import type { QaRunnerCliRegistration } from "marketingclaw/plugin-sdk/qa-runner-runtime";
 import { createMatrixQaClient, provisionMatrixQaRoom } from "./substrate/client.js";
 import { buildMatrixQaConfig } from "./substrate/config.js";
 import type { MatrixQaObservedEvent } from "./substrate/events.js";
@@ -22,27 +22,27 @@ const MATRIX_SHARED_FLOW_TOPOLOGY = {
       key: "main",
       kind: "group",
       members: ["driver", "observer", "sut"],
-      name: "OpenClaw Matrix QA",
+      name: "MarketingClaw Matrix QA",
       requireMention: true,
     },
     {
       key: "secondary",
       kind: "group",
       members: ["driver", "observer", "sut"],
-      name: "OpenClaw Matrix QA Secondary Room",
+      name: "MarketingClaw Matrix QA Secondary Room",
       requireMention: true,
     },
     {
       key: "driver-dm",
       kind: "dm",
       members: ["driver", "sut"],
-      name: "OpenClaw Matrix QA Driver DM",
+      name: "MarketingClaw Matrix QA Driver DM",
     },
     {
       key: "driver-dm-shared",
       kind: "dm",
       members: ["driver", "sut"],
-      name: "OpenClaw Matrix QA Shared DM",
+      name: "MarketingClaw Matrix QA Shared DM",
     },
   ],
 } satisfies MatrixQaTopologySpec;
@@ -128,7 +128,7 @@ export async function createMatrixQaTransportAdapter(
       driverLocalpart: `qa-driver-${suffix}`,
       observerLocalpart: `qa-observer-${suffix}`,
       registrationToken: harness.registrationToken,
-      roomName: `OpenClaw Matrix QA ${suffix}`,
+      roomName: `MarketingClaw Matrix QA ${suffix}`,
       sutLocalpart: `qa-sut-${suffix}`,
       topology: MATRIX_SHARED_FLOW_TOPOLOGY,
     });
@@ -244,8 +244,8 @@ export async function createMatrixQaTransportAdapter(
       });
       const actor = input.senderId === "observer" ? provisioning.observer : provisioning.driver;
       const actorClient = input.senderId === "observer" ? observerClient : driverClient;
-      const hasPortableMention = input.text.includes("@openclaw");
-      const body = input.text.replaceAll("@openclaw", provisioning.sut.userId);
+      const hasPortableMention = input.text.includes("@marketingclaw");
+      const body = input.text.replaceAll("@marketingclaw", provisioning.sut.userId);
       const eventId = await actorClient.sendTextMessage({
         body,
         mentionUserIds: hasPortableMention ? [provisioning.sut.userId] : undefined,
@@ -267,7 +267,7 @@ export async function createMatrixQaTransportAdapter(
       busMessageIds.clear();
     },
     createGatewayConfig: () =>
-      buildMatrixQaConfig({} as OpenClawConfig, {
+      buildMatrixQaConfig({} as MarketingClawConfig, {
         driverAccessToken: provisioning.driver.accessToken,
         driverUserId: provisioning.driver.userId,
         homeserver: harness.baseUrl,
@@ -280,8 +280,8 @@ export async function createMatrixQaTransportAdapter(
         topology: provisioning.topology,
       }),
     createRuntimeEnvPatch: () => ({
-      OPENCLAW_QA_MATRIX_DRIVER_USER_ID: provisioning.driver.userId,
-      OPENCLAW_QA_MATRIX_OBSERVER_USER_ID: provisioning.observer.userId,
+      MARKETINGCLAW_QA_MATRIX_DRIVER_USER_ID: provisioning.driver.userId,
+      MARKETINGCLAW_QA_MATRIX_OBSERVER_USER_ID: provisioning.observer.userId,
     }),
     waitReady: async ({ gateway, timeoutMs, pollIntervalMs }) =>
       await waitForMatrixChannelReady(gateway, accountId, timeoutMs, pollIntervalMs),

@@ -1,9 +1,9 @@
 /** Relays child ACP session stream updates back into the requester parent session. */
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
-import { asFiniteNumber } from "@openclaw/normalization-core/number-coercion";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import { sliceUtf16Safe, truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { asFiniteNumber } from "@marketingclaw/normalization-core/number-coercion";
+import { normalizeOptionalString } from "@marketingclaw/normalization-core/string-coerce";
+import { sliceUtf16Safe, truncateUtf16Safe } from "@marketingclaw/normalization-core/utf16-slice";
 import { readAcpSessionEntry } from "../acp/runtime/session-meta.js";
 import {
   isAcpTagVisible,
@@ -15,7 +15,7 @@ import {
   type StreamingCompatEntry,
 } from "../channels/streaming.js";
 import { resolveSessionFilePath, resolveSessionFilePathOptions } from "../config/sessions/paths.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { onAgentEvent } from "../infra/agent-events.js";
 import {
   type EventSessionRoutingPolicy,
@@ -170,7 +170,7 @@ function applyParentPreviewStreamModeDefault(
 }
 
 function resolveParentProgressStreamingEntry(params: {
-  cfg: OpenClawConfig | undefined;
+  cfg: MarketingClawConfig | undefined;
   deliveryContext: DeliveryContext | undefined;
 }): StreamingCompatEntry | undefined {
   const channelId = normalizeOptionalString(params.deliveryContext?.channel);
@@ -196,7 +196,7 @@ function resolveParentProgressStreamingEntry(params: {
 }
 
 function resolveParentProgressCommentary(params: {
-  cfg: OpenClawConfig | undefined;
+  cfg: MarketingClawConfig | undefined;
   deliveryContext: DeliveryContext | undefined;
 }): boolean {
   return resolveChannelStreamingProgressCommentary(
@@ -281,7 +281,7 @@ export function startAcpSpawnParentStreamRelay(params: {
   noOutputPollMs?: number;
   maxRelayLifetimeMs?: number;
   emitStartNotice?: boolean;
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
 }): AcpSpawnParentRelayHandle {
   const runId = normalizeOptionalString(params.runId) ?? "";
   const parentSessionKey = normalizeOptionalString(params.parentSessionKey) ?? "";

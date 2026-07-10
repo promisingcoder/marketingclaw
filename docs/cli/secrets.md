@@ -1,5 +1,5 @@
 ---
-summary: "CLI reference for `openclaw secrets` (reload, audit, configure, apply)"
+summary: "CLI reference for `marketingclaw secrets` (reload, audit, configure, apply)"
 read_when:
   - Re-resolving secret refs at runtime
   - Auditing plaintext residues and unresolved refs
@@ -7,7 +7,7 @@ read_when:
 title: "Secrets"
 ---
 
-# `openclaw secrets`
+# `marketingclaw secrets`
 
 Manage SecretRefs and keep the active runtime snapshot healthy.
 
@@ -21,12 +21,12 @@ Manage SecretRefs and keep the active runtime snapshot healthy.
 Recommended operator loop:
 
 ```bash
-openclaw secrets audit --check
-openclaw secrets configure
-openclaw secrets apply --from /tmp/openclaw-secrets-plan.json --dry-run
-openclaw secrets apply --from /tmp/openclaw-secrets-plan.json
-openclaw secrets audit --check
-openclaw secrets reload
+marketingclaw secrets audit --check
+marketingclaw secrets configure
+marketingclaw secrets apply --from /tmp/marketingclaw-secrets-plan.json --dry-run
+marketingclaw secrets apply --from /tmp/marketingclaw-secrets-plan.json
+marketingclaw secrets audit --check
+marketingclaw secrets reload
 ```
 
 If your plan includes `exec` SecretRefs/providers, pass `--allow-exec` on both the dry-run and write `apply` commands.
@@ -41,9 +41,9 @@ Related: [Secrets Management](/gateway/secrets) · [SecretRef Credential Surface
 ## Reload runtime snapshot
 
 ```bash
-openclaw secrets reload
-openclaw secrets reload --json
-openclaw secrets reload --url ws://127.0.0.1:18789 --token <token>
+marketingclaw secrets reload
+marketingclaw secrets reload --json
+marketingclaw secrets reload --url ws://127.0.0.1:18789 --token <token>
 ```
 
 Uses gateway RPC method `secrets.reload`. If resolution fails, the gateway keeps its last-known-good snapshot and returns an error (no partial activation). JSON response includes `warningCount`.
@@ -52,21 +52,21 @@ Options: `--url <url>`, `--token <token>`, `--timeout <ms>`, `--json`.
 
 ## Audit
 
-Scans OpenClaw state for:
+Scans MarketingClaw state for:
 
 - plaintext secret storage
 - unresolved refs
-- precedence drift (`auth-profiles.json` credentials shadowing `openclaw.json` refs)
+- precedence drift (`auth-profiles.json` credentials shadowing `marketingclaw.json` refs)
 - generated `agents/*/agent/models.json` residues (provider `apiKey` values and sensitive provider headers)
 - legacy residues (legacy auth store entries, OAuth reminders)
 
 Sensitive provider header detection is name-heuristic based: it flags headers whose name matches common auth/credential fragments (`authorization`, `x-api-key`, `token`, `secret`, `password`, `credential`).
 
 ```bash
-openclaw secrets audit
-openclaw secrets audit --check
-openclaw secrets audit --json
-openclaw secrets audit --allow-exec
+marketingclaw secrets audit
+marketingclaw secrets audit --check
+marketingclaw secrets audit --json
+marketingclaw secrets audit --allow-exec
 ```
 
 Report shape:
@@ -81,13 +81,13 @@ Report shape:
 Build provider and SecretRef changes interactively, run preflight, and optionally apply:
 
 ```bash
-openclaw secrets configure
-openclaw secrets configure --plan-out /tmp/openclaw-secrets-plan.json
-openclaw secrets configure --apply --yes
-openclaw secrets configure --providers-only
-openclaw secrets configure --skip-provider-setup
-openclaw secrets configure --agent ops
-openclaw secrets configure --json
+marketingclaw secrets configure
+marketingclaw secrets configure --plan-out /tmp/marketingclaw-secrets-plan.json
+marketingclaw secrets configure --apply --yes
+marketingclaw secrets configure --providers-only
+marketingclaw secrets configure --skip-provider-setup
+marketingclaw secrets configure --agent ops
+marketingclaw secrets configure --json
 ```
 
 Flow: provider setup first (add/edit/remove `secrets.providers` aliases), then credential mapping (select fields, assign `{source, provider, id}` refs), then preflight and optional apply.
@@ -104,7 +104,7 @@ Flags:
 Notes:
 
 - Requires an interactive TTY.
-- Targets secret-bearing fields in `openclaw.json` plus `auth-profiles.json` for the selected agent scope; canonical supported surface: [SecretRef Credential Surface](/reference/secretref-credential-surface).
+- Targets secret-bearing fields in `marketingclaw.json` plus `auth-profiles.json` for the selected agent scope; canonical supported surface: [SecretRef Credential Surface](/reference/secretref-credential-surface).
 - Supports creating new `auth-profiles.json` mappings directly in the picker flow.
 - Runs preflight resolution before apply.
 - Generated plans default to scrub options enabled (`scrubEnv`, `scrubAuthProfilesForProviderTargets`, `scrubLegacyAuthJson`). Apply is one-way for scrubbed plaintext values.
@@ -114,26 +114,26 @@ Notes:
 
 ### Exec provider safety
 
-Homebrew installs often expose symlinked binaries under `/opt/homebrew/bin/*`. Set `allowSymlinkCommand: true` only when needed for trusted package-manager paths, paired with `trustedDirs` (for example `["/opt/homebrew"]`). On Windows, if ACL verification is unavailable for a provider path, OpenClaw fails closed; for trusted paths only, set `allowInsecurePath: true` on that provider to bypass the path security check.
+Homebrew installs often expose symlinked binaries under `/opt/homebrew/bin/*`. Set `allowSymlinkCommand: true` only when needed for trusted package-manager paths, paired with `trustedDirs` (for example `["/opt/homebrew"]`). On Windows, if ACL verification is unavailable for a provider path, MarketingClaw fails closed; for trusted paths only, set `allowInsecurePath: true` on that provider to bypass the path security check.
 
 ## Apply a saved plan
 
 ```bash
-openclaw secrets apply --from /tmp/openclaw-secrets-plan.json
-openclaw secrets apply --from /tmp/openclaw-secrets-plan.json --allow-exec
-openclaw secrets apply --from /tmp/openclaw-secrets-plan.json --dry-run
-openclaw secrets apply --from /tmp/openclaw-secrets-plan.json --dry-run --allow-exec
-openclaw secrets apply --from /tmp/openclaw-secrets-plan.json --json
+marketingclaw secrets apply --from /tmp/marketingclaw-secrets-plan.json
+marketingclaw secrets apply --from /tmp/marketingclaw-secrets-plan.json --allow-exec
+marketingclaw secrets apply --from /tmp/marketingclaw-secrets-plan.json --dry-run
+marketingclaw secrets apply --from /tmp/marketingclaw-secrets-plan.json --dry-run --allow-exec
+marketingclaw secrets apply --from /tmp/marketingclaw-secrets-plan.json --json
 ```
 
 `--dry-run` validates preflight without writing files; exec SecretRef checks are skipped by default in dry-run. Write mode rejects plans containing exec SecretRefs/providers unless `--allow-exec`. Use `--allow-exec` to opt in to exec provider checks/execution in either mode.
 
 What `apply` may update:
 
-- `openclaw.json` (SecretRef targets + provider upserts/deletes)
+- `marketingclaw.json` (SecretRef targets + provider upserts/deletes)
 - `auth-profiles.json` (provider-target scrubbing)
 - legacy `auth.json` residues
-- `~/.openclaw/.env` known secret keys whose values were migrated
+- `~/.marketingclaw/.env` known secret keys whose values were migrated
 
 Plan contract details (allowed target paths, validation rules, failure semantics): [Secrets Apply Plan Contract](/gateway/secrets-plan-contract).
 
@@ -144,9 +144,9 @@ Plan contract details (allowed target paths, validation rules, failure semantics
 ## Example
 
 ```bash
-openclaw secrets audit --check
-openclaw secrets configure
-openclaw secrets audit --check
+marketingclaw secrets audit --check
+marketingclaw secrets configure
+marketingclaw secrets audit --check
 ```
 
 If `audit --check` still reports plaintext findings, update the remaining reported target paths and rerun audit.

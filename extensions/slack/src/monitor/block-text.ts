@@ -1,7 +1,7 @@
 import {
   normalizeOptionalString,
   readStringValue as readString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "marketingclaw/plugin-sdk/string-coerce-runtime";
 
 type SlackTextObject = {
   text?: unknown;

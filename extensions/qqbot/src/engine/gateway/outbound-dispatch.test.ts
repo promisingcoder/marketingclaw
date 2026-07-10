@@ -217,7 +217,7 @@ function makeRuntime(params: {
         resolveEnvelopeFormatOptions: vi.fn(() => ({})),
       },
       session: {
-        resolveStorePath: vi.fn(() => "/tmp/openclaw/qqbot-sessions.json"),
+        resolveStorePath: vi.fn(() => "/tmp/marketingclaw/qqbot-sessions.json"),
         recordInboundSession: vi.fn(async () => undefined),
       },
       inbound: makeInboundRuntime(),
@@ -231,7 +231,7 @@ function makeRuntime(params: {
     tts: {
       textToSpeech: vi.fn(async () => ({
         success: true,
-        audioPath: "/tmp/openclaw-qqbot/tts.wav",
+        audioPath: "/tmp/marketingclaw-qqbot/tts.wav",
         provider: "test-tts",
         outputFormat: "wav",
       })),
@@ -679,7 +679,7 @@ describe("dispatchOutbound", () => {
 
   it("does not expose default sandbox roots through gateway qqmedia replies", async () => {
     const tmpRoot = await fs.mkdtemp(path.join(os.tmpdir(), "qqbot-agent-root-boundary-"));
-    const originalStateDir = process.env.OPENCLAW_STATE_DIR;
+    const originalStateDir = process.env.MARKETINGCLAW_STATE_DIR;
     try {
       const workspaceDir = path.join(tmpRoot, "workspace");
       const stateSandboxDir = path.join(tmpRoot, "state", "sandboxes", "other-agent");
@@ -687,7 +687,7 @@ describe("dispatchOutbound", () => {
       await fs.mkdir(workspaceDir, { recursive: true });
       await fs.mkdir(stateSandboxDir, { recursive: true });
       await fs.writeFile(stateSandboxFile, Buffer.from("outside"));
-      process.env.OPENCLAW_STATE_DIR = path.join(tmpRoot, "state");
+      process.env.MARKETINGCLAW_STATE_DIR = path.join(tmpRoot, "state");
       const runtime = makeRuntime({
         onDeliver: async (deliver) => {
           await deliver({ text: `<qqmedia>${stateSandboxFile}</qqmedia>` }, { kind: "block" });
@@ -708,9 +708,9 @@ describe("dispatchOutbound", () => {
       expect(sendMediaMock).not.toHaveBeenCalled();
     } finally {
       if (originalStateDir === undefined) {
-        delete process.env.OPENCLAW_STATE_DIR;
+        delete process.env.MARKETINGCLAW_STATE_DIR;
       } else {
-        process.env.OPENCLAW_STATE_DIR = originalStateDir;
+        process.env.MARKETINGCLAW_STATE_DIR = originalStateDir;
       }
       await fs.rm(tmpRoot, { recursive: true, force: true });
     }
@@ -954,7 +954,7 @@ describe("dispatchOutbound", () => {
       channel: "qqbot",
       accountId: "qq-main",
     });
-    expect(audioFileToSilkBase64Mock).toHaveBeenCalledWith("/tmp/openclaw-qqbot/tts.wav");
+    expect(audioFileToSilkBase64Mock).toHaveBeenCalledWith("/tmp/marketingclaw-qqbot/tts.wav");
     const sentMedia = sendMediaMock.mock.calls.at(0)?.[0] as
       | { kind?: string; source?: unknown; msgId?: string; ttsText?: string }
       | undefined;

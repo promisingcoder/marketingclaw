@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import { detectSkillWorkshopToolPolicyDiagnostic } from "./tool-policy-diagnostic.js";
 
-function detect(config: OpenClawConfig, workshopEnabled = true) {
+function detect(config: MarketingClawConfig, workshopEnabled = true) {
   return detectSkillWorkshopToolPolicyDiagnostic({ config, workshopEnabled });
 }
 

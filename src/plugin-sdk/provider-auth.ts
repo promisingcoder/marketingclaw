@@ -24,13 +24,13 @@ import {
 } from "../agents/copilot-dynamic-headers.js";
 import { resolveEnvApiKey } from "../agents/model-auth-env.js";
 import { readProviderJsonResponse } from "../agents/provider-http-errors.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { MarketingClawConfig } from "../config/config.js";
 import { resolveStateDir } from "../config/paths.js";
 import { loadJsonFile, saveJsonFile } from "../infra/json-file.js";
 import { logWarn } from "../logger.js";
 import { resolveProviderEndpoint } from "./provider-model-shared.js";
 
-export type { OpenClawConfig } from "../config/config.js";
+export type { MarketingClawConfig } from "../config/config.js";
 export type { SecretInput } from "../config/types.secrets.js";
 export type { SecretInputMode } from "../plugins/provider-auth-types.js";
 export type { ProviderAuthResult } from "../plugins/types.js";
@@ -92,7 +92,7 @@ export { createProviderApiKeyAuthMethod } from "../plugins/provider-api-key-auth
 export { coerceSecretRef, hasConfiguredSecretInput } from "../config/types.secrets.js";
 export { resolveDefaultSecretProviderAlias } from "../secrets/ref-contract.js";
 export { resolveRequiredHomeDir } from "../infra/home-dir.js";
-export { resolveOpenClawAgentDir } from "./agent-dir-compat.js";
+export { resolveMarketingClawAgentDir } from "./agent-dir-compat.js";
 export {
   normalizeOptionalSecretInput,
   normalizeSecretInput,
@@ -178,7 +178,7 @@ export function normalizeGithubCopilotDomain(raw: string | undefined | null): st
   return DEFAULT_GITHUB_COPILOT_DOMAIN;
 }
 
-function readGithubCopilotDomainFromConfig(config?: OpenClawConfig): string | undefined {
+function readGithubCopilotDomainFromConfig(config?: MarketingClawConfig): string | undefined {
   const params = config?.models?.providers?.[COPILOT_PROVIDER_ID]?.params;
   const value = params && typeof params === "object" ? params.githubDomain : undefined;
   if (typeof value !== "string" || value.trim().length === 0) {
@@ -217,7 +217,7 @@ function warnOnceOnRejectedConfigDomain(configured: string): void {
 function resolveGithubCopilotDomain(params?: {
   env?: NodeJS.ProcessEnv;
   explicit?: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
 }): string {
   const env = params?.env ?? process.env;
   const fromEnv = env.COPILOT_GITHUB_DOMAIN?.trim();
@@ -404,11 +404,11 @@ export async function resolveCopilotApiToken(params: {
    */
   githubDomain?: string;
   /**
-   * OpenClaw config used to resolve the persisted `githubDomain` provider
+   * MarketingClaw config used to resolve the persisted `githubDomain` provider
    * param when an explicit `githubDomain` is not supplied. Precedence is
    * `COPILOT_GITHUB_DOMAIN` env > explicit `githubDomain` > config.
    */
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
 }): Promise<{
   /** Copilot API token, from cache or fresh exchange. */
   token: string;
@@ -520,7 +520,7 @@ export function listUsableProviderAuthProfileIds(params: {
   /** Provider id whose usable auth profiles should be listed. */
   provider: string;
   /** Optional runtime config used to resolve auth profile order and default agent dir. */
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
   /** Agent directory containing auth profiles. */
   agentDir?: string;
   /** Optional allowed profile credential types. */
@@ -545,7 +545,7 @@ export function isProviderAuthProfileConfigured(params: {
   /** Provider id to check for usable auth profiles. */
   provider: string;
   /** Optional runtime config used to resolve auth profile order and default agent dir. */
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
   /** Agent directory containing auth profiles. */
   agentDir?: string;
   /** Optional allowed profile credential types. */
@@ -565,7 +565,7 @@ export async function resolveProviderAuthProfileApiKey(params: {
   /** Provider id whose first usable auth profile should resolve to an API key. */
   provider: string;
   /** Optional runtime config used to resolve auth profile order and secret refs. */
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
   /** Agent directory containing auth profiles. */
   agentDir?: string;
   /** Optional allowed profile credential types. */
@@ -595,7 +595,7 @@ export async function resolveProviderAuthProfileApiKey(params: {
 
 function resolveUsableProviderAuthProfiles(params: {
   provider: string;
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
   agentDir?: string;
   allowKeychainPrompt?: boolean;
   includeExternalCliAuth?: boolean;

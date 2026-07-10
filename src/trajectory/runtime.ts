@@ -1,13 +1,13 @@
 // Trajectory runtime records runtime events into trajectory log files.
 import fs from "node:fs";
 import path from "node:path";
-import { KeyedAsyncQueue } from "openclaw/plugin-sdk/keyed-async-queue";
+import { KeyedAsyncQueue } from "marketingclaw/plugin-sdk/keyed-async-queue";
 import { sanitizeDiagnosticPayload } from "../agents/payload-redaction.js";
 import type {
   QueuedFileWriter,
   QueuedFileWriterDiagnostics,
 } from "../agents/queued-file-writer.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { assertNoSymlinkParents, writeSiblingTempFile } from "../infra/fs-safe-advanced.js";
 import { readRegularFileSync } from "../infra/fs-safe.js";
 import { redactSecrets } from "../logging/redact.js";
@@ -24,7 +24,7 @@ import {
 import type { TrajectoryEvent, TrajectoryToolDefinition } from "./types.js";
 
 type TrajectoryRuntimeInit = {
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
   env?: NodeJS.ProcessEnv;
   maxRuntimeFileBytes?: number;
   runId?: string;
@@ -93,7 +93,7 @@ function writeTrajectoryPointerBestEffort(params: {
         fd,
         `${JSON.stringify(
           {
-            traceSchema: "openclaw-trajectory-pointer",
+            traceSchema: "marketingclaw-trajectory-pointer",
             schemaVersion: 1,
             sessionId: params.sessionId,
             runtimeFile: params.filePath,
@@ -374,7 +374,7 @@ async function replaceTrajectoryWindow(params: {
     dir,
     chmodDir: false,
     mode: 0o600,
-    tempPrefix: ".openclaw-trajectory-",
+    tempPrefix: ".marketingclaw-trajectory-",
     writeTemp: async (tempPath) => {
       await fs.promises.writeFile(tempPath, lines.join(""), {
         encoding: "utf8",
@@ -497,8 +497,8 @@ export function createTrajectoryRuntimeRecorder(
 ): TrajectoryRuntimeRecorder | null {
   const env = params.env ?? process.env;
   // Trajectory capture is now default-on. The env var remains as an explicit
-  // override so operators can still disable recording with OPENCLAW_TRAJECTORY=0.
-  const enabled = parseBooleanValue(env.OPENCLAW_TRAJECTORY) ?? true;
+  // override so operators can still disable recording with MARKETINGCLAW_TRAJECTORY=0.
+  const enabled = parseBooleanValue(env.MARKETINGCLAW_TRAJECTORY) ?? true;
   if (!enabled) {
     return null;
   }
@@ -530,7 +530,7 @@ export function createTrajectoryRuntimeRecorder(
     const nextSeq = seq + 1;
     const sourceSeq = writer.nextSourceSeq?.() ?? nextSeq;
     const event: TrajectoryEvent = {
-      traceSchema: "openclaw-trajectory",
+      traceSchema: "marketingclaw-trajectory",
       schemaVersion: 1,
       traceId,
       source: "runtime",

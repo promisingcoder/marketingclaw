@@ -4,9 +4,9 @@
  */
 import type { IncomingMessage, ServerResponse } from "node:http";
 import type { Duplex } from "node:stream";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import { definePluginEntry, type AnyAgentTool } from "openclaw/plugin-sdk/plugin-entry";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import { createLazyRuntimeModule } from "marketingclaw/plugin-sdk/lazy-runtime";
+import { definePluginEntry, type AnyAgentTool } from "marketingclaw/plugin-sdk/plugin-entry";
 import { canvasConfigSchema, isCanvasHostEnabled } from "./src/config.js";
 import { A2UI_PATH, CANVAS_HOST_PATH, CANVAS_WS_PATH } from "./src/host/a2ui-shared.js";
 import {
@@ -27,7 +27,7 @@ const CANVAS_NODE_COMMANDS = [
 ];
 
 function createLazyCanvasTool(params: {
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
 }): AnyAgentTool {
   const loadTool = createLazyRuntimeModule(() =>
@@ -50,7 +50,7 @@ function createLazyCanvasTool(params: {
 }
 
 function createLazyShowWidgetTool(params: {
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   sessionId?: string;
   agentId?: string;
 }): AnyAgentTool {

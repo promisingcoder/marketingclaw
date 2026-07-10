@@ -10,7 +10,7 @@ read_when:
 
 Skills are markdown instruction files that teach the agent how and when to use
 tools. Each skill lives in a directory containing a `SKILL.md` file with YAML
-frontmatter and a markdown body. OpenClaw loads bundled skills plus any local
+frontmatter and a markdown body. MarketingClaw loads bundled skills plus any local
 overrides, and filters them at load time based on environment, config, and
 binary presence.
 
@@ -31,7 +31,7 @@ binary presence.
 
 ## Loading order
 
-OpenClaw loads from these sources, **highest precedence first**. When the same
+MarketingClaw loads from these sources, **highest precedence first**. When the same
 skill name appears in multiple places, the highest source wins.
 
 | Priority    | Source                 | Path                                    |
@@ -39,11 +39,11 @@ skill name appears in multiple places, the highest source wins.
 | 1 — highest | Workspace skills       | `<workspace>/skills`                    |
 | 2           | Project agent skills   | `<workspace>/.agents/skills`            |
 | 3           | Personal agent skills  | `~/.agents/skills`                      |
-| 4           | Managed / local skills | `~/.openclaw/skills`                    |
+| 4           | Managed / local skills | `~/.marketingclaw/skills`               |
 | 5           | Bundled skills         | shipped with the install                |
 | 6 — lowest  | Extra directories      | `skills.load.extraDirs` + plugin skills |
 
-Skill roots support grouped layouts. OpenClaw discovers a skill whenever
+Skill roots support grouped layouts. MarketingClaw discovers a skill whenever
 `SKILL.md` appears anywhere under a configured root (up to 6 levels deep):
 
 ```text
@@ -56,9 +56,9 @@ come from the `name` frontmatter field (or the directory name when `name` is
 missing). Agent allowlists (below) also match on this `name`.
 
 <Note>
-  Codex CLI's native `$CODEX_HOME/skills` directory is **not** an OpenClaw
-  skill root. Use `openclaw migrate plan codex` to inventory those skills, then
-  `openclaw migrate codex` to copy them into your OpenClaw workspace.
+  Codex CLI's native `$CODEX_HOME/skills` directory is **not** an MarketingClaw
+  skill root. Use `marketingclaw migrate plan codex` to inventory those skills, then
+  `marketingclaw migrate codex` to copy them into your MarketingClaw workspace.
 </Note>
 
 ## Per-agent vs shared skills
@@ -71,7 +71,7 @@ matches your desired visibility:
 | Per-agent      | `<workspace>/skills`         | Only that agent             |
 | Project-agent  | `<workspace>/.agents/skills` | Only that workspace's agent |
 | Personal-agent | `~/.agents/skills`           | All agents on this machine  |
-| Shared managed | `~/.openclaw/skills`         | All agents on this machine  |
+| Shared managed | `~/.marketingclaw/skills`    | All agents on this machine  |
 | Extra dirs     | `skills.load.extraDirs`      | All agents on this machine  |
 
 ## Agent allowlists
@@ -113,14 +113,14 @@ regardless of where they are loaded from.
 ## Plugins and skills
 
 Plugins can ship their own skills by listing `skills` directories in
-`openclaw.plugin.json` (paths relative to the plugin root). Plugin skills load
+`marketingclaw.plugin.json` (paths relative to the plugin root). Plugin skills load
 when the plugin is enabled — for example, the browser plugin ships a
 `browser-automation` skill for multi-step browser control.
 
 Plugin skill directories merge at the same low-precedence level as
 `skills.load.extraDirs`, so a same-named bundled, managed, agent, or workspace
 skill overrides them. Gate a plugin skill's own eligibility via
-`metadata.openclaw.requires` in its frontmatter, same as any other skill.
+`metadata.marketingclaw.requires` in its frontmatter, same as any other skill.
 
 See [Plugins](/tools/plugin) and [Tools](/tools) for the full plugin system.
 
@@ -132,9 +132,9 @@ proposal instead of writing directly to `SKILL.md`. You review and approve
 before anything changes.
 
 ```bash
-openclaw skills workshop list
-openclaw skills workshop inspect <proposal-id>
-openclaw skills workshop apply <proposal-id>
+marketingclaw skills workshop list
+marketingclaw skills workshop inspect <proposal-id>
+marketingclaw skills workshop apply <proposal-id>
 ```
 
 See [Skill Workshop](/tools/skill-workshop) for the full lifecycle, CLI
@@ -143,38 +143,38 @@ reference, and configuration.
 ## Installing from ClawHub
 
 [ClawHub](https://clawhub.ai) is the public skills registry. Use
-`openclaw skills` commands for install and update, or the `clawhub` CLI for
+`marketingclaw skills` commands for install and update, or the `clawhub` CLI for
 publish and sync.
 
-| Action                             | Command                                                |
-| ---------------------------------- | ------------------------------------------------------ |
-| Install a skill into the workspace | `openclaw skills install @owner/<slug>`                |
-| Install from a Git repository      | `openclaw skills install git:owner/repo@ref`           |
-| Install a local skill directory    | `openclaw skills install ./path/to/skill --as my-tool` |
-| Install for all local agents       | `openclaw skills install @owner/<slug> --global`       |
-| Update all workspace skills        | `openclaw skills update --all`                         |
-| Update a shared managed skill      | `openclaw skills update @owner/<slug> --global`        |
-| Update all shared managed skills   | `openclaw skills update --all --global`                |
-| Verify a skill's trust envelope    | `openclaw skills verify @owner/<slug>`                 |
-| Print the generated Skill Card     | `openclaw skills verify @owner/<slug> --card`          |
-| Publish / sync via ClawHub CLI     | `clawhub sync --all`                                   |
+| Action                             | Command                                                     |
+| ---------------------------------- | ----------------------------------------------------------- |
+| Install a skill into the workspace | `marketingclaw skills install @owner/<slug>`                |
+| Install from a Git repository      | `marketingclaw skills install git:owner/repo@ref`           |
+| Install a local skill directory    | `marketingclaw skills install ./path/to/skill --as my-tool` |
+| Install for all local agents       | `marketingclaw skills install @owner/<slug> --global`       |
+| Update all workspace skills        | `marketingclaw skills update --all`                         |
+| Update a shared managed skill      | `marketingclaw skills update @owner/<slug> --global`        |
+| Update all shared managed skills   | `marketingclaw skills update --all --global`                |
+| Verify a skill's trust envelope    | `marketingclaw skills verify @owner/<slug>`                 |
+| Print the generated Skill Card     | `marketingclaw skills verify @owner/<slug> --card`          |
+| Publish / sync via ClawHub CLI     | `clawhub sync --all`                                        |
 
 <AccordionGroup>
   <Accordion title="Install details">
-    `openclaw skills install` installs into the active workspace `skills/`
+    `marketingclaw skills install` installs into the active workspace `skills/`
     directory by default. Add `--global` to install into the shared
-    `~/.openclaw/skills` directory, visible to all local agents unless agent
+    `~/.marketingclaw/skills` directory, visible to all local agents unless agent
     allowlists narrow it.
 
     Git and local installs expect `SKILL.md` at the source root. The slug comes
     from `SKILL.md` frontmatter `name` when valid, then falls back to the
     directory or repository name. Use `--as <slug>` to override.
-    `openclaw skills update` tracks ClawHub installs only — reinstall Git or
+    `marketingclaw skills update` tracks ClawHub installs only — reinstall Git or
     local sources to refresh them.
 
   </Accordion>
   <Accordion title="Verification and security scanning">
-    `openclaw skills verify @owner/<slug>` asks ClawHub for the skill's
+    `marketingclaw skills verify @owner/<slug>` asks ClawHub for the skill's
     `clawhub.skill.verify.v1` trust envelope. Installed ClawHub skills verify
     against the version and registry recorded in `.clawhub/origin.json`.
     Bare slugs remain accepted for existing installed or unambiguous skills, but
@@ -192,7 +192,7 @@ publish and sync.
     with `skills.upload.begin`, `skills.upload.chunk`, and `skills.upload.commit`,
     then install with `skills.install({ source: "upload", ... })`. This path is
     off by default and requires `skills.install.allowUploadedArchives: true` in
-    `openclaw.json`. Normal ClawHub installs never need that setting.
+    `marketingclaw.json`. Normal ClawHub installs never need that setting.
   </Accordion>
 </AccordionGroup>
 
@@ -211,7 +211,7 @@ publish and sync.
     `skills.load.allowSymlinkTargets` explicitly trusts a target root.
     Skill Workshop writes through those trusted targets only when
     `skills.workshop.allowSymlinkTargetWrites` is enabled.
-    Managed `~/.openclaw/skills` and personal `~/.agents/skills` may contain
+    Managed `~/.marketingclaw/skills` and personal `~/.agents/skills` may contain
     symlinked skill folders, but every `SKILL.md` realpath must still stay
     inside its resolved skill directory.
   </Accordion>
@@ -246,7 +246,7 @@ When the user asks to generate an image, use the `image_generate` tool...
 ```
 
 <Note>
-  OpenClaw follows the [AgentSkills](https://agentskills.io) spec. Frontmatter
+  MarketingClaw follows the [AgentSkills](https://agentskills.io) spec. Frontmatter
   is parsed as YAML first; if that fails, it falls back to a single-line-only
   parser. Nested `metadata` blocks (including multi-line YAML mappings) are
   flattened to a JSON string and re-parsed as JSON5, so the block form shown
@@ -258,7 +258,7 @@ When the user asks to generate an image, use the `image_generate` tool...
 
 <ParamField path="homepage" type="string">
   URL shown as "Website" in the macOS Skills UI. Also supported via
-  `metadata.openclaw.homepage`.
+  `metadata.marketingclaw.homepage`.
 </ParamField>
 
 <ParamField path="user-invocable" type="boolean" default="true">
@@ -266,7 +266,7 @@ When the user asks to generate an image, use the `image_generate` tool...
 </ParamField>
 
 <ParamField path="disable-model-invocation" type="boolean" default="false">
-  When `true`, OpenClaw keeps the skill's instructions out of the agent's normal
+  When `true`, MarketingClaw keeps the skill's instructions out of the agent's normal
   prompt. The skill is still available as a slash command when `user-invocable`
   is also `true`.
 </ParamField>
@@ -288,9 +288,9 @@ When the user asks to generate an image, use the `image_generate` tool...
 
 ## Gating
 
-OpenClaw filters skills at load time using `metadata.openclaw` (JSON5 object
+MarketingClaw filters skills at load time using `metadata.marketingclaw` (JSON5 object
 embedded in the frontmatter, see the parsing note above). A skill with no
-`metadata.openclaw` block is always eligible unless explicitly disabled.
+`metadata.marketingclaw` block is always eligible unless explicitly disabled.
 
 ```markdown
 ---
@@ -298,7 +298,7 @@ name: image-lab
 description: Generate or edit images via a provider-backed image workflow
 metadata:
   {
-    "openclaw":
+    "marketingclaw":
       {
         "requires": { "bins": ["uv"], "env": ["GEMINI_API_KEY"], "config": ["browser.enabled"] },
         "primaryEnv": "GEMINI_API_KEY",
@@ -336,7 +336,7 @@ metadata:
 </ParamField>
 
 <ParamField path="requires.config" type="string[]">
-  Each `openclaw.json` path must be truthy.
+  Each `marketingclaw.json` path must be truthy.
 </ParamField>
 
 <ParamField path="primaryEnv" type="string">
@@ -349,9 +349,9 @@ metadata:
 
 <Note>
   Legacy `metadata.clawdbot` blocks are still accepted when
-  `metadata.openclaw` is absent, so older installed skills keep their
+  `metadata.marketingclaw` is absent, so older installed skills keep their
   dependency gates and installer hints. New skills should use
-  `metadata.openclaw`.
+  `metadata.marketingclaw`.
 </Note>
 
 ### Installer specs
@@ -364,7 +364,7 @@ name: gemini
 description: Use Gemini CLI for coding assistance and Google search lookups.
 metadata:
   {
-    "openclaw":
+    "marketingclaw":
       {
         "emoji": "♊️",
         "requires": { "bins": ["gemini"] },
@@ -387,32 +387,32 @@ metadata:
   <Accordion title="Installer selection rules">
     - When multiple installers are listed, the gateway picks one preferred
       option (brew when available, otherwise node).
-    - If all installers are `download`, OpenClaw lists each entry so you can
+    - If all installers are `download`, MarketingClaw lists each entry so you can
       see all available artifacts.
     - Specs can include `os: ["darwin"|"linux"|"win32"]` to filter by platform.
-    - Node installs honor `skills.install.nodeManager` in `openclaw.json`
+    - Node installs honor `skills.install.nodeManager` in `marketingclaw.json`
       (default: npm; options: npm / pnpm / yarn / bun). This only affects skill
       installs; the Gateway runtime should still be Node.
     - Gateway installer preference: Homebrew → uv → configured node manager →
       go → download.
   </Accordion>
   <Accordion title="Per-installer details">
-    - **Homebrew:** OpenClaw does not auto-install Homebrew or translate brew
+    - **Homebrew:** MarketingClaw does not auto-install Homebrew or translate brew
       formulas into system package commands. In Linux containers without
       `brew`, brew-only installers are hidden; use a custom image or install
       the dependency manually.
-    - **Go:** OpenClaw requires Go 1.21 or newer for automatic skill installs.
-      If `go` is missing and Homebrew is available, OpenClaw installs Go via
+    - **Go:** MarketingClaw requires Go 1.21 or newer for automatic skill installs.
+      If `go` is missing and Homebrew is available, MarketingClaw installs Go via
       Homebrew first; on Linux without Homebrew it can instead use `apt-get`
       as root or through passwordless `sudo` when the refreshed `golang-go`
       candidate meets the minimum version. The actual `go install` for the
-      dependency always targets a dedicated OpenClaw-managed bin directory
+      dependency always targets a dedicated MarketingClaw-managed bin directory
       (Homebrew's `bin` on a fresh install, else `~/.local/bin`) rather than
       your configured `GOBIN` — your own `GOBIN`, `GOPATH`, and `GOTOOLCHAIN`
       env vars are read but never overwritten.
     - **Download:** `url` (required), `archive` (`tar.gz` | `tar.bz2` | `zip`),
       `extract` (default: auto when archive detected), `stripComponents`,
-      `targetDir` (default: `~/.openclaw/tools/<skillKey>`).
+      `targetDir` (default: `~/.marketingclaw/tools/<skillKey>`).
   </Accordion>
   <Accordion title="Sandboxing notes">
     `requires.bins` is checked on the **host** at skill load time. If an agent
@@ -426,7 +426,7 @@ metadata:
 ## Config overrides
 
 Toggle and configure bundled or managed skills under `skills.entries` in
-`~/.openclaw/openclaw.json`:
+`~/.marketingclaw/marketingclaw.json`:
 
 ```json5
 {
@@ -456,7 +456,7 @@ Toggle and configure bundled or managed skills under `skills.entries` in
 </ParamField>
 
 <ParamField path="apiKey" type='string | { source, provider, id }'>
-  Convenience field for skills that declare `metadata.openclaw.primaryEnv`.
+  Convenience field for skills that declare `metadata.marketingclaw.primaryEnv`.
   Supports a plaintext string or a SecretRef object.
 </ParamField>
 
@@ -476,17 +476,17 @@ Toggle and configure bundled or managed skills under `skills.entries` in
 
 <Note>
   Config keys match the **skill name** by default. If a skill defines
-  `metadata.openclaw.skillKey`, use that key under `skills.entries` instead.
+  `metadata.marketingclaw.skillKey`, use that key under `skills.entries` instead.
   Quote hyphenated names: JSON5 allows quoted keys.
 </Note>
 
 ## Environment injection
 
-When an agent run starts, OpenClaw:
+When an agent run starts, MarketingClaw:
 
 <Steps>
   <Step title="Reads skill metadata">
-    OpenClaw resolves the effective skill list for the agent, applying gating
+    MarketingClaw resolves the effective skill list for the agent, applying gating
     rules, allowlists, and config overrides.
   </Step>
   <Step title="Injects env and API keys">
@@ -509,13 +509,13 @@ When an agent run starts, OpenClaw:
   to pass secrets into sandboxed runs.
 </Warning>
 
-For the bundled `claude-cli` backend, OpenClaw also materializes the same
+For the bundled `claude-cli` backend, MarketingClaw also materializes the same
 eligible skill snapshot as a temporary Claude Code plugin and passes it via
 `--plugin-dir`. Other CLI backends use the prompt catalog only.
 
 ## Snapshots and refresh
 
-OpenClaw snapshots eligible skills **when a session starts** and reuses that
+MarketingClaw snapshots eligible skills **when a session starts** and reuses that
 list for all subsequent turns in the session. Changes to skills or config take
 effect on the next new session.
 
@@ -525,12 +525,12 @@ Skills refresh mid-session in two cases:
 - A new eligible remote node connects.
 
 The refreshed list is picked up on the next agent turn. If the effective agent
-allowlist changes, OpenClaw refreshes the snapshot to keep visible skills
+allowlist changes, MarketingClaw refreshes the snapshot to keep visible skills
 aligned.
 
 <AccordionGroup>
   <Accordion title="Skills watcher">
-    By default, OpenClaw watches skill folders and bumps the snapshot when
+    By default, MarketingClaw watches skill folders and bumps the snapshot when
     `SKILL.md` files change. Configure under `skills.load`:
 
     ```json5
@@ -555,19 +555,19 @@ aligned.
   </Accordion>
   <Accordion title="Remote macOS nodes (Linux gateway)">
     If the Gateway runs on Linux but a **macOS node** is connected with
-    `system.run` allowed, OpenClaw can treat macOS-only skills as eligible when
+    `system.run` allowed, MarketingClaw can treat macOS-only skills as eligible when
     the required binaries are present on that node. The agent should run those
     skills via the `exec` tool with `host=node`.
 
     Offline nodes do **not** make remote-only skills visible. If a node stops
-    answering bin probes, OpenClaw clears its cached bin matches.
+    answering bin probes, MarketingClaw clears its cached bin matches.
 
   </Accordion>
 </AccordionGroup>
 
 ## Token impact
 
-When skills are eligible, OpenClaw injects a compact XML block into the system
+When skills are eligible, MarketingClaw injects a compact XML block into the system
 prompt. The cost is deterministic and scales linearly per skill:
 
 - **Base overhead** (only when 1+ skills are eligible): a fixed block of intro
@@ -579,9 +579,9 @@ prompt. The cost is deterministic and scales linearly per skill:
 - At ~4 chars/token, 97 chars ≈ 24 tokens per skill before field lengths.
 
 If the rendered block would exceed the configured prompt budget
-(`skills.limits.maxSkillsPromptChars`), OpenClaw first drops descriptions
+(`skills.limits.maxSkillsPromptChars`), MarketingClaw first drops descriptions
 (compact format: name + location only), then truncates the skill list and adds
-a note pointing at `openclaw skills check`.
+a note pointing at `marketingclaw skills check`.
 
 Keep descriptions short and descriptive to minimize prompt overhead.
 

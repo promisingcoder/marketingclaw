@@ -1,10 +1,10 @@
 // Line plugin module implements markdown to line behavior.
 import type { messagingApi } from "@line/bot-sdk";
-import { stripMarkdown } from "openclaw/plugin-sdk/text-chunking";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+import { stripMarkdown } from "marketingclaw/plugin-sdk/text-chunking";
+import { truncateUtf16Safe } from "marketingclaw/plugin-sdk/text-utility-runtime";
 import { uriAction } from "./actions.js";
 import { createReceiptCard, toFlexMessage, type FlexBubble } from "./flex-templates.js";
-export { stripMarkdown } from "openclaw/plugin-sdk/text-chunking";
+export { stripMarkdown } from "marketingclaw/plugin-sdk/text-chunking";
 
 type FlexMessage = messagingApi.FlexMessage;
 type FlexComponent = messagingApi.FlexComponent;

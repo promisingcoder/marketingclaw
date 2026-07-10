@@ -3,11 +3,11 @@ import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { redactSensitiveUrlLikeString } from "@openclaw/net-policy/redact-sensitive-url";
+import { redactSensitiveUrlLikeString } from "@marketingclaw/net-policy/redact-sensitive-url";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../test/helpers/temp-dir.js";
 import type { DiagnosticSecurityEvent } from "../infra/diagnostic-events.js";
-import { resolvePreferredOpenClawTmpDir } from "../infra/tmp-openclaw-dir.js";
+import { resolvePreferredMarketingClawTmpDir } from "../infra/tmp-marketingclaw-dir.js";
 
 const runCommandWithTimeoutMock = vi.fn();
 const installPluginFromInstalledPackageDirMock = vi.fn();
@@ -160,7 +160,7 @@ describe("installPluginFromGitSpec", () => {
     preflightPluginGitInstallPolicyMock.mockReset();
     preflightPluginGitInstallPolicyMock.mockResolvedValue(null);
     const globalConfigRoot = await fs.mkdtemp(
-      path.join(os.tmpdir(), "openclaw-git-install-npmrc-"),
+      path.join(os.tmpdir(), "marketingclaw-git-install-npmrc-"),
     );
     tempDirs.push(globalConfigRoot);
     const globalConfig = path.join(globalConfigRoot, "global-npmrc");
@@ -267,7 +267,7 @@ describe("installPluginFromGitSpec", () => {
   });
 
   it("does not emit git install success when committing the managed repo fails", async () => {
-    const gitRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-git-install-fail-"));
+    const gitRoot = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-git-install-fail-"));
     const gitDir = path.join(gitRoot, "not-a-directory");
     await fs.writeFile(gitDir, "file blocks nested managed repo creation", "utf8");
     try {
@@ -478,7 +478,7 @@ describe("installPluginFromGitSpec", () => {
   });
 
   it("reports effective install mode for requested git update without an installed target", async () => {
-    const gitDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-git-install-mode-"));
+    const gitDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-git-install-mode-"));
     try {
       runCommandWithTimeoutMock
         .mockResolvedValueOnce({ code: 0, stdout: "", stderr: "" })
@@ -515,7 +515,7 @@ describe("installPluginFromGitSpec", () => {
   });
 
   it("stages the clone beside the managed repo so replacement stays on one filesystem (#99885)", async () => {
-    const gitDir = trackedTempDirs.make("openclaw-git-install-stage-");
+    const gitDir = trackedTempDirs.make("marketingclaw-git-install-stage-");
     try {
       runCommandWithTimeoutMock
         .mockResolvedValueOnce({ code: 0, stdout: "", stderr: "" })
@@ -557,8 +557,8 @@ describe("installPluginFromGitSpec", () => {
     }
   });
 
-  it("falls back to the OpenClaw temp root when target workspace creation fails", async () => {
-    const gitDir = trackedTempDirs.make("openclaw-git-install-stage-fallback-");
+  it("falls back to the MarketingClaw temp root when target workspace creation fails", async () => {
+    const gitDir = trackedTempDirs.make("marketingclaw-git-install-stage-fallback-");
     runCommandWithTimeoutMock
       .mockResolvedValueOnce({ code: 0, stdout: "", stderr: "" })
       .mockResolvedValueOnce({ code: 0, stdout: "abc123\n", stderr: "" })
@@ -594,11 +594,11 @@ describe("installPluginFromGitSpec", () => {
         normalizedSpec: "git:https://github.com/acme/demo.git",
       });
       expect(path.dirname(targetPrefix)).toBe(await fs.realpath(path.dirname(persistentRepoDir)));
-      // withTempDir roots fallback staging at resolvePreferredOpenClawTmpDir(), which
-      // prefers /tmp/openclaw and only degrades to a uid-scoped os.tmpdir path when
+      // withTempDir roots fallback staging at resolvePreferredMarketingClawTmpDir(), which
+      // prefers /tmp/marketingclaw and only degrades to a uid-scoped os.tmpdir path when
       // that is unsafe. Recompute it here so the assertion holds on every host.
       expect(path.dirname(fallbackPrefix)).toBe(
-        await fs.realpath(resolvePreferredOpenClawTmpDir()),
+        await fs.realpath(resolvePreferredMarketingClawTmpDir()),
       );
       expect(runCommandWithTimeoutMock).toHaveBeenCalledTimes(3);
     } finally {
@@ -607,7 +607,7 @@ describe("installPluginFromGitSpec", () => {
   });
 
   it("keeps dry-run clone staging out of managed state", async () => {
-    const caseDir = trackedTempDirs.make("openclaw-git-dry-run-stage-");
+    const caseDir = trackedTempDirs.make("marketingclaw-git-dry-run-stage-");
     const gitDir = path.join(caseDir, "git");
     try {
       runCommandWithTimeoutMock
@@ -640,7 +640,7 @@ describe("installPluginFromGitSpec", () => {
   });
 
   it("uses a credential-free managed repo path for authenticated git URLs", async () => {
-    const gitDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-git-install-path-"));
+    const gitDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-git-install-path-"));
     try {
       runCommandWithTimeoutMock
         .mockResolvedValueOnce({ code: 0, stdout: "", stderr: "" })
@@ -731,7 +731,7 @@ describe("installPluginFromGitSpec", () => {
   });
 
   it("keeps the existing managed repo when replacement install fails", async () => {
-    const gitDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-git-install-preserve-"));
+    const gitDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-git-install-preserve-"));
     const normalizedSpec = "git:https://github.com/acme/demo.git";
     const existingRepoDir = expectedGitRepoDir({ gitDir, normalizedSpec });
     const markerPath = path.join(existingRepoDir, "existing.txt");

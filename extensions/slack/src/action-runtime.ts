@@ -1,9 +1,9 @@
 // Slack plugin module implements action runtime behavior.
-import type { AgentToolResult } from "openclaw/plugin-sdk/agent-core";
-import { readBooleanParam } from "openclaw/plugin-sdk/boolean-param";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import { isSingleUseReplyToMode } from "openclaw/plugin-sdk/reply-reference";
-import { resolveOpenProviderRuntimeGroupPolicy } from "openclaw/plugin-sdk/runtime-group-policy";
+import type { AgentToolResult } from "marketingclaw/plugin-sdk/agent-core";
+import { readBooleanParam } from "marketingclaw/plugin-sdk/boolean-param";
+import { createLazyRuntimeModule } from "marketingclaw/plugin-sdk/lazy-runtime";
+import { isSingleUseReplyToMode } from "marketingclaw/plugin-sdk/reply-reference";
+import { resolveOpenProviderRuntimeGroupPolicy } from "marketingclaw/plugin-sdk/runtime-group-policy";
 import type { ResolvedSlackAccount } from "./accounts.js";
 import { parseSlackBlocksInput } from "./blocks-input.js";
 import { resolveSlackChannelConfig } from "./monitor/channel-config.js";
@@ -15,7 +15,7 @@ import {
   readPositiveIntegerParam,
   readReactionParams,
   readStringParam,
-  type OpenClawConfig,
+  type MarketingClawConfig,
   withNormalizedTimestamp,
 } from "./runtime-api.js";
 import { resolveSlackChannelId, slackContextTargetsMatch } from "./targets.js";
@@ -148,7 +148,7 @@ type SlackReadTargetDecision = "allow" | "deny" | "resolve-name";
 
 function resolveSlackReadTargetDecision(params: {
   account: ResolvedSlackAccount;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   channelId: string;
   channelName?: string;
 }): SlackReadTargetDecision {
@@ -190,7 +190,7 @@ function resolveSlackReadTargetDecision(params: {
 
 async function assertSlackReadTargetAllowed(params: {
   account: ResolvedSlackAccount;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   channelId: string;
   resolveChannelName: () => Promise<string | undefined>;
 }) {
@@ -210,7 +210,7 @@ async function assertSlackReadTargetAllowed(params: {
 
 export async function handleSlackAction(
   params: Record<string, unknown>,
-  cfg: OpenClawConfig,
+  cfg: MarketingClawConfig,
   context?: SlackActionContext,
 ): Promise<AgentToolResult<unknown>> {
   const resolveChannelId = () =>

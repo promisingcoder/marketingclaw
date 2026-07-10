@@ -1,6 +1,6 @@
 // Verifies plugin loading needed before agent harness selection.
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 
 const mocks = vi.hoisted(() => ({
   ensurePluginRegistryLoaded: vi.fn(),
@@ -45,7 +45,7 @@ describe("ensureSelectedAgentHarnessPlugin", () => {
         config,
       }: {
         trigger: { kind: "agentHarness"; runtime: string };
-        config?: OpenClawConfig;
+        config?: MarketingClawConfig;
       }) => {
         const pluginId = trigger.runtime;
         const allow = config?.plugins?.allow ?? [];
@@ -87,7 +87,7 @@ describe("ensureSelectedAgentHarnessPlugin", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       agentHarnessRuntimeOverride: "codex",
       workspaceDir: "/tmp/workspace",
     });
@@ -114,7 +114,7 @@ describe("ensureSelectedAgentHarnessPlugin", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       workspaceDir: "/tmp/workspace",
     });
 
@@ -141,7 +141,7 @@ describe("ensureSelectedAgentHarnessPlugin", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       workspaceDir: "/tmp/workspace",
     });
 
@@ -177,7 +177,7 @@ describe("ensureSelectedAgentHarnessPlugin", () => {
             "custom-harness-plugin": { enabled: true },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       agentHarnessRuntimeOverride: "custom-harness",
       workspaceDir: "/tmp/workspace",
     });
@@ -240,7 +240,7 @@ describe("ensureSelectedAgentHarnessPlugin", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       workspaceDir: "/tmp/workspace",
     });
 
@@ -258,7 +258,7 @@ describe("ensureSelectedAgentHarnessPlugin", () => {
             codex: { enabled: true },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       workspaceDir: "/tmp/workspace",
     });
 
@@ -292,7 +292,7 @@ describe("ensureSelectedAgentHarnessPlugin", () => {
             openai: { enabled: true },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       workspaceDir: "/tmp/workspace",
     });
 
@@ -323,7 +323,7 @@ describe("ensureSelectedAgentHarnessPlugin", () => {
         plugins: {
           slots: { memory: "workspace-memory" },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       workspaceDir: "/tmp/workspace",
     });
 
@@ -368,7 +368,7 @@ describe("ensureSelectedAgentHarnessPlugin", () => {
             codex: { enabled: true },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       workspaceDir: "/tmp/workspace",
     });
 
@@ -402,7 +402,7 @@ describe("ensureSelectedAgentHarnessPlugin", () => {
             telegram: { enabled: true },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       workspaceDir: "/tmp/workspace",
     });
 
@@ -433,7 +433,7 @@ describe("ensureSelectedAgentHarnessPlugin", () => {
     );
   });
 
-  it("keeps custom OpenAI-compatible providers on embedded OpenClaw when no runtime override is set", async () => {
+  it("keeps custom OpenAI-compatible providers on embedded MarketingClaw when no runtime override is set", async () => {
     await ensureSelectedAgentHarnessPlugin({
       provider: "openai",
       modelId: "gpt-5.5",
@@ -446,7 +446,7 @@ describe("ensureSelectedAgentHarnessPlugin", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       workspaceDir: "/tmp/workspace",
     });
 
@@ -468,7 +468,7 @@ describe("ensureSelectedAgentHarnessPlugin", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       workspaceDir: "/tmp/workspace",
     });
 

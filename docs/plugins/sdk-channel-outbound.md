@@ -8,8 +8,8 @@ read_when:
 ---
 
 Channel plugins expose outbound message behavior from
-`openclaw/plugin-sdk/channel-outbound`. Use
-`openclaw/plugin-sdk/channel-inbound` for receive/context/dispatch
+`marketingclaw/plugin-sdk/channel-outbound`. Use
+`marketingclaw/plugin-sdk/channel-inbound` for receive/context/dispatch
 orchestration.
 
 Core owns queueing, durability, generic retry policy, hooks, receipts, and
@@ -25,7 +25,7 @@ Most plugins define one `message` adapter:
 import {
   defineChannelMessageAdapter,
   createMessageReceiptFromOutboundResults,
-} from "openclaw/plugin-sdk/channel-outbound";
+} from "marketingclaw/plugin-sdk/channel-outbound";
 
 export const demoMessageAdapter = defineChannelMessageAdapter({
   id: "demo",
@@ -81,7 +81,7 @@ If the channel already has a compatible `outbound` adapter, derive the
 message adapter instead of duplicating send code:
 
 ```ts
-import { createChannelMessageAdapterFromOutbound } from "openclaw/plugin-sdk/channel-outbound";
+import { createChannelMessageAdapterFromOutbound } from "marketingclaw/plugin-sdk/channel-outbound";
 
 export const messageAdapter = createChannelMessageAdapterFromOutbound({
   id: "demo",
@@ -137,7 +137,7 @@ The hook is a synchronous admission decision, not a send path. Read only
 already-loaded config or runtime state; do not perform network, filesystem, or
 other asynchronous I/O. Contract tests should exercise both phases and both
 result variants through `ChannelMessageDurableFinalAdapter` from
-`openclaw/plugin-sdk/channel-outbound`.
+`marketingclaw/plugin-sdk/channel-outbound`.
 
 ## Compatibility dispatch
 

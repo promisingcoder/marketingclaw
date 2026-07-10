@@ -13,7 +13,7 @@ import { assertValidParams } from "./validation.js";
 
 /**
  * `crestodian.chat` lets clients (macOS app onboarding, future UIs) run the
- * same conversational setup as `openclaw crestodian`. It is configless-safe:
+ * same conversational setup as `marketingclaw crestodian`. It is configless-safe:
  * the engine answers deterministically before any model is configured, so the
  * app can onboard a fresh machine entirely through this one method.
  *

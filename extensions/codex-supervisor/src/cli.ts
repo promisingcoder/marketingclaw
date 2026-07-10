@@ -4,9 +4,9 @@ import {
   addGatewayClientOptions,
   callGatewayFromCli,
   type GatewayRpcOpts,
-} from "openclaw/plugin-sdk/gateway-runtime";
-import { sanitizeTerminalText } from "openclaw/plugin-sdk/text-chunking";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "marketingclaw/plugin-sdk/gateway-runtime";
+import { sanitizeTerminalText } from "marketingclaw/plugin-sdk/text-chunking";
+import { truncateUtf16Safe } from "marketingclaw/plugin-sdk/text-utility-runtime";
 import {
   CODEX_SESSION_CATALOG_MAX_PAGE_LIMIT,
   CODEX_SESSION_CATALOG_METHOD,

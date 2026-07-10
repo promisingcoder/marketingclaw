@@ -1,4 +1,4 @@
-package ai.openclaw.app
+package ai.marketingclaw.app
 
 /**
  * Persisted voice capture mode that controls foreground-service microphone requirements.

@@ -61,7 +61,10 @@ describe("pre-auth bootstrap-token rate limit", () => {
       },
     };
     await withGatewayServer(async ({ port }) => {
-      const identityPrefix = path.join(os.tmpdir(), `openclaw-preauth-bootstrap-${randomUUID()}`);
+      const identityPrefix = path.join(
+        os.tmpdir(),
+        `marketingclaw-preauth-bootstrap-${randomUUID()}`,
+      );
 
       const responses = await Promise.all(
         Array.from(
@@ -93,7 +96,7 @@ describe("pre-auth bootstrap-token rate limit", () => {
     await withGatewayServer(async ({ port }) => {
       const identityPath = path.join(
         os.tmpdir(),
-        `openclaw-preauth-bootstrap-shared-${randomUUID()}.json`,
+        `marketingclaw-preauth-bootstrap-shared-${randomUUID()}.json`,
       );
 
       const first = await attemptForgedBootstrap(port, identityPath);

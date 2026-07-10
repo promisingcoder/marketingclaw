@@ -9,9 +9,9 @@ import {
   type TrustedToolExecutionEvent,
 } from "../infra/diagnostic-events.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-} from "../state/openclaw-state-db.js";
+  closeMarketingClawStateDatabaseForTest,
+  openMarketingClawStateDatabase,
+} from "../state/marketingclaw-state-db.js";
 import {
   createAgentEventAuditRecorder,
   projectAgentEventToAudit,
@@ -30,7 +30,7 @@ import type { AuditEventWriter } from "./audit-event-writer.js";
 const tempDirs: string[] = [];
 
 function createDatabaseOptions() {
-  return { env: { OPENCLAW_STATE_DIR: makeTempDir(tempDirs, "openclaw-audit-") } };
+  return { env: { MARKETINGCLAW_STATE_DIR: makeTempDir(tempDirs, "marketingclaw-audit-") } };
 }
 
 function auditInput(overrides: Partial<AuditEventInput> = {}): AuditEventInput {
@@ -79,7 +79,7 @@ function toolEvent(overrides: Partial<TrustedToolExecutionEvent> = {}): TrustedT
 }
 
 afterEach(() => {
-  closeOpenClawStateDatabaseForTest();
+  closeMarketingClawStateDatabaseForTest();
   resetAgentEventAuditForTest();
   resetDiagnosticEventsForTest();
 });
@@ -124,7 +124,7 @@ describe("audit event persistence", () => {
     expect(first.events.map((event) => event.sourceSequence)).toEqual([3, 2]);
     expect(first.nextCursor).toBe(first.events[1]?.sequence);
 
-    closeOpenClawStateDatabaseForTest();
+    closeMarketingClawStateDatabaseForTest();
     const second = listAuditEvents({ database, limit: 2, cursor: first.nextCursor });
     expect(second.events.map((event) => event.sourceSequence)).toEqual([1]);
     expect(second.events[0]?.eventId).toBe(oldest?.eventId);
@@ -163,7 +163,7 @@ describe("audit event persistence", () => {
     const database = createDatabaseOptions();
     const occurredAt = Date.now();
     recordAuditEvent(auditInput({ occurredAt }), database);
-    const { db } = openOpenClawStateDatabase(database);
+    const { db } = openMarketingClawStateDatabase(database);
     db.prepare("UPDATE sqlite_sequence SET seq = ? WHERE name = 'audit_events'").run(
       auditEventStoreLimits.maxRows + 1,
     );

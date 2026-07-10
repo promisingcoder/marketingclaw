@@ -1,10 +1,10 @@
 import Foundation
 
-public enum OpenClawPhotosCommand: String, Codable, Sendable {
+public enum MarketingClawPhotosCommand: String, Codable, Sendable {
     case latest = "photos.latest"
 }
 
-public struct OpenClawPhotosLatestParams: Codable, Sendable, Equatable {
+public struct MarketingClawPhotosLatestParams: Codable, Sendable, Equatable {
     public var limit: Int?
     public var maxWidth: Int?
     public var quality: Double?
@@ -16,7 +16,7 @@ public struct OpenClawPhotosLatestParams: Codable, Sendable, Equatable {
     }
 }
 
-public struct OpenClawPhotoPayload: Codable, Sendable, Equatable {
+public struct MarketingClawPhotoPayload: Codable, Sendable, Equatable {
     public var format: String
     public var base64: String
     public var width: Int
@@ -32,10 +32,10 @@ public struct OpenClawPhotoPayload: Codable, Sendable, Equatable {
     }
 }
 
-public struct OpenClawPhotosLatestPayload: Codable, Sendable, Equatable {
-    public var photos: [OpenClawPhotoPayload]
+public struct MarketingClawPhotosLatestPayload: Codable, Sendable, Equatable {
+    public var photos: [MarketingClawPhotoPayload]
 
-    public init(photos: [OpenClawPhotoPayload]) {
+    public init(photos: [MarketingClawPhotoPayload]) {
         self.photos = photos
     }
 }

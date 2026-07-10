@@ -4,7 +4,10 @@ import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { describe, expect, test, vi } from "vitest";
 import { z } from "zod";
 import { shouldRetryInitialMcpGatewayConnect } from "./channel-bridge.js";
-import { createOpenClawChannelMcpServer, OpenClawChannelBridge } from "./channel-server.js";
+import {
+  createMarketingClawChannelMcpServer,
+  MarketingClawChannelBridge,
+} from "./channel-server.js";
 import { extractAttachmentsFromMessage } from "./channel-shared.js";
 
 const ClaudeChannelNotificationSchema = z.object({
@@ -24,7 +27,7 @@ const ClaudePermissionNotificationSchema = z.object({
 });
 
 async function connectMcpWithoutGateway(params?: { claudeChannelMode?: "auto" | "on" | "off" }) {
-  const serverHarness = await createOpenClawChannelMcpServer({
+  const serverHarness = await createMarketingClawChannelMcpServer({
     claudeChannelMode: params?.claudeChannelMode ?? "auto",
     config: {} as never,
     verbose: false,
@@ -44,7 +47,7 @@ async function connectMcpWithoutGateway(params?: { claudeChannelMode?: "auto" | 
 }
 
 function attachReadyGateway(
-  bridge: OpenClawChannelBridge,
+  bridge: MarketingClawChannelBridge,
   gatewayRequest: ReturnType<typeof vi.fn>,
 ) {
   (
@@ -90,7 +93,7 @@ function gatewayRequestError(retryable: boolean): Error {
   });
 }
 
-describe("openclaw channel mcp server", () => {
+describe("marketingclaw channel mcp server", () => {
   test("keeps initial MCP gateway connection alive through transient connect errors", () => {
     expect(
       shouldRetryInitialMcpGatewayConnect(new Error("gateway request timeout for connect")),
@@ -170,7 +173,7 @@ describe("openclaw channel mcp server", () => {
                   content: [{ type: "text", text: "hello from transcript" }],
                 },
                 {
-                  __openclaw: {
+                  __marketingclaw: {
                     id: "msg-attachment",
                   },
                   role: "assistant",
@@ -191,7 +194,7 @@ describe("openclaw channel mcp server", () => {
           }
           throw new Error(`unexpected gateway method ${method}`);
         });
-        const bridge = new OpenClawChannelBridge({} as never, {
+        const bridge = new MarketingClawChannelBridge({} as never, {
           claudeChannelMode: "off",
           verbose: false,
         });
@@ -208,7 +211,7 @@ describe("openclaw channel mcp server", () => {
         const messages = await bridge.readMessages(sessionKey, 5);
         expect(messages[0]?.role).toBe("assistant");
         expect(messages[0]?.content).toEqual([{ type: "text", text: "hello from transcript" }]);
-        expect((messages[1]?.["__openclaw"] as { id?: string } | undefined)?.id).toBe(
+        expect((messages[1]?.["__marketingclaw"] as { id?: string } | undefined)?.id).toBe(
           "msg-attachment",
         );
         expect(
@@ -229,7 +232,7 @@ describe("openclaw channel mcp server", () => {
           }
           throw new Error(`unexpected gateway method ${method}`);
         });
-        const bridge = new OpenClawChannelBridge({} as never, {
+        const bridge = new MarketingClawChannelBridge({} as never, {
           claudeChannelMode: "off",
           verbose: false,
         });
@@ -405,7 +408,7 @@ describe("openclaw channel mcp server", () => {
     });
 
     test("sendMessage normalizes route metadata for gateway send", async () => {
-      const bridge = new OpenClawChannelBridge({} as never, {
+      const bridge = new MarketingClawChannelBridge({} as never, {
         claudeChannelMode: "off",
         verbose: false,
       });
@@ -439,7 +442,7 @@ describe("openclaw channel mcp server", () => {
     });
 
     test("gets one conversation through sessions.describe without broad listing", async () => {
-      const bridge = new OpenClawChannelBridge({} as never, {
+      const bridge = new MarketingClawChannelBridge({} as never, {
         claudeChannelMode: "off",
         verbose: false,
       });
@@ -476,7 +479,7 @@ describe("openclaw channel mcp server", () => {
     });
 
     test("lists routed sessions from deliveryContext without mirrored route fields", async () => {
-      const bridge = new OpenClawChannelBridge({} as never, {
+      const bridge = new MarketingClawChannelBridge({} as never, {
         claudeChannelMode: "off",
         verbose: false,
       });
@@ -516,7 +519,7 @@ describe("openclaw channel mcp server", () => {
     });
 
     test("swallows notification send errors after channel replies are matched", async () => {
-      const bridge = new OpenClawChannelBridge({} as never, {
+      const bridge = new MarketingClawChannelBridge({} as never, {
         claudeChannelMode: "on",
         verbose: false,
       });

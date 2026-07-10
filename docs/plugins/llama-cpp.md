@@ -3,7 +3,7 @@ summary: "Install the official llama.cpp provider for local GGUF memory embeddin
 read_when:
   - You want memory search embeddings from a local GGUF model
   - You are configuring memorySearch.provider = "local"
-  - You need the OpenClaw plugin that owns the node-llama-cpp runtime
+  - You need the MarketingClaw plugin that owns the node-llama-cpp runtime
 title: "llama.cpp Provider"
 sidebarTitle: "llama.cpp Provider"
 ---
@@ -15,12 +15,12 @@ embeddings. It registers embedding provider id `local` and owns the
 Install it before using local memory embeddings:
 
 ```bash
-openclaw plugins install @openclaw/llama-cpp-provider
+marketingclaw plugins install @marketingclaw/llama-cpp-provider
 ```
 
-The main `openclaw` npm package does not include `node-llama-cpp`. Keeping the
-native dependency in this plugin prevents normal OpenClaw npm updates from
-deleting a manually installed runtime inside the OpenClaw package directory.
+The main `marketingclaw` npm package does not include `node-llama-cpp`. Keeping the
+native dependency in this plugin prevents normal MarketingClaw npm updates from
+deleting a manually installed runtime inside the MarketingClaw package directory.
 
 ## Configuration
 
@@ -59,10 +59,10 @@ pnpm rebuild node-llama-cpp
 
 ## Troubleshooting
 
-If `node-llama-cpp` is missing or fails to load, OpenClaw reports the failure
+If `node-llama-cpp` is missing or fails to load, MarketingClaw reports the failure
 with:
 
-1. Install the plugin: `openclaw plugins install @openclaw/llama-cpp-provider`.
+1. Install the plugin: `marketingclaw plugins install @marketingclaw/llama-cpp-provider`.
 2. Use Node 24 for native installs/updates.
 3. From a pnpm source checkout: `pnpm approve-builds`, then `pnpm rebuild node-llama-cpp`.
 

@@ -3,7 +3,7 @@
  */
 
 import { spawn } from "node:child_process";
-import { sliceUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { sliceUtf16Safe } from "@marketingclaw/normalization-core/utf16-slice";
 import { killProcessTree } from "../../process/kill-tree.js";
 import { waitForChildProcess } from "../utils/child-process.js";
 

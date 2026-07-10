@@ -37,12 +37,12 @@ rather than generating a fresh request (and approval prompt) per attempt.
 ## CLI workflow (headless friendly)
 
 ```bash
-openclaw nodes pending
-openclaw nodes approve <requestId>
-openclaw nodes reject <requestId>
-openclaw nodes status
-openclaw nodes remove --node <id|name|ip>
-openclaw nodes rename --node <id|name|ip> --name "Living Room iPad"
+marketingclaw nodes pending
+marketingclaw nodes approve <requestId>
+marketingclaw nodes reject <requestId>
+marketingclaw nodes status
+marketingclaw nodes remove --node <id|name|ip>
+marketingclaw nodes rename --node <id|name|ip> --name "Living Room iPad"
 ```
 
 `nodes status` shows paired/connected nodes and their capabilities.
@@ -198,7 +198,7 @@ Boundaries:
 - Only records whose latest approval was same-host local (`silent`) are
   eligible, as trigger and as target. Trusted-CIDR pairings cross hosts where
   display metadata is not a machine identity, so they are never removed
-  automatically — use the Control UI cleanup or `openclaw nodes remove` for
+  automatically — use the Control UI cleanup or `marketingclaw nodes remove` for
   those.
 - Owner-approved and QR/setup-code (bootstrap) pairings are never removed
   automatically. Records approved before provenance existed stay protected,
@@ -213,7 +213,7 @@ Boundaries:
 ## Metadata-upgrade auto-approval
 
 When an already-paired device reconnects with only non-sensitive metadata
-changes (for example display name or client platform hints), OpenClaw treats
+changes (for example display name or client platform hints), MarketingClaw treats
 that as a `metadata-upgrade`. Silent auto-approval is narrow: it applies only
 to trusted non-browser local reconnects that already proved possession of
 local or shared credentials, including same-host native app reconnects after
@@ -244,12 +244,12 @@ operator auth.
 ## Storage (local, private)
 
 Pairing state is stored under the Gateway state directory (default
-`~/.openclaw`):
+`~/.marketingclaw`):
 
-- `~/.openclaw/nodes/paired.json`
-- `~/.openclaw/nodes/pending.json`
+- `~/.marketingclaw/nodes/paired.json`
+- `~/.marketingclaw/nodes/pending.json`
 
-If you override `OPENCLAW_STATE_DIR`, the `nodes/` folder moves with it.
+If you override `MARKETINGCLAW_STATE_DIR`, the `nodes/` folder moves with it.
 
 Security notes:
 

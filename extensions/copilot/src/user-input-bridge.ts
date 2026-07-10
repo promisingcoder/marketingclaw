@@ -5,7 +5,7 @@ import {
   embeddedAgentLog,
   type AgentHarnessUserInputQuestion,
   type EmbeddedRunAttemptParams,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "marketingclaw/plugin-sdk/agent-harness-runtime";
 
 type PendingCopilotUserInput = {
   question: AgentHarnessUserInputQuestion;

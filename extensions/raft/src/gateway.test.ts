@@ -2,9 +2,9 @@ import { EventEmitter } from "node:events";
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import type { ChannelGatewayContext } from "openclaw/plugin-sdk/channel-contract";
-import { createClaimableDedupe } from "openclaw/plugin-sdk/persistent-dedupe";
-import { resetPluginStateStoreForTests } from "openclaw/plugin-sdk/plugin-state-test-runtime";
+import type { ChannelGatewayContext } from "marketingclaw/plugin-sdk/channel-contract";
+import { createClaimableDedupe } from "marketingclaw/plugin-sdk/persistent-dedupe";
+import { resetPluginStateStoreForTests } from "marketingclaw/plugin-sdk/plugin-state-test-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { ResolvedRaftAccount } from "./accounts.js";
 import { startRaftGatewayAccount } from "./gateway.js";
@@ -16,7 +16,7 @@ class FakeBridge extends EventEmitter {
 const tempDirs = new Set<string>();
 
 function makeTempDir(prefix: string): string {
-  // openclaw-temp-dir: allow extension tests cannot import root test helpers
+  // marketingclaw-temp-dir: allow extension tests cannot import root test helpers
   const dir = mkdtempSync(path.join(tmpdir(), prefix));
   tempDirs.add(dir);
   return dir;
@@ -30,33 +30,35 @@ function createContext(accountId = "default") {
     lastStopAt: null,
     lastError: null,
   };
-  const run = vi.fn(async (params: {
-    raw: unknown;
-    adapter: {
-      ingest: (raw: unknown) => {
-        id: string;
-        timestamp: number;
-        rawText: string;
-        textForAgent: string;
-        textForCommands: string;
-      };
-      resolveTurn: (input: {
-        id: string;
-        timestamp: number;
-        rawText: string;
-        textForAgent: string;
-        textForCommands: string;
-      }) => Promise<{
-        delivery: {
-          deliver: () => Promise<{ visibleReplySent: false }>;
+  const run = vi.fn(
+    async (params: {
+      raw: unknown;
+      adapter: {
+        ingest: (raw: unknown) => {
+          id: string;
+          timestamp: number;
+          rawText: string;
+          textForAgent: string;
+          textForCommands: string;
         };
-      }>;
-    };
-  }) => {
-    const input = params.adapter.ingest(params.raw);
-    const turn = await params.adapter.resolveTurn(input);
-    await turn.delivery.deliver();
-  });
+        resolveTurn: (input: {
+          id: string;
+          timestamp: number;
+          rawText: string;
+          textForAgent: string;
+          textForCommands: string;
+        }) => Promise<{
+          delivery: {
+            deliver: () => Promise<{ visibleReplySent: false }>;
+          };
+        }>;
+      };
+    }) => {
+      const input = params.adapter.ingest(params.raw);
+      const turn = await params.adapter.resolveTurn(input);
+      await turn.delivery.deliver();
+    },
+  );
   const ctx = {
     cfg: {},
     accountId,
@@ -65,7 +67,7 @@ function createContext(accountId = "default") {
       name: null,
       enabled: true,
       configured: true,
-      profile: "openclaw",
+      profile: "marketingclaw",
     },
     runtime: {},
     abortSignal: new AbortController().signal,
@@ -90,7 +92,7 @@ function createContext(accountId = "default") {
         buildContext: vi.fn(() => ({})),
       },
       session: {
-        resolveStorePath: vi.fn(() => "/tmp/openclaw-agent.sqlite"),
+        resolveStorePath: vi.fn(() => "/tmp/marketingclaw-agent.sqlite"),
         recordInboundSession: vi.fn(),
       },
       reply: {
@@ -116,7 +118,7 @@ function createPersistentWakeDedupe(stateDir: string) {
     pluginId: "raft",
     namespacePrefix: "raft-wake-dedupe",
     stateMaxEntries: 10_000,
-    env: { ...process.env, OPENCLAW_STATE_DIR: stateDir },
+    env: { ...process.env, MARKETINGCLAW_STATE_DIR: stateDir },
   });
 }
 
@@ -391,7 +393,7 @@ describe("Raft wake gateway", () => {
   });
 
   it("persists accepted wake dedupe across restarts without crossing accounts", async () => {
-    const stateDir = makeTempDir("openclaw-raft-wake-dedupe-");
+    const stateDir = makeTempDir("marketingclaw-raft-wake-dedupe-");
     try {
       const first = createContext();
       Object.defineProperty(first.ctx, "abortSignal", { value: first.controller.signal });
@@ -485,5 +487,4 @@ describe("Raft wake gateway", () => {
       resetPluginStateStoreForTests();
     }
   });
-
 });

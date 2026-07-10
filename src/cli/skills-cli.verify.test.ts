@@ -49,7 +49,7 @@ vi.mock("../runtime.js", () => ({
 
 vi.mock("../utils.js", async (importOriginal) => ({
   ...(await importOriginal<typeof import("../utils.js")>()),
-  CONFIG_DIR: "/tmp/openclaw-config",
+  CONFIG_DIR: "/tmp/marketingclaw-config",
 }));
 
 vi.mock("../config/config.js", () => ({
@@ -79,7 +79,7 @@ describe("skills verify CLI", () => {
   let workspaceDir: string;
 
   beforeEach(async () => {
-    workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-skill-verify-cli-"));
+    workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-skill-verify-cli-"));
     mocks.runtimeStdout.length = 0;
     mocks.runtimeErrors.length = 0;
     mocks.resolveAgentWorkspaceDirMock.mockReset();
@@ -164,7 +164,7 @@ describe("skills verify CLI", () => {
       decision: "pass",
       reasons: [],
       skill: { slug: "agentreceipt" },
-      publisher: { handle: "openclaw" },
+      publisher: { handle: "marketingclaw" },
       version: { version: "1.2.3" },
       card: { available: true },
       artifact: {
@@ -220,9 +220,9 @@ describe("skills verify CLI", () => {
       baseUrl: "https://clawhub.ai",
     });
     const payload = JSON.parse(mocks.runtimeStdout.at(-1) ?? "{}") as {
-      openclaw?: { resolution?: { source?: string; selector?: string } };
+      marketingclaw?: { resolution?: { source?: string; selector?: string } };
     };
-    expect(payload.openclaw?.resolution).toMatchObject({
+    expect(payload.marketingclaw?.resolution).toMatchObject({
       source: "registry",
       selector: "version",
     });
@@ -278,7 +278,7 @@ describe("skills verify CLI", () => {
       decision: "pass",
       reasons: [],
       skill: { slug: "agentreceipt" },
-      publisher: { handle: "openclaw" },
+      publisher: { handle: "marketingclaw" },
       version: { version: "1.0.0" },
       card: { available: true },
       artifact: { sourceFingerprint: "source-fp" },
@@ -286,7 +286,7 @@ describe("skills verify CLI", () => {
         source: "server-resolved-github-import",
         kind: "github",
         url: sourceUrl,
-        repo: "openclaw/skills",
+        repo: "marketingclaw/skills",
         ref: "main",
         commit: "0123456789abcdef0123456789abcdef01234567",
         path: "agentreceipt",
@@ -298,9 +298,9 @@ describe("skills verify CLI", () => {
     await runCommand(["skills", "verify", "agentreceipt"]);
 
     const payload = JSON.parse(mocks.runtimeStdout.at(-1) ?? "{}") as {
-      openclaw?: { verifiedSourceUrl?: string };
+      marketingclaw?: { verifiedSourceUrl?: string };
     };
-    expect(payload.openclaw?.verifiedSourceUrl).toBe(verifiedSourceUrl);
+    expect(payload.marketingclaw?.verifiedSourceUrl).toBe(verifiedSourceUrl);
     expect(mocks.defaultRuntime.exit).not.toHaveBeenCalled();
     expect(mocks.runtimeErrors).toStrictEqual([]);
   });
@@ -312,7 +312,7 @@ describe("skills verify CLI", () => {
       decision: "pass",
       reasons: [],
       skill: { slug: "agentreceipt" },
-      publisher: { handle: "openclaw" },
+      publisher: { handle: "marketingclaw" },
       version: { version: "1.0.0" },
       card: { available: true },
       artifact: { sourceFingerprint: "source-fp" },
@@ -327,9 +327,9 @@ describe("skills verify CLI", () => {
     await runCommand(["skills", "verify", "agentreceipt"]);
 
     const payload = JSON.parse(mocks.runtimeStdout.at(-1) ?? "{}") as {
-      openclaw?: { verifiedSourceUrl?: string };
+      marketingclaw?: { verifiedSourceUrl?: string };
     };
-    expect(payload.openclaw?.verifiedSourceUrl).toBeUndefined();
+    expect(payload.marketingclaw?.verifiedSourceUrl).toBeUndefined();
     expect(mocks.defaultRuntime.exit).not.toHaveBeenCalled();
     expect(mocks.runtimeErrors).toStrictEqual([]);
   });

@@ -5,7 +5,7 @@ import { spawnSync } from "node:child_process";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { SessionManager } from "openclaw/plugin-sdk/agent-sessions";
+import { SessionManager } from "marketingclaw/plugin-sdk/agent-sessions";
 import {
   buildRuntimeContextCustomMessage,
   resolveRuntimeContextPromptParts,
@@ -57,15 +57,22 @@ function messageText(content: unknown): string {
 }
 
 async function verifyRuntimeContextTranscriptShape(root: string) {
-  const sessionFile = path.join(root, ".openclaw", "agents", "main", "sessions", "runtime.jsonl");
+  const sessionFile = path.join(
+    root,
+    ".marketingclaw",
+    "agents",
+    "main",
+    "sessions",
+    "runtime.jsonl",
+  );
   await fs.mkdir(path.dirname(sessionFile), { recursive: true });
   const sessionManager = SessionManager.open(sessionFile);
   const effectivePrompt = [
     "visible ask",
     "",
-    "<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>",
+    "<<<BEGIN_MARKETINGCLAW_INTERNAL_CONTEXT>>>",
     "secret docker context",
-    "<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+    "<<<END_MARKETINGCLAW_INTERNAL_CONTEXT>>>",
   ].join("\n");
   const promptSubmission = resolveRuntimeContextPromptParts({
     effectivePrompt,
@@ -95,7 +102,7 @@ async function verifyRuntimeContextTranscriptShape(root: string) {
   const customEntry = entries.find((entry) => entry.type === "custom_message");
   assert(!customEntry, "runtime custom message should not be persisted without its user turn");
   assert(
-    runtimeContextMessage.customType === "openclaw.runtime-context",
+    runtimeContextMessage.customType === "marketingclaw.runtime-context",
     "unexpected custom message type",
   );
   assert(!runtimeContextMessage.display, "runtime custom message should be hidden");
@@ -109,7 +116,8 @@ async function verifyRuntimeContextTranscriptShape(root: string) {
   const userText = messageText(userEntries[0]?.message?.content);
   assert(userText === "visible ask", `unexpected visible user text: ${JSON.stringify(userText)}`);
   assert(
-    !userText.includes("OPENCLAW_INTERNAL_CONTEXT") && !userText.includes("secret docker context"),
+    !userText.includes("MARKETINGCLAW_INTERNAL_CONTEXT") &&
+      !userText.includes("secret docker context"),
     "visible user transcript leaked runtime context",
   );
 }
@@ -135,9 +143,9 @@ async function seedBrokenSession(stateDir: string): Promise<string> {
         content: [
           "visible ask",
           "",
-          "<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>",
+          "<<<BEGIN_MARKETINGCLAW_INTERNAL_CONTEXT>>>",
           "secret doctor context",
-          "<<<END_OPENCLAW_INTERNAL_CONTEXT>>>",
+          "<<<END_MARKETINGCLAW_INTERNAL_CONTEXT>>>",
         ].join("\n"),
       },
     },
@@ -185,8 +193,8 @@ async function seedBrokenSession(stateDir: string): Promise<string> {
 }
 
 async function verifyDoctorRepair(root: string) {
-  const stateDir = path.join(root, ".openclaw");
-  const configPath = path.join(stateDir, "openclaw.json");
+  const stateDir = path.join(root, ".marketingclaw");
+  const configPath = path.join(stateDir, "marketingclaw.json");
   const sessionFile = await seedBrokenSession(stateDir);
   await fs.mkdir(path.dirname(configPath), { recursive: true });
   await fs.writeFile(configPath, JSON.stringify({ plugins: { enabled: false } }, null, 2));
@@ -200,15 +208,15 @@ async function verifyDoctorRepair(root: string) {
     env: {
       ...process.env,
       HOME: root,
-      OPENCLAW_CONFIG_PATH: configPath,
-      OPENCLAW_DISABLE_BONJOUR: "1",
-      OPENCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-      OPENCLAW_NO_ONBOARD: "1",
-      OPENCLAW_STATE_DIR: stateDir,
-      OPENCLAW_SKIP_CANVAS_HOST: "1",
-      OPENCLAW_SKIP_CHANNELS: "1",
-      OPENCLAW_SKIP_CRON: "1",
-      OPENCLAW_SKIP_GMAIL_WATCHER: "1",
+      MARKETINGCLAW_CONFIG_PATH: configPath,
+      MARKETINGCLAW_DISABLE_BONJOUR: "1",
+      MARKETINGCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+      MARKETINGCLAW_NO_ONBOARD: "1",
+      MARKETINGCLAW_STATE_DIR: stateDir,
+      MARKETINGCLAW_SKIP_CANVAS_HOST: "1",
+      MARKETINGCLAW_SKIP_CHANNELS: "1",
+      MARKETINGCLAW_SKIP_CRON: "1",
+      MARKETINGCLAW_SKIP_GMAIL_WATCHER: "1",
     },
     encoding: "utf-8",
     timeout: 120_000,
@@ -238,17 +246,17 @@ async function verifyDoctorRepair(root: string) {
 }
 
 async function main() {
-  const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-session-runtime-context-"));
-  const stateDir = path.join(root, ".openclaw");
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-session-runtime-context-"));
+  const stateDir = path.join(root, ".marketingclaw");
   setEnvValue("HOME", root);
-  setEnvValue("OPENCLAW_STATE_DIR", stateDir);
-  setEnvValue("OPENCLAW_CONFIG_PATH", path.join(stateDir, "openclaw.json"));
+  setEnvValue("MARKETINGCLAW_STATE_DIR", stateDir);
+  setEnvValue("MARKETINGCLAW_CONFIG_PATH", path.join(stateDir, "marketingclaw.json"));
   try {
     await verifyRuntimeContextTranscriptShape(root);
     await verifyDoctorRepair(root);
     console.log("session runtime context Docker E2E passed");
   } finally {
-    if (process.env.OPENCLAW_SESSION_RUNTIME_CONTEXT_KEEP_ARTIFACTS !== "1") {
+    if (process.env.MARKETINGCLAW_SESSION_RUNTIME_CONTEXT_KEEP_ARTIFACTS !== "1") {
       await fs.rm(root, { recursive: true, force: true });
     } else {
       console.error(`kept artifacts: ${root}`);

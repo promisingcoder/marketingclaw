@@ -9,7 +9,7 @@ import {
   type Api,
   type Model,
   type ModelThinkingLevel,
-} from "openclaw/plugin-sdk/llm";
+} from "marketingclaw/plugin-sdk/llm";
 import { afterEach, describe, expect, it } from "vitest";
 import { renderCatNoncePngBase64 } from "../../test/helpers/live-image-probe.js";
 import { discoverAuthStorage, discoverModels } from "../agents/agent-model-discovery.js";
@@ -46,10 +46,10 @@ import {
 import { getApiKeyForModel, resolveEnvApiKey } from "../agents/model-auth.js";
 import { normalizeProviderId } from "../agents/model-selection.js";
 import { shouldSuppressBuiltInModel } from "../agents/model-suppression.js";
-import { ensureOpenClawModelsJson } from "../agents/models-config.js";
+import { ensureMarketingClawModelsJson } from "../agents/models-config.js";
 import { STREAM_ERROR_FALLBACK_TEXT } from "../agents/stream-message-shared.js";
 import { clearRuntimeConfigSnapshot, getRuntimeConfig } from "../config/io.js";
-import type { ModelsConfig, ModelProviderConfig, OpenClawConfig } from "../config/types.js";
+import type { ModelsConfig, ModelProviderConfig, MarketingClawConfig } from "../config/types.js";
 import { isTruthyEnvValue } from "../infra/env.js";
 import type { ModelRegistry } from "../llm/model-registry.js";
 import { normalizeGoogleModelId } from "../plugin-sdk/google-model-id.js";
@@ -73,13 +73,13 @@ import { startGatewayServer } from "./server.impl.js";
 import { readSessionMessagesAsync } from "./session-transcript-readers.js";
 import { loadSessionEntry } from "./session-utils.js";
 
-const ZAI_FALLBACK = isTruthyEnvValue(process.env.OPENCLAW_LIVE_GATEWAY_ZAI_FALLBACK);
+const ZAI_FALLBACK = isTruthyEnvValue(process.env.MARKETINGCLAW_LIVE_GATEWAY_ZAI_FALLBACK);
 const REQUIRE_PROFILE_KEYS = isLiveProfileKeyModeEnabled();
 const LIVE_CREDENTIAL_PRECEDENCE = REQUIRE_PROFILE_KEYS ? "profile-first" : "env-first";
-const PROVIDERS = parseFilter(process.env.OPENCLAW_LIVE_GATEWAY_PROVIDERS);
-const GATEWAY_LIVE_SMOKE = isTruthyEnvValue(process.env.OPENCLAW_LIVE_GATEWAY_SMOKE);
+const PROVIDERS = parseFilter(process.env.MARKETINGCLAW_LIVE_GATEWAY_PROVIDERS);
+const GATEWAY_LIVE_SMOKE = isTruthyEnvValue(process.env.MARKETINGCLAW_LIVE_GATEWAY_SMOKE);
 const THINKING_LEVEL = resolveGatewayLiveThinkingLevel({
-  raw: process.env.OPENCLAW_LIVE_GATEWAY_THINKING,
+  raw: process.env.MARKETINGCLAW_LIVE_GATEWAY_THINKING,
   smoke: GATEWAY_LIVE_SMOKE,
 });
 const ENABLE_EXTRA_TOOL_PROBES = !GATEWAY_LIVE_SMOKE;
@@ -92,7 +92,7 @@ const EXPLICIT_LIVE_FALLBACK_CONTEXT_WINDOW = 128_000;
 const GATEWAY_LIVE_MAX_TIMEOUT_MS = 2 * 60 * 60 * 1000;
 const GATEWAY_LIVE_PROBE_TIMEOUT_MS = Math.max(
   30_000,
-  toInt(process.env.OPENCLAW_LIVE_GATEWAY_STEP_TIMEOUT_MS, 90_000),
+  toInt(process.env.MARKETINGCLAW_LIVE_GATEWAY_STEP_TIMEOUT_MS, 90_000),
 );
 const GATEWAY_LIVE_SETUP_TIMEOUT_MS = resolveGatewayLiveSetupTimeoutMs();
 const GATEWAY_LIVE_MODEL_TIMEOUT_MS = resolveGatewayLiveModelTimeoutMs();
@@ -102,7 +102,7 @@ const GATEWAY_LIVE_AGENT_RUN_TIMEOUT_MS = resolveGatewayLiveAgentRunTimeoutMs();
 const GATEWAY_LIVE_AGENT_WAIT_TIMEOUT_MS = resolveGatewayLiveAgentWaitTimeoutMs();
 const GATEWAY_LIVE_HEARTBEAT_MS = Math.max(
   1_000,
-  toInt(process.env.OPENCLAW_LIVE_GATEWAY_HEARTBEAT_MS, 30_000),
+  toInt(process.env.MARKETINGCLAW_LIVE_GATEWAY_HEARTBEAT_MS, 30_000),
 );
 const GATEWAY_LIVE_STRIP_SCAFFOLDING_MODEL_KEYS = new Set([
   "google/gemini-3-flash-preview",
@@ -112,10 +112,10 @@ const GATEWAY_LIVE_STRIP_SCAFFOLDING_MODEL_KEYS = new Set([
   "openai/gpt-5.4-pro",
 ]);
 const GATEWAY_LIVE_AGENT_ID = "dev";
-const GATEWAY_LIVE_CONFIG_TEST_WORKSPACE = path.join(os.tmpdir(), "openclaw-live-config-test");
+const GATEWAY_LIVE_CONFIG_TEST_WORKSPACE = path.join(os.tmpdir(), "marketingclaw-live-config-test");
 const GATEWAY_LIVE_CONFIG_TEST_AGENT_DIR = path.join(
   os.tmpdir(),
-  "openclaw-live-config-test-agent",
+  "marketingclaw-live-config-test-agent",
 );
 const GATEWAY_LIVE_EXEC_READ_NONCE_MISS_SKIP_MODEL_KEYS = new Set([
   "fireworks/accounts/fireworks/models/glm-5",
@@ -133,9 +133,9 @@ const GATEWAY_LIVE_TOOL_NONCE_MISS_SKIP_MODEL_KEYS = new Set([
 ]);
 const GATEWAY_LIVE_MAX_MODELS = resolveGatewayLiveMaxModels();
 const GATEWAY_LIVE_SUITE_TIMEOUT_MS = resolveGatewayLiveSuiteTimeoutMs(GATEWAY_LIVE_MAX_MODELS);
-const QUIET_LIVE_LOGS = process.env.OPENCLAW_LIVE_TEST_QUIET !== "0";
+const QUIET_LIVE_LOGS = process.env.MARKETINGCLAW_LIVE_TEST_QUIET !== "0";
 
-const describeLive = isLiveTestEnabled(["OPENCLAW_LIVE_GATEWAY"]) ? describe : describe.skip;
+const describeLive = isLiveTestEnabled(["MARKETINGCLAW_LIVE_GATEWAY"]) ? describe : describe.skip;
 
 function parseFilter(raw?: string): Set<string> | null {
   const trimmed = raw?.trim();
@@ -261,22 +261,22 @@ function toInt(value: string | undefined, fallback: number): number {
 }
 
 function resolveGatewayLiveSetupTimeoutMs(
-  raw = process.env.OPENCLAW_LIVE_GATEWAY_SETUP_TIMEOUT_MS,
+  raw = process.env.MARKETINGCLAW_LIVE_GATEWAY_SETUP_TIMEOUT_MS,
 ): number {
   return Math.max(1_000, toInt(raw, 180_000));
 }
 
 function resolveGatewayLiveMaxModels(): number {
-  const gatewayRaw = process.env.OPENCLAW_LIVE_GATEWAY_MAX_MODELS?.trim();
+  const gatewayRaw = process.env.MARKETINGCLAW_LIVE_GATEWAY_MAX_MODELS?.trim();
   if (gatewayRaw) {
     return Math.max(0, toInt(gatewayRaw, 0));
   }
-  const rawModels = process.env.OPENCLAW_LIVE_GATEWAY_MODELS?.trim();
+  const rawModels = process.env.MARKETINGCLAW_LIVE_GATEWAY_MODELS?.trim();
   const useSmallModels = rawModels === "small";
   const useExplicitModels =
     Boolean(rawModels) && rawModels !== "modern" && rawModels !== "all" && !useSmallModels;
   return resolveHighSignalLiveModelLimit({
-    rawMaxModels: process.env.OPENCLAW_LIVE_MAX_MODELS,
+    rawMaxModels: process.env.MARKETINGCLAW_LIVE_MAX_MODELS,
     useExplicitModels,
     defaultLimit: useSmallModels
       ? DEFAULT_SMALL_LIVE_MODEL_LIMIT
@@ -300,8 +300,8 @@ function resolveGatewayLiveSuiteTimeoutMs(maxModels: number): number {
 }
 
 function resolveGatewayLiveModelTimeoutMs(
-  gatewayModelTimeoutRaw = process.env.OPENCLAW_LIVE_GATEWAY_MODEL_TIMEOUT_MS,
-  liveModelTimeoutRaw = process.env.OPENCLAW_LIVE_MODEL_TIMEOUT_MS,
+  gatewayModelTimeoutRaw = process.env.MARKETINGCLAW_LIVE_GATEWAY_MODEL_TIMEOUT_MS,
+  liveModelTimeoutRaw = process.env.MARKETINGCLAW_LIVE_MODEL_TIMEOUT_MS,
   stepTimeoutMs = GATEWAY_LIVE_PROBE_TIMEOUT_MS,
 ): number {
   const requested = toInt(gatewayModelTimeoutRaw, toInt(liveModelTimeoutRaw, 300_000));
@@ -545,10 +545,10 @@ function enterProductionEnvForLiveRun() {
   const previous = {
     vitest: process.env.VITEST,
     nodeEnv: process.env.NODE_ENV,
-    testFast: process.env.OPENCLAW_TEST_FAST,
+    testFast: process.env.MARKETINGCLAW_TEST_FAST,
   };
   delete process.env.VITEST;
-  delete process.env.OPENCLAW_TEST_FAST;
+  delete process.env.MARKETINGCLAW_TEST_FAST;
   process.env.NODE_ENV = "production";
   return previous;
 }
@@ -564,9 +564,9 @@ function restoreProductionEnvForLiveRun(previous: {
     process.env.VITEST = previous.vitest;
   }
   if (previous.testFast === undefined) {
-    delete process.env.OPENCLAW_TEST_FAST;
+    delete process.env.MARKETINGCLAW_TEST_FAST;
   } else {
-    process.env.OPENCLAW_TEST_FAST = previous.testFast;
+    process.env.MARKETINGCLAW_TEST_FAST = previous.testFast;
   }
   if (previous.nodeEnv === undefined) {
     delete process.env.NODE_ENV;
@@ -1109,9 +1109,9 @@ describe("resolveGatewayLiveSuiteTimeoutMs", () => {
 });
 
 describe("resolveGatewayLiveMaxModels", () => {
-  const originalGatewayModels = process.env.OPENCLAW_LIVE_GATEWAY_MODELS;
-  const originalGatewayMax = process.env.OPENCLAW_LIVE_GATEWAY_MAX_MODELS;
-  const originalSharedMax = process.env.OPENCLAW_LIVE_MAX_MODELS;
+  const originalGatewayModels = process.env.MARKETINGCLAW_LIVE_GATEWAY_MODELS;
+  const originalGatewayMax = process.env.MARKETINGCLAW_LIVE_GATEWAY_MAX_MODELS;
+  const originalSharedMax = process.env.MARKETINGCLAW_LIVE_MAX_MODELS;
   function restoreEnvValue(name: string, value: string | undefined): void {
     if (value === undefined) {
       deleteTestEnvValue(name);
@@ -1121,35 +1121,35 @@ describe("resolveGatewayLiveMaxModels", () => {
   }
 
   afterEach(() => {
-    restoreEnvValue("OPENCLAW_LIVE_GATEWAY_MODELS", originalGatewayModels);
-    restoreEnvValue("OPENCLAW_LIVE_GATEWAY_MAX_MODELS", originalGatewayMax);
-    restoreEnvValue("OPENCLAW_LIVE_MAX_MODELS", originalSharedMax);
+    restoreEnvValue("MARKETINGCLAW_LIVE_GATEWAY_MODELS", originalGatewayModels);
+    restoreEnvValue("MARKETINGCLAW_LIVE_GATEWAY_MAX_MODELS", originalGatewayMax);
+    restoreEnvValue("MARKETINGCLAW_LIVE_MAX_MODELS", originalSharedMax);
   });
 
   it("defaults modern gateway sweeps to the curated high-signal cap", () => {
-    delete process.env.OPENCLAW_LIVE_GATEWAY_MODELS;
-    delete process.env.OPENCLAW_LIVE_GATEWAY_MAX_MODELS;
-    delete process.env.OPENCLAW_LIVE_MAX_MODELS;
+    delete process.env.MARKETINGCLAW_LIVE_GATEWAY_MODELS;
+    delete process.env.MARKETINGCLAW_LIVE_GATEWAY_MAX_MODELS;
+    delete process.env.MARKETINGCLAW_LIVE_MAX_MODELS;
 
     expect(resolveGatewayLiveMaxModels()).toBe(DEFAULT_HIGH_SIGNAL_LIVE_MODEL_LIMIT);
   });
 
   it("defaults small gateway sweeps to the curated small-model cap", () => {
-    process.env.OPENCLAW_LIVE_GATEWAY_MODELS = "small";
-    delete process.env.OPENCLAW_LIVE_GATEWAY_MAX_MODELS;
-    delete process.env.OPENCLAW_LIVE_MAX_MODELS;
+    process.env.MARKETINGCLAW_LIVE_GATEWAY_MODELS = "small";
+    delete process.env.MARKETINGCLAW_LIVE_GATEWAY_MAX_MODELS;
+    delete process.env.MARKETINGCLAW_LIVE_MAX_MODELS;
 
     expect(resolveGatewayLiveMaxModels()).toBe(DEFAULT_SMALL_LIVE_MODEL_LIMIT);
   });
 
   it("keeps explicit gateway model lists uncapped unless a cap is provided", () => {
-    process.env.OPENCLAW_LIVE_GATEWAY_MODELS = "openai/gpt-5.5,anthropic/claude-opus-4-6";
-    delete process.env.OPENCLAW_LIVE_GATEWAY_MAX_MODELS;
-    delete process.env.OPENCLAW_LIVE_MAX_MODELS;
+    process.env.MARKETINGCLAW_LIVE_GATEWAY_MODELS = "openai/gpt-5.5,anthropic/claude-opus-4-6";
+    delete process.env.MARKETINGCLAW_LIVE_GATEWAY_MAX_MODELS;
+    delete process.env.MARKETINGCLAW_LIVE_MAX_MODELS;
 
     expect(resolveGatewayLiveMaxModels()).toBe(0);
 
-    process.env.OPENCLAW_LIVE_GATEWAY_MAX_MODELS = "2";
+    process.env.MARKETINGCLAW_LIVE_GATEWAY_MAX_MODELS = "2";
     expect(resolveGatewayLiveMaxModels()).toBe(2);
   });
 });
@@ -1182,7 +1182,7 @@ function resolveExplicitLiveFallbackApi(provider: string): Api {
 
 function resolveDefaultBedrockLiveBaseUrl(
   params: {
-    cfg?: OpenClawConfig;
+    cfg?: MarketingClawConfig;
     env?: NodeJS.ProcessEnv;
   } = {},
 ): string {
@@ -1196,7 +1196,7 @@ function resolveDefaultBedrockLiveBaseUrl(
   return `https://bedrock-runtime.${region}.amazonaws.com`;
 }
 
-function resolveBedrockDiscoveryRegion(cfg: OpenClawConfig | undefined): string | undefined {
+function resolveBedrockDiscoveryRegion(cfg: MarketingClawConfig | undefined): string | undefined {
   const pluginConfig = cfg?.plugins?.entries?.["amazon-bedrock"]?.config;
   if (!isRecord(pluginConfig)) {
     return undefined;
@@ -1647,7 +1647,7 @@ describe("resolveGatewayLiveModelThinkingLevel", () => {
 });
 
 describe("buildLiveGatewayConfig", () => {
-  it("pins selected live gateway models to the OpenClaw runtime", () => {
+  it("pins selected live gateway models to the MarketingClaw runtime", () => {
     const cfg = buildLiveGatewayConfig({
       cfg: {},
       candidates: [createGatewayLiveTestModel("openai", "gpt-5.5")],
@@ -1656,7 +1656,7 @@ describe("buildLiveGatewayConfig", () => {
     });
 
     expect(cfg.agents?.defaults?.models?.["openai/gpt-5.5"]).toEqual({
-      agentRuntime: { id: "openclaw" },
+      agentRuntime: { id: "marketingclaw" },
     });
   });
 
@@ -1794,7 +1794,10 @@ describe("buildLiveGatewayConfig", () => {
       deleteTestEnvValue("AWS_PROFILE");
       deleteTestEnvValue("AWS_CONFIG_FILE");
       deleteTestEnvValue("AWS_SHARED_CREDENTIALS_FILE");
-      setTestEnvValue("HOME", path.join(os.tmpdir(), `openclaw-empty-aws-home-${randomUUID()}`));
+      setTestEnvValue(
+        "HOME",
+        path.join(os.tmpdir(), `marketingclaw-empty-aws-home-${randomUUID()}`),
+      );
 
       const cfg = buildLiveGatewayConfig({
         cfg: {},
@@ -1967,7 +1970,7 @@ describe("buildLiveGatewayConfig", () => {
       awsSharedCredentialsFile: process.env.AWS_SHARED_CREDENTIALS_FILE,
       home: process.env.HOME,
     };
-    const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-bedrock-aws-home-"));
+    const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-bedrock-aws-home-"));
     try {
       const awsDir = path.join(tempHome, ".aws");
       await fs.mkdir(awsDir, { recursive: true });
@@ -2015,7 +2018,7 @@ describe("buildLiveGatewayConfig", () => {
       awsSharedCredentialsFile: process.env.AWS_SHARED_CREDENTIALS_FILE,
       home: process.env.HOME,
     };
-    const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-bedrock-aws-home-"));
+    const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-bedrock-aws-home-"));
     try {
       const awsDir = path.join(tempHome, ".aws");
       await fs.mkdir(awsDir, { recursive: true });
@@ -2063,7 +2066,7 @@ describe("buildLiveGatewayConfig", () => {
       awsSharedCredentialsFile: process.env.AWS_SHARED_CREDENTIALS_FILE,
       home: process.env.HOME,
     };
-    const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-bedrock-aws-home-"));
+    const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-bedrock-aws-home-"));
     try {
       const awsDir = path.join(tempHome, ".aws");
       await fs.mkdir(awsDir, { recursive: true });
@@ -2113,22 +2116,22 @@ describe("enterProductionEnvForLiveRun", () => {
     const previous = {
       vitest: process.env.VITEST,
       nodeEnv: process.env.NODE_ENV,
-      testFast: process.env.OPENCLAW_TEST_FAST,
+      testFast: process.env.MARKETINGCLAW_TEST_FAST,
     };
     process.env.VITEST = "1";
     process.env.NODE_ENV = "test";
-    process.env.OPENCLAW_TEST_FAST = "1";
+    process.env.MARKETINGCLAW_TEST_FAST = "1";
 
     const runtimeEnv = enterProductionEnvForLiveRun();
     try {
       expect(process.env.VITEST).toBeUndefined();
       expect(process.env.NODE_ENV).toBe("production");
-      expect(process.env.OPENCLAW_TEST_FAST).toBeUndefined();
+      expect(process.env.MARKETINGCLAW_TEST_FAST).toBeUndefined();
     } finally {
       restoreProductionEnvForLiveRun(runtimeEnv);
       restoreOptionalEnv("VITEST", previous.vitest);
       restoreOptionalEnv("NODE_ENV", previous.nodeEnv);
-      restoreOptionalEnv("OPENCLAW_TEST_FAST", previous.testFast);
+      restoreOptionalEnv("MARKETINGCLAW_TEST_FAST", previous.testFast);
     }
   });
 });
@@ -3052,7 +3055,7 @@ async function requestGatewayAgentText(params: {
 
 type GatewayModelSuiteParams = {
   label: string;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   candidates: Array<Model>;
   allowNotFoundSkip: boolean;
   extraToolProbes: boolean;
@@ -3171,7 +3174,7 @@ function createStaticLiveModelRegistry(models: Array<Model>): LiveModelRegistry 
 
 async function loadAuthBackedLiveModelRegistry(params: {
   agentDir: string;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   providerList: string[] | undefined;
 }): Promise<{
   authProfileStore: AuthProfileStore;
@@ -3266,7 +3269,7 @@ function mergeLiveProviderConfig(params: {
 
 function buildLiveProviderConfigs(params: {
   candidates: Array<Model>;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
 }): Record<string, ModelProviderConfig> {
   const providers: Record<string, ModelProviderConfig> = {};
   for (const model of params.candidates) {
@@ -3283,7 +3286,7 @@ function buildLiveProviderConfigs(params: {
 
 function buildLiveProviderConfig(params: {
   model: Model;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
 }): ModelProviderConfig {
   const { model } = params;
   const provider = normalizeProviderId(model.provider);
@@ -3366,7 +3369,7 @@ function resolveExplicitLiveModelCandidates(params: {
 }
 
 function resolveGatewayLiveModelThinkingLevel(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   model: Model;
   requestedLevel: string;
 }): string {
@@ -3439,12 +3442,12 @@ function resolveGatewayLiveThinkingLevel(params: { raw?: string; smoke: boolean 
 }
 
 function buildLiveGatewayConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   candidates: Array<Model>;
   liveAgentDir: string;
   liveAgentWorkspaceDir: string;
   providerOverrides?: Record<string, ModelProviderConfig>;
-}): OpenClawConfig {
+}): MarketingClawConfig {
   const providerOverrides = params.providerOverrides ?? {};
   const lmstudioProvider = params.cfg.models?.providers?.lmstudio;
   const baseProviders = params.cfg.models?.providers ?? {};
@@ -3480,7 +3483,7 @@ function buildLiveGatewayConfig(params: {
       workspace: params.liveAgentWorkspaceDir,
       sandbox: { mode: "off" },
     },
-  ] satisfies NonNullable<OpenClawConfig["agents"]>["list"];
+  ] satisfies NonNullable<MarketingClawConfig["agents"]>["list"];
   const baseModels = params.cfg.models;
   return {
     ...params.cfg,
@@ -3500,7 +3503,7 @@ function buildLiveGatewayConfig(params: {
         models: Object.fromEntries(
           params.candidates.map((m) => [
             `${m.provider}/${m.id}`,
-            { agentRuntime: { id: "openclaw" as const } },
+            { agentRuntime: { id: "marketingclaw" as const } },
           ]),
         ),
       },
@@ -3513,9 +3516,9 @@ function buildLiveGatewayConfig(params: {
 }
 
 async function sanitizeAuthConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   agentDir: string;
-}): Promise<OpenClawConfig["auth"] | undefined> {
+}): Promise<MarketingClawConfig["auth"] | undefined> {
   const auth = params.cfg.auth;
   if (!auth) {
     return auth;
@@ -3524,7 +3527,7 @@ async function sanitizeAuthConfig(params: {
     allowKeychainPrompt: false,
   });
 
-  let profiles: NonNullable<OpenClawConfig["auth"]>["profiles"] | undefined;
+  let profiles: NonNullable<MarketingClawConfig["auth"]>["profiles"] | undefined;
   if (auth.profiles) {
     profiles = {};
     for (const [profileId, profile] of Object.entries(auth.profiles)) {
@@ -3564,7 +3567,7 @@ async function sanitizeAuthConfig(params: {
 }
 
 function buildMinimaxProviderOverride(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   api: "openai-completions" | "anthropic-messages";
   baseUrl: string;
 }): ModelProviderConfig | null {
@@ -3583,29 +3586,29 @@ async function runGatewayModelSuite(params: GatewayModelSuiteParams) {
   clearRuntimeConfigSnapshot();
   const runtimeEnv = enterProductionEnvForLiveRun();
   const previous = {
-    configPath: process.env.OPENCLAW_CONFIG_PATH,
-    token: process.env.OPENCLAW_GATEWAY_TOKEN,
-    skipChannels: process.env.OPENCLAW_SKIP_CHANNELS,
-    skipGmail: process.env.OPENCLAW_SKIP_GMAIL_WATCHER,
-    skipCron: process.env.OPENCLAW_SKIP_CRON,
-    skipCanvas: process.env.OPENCLAW_SKIP_CANVAS_HOST,
-    disableBonjour: process.env.OPENCLAW_DISABLE_BONJOUR,
-    logLevel: process.env.OPENCLAW_LOG_LEVEL,
-    agentDir: process.env.OPENCLAW_AGENT_DIR,
-    stateDir: process.env.OPENCLAW_STATE_DIR,
+    configPath: process.env.MARKETINGCLAW_CONFIG_PATH,
+    token: process.env.MARKETINGCLAW_GATEWAY_TOKEN,
+    skipChannels: process.env.MARKETINGCLAW_SKIP_CHANNELS,
+    skipGmail: process.env.MARKETINGCLAW_SKIP_GMAIL_WATCHER,
+    skipCron: process.env.MARKETINGCLAW_SKIP_CRON,
+    skipCanvas: process.env.MARKETINGCLAW_SKIP_CANVAS_HOST,
+    disableBonjour: process.env.MARKETINGCLAW_DISABLE_BONJOUR,
+    logLevel: process.env.MARKETINGCLAW_LOG_LEVEL,
+    agentDir: process.env.MARKETINGCLAW_AGENT_DIR,
+    stateDir: process.env.MARKETINGCLAW_STATE_DIR,
   };
 
-  process.env.OPENCLAW_SKIP_CHANNELS = "1";
-  process.env.OPENCLAW_SKIP_GMAIL_WATCHER = "1";
-  process.env.OPENCLAW_SKIP_CRON = "1";
-  process.env.OPENCLAW_SKIP_CANVAS_HOST = "1";
+  process.env.MARKETINGCLAW_SKIP_CHANNELS = "1";
+  process.env.MARKETINGCLAW_SKIP_GMAIL_WATCHER = "1";
+  process.env.MARKETINGCLAW_SKIP_CRON = "1";
+  process.env.MARKETINGCLAW_SKIP_CANVAS_HOST = "1";
   if (QUIET_LIVE_LOGS) {
-    process.env.OPENCLAW_DISABLE_BONJOUR = "1";
-    process.env.OPENCLAW_LOG_LEVEL = "silent";
+    process.env.MARKETINGCLAW_DISABLE_BONJOUR = "1";
+    process.env.MARKETINGCLAW_LOG_LEVEL = "silent";
   }
 
   const token = `test-${randomUUID()}`;
-  process.env.OPENCLAW_GATEWAY_TOKEN = token;
+  process.env.MARKETINGCLAW_GATEWAY_TOKEN = token;
   const agentId = GATEWAY_LIVE_AGENT_ID;
 
   const hostAgentDir = resolveDefaultAgentDir(getRuntimeConfig());
@@ -3621,8 +3624,8 @@ async function runGatewayModelSuite(params: GatewayModelSuiteParams) {
     lastGood: hostStore.lastGood ? { ...hostStore.lastGood } : undefined,
     usageStats: hostStore.usageStats ? { ...hostStore.usageStats } : undefined,
   });
-  const tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-live-state-"));
-  setTestEnvValue("OPENCLAW_STATE_DIR", tempStateDir);
+  const tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-live-state-"));
+  setTestEnvValue("MARKETINGCLAW_STATE_DIR", tempStateDir);
   const tempAgentDir: string | undefined = path.join(
     tempStateDir,
     "agents",
@@ -3634,13 +3637,13 @@ async function runGatewayModelSuite(params: GatewayModelSuiteParams) {
   if (tempSessionAgentDir !== tempAgentDir) {
     saveAuthProfileStore(sanitizedStore, tempSessionAgentDir);
   }
-  setTestEnvValue("OPENCLAW_AGENT_DIR", tempAgentDir);
+  setTestEnvValue("MARKETINGCLAW_AGENT_DIR", tempAgentDir);
 
   const workspaceDir = path.join(tempStateDir, "workspace-dev");
   await fs.mkdir(workspaceDir, { recursive: true });
-  await fs.mkdir(path.join(workspaceDir, ".openclaw"), { recursive: true });
+  await fs.mkdir(path.join(workspaceDir, ".marketingclaw"), { recursive: true });
   await fs.writeFile(
-    path.join(workspaceDir, ".openclaw", "workspace-state.json"),
+    path.join(workspaceDir, ".marketingclaw", "workspace-state.json"),
     `${JSON.stringify(
       {
         version: 1,
@@ -3653,11 +3656,11 @@ async function runGatewayModelSuite(params: GatewayModelSuiteParams) {
   await fs.rm(path.join(workspaceDir, "BOOTSTRAP.md"), { force: true });
   const nonceA = randomUUID();
   const nonceB = randomUUID();
-  const toolProbePath = path.join(workspaceDir, `.openclaw-live-tool-probe.${nonceA}.txt`);
+  const toolProbePath = path.join(workspaceDir, `.marketingclaw-live-tool-probe.${nonceA}.txt`);
   await fs.writeFile(toolProbePath, `nonceA=${nonceA}\nnonceB=${nonceB}\n`);
 
   const agentDir = resolveDefaultAgentDir(params.cfg);
-  const sanitizedCfg: OpenClawConfig = {
+  const sanitizedCfg: MarketingClawConfig = {
     ...params.cfg,
     auth: await sanitizeAuthConfig({ cfg: params.cfg, agentDir }),
   };
@@ -3668,10 +3671,10 @@ async function runGatewayModelSuite(params: GatewayModelSuiteParams) {
     liveAgentWorkspaceDir: workspaceDir,
     providerOverrides: params.providerOverrides,
   });
-  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-live-"));
-  const tempConfigPath = path.join(tempDir, "openclaw.json");
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-live-"));
+  const tempConfigPath = path.join(tempDir, "marketingclaw.json");
   await fs.writeFile(tempConfigPath, `${JSON.stringify(nextCfg, null, 2)}\n`);
-  setTestEnvValue("OPENCLAW_CONFIG_PATH", tempConfigPath);
+  setTestEnvValue("MARKETINGCLAW_CONFIG_PATH", tempConfigPath);
 
   const liveProviders = nextCfg.models?.providers;
   if (liveProviders && Object.keys(liveProviders).length > 0) {
@@ -3895,10 +3898,10 @@ async function runGatewayModelSuite(params: GatewayModelSuiteParams) {
                     idempotencyKey: `idem-${runIdTool}-tool-${toolReadAttempt + 1}`,
                     modelKey,
                     message: strictReply
-                      ? "OpenClaw live tool probe (local, safe): " +
+                      ? "MarketingClaw live tool probe (local, safe): " +
                         `use the tool named \`read\` (or \`Read\`) with JSON arguments {"path":"${toolProbePath}"}. ` +
                         "Then reply with exactly the two nonce values from that file, separated by one space. No extra text."
-                      : "OpenClaw live tool probe (local, safe): " +
+                      : "MarketingClaw live tool probe (local, safe): " +
                         `use the tool named \`read\` (or \`Read\`) with JSON arguments {"path":"${toolProbePath}"}. ` +
                         "Then reply with the two nonce values you read (include both).",
                     thinkingLevel,
@@ -3990,12 +3993,12 @@ async function runGatewayModelSuite(params: GatewayModelSuiteParams) {
                     idempotencyKey: `idem-${runIdTool}-exec-read-${execReadAttempt + 1}`,
                     modelKey,
                     message: strictReply
-                      ? "OpenClaw live tool probe (local, safe): " +
+                      ? "MarketingClaw live tool probe (local, safe): " +
                         "use the tool named `exec` (or `Exec`) to run this command: " +
                         `mkdir -p "${tempDir}" && printf '%s' '${nonceC}' > "${toolWritePath}". ` +
                         `Then use the tool named \`read\` (or \`Read\`) with JSON arguments {"path":"${toolWritePath}"}. ` +
                         "Then reply with exactly the nonce text from that file. No extra text."
-                      : "OpenClaw live tool probe (local, safe): " +
+                      : "MarketingClaw live tool probe (local, safe): " +
                         "use the tool named `exec` (or `Exec`) to run this command: " +
                         `mkdir -p "${tempDir}" && printf '%s' '${nonceC}' > "${toolWritePath}". ` +
                         `Then use the tool named \`read\` (or \`Read\`) with JSON arguments {"path":"${toolWritePath}"}. ` +
@@ -4389,16 +4392,16 @@ async function runGatewayModelSuite(params: GatewayModelSuiteParams) {
       await fs.rm(tempStateDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 50 });
     }
 
-    restoreOptionalEnv("OPENCLAW_CONFIG_PATH", previous.configPath);
-    restoreOptionalEnv("OPENCLAW_GATEWAY_TOKEN", previous.token);
-    restoreOptionalEnv("OPENCLAW_SKIP_CHANNELS", previous.skipChannels);
-    restoreOptionalEnv("OPENCLAW_SKIP_GMAIL_WATCHER", previous.skipGmail);
-    restoreOptionalEnv("OPENCLAW_SKIP_CRON", previous.skipCron);
-    restoreOptionalEnv("OPENCLAW_SKIP_CANVAS_HOST", previous.skipCanvas);
-    restoreOptionalEnv("OPENCLAW_DISABLE_BONJOUR", previous.disableBonjour);
-    restoreOptionalEnv("OPENCLAW_LOG_LEVEL", previous.logLevel);
-    restoreOptionalEnv("OPENCLAW_AGENT_DIR", previous.agentDir);
-    restoreOptionalEnv("OPENCLAW_STATE_DIR", previous.stateDir);
+    restoreOptionalEnv("MARKETINGCLAW_CONFIG_PATH", previous.configPath);
+    restoreOptionalEnv("MARKETINGCLAW_GATEWAY_TOKEN", previous.token);
+    restoreOptionalEnv("MARKETINGCLAW_SKIP_CHANNELS", previous.skipChannels);
+    restoreOptionalEnv("MARKETINGCLAW_SKIP_GMAIL_WATCHER", previous.skipGmail);
+    restoreOptionalEnv("MARKETINGCLAW_SKIP_CRON", previous.skipCron);
+    restoreOptionalEnv("MARKETINGCLAW_SKIP_CANVAS_HOST", previous.skipCanvas);
+    restoreOptionalEnv("MARKETINGCLAW_DISABLE_BONJOUR", previous.disableBonjour);
+    restoreOptionalEnv("MARKETINGCLAW_LOG_LEVEL", previous.logLevel);
+    restoreOptionalEnv("MARKETINGCLAW_AGENT_DIR", previous.agentDir);
+    restoreOptionalEnv("MARKETINGCLAW_STATE_DIR", previous.stateDir);
   }
 }
 
@@ -4419,7 +4422,7 @@ describeLive("gateway live (dev agent, profile keys)", () => {
         const workspaceDir = resolveAgentWorkspaceDir(cfg, DEFAULT_AGENT_ID);
         logProgress("[all-models] preparing models.json");
         const modelsJsonResult = await withGatewayLiveSetupTimeout(
-          ensureOpenClawModelsJson(cfg, undefined, {
+          ensureMarketingClawModelsJson(cfg, undefined, {
             workspaceDir,
             ...(providerList ? { providerDiscoveryProviderIds: providerList } : {}),
           }),
@@ -4427,7 +4430,7 @@ describeLive("gateway live (dev agent, profile keys)", () => {
         );
         const agentDir = modelsJsonResult.agentDir;
 
-        const rawModels = process.env.OPENCLAW_LIVE_GATEWAY_MODELS?.trim();
+        const rawModels = process.env.MARKETINGCLAW_LIVE_GATEWAY_MODELS?.trim();
         const useModern = !rawModels || rawModels === "modern" || rawModels === "all";
         const useSmall = rawModels === "small";
         const useExplicit = Boolean(rawModels) && !useModern && !useSmall;
@@ -4596,7 +4599,7 @@ describeLive("gateway live (dev agent, profile keys)", () => {
         );
         if (selectedCandidates.length < candidates.length) {
           logProgress(
-            `[all-models] capped to ${selectedCandidates.length}/${candidates.length} via OPENCLAW_LIVE_GATEWAY_MAX_MODELS=${maxModels}`,
+            `[all-models] capped to ${selectedCandidates.length}/${candidates.length} via MARKETINGCLAW_LIVE_GATEWAY_MAX_MODELS=${maxModels}`,
           );
         }
         expect(selectedCandidates.length).toBeGreaterThan(0);
@@ -4652,23 +4655,23 @@ describeLive("gateway live (dev agent, profile keys)", () => {
     clearRuntimeConfigSnapshot();
     const runtimeEnv = enterProductionEnvForLiveRun();
     const previous = {
-      configPath: process.env.OPENCLAW_CONFIG_PATH,
-      token: process.env.OPENCLAW_GATEWAY_TOKEN,
-      skipChannels: process.env.OPENCLAW_SKIP_CHANNELS,
-      skipGmail: process.env.OPENCLAW_SKIP_GMAIL_WATCHER,
-      skipCron: process.env.OPENCLAW_SKIP_CRON,
-      skipCanvas: process.env.OPENCLAW_SKIP_CANVAS_HOST,
-      agentDir: process.env.OPENCLAW_AGENT_DIR,
-      stateDir: process.env.OPENCLAW_STATE_DIR,
+      configPath: process.env.MARKETINGCLAW_CONFIG_PATH,
+      token: process.env.MARKETINGCLAW_GATEWAY_TOKEN,
+      skipChannels: process.env.MARKETINGCLAW_SKIP_CHANNELS,
+      skipGmail: process.env.MARKETINGCLAW_SKIP_GMAIL_WATCHER,
+      skipCron: process.env.MARKETINGCLAW_SKIP_CRON,
+      skipCanvas: process.env.MARKETINGCLAW_SKIP_CANVAS_HOST,
+      agentDir: process.env.MARKETINGCLAW_AGENT_DIR,
+      stateDir: process.env.MARKETINGCLAW_STATE_DIR,
     };
 
-    process.env.OPENCLAW_SKIP_CHANNELS = "1";
-    process.env.OPENCLAW_SKIP_GMAIL_WATCHER = "1";
-    process.env.OPENCLAW_SKIP_CRON = "1";
-    process.env.OPENCLAW_SKIP_CANVAS_HOST = "1";
+    process.env.MARKETINGCLAW_SKIP_CHANNELS = "1";
+    process.env.MARKETINGCLAW_SKIP_GMAIL_WATCHER = "1";
+    process.env.MARKETINGCLAW_SKIP_CRON = "1";
+    process.env.MARKETINGCLAW_SKIP_CANVAS_HOST = "1";
 
     const token = `test-${randomUUID()}`;
-    process.env.OPENCLAW_GATEWAY_TOKEN = token;
+    process.env.MARKETINGCLAW_GATEWAY_TOKEN = token;
 
     let server: Awaited<ReturnType<typeof startGatewayServer>> | undefined;
     let client: GatewayClient | undefined;
@@ -4677,7 +4680,7 @@ describeLive("gateway live (dev agent, profile keys)", () => {
     let tempStateDir: string | undefined;
     try {
       const cfg = getRuntimeConfig();
-      await ensureOpenClawModelsJson(cfg);
+      await ensureMarketingClawModelsJson(cfg);
 
       const agentDir = resolveDefaultAgentDir(cfg);
       const hostStore = ensureAuthProfileStore(agentDir, {
@@ -4707,13 +4710,13 @@ describeLive("gateway live (dev agent, profile keys)", () => {
       }
 
       const agentId = GATEWAY_LIVE_AGENT_ID;
-      tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-live-zai-state-"));
-      setTestEnvValue("OPENCLAW_STATE_DIR", tempStateDir);
+      tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-live-zai-state-"));
+      setTestEnvValue("MARKETINGCLAW_STATE_DIR", tempStateDir);
       const workspaceDir = path.join(tempStateDir, "workspace-dev");
       await fs.mkdir(workspaceDir, { recursive: true });
-      await fs.mkdir(path.join(workspaceDir, ".openclaw"), { recursive: true });
+      await fs.mkdir(path.join(workspaceDir, ".marketingclaw"), { recursive: true });
       await fs.writeFile(
-        path.join(workspaceDir, ".openclaw", "workspace-state.json"),
+        path.join(workspaceDir, ".marketingclaw", "workspace-state.json"),
         `${JSON.stringify(
           {
             version: 1,
@@ -4725,7 +4728,7 @@ describeLive("gateway live (dev agent, profile keys)", () => {
       );
       const nonceA = randomUUID();
       const nonceB = randomUUID();
-      toolProbePath = path.join(workspaceDir, `.openclaw-live-zai-fallback.${nonceA}.txt`);
+      toolProbePath = path.join(workspaceDir, `.marketingclaw-live-zai-fallback.${nonceA}.txt`);
       await fs.writeFile(toolProbePath, `nonceA=${nonceA}\nnonceB=${nonceB}\n`);
 
       const sanitizedStore = sanitizeAuthProfileStoreForLiveGateway({
@@ -4737,9 +4740,9 @@ describeLive("gateway live (dev agent, profile keys)", () => {
       });
       const tempAgentDir = path.join(tempStateDir, "agents", agentId, "agent");
       saveAuthProfileStore(sanitizedStore, tempAgentDir);
-      setTestEnvValue("OPENCLAW_AGENT_DIR", tempAgentDir);
+      setTestEnvValue("MARKETINGCLAW_AGENT_DIR", tempAgentDir);
 
-      const sanitizedCfg: OpenClawConfig = {
+      const sanitizedCfg: MarketingClawConfig = {
         ...cfg,
         auth: await sanitizeAuthConfig({ cfg, agentDir }),
       };
@@ -4749,10 +4752,10 @@ describeLive("gateway live (dev agent, profile keys)", () => {
         liveAgentDir: tempAgentDir,
         liveAgentWorkspaceDir: workspaceDir,
       });
-      tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-live-zai-"));
-      const tempConfigPath = path.join(tempDir, "openclaw.json");
+      tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-live-zai-"));
+      const tempConfigPath = path.join(tempDir, "marketingclaw.json");
       await fs.writeFile(tempConfigPath, `${JSON.stringify(nextCfg, null, 2)}\n`);
-      setTestEnvValue("OPENCLAW_CONFIG_PATH", tempConfigPath);
+      setTestEnvValue("MARKETINGCLAW_CONFIG_PATH", tempConfigPath);
       clearRuntimeConfigSnapshot();
 
       const liveProviders = nextCfg.models?.providers;
@@ -4887,14 +4890,14 @@ describeLive("gateway live (dev agent, profile keys)", () => {
         });
       }
 
-      restoreOptionalEnv("OPENCLAW_CONFIG_PATH", previous.configPath);
-      restoreOptionalEnv("OPENCLAW_GATEWAY_TOKEN", previous.token);
-      restoreOptionalEnv("OPENCLAW_SKIP_CHANNELS", previous.skipChannels);
-      restoreOptionalEnv("OPENCLAW_SKIP_GMAIL_WATCHER", previous.skipGmail);
-      restoreOptionalEnv("OPENCLAW_SKIP_CRON", previous.skipCron);
-      restoreOptionalEnv("OPENCLAW_SKIP_CANVAS_HOST", previous.skipCanvas);
-      restoreOptionalEnv("OPENCLAW_AGENT_DIR", previous.agentDir);
-      restoreOptionalEnv("OPENCLAW_STATE_DIR", previous.stateDir);
+      restoreOptionalEnv("MARKETINGCLAW_CONFIG_PATH", previous.configPath);
+      restoreOptionalEnv("MARKETINGCLAW_GATEWAY_TOKEN", previous.token);
+      restoreOptionalEnv("MARKETINGCLAW_SKIP_CHANNELS", previous.skipChannels);
+      restoreOptionalEnv("MARKETINGCLAW_SKIP_GMAIL_WATCHER", previous.skipGmail);
+      restoreOptionalEnv("MARKETINGCLAW_SKIP_CRON", previous.skipCron);
+      restoreOptionalEnv("MARKETINGCLAW_SKIP_CANVAS_HOST", previous.skipCanvas);
+      restoreOptionalEnv("MARKETINGCLAW_AGENT_DIR", previous.agentDir);
+      restoreOptionalEnv("MARKETINGCLAW_STATE_DIR", previous.stateDir);
     }
   }, 180_000);
 });

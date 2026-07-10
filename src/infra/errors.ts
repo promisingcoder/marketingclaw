@@ -134,7 +134,7 @@ export function stringifyNonErrorCause(value: unknown): string {
   }
 }
 
-export { toErrorObject } from "@openclaw/normalization-core/error-coercion";
+export { toErrorObject } from "@marketingclaw/normalization-core/error-coercion";
 
 export function formatUncaughtError(err: unknown): string {
   if (extractErrorCode(err) === "INVALID_CONFIG") {

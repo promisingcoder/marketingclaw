@@ -1,4 +1,4 @@
-package ai.openclaw.app.chat
+package ai.marketingclaw.app.chat
 
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi

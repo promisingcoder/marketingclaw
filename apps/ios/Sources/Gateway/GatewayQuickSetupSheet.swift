@@ -1,4 +1,4 @@
-import OpenClawKit
+import MarketingClawKit
 import SwiftUI
 
 #if DEBUG
@@ -60,16 +60,16 @@ struct GatewayQuickSetupSheet: View {
                                     HStack(spacing: 8) {
                                         ProgressView().progressViewStyle(.circular)
                                         Text("Connecting…")
-                                            .font(OpenClawType.subheadSemiBold)
+                                            .font(MarketingClawType.subheadSemiBold)
                                     }
                                 } else {
                                     Text("Connect to this Gateway")
-                                        .font(OpenClawType.subheadSemiBold)
+                                        .font(MarketingClawType.subheadSemiBold)
                                 }
                             }
                             .frame(maxWidth: .infinity)
                         }
-                        .buttonStyle(OpenClawPrimaryActionButtonStyle())
+                        .buttonStyle(MarketingClawPrimaryActionButtonStyle())
                         .disabled(self.connecting)
 
                         if let connectError {
@@ -80,10 +80,10 @@ struct GatewayQuickSetupSheet: View {
                             self.dismiss()
                         } label: {
                             Text("Not now")
-                                .font(OpenClawType.subheadSemiBold)
+                                .font(MarketingClawType.subheadSemiBold)
                                 .frame(maxWidth: .infinity)
                         }
-                        .buttonStyle(OpenClawSecondaryActionButtonStyle())
+                        .buttonStyle(MarketingClawSecondaryActionButtonStyle())
                         .disabled(self.connecting)
 
                         self.fullRowToggle("Don't show this again", isOn: self.$quickSetupDismissed)
@@ -95,7 +95,7 @@ struct GatewayQuickSetupSheet: View {
                 }
                 .padding(20)
             }
-            .background(OpenClawBrand.activationCanvasGradient)
+            .background(MarketingClawBrand.activationCanvasGradient)
             .navigationTitle("Quick Setup")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -105,9 +105,9 @@ struct GatewayQuickSetupSheet: View {
                         self.dismiss()
                     } label: {
                         Text("Close")
-                            .font(OpenClawType.subheadSemiBold)
+                            .font(MarketingClawType.subheadSemiBold)
                     }
-                    .buttonStyle(OpenClawCloseButtonStyle())
+                    .buttonStyle(MarketingClawCloseButtonStyle())
                 }
             }
         }
@@ -130,7 +130,7 @@ struct GatewayQuickSetupSheet: View {
     private func fullRowToggle(_ title: LocalizedStringKey, isOn: Binding<Bool>) -> some View {
         Toggle(isOn: isOn) {
             Text(title)
-                .font(OpenClawType.subhead)
+                .font(MarketingClawType.subhead)
         }
         .contentShape(Rectangle())
         .overlay {
@@ -174,29 +174,29 @@ private struct GatewayQuickSetupHeader: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             ZStack(alignment: .bottomTrailing) {
-                OpenClawActivationGlyph(size: 70)
-                    .shadow(color: OpenClawBrand.activationGlow.opacity(0.18), radius: 10, x: 0, y: 5)
+                MarketingClawActivationGlyph(size: 70)
+                    .shadow(color: MarketingClawBrand.activationGlow.opacity(0.18), radius: 10, x: 0, y: 5)
 
                 Image(systemName: "antenna.radiowaves.left.and.right")
-                    .font(OpenClawType.caption2SemiBold)
-                    .foregroundStyle(OpenClawBrand.activationPrimaryActionText)
+                    .font(MarketingClawType.caption2SemiBold)
+                    .foregroundStyle(MarketingClawBrand.activationPrimaryActionText)
                     .frame(width: 28, height: 28)
                     .background {
                         Circle()
-                            .fill(OpenClawBrand.activationPrimaryGradient)
+                            .fill(MarketingClawBrand.activationPrimaryGradient)
                     }
                     .overlay {
                         Circle()
-                            .stroke(OpenClawBrand.activationCanvas, lineWidth: 3)
+                            .stroke(MarketingClawBrand.activationCanvas, lineWidth: 3)
                     }
                     .offset(x: 4, y: 4)
             }
 
             VStack(alignment: .leading, spacing: 6) {
                 Text("Connect a nearby Gateway")
-                    .font(OpenClawType.title2SemiBold)
+                    .font(MarketingClawType.title2SemiBold)
                 Text(self.subtitle)
-                    .font(OpenClawType.subhead)
+                    .font(MarketingClawType.subhead)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -206,9 +206,9 @@ private struct GatewayQuickSetupHeader: View {
 
     private var subtitle: LocalizedStringKey {
         if self.hasCandidate {
-            return "OpenClaw found a gateway on this network. Review it, then pair this iPhone as a secure node."
+            return "MarketingClaw found a gateway on this network. Review it, then pair this iPhone as a secure node."
         }
-        return "OpenClaw is searching the local network and tailnet for a Gateway you can trust."
+        return "MarketingClaw is searching the local network and tailnet for a Gateway you can trust."
     }
 }
 
@@ -226,19 +226,19 @@ private struct GatewayQuickSetupCandidatePanel: View {
         VStack(alignment: .leading, spacing: 14) {
             HStack(alignment: .top, spacing: 12) {
                 Image(systemName: "network")
-                    .font(OpenClawType.headline)
-                    .foregroundStyle(OpenClawBrand.activationPrimaryActionText)
+                    .font(MarketingClawType.headline)
+                    .foregroundStyle(MarketingClawBrand.activationPrimaryActionText)
                     .frame(width: 36, height: 36)
                     .background {
                         RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .fill(OpenClawBrand.activationPrimaryGradient)
+                            .fill(MarketingClawBrand.activationPrimaryGradient)
                     }
-                    .shadow(color: OpenClawBrand.activationGlow.opacity(0.18), radius: 6, x: 0, y: 3)
+                    .shadow(color: MarketingClawBrand.activationGlow.opacity(0.18), radius: 6, x: 0, y: 3)
 
                 VStack(alignment: .leading, spacing: 4) {
                     HStack(alignment: .firstTextBaseline, spacing: 8) {
                         Text(verbatim: self.name)
-                            .font(OpenClawType.headline)
+                            .font(MarketingClawType.headline)
                             .foregroundStyle(.primary)
                             .lineLimit(1)
                             .truncationMode(.middle)
@@ -247,7 +247,7 @@ private struct GatewayQuickSetupCandidatePanel: View {
                     }
 
                     Text(verbatim: self.endpointSummary)
-                        .font(OpenClawType.footnote)
+                        .font(MarketingClawType.footnote)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                         .truncationMode(.middle)
@@ -266,7 +266,7 @@ private struct GatewayQuickSetupCandidatePanel: View {
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
         .textSelection(.enabled)
-        .openClawCraftSurface(cornerRadius: 22)
+        .marketingClawCraftSurface(cornerRadius: 22)
         .accessibilityElement(children: .combine)
     }
 
@@ -279,7 +279,7 @@ private struct GatewayQuickSetupCandidatePanel: View {
 private struct GatewayQuickSetupHairlineDivider: View {
     var body: some View {
         Rectangle()
-            .fill(OpenClawBrand.activationNeutralDivider)
+            .fill(MarketingClawBrand.activationNeutralDivider)
             .frame(height: 0.5)
             .frame(maxWidth: .infinity)
     }
@@ -290,17 +290,17 @@ private struct GatewayQuickSetupChip: View {
 
     var body: some View {
         Text(self.text)
-            .font(OpenClawType.caption2SemiBold)
-            .foregroundStyle(OpenClawBrand.activationPrimaryAction)
+            .font(MarketingClawType.caption2SemiBold)
+            .foregroundStyle(MarketingClawBrand.activationPrimaryAction)
             .padding(.vertical, 4)
             .padding(.horizontal, 8)
             .background {
                 Capsule(style: .continuous)
-                    .fill(OpenClawBrand.activationGlow.opacity(0.10))
+                    .fill(MarketingClawBrand.activationGlow.opacity(0.10))
             }
             .overlay {
                 Capsule(style: .continuous)
-                    .stroke(OpenClawBrand.activationHairline, lineWidth: 0.6)
+                    .stroke(MarketingClawBrand.activationHairline, lineWidth: 0.6)
             }
     }
 }
@@ -312,11 +312,11 @@ private struct GatewayQuickSetupStatusRow: View {
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 12) {
             Text(self.title)
-                .font(OpenClawType.captionMedium)
+                .font(MarketingClawType.captionMedium)
                 .foregroundStyle(.secondary)
                 .frame(width: 70, alignment: .leading)
             Text(verbatim: self.value)
-                .font(OpenClawType.footnote)
+                .font(MarketingClawType.footnote)
                 .foregroundStyle(.primary)
                 .lineLimit(2)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -330,10 +330,10 @@ private struct GatewayQuickSetupErrorView: View {
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
             Image(systemName: "exclamationmark.triangle.fill")
-                .foregroundStyle(OpenClawBrand.warn)
+                .foregroundStyle(MarketingClawBrand.warn)
                 .padding(.top, 1)
             Text(self.message)
-                .font(OpenClawType.footnote)
+                .font(MarketingClawType.footnote)
                 .foregroundStyle(.secondary)
                 .textSelection(.enabled)
                 .fixedSize(horizontal: false, vertical: true)
@@ -342,11 +342,11 @@ private struct GatewayQuickSetupErrorView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(OpenClawBrand.activationInsetGradient)
+                .fill(MarketingClawBrand.activationInsetGradient)
         }
         .overlay {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .stroke(OpenClawBrand.activationHairline, lineWidth: 0.7)
+                .stroke(MarketingClawBrand.activationHairline, lineWidth: 0.7)
         }
     }
 }
@@ -357,38 +357,38 @@ private struct GatewayQuickSetupEmptyState: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             Image(systemName: "magnifyingglass")
-                .font(OpenClawType.title2SemiBold)
-                .foregroundStyle(OpenClawBrand.activationPrimaryAction)
+                .font(MarketingClawType.title2SemiBold)
+                .foregroundStyle(MarketingClawBrand.activationPrimaryAction)
                 .frame(width: 42, height: 42)
                 .background {
                     RoundedRectangle(cornerRadius: 14, style: .continuous)
-                        .fill(OpenClawBrand.activationInsetGradient)
+                        .fill(MarketingClawBrand.activationInsetGradient)
                 }
 
             VStack(alignment: .leading, spacing: 6) {
                 Text("Looking for a Gateway")
-                    .font(OpenClawType.headline)
+                    .font(MarketingClawType.headline)
                 Text("Keep your iPhone on the same LAN or tailnet, then start the Gateway on your host machine.")
-                    .font(OpenClawType.subhead)
+                    .font(MarketingClawType.subhead)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
 
             VStack(alignment: .leading, spacing: 6) {
-                GatewayQuickSetupInstructionRow(text: "Run openclaw gateway --port 18789.")
+                GatewayQuickSetupInstructionRow(text: "Run marketingclaw gateway --port 18789.")
                 GatewayQuickSetupInstructionRow(text: "Check that Bonjour discovery is enabled.")
                 GatewayQuickSetupInstructionRow(text: "Open Settings if you need a manual host.")
             }
             .padding(.top, 2)
 
             Text(verbatim: "Discovery: \(self.discoveryStatusText)")
-                .font(OpenClawType.footnote)
+                .font(MarketingClawType.footnote)
                 .foregroundStyle(.secondary)
                 .textSelection(.enabled)
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .openClawCraftSurface(cornerRadius: 22)
+        .marketingClawCraftSurface(cornerRadius: 22)
     }
 }
 
@@ -398,10 +398,10 @@ private struct GatewayQuickSetupInstructionRow: View {
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 8) {
             Image(systemName: "arrow.right.circle.fill")
-                .font(OpenClawType.captionSemiBold)
+                .font(MarketingClawType.captionSemiBold)
                 .foregroundStyle(.secondary)
             Text(self.text)
-                .font(OpenClawType.footnote)
+                .font(MarketingClawType.footnote)
                 .foregroundStyle(.secondary)
         }
     }
@@ -435,7 +435,7 @@ private struct GatewayQuickSetupPreviewHost: View {
         GatewayQuickSetupSheet()
             .environment(self.appModel)
             .environment(self.gatewayController)
-            .openClawSheetChrome()
+            .marketingClawSheetChrome()
     }
 }
 
@@ -443,16 +443,16 @@ extension GatewayDiscoveryModel.DiscoveredGateway {
     fileprivate static let previewGateway = GatewayDiscoveryModel.DiscoveredGateway(
         name: "Studio Gateway",
         endpoint: .hostPort(
-            host: .name("openclaw.local", nil),
+            host: .name("marketingclaw.local", nil),
             port: 18789),
         stableID: "preview-gateway",
-        debugID: "openclaw.local",
-        lanHost: "openclaw.local",
+        debugID: "marketingclaw.local",
+        lanHost: "marketingclaw.local",
         tailnetDns: nil,
         gatewayPort: 18789,
         canvasPort: 18789,
         tlsEnabled: true,
         tlsFingerprintSha256: "preview",
-        cliPath: "/opt/homebrew/bin/openclaw")
+        cliPath: "/opt/homebrew/bin/marketingclaw")
 }
 #endif

@@ -13,7 +13,7 @@ import {
 
 const chromiumExecutablePath = resolvePlaywrightChromiumExecutablePath(chromium.executablePath());
 const chromiumAvailable = canRunPlaywrightChromium(chromiumExecutablePath);
-const allowMissingChromium = process.env.OPENCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM === "1";
+const allowMissingChromium = process.env.MARKETINGCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM === "1";
 const describeControlUiE2e = chromiumAvailable || !allowMissingChromium ? describe : describe.skip;
 const artifactDir = path.resolve(process.cwd(), ".artifacts/control-ui-e2e/native-link-routing");
 
@@ -63,13 +63,13 @@ describeControlUiE2e("native link routing", () => {
     await context.addInitScript(() => {
       const messages: unknown[] = [];
       const host = window as Window & {
-        openclawNativeLinkMessages?: unknown[];
+        marketingclawNativeLinkMessages?: unknown[];
         webkit?: unknown;
       };
-      host.openclawNativeLinkMessages = messages;
+      host.marketingclawNativeLinkMessages = messages;
       host.webkit = {
         messageHandlers: {
-          openclawLink: { postMessage: (message: unknown) => messages.push(message) },
+          marketingclawLink: { postMessage: (message: unknown) => messages.push(message) },
         },
       };
     });
@@ -99,8 +99,8 @@ describeControlUiE2e("native link routing", () => {
       .poll(() =>
         page.evaluate(
           () =>
-            (window as Window & { openclawNativeLinkMessages?: unknown[] })
-              .openclawNativeLinkMessages,
+            (window as Window & { marketingclawNativeLinkMessages?: unknown[] })
+              .marketingclawNativeLinkMessages,
         ),
       )
       .toEqual([{ type: "open-link", url: "https://example.com/report", target: "inline" }]);
@@ -123,8 +123,8 @@ describeControlUiE2e("native link routing", () => {
       .poll(() =>
         page.evaluate(
           () =>
-            (window as Window & { openclawNativeLinkMessages?: unknown[] })
-              .openclawNativeLinkMessages,
+            (window as Window & { marketingclawNativeLinkMessages?: unknown[] })
+              .marketingclawNativeLinkMessages,
         ),
       )
       .toContainEqual({
@@ -134,16 +134,16 @@ describeControlUiE2e("native link routing", () => {
       });
     const messageCount = await page.evaluate(
       () =>
-        (window as Window & { openclawNativeLinkMessages?: unknown[] }).openclawNativeLinkMessages
-          ?.length ?? 0,
+        (window as Window & { marketingclawNativeLinkMessages?: unknown[] })
+          .marketingclawNativeLinkMessages?.length ?? 0,
     );
     await emailLink.evaluate((anchor) => (anchor as HTMLAnchorElement).click());
     await expect
       .poll(() =>
         page.evaluate(
           () =>
-            (window as Window & { openclawNativeLinkMessages?: unknown[] })
-              .openclawNativeLinkMessages?.length ?? 0,
+            (window as Window & { marketingclawNativeLinkMessages?: unknown[] })
+              .marketingclawNativeLinkMessages?.length ?? 0,
         ),
       )
       .toBe(messageCount);
@@ -176,8 +176,8 @@ describeControlUiE2e("native link routing", () => {
       .poll(() =>
         page.evaluate(
           () =>
-            (window as Window & { openclawNativeLinkMessages?: unknown[] })
-              .openclawNativeLinkMessages,
+            (window as Window & { marketingclawNativeLinkMessages?: unknown[] })
+              .marketingclawNativeLinkMessages,
         ),
       )
       .toEqual([
@@ -200,8 +200,8 @@ describeControlUiE2e("native link routing", () => {
     await popup.close();
 
     await page.evaluate(async () => {
-      await customElements.whenDefined("openclaw-modal-dialog");
-      const dialog = document.createElement("openclaw-modal-dialog");
+      await customElements.whenDefined("marketingclaw-modal-dialog");
+      const dialog = document.createElement("marketingclaw-modal-dialog");
       dialog.id = "native-link-routing-modal";
       dialog.setAttribute("label", "Link routing test");
       const anchor = document.createElement("a");
@@ -229,8 +229,8 @@ describeControlUiE2e("native link routing", () => {
       .poll(() =>
         page.evaluate(
           () =>
-            (window as Window & { openclawNativeLinkMessages?: unknown[] })
-              .openclawNativeLinkMessages,
+            (window as Window & { marketingclawNativeLinkMessages?: unknown[] })
+              .marketingclawNativeLinkMessages,
         ),
       )
       .toContainEqual({
@@ -243,7 +243,7 @@ describeControlUiE2e("native link routing", () => {
     });
 
     await page.getByRole("link", { name: "Usage" }).click({ button: "right" });
-    expect(await page.locator("openclaw-native-link-menu").count()).toBe(0);
+    expect(await page.locator("marketingclaw-native-link-menu").count()).toBe(0);
     const messageMenu = page.getByRole("menu", { name: "Message actions" });
     await expect.poll(() => messageMenu.isVisible()).toBe(true);
     await page.evaluate(() => new Promise(requestAnimationFrame));
@@ -252,7 +252,7 @@ describeControlUiE2e("native link routing", () => {
     await page.locator('a.markdown-file-link[data-file-path="README.md"]').click({
       button: "right",
     });
-    expect(await page.locator("openclaw-native-link-menu").count()).toBe(0);
+    expect(await page.locator("marketingclaw-native-link-menu").count()).toBe(0);
   });
 
   it("keeps ordinary browser navigation when the native bridge is absent", async () => {
@@ -274,7 +274,7 @@ describeControlUiE2e("native link routing", () => {
     const link = page.getByRole("link", { name: "report" });
 
     await link.click({ button: "right" });
-    expect(await page.locator("openclaw-native-link-menu").count()).toBe(0);
+    expect(await page.locator("marketingclaw-native-link-menu").count()).toBe(0);
     const popupPromise = page.waitForEvent("popup");
     await link.click();
     const popup = await popupPromise;

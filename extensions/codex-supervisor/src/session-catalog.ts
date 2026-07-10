@@ -3,14 +3,14 @@ import {
   ErrorCodes,
   errorShape,
   type GatewayRequestHandlerOptions,
-} from "openclaw/plugin-sdk/gateway-runtime";
+} from "marketingclaw/plugin-sdk/gateway-runtime";
 import type {
-  OpenClawPluginApi,
-  OpenClawPluginNodeHostCommand,
-  OpenClawPluginNodeInvokePolicy,
-} from "openclaw/plugin-sdk/plugin-entry";
-import type { PluginRuntime } from "openclaw/plugin-sdk/plugin-runtime";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+  MarketingClawPluginApi,
+  MarketingClawPluginNodeHostCommand,
+  MarketingClawPluginNodeInvokePolicy,
+} from "marketingclaw/plugin-sdk/plugin-entry";
+import type { PluginRuntime } from "marketingclaw/plugin-sdk/plugin-runtime";
+import { isRecord } from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import { CodexSupervisor } from "./supervisor.js";
 import type {
   CodexSessionCatalogError,
@@ -561,7 +561,7 @@ export async function listCodexSessionCatalog(params: {
 /** Builds the node-local read-only Codex app-server catalog command. */
 export function createCodexSessionCatalogNodeHostCommands(
   supervisor: CodexSupervisor,
-): OpenClawPluginNodeHostCommand[] {
+): MarketingClawPluginNodeHostCommand[] {
   return [
     {
       command: CODEX_APP_SERVER_THREADS_LIST_COMMAND,
@@ -589,7 +589,7 @@ export function createCodexSessionCatalogNodeHostCommands(
 }
 
 /** Allows the metadata-only catalog command on supported paired-node platforms. */
-export function createCodexSessionCatalogNodeInvokePolicies(): OpenClawPluginNodeInvokePolicy[] {
+export function createCodexSessionCatalogNodeInvokePolicies(): MarketingClawPluginNodeInvokePolicy[] {
   return [
     {
       commands: [CODEX_APP_SERVER_THREADS_LIST_COMMAND],
@@ -601,7 +601,7 @@ export function createCodexSessionCatalogNodeInvokePolicies(): OpenClawPluginNod
 
 /** Registers the Control UI descriptor and host-grouped Gateway catalog method. */
 export function registerCodexSessionCatalogGateway(params: {
-  api: OpenClawPluginApi;
+  api: MarketingClawPluginApi;
   supervisor: CodexSupervisor;
 }): void {
   params.api.session.controls.registerControlUiDescriptor({

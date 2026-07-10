@@ -2,9 +2,9 @@
 import {
   verifyChannelMessageAdapterCapabilityProofs,
   verifyChannelMessageReceiveAckPolicyAdapterProofs,
-} from "openclaw/plugin-sdk/channel-outbound";
+} from "marketingclaw/plugin-sdk/channel-outbound";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig, PluginRuntime } from "../api.js";
+import type { MarketingClawConfig, PluginRuntime } from "../api.js";
 import { linePlugin } from "./channel.js";
 import { lineConfigAdapter } from "./config-adapter.js";
 import { resolveLineGroupRequireMention } from "./group-policy.js";
@@ -16,12 +16,12 @@ const ssrfMocks = vi.hoisted(() => ({
   resolvePinnedHostnameWithPolicy: vi.fn(),
 }));
 
-vi.mock("openclaw/plugin-sdk/ssrf-runtime", () => ({
+vi.mock("marketingclaw/plugin-sdk/ssrf-runtime", () => ({
   resolvePinnedHostnameWithPolicy: ssrfMocks.resolvePinnedHostnameWithPolicy,
 }));
 
 afterAll(() => {
-  vi.doUnmock("openclaw/plugin-sdk/ssrf-runtime");
+  vi.doUnmock("marketingclaw/plugin-sdk/ssrf-runtime");
   vi.resetModules();
 });
 
@@ -74,7 +74,7 @@ function createRuntime(): { runtime: PluginRuntime; mocks: LineRuntimeMocks } {
   const chunkMarkdownText = vi.fn((text: string) => [text]);
   const resolveTextChunkLimit = vi.fn(() => 123);
   const resolveLineAccount = vi.fn(
-    ({ cfg, accountId }: { cfg: OpenClawConfig; accountId?: string }) => {
+    ({ cfg, accountId }: { cfg: MarketingClawConfig; accountId?: string }) => {
       const resolved = accountId ?? "default";
       const lineConfig = (cfg.channels?.line ?? {}) as {
         accounts?: Record<string, Record<string, unknown>>;
@@ -131,7 +131,7 @@ describe("line outbound sendPayload", () => {
   it("sends flex message without dropping text", async () => {
     const { runtime, mocks } = createRuntime();
     setLineRuntime(runtime);
-    const cfg = { channels: { line: {} } } as OpenClawConfig;
+    const cfg = { channels: { line: {} } } as MarketingClawConfig;
 
     const payload = {
       text: "Now playing:",
@@ -164,7 +164,7 @@ describe("line outbound sendPayload", () => {
   it("reports each platform result for text and media payloads", async () => {
     const { runtime } = createRuntime();
     setLineRuntime(runtime);
-    const cfg = { channels: { line: {} } } as OpenClawConfig;
+    const cfg = { channels: { line: {} } } as MarketingClawConfig;
     const onDeliveryResult = vi.fn();
 
     await lineOutboundAdapter.sendPayload!({
@@ -189,7 +189,7 @@ describe("line outbound sendPayload", () => {
   it("sends template message without dropping text", async () => {
     const { runtime, mocks } = createRuntime();
     setLineRuntime(runtime);
-    const cfg = { channels: { line: {} } } as OpenClawConfig;
+    const cfg = { channels: { line: {} } } as MarketingClawConfig;
 
     const payload = {
       text: "Choose one:",
@@ -227,7 +227,7 @@ describe("line outbound sendPayload", () => {
   it("attaches quick replies when no text chunks are present", async () => {
     const { runtime, mocks } = createRuntime();
     setLineRuntime(runtime);
-    const cfg = { channels: { line: {} } } as OpenClawConfig;
+    const cfg = { channels: { line: {} } } as MarketingClawConfig;
 
     const payload = {
       channelData: {
@@ -268,7 +268,7 @@ describe("line outbound sendPayload", () => {
   it("sends quick-reply-only payloads with fallback text", async () => {
     const { runtime, mocks } = createRuntime();
     setLineRuntime(runtime);
-    const cfg = { channels: { line: {} } } as OpenClawConfig;
+    const cfg = { channels: { line: {} } } as MarketingClawConfig;
 
     const result = await lineOutboundAdapter.sendPayload!({
       to: "line:user:quick",
@@ -330,7 +330,7 @@ describe("line outbound sendPayload", () => {
   it("sends media before quick-reply text so buttons stay visible", async () => {
     const { runtime, mocks } = createRuntime();
     setLineRuntime(runtime);
-    const cfg = { channels: { line: {} } } as OpenClawConfig;
+    const cfg = { channels: { line: {} } } as MarketingClawConfig;
 
     const payload = {
       text: "Hello",
@@ -374,7 +374,7 @@ describe("line outbound sendPayload", () => {
   it("keeps generic media payloads on the image-only send path", async () => {
     const { runtime, mocks } = createRuntime();
     setLineRuntime(runtime);
-    const cfg = { channels: { line: {} } } as OpenClawConfig;
+    const cfg = { channels: { line: {} } } as MarketingClawConfig;
 
     await lineOutboundAdapter.sendPayload!({
       to: "line:user:4",
@@ -397,7 +397,7 @@ describe("line outbound sendPayload", () => {
   it("uses LINE-specific media options for rich media payloads", async () => {
     const { runtime, mocks } = createRuntime();
     setLineRuntime(runtime);
-    const cfg = { channels: { line: {} } } as OpenClawConfig;
+    const cfg = { channels: { line: {} } } as MarketingClawConfig;
 
     await lineOutboundAdapter.sendPayload!({
       to: "line:user:5",
@@ -431,7 +431,7 @@ describe("line outbound sendPayload", () => {
   it("uses configured text chunk limit for payloads", async () => {
     const { runtime, mocks } = createRuntime();
     setLineRuntime(runtime);
-    const cfg = { channels: { line: { textChunkLimit: 123 } } } as OpenClawConfig;
+    const cfg = { channels: { line: { textChunkLimit: 123 } } } as MarketingClawConfig;
 
     const payload = {
       text: "Hello world",
@@ -462,7 +462,7 @@ describe("line outbound sendPayload", () => {
   it("omits trackingId for non-user quick-reply inline video media", async () => {
     const { runtime, mocks } = createRuntime();
     setLineRuntime(runtime);
-    const cfg = { channels: { line: {} } } as OpenClawConfig;
+    const cfg = { channels: { line: {} } } as MarketingClawConfig;
 
     const payload = {
       text: "",
@@ -502,7 +502,7 @@ describe("line outbound sendPayload", () => {
   it("keeps trackingId for user quick-reply inline video media", async () => {
     const { runtime, mocks } = createRuntime();
     setLineRuntime(runtime);
-    const cfg = { channels: { line: {} } } as OpenClawConfig;
+    const cfg = { channels: { line: {} } } as MarketingClawConfig;
 
     const payload = {
       text: "",
@@ -543,7 +543,7 @@ describe("line outbound sendPayload", () => {
   it("rejects quick-reply inline video media without previewImageUrl", async () => {
     const { runtime } = createRuntime();
     setLineRuntime(runtime);
-    const cfg = { channels: { line: {} } } as OpenClawConfig;
+    const cfg = { channels: { line: {} } } as MarketingClawConfig;
 
     const payload = {
       text: "",
@@ -570,7 +570,7 @@ describe("line outbound sendPayload", () => {
   it("declares message adapter durable text and media with receipt proofs", async () => {
     const { runtime, mocks } = createRuntime();
     setLineRuntime(runtime);
-    const cfg = { channels: { line: {} } } as OpenClawConfig;
+    const cfg = { channels: { line: {} } } as MarketingClawConfig;
 
     const proofResults = await verifyChannelMessageAdapterCapabilityProofs({
       adapterName: "line",
@@ -645,7 +645,7 @@ describe("line outbound sendPayload", () => {
 describe("linePlugin config.formatAllowFrom", () => {
   it("strips line:user: prefixes without lowercasing", () => {
     const formatted = lineConfigAdapter.formatAllowFrom!({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as MarketingClawConfig,
       allowFrom: ["line:user:UABC", "line:UDEF"],
     });
     expect(formatted).toEqual(["UABC", "UDEF"]);
@@ -672,7 +672,7 @@ describe("linePlugin groups.resolveRequireMention", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     const requireMention = resolveLineGroupRequireMention({
       cfg,

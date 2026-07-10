@@ -1,5 +1,5 @@
 /** Tracks plugin API lifecycle callbacks registered during runtime activation. */
-import type { OpenClawPluginApi } from "./types.js";
+import type { MarketingClawPluginApi } from "./types.js";
 
 type FunctionPropertyNames<T> = Extract<
   {
@@ -8,8 +8,8 @@ type FunctionPropertyNames<T> = Extract<
   string
 >;
 
-/** Names of plugin API methods exposed on the OpenClaw plugin API. */
-export type PluginApiMethodName = FunctionPropertyNames<OpenClawPluginApi>;
+/** Names of plugin API methods exposed on the MarketingClaw plugin API. */
+export type PluginApiMethodName = FunctionPropertyNames<MarketingClawPluginApi>;
 
 /** Lifecycle policy for whether a plugin API method can be called after registration. */
 export type PluginApiLifecyclePolicy = {

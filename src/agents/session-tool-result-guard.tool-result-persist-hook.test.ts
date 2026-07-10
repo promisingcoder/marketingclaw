@@ -2,20 +2,20 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { AgentMessage } from "openclaw/plugin-sdk/agent-core";
-import { SessionManager } from "openclaw/plugin-sdk/agent-sessions";
+import type { AgentMessage } from "marketingclaw/plugin-sdk/agent-core";
+import { SessionManager } from "marketingclaw/plugin-sdk/agent-sessions";
 import { describe, expect, it, afterEach, vi } from "vitest";
 import {
   initializeGlobalHookRunner,
   resetGlobalHookRunner,
 } from "../plugins/hook-runner-global.js";
-import { loadOpenClawPlugins } from "../plugins/loader.js";
+import { loadMarketingClawPlugins } from "../plugins/loader.js";
 import { deleteTestEnvValue, setTestEnvValue } from "../test-utils/env.js";
 import { guardSessionManager } from "./session-tool-result-guard-wrapper.js";
 
 const EMPTY_PLUGIN_SCHEMA = { type: "object", additionalProperties: false, properties: {} };
-const originalBundledPluginsDir = process.env.OPENCLAW_BUNDLED_PLUGINS_DIR;
-const originalConfigPath = process.env.OPENCLAW_CONFIG_PATH;
+const originalBundledPluginsDir = process.env.MARKETINGCLAW_BUNDLED_PLUGINS_DIR;
+const originalConfigPath = process.env.MARKETINGCLAW_CONFIG_PATH;
 let tempDirs: string[] = [];
 
 function writeTempPlugin(params: { dir: string; id: string; body: string }): string {
@@ -25,7 +25,7 @@ function writeTempPlugin(params: { dir: string; id: string; body: string }): str
   const file = path.join(pluginDir, `${params.id}.mjs`);
   fs.writeFileSync(file, params.body, "utf-8");
   fs.writeFileSync(
-    path.join(pluginDir, "openclaw.plugin.json"),
+    path.join(pluginDir, "marketingclaw.plugin.json"),
     JSON.stringify(
       {
         id: params.id,
@@ -74,13 +74,13 @@ function requirePersistedToolResult(sm: ReturnType<typeof SessionManager.inMemor
 
 function initializeTempPlugin(params: { tmpPrefix: string; id: string; body: string }) {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), params.tmpPrefix));
-  process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
+  process.env.MARKETINGCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
   const plugin = writeTempPlugin({
     dir: tmp,
     id: params.id,
     body: params.body,
   });
-  const registry = loadOpenClawPlugins({
+  const registry = loadMarketingClawPlugins({
     cache: false,
     workspaceDir: tmp,
     config: {
@@ -113,14 +113,14 @@ function expectPersistedToolResultDetailsCapped(sm: ReturnType<typeof SessionMan
 afterEach(() => {
   resetGlobalHookRunner();
   if (originalBundledPluginsDir === undefined) {
-    delete process.env.OPENCLAW_BUNDLED_PLUGINS_DIR;
+    delete process.env.MARKETINGCLAW_BUNDLED_PLUGINS_DIR;
   } else {
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = originalBundledPluginsDir;
+    process.env.MARKETINGCLAW_BUNDLED_PLUGINS_DIR = originalBundledPluginsDir;
   }
   if (originalConfigPath === undefined) {
-    deleteTestEnvValue("OPENCLAW_CONFIG_PATH");
+    deleteTestEnvValue("MARKETINGCLAW_CONFIG_PATH");
   } else {
-    setTestEnvValue("OPENCLAW_CONFIG_PATH", originalConfigPath);
+    setTestEnvValue("MARKETINGCLAW_CONFIG_PATH", originalConfigPath);
   }
   for (const dir of tempDirs) {
     fs.rmSync(dir, { force: true, recursive: true });
@@ -258,10 +258,10 @@ describe("tool_result_persist hook", () => {
   });
 
   it("keeps sensitive parent keys when custom value patterns match the key probe", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-redact-config-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-redact-config-"));
     tempDirs.push(tempDir);
-    const configPath = path.join(tempDir, "openclaw.json");
-    setTestEnvValue("OPENCLAW_CONFIG_PATH", configPath);
+    const configPath = path.join(tempDir, "marketingclaw.json");
+    setTestEnvValue("MARKETINGCLAW_CONFIG_PATH", configPath);
     fs.writeFileSync(
       configPath,
       JSON.stringify({ logging: { redactPatterns: ["/[a-z0-9]{30,}/g"] } }),
@@ -677,8 +677,8 @@ describe("tool_result_persist hook", () => {
   });
 
   it("loads tool_result_persist hooks without breaking persistence", () => {
-    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-toolpersist-"));
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
+    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-toolpersist-"));
+    process.env.MARKETINGCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
 
     const pluginA = writeTempPlugin({
       dir: tmp,
@@ -704,7 +704,7 @@ describe("tool_result_persist hook", () => {
 } };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadMarketingClawPlugins({
       cache: false,
       workspaceDir: tmp,
       config: {
@@ -732,7 +732,7 @@ describe("tool_result_persist hook", () => {
 
   it("reapplies the cap after tool_result_persist expands a tool result", () => {
     initializeTempPlugin({
-      tmpPrefix: "openclaw-toolpersist-expand-",
+      tmpPrefix: "marketingclaw-toolpersist-expand-",
       id: "persist-expand",
       body: `export default { id: "persist-expand", register(api) {
   api.on("tool_result_persist", (event) => {
@@ -758,7 +758,7 @@ describe("tool_result_persist hook", () => {
 
   it("reapplies the details cap after tool_result_persist expands details", () => {
     initializeTempPlugin({
-      tmpPrefix: "openclaw-toolpersist-details-expand-",
+      tmpPrefix: "marketingclaw-toolpersist-details-expand-",
       id: "persist-details-expand",
       body: `export default { id: "persist-details-expand", register(api) {
   api.on("tool_result_persist", (event) => {
@@ -789,7 +789,7 @@ describe("tool_result_persist hook", () => {
     const deepItems = Array.from({ length: 2_000 }, () => ({}));
     const hookDetails = { a: { b: { c: { d: { e: { f: { g: deepItems } } } } } } };
     initializeTempPlugin({
-      tmpPrefix: "openclaw-toolpersist-details-redaction-expand-",
+      tmpPrefix: "marketingclaw-toolpersist-details-redaction-expand-",
       id: "persist-details-redaction-expand",
       body: `export default { id: "persist-details-redaction-expand", register(api) {
   api.on("tool_result_persist", (event) => {
@@ -811,7 +811,7 @@ describe("tool_result_persist hook", () => {
 describe("before_message_write hook", () => {
   it("continues persistence when a before_message_write hook throws", () => {
     initializeTempPlugin({
-      tmpPrefix: "openclaw-before-write-",
+      tmpPrefix: "marketingclaw-before-write-",
       id: "before-write-throws",
       body: `export default { id: "before-write-throws", register(api) {
   api.on("before_message_write", () => {
@@ -842,7 +842,7 @@ describe("before_message_write hook", () => {
 
   it("reapplies the cap after before_message_write expands a tool result", () => {
     initializeTempPlugin({
-      tmpPrefix: "openclaw-before-write-expand-",
+      tmpPrefix: "marketingclaw-before-write-expand-",
       id: "before-write-expand",
       body: `export default { id: "before-write-expand", register(api) {
   api.on("before_message_write", (event) => {

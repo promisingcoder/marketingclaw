@@ -2,7 +2,7 @@
 import { normalizeOptionalString } from "../../../../packages/normalization-core/src/string-coerce.js";
 import { note } from "../../../../packages/terminal-core/src/note.js";
 import { formatCliCommand } from "../../../cli/command-format.js";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../../config/types.marketingclaw.js";
 import {
   loadCronQuarantineFile,
   loadCronJobsStoreWithConfigJobs,
@@ -150,12 +150,12 @@ function legacyCronStoreFinding(params: {
     requirement: params.requirement,
     fixHint:
       params.fixHint ??
-      `Run ${formatCliCommand("openclaw doctor --fix")} to normalize legacy cron storage.`,
+      `Run ${formatCliCommand("marketingclaw doctor --fix")} to normalize legacy cron storage.`,
   };
 }
 
 async function loadLegacyCronRepairState(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   onlyIfLegacyDetected?: boolean;
   readOnly?: boolean;
 }): Promise<LegacyCronRepairState | null> {
@@ -224,7 +224,7 @@ async function loadLegacyCronRepairState(params: {
 }
 
 async function applyLegacyCronStoreRepair(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   state: LegacyCronRepairState;
   normalized?: ReturnType<typeof normalizeStoredCronJobs>;
 }): Promise<LegacyCronRepairResult> {
@@ -323,7 +323,7 @@ async function applyLegacyCronStoreRepair(params: {
       // claiming a finished migration; doctor re-detects the leftover and retries.
       for (const failure of archiveResult.failures) {
         warnings.push(
-          `Migrated cron jobs to SQLite but could not archive the legacy cron file at ${shortenHomePath(failure.path)}: ${failure.reason}. Remove it manually or rerun ${formatCliCommand("openclaw doctor --fix")} to retry.`,
+          `Migrated cron jobs to SQLite but could not archive the legacy cron file at ${shortenHomePath(failure.path)}: ${failure.reason}. Remove it manually or rerun ${formatCliCommand("marketingclaw doctor --fix")} to retry.`,
         );
       }
     }
@@ -344,7 +344,7 @@ async function applyLegacyCronStoreRepair(params: {
 }
 
 export async function collectLegacyCronStoreHealthFindings(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
 }): Promise<readonly HealthFinding[]> {
   let state: LegacyCronRepairState | null;
   try {
@@ -357,7 +357,7 @@ export async function collectLegacyCronStoreHealthFindings(params: {
         path: storePath,
         requirement: "cron-store-readable",
         fixHint: [
-          `Fix the file's permissions or contents and re-run ${formatCliCommand("openclaw doctor")}.`,
+          `Fix the file's permissions or contents and re-run ${formatCliCommand("marketingclaw doctor")}.`,
           "Later health checks will continue.",
           `Details: ${errorMessage(err)}`,
         ].join(" "),
@@ -475,7 +475,7 @@ export async function collectLegacyCronStoreHealthFindings(params: {
 }
 
 export async function repairLegacyCronStoreWithoutPrompt(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
 }): Promise<LegacyCronRepairResult> {
   const storePath = resolveCronJobsStorePath(normalizeOptionalString(params.cfg.cron?.store));
   let state: LegacyCronRepairState | null;
@@ -509,7 +509,7 @@ function noteLegacyCronRepairResult(result: LegacyCronRepairResult): void {
 
 /** Inspect cron storage and optionally repair legacy JSON/SQLite/payload shapes. */
 export async function maybeRepairLegacyCronStore(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   options: DoctorOptions;
   prompter: Pick<DoctorPrompter, "confirm">;
 }) {
@@ -523,7 +523,7 @@ export async function maybeRepairLegacyCronStore(params: {
       [
         `Unable to read cron job store at ${shortenHomePath(storePath)}.`,
         `- ${reason}`,
-        `Fix the file's permissions or contents and re-run ${formatCliCommand("openclaw doctor")}; later health checks will continue.`,
+        `Fix the file's permissions or contents and re-run ${formatCliCommand("marketingclaw doctor")}; later health checks will continue.`,
       ].join("\n"),
       "Cron",
     );
@@ -578,7 +578,7 @@ export async function maybeRepairLegacyCronStore(params: {
       [
         `Legacy cron storage detected at ${shortenHomePath(storePath)}.`,
         ...previewLines,
-        `Repair with ${formatCliCommand("openclaw doctor --fix")} to finish the migration.`,
+        `Repair with ${formatCliCommand("marketingclaw doctor --fix")} to finish the migration.`,
       ].join("\n"),
       "Cron",
     );
@@ -600,9 +600,9 @@ export async function maybeRepairLegacyCronStore(params: {
     const subject = inFlightCount === 1 ? "it" : "them";
     note(
       [
-        `${pluralize(inFlightCount, "cron job")} ${inFlightCount === 1 ? "is" : "are"} still marked in-flight (\`state.runningAtMs\` is set), so ${formatCliCommand("openclaw cron list")} shows ${subject} as \`running\`.`,
+        `${pluralize(inFlightCount, "cron job")} ${inFlightCount === 1 ? "is" : "are"} still marked in-flight (\`state.runningAtMs\` is set), so ${formatCliCommand("marketingclaw cron list")} shows ${subject} as \`running\`.`,
         `- If no gateway is currently executing ${subject}, the marker is left over from an interrupted run; the gateway marks such runs interrupted the next time it starts.`,
-        `- Review with ${formatCliCommand("openclaw cron list")} or ${formatCliCommand("openclaw cron show <id>")}.`,
+        `- Review with ${formatCliCommand("marketingclaw cron list")} or ${formatCliCommand("marketingclaw cron show <id>")}.`,
       ].join("\n"),
       "Cron",
     );
@@ -614,7 +614,7 @@ export async function maybeRepairLegacyCronStore(params: {
       [
         `${pluralize(chronicFailureCount, "cron job")} ${chronicFailureCount === 1 ? "has" : "have"} failed ${CHRONIC_FAILURE_MIN_CONSECUTIVE_ERRORS}+ runs in a row (\`state.consecutiveErrors\`), so the scheduler only re-fires ${chronicFailureCount === 1 ? "it" : "them"} on error backoff.`,
         `- The count resets on the next successful run and also counts runs interrupted by a gateway restart, so a lasting streak means repeated task failures, repeatedly interrupted runs, or a mix. Failure alerts are opt-in, so this may be the only notice.`,
-        `- Review with ${formatCliCommand("openclaw cron list")} or ${formatCliCommand("openclaw cron show <id>")}.`,
+        `- Review with ${formatCliCommand("marketingclaw cron list")} or ${formatCliCommand("marketingclaw cron show <id>")}.`,
       ].join("\n"),
       "Cron",
     );
@@ -675,7 +675,7 @@ export async function maybeRepairLegacyCronStore(params: {
     [
       noteHeading,
       ...previewLines,
-      `Repair with ${formatCliCommand("openclaw doctor --fix")} to normalize the store before the next scheduler run.`,
+      `Repair with ${formatCliCommand("marketingclaw doctor --fix")} to normalize the store before the next scheduler run.`,
     ].join("\n"),
     "Cron",
   );

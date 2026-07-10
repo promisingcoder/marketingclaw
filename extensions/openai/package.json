@@ -1,16 +1,16 @@
 {
-  "name": "@openclaw/openai-provider",
+  "name": "@marketingclaw/openai-provider",
   "version": "2026.6.11",
   "private": true,
-  "description": "OpenClaw OpenAI provider plugins",
+  "description": "MarketingClaw OpenAI provider plugins",
   "type": "module",
   "dependencies": {
     "ws": "8.21.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@marketingclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "marketingclaw": {
     "extensions": [
       "./index.ts"
     ]

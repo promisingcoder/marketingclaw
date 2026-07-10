@@ -1,7 +1,7 @@
 // Decorative lobster pet that perches on the sidebar footer and mirrors
 // gateway status: it idles (naps, waves, wanders) when nothing is running,
 // scurries while runs are active, and paces worriedly while disconnected.
-// Drawn in the smooth OpenClaw lobster style (see the dreams scene and
+// Drawn in the smooth MarketingClaw lobster style (see the dreams scene and
 // icons.lobster). Look and personality are seeded per session + page load so
 // every new session hatches a slightly different lobster.
 import { html, LitElement, nothing, svg, type TemplateResult } from "lit";
@@ -162,7 +162,7 @@ const PALETTES: Array<[LobsterPetPalette, number]> = [
   [{ id: "abyss", shell: "#2c3b68", claw: "#465b96" }, 2],
   [{ id: "ghost", shell: "#dce8f2", claw: "#ecf3fa" }, 1],
   [{ id: "split", shell: "#ff4f40", claw: "#ff775f" }, 1],
-  // The grail: homage to the classic OpenClaw logo (big raised claw, smirk,
+  // The grail: homage to the classic MarketingClaw logo (big raised claw, smirk,
   // angry brows, white sticker outline). ~0.5% of sessions.
   [{ id: "retro", shell: "#e8262c", claw: "#f04a3e" }, 0.5],
 ];
@@ -312,7 +312,7 @@ const SPLIT_HALF = svg`
   />
 `;
 
-// Retro homage parts (classic OpenClaw logo): one oversized raised claw with
+// Retro homage parts (classic MarketingClaw logo): one oversized raised claw with
 // a pincer notch, tall V antennae, angry brows, and a smirk. The mega claw
 // lives inside the .lob-claw--r group so wave/snip acts swing it.
 const RETRO_MEGA_CLAW = svg`
@@ -617,6 +617,6 @@ export class LobsterPet extends LitElement {
   }
 }
 
-if (!customElements.get("openclaw-lobster-pet")) {
-  customElements.define("openclaw-lobster-pet", LobsterPet);
+if (!customElements.get("marketingclaw-lobster-pet")) {
+  customElements.define("marketingclaw-lobster-pet", LobsterPet);
 }

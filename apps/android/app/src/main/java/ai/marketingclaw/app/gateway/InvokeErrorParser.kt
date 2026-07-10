@@ -1,4 +1,4 @@
-package ai.openclaw.app.gateway
+package ai.marketingclaw.app.gateway
 
 private val invokeErrorCodePattern = Regex("^[A-Z][A-Z0-9_]*$")
 

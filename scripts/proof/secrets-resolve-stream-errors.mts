@@ -20,7 +20,7 @@ const require = createRequire(import.meta.url);
 const childProcess = require("node:child_process") as typeof import("node:child_process");
 const originalSpawn = childProcess.spawn;
 
-const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-proof-secrets-"));
+const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-proof-secrets-"));
 const fakeSecret = path.join(tmpDir, "secret-provider");
 
 // Fake exec secret provider that returns the requested secret as JSON.

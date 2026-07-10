@@ -1,22 +1,22 @@
 {
-  "name": "@openclaw/perplexity-plugin",
+  "name": "@marketingclaw/perplexity-plugin",
   "version": "2026.6.11",
-  "description": "OpenClaw Perplexity plugin.",
+  "description": "MarketingClaw Perplexity plugin.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/promisingcoder/marketingclaw"
   },
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@marketingclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "marketingclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@openclaw/perplexity-plugin",
-      "npmSpec": "@openclaw/perplexity-plugin",
+      "clawhubSpec": "clawhub:@marketingclaw/perplexity-plugin",
+      "npmSpec": "@marketingclaw/perplexity-plugin",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.6.8"
     },
@@ -24,7 +24,7 @@
       "pluginApi": ">=2026.6.11"
     },
     "build": {
-      "openclawVersion": "2026.6.11",
+      "marketingclawVersion": "2026.6.11",
       "bundledDist": false
     },
     "release": {

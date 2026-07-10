@@ -4,7 +4,7 @@
  * Embedded runs use this to merge bundled/plugin MCP server config and return
  * the launchable server map plus diagnostics for the caller.
  */
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import type { BundleMcpDiagnostic, BundleMcpServerConfig } from "../plugins/bundle-mcp.js";
 import type { PluginManifestRegistry } from "../plugins/manifest-registry.js";
 import { loadMergedBundleMcpConfig } from "./bundle-mcp-config.js";
@@ -17,7 +17,7 @@ type EmbeddedAgentMcpConfig = {
 /** Loads merged MCP server config for an embedded agent workspace. */
 export function loadEmbeddedAgentMcpConfig(params: {
   workspaceDir: string;
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
   manifestRegistry?: Pick<PluginManifestRegistry, "plugins">;
 }): EmbeddedAgentMcpConfig {
   const bundleMcp = loadMergedBundleMcpConfig({

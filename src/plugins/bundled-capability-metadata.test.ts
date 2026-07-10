@@ -13,7 +13,7 @@ import {
   hasBundledPluginContractSnapshotCapabilities,
 } from "./contracts/inventory/bundled-capability-metadata.js";
 import { pluginTestRepoRoot as repoRoot } from "./generated-plugin-test-helpers.js";
-import type { OpenClawPackageManifest } from "./manifest.js";
+import type { MarketingClawPackageManifest } from "./manifest.js";
 import type { PluginManifest } from "./manifest.js";
 
 function listGitExtensionPackagePaths(extensionsDir: string): string[] | null {
@@ -49,14 +49,17 @@ function readManifestRecords(): PluginManifest[] {
   return listExtensionPackagePaths(extensionsDir)
     .filter((packagePath) => {
       const packageJson = JSON.parse(fs.readFileSync(packagePath, "utf-8")) as {
-        openclaw?: OpenClawPackageManifest;
+        marketingclaw?: MarketingClawPackageManifest;
       };
-      return normalizeBundledPluginStringList(packageJson.openclaw?.extensions).length > 0;
+      return normalizeBundledPluginStringList(packageJson.marketingclaw?.extensions).length > 0;
     })
     .map(
       (packagePath) =>
         JSON.parse(
-          fs.readFileSync(path.join(path.dirname(packagePath), "openclaw.plugin.json"), "utf-8"),
+          fs.readFileSync(
+            path.join(path.dirname(packagePath), "marketingclaw.plugin.json"),
+            "utf-8",
+          ),
         ) as PluginManifest,
     )
     .toSorted((left, right) => left.id.localeCompare(right.id));

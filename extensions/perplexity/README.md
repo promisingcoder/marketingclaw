@@ -1,12 +1,12 @@
-# OpenClaw Perplexity Plugin
+# MarketingClaw Perplexity Plugin
 
-Official OpenClaw plugin for Perplexity.
+Official MarketingClaw plugin for Perplexity.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugins install @openclaw/perplexity-plugin
-openclaw gateway restart
+marketingclaw plugins install @marketingclaw/perplexity-plugin
+marketingclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/tools/perplexity-search> for setup and configuration.
+See <https://docs.marketingclaw.ai/tools/perplexity-search> for setup and configuration.

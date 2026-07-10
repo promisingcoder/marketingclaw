@@ -2,13 +2,13 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/plugin-entry";
-import { normalizeAgentId } from "openclaw/plugin-sdk/routing";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/plugin-entry";
+import { normalizeAgentId } from "marketingclaw/plugin-sdk/routing";
 import {
   archiveLegacyStateSource,
   type PluginDoctorStateMigration,
   type PluginStateKeyedStore,
-} from "openclaw/plugin-sdk/runtime-doctor";
+} from "marketingclaw/plugin-sdk/runtime-doctor";
 import {
   buildVoiceCallLegacyJsonlEventKey,
   CALL_RECORD_CHUNK_MAX_ENTRIES,
@@ -67,7 +67,7 @@ function resolveUserPath(input: string, env: NodeJS.ProcessEnv): string {
 
 /** Read the configured voice-call store path from either package id. */
 function getVoiceCallConfigStore(config: PluginDoctorStateMigrationParams["config"]): string {
-  for (const pluginId of ["voice-call", "@openclaw/voice-call"]) {
+  for (const pluginId of ["voice-call", "@marketingclaw/voice-call"]) {
     const rawConfig = config.plugins?.entries?.[pluginId]?.config;
     if (!rawConfig || typeof rawConfig !== "object" || Array.isArray(rawConfig)) {
       continue;
@@ -91,9 +91,9 @@ function asRecord(value: unknown): Record<string, unknown> | undefined {
 }
 
 /** Return Voice Call agents whose templated core session stores need migration. */
-export function resolveSessionStoreAgentIds(params: { cfg: OpenClawConfig }): string[] {
+export function resolveSessionStoreAgentIds(params: { cfg: MarketingClawConfig }): string[] {
   const agentIds = new Set<string>();
-  for (const pluginId of ["voice-call", "@openclaw/voice-call"]) {
+  for (const pluginId of ["voice-call", "@marketingclaw/voice-call"]) {
     const entry = params.cfg.plugins?.entries?.[pluginId];
     if (!entry) {
       continue;
@@ -123,7 +123,7 @@ function resolveVoiceCallStorePath(params: {
   if (configuredStore) {
     return resolveUserPath(configuredStore, params.env);
   }
-  return path.join(resolveHome(params.env), ".openclaw", "voice-calls");
+  return path.join(resolveHome(params.env), ".marketingclaw", "voice-calls");
 }
 
 /** Return true when a path exists and is a file. */
@@ -296,7 +296,7 @@ export const stateMigrations: PluginDoctorStateMigration[] = [
       if (entries.length === 0) {
         return { changes, warnings };
       }
-      const env = { ...params.env, OPENCLAW_STATE_DIR: storePath };
+      const env = { ...params.env, MARKETINGCLAW_STATE_DIR: storePath };
       const eventStore = params.context.openPluginStateKeyedStore<CallRecordEventMeta>({
         namespace: CALL_RECORD_EVENTS_NAMESPACE,
         maxEntries: CALL_RECORD_EVENT_META_MAX_ENTRIES,

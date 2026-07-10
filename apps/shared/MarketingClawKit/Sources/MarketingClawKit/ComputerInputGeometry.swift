@@ -2,7 +2,7 @@ import Foundation
 
 /// A target display expressed in the global CoreGraphics point space (top-left
 /// origin), which is exactly the space CGEvent mouse coordinates use.
-public struct OpenClawComputerDisplayGeometry: Sendable, Equatable {
+public struct MarketingClawComputerDisplayGeometry: Sendable, Equatable {
     public var originX: Double
     public var originY: Double
     public var widthPoints: Double
@@ -27,7 +27,7 @@ public struct OpenClawComputerDisplayGeometry: Sendable, Equatable {
 /// rather than the display point width keeps clicks aligned on Retina modes
 /// where physical pixels and logical points differ. Retina backing scale never
 /// enters CGEvent coordinates, which are always points.
-public enum OpenClawComputerInputGeometry {
+public enum MarketingClawComputerInputGeometry {
     /// The delivered screenshot pixel width for a reference width and the capture
     /// source dimensions. `sourceWidth`/`sourceHeight` are the capture source
     /// dimensions in the same units ScreenSnapshotService reads from the display.
@@ -61,7 +61,7 @@ public enum OpenClawComputerInputGeometry {
         x: Double,
         y: Double,
         capturedWidthPixels: Double,
-        display: OpenClawComputerDisplayGeometry) -> (x: Double, y: Double)
+        display: MarketingClawComputerDisplayGeometry) -> (x: Double, y: Double)
     {
         guard capturedWidthPixels > 0, display.widthPoints > 0 else {
             return (x: display.originX, y: display.originY)
@@ -80,7 +80,7 @@ public enum OpenClawComputerInputGeometry {
     public static func clampToDisplay(
         x: Double,
         y: Double,
-        display: OpenClawComputerDisplayGeometry) -> (x: Double, y: Double)
+        display: MarketingClawComputerDisplayGeometry) -> (x: Double, y: Double)
     {
         let maxX = display.originX + max(0, display.widthPoints - 1)
         let maxY = display.originY + max(0, display.heightPoints - 1)

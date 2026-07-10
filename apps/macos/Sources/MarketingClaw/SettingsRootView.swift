@@ -42,7 +42,7 @@ struct SettingsRootView: View {
         .navigationSplitViewStyle(.balanced)
         .frame(width: SettingsTab.windowWidth, height: SettingsTab.windowHeight, alignment: .topLeading)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .onReceive(NotificationCenter.default.publisher(for: .openclawSelectSettingsTab)) { note in
+        .onReceive(NotificationCenter.default.publisher(for: .marketingclawSelectSettingsTab)) { note in
             if let tab = note.object as? SettingsTab {
                 withAnimation(.spring(response: 0.32, dampingFraction: 0.85)) {
                     self.selectedTab = self.validTab(for: tab)
@@ -122,8 +122,8 @@ struct SettingsRootView: View {
 
     private var nixManagedBanner: some View {
         // Prefer gateway-resolved paths; fall back to local env defaults if disconnected.
-        let configPath = self.snapshotPaths.configPath ?? OpenClawPaths.configURL.path
-        let stateDir = self.snapshotPaths.stateDir ?? OpenClawPaths.stateDirURL.path
+        let configPath = self.snapshotPaths.configPath ?? MarketingClawPaths.configURL.path
+        let stateDir = self.snapshotPaths.stateDir ?? MarketingClawPaths.stateDirURL.path
 
         return VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 8) {
@@ -245,7 +245,7 @@ private struct SettingsTabGroup: Identifiable {
             SettingsTabGroup(title: "Automation", tabs: [.channels, .skills, .cron, .execApprovals]),
             SettingsTabGroup(title: "Data", tabs: [.sessions, .instances]),
             SettingsTabGroup(title: "Advanced", tabs: [.config]),
-            SettingsTabGroup(title: "OpenClaw", tabs: [.about]),
+            SettingsTabGroup(title: "MarketingClaw", tabs: [.about]),
         ]
 
         if showDebug {
@@ -320,7 +320,7 @@ enum SettingsTabRouter {
 }
 
 extension Notification.Name {
-    static let openclawSelectSettingsTab = Notification.Name("openclawSelectSettingsTab")
+    static let marketingclawSelectSettingsTab = Notification.Name("marketingclawSelectSettingsTab")
 }
 
 #if DEBUG

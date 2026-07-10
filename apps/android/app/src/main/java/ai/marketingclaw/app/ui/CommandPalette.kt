@@ -1,15 +1,15 @@
-package ai.openclaw.app.ui
+package ai.marketingclaw.app.ui
 
-import ai.openclaw.app.GatewayModelProviderSummary
-import ai.openclaw.app.GatewayModelSummary
-import ai.openclaw.app.MainViewModel
-import ai.openclaw.app.ui.design.ClawEmptyState
-import ai.openclaw.app.ui.design.ClawPanel
-import ai.openclaw.app.ui.design.ClawPlainIconButton
-import ai.openclaw.app.ui.design.ClawScaffold
-import ai.openclaw.app.ui.design.ClawSeparatedColumn
-import ai.openclaw.app.ui.design.ClawTextField
-import ai.openclaw.app.ui.design.ClawTheme
+import ai.marketingclaw.app.GatewayModelProviderSummary
+import ai.marketingclaw.app.GatewayModelSummary
+import ai.marketingclaw.app.MainViewModel
+import ai.marketingclaw.app.ui.design.ClawEmptyState
+import ai.marketingclaw.app.ui.design.ClawPanel
+import ai.marketingclaw.app.ui.design.ClawPlainIconButton
+import ai.marketingclaw.app.ui.design.ClawScaffold
+import ai.marketingclaw.app.ui.design.ClawSeparatedColumn
+import ai.marketingclaw.app.ui.design.ClawTextField
+import ai.marketingclaw.app.ui.design.ClawTheme
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -73,7 +73,7 @@ internal fun CommandPalette(
   val quickActions =
     listOf(
       CommandItem("Open Chat", "Start or continue a conversation", Icons.Outlined.ChatBubbleOutline, onOpenChat),
-      CommandItem("Start Voice", "Talk or dictate with OpenClaw", Icons.Outlined.MicNone, onOpenVoice),
+      CommandItem("Start Voice", "Talk or dictate with MarketingClaw", Icons.Outlined.MicNone, onOpenVoice),
       CommandItem("Browse Sessions", "Find previous conversations", Icons.Outlined.AccessTime, onOpenSessions),
       CommandItem("Providers & Models", providerCommandSubtitle(isConnected, providers, models), Icons.Outlined.Inventory2, onOpenProviders),
       CommandItem("Settings", "Gateway, voice, notifications, privacy", Icons.Outlined.Settings, onOpenSettings),
@@ -106,7 +106,7 @@ internal fun CommandPalette(
         }
 
         item {
-          ClawTextField(value = query, onValueChange = { query = it }, placeholder = "Search OpenClaw")
+          ClawTextField(value = query, onValueChange = { query = it }, placeholder = "Search MarketingClaw")
         }
 
         item {
@@ -145,7 +145,7 @@ internal fun CommandPalette(
                   CommandSessionRow(
                     key = session.key,
                     title = commandSessionTitle(session.displayName),
-                    subtitle = if (pendingRunCount > 0) "Assistant working" else "OpenClaw session",
+                    subtitle = if (pendingRunCount > 0) "Assistant working" else "MarketingClaw session",
                     metadata = session.updatedAtMs?.let(::commandRelativeTime) ?: "now",
                   )
                 },

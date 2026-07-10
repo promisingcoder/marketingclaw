@@ -3,11 +3,9 @@
  * Verifies filtered catalog output and pending load behavior.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { MAX_TIMER_TIMEOUT_MS } from "../shared/number-coercion.js";
-import {
-  loadModelCatalogForBrowse,
-} from "./model-catalog-browse.js";
+import { loadModelCatalogForBrowse } from "./model-catalog-browse.js";
 import type { ModelCatalogEntry } from "./model-catalog.types.js";
 
 const DEFAULT_MODEL_CATALOG_BROWSE_TIMEOUT_MS = 750;
@@ -16,7 +14,7 @@ const readOnlyCatalog: ModelCatalogEntry[] = [
 ];
 const fullCatalog: ModelCatalogEntry[] = [{ id: "gpt-full", name: "GPT Full", provider: "openai" }];
 
-function config(params: { providerWildcard?: boolean } = {}): OpenClawConfig {
+function config(params: { providerWildcard?: boolean } = {}): MarketingClawConfig {
   return {
     agents: params.providerWildcard
       ? {
@@ -27,7 +25,7 @@ function config(params: { providerWildcard?: boolean } = {}): OpenClawConfig {
           },
         }
       : undefined,
-  } as OpenClawConfig;
+  } as MarketingClawConfig;
 }
 
 describe("loadModelCatalogForBrowse", () => {

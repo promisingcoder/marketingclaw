@@ -12,11 +12,11 @@ import {
   stopWorkboardPolling,
   syncWorkboardLifecycle,
 } from "../../lib/workboard/index.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { MarketingClawLightDomElement } from "../../lit/marketingclaw-element.ts";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
 import { renderWorkboard } from "./view.ts";
 
-class WorkboardPage extends OpenClawLightDomElement {
+class WorkboardPage extends MarketingClawLightDomElement {
   @consume({ context: applicationContext, subscribe: true })
   private context?: ApplicationContext;
 
@@ -183,6 +183,6 @@ class WorkboardPage extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-workboard-page")) {
-  customElements.define("openclaw-workboard-page", WorkboardPage);
+if (!customElements.get("marketingclaw-workboard-page")) {
+  customElements.define("marketingclaw-workboard-page", WorkboardPage);
 }

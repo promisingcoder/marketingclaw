@@ -41,7 +41,7 @@ const {
 } = await import("./install.js");
 const hookInstallRuntime = await import("./install.runtime.js");
 
-const fixtureRoot = path.join(process.cwd(), ".tmp", `openclaw-hook-install-${randomUUID()}`);
+const fixtureRoot = path.join(process.cwd(), ".tmp", `marketingclaw-hook-install-${randomUUID()}`);
 const sharedArchiveDir = path.join(fixtureRoot, "_archives");
 let tempDirIndex = 0;
 const sharedArchivePathByName = new Map<string, string>();
@@ -133,7 +133,7 @@ function writeHookPackManifest(params: {
     JSON.stringify({
       name: "@openclaw/test-hooks",
       version: "0.0.1",
-      openclaw: {
+      marketingclaw: {
         hooks: params.hooks,
         ...(params.extensions ? { extensions: params.extensions } : {}),
       },
@@ -170,7 +170,7 @@ function writeHookPackFiles(params: {
       "---",
       `name: ${params.hookName}`,
       `description: ${params.hookDescription}`,
-      'metadata: {"openclaw":{"events":["command:new"]}}',
+      'metadata: {"marketingclaw":{"events":["command:new"]}}',
       "---",
       "",
       `# ${params.heading}`,
@@ -194,7 +194,7 @@ async function createZipHookPackBuffer(params: {
   const packageJson = JSON.stringify({
     name: params.packageName,
     version: "0.0.1",
-    openclaw: { hooks: [`./hooks/${params.hookName}`] },
+    marketingclaw: { hooks: [`./hooks/${params.hookName}`] },
   });
   return createZipBuffer([
     { path: "package/package.json", contents: packageJson },
@@ -204,7 +204,7 @@ async function createZipHookPackBuffer(params: {
         "---",
         `name: ${params.hookName}`,
         `description: ${params.hookDescription}`,
-        'metadata: {"openclaw":{"events":["command:new"]}}',
+        'metadata: {"marketingclaw":{"events":["command:new"]}}',
         "---",
         "",
         `# ${params.heading}`,
@@ -328,20 +328,20 @@ describe("installHooksFromArchive", () => {
 describe("installHooksFromPath", () => {
   it.each([
     {
-      openclaw: {},
-      error: "package.json missing openclaw.hooks",
-      code: HOOK_INSTALL_ERROR_CODE.MISSING_OPENCLAW_HOOKS,
+      marketingclaw: {},
+      error: "package.json missing marketingclaw.hooks",
+      code: HOOK_INSTALL_ERROR_CODE.MISSING_MARKETINGCLAW_HOOKS,
     },
     {
-      openclaw: { hooks: [] },
-      error: "package.json openclaw.hooks is empty",
-      code: HOOK_INSTALL_ERROR_CODE.EMPTY_OPENCLAW_HOOKS,
+      marketingclaw: { hooks: [] },
+      error: "package.json marketingclaw.hooks is empty",
+      code: HOOK_INSTALL_ERROR_CODE.EMPTY_MARKETINGCLAW_HOOKS,
     },
-  ])("returns a stable code for $error", async ({ openclaw, error, code }) => {
+  ])("returns a stable code for $error", async ({ marketingclaw, error, code }) => {
     const pkgDir = makeTempDir();
     fs.writeFileSync(
       path.join(pkgDir, "package.json"),
-      JSON.stringify({ name: "@openclaw/test-hooks", openclaw }),
+      JSON.stringify({ name: "@openclaw/test-hooks", marketingclaw }),
     );
 
     const result = await installHooksFromPath({ path: pkgDir, hooksDir: makeTempDir() });
@@ -365,7 +365,7 @@ describe("installHooksFromPath", () => {
         "---",
         "name: one-hook",
         "description: One hook",
-        'metadata: {"openclaw":{"events":["command:new"]}}',
+        'metadata: {"marketingclaw":{"events":["command:new"]}}',
         "---",
         "",
         "# One Hook",
@@ -400,7 +400,7 @@ describe("installHooksFromPath", () => {
         "---",
         "name: my-hook",
         "description: My hook",
-        'metadata: {"openclaw":{"events":["command:new"]}}',
+        'metadata: {"marketingclaw":{"events":["command:new"]}}',
         "---",
         "",
         "# My Hook",
@@ -462,7 +462,7 @@ describe("installHooksFromPath", () => {
     const scanCall = scanInstalledPackageDependencyTreeMock.mock.calls[0]?.[0] as {
       packageDir?: string;
     };
-    expect(scanCall.packageDir).toContain(".openclaw-install-stage-");
+    expect(scanCall.packageDir).toContain(".marketingclaw-install-stage-");
     expect(fs.existsSync(path.join(hooksDir, "my-hook"))).toBe(false);
   });
 
@@ -492,7 +492,7 @@ describe("installHooksFromPath", () => {
     expect(result.packageKind).toBe("plugin-capable");
   });
 
-  it.each([".codex-plugin/plugin.json", "hooks/hooks.json", "openclaw.plugin.json"])(
+  it.each([".codex-plugin/plugin.json", "hooks/hooks.json", "marketingclaw.plugin.json"])(
     "classifies hook packages with bundle marker %s as plugin-capable",
     async (bundleMarker) => {
       const stateDir = makeTempDir();
@@ -796,7 +796,7 @@ describe("installHooksFromPath", () => {
     const scanCall = scanInstalledPackageDependencyTreeMock.mock.calls[0]?.[0] as {
       packageDir?: string;
     };
-    expect(scanCall.packageDir).toContain(".openclaw-install-stage-");
+    expect(scanCall.packageDir).toContain(".marketingclaw-install-stage-");
     expect(fs.existsSync(path.join(hooksDir, "canonical-hooks"))).toBe(false);
   });
 
@@ -805,12 +805,12 @@ describe("installHooksFromPath", () => {
       {
         hooks: ["../outside"],
         setupLink: false,
-        expected: "openclaw.hooks entry escapes package directory",
+        expected: "marketingclaw.hooks entry escapes package directory",
       },
       {
         hooks: ["./linked"],
         setupLink: true,
-        expected: "openclaw.hooks entry resolves outside package directory",
+        expected: "marketingclaw.hooks entry resolves outside package directory",
       },
     ] as const;
 

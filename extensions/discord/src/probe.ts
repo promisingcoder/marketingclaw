@@ -1,9 +1,9 @@
 // Discord plugin module implements probe behavior.
-import type { BaseProbeResult } from "openclaw/plugin-sdk/channel-contract";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { resolveFetch } from "openclaw/plugin-sdk/fetch-runtime";
-import { readProviderJsonResponse } from "openclaw/plugin-sdk/provider-http";
-import { fetchWithTimeout } from "openclaw/plugin-sdk/text-utility-runtime";
+import type { BaseProbeResult } from "marketingclaw/plugin-sdk/channel-contract";
+import { formatErrorMessage } from "marketingclaw/plugin-sdk/error-runtime";
+import { resolveFetch } from "marketingclaw/plugin-sdk/fetch-runtime";
+import { readProviderJsonResponse } from "marketingclaw/plugin-sdk/provider-http";
+import { fetchWithTimeout } from "marketingclaw/plugin-sdk/text-utility-runtime";
 import { DiscordApiError, fetchDiscord } from "./api.js";
 import { normalizeDiscordToken } from "./token.js";
 

@@ -1,6 +1,6 @@
+import { listBundledPluginMetadata } from "../plugins/bundled-plugin-metadata.js";
 /** Builds the static and plugin-derived registry of secret migration targets. */
 import type { PluginManifestRecord } from "../plugins/manifest-registry.js";
-import { listBundledPluginMetadata } from "../plugins/bundled-plugin-metadata.js";
 import { resolvePluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.js";
 import { loadChannelSecretContractApiForRecord } from "./channel-contract-api.js";
 import type { SecretTargetRegistryEntry } from "./target-registry-types.js";
@@ -15,7 +15,7 @@ const WEB_PROVIDER_SECRET_CONFIGS = [
 
 type WebProviderSecretConfig = (typeof WEB_PROVIDER_SECRET_CONFIGS)[number];
 
-function createPluginOpenClawConfigSecretTargetEntry(
+function createPluginMarketingClawConfigSecretTargetEntry(
   pluginId: string,
   configPath: string,
 ): SecretTargetRegistryEntry {
@@ -25,7 +25,7 @@ function createPluginOpenClawConfigSecretTargetEntry(
   return {
     id: pathPattern,
     targetType: pathPattern,
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern,
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -59,7 +59,9 @@ function listBundledWebProviderSecretTargetRegistryEntries(
         hasWebProviderContract(record, config.contract) &&
         hasSensitiveConfigHint(record, config.configPath)
       ) {
-        entries.push(createPluginOpenClawConfigSecretTargetEntry(record.id, config.configPath));
+        entries.push(
+          createPluginMarketingClawConfigSecretTargetEntry(record.id, config.configPath),
+        );
       }
     }
   }
@@ -74,7 +76,7 @@ function listBundledPluginConfigSecretTargetRegistryEntries(
   for (const record of bundledPlugins) {
     const secretInputs = record.configContracts?.secretInputs?.paths ?? [];
     for (const secretInput of secretInputs) {
-      const entry = createPluginOpenClawConfigSecretTargetEntry(record.id, secretInput.path);
+      const entry = createPluginMarketingClawConfigSecretTargetEntry(record.id, secretInput.path);
       const key = `${entry.configFile}:${entry.pathPattern}`;
       if (seen.has(key)) {
         continue;
@@ -154,7 +156,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
   {
     id: "agents.defaults.memorySearch.remote.apiKey",
     targetType: "agents.defaults.memorySearch.remote.apiKey",
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "agents.defaults.memorySearch.remote.apiKey",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -165,7 +167,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
   {
     id: "agents.list[].memorySearch.remote.apiKey",
     targetType: "agents.list[].memorySearch.remote.apiKey",
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "agents.list[].memorySearch.remote.apiKey",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -176,7 +178,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
   {
     id: "cron.webhookToken",
     targetType: "cron.webhookToken",
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "cron.webhookToken",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -187,7 +189,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
   {
     id: "gateway.auth.token",
     targetType: "gateway.auth.token",
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "gateway.auth.token",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -198,7 +200,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
   {
     id: "gateway.auth.password",
     targetType: "gateway.auth.password",
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "gateway.auth.password",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -209,7 +211,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
   {
     id: "gateway.remote.password",
     targetType: "gateway.remote.password",
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "gateway.remote.password",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -220,7 +222,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
   {
     id: "gateway.remote.token",
     targetType: "gateway.remote.token",
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "gateway.remote.token",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -231,7 +233,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
   {
     id: "messages.tts.providers.*.apiKey",
     targetType: "messages.tts.providers.*.apiKey",
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "messages.tts.providers.*.apiKey",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -243,7 +245,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
   {
     id: "agents.list[].tts.providers.*.apiKey",
     targetType: "agents.list[].tts.providers.*.apiKey",
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "agents.list[].tts.providers.*.apiKey",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -256,7 +258,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
     id: "models.providers.*.apiKey",
     targetType: "models.providers.apiKey",
     targetTypeAliases: ["models.providers.*.apiKey"],
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "models.providers.*.apiKey",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -270,7 +272,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
     id: "models.providers.*.headers.*",
     targetType: "models.providers.headers",
     targetTypeAliases: ["models.providers.*.headers.*"],
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "models.providers.*.headers.*",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -283,7 +285,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
     id: "models.providers.*.request.headers.*",
     targetType: "models.providers.request.headers",
     targetTypeAliases: ["models.providers.*.request.headers.*"],
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "models.providers.*.request.headers.*",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -296,7 +298,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
     id: "models.providers.*.request.auth.token",
     targetType: "models.providers.request.auth.token",
     targetTypeAliases: ["models.providers.*.request.auth.token"],
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "models.providers.*.request.auth.token",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -309,7 +311,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
     id: "models.providers.*.request.auth.value",
     targetType: "models.providers.request.auth.value",
     targetTypeAliases: ["models.providers.*.request.auth.value"],
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "models.providers.*.request.auth.value",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -322,7 +324,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
     id: "models.providers.*.request.proxy.tls.ca",
     targetType: "models.providers.request.proxy.tls.ca",
     targetTypeAliases: ["models.providers.*.request.proxy.tls.ca"],
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "models.providers.*.request.proxy.tls.ca",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -335,7 +337,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
     id: "models.providers.*.request.proxy.tls.cert",
     targetType: "models.providers.request.proxy.tls.cert",
     targetTypeAliases: ["models.providers.*.request.proxy.tls.cert"],
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "models.providers.*.request.proxy.tls.cert",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -348,7 +350,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
     id: "models.providers.*.request.proxy.tls.key",
     targetType: "models.providers.request.proxy.tls.key",
     targetTypeAliases: ["models.providers.*.request.proxy.tls.key"],
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "models.providers.*.request.proxy.tls.key",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -361,7 +363,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
     id: "models.providers.*.request.proxy.tls.passphrase",
     targetType: "models.providers.request.proxy.tls.passphrase",
     targetTypeAliases: ["models.providers.*.request.proxy.tls.passphrase"],
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "models.providers.*.request.proxy.tls.passphrase",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -374,7 +376,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
     id: "models.providers.*.request.tls.ca",
     targetType: "models.providers.request.tls.ca",
     targetTypeAliases: ["models.providers.*.request.tls.ca"],
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "models.providers.*.request.tls.ca",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -387,7 +389,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
     id: "models.providers.*.request.tls.cert",
     targetType: "models.providers.request.tls.cert",
     targetTypeAliases: ["models.providers.*.request.tls.cert"],
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "models.providers.*.request.tls.cert",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -400,7 +402,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
     id: "models.providers.*.request.tls.key",
     targetType: "models.providers.request.tls.key",
     targetTypeAliases: ["models.providers.*.request.tls.key"],
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "models.providers.*.request.tls.key",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -413,7 +415,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
     id: "models.providers.*.request.tls.passphrase",
     targetType: "models.providers.request.tls.passphrase",
     targetTypeAliases: ["models.providers.*.request.tls.passphrase"],
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "models.providers.*.request.tls.passphrase",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -426,7 +428,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
     id: "skills.entries.*.apiKey",
     targetType: "skills.entries.apiKey",
     targetTypeAliases: ["skills.entries.*.apiKey"],
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "skills.entries.*.apiKey",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -437,7 +439,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
   {
     id: "talk.providers.*.apiKey",
     targetType: "talk.providers.*.apiKey",
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "talk.providers.*.apiKey",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -449,7 +451,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
   {
     id: "talk.realtime.providers.*.apiKey",
     targetType: "talk.realtime.providers.*.apiKey",
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "talk.realtime.providers.*.apiKey",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -461,7 +463,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
   {
     id: "tools.web.search.apiKey",
     targetType: "tools.web.search.apiKey",
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "tools.web.search.apiKey",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -472,7 +474,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
   {
     id: "tools.web.fetch.firecrawl.apiKey",
     targetType: "tools.web.fetch.firecrawl.apiKey",
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "tools.web.fetch.firecrawl.apiKey",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -483,7 +485,7 @@ const CORE_SECRET_TARGET_REGISTRY: SecretTargetRegistryEntry[] = [
   {
     id: "tools.web.search.*.apiKey",
     targetType: "tools.web.search.*.apiKey",
-    configFile: "openclaw.json",
+    configFile: "marketingclaw.json",
     pathPattern: "tools.web.search.*.apiKey",
     secretShape: SECRET_INPUT_SHAPE,
     expectedResolvedValue: "string",
@@ -541,7 +543,8 @@ export function getSourceSecretTargetRegistry(): SecretTargetRegistryEntry[] {
   return loadSecretTargetRegistryFromPluginMetadata({
     env: {
       ...process.env,
-      OPENCLAW_BUNDLED_PLUGINS_DIR: process.env.OPENCLAW_BUNDLED_PLUGINS_DIR ?? "extensions",
+      MARKETINGCLAW_BUNDLED_PLUGINS_DIR:
+        process.env.MARKETINGCLAW_BUNDLED_PLUGINS_DIR ?? "extensions",
     },
     preferPersisted: false,
   });

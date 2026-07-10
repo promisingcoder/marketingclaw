@@ -1,14 +1,14 @@
-import OpenClawKit
+import MarketingClawKit
 import SwiftUI
 
 extension AgentProTab {
     func detailMetric(label: String, value: String) -> some View {
         VStack(alignment: .leading, spacing: 3) {
             Text(label)
-                .font(OpenClawType.caption2Medium)
+                .font(MarketingClawType.caption2Medium)
                 .foregroundStyle(.secondary)
             Text(value)
-                .font(OpenClawType.subheadSemiBold)
+                .font(MarketingClawType.subheadSemiBold)
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
         }
@@ -16,7 +16,7 @@ extension AgentProTab {
         .padding(10)
         .background(
             Color.primary.opacity(0.055),
-            in: RoundedRectangle(cornerRadius: OpenClawRadius.sm, style: .continuous))
+            in: RoundedRectangle(cornerRadius: MarketingClawRadius.sm, style: .continuous))
     }
 
     func emptyDetailRow(icon: String, title: String, detail: String) -> some View {
@@ -24,9 +24,9 @@ extension AgentProTab {
             ProIconBadge(systemName: icon, color: .secondary)
             VStack(alignment: .leading, spacing: 3) {
                 Text(title)
-                    .font(OpenClawType.subheadSemiBold)
+                    .font(MarketingClawType.subheadSemiBold)
                 Text(detail)
-                    .font(OpenClawType.caption)
+                    .font(MarketingClawType.caption)
                     .foregroundStyle(.secondary)
                     .lineLimit(2)
             }

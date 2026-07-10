@@ -28,7 +28,7 @@ import {
   normalizeAgentModelRefForConfig,
   resolveAgentModelPrimaryValue,
 } from "../config/model-input.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { enablePluginInConfig } from "../plugins/enable.js";
 import {
   applyProviderPluginAuthMethodResultConfig,
@@ -218,7 +218,7 @@ type SetupInferenceTestPlan = {
   provider: string;
   model: string;
   modelRef: string;
-  config: OpenClawConfig;
+  config: MarketingClawConfig;
   agentHarnessId?: string;
   agentDir?: string;
   authProfileId?: string;
@@ -277,7 +277,7 @@ async function buildTestPlan(params: {
   kind: InferenceBackendKind | "api-key";
   authChoice?: string;
   apiKey?: string;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   workspaceDir: string;
   pluginWorkspaceDir: string;
   agentDir: string;
@@ -395,7 +395,7 @@ async function buildTestPlan(params: {
         return { error: "That key-based provider is not available on this Gateway." };
       }
       let result: ProviderAuthResult;
-      let preparedConfig: OpenClawConfig;
+      let preparedConfig: MarketingClawConfig;
       try {
         if (resolved.method.kind === "api_key" || resolved.method.kind === "token") {
           result = await runProviderPluginAuthMethodUnpersisted({
@@ -471,14 +471,14 @@ async function buildTestPlan(params: {
 }
 
 async function runProviderManualSecretMethod(params: {
-  config: OpenClawConfig;
-  baseConfig: OpenClawConfig;
+  config: MarketingClawConfig;
+  baseConfig: MarketingClawConfig;
   choice: ProviderAuthChoiceMetadata;
   method: ProviderAuthMethod;
   apiKey: string;
   agentDir: string;
   workspaceDir: string;
-}): Promise<{ result: ProviderAuthResult; config: OpenClawConfig }> {
+}): Promise<{ result: ProviderAuthResult; config: MarketingClawConfig }> {
   const optionKey = params.choice.optionKey;
   const runNonInteractive = params.method.runNonInteractive;
   if (!optionKey || !params.choice.cliOption || !runNonInteractive) {
@@ -559,7 +559,7 @@ export async function activateSetupInference(
   const readSnapshot =
     deps.readConfigFileSnapshot ?? (await import("../config/config.js")).readConfigFileSnapshot;
   const snapshot = await readSnapshot();
-  const cfg: OpenClawConfig =
+  const cfg: MarketingClawConfig =
     snapshot.exists && snapshot.valid ? (snapshot.runtimeConfig ?? snapshot.config) : {};
   const workspace = params.workspace?.trim()
     ? resolveUserPath(params.workspace)
@@ -571,7 +571,8 @@ export async function activateSetupInference(
       ).workspace;
 
   const tempDir = await (
-    deps.createTempDir ?? (() => fs.mkdtemp(path.join(os.tmpdir(), "openclaw-setup-inference-")))
+    deps.createTempDir ??
+    (() => fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-setup-inference-")))
   )();
   const agentDir = (deps.resolveAgentDir ?? resolveAgentDir)(cfg, resolveDefaultAgentId(cfg));
   const testAgentDir = path.join(tempDir, "agent");
@@ -671,10 +672,11 @@ export async function verifySetupInference(params: {
   const readSnapshot =
     deps.readConfigFileSnapshot ?? (await import("../config/config.js")).readConfigFileSnapshot;
   const snapshot = await readSnapshot();
-  const cfg: OpenClawConfig =
+  const cfg: MarketingClawConfig =
     snapshot.exists && snapshot.valid ? (snapshot.runtimeConfig ?? snapshot.config) : {};
   const tempDir = await (
-    deps.createTempDir ?? (() => fs.mkdtemp(path.join(os.tmpdir(), "openclaw-setup-inference-")))
+    deps.createTempDir ??
+    (() => fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-setup-inference-")))
   )();
   try {
     const plan = await buildTestPlan({
@@ -699,9 +701,9 @@ export async function verifySetupInference(params: {
 }
 
 function applyManualAuthConfig(
-  config: OpenClawConfig,
+  config: MarketingClawConfig,
   manualAuth: NonNullable<SetupInferenceTestPlan["manualAuth"]>,
-): OpenClawConfig {
+): MarketingClawConfig {
   let enabledConfig = config;
   if (manualAuth.pluginId) {
     const enableResult = enablePluginInConfig(config, manualAuth.pluginId);
@@ -710,7 +712,7 @@ function applyManualAuthConfig(
     }
     enabledConfig = enableResult.config;
   }
-  return applyMergePatch(enabledConfig, manualAuth.configPatch) as OpenClawConfig;
+  return applyMergePatch(enabledConfig, manualAuth.configPatch) as MarketingClawConfig;
 }
 
 async function persistManualAuthProfiles(

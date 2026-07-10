@@ -1,5 +1,5 @@
 // Converts streaming reply directives into payload delivery decisions.
-import { hasOutboundReplyContent } from "openclaw/plugin-sdk/reply-payload";
+import { hasOutboundReplyContent } from "marketingclaw/plugin-sdk/reply-payload";
 import { parseInlineDirectives } from "../../utils/directive-tags.js";
 import {
   isSilentReplyPrefixText,

@@ -6,7 +6,7 @@ import path from "node:path";
 import type { DatabaseSync } from "node:sqlite";
 import { gunzipSync, gzipSync } from "node:zlib";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { MarketingClawConfig } from "../config/config.js";
 import type { SessionEntry } from "../config/sessions/types.js";
 import { requireNodeSqlite } from "../infra/node-sqlite.js";
 import {
@@ -21,9 +21,9 @@ import {
 } from "../plugins/installed-plugin-index-store.js";
 import type { InstalledPluginInstallRecordInfo } from "../plugins/installed-plugin-index.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-} from "../state/openclaw-state-db.js";
+  closeMarketingClawStateDatabaseForTest,
+  openMarketingClawStateDatabase,
+} from "../state/marketingclaw-state-db.js";
 import { loadTaskFlowRegistryStateFromSqlite } from "../tasks/task-flow-registry.store.sqlite.js";
 import { loadTaskRegistryStateFromSqlite } from "../tasks/task-registry.store.sqlite.js";
 import {
@@ -55,7 +55,7 @@ vi.mock("../channels/plugins/bundled.js", async () => {
     }
   }
 
-  function resolveTelegramAccountId(cfg: OpenClawConfig): string {
+  function resolveTelegramAccountId(cfg: MarketingClawConfig): string {
     const defaultAgentId = cfg.agents?.list?.find((agent) => agent.default)?.id ?? "main";
     const boundAccountId = cfg.bindings?.find(
       (binding) =>
@@ -67,10 +67,10 @@ vi.mock("../channels/plugins/bundled.js", async () => {
   }
 
   function detectTelegramAllowFromMigration(params: {
-    cfg: OpenClawConfig;
+    cfg: MarketingClawConfig;
     env: NodeJS.ProcessEnv;
   }) {
-    const root = params.env.OPENCLAW_STATE_DIR;
+    const root = params.env.MARKETINGCLAW_STATE_DIR;
     if (!root) {
       return [];
     }
@@ -132,7 +132,7 @@ vi.mock("../channels/plugins/bundled.js", async () => {
     ]),
     listBundledChannelLegacyStateMigrationDetectors: vi.fn(() => [
       ({ oauthDir }: { oauthDir: string }) => detectWhatsAppLegacyStateMigrations({ oauthDir }),
-      ({ cfg, env }: { cfg: OpenClawConfig; env: NodeJS.ProcessEnv }) =>
+      ({ cfg, env }: { cfg: MarketingClawConfig; env: NodeJS.ProcessEnv }) =>
         detectTelegramAllowFromMigration({ cfg, env }),
       () => mockedChannelMigrationPlans.plans,
     ]),
@@ -177,14 +177,14 @@ vi.mock("../plugins/doctor-contract-registry.js", () => ({
 }));
 
 async function makeTempRoot() {
-  const root = await fs.promises.mkdtemp(path.join(os.tmpdir(), "openclaw-doctor-"));
+  const root = await fs.promises.mkdtemp(path.join(os.tmpdir(), "marketingclaw-doctor-"));
   tempRoots.push(root);
   return root;
 }
 
 async function makeRootWithEmptyCfg() {
   const root = await makeTempRoot();
-  const cfg: OpenClawConfig = {};
+  const cfg: MarketingClawConfig = {};
   return { root, cfg };
 }
 
@@ -203,12 +203,12 @@ function writeLegacyTelegramAllowFromStore(oauthDir: string) {
   );
 }
 
-async function runTelegramAllowFromMigration(params: { root: string; cfg: OpenClawConfig }) {
+async function runTelegramAllowFromMigration(params: { root: string; cfg: MarketingClawConfig }) {
   const oauthDir = ensureCredentialsDir(params.root);
   writeLegacyTelegramAllowFromStore(oauthDir);
   const detected = await detectLegacyStateMigrations({
     cfg: params.cfg,
-    env: { OPENCLAW_STATE_DIR: params.root } as NodeJS.ProcessEnv,
+    env: { MARKETINGCLAW_STATE_DIR: params.root } as NodeJS.ProcessEnv,
   });
   const result = await runLegacyStateMigrations({ detected, now: () => 123 });
   return { oauthDir, detected, result };
@@ -218,7 +218,7 @@ afterEach(async () => {
   resetAutoMigrateLegacyStateForTest();
   resetAutoMigrateLegacyStateDirForTest();
   resetAutoMigrateLegacyTaskStateSidecarsForTest();
-  closeOpenClawStateDatabaseForTest();
+  closeMarketingClawStateDatabaseForTest();
   setMaxPluginStateEntriesPerPluginForTests();
   resetPluginStateStoreForTests();
   mockedChannelMigrationPlans.plans = [];
@@ -245,7 +245,7 @@ function readPrimaryKeyColumns(db: DatabaseSync, tableName: string): string[] {
 }
 
 function createLegacyAgentDatabaseRegistry(stateDir: string): string {
-  const stateDatabasePath = path.join(stateDir, "state", "openclaw.sqlite");
+  const stateDatabasePath = path.join(stateDir, "state", "marketingclaw.sqlite");
   fs.mkdirSync(path.dirname(stateDatabasePath), { recursive: true });
   const { DatabaseSync } = requireNodeSqlite();
   const db = new DatabaseSync(stateDatabasePath);
@@ -266,7 +266,7 @@ function createLegacyAgentDatabaseRegistry(stateDir: string): string {
         size_bytes
       ) VALUES (
         'worker-1',
-        '/legacy/worker-1/openclaw-agent.sqlite',
+        '/legacy/worker-1/marketingclaw-agent.sqlite',
         1,
         10,
         20
@@ -384,8 +384,8 @@ function writeLegacyDebugProxyCaptureSidecar(
       100,
       200,
       "proxy-run",
-      "openclaw",
-      "openclaw",
+      "marketingclaw",
+      "marketingclaw",
       "http://127.0.0.1:8080",
       sourcePath,
       blobDir,
@@ -399,8 +399,8 @@ function writeLegacyDebugProxyCaptureSidecar(
     ).run(
       "legacy-session",
       150,
-      "openclaw",
-      "openclaw",
+      "marketingclaw",
+      "marketingclaw",
       "https",
       "outbound",
       "request",
@@ -457,7 +457,7 @@ function writeLegacyPluginInstallIndex(
 async function runLegacyStateMigrationsForRoot(root: string) {
   const detected = await detectLegacyStateMigrations({
     cfg: {},
-    env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+    env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
   });
   return await runLegacyStateMigrations({ detected });
 }
@@ -650,26 +650,26 @@ function appendLegacyCrossAgentTask(taskRunsPath: string): void {
 
 async function detectAndRunMigrations(params: {
   root: string;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   now?: () => number;
 }) {
   const detected = await detectLegacyStateMigrations({
     cfg: params.cfg,
-    env: { OPENCLAW_STATE_DIR: params.root } as NodeJS.ProcessEnv,
+    env: { MARKETINGCLAW_STATE_DIR: params.root } as NodeJS.ProcessEnv,
   });
   await runLegacyStateMigrations({ detected, now: params.now });
 }
 
 async function withStateDir<T>(root: string, run: () => Promise<T>): Promise<T> {
-  const previous = process.env.OPENCLAW_STATE_DIR;
-  process.env.OPENCLAW_STATE_DIR = root;
+  const previous = process.env.MARKETINGCLAW_STATE_DIR;
+  process.env.MARKETINGCLAW_STATE_DIR = root;
   try {
     return await run();
   } finally {
     if (previous === undefined) {
-      delete process.env.OPENCLAW_STATE_DIR;
+      delete process.env.MARKETINGCLAW_STATE_DIR;
     } else {
-      process.env.OPENCLAW_STATE_DIR = previous;
+      process.env.MARKETINGCLAW_STATE_DIR = previous;
     }
   }
 }
@@ -683,7 +683,7 @@ function readSessionsStore(targetDir: string) {
 
 async function runAndReadSessionsStore(params: {
   root: string;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   targetDir: string;
   now?: () => number;
 }) {
@@ -701,7 +701,7 @@ const DIR_LINK_TYPE = process.platform === "win32" ? "junction" : "dir";
 
 function getStateDirMigrationPaths(root: string) {
   return {
-    targetDir: path.join(root, ".openclaw"),
+    targetDir: path.join(root, ".marketingclaw"),
     legacyDir: path.join(root, ".clawdbot"),
   };
 }
@@ -727,13 +727,13 @@ async function runFreshStateDirMigration(root: string, env = {} as NodeJS.Proces
 
 async function runAutoMigrateLegacyStateWithLog(params: {
   root: string;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   now?: () => number;
 }) {
   const log = { info: vi.fn(), warn: vi.fn() };
   const result = await autoMigrateLegacyState({
     cfg: params.cfg,
-    env: { OPENCLAW_STATE_DIR: params.root } as NodeJS.ProcessEnv,
+    env: { MARKETINGCLAW_STATE_DIR: params.root } as NodeJS.ProcessEnv,
     log,
     now: params.now,
   });
@@ -777,7 +777,7 @@ describe("doctor legacy state migrations", () => {
 
   beforeAll(async () => {
     const root = await makeTempRoot();
-    const cfg: OpenClawConfig = {};
+    const cfg: MarketingClawConfig = {};
     const legacySessionsDir = writeLegacySessionsFixture({
       root,
       sessions: {
@@ -799,7 +799,7 @@ describe("doctor legacy state migrations", () => {
 
     const detected = await detectLegacyStateMigrations({
       cfg,
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     const result = await runLegacyStateMigrations({
       detected,
@@ -852,7 +852,7 @@ describe("doctor legacy state migrations", () => {
 
     const detected = await detectLegacyStateMigrations({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     expect(detected.preview).toContain(
       `- Sessions: repair migrated transcript paths in ${path.join(targetDir, "sessions.json")}`,
@@ -892,7 +892,7 @@ describe("doctor legacy state migrations", () => {
 
     const detected = await detectLegacyStateMigrations({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     expect(detected.sessions.hasLegacy).toBe(false);
     expect(detected.preview).not.toContain(
@@ -909,7 +909,7 @@ describe("doctor legacy state migrations", () => {
     await expect(
       detectLegacyStateMigrations({
         cfg: {},
-        env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+        env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
       }),
     ).resolves.toBeDefined();
   });
@@ -930,14 +930,14 @@ describe("doctor legacy state migrations", () => {
 
     const detected = await detectLegacyStateMigrations({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     expect(detected.sessions.hasLegacy).toBe(true);
   });
 
   it("migrates the legacy shared state agent registry primary key", async () => {
     const root = await makeTempRoot();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const stateDatabasePath = createLegacyAgentDatabaseRegistry(stateDir);
     const detected = await detectLegacyStateMigrations({
       cfg: {},
@@ -969,7 +969,7 @@ describe("doctor legacy state migrations", () => {
             size_bytes
           ) VALUES (
             'worker-1',
-            '/relocated/worker-1/openclaw-agent.sqlite',
+            '/relocated/worker-1/marketingclaw-agent.sqlite',
             1,
             20,
             30
@@ -986,7 +986,7 @@ describe("doctor legacy state migrations", () => {
 
   it("does not repair newer shared state schemas", async () => {
     const root = await makeTempRoot();
-    const stateDir = path.join(root, ".openclaw");
+    const stateDir = path.join(root, ".marketingclaw");
     const stateDatabasePath = createLegacyAgentDatabaseRegistry(stateDir);
     const { DatabaseSync } = requireNodeSqlite();
     const seededDb = new DatabaseSync(stateDatabasePath);
@@ -1013,7 +1013,7 @@ describe("doctor legacy state migrations", () => {
 
   it("migrates legacy ACP metadata from sessions.json into shared SQLite", async () => {
     const root = await makeTempRoot();
-    const cfg: OpenClawConfig = {};
+    const cfg: MarketingClawConfig = {};
     const legacySessionKey = "acp:binding:discord:default:feedface";
     const sessionKey = "agent:main:acp:binding:discord:default:feedface";
     writeLegacySessionsFixture({
@@ -1036,7 +1036,7 @@ describe("doctor legacy state migrations", () => {
 
     const detected = await detectLegacyStateMigrations({
       cfg,
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     const result = await runLegacyStateMigrations({
       detected,
@@ -1051,7 +1051,7 @@ describe("doctor legacy state migrations", () => {
     expect(store[legacySessionKey]?.acp).toBeUndefined();
 
     const sqlite = requireNodeSqlite();
-    const db = new sqlite.DatabaseSync(path.join(root, "state", "openclaw.sqlite"));
+    const db = new sqlite.DatabaseSync(path.join(root, "state", "marketingclaw.sqlite"));
     try {
       const row = db
         .prepare(
@@ -1086,7 +1086,7 @@ describe("doctor legacy state migrations", () => {
 
   it("keeps shipped WhatsApp legacy group keys channel-qualified during migration", async () => {
     const root = await makeTempRoot();
-    const cfg: OpenClawConfig = {};
+    const cfg: MarketingClawConfig = {};
     const targetDir = path.join(root, "agents", "main", "sessions");
 
     writeLegacySessionsFixture({
@@ -1200,7 +1200,7 @@ describe("doctor legacy state migrations", () => {
 
   it("does not fan out legacy Telegram pairing allowFrom store to configured named accounts", async () => {
     const root = await makeTempRoot();
-    const cfg: OpenClawConfig = {
+    const cfg: MarketingClawConfig = {
       channels: {
         telegram: {
           defaultAccount: "bot2",
@@ -1232,7 +1232,7 @@ describe("doctor legacy state migrations", () => {
 
   it("migrates legacy Telegram pairing allowFrom store to the default agent bound account", async () => {
     const root = await makeTempRoot();
-    const cfg: OpenClawConfig = {
+    const cfg: MarketingClawConfig = {
       agents: {
         list: [{ id: "ops", default: true }],
       },
@@ -1268,10 +1268,10 @@ describe("doctor legacy state migrations", () => {
 
   it("no-ops when nothing detected", async () => {
     const root = await makeTempRoot();
-    const cfg: OpenClawConfig = {};
+    const cfg: MarketingClawConfig = {};
     const detected = await detectLegacyStateMigrations({
       cfg,
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     const result = await runLegacyStateMigrations({ detected });
     expect(result.changes).toStrictEqual([]);
@@ -1326,7 +1326,7 @@ describe("doctor legacy state migrations", () => {
 
     const detected = await detectLegacyStateMigrations({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     const result = await runLegacyStateMigrations({ detected });
 
@@ -1408,7 +1408,7 @@ describe("doctor legacy state migrations", () => {
 
     const detected = await detectLegacyStateMigrations({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     const result = await runLegacyStateMigrations({ detected });
 
@@ -1456,7 +1456,7 @@ describe("doctor legacy state migrations", () => {
 
     const detected = await detectLegacyStateMigrations({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     const result = await runLegacyStateMigrations({ detected });
 
@@ -1503,7 +1503,7 @@ describe("doctor legacy state migrations", () => {
 
     const detected = await detectLegacyStateMigrations({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     const result = await runLegacyStateMigrations({ detected });
 
@@ -1542,7 +1542,7 @@ describe("doctor legacy state migrations", () => {
 
     const detected = await detectLegacyStateMigrations({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     const result = await runLegacyStateMigrations({ detected });
 
@@ -1592,7 +1592,7 @@ describe("doctor legacy state migrations", () => {
 
     const detected = await detectLegacyStateMigrations({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     const result = await runLegacyStateMigrations({ detected });
 
@@ -1625,7 +1625,7 @@ describe("doctor legacy state migrations", () => {
 
     const detected = await detectLegacyStateMigrations({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     expect(detected.pluginStateSidecar).toEqual({ sourcePath, hasLegacy: true });
     expect(detected.preview).toContain(
@@ -1660,7 +1660,7 @@ describe("doctor legacy state migrations", () => {
 
     const detected = await detectLegacyStateMigrations({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     expect(detected.debugProxyCaptureSidecar).toEqual({
       sourcePath,
@@ -1683,8 +1683,8 @@ describe("doctor legacy state migrations", () => {
     expect(fs.existsSync(`${blobDir}.migrated`)).toBe(true);
     expect(fs.readFileSync(path.join(certDir, "ca.pem"), "utf8")).toBe("keep");
 
-    const state = openOpenClawStateDatabase({
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+    const state = openMarketingClawStateDatabase({
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     expect(
       state.db.prepare("SELECT id, mode FROM capture_sessions WHERE id = ?").get("legacy-session"),
@@ -1715,9 +1715,9 @@ describe("doctor legacy state migrations", () => {
       legacyDb.close();
     }
     const env = {
-      OPENCLAW_STATE_DIR: root,
-      OPENCLAW_DEBUG_PROXY_DB_PATH: sourcePath,
-      OPENCLAW_DEBUG_PROXY_BLOB_DIR: blobDir,
+      MARKETINGCLAW_STATE_DIR: root,
+      MARKETINGCLAW_DEBUG_PROXY_DB_PATH: sourcePath,
+      MARKETINGCLAW_DEBUG_PROXY_BLOB_DIR: blobDir,
     } as NodeJS.ProcessEnv;
 
     const detected = await detectLegacyStateMigrations({ cfg: {}, env });
@@ -1745,8 +1745,8 @@ describe("doctor legacy state migrations", () => {
     ]);
     expect(fs.existsSync(`${sourcePath}.migrated`)).toBe(true);
     expect(fs.existsSync(blobDir)).toBe(true);
-    const state = openOpenClawStateDatabase({
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+    const state = openMarketingClawStateDatabase({
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     expect(
       state.db.prepare("SELECT blob_id FROM capture_blobs WHERE blob_id = ?").get(blobId),
@@ -1758,9 +1758,9 @@ describe("doctor legacy state migrations", () => {
 
   it("ignores a legacy debug proxy override that points at shared state", async () => {
     const root = await makeTempRoot();
-    const sharedStatePath = path.join(root, "state", "openclaw.sqlite");
-    const state = openOpenClawStateDatabase({
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+    const sharedStatePath = path.join(root, "state", "marketingclaw.sqlite");
+    const state = openMarketingClawStateDatabase({
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     state.db
       .prepare(
@@ -1768,12 +1768,12 @@ describe("doctor legacy state migrations", () => {
           id, started_at, mode, source_scope, source_process
         ) VALUES (?, ?, ?, ?, ?)`,
       )
-      .run("shared-session", 100, "proxy-run", "openclaw", "openclaw");
+      .run("shared-session", 100, "proxy-run", "marketingclaw", "marketingclaw");
     const detected = await detectLegacyStateMigrations({
       cfg: {},
       env: {
-        OPENCLAW_STATE_DIR: root,
-        OPENCLAW_DEBUG_PROXY_DB_PATH: sharedStatePath,
+        MARKETINGCLAW_STATE_DIR: root,
+        MARKETINGCLAW_DEBUG_PROXY_DB_PATH: sharedStatePath,
       } as NodeJS.ProcessEnv,
     });
 
@@ -1830,8 +1830,8 @@ describe("doctor legacy state migrations", () => {
     const retryResult = await runLegacyStateMigrationsForRoot(root);
 
     expect(retryResult.warnings).toStrictEqual([]);
-    const state = openOpenClawStateDatabase({
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+    const state = openMarketingClawStateDatabase({
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     expect(state.db.prepare("SELECT COUNT(*) AS count FROM capture_events").get()).toEqual({
       count: 2,
@@ -1841,8 +1841,8 @@ describe("doctor legacy state migrations", () => {
   it("leaves debug proxy sources in place when a session id conflicts", async () => {
     const root = await makeTempRoot();
     const { sourcePath, blobDir } = writeLegacyDebugProxyCaptureSidecar(root);
-    const state = openOpenClawStateDatabase({
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+    const state = openMarketingClawStateDatabase({
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     state.db
       .prepare(
@@ -1850,7 +1850,7 @@ describe("doctor legacy state migrations", () => {
           id, started_at, mode, source_scope, source_process
         ) VALUES (?, ?, ?, ?, ?)`,
       )
-      .run("legacy-session", 999, "different", "openclaw", "openclaw");
+      .run("legacy-session", 999, "different", "marketingclaw", "marketingclaw");
 
     const result = await runLegacyStateMigrationsForRoot(root);
 
@@ -1884,7 +1884,7 @@ describe("doctor legacy state migrations", () => {
 
     const retryDetected = await detectLegacyStateMigrations({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     expect(retryDetected.debugProxyCaptureSidecar.hasLegacy).toBe(true);
     const retryResult = await runLegacyStateMigrations({ detected: retryDetected });
@@ -1893,8 +1893,8 @@ describe("doctor legacy state migrations", () => {
     expect(retryResult.changes).toStrictEqual([
       `Archived debug proxy capture blobs → ${blobDir}.migrated`,
     ]);
-    const state = openOpenClawStateDatabase({
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+    const state = openMarketingClawStateDatabase({
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     expect(state.db.prepare("SELECT COUNT(*) AS count FROM capture_events").get()).toEqual({
       count: 1,
@@ -1950,7 +1950,7 @@ describe("doctor legacy state migrations", () => {
 
     const retryDetected = await detectLegacyStateMigrations({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     expect(retryDetected.pluginStateSidecar).toEqual({ sourcePath, hasLegacy: true });
     expect(retryDetected.preview).toContain(
@@ -1996,7 +1996,7 @@ describe("doctor legacy state migrations", () => {
 
     const detected = await detectLegacyStateMigrations({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     expect(detected.pluginInstallIndex).toEqual({ sourcePath, hasLegacy: true });
     expect(detected.preview).toContain(
@@ -2039,7 +2039,7 @@ describe("doctor legacy state migrations", () => {
 
     const detected = await detectLegacyStateMigrations({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     const result = await runLegacyStateMigrations({ detected });
 
@@ -2072,7 +2072,7 @@ describe("doctor legacy state migrations", () => {
 
     const detected = await detectLegacyStateMigrations({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     const result = await runLegacyStateMigrations({ detected });
 
@@ -2159,8 +2159,8 @@ describe("doctor legacy state migrations", () => {
     await writeExistingPluginInstallIndex(root, {
       discord: {
         source: "npm",
-        spec: "@openclaw/discord@latest",
-        resolvedName: "@openclaw/discord",
+        spec: "@marketingclaw/discord@latest",
+        resolvedName: "@marketingclaw/discord",
         resolvedVersion: "2026.6.16",
         integrity: "sha512-current",
         installedAt: "2026-06-16T12:00:00.000Z",
@@ -2169,7 +2169,7 @@ describe("doctor legacy state migrations", () => {
     const sourcePath = writeLegacyPluginInstallIndex(root, {
       discord: {
         source: "npm",
-        spec: "@openclaw/discord@2026.6.16",
+        spec: "@marketingclaw/discord@2026.6.16",
         version: "2026.6.16",
         installedAt: "2026-06-01T12:00:00.000Z",
       },
@@ -2184,8 +2184,8 @@ describe("doctor legacy state migrations", () => {
       installRecords: {
         discord: {
           source: "npm",
-          spec: "@openclaw/discord@latest",
-          resolvedName: "@openclaw/discord",
+          spec: "@marketingclaw/discord@latest",
+          resolvedName: "@marketingclaw/discord",
           resolvedVersion: "2026.6.16",
           integrity: "sha512-current",
         },
@@ -2343,7 +2343,7 @@ describe("doctor legacy state migrations", () => {
 
     const result = await autoMigrateLegacyState({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
       log: { info: vi.fn(), warn: vi.fn() },
     });
 
@@ -2368,8 +2368,8 @@ describe("doctor legacy state migrations", () => {
     const result = await autoMigrateLegacyState({
       cfg: {},
       env: {
-        OPENCLAW_STATE_DIR: root,
-        OPENCLAW_AGENT_DIR: path.join(root, "custom-agent"),
+        MARKETINGCLAW_STATE_DIR: root,
+        MARKETINGCLAW_AGENT_DIR: path.join(root, "custom-agent"),
       } as NodeJS.ProcessEnv,
       log: { info: vi.fn(), warn: vi.fn() },
     });
@@ -2391,8 +2391,8 @@ describe("doctor legacy state migrations", () => {
   it("migrates default exec approvals into an explicit state dir", async () => {
     const root = await makeTempRoot();
     const stateDir = path.join(root, "custom-state");
-    const sourcePath = path.join(root, ".openclaw", "exec-approvals.json");
-    const legacySocketPath = path.join(root, ".openclaw", "exec-approvals.sock");
+    const sourcePath = path.join(root, ".marketingclaw", "exec-approvals.json");
+    const legacySocketPath = path.join(root, ".marketingclaw", "exec-approvals.sock");
     const targetPath = path.join(stateDir, "exec-approvals.json");
     const targetSocketPath = path.join(stateDir, "exec-approvals.sock");
     writeJson5(sourcePath, {
@@ -2414,7 +2414,7 @@ describe("doctor legacy state migrations", () => {
 
     const detected = await detectLegacyStateMigrations({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: stateDir } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: stateDir } as NodeJS.ProcessEnv,
       homedir: () => root,
     });
     expect(detected.preview).toContain(`- Exec approvals: ${sourcePath} → ${targetPath}`);
@@ -2443,7 +2443,7 @@ describe("doctor legacy state migrations", () => {
   it("skips exec approvals migration when the target appears after detection", async () => {
     const root = await makeTempRoot();
     const stateDir = path.join(root, "custom-state");
-    const sourcePath = path.join(root, ".openclaw", "exec-approvals.json");
+    const sourcePath = path.join(root, ".marketingclaw", "exec-approvals.json");
     const targetPath = path.join(stateDir, "exec-approvals.json");
     writeJson5(sourcePath, {
       version: 1,
@@ -2456,7 +2456,7 @@ describe("doctor legacy state migrations", () => {
     });
     const detected = await detectLegacyStateMigrations({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: stateDir } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: stateDir } as NodeJS.ProcessEnv,
       homedir: () => root,
     });
     writeJson5(targetPath, {
@@ -2489,7 +2489,7 @@ describe("doctor legacy state migrations", () => {
   it("auto-migrates exec approvals without a valid config snapshot", async () => {
     const root = await makeTempRoot();
     const stateDir = path.join(root, "custom-state");
-    const sourcePath = path.join(root, ".openclaw", "exec-approvals.json");
+    const sourcePath = path.join(root, ".marketingclaw", "exec-approvals.json");
     const targetPath = path.join(stateDir, "exec-approvals.json");
     writeJson5(sourcePath, {
       version: 1,
@@ -2503,7 +2503,7 @@ describe("doctor legacy state migrations", () => {
     });
 
     const result = await autoMigrateLegacyTaskStateSidecars({
-      env: { OPENCLAW_STATE_DIR: stateDir } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: stateDir } as NodeJS.ProcessEnv,
       homedir: () => root,
     });
 
@@ -2537,7 +2537,7 @@ describe("doctor legacy state migrations", () => {
 
     const detected = await detectLegacyStateMigrations({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     const result = await runLegacyStateMigrations({ detected });
 
@@ -2607,7 +2607,7 @@ describe("doctor legacy state migrations", () => {
 
     const detected = await detectLegacyStateMigrations({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     const result = await runLegacyStateMigrations({ detected });
 
@@ -2685,7 +2685,7 @@ describe("doctor legacy state migrations", () => {
 
     const detected = await detectLegacyStateMigrations({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     const result = await runLegacyStateMigrations({ detected });
 
@@ -2716,7 +2716,7 @@ describe("doctor legacy state migrations", () => {
 
     const detected = await detectLegacyStateMigrations({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     const result = await runLegacyStateMigrations({ detected });
 
@@ -2743,7 +2743,7 @@ describe("doctor legacy state migrations", () => {
 
     const detected = await detectLegacyStateMigrations({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     const result = await runLegacyStateMigrations({ detected });
 
@@ -2766,7 +2766,7 @@ describe("doctor legacy state migrations", () => {
 
     const detected = await detectLegacyStateMigrations({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
 
     expect(detected.taskStateSidecars).toEqual({
@@ -2828,7 +2828,7 @@ describe("doctor legacy state migrations", () => {
     fs.writeFileSync(flowJournalPath, "");
 
     const result = await autoMigrateLegacyTaskStateSidecars({
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
 
     expect(result.warnings).toStrictEqual([]);
@@ -2852,7 +2852,7 @@ describe("doctor legacy state migrations", () => {
 
     const detected = await detectLegacyStateMigrations({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
 
     expect(detected.taskStateSidecars.hasLegacy).toBe(true);
@@ -2879,7 +2879,7 @@ describe("doctor legacy state migrations", () => {
     const firstResult = await (async () => {
       try {
         return await autoMigrateLegacyTaskStateSidecars({
-          env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+          env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
         });
       } finally {
         rename.mockRestore();
@@ -2899,7 +2899,7 @@ describe("doctor legacy state migrations", () => {
 
     resetAutoMigrateLegacyTaskStateSidecarsForTest();
     const retryResult = await autoMigrateLegacyTaskStateSidecars({
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
 
     expect(retryResult.warnings).toStrictEqual([]);
@@ -2934,7 +2934,7 @@ describe("doctor legacy state migrations", () => {
     }
 
     const result = await autoMigrateLegacyTaskStateSidecars({
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
 
     expect(result.changes).toContain("Migrated 1 task registry sidecar row → shared SQLite state");
@@ -2957,7 +2957,7 @@ describe("doctor legacy state migrations", () => {
     const { taskRunsPath, flowRunsPath } = writeLegacyTaskStateSidecars(root);
 
     const result = await autoMigrateLegacyTaskStateSidecars({
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
 
     expect(result.warnings).toStrictEqual([]);
@@ -2978,7 +2978,7 @@ describe("doctor legacy state migrations", () => {
     appendLegacyCrossAgentTask(taskRunsPath);
 
     const result = await autoMigrateLegacyTaskStateSidecars({
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
 
     expect(result.warnings).toStrictEqual([]);
@@ -3002,9 +3002,9 @@ describe("doctor legacy state migrations", () => {
 
     await withStateDir(root, async () => {
       loadTaskRegistryStateFromSqlite();
-      closeOpenClawStateDatabaseForTest();
+      closeMarketingClawStateDatabaseForTest();
       const sqlite = requireNodeSqlite();
-      const db = new sqlite.DatabaseSync(path.join(root, "state", "openclaw.sqlite"));
+      const db = new sqlite.DatabaseSync(path.join(root, "state", "marketingclaw.sqlite"));
       try {
         db.prepare(
           `INSERT INTO task_runs (
@@ -3047,7 +3047,7 @@ describe("doctor legacy state migrations", () => {
     });
 
     const result = await autoMigrateLegacyTaskStateSidecars({
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
 
     expect(result.warnings).toContain(
@@ -3062,7 +3062,7 @@ describe("doctor legacy state migrations", () => {
 
     await withStateDir(root, async () => {
       const sqlite = requireNodeSqlite();
-      const sharedPath = path.join(root, "state", "openclaw.sqlite");
+      const sharedPath = path.join(root, "state", "marketingclaw.sqlite");
       fs.mkdirSync(path.dirname(sharedPath), { recursive: true });
       const db = new sqlite.DatabaseSync(sharedPath);
       try {
@@ -3120,7 +3120,7 @@ describe("doctor legacy state migrations", () => {
 
     const detected = await detectLegacyStateMigrations({
       cfg: {},
-      env: { OPENCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
+      env: { MARKETINGCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
     });
     const result = await runLegacyStateMigrations({ detected });
 
@@ -3135,7 +3135,7 @@ describe("doctor legacy state migrations", () => {
 
   it("routes legacy state to the default agent entry", async () => {
     const root = await makeTempRoot();
-    const cfg: OpenClawConfig = {
+    const cfg: MarketingClawConfig = {
       agents: { list: [{ id: "alpha", default: true }] },
     };
     writeLegacySessionsFixture({
@@ -3157,7 +3157,7 @@ describe("doctor legacy state migrations", () => {
 
   it("honors session.mainKey when seeding the direct-chat bucket", async () => {
     const root = await makeTempRoot();
-    const cfg: OpenClawConfig = { session: { mainKey: "work" } };
+    const cfg: MarketingClawConfig = { session: { mainKey: "work" } };
     writeLegacySessionsFixture({
       root,
       sessions: {
@@ -3197,7 +3197,7 @@ describe("doctor legacy state migrations", () => {
 
   it("prefers the newest entry when collapsing main aliases", async () => {
     const root = await makeTempRoot();
-    const cfg: OpenClawConfig = { session: { mainKey: "work" } };
+    const cfg: MarketingClawConfig = { session: { mainKey: "work" } };
     const targetDir = path.join(root, "agents", "main", "sessions");
     writeJson5(path.join(targetDir, "sessions.json"), {
       "agent:main:main": { sessionId: "legacy", updatedAt: 50 },
@@ -3216,7 +3216,7 @@ describe("doctor legacy state migrations", () => {
 
   it("lowercases agent session keys during canonicalization", async () => {
     const root = await makeTempRoot();
-    const cfg: OpenClawConfig = {};
+    const cfg: MarketingClawConfig = {};
     const targetDir = path.join(root, "agents", "main", "sessions");
     writeJson5(path.join(targetDir, "sessions.json"), {
       "agent:main:slack:channel:C123": { sessionId: "legacy", updatedAt: 10 },
@@ -3234,7 +3234,7 @@ describe("doctor legacy state migrations", () => {
 
   it("preserves Matrix room and thread casing during canonicalization", async () => {
     const root = await makeTempRoot();
-    const cfg: OpenClawConfig = {};
+    const cfg: MarketingClawConfig = {};
     const targetDir = path.join(root, "agents", "main", "sessions");
     writeJson5(path.join(targetDir, "sessions.json"), {
       "agent:main:Matrix:Channel:!Mixed:Example.Org:Thread:$EventABC": {
@@ -3257,7 +3257,7 @@ describe("doctor legacy state migrations", () => {
 
   it("preserves unscoped legacy Matrix room casing when scoping to an agent", async () => {
     const root = await makeTempRoot();
-    const cfg: OpenClawConfig = {};
+    const cfg: MarketingClawConfig = {};
     const targetDir = path.join(root, "agents", "main", "sessions");
     writeJson5(path.join(targetDir, "sessions.json"), {
       "Matrix:Channel:!Mixed:Example.Org": { sessionId: "matrix", updatedAt: 10 },
@@ -3306,7 +3306,7 @@ describe("doctor legacy state migrations", () => {
     fs.mkdirSync(legacyDir, { recursive: true });
 
     const result = await runStateDirMigration(root, {
-      OPENCLAW_STATE_DIR: "/custom/state",
+      MARKETINGCLAW_STATE_DIR: "/custom/state",
     } as NodeJS.ProcessEnv);
 
     expect(result.skipped).toBe(true);

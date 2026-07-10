@@ -6,12 +6,12 @@
  */
 import os from "node:os";
 import path from "node:path";
-import { MAX_TIMER_TIMEOUT_MS } from "openclaw/plugin-sdk/number-runtime";
+import { MAX_TIMER_TIMEOUT_MS } from "marketingclaw/plugin-sdk/number-runtime";
 import {
   normalizeOptionalString,
   normalizeOptionalTrimmedStringList,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
-import type { BrowserConfig, BrowserProfileConfig, OpenClawConfig } from "../config/config.js";
+} from "marketingclaw/plugin-sdk/string-coerce-runtime";
+import type { BrowserConfig, BrowserProfileConfig, MarketingClawConfig } from "../config/config.js";
 import { resolveGatewayPort } from "../config/paths.js";
 import {
   DEFAULT_BROWSER_CONTROL_PORT,
@@ -32,9 +32,9 @@ import {
   DEFAULT_BROWSER_TAB_CLEANUP_IDLE_MINUTES,
   DEFAULT_BROWSER_TAB_CLEANUP_MAX_TABS_PER_SESSION,
   DEFAULT_BROWSER_TAB_CLEANUP_SWEEP_MINUTES,
-  DEFAULT_OPENCLAW_BROWSER_COLOR,
-  DEFAULT_OPENCLAW_BROWSER_ENABLED,
-  DEFAULT_OPENCLAW_BROWSER_PROFILE_NAME,
+  DEFAULT_MARKETINGCLAW_BROWSER_COLOR,
+  DEFAULT_MARKETINGCLAW_BROWSER_ENABLED,
+  DEFAULT_MARKETINGCLAW_BROWSER_PROFILE_NAME,
 } from "./constants.js";
 import { resolveExtensionRelayToken } from "./extension-relay/relay-auth.js";
 import { DEFAULT_UPLOAD_DIR } from "./paths.js";
@@ -44,9 +44,9 @@ export {
   DEFAULT_BROWSER_ACTION_TIMEOUT_MS,
   DEFAULT_BROWSER_DEFAULT_PROFILE_NAME,
   DEFAULT_BROWSER_EVALUATE_ENABLED,
-  DEFAULT_OPENCLAW_BROWSER_COLOR,
-  DEFAULT_OPENCLAW_BROWSER_ENABLED,
-  DEFAULT_OPENCLAW_BROWSER_PROFILE_NAME,
+  DEFAULT_MARKETINGCLAW_BROWSER_COLOR,
+  DEFAULT_MARKETINGCLAW_BROWSER_ENABLED,
+  DEFAULT_MARKETINGCLAW_BROWSER_PROFILE_NAME,
   DEFAULT_UPLOAD_DIR,
   parseBrowserHttpUrl,
   redactCdpUrl,
@@ -114,7 +114,7 @@ export type ResolvedBrowserProfile = {
   mcpCommand?: string;
   mcpArgs?: string[];
   color: string;
-  driver: "openclaw" | "existing-session" | "extension";
+  driver: "marketingclaw" | "existing-session" | "extension";
   executablePath?: string;
   headless: boolean;
   headlessSource?: "profile" | "config" | "default";
@@ -129,10 +129,10 @@ const DEFAULT_BROWSER_CDP_PORT_RANGE_START = 18800;
  */
 const EXTENSION_RELAY_PORT_OFFSET = 8;
 /** Username half of the relay's Basic credential; the password is the derived token. */
-const EXTENSION_RELAY_CDP_USER = "openclaw";
+const EXTENSION_RELAY_CDP_USER = "marketingclaw";
 const MAX_BROWSER_STARTUP_TIMEOUT_MS = 120_000;
 /** Environment variable that overrides managed Chrome headless mode. */
-export const OPENCLAW_BROWSER_HEADLESS_ENV = "OPENCLAW_BROWSER_HEADLESS";
+export const MARKETINGCLAW_BROWSER_HEADLESS_ENV = "MARKETINGCLAW_BROWSER_HEADLESS";
 
 /** Source that determined managed Chrome headless mode. */
 export type ManagedBrowserHeadlessSource =
@@ -163,11 +163,11 @@ export type ManagedBrowserHeadlessOptions = {
 function normalizeHexColor(raw: string | undefined): string {
   const value = (raw ?? "").trim();
   if (!value) {
-    return DEFAULT_OPENCLAW_BROWSER_COLOR;
+    return DEFAULT_MARKETINGCLAW_BROWSER_COLOR;
   }
   const normalized = value.startsWith("#") ? value : `#${value}`;
   if (!/^#[0-9a-fA-F]{6}$/.test(normalized)) {
-    return DEFAULT_OPENCLAW_BROWSER_COLOR;
+    return DEFAULT_MARKETINGCLAW_BROWSER_COLOR;
   }
   return normalized.toUpperCase();
 }
@@ -252,7 +252,7 @@ function hasLinuxDisplay(env: NodeJS.ProcessEnv): boolean {
 }
 
 function isLocalManagedProfile(profile: ResolvedBrowserProfile): boolean {
-  return profile.driver === "openclaw" && profile.cdpIsLoopback && !profile.attachOnly;
+  return profile.driver === "marketingclaw" && profile.cdpIsLoopback && !profile.attachOnly;
 }
 
 function resolveBrowserTabCleanupConfig(
@@ -340,8 +340,8 @@ function ensureDefaultProfile(
   legacyCdpUrl?: string,
 ): Record<string, BrowserProfileConfig> {
   const result = { ...profiles };
-  if (!result[DEFAULT_OPENCLAW_BROWSER_PROFILE_NAME]) {
-    result[DEFAULT_OPENCLAW_BROWSER_PROFILE_NAME] = {
+  if (!result[DEFAULT_MARKETINGCLAW_BROWSER_PROFILE_NAME]) {
+    result[DEFAULT_MARKETINGCLAW_BROWSER_PROFILE_NAME] = {
       cdpPort: legacyCdpPort ?? derivedDefaultCdpPort ?? DEFAULT_BROWSER_CDP_PORT_RANGE_START,
       color: defaultColor,
       ...(legacyCdpUrl ? { cdpUrl: legacyCdpUrl } : {}),
@@ -375,7 +375,7 @@ function ensureDefaultChromeExtensionProfile(
   }
   result.chrome = {
     driver: "extension",
-    color: DEFAULT_OPENCLAW_BROWSER_COLOR,
+    color: DEFAULT_MARKETINGCLAW_BROWSER_COLOR,
   };
   return result;
 }
@@ -430,9 +430,9 @@ function applyLegacyCdpUrlToExistingSessionDefaultProfile(
 /** Resolve raw browser config into runtime browser defaults. */
 export function resolveBrowserConfig(
   cfg: BrowserConfig | undefined,
-  rootConfig?: OpenClawConfig,
+  rootConfig?: MarketingClawConfig,
 ): ResolvedBrowserConfig {
-  const enabled = cfg?.enabled ?? DEFAULT_OPENCLAW_BROWSER_ENABLED;
+  const enabled = cfg?.enabled ?? DEFAULT_MARKETINGCLAW_BROWSER_ENABLED;
   const evaluateEnabled = cfg?.evaluateEnabled ?? DEFAULT_BROWSER_EVALUATE_ENABLED;
   const gatewayPort = resolveGatewayPort(rootConfig);
   const controlPort = deriveDefaultBrowserControlPort(gatewayPort ?? DEFAULT_BROWSER_CONTROL_PORT);
@@ -519,8 +519,8 @@ export function resolveBrowserConfig(
     defaultProfileFromConfig ??
     (profiles[DEFAULT_BROWSER_DEFAULT_PROFILE_NAME]
       ? DEFAULT_BROWSER_DEFAULT_PROFILE_NAME
-      : profiles[DEFAULT_OPENCLAW_BROWSER_PROFILE_NAME]
-        ? DEFAULT_OPENCLAW_BROWSER_PROFILE_NAME
+      : profiles[DEFAULT_MARKETINGCLAW_BROWSER_PROFILE_NAME]
+        ? DEFAULT_MARKETINGCLAW_BROWSER_PROFILE_NAME
         : "user");
   profiles = applyLegacyCdpUrlToExistingSessionDefaultProfile(
     profiles,
@@ -585,7 +585,7 @@ export function resolveProfile(
   const driver =
     profile.driver === "existing-session" || profile.driver === "extension"
       ? profile.driver
-      : "openclaw";
+      : "marketingclaw";
   const headless = profile.headless ?? resolved.headless;
   const headlessSource =
     typeof profile.headless === "boolean" ? "profile" : resolved.headlessSource;
@@ -705,7 +705,7 @@ export function resolveManagedBrowserHeadlessMode(
 
   const env = params.env ?? process.env;
   const platform = params.platform ?? process.platform;
-  const envHeadless = parseBooleanValue(env[OPENCLAW_BROWSER_HEADLESS_ENV]);
+  const envHeadless = parseBooleanValue(env[MARKETINGCLAW_BROWSER_HEADLESS_ENV]);
   if (envHeadless !== undefined) {
     return { headless: envHeadless, source: "env" };
   }
@@ -750,7 +750,7 @@ export function getManagedBrowserMissingDisplayError(
     mode.source === "request"
       ? "request override"
       : mode.source === "env"
-        ? `${OPENCLAW_BROWSER_HEADLESS_ENV}=0`
+        ? `${MARKETINGCLAW_BROWSER_HEADLESS_ENV}=0`
         : mode.source === "profile"
           ? `browser.profiles.${profile.name}.headless=false`
           : "browser.headless=false";
@@ -758,7 +758,7 @@ export function getManagedBrowserMissingDisplayError(
     message:
       `Headed browser start requested for profile "${profile.name}" via ${sourceHint}, ` +
       "but no Linux display server was detected ($DISPLAY/$WAYLAND_DISPLAY unset). " +
-      `Set ${OPENCLAW_BROWSER_HEADLESS_ENV}=1, remove the headed override, or launch under Xvfb.`,
+      `Set ${MARKETINGCLAW_BROWSER_HEADLESS_ENV}=1, remove the headed override, or launch under Xvfb.`,
     headlessSource: mode.source,
   };
 }

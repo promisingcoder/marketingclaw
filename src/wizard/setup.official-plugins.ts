@@ -1,6 +1,6 @@
 // Official plugin setup helpers install and configure bundled onboarding plugins.
 import { ensureOnboardingPluginInstalled } from "../commands/onboarding-plugin-install.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import type { PluginPackageInstall } from "../plugins/manifest.js";
 import {
   getOfficialExternalPluginCatalogManifest,
@@ -25,7 +25,7 @@ export type OfficialPluginOnboardingInstallEntry = {
   trustedSourceLinkedOfficialInstall?: boolean;
 };
 
-function isInstalledOrConfigured(config: OpenClawConfig, pluginId: string): boolean {
+function isInstalledOrConfigured(config: MarketingClawConfig, pluginId: string): boolean {
   return Boolean(config.plugins?.entries?.[pluginId] || config.plugins?.installs?.[pluginId]);
 }
 
@@ -64,7 +64,7 @@ export const testing = {
 };
 
 export function resolveOfficialPluginOnboardingInstallEntries(params: {
-  config: OpenClawConfig;
+  config: MarketingClawConfig;
 }): OfficialPluginOnboardingInstallEntry[] {
   const entries: OfficialPluginOnboardingInstallEntry[] = [];
   for (const entry of listOfficialExternalPluginCatalogEntries()) {
@@ -90,11 +90,11 @@ export function resolveOfficialPluginOnboardingInstallEntries(params: {
 // Prompt for optional official plugin installs during onboarding. The skip entry
 // is explicit so users can leave every plugin unselected without ambiguity.
 export async function setupOfficialPluginInstalls(params: {
-  config: OpenClawConfig;
+  config: MarketingClawConfig;
   prompter: WizardPrompter;
   runtime: RuntimeEnv;
   workspaceDir?: string;
-}): Promise<OpenClawConfig> {
+}): Promise<MarketingClawConfig> {
   const installEntries = resolveOfficialPluginOnboardingInstallEntries({
     config: params.config,
   });

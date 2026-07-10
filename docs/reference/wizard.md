@@ -8,7 +8,7 @@ title: "Onboarding reference"
 sidebarTitle: "Onboarding Reference"
 ---
 
-This is the full reference for `openclaw onboard`.
+This is the full reference for `marketingclaw onboard`.
 For a high-level overview, see [Onboarding (CLI)](/start/wizard). For step-by-step
 behavior and outputs, see [CLI setup reference](/start/wizard-cli-reference).
 
@@ -22,7 +22,7 @@ behavior and outputs, see [CLI setup reference](/start/wizard-cli-reference).
       only), `config+creds+sessions` (default), or `full` (also removes the
       workspace).
     - If the config file is invalid, onboarding stops and tells you to run
-      `openclaw doctor` first, then re-run setup.
+      `marketingclaw doctor` first, then re-run setup.
     - Reset moves state to Trash (never deletes directly).
 
   </Step>
@@ -38,7 +38,7 @@ behavior and outputs, see [CLI setup reference](/start/wizard-cli-reference).
   </Step>
   <Step title="Model/Auth">
     - **Anthropic API key**: uses `ANTHROPIC_API_KEY` if present or prompts for a key, then saves it for daemon use.
-    - **Anthropic Claude CLI**: preferred local path when a Claude CLI sign-in already exists; OpenClaw still supports Anthropic setup-token auth as an alternative.
+    - **Anthropic Claude CLI**: preferred local path when a Claude CLI sign-in already exists; MarketingClaw still supports Anthropic setup-token auth as an alternative.
     - **OpenAI Code (Codex) subscription (OAuth)**: browser flow; paste the `code#state`.
       - Sets `agents.defaults.model` to `openai/gpt-5.5` through the Codex runtime when model is unset or already OpenAI-family.
     - **OpenAI Code (Codex) subscription (device pairing)**: browser pairing flow with a short-lived device code.
@@ -73,18 +73,18 @@ behavior and outputs, see [CLI setup reference](/start/wizard-cli-reference).
     - Pick a default model from detected options (or enter provider/model manually). For best quality and lower prompt-injection risk, choose the strongest latest-generation model available in your provider stack.
     - Onboarding runs a model check and warns if the configured model is unknown or missing auth.
     - API key storage mode defaults to plaintext auth-profile values. Use `--secret-input-mode ref` to store env-backed refs instead (for example `keyRef: { source: "env", provider: "default", id: "OPENAI_API_KEY" }`); the referenced env var must already be set, or onboarding fails fast.
-    - Auth profiles live in `~/.openclaw/agents/<agentId>/agent/auth-profiles.json` (API keys + OAuth). `~/.openclaw/credentials/oauth.json` is legacy import-only.
+    - Auth profiles live in `~/.marketingclaw/agents/<agentId>/agent/auth-profiles.json` (API keys + OAuth). `~/.marketingclaw/credentials/oauth.json` is legacy import-only.
     - More detail: [OAuth](/concepts/oauth)
     <Note>
     Headless/server tip: complete OAuth on a machine with a browser, then copy
     that agent's `auth-profiles.json` (for example
-    `~/.openclaw/agents/<agentId>/agent/auth-profiles.json`, or the matching
-    `$OPENCLAW_STATE_DIR/...` path) to the gateway host. `credentials/oauth.json`
+    `~/.marketingclaw/agents/<agentId>/agent/auth-profiles.json`, or the matching
+    `$MARKETINGCLAW_STATE_DIR/...` path) to the gateway host. `credentials/oauth.json`
     is only a legacy import source.
     </Note>
   </Step>
   <Step title="Workspace">
-    - Default `~/.openclaw/workspace` (configurable).
+    - Default `~/.marketingclaw/workspace` (configurable).
     - Seeds the workspace files needed for the agent bootstrap ritual.
     - Full workspace layout + backup guide: [Agent workspace](/concepts/agent-workspace)
 
@@ -115,14 +115,14 @@ behavior and outputs, see [CLI setup reference](/start/wizard-cli-reference).
     - [iMessage](/channels/imessage): `imsg` CLI path + Messages DB access; use an SSH wrapper when the Gateway runs off-Mac.
     - Discord, Feishu, Microsoft Teams, QQ Bot, Slack, and other channels ship as
       plugins onboarding can install for you. Full catalog: [Channels](/channels).
-    - DM security: default is pairing. First DM sends a code; approve via `openclaw pairing approve <channel> <code>` or use allowlists.
+    - DM security: default is pairing. First DM sends a code; approve via `marketingclaw pairing approve <channel> <code>` or use allowlists.
 
   </Step>
   <Step title="Web search">
     - Pick a supported provider such as Brave, Codex (Hosted Search), DuckDuckGo, Exa, Firecrawl, Gemini, Grok, Kimi, MiniMax Search, Ollama Web Search, Parallel, Perplexity, SearXNG, or Tavily (or skip).
     - API-backed providers can use env vars or existing config for quick setup; key-free providers use their provider-specific prerequisites instead.
     - Skip with `--skip-search`.
-    - Configure later: `openclaw configure --section web`.
+    - Configure later: `marketingclaw configure --section web`.
 
   </Step>
   <Step title="Daemon install">
@@ -131,7 +131,7 @@ behavior and outputs, see [CLI setup reference](/start/wizard-cli-reference).
     - Linux (and Windows via WSL2): systemd user unit
       - Onboarding attempts to enable lingering via `loginctl enable-linger <user>` so the Gateway stays up after logout.
       - May prompt for sudo (writes `/var/lib/systemd/linger`); it tries without sudo first.
-    - Native Windows: Scheduled Task first; if task creation is denied, OpenClaw falls back to a per-user Startup-folder login item and starts the Gateway immediately.
+    - Native Windows: Scheduled Task first; if task creation is denied, MarketingClaw falls back to a per-user Startup-folder login item and starts the Gateway immediately.
     - **Runtime selection:** Node (recommended; required for WhatsApp/Telegram - Bun can corrupt memory on reconnect). Only Node is offered interactively; `--daemon-runtime bun` is CLI-only.
     - If token auth requires a token and `gateway.auth.token` is SecretRef-managed, daemon install validates it but does not persist resolved plaintext token values into supervisor service environment metadata.
     - If token auth requires a token and the configured token SecretRef is unresolved, daemon install is blocked with actionable guidance.
@@ -139,15 +139,15 @@ behavior and outputs, see [CLI setup reference](/start/wizard-cli-reference).
 
   </Step>
   <Step title="Health check">
-    - Starts the Gateway (if needed) and runs `openclaw health`.
-    - Tip: `openclaw status --deep` adds the live gateway health probe to status output, including channel probes when supported (requires a reachable gateway).
+    - Starts the Gateway (if needed) and runs `marketingclaw health`.
+    - Tip: `marketingclaw status --deep` adds the live gateway health probe to status output, including channel probes when supported (requires a reachable gateway).
 
   </Step>
   <Step title="Skills (recommended)">
     - Reads the available skills and checks requirements.
     - Lets you choose a node manager: **npm / pnpm / bun**.
     - Auto-installs optional dependencies for trusted bundled skills (some use Homebrew on macOS).
-    - Skips skills whose Homebrew, uv, or Go installer prerequisite is unavailable, groups them with manual setup guidance, and points you at `openclaw doctor` once the prerequisite is installed.
+    - Skips skills whose Homebrew, uv, or Go installer prerequisite is unavailable, groups them with manual setup guidance, and points you at `marketingclaw doctor` once the prerequisite is installed.
 
   </Step>
   <Step title="Finish">
@@ -168,7 +168,7 @@ flag is the required risk acknowledgement; onboarding exits with an error
 without it):
 
 ```bash
-openclaw onboard --non-interactive --accept-risk \
+marketingclaw onboard --non-interactive --accept-risk \
   --mode local \
   --auth-choice apiKey \
   --anthropic-api-key "$ANTHROPIC_API_KEY" \
@@ -184,12 +184,12 @@ Add `--json` for a machine-readable summary.
 Gateway token SecretRef in non-interactive mode:
 
 ```bash
-export OPENCLAW_GATEWAY_TOKEN="your-token"
-openclaw onboard --non-interactive --accept-risk \
+export MARKETINGCLAW_GATEWAY_TOKEN="your-token"
+marketingclaw onboard --non-interactive --accept-risk \
   --mode local \
   --auth-choice skip \
   --gateway-auth token \
-  --gateway-token-ref-env OPENCLAW_GATEWAY_TOKEN
+  --gateway-token-ref-env MARKETINGCLAW_GATEWAY_TOKEN
 ```
 
 `--gateway-token` and `--gateway-token-ref-env` are mutually exclusive.
@@ -204,15 +204,15 @@ Use this reference page for flag semantics and step ordering.
 ### Add agent (non-interactive)
 
 ```bash
-openclaw agents add work \
-  --workspace ~/.openclaw/workspace-work \
+marketingclaw agents add work \
+  --workspace ~/.marketingclaw/workspace-work \
   --model openai/gpt-5.5 \
   --bind whatsapp:biz \
   --non-interactive \
   --json
 ```
 
-`main` is a reserved agent id and cannot be used for `openclaw agents add`.
+`main` is a reserved agent id and cannot be used for `marketingclaw agents add`.
 
 ## Gateway wizard RPC
 
@@ -223,14 +223,14 @@ Clients (macOS app, Control UI) can render steps without re-implementing onboard
 
 Onboarding detects whether `signal-cli` is on `PATH` and, if missing, offers to install it:
 
-- Linux x86-64: downloads the official native GraalVM build from the `signal-cli` GitHub releases and stores it under `~/.openclaw/tools/signal-cli/<version>/`.
+- Linux x86-64: downloads the official native GraalVM build from the `signal-cli` GitHub releases and stores it under `~/.marketingclaw/tools/signal-cli/<version>/`.
 - macOS and other architectures: installs via Homebrew instead.
 - Native Windows: not supported yet; run onboarding inside WSL2 to get the Linux install path.
 - Writes `channels.signal.cliPath` to your config either way.
 
 ## What the wizard writes
 
-Typical fields in `~/.openclaw/openclaw.json`:
+Typical fields in `~/.marketingclaw/marketingclaw.json`:
 
 - `agents.defaults.workspace`
 - `agents.defaults.skipBootstrap` when `--skip-bootstrap` is passed
@@ -250,10 +250,10 @@ Typical fields in `~/.openclaw/openclaw.json`:
 - `wizard.lastRunMode`
 - `wizard.securityAcknowledgedAt`
 
-`openclaw agents add` writes `agents.list[]` and optional `bindings`.
+`marketingclaw agents add` writes `agents.list[]` and optional `bindings`.
 
-WhatsApp credentials go under `~/.openclaw/credentials/whatsapp/<accountId>/`.
-Sessions are stored under `~/.openclaw/agents/<agentId>/sessions/`.
+WhatsApp credentials go under `~/.marketingclaw/credentials/whatsapp/<accountId>/`.
+Sessions are stored under `~/.marketingclaw/agents/<agentId>/sessions/`.
 
 Some channels are delivered as plugins. When you pick one during setup, onboarding
 will prompt to install it (npm or a local path) before it can be configured.

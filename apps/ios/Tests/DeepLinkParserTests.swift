@@ -1,4 +1,4 @@
-import OpenClawKit
+import MarketingClawKit
 import Foundation
 import Testing
 
@@ -34,28 +34,28 @@ private func agentAction(
 
 @Suite struct DeepLinkParserTests {
     @Test func parseRejectsUnknownHost() {
-        let url = URL(string: "openclaw://nope?message=hi")!
+        let url = URL(string: "marketingclaw://nope?message=hi")!
         #expect(DeepLinkParser.parse(url) == nil)
     }
 
     @Test func parseHostIsCaseInsensitive() {
-        let url = URL(string: "openclaw://AGENT?message=Hello")!
+        let url = URL(string: "marketingclaw://AGENT?message=Hello")!
         #expect(DeepLinkParser.parse(url) == agentAction(message: "Hello"))
     }
 
-    @Test func parseRejectsNonOpenClawScheme() {
+    @Test func parseRejectsNonMarketingClawScheme() {
         let url = URL(string: "https://example.com/agent?message=hi")!
         #expect(DeepLinkParser.parse(url) == nil)
     }
 
     @Test func parseRejectsEmptyMessage() {
-        let url = URL(string: "openclaw://agent?message=%20%20%0A")!
+        let url = URL(string: "marketingclaw://agent?message=%20%20%0A")!
         #expect(DeepLinkParser.parse(url) == nil)
     }
 
     @Test func parseAgentLinkParsesCommonFields() {
         let url =
-            URL(string: "openclaw://agent?message=Hello&deliver=1&sessionKey=node-test&thinking=low&timeoutSeconds=30")!
+            URL(string: "marketingclaw://agent?message=Hello&deliver=1&sessionKey=node-test&thinking=low&timeoutSeconds=30")!
         #expect(DeepLinkParser.parse(url) == agentAction(
             message: "Hello",
             sessionKey: "node-test",
@@ -67,7 +67,7 @@ private func agentAction(
     @Test func parseAgentLinkParsesTargetRoutingFields() {
         let url =
             URL(
-                string: "openclaw://agent?message=Hello%20World&deliver=1&to=%2B15551234567&channel=whatsapp&key=secret")!
+                string: "marketingclaw://agent?message=Hello%20World&deliver=1&to=%2B15551234567&channel=whatsapp&key=secret")!
         #expect(DeepLinkParser.parse(url) == agentAction(
             message: "Hello World",
             deliver: true,
@@ -77,17 +77,17 @@ private func agentAction(
     }
 
     @Test func parseRejectsNegativeTimeoutSeconds() {
-        let url = URL(string: "openclaw://agent?message=Hello&timeoutSeconds=-1")!
+        let url = URL(string: "marketingclaw://agent?message=Hello&timeoutSeconds=-1")!
         #expect(DeepLinkParser.parse(url) == agentAction(message: "Hello"))
     }
 
     @Test func parseGatewayLinkParsesCommonFields() {
         let url = URL(
-            string: "openclaw://gateway?host=openclaw.local&port=18789&tls=1&token=abc&password=def")!
+            string: "marketingclaw://gateway?host=marketingclaw.local&port=18789&tls=1&token=abc&password=def")!
         #expect(
             DeepLinkParser.parse(url) == .gateway(
                 .init(
-                    host: "openclaw.local",
+                    host: "marketingclaw.local",
                     port: 18789,
                     tls: true,
                     bootstrapToken: nil,
@@ -97,17 +97,17 @@ private func agentAction(
 
     @Test func parseGatewayLinkRejectsInsecureNonLoopbackWs() {
         let url = URL(
-            string: "openclaw://gateway?host=attacker.example&port=18789&tls=0&token=abc")!
+            string: "marketingclaw://gateway?host=attacker.example&port=18789&tls=0&token=abc")!
         #expect(DeepLinkParser.parse(url) == nil)
     }
 
     @Test func parseGatewayLinkAllowsPrivateLanWs() {
         let url = URL(
-            string: "openclaw://gateway?host=openclaw.local&port=18789&tls=0&token=abc")!
+            string: "marketingclaw://gateway?host=marketingclaw.local&port=18789&tls=0&token=abc")!
         #expect(
             DeepLinkParser.parse(url) == .gateway(
                 .init(
-                    host: "openclaw.local",
+                    host: "marketingclaw.local",
                     port: 18789,
                     tls: false,
                     bootstrapToken: nil,
@@ -117,17 +117,17 @@ private func agentAction(
 
     @Test func parseGatewayLinkRejectsInsecurePrefixBypassHost() {
         let url = URL(
-            string: "openclaw://gateway?host=127.attacker.example&port=18789&tls=0&token=abc")!
+            string: "marketingclaw://gateway?host=127.attacker.example&port=18789&tls=0&token=abc")!
         #expect(DeepLinkParser.parse(url) == nil)
     }
 
     @Test func parseGatewayLinkRejectsInvalidPort() {
-        let url = URL(string: "openclaw://gateway?host=gateway.example.com&port=70000&tls=1")!
+        let url = URL(string: "marketingclaw://gateway?host=gateway.example.com&port=70000&tls=1")!
         #expect(DeepLinkParser.parse(url) == nil)
     }
 
     @Test func parseGatewayLinkRejectsMalformedPort() {
-        let url = URL(string: "openclaw://gateway?host=gateway.example.com&port=not-a-port&tls=1")!
+        let url = URL(string: "marketingclaw://gateway?host=gateway.example.com&port=not-a-port&tls=1")!
         #expect(DeepLinkParser.parse(url) == nil)
     }
 
@@ -205,11 +205,11 @@ private func agentAction(
     }
 
     @Test func parseGatewaySetupCodeAllowsPrivateLanWs() {
-        let payload = #"{"url":"ws://openclaw.local:18789","bootstrapToken":"tok"}"#
+        let payload = #"{"url":"ws://marketingclaw.local:18789","bootstrapToken":"tok"}"#
         let link = GatewayConnectDeepLink.fromSetupCode(setupCode(from: payload))
 
         #expect(link == .init(
-            host: "openclaw.local",
+            host: "marketingclaw.local",
             port: 18789,
             tls: false,
             bootstrapToken: "tok",

@@ -1,4 +1,4 @@
-package ai.openclaw.app.node
+package ai.marketingclaw.app.node
 
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject

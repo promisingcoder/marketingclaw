@@ -324,6 +324,6 @@ class AgentSelect extends LitElement {
   }
 }
 
-if (!customElements.get("openclaw-agent-select")) {
-  customElements.define("openclaw-agent-select", AgentSelect);
+if (!customElements.get("marketingclaw-agent-select")) {
+  customElements.define("marketingclaw-agent-select", AgentSelect);
 }

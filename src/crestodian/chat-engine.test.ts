@@ -12,7 +12,7 @@ const mocks = vi.hoisted(() => ({
   readConfigFileSnapshot: vi.fn(async () => ({
     exists: true,
     valid: true,
-    path: "/tmp/openclaw.json",
+    path: "/tmp/marketingclaw.json",
     hash: "h",
     config: {},
     sourceConfig: {},
@@ -30,7 +30,7 @@ const tempDirs: string[] = [];
 function useTempStateDir(): string {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "crestodian-engine-"));
   tempDirs.push(dir);
-  vi.stubEnv("OPENCLAW_STATE_DIR", dir);
+  vi.stubEnv("MARKETINGCLAW_STATE_DIR", dir);
   return dir;
 }
 
@@ -40,7 +40,7 @@ afterEach(() => {
   mocks.readConfigFileSnapshot.mockResolvedValue({
     exists: true,
     valid: true,
-    path: "/tmp/openclaw.json",
+    path: "/tmp/marketingclaw.json",
     hash: "h",
     config: {},
     sourceConfig: {},
@@ -71,7 +71,7 @@ describe("CrestodianChatEngine", () => {
   it("offers masked model provider setup after a providerless bootstrap", async () => {
     useTempStateDir();
     const applySetup = vi.fn(async () => ({
-      configPath: "/tmp/openclaw.json",
+      configPath: "/tmp/marketingclaw.json",
       lines: ["Workspace: /tmp/work"],
     }));
     const engine = new CrestodianChatEngine({
@@ -250,7 +250,7 @@ describe("CrestodianChatEngine", () => {
     const reply = await engine.handle("connect telegram");
 
     expect(reply.text).toContain("Sensitive input is not accepted");
-    expect(reply.text).toContain("openclaw channels add --channel telegram");
+    expect(reply.text).toContain("marketingclaw channels add --channel telegram");
     expect(reply.sensitive).toBeUndefined();
 
     const handoff = await engine.handle("open channel wizard");
@@ -590,7 +590,7 @@ describe("CrestodianChatEngine", () => {
       mocks.readConfigFileSnapshot.mockResolvedValue({
         exists: true,
         valid: false,
-        path: "/tmp/openclaw.json",
+        path: "/tmp/marketingclaw.json",
         hash: "h",
         config: {},
         sourceConfig: {},
@@ -653,7 +653,7 @@ describe("Crestodian agent loop backends", () => {
     const snapshot = {
       exists: true,
       valid: true,
-      path: "/tmp/openclaw.json",
+      path: "/tmp/marketingclaw.json",
       hash: "h",
       config: {},
       sourceConfig: {},
@@ -787,7 +787,13 @@ function fakeOverviewLoader(
 ) {
   return async () =>
     ({
-      config: { path: "/tmp/openclaw.json", exists: false, valid: true, issues: [], hash: null },
+      config: {
+        path: "/tmp/marketingclaw.json",
+        exists: false,
+        valid: true,
+        issues: [],
+        hash: null,
+      },
       agents: [],
       defaultAgentId: "main",
       defaultModel: overrides.defaultModel,
@@ -799,8 +805,8 @@ function fakeOverviewLoader(
       },
       gateway: { url: "ws://127.0.0.1:18789", source: "local", reachable: false },
       references: {
-        docsUrl: "https://docs.openclaw.ai",
-        sourceUrl: "https://github.com/openclaw/openclaw",
+        docsUrl: "https://docs.marketingclaw.ai",
+        sourceUrl: "https://github.com/promisingcoder/marketingclaw",
       },
     }) as never;
 }

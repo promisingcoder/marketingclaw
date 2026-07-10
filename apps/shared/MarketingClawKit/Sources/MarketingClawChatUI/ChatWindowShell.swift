@@ -5,16 +5,16 @@ import UniformTypeIdentifiers
 
 /// Native macOS chat window: sessions sidebar + transcript detail with the
 /// pickers promoted into the unified window toolbar. The compact menu-bar
-/// panel keeps using `OpenClawChatView` directly; this shell is the full
+/// panel keeps using `MarketingClawChatView` directly; this shell is the full
 /// window experience.
 @MainActor
-public struct OpenClawChatWindowShell: View {
-    @State private var viewModel: OpenClawChatViewModel
+public struct MarketingClawChatWindowShell: View {
+    @State private var viewModel: MarketingClawChatViewModel
     @State private var sessionQuery = ""
     @State private var isConfirmingClearHistory = false
     private let userAccent: Color?
 
-    public init(viewModel: OpenClawChatViewModel, userAccent: Color? = nil) {
+    public init(viewModel: MarketingClawChatViewModel, userAccent: Color? = nil) {
         _viewModel = State(initialValue: viewModel)
         self.userAccent = userAccent
     }
@@ -26,7 +26,7 @@ public struct OpenClawChatWindowShell: View {
                 query: self.$sessionQuery)
                 .navigationSplitViewColumnWidth(min: 200, ideal: 240, max: 340)
         } detail: {
-            OpenClawChatView(
+            MarketingClawChatView(
                 viewModel: self.viewModel,
                 drawsBackground: false,
                 userAccent: self.userAccent,
@@ -100,7 +100,7 @@ public struct OpenClawChatWindowShell: View {
     }
 
     private var currentModelLabel: String {
-        if self.viewModel.modelSelectionID != OpenClawChatViewModel.defaultModelSelectionID {
+        if self.viewModel.modelSelectionID != MarketingClawChatViewModel.defaultModelSelectionID {
             return self.viewModel.modelSelectionID
         }
         let entry = self.viewModel.sessions.first { $0.key == self.viewModel.sessionKey }
@@ -157,7 +157,7 @@ public struct OpenClawChatWindowShell: View {
                 set: { self.viewModel.selectModel($0) }))
         {
             Text(self.viewModel.defaultModelLabel)
-                .tag(OpenClawChatViewModel.defaultModelSelectionID)
+                .tag(MarketingClawChatViewModel.defaultModelSelectionID)
             if sections.pinned.isEmpty, sections.recent.isEmpty {
                 self.modelOptions(sections.remaining)
             } else {
@@ -176,7 +176,7 @@ public struct OpenClawChatWindowShell: View {
         .help("Model")
     }
 
-    private func modelOptions(_ models: [OpenClawChatModelChoice]) -> some View {
+    private func modelOptions(_ models: [MarketingClawChatModelChoice]) -> some View {
         ForEach(models) { model in
             Text(model.displayLabel).tag(model.selectionID)
         }
@@ -258,7 +258,7 @@ public struct OpenClawChatWindowShell: View {
 /// Toolbar gauge + dropdown with token/cost details, mirroring the web UI's
 /// context ring.
 private struct ChatContextUsageMenu: View {
-    let usage: OpenClawChatContextUsage
+    let usage: MarketingClawChatContextUsage
     let onCompact: () -> Void
 
     var body: some View {
@@ -287,9 +287,9 @@ private struct ChatContextUsageMenu: View {
 
 @MainActor
 private struct ChatSessionSidebar: View {
-    @Bindable var viewModel: OpenClawChatViewModel
+    @Bindable var viewModel: MarketingClawChatViewModel
     @Binding var query: String
-    @State private var sessionPendingDeletion: OpenClawChatSessionEntry?
+    @State private var sessionPendingDeletion: MarketingClawChatSessionEntry?
 
     var body: some View {
         let sections = ChatSessionSidebarModel.sections(
@@ -384,15 +384,15 @@ private struct ChatSessionSidebar: View {
             })
     }
 
-    private func row(for session: OpenClawChatSessionEntry) -> some View {
+    private func row(for session: MarketingClawChatSessionEntry) -> some View {
         HStack(spacing: 6) {
             VStack(alignment: .leading, spacing: 2) {
                 Text(ChatSessionSidebarModel.displayName(for: session))
-                    .font(OpenClawChatTypography.body(size: 13, weight: .medium, relativeTo: .body))
+                    .font(MarketingClawChatTypography.body(size: 13, weight: .medium, relativeTo: .body))
                     .lineLimit(1)
                 if let subtitle = self.rowSubtitle(for: session) {
                     Text(subtitle)
-                        .font(OpenClawChatTypography.caption)
+                        .font(MarketingClawChatTypography.caption)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                 }
@@ -430,7 +430,7 @@ private struct ChatSessionSidebar: View {
         }
     }
 
-    private func rowSubtitle(for session: OpenClawChatSessionEntry) -> String? {
+    private func rowSubtitle(for session: MarketingClawChatSessionEntry) -> String? {
         guard let updatedAt = session.updatedAt ?? session.lastActivityAt, updatedAt > 0 else {
             return nil
         }
@@ -444,7 +444,7 @@ private struct ChatSessionSidebar: View {
                 .fill(self.viewModel.healthOK ? .green : .orange)
                 .frame(width: 7, height: 7)
             Text(self.viewModel.healthOK ? "Gateway connected" : "Connecting…")
-                .font(OpenClawChatTypography.caption)
+                .font(MarketingClawChatTypography.caption)
                 .foregroundStyle(.secondary)
             Spacer(minLength: 0)
         }

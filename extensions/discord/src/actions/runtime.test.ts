@@ -1,7 +1,7 @@
 // Discord tests cover runtime plugin behavior.
 import { ChannelType, PermissionFlagsBits } from "discord-api-types/v10";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { DiscordActionConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import type { DiscordActionConfig } from "marketingclaw/plugin-sdk/config-contracts";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { clearPresences, setPresence } from "../monitor/presence-cache.js";
 import { DiscordThreadInitialMessageError } from "../send.js";
@@ -135,9 +135,9 @@ const DISCORD_TEST_CFG = {
       groupPolicy: "open",
     },
   },
-} as OpenClawConfig;
+} as MarketingClawConfig;
 
-function discordAllowlistCfg(guilds: Record<string, unknown>): OpenClawConfig {
+function discordAllowlistCfg(guilds: Record<string, unknown>): MarketingClawConfig {
   return {
     channels: {
       discord: {
@@ -146,7 +146,7 @@ function discordAllowlistCfg(guilds: Record<string, unknown>): OpenClawConfig {
         guilds,
       },
     },
-  } as OpenClawConfig;
+  } as MarketingClawConfig;
 }
 
 type MockCallSource = { mock: { calls: Array<Array<unknown>> } };
@@ -176,7 +176,7 @@ function handleMessagingAction(
   action: string,
   params: Record<string, unknown>,
   isActionEnabled: (key: keyof DiscordActionConfig) => boolean,
-  cfg: OpenClawConfig = DISCORD_TEST_CFG,
+  cfg: MarketingClawConfig = DISCORD_TEST_CFG,
   options?: {
     mediaAccess?: {
       localRoots?: readonly string[];
@@ -194,7 +194,7 @@ function handleGuildAction(
   action: string,
   params: Record<string, unknown>,
   isActionEnabled: (key: keyof DiscordActionConfig) => boolean,
-  cfg: OpenClawConfig = DISCORD_TEST_CFG,
+  cfg: MarketingClawConfig = DISCORD_TEST_CFG,
   options?: { mediaLocalRoots?: readonly string[] },
 ) {
   return handleDiscordGuildAction(action, params, isActionEnabled, cfg, options);
@@ -204,7 +204,7 @@ function handleModerationAction(
   action: string,
   params: Record<string, unknown>,
   isActionEnabled: (key: keyof DiscordActionConfig, defaultValue?: boolean) => boolean,
-  cfg: OpenClawConfig = DISCORD_TEST_CFG,
+  cfg: MarketingClawConfig = DISCORD_TEST_CFG,
 ) {
   return handleDiscordModerationAction(action, params, isActionEnabled, cfg);
 }
@@ -272,7 +272,7 @@ describe("handleDiscordMessagingAction", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     await handleMessagingAction(
       "react",
@@ -571,7 +571,7 @@ describe("handleDiscordMessagingAction", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     await expect(
       handleMessagingAction(
@@ -686,7 +686,7 @@ describe("handleDiscordMessagingAction", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     await expect(
       handleMessagingAction("permissions", { channelId: "444" }, enableAllActions, cfg),
@@ -728,7 +728,7 @@ describe("handleDiscordMessagingAction", () => {
           token: "token",
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
     await handleMessagingAction("readMessages", { channelId: "C1" }, enableAllActions, cfg);
     expect(readMessagesDiscord).toHaveBeenCalledWith(
       "C1",
@@ -766,7 +766,7 @@ describe("handleDiscordMessagingAction", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     await handleMessagingAction("readMessages", { channelId: "222" }, enableAllActions, cfg);
 
@@ -785,7 +785,7 @@ describe("handleDiscordMessagingAction", () => {
     });
     fetchGuildInfoDiscord.mockResolvedValueOnce({
       id: "111",
-      name: "Friends of OpenClaw",
+      name: "Friends of MarketingClaw",
     });
     const cfg = {
       channels: {
@@ -793,7 +793,7 @@ describe("handleDiscordMessagingAction", () => {
           token: "token",
           groupPolicy: "allowlist",
           guilds: {
-            "friends-of-openclaw": {
+            "friends-of-marketingclaw": {
               channels: {
                 "222": { enabled: true },
               },
@@ -801,7 +801,7 @@ describe("handleDiscordMessagingAction", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     await handleMessagingAction("readMessages", { channelId: "222" }, enableAllActions, cfg);
 
@@ -828,7 +828,7 @@ describe("handleDiscordMessagingAction", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     await expect(
       handleMessagingAction("readMessages", { channelId: "333" }, enableAllActions, cfg),
@@ -837,7 +837,7 @@ describe("handleDiscordMessagingAction", () => {
   });
 
   it("fails closed for Discord message reads when provider config is missing", async () => {
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as MarketingClawConfig;
 
     await expect(
       handleMessagingAction("readMessages", { channelId: "C1" }, enableAllActions, cfg),
@@ -880,7 +880,7 @@ describe("handleDiscordMessagingAction", () => {
           token: "token",
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
     await handleMessagingAction(
       "fetchMessage",
       { guildId: "G1", channelId: "C1", messageId: "M1" },
@@ -898,7 +898,7 @@ describe("handleDiscordMessagingAction", () => {
     });
     fetchGuildInfoDiscord.mockResolvedValueOnce({
       id: "111",
-      name: "Friends of OpenClaw",
+      name: "Friends of MarketingClaw",
     });
     const cfg = {
       channels: {
@@ -906,7 +906,7 @@ describe("handleDiscordMessagingAction", () => {
           token: "token",
           groupPolicy: "allowlist",
           guilds: {
-            "friends-of-openclaw": {
+            "friends-of-marketingclaw": {
               channels: {
                 "222": { enabled: true },
               },
@@ -914,7 +914,7 @@ describe("handleDiscordMessagingAction", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     await handleMessagingAction(
       "fetchMessage",
@@ -942,7 +942,7 @@ describe("handleDiscordMessagingAction", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     await expect(
       handleMessagingAction(
@@ -979,7 +979,7 @@ describe("handleDiscordMessagingAction", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     await handleMessagingAction(
       "fetchMessage",
@@ -1012,7 +1012,7 @@ describe("handleDiscordMessagingAction", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     await expect(
       handleMessagingAction(
@@ -1051,7 +1051,7 @@ describe("handleDiscordMessagingAction", () => {
             },
           },
         },
-      } as OpenClawConfig;
+      } as MarketingClawConfig;
 
       await expect(
         handleMessagingAction(action, { channelId: "333" }, enableAllActions, cfg),
@@ -1088,7 +1088,7 @@ describe("handleDiscordMessagingAction", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     await expect(
       handleMessagingAction("listPins", { channelId: "444" }, enableAllActions, cfg),
@@ -1133,7 +1133,7 @@ describe("handleDiscordMessagingAction", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     await expect(
       handleMessagingAction(
@@ -1161,7 +1161,7 @@ describe("handleDiscordMessagingAction", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     await expect(
       handleMessagingAction(
@@ -1177,7 +1177,7 @@ describe("handleDiscordMessagingAction", () => {
   });
 
   it("fails closed for Discord guild-wide searches when provider config is missing", async () => {
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as MarketingClawConfig;
 
     await expect(
       handleMessagingAction(
@@ -1205,7 +1205,7 @@ describe("handleDiscordMessagingAction", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     await handleMessagingAction(
       "searchMessages",
@@ -1681,7 +1681,7 @@ describe("handleDiscordGuildAction", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
     const result = await handleGuildAction(
       "memberInfo",
       {
@@ -2504,7 +2504,7 @@ describe("handleDiscordAction per-account gating", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     await handleDiscordAction(
       { action: "timeout", guildId: "G1", userId: "U1", durationMinutes: 5, accountId: "ops" },
@@ -2529,7 +2529,7 @@ describe("handleDiscordAction per-account gating", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     await expect(
       handleDiscordAction(
@@ -2550,7 +2550,7 @@ describe("handleDiscordAction per-account gating", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     await handleDiscordAction(
       { action: "kick", guildId: "G1", userId: "U1", accountId: "ops" },
@@ -2569,7 +2569,7 @@ describe("handleDiscordAction per-account gating", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     await expect(
       handleDiscordAction(
@@ -2592,7 +2592,7 @@ describe("handleDiscordAction per-account gating", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     await handleDiscordAction(
       { action: "channelCreate", guildId: "G1", name: "alerts", accountId: "ops" },

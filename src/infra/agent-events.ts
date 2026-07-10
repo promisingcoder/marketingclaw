@@ -163,8 +163,8 @@ type AgentEventState = {
   lifecycleGeneration: string;
 };
 
-const AGENT_EVENT_STATE_KEY = Symbol.for("openclaw.agentEvents.state");
-const AGENT_EVENT_EXECUTION_CONTEXT_KEY = Symbol.for("openclaw.agentEvents.executionContext");
+const AGENT_EVENT_STATE_KEY = Symbol.for("marketingclaw.agentEvents.state");
+const AGENT_EVENT_EXECUTION_CONTEXT_KEY = Symbol.for("marketingclaw.agentEvents.executionContext");
 
 type AgentEventExecutionContext = {
   lifecycleGeneration: string;

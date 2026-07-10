@@ -36,7 +36,7 @@ describe("chat.history request emits truncation diagnostic (real WS gateway)", (
     // front byte cap drops older messages without per-message placeholdering.
     const BUDGET_BYTES = 8_000;
 
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-chat-history-omit-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-chat-history-omit-"));
     const captured: DiagnosticPayloadLargeEvent[] = [];
     const unsubscribe = onDiagnosticEvent((evt) => {
       if (evt.type === "payload.large" && evt.surface === "gateway.chat.history") {

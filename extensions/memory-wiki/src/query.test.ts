@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../api.js";
+import type { MarketingClawConfig } from "../api.js";
 import { compileMemoryWikiVault } from "./compile.js";
 import type { MemoryWikiPluginConfig } from "./config.js";
 import { renderWikiMarkdown } from "./markdown.js";
@@ -25,18 +25,18 @@ const {
   }),
 }));
 
-vi.mock("openclaw/plugin-sdk/memory-host-search", () => ({
+vi.mock("marketingclaw/plugin-sdk/memory-host-search", () => ({
   getActiveMemorySearchManager: getActiveMemorySearchManagerMock,
 }));
 
-vi.mock("openclaw/plugin-sdk/memory-host-core", () => ({
+vi.mock("marketingclaw/plugin-sdk/memory-host-core", () => ({
   resolveDefaultAgentId: resolveDefaultAgentIdMock,
   resolveSessionAgentId: resolveSessionAgentIdMock,
 }));
 
-vi.mock("openclaw/plugin-sdk/session-transcript-hit", async (importOriginal) => {
+vi.mock("marketingclaw/plugin-sdk/session-transcript-hit", async (importOriginal) => {
   const actual =
-    await importOriginal<typeof import("openclaw/plugin-sdk/session-transcript-hit")>();
+    await importOriginal<typeof import("marketingclaw/plugin-sdk/session-transcript-hit")>();
   return {
     ...actual,
     loadCombinedSessionStoreForGateway: loadCombinedSessionStoreForGatewayMock,
@@ -99,15 +99,15 @@ async function createQueryVault(options?: {
   });
 }
 
-function createAppConfig(): OpenClawConfig {
+function createAppConfig(): MarketingClawConfig {
   return {
     agents: {
       list: [{ id: "main", default: true }],
     },
-  } as OpenClawConfig;
+  } as MarketingClawConfig;
 }
 
-function createSessionVisibilityAppConfig(): OpenClawConfig {
+function createSessionVisibilityAppConfig(): MarketingClawConfig {
   return {
     agents: {
       defaults: { sandbox: { sessionToolsVisibility: "all" } },
@@ -116,7 +116,7 @@ function createSessionVisibilityAppConfig(): OpenClawConfig {
     tools: {
       sessions: { visibility: "self" },
     },
-  } as OpenClawConfig;
+  } as MarketingClawConfig;
 }
 
 function mockSessionTranscriptStore() {
@@ -126,12 +126,12 @@ function mockSessionTranscriptStore() {
       "agent:main:child-session": {
         sessionId: "child-session",
         updatedAt: 1,
-        sessionFile: "/tmp/openclaw/child-session.jsonl",
+        sessionFile: "/tmp/marketingclaw/child-session.jsonl",
       },
       "agent:main:sibling-session": {
         sessionId: "sibling-session",
         updatedAt: 2,
-        sessionFile: "/tmp/openclaw/sibling-session.jsonl",
+        sessionFile: "/tmp/marketingclaw/sibling-session.jsonl",
       },
     },
   });
@@ -283,10 +283,10 @@ describe("searchMemoryWiki", () => {
           "Alpha body.",
           "",
           "## Related",
-          "<!-- openclaw:wiki:related:start -->",
+          "<!-- marketingclaw:wiki:related:start -->",
           "### Related Pages",
           "- [Needle Person](entities/needle-person.md)",
-          "<!-- openclaw:wiki:related:end -->",
+          "<!-- marketingclaw:wiki:related:end -->",
           "",
         ].join("\n"),
       }),
@@ -332,7 +332,7 @@ describe("searchMemoryWiki", () => {
           "# Maintainer: Brad Groux",
           "",
           "## Agent Card",
-          "- Maintainer lane: CEO; Microsoft-facing OpenClaw maintainer",
+          "- Maintainer lane: CEO; Microsoft-facing MarketingClaw maintainer",
           "",
           "## AI Notes",
           "- Main sample theme is Microsoft ecosystem adoption: Teams, M365, Azure, Foundry, tenants, and pilots.",
@@ -723,7 +723,7 @@ describe("searchMemoryWiki", () => {
         search: { backend: "shared", corpus: "all" },
       },
     });
-    // Partial manager as registered by @mem0/openclaw-mem0 <= 1.0.14.
+    // Partial manager as registered by @mem0/marketingclaw-mem0 <= 1.0.14.
     const partialManager = {
       status: vi.fn().mockReturnValue({ backend: "builtin", provider: "builtin" }),
       probeEmbeddingAvailability: vi.fn().mockResolvedValue({ ok: true }),
@@ -914,7 +914,7 @@ describe("searchMemoryWiki", () => {
         "agent:main:abc-uuid": {
           sessionId: "abc-uuid",
           updatedAt: 1,
-          sessionFile: "/tmp/openclaw/abc-uuid.jsonl",
+          sessionFile: "/tmp/marketingclaw/abc-uuid.jsonl",
         },
       },
     });
@@ -967,7 +967,7 @@ describe("searchMemoryWiki", () => {
         "agent:secondary:visible-session": {
           sessionId: "visible-session",
           updatedAt: 1,
-          sessionFile: "/tmp/openclaw/visible-session.jsonl",
+          sessionFile: "/tmp/marketingclaw/visible-session.jsonl",
         },
       },
     });
@@ -1030,14 +1030,14 @@ describe("searchMemoryWiki", () => {
       agents: {
         list: [{ id: "main", default: true }, { id: "secondary" }],
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
     loadCombinedSessionStoreForGatewayMock.mockReturnValue({
       storePath: "(test)",
       store: {
         global: {
           sessionId: "visible-session",
           updatedAt: 1,
-          sessionFile: "/tmp/openclaw/visible-session.jsonl",
+          sessionFile: "/tmp/marketingclaw/visible-session.jsonl",
         },
       },
     });
@@ -1166,7 +1166,7 @@ describe("searchMemoryWiki", () => {
         "agent:secondary:main": {
           sessionId: "main",
           updatedAt: 1,
-          sessionFile: "/tmp/openclaw/main.jsonl",
+          sessionFile: "/tmp/marketingclaw/main.jsonl",
         },
       },
     });
@@ -1216,7 +1216,7 @@ describe("searchMemoryWiki", () => {
         "agent:other:visible-session": {
           sessionId: "visible-session",
           updatedAt: 1,
-          sessionFile: "/tmp/openclaw/visible-session.jsonl",
+          sessionFile: "/tmp/marketingclaw/visible-session.jsonl",
         },
       },
     });

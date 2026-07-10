@@ -1,7 +1,7 @@
 // Discord tests cover api plugin behavior.
 import { createServer, type Server } from "node:http";
-import { MAX_TIMER_TIMEOUT_MS } from "openclaw/plugin-sdk/number-runtime";
-import { withFetchPreconnect } from "openclaw/plugin-sdk/test-env";
+import { MAX_TIMER_TIMEOUT_MS } from "marketingclaw/plugin-sdk/number-runtime";
+import { withFetchPreconnect } from "marketingclaw/plugin-sdk/test-env";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DiscordApiError, fetchDiscord, requestDiscord } from "./api.js";
 import { jsonResponse } from "./test-http-helpers.js";
@@ -322,9 +322,7 @@ describe("fetchDiscord", () => {
   });
 
   it("throws DiscordApiError on malformed JSON success response body", async () => {
-    const fetcher = withFetchPreconnect(
-      async () => new Response("NOT JSON {{{", { status: 200 }),
-    );
+    const fetcher = withFetchPreconnect(async () => new Response("NOT JSON {{{", { status: 200 }));
 
     let error: unknown;
     try {

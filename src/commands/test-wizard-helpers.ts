@@ -6,6 +6,6 @@ export {
   createExitThrowingRuntime,
   createWizardPrompter,
   readAuthProfilesForAgent,
-  requireOpenClawAgentDir,
+  requireMarketingClawAgentDir,
   setupAuthTestEnv,
 } from "../../test/helpers/auth-wizard.js";

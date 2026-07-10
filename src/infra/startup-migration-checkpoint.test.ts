@@ -3,8 +3,8 @@ import { mkdirSync } from "node:fs";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../test/helpers/temp-dir.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
-import { resolveOpenClawStateSqlitePath } from "../state/openclaw-state-db.paths.js";
+import { closeMarketingClawStateDatabaseForTest } from "../state/marketingclaw-state-db.js";
+import { resolveMarketingClawStateSqlitePath } from "../state/marketingclaw-state-db.paths.js";
 import { requireNodeSqlite } from "./node-sqlite.js";
 import {
   acquireStartupMigrationLease,
@@ -14,15 +14,15 @@ import {
 } from "./startup-migration-checkpoint.js";
 
 afterEach(() => {
-  closeOpenClawStateDatabaseForTest();
+  closeMarketingClawStateDatabaseForTest();
 });
 
 const startupMigrationTempDirs = useAutoCleanupTempDirTracker(afterEach);
 
 describe("startup migration checkpoint", () => {
-  it("records the migrated OpenClaw version in shared state", () => {
+  it("records the migrated MarketingClaw version in shared state", () => {
     const env = {
-      OPENCLAW_STATE_DIR: startupMigrationTempDirs.make("openclaw-startup-migration-"),
+      MARKETINGCLAW_STATE_DIR: startupMigrationTempDirs.make("marketingclaw-startup-migration-"),
     };
 
     expect(readStartupMigrationVersion(env)).toBeNull();
@@ -37,12 +37,12 @@ describe("startup migration checkpoint", () => {
 
   it("serializes startup migrations with an expiring shared-state lease", () => {
     const env = {
-      OPENCLAW_STATE_DIR: startupMigrationTempDirs.make("openclaw-startup-migration-"),
+      MARKETINGCLAW_STATE_DIR: startupMigrationTempDirs.make("marketingclaw-startup-migration-"),
     };
     const lease = acquireStartupMigrationLease({ env, nowMs: 1000, owner: "first" });
 
     expect(() => acquireStartupMigrationLease({ env, nowMs: 1001, owner: "second" })).toThrow(
-      "OpenClaw startup migrations are already running",
+      "MarketingClaw startup migrations are already running",
     );
 
     lease.release();
@@ -53,14 +53,14 @@ describe("startup migration checkpoint", () => {
 
   it("renews startup migration leases while the owner is still running", () => {
     const env = {
-      OPENCLAW_STATE_DIR: startupMigrationTempDirs.make("openclaw-startup-migration-"),
+      MARKETINGCLAW_STATE_DIR: startupMigrationTempDirs.make("marketingclaw-startup-migration-"),
     };
     const lease = acquireStartupMigrationLease({ env, nowMs: 1000, owner: "first" });
 
     lease.heartbeat({ nowMs: 300_000 });
 
     expect(() => acquireStartupMigrationLease({ env, nowMs: 301_001, owner: "second" })).toThrow(
-      "OpenClaw startup migrations are already running",
+      "MarketingClaw startup migrations are already running",
     );
 
     lease.release();
@@ -68,7 +68,7 @@ describe("startup migration checkpoint", () => {
 
   it("does not checkpoint startup migrations after the lease is lost", () => {
     const env = {
-      OPENCLAW_STATE_DIR: startupMigrationTempDirs.make("openclaw-startup-migration-"),
+      MARKETINGCLAW_STATE_DIR: startupMigrationTempDirs.make("marketingclaw-startup-migration-"),
     };
     const first = acquireStartupMigrationLease({ env, nowMs: 1000, owner: "first" });
     const second = acquireStartupMigrationLease({ env, nowMs: 400_000, owner: "second" });
@@ -88,10 +88,10 @@ describe("startup migration checkpoint", () => {
 
   it("reads the checkpoint without requiring the full state schema to be canonical", () => {
     const env = {
-      OPENCLAW_STATE_DIR: startupMigrationTempDirs.make("openclaw-startup-migration-"),
+      MARKETINGCLAW_STATE_DIR: startupMigrationTempDirs.make("marketingclaw-startup-migration-"),
     };
     const sqlite = requireNodeSqlite();
-    const dbPath = resolveOpenClawStateSqlitePath(env);
+    const dbPath = resolveMarketingClawStateSqlitePath(env);
     mkdirSync(path.dirname(dbPath), { recursive: true });
     const db = new sqlite.DatabaseSync(dbPath);
     db.exec(`
@@ -112,10 +112,10 @@ describe("startup migration checkpoint", () => {
 
   it("refuses future-version state databases before creating checkpoint tables", () => {
     const env = {
-      OPENCLAW_STATE_DIR: startupMigrationTempDirs.make("openclaw-startup-migration-"),
+      MARKETINGCLAW_STATE_DIR: startupMigrationTempDirs.make("marketingclaw-startup-migration-"),
     };
     const sqlite = requireNodeSqlite();
-    const dbPath = resolveOpenClawStateSqlitePath(env);
+    const dbPath = resolveMarketingClawStateSqlitePath(env);
     mkdirSync(path.dirname(dbPath), { recursive: true });
     const db = new sqlite.DatabaseSync(dbPath);
     db.exec("PRAGMA user_version = 2;");

@@ -1,5 +1,5 @@
 import Foundation
-import OpenClawKit
+import MarketingClawKit
 import SwiftUI
 
 private enum ChatUIConstants {
@@ -15,7 +15,7 @@ struct ChatAgentAvatar: View {
 
     var body: some View {
         Text(self.displayText)
-            .font(OpenClawChatTypography.avatar(size: self.fontSize))
+            .font(MarketingClawChatTypography.avatar(size: self.fontSize))
             .foregroundStyle(.white)
             .minimumScaleFactor(0.6)
             .lineLimit(1)
@@ -25,7 +25,7 @@ struct ChatAgentAvatar: View {
                     .fill(
                         LinearGradient(
                             colors: [
-                                (self.tint ?? OpenClawChatTheme.accent).opacity(0.95),
+                                (self.tint ?? MarketingClawChatTheme.accent).opacity(0.95),
                                 Color(red: 38 / 255.0, green: 40 / 255.0, blue: 43 / 255.0),
                             ],
                             startPoint: .topLeading,
@@ -33,7 +33,7 @@ struct ChatAgentAvatar: View {
             .overlay(
                 Circle()
                     .strokeBorder(Color.white.opacity(0.18), lineWidth: 1))
-            .shadow(color: (self.tint ?? OpenClawChatTheme.accent).opacity(0.18), radius: 8, y: 4)
+            .shadow(color: (self.tint ?? MarketingClawChatTheme.accent).opacity(0.18), radius: 8, y: 4)
             .accessibilityLabel(self.name.map { "\($0) avatar" } ?? "Agent avatar")
     }
 
@@ -198,8 +198,8 @@ private struct ChatBubbleShape: InsettableShape {
 
 @MainActor
 struct ChatMessageBubble: View {
-    let message: OpenClawChatMessage
-    let style: OpenClawChatView.Style
+    let message: MarketingClawChatMessage
+    let style: MarketingClawChatView.Style
     let markdownVariant: ChatMarkdownVariant
     let userAccent: Color?
     let showsAssistantTrace: Bool
@@ -251,10 +251,10 @@ struct ChatMessageBubble: View {
 
 @MainActor
 private struct ChatMessageBody: View {
-    @Environment(\.openClawAssistantBubblesInCleanChrome) private var assistantBubblesInClean
-    let message: OpenClawChatMessage
+    @Environment(\.marketingClawAssistantBubblesInCleanChrome) private var assistantBubblesInClean
+    let message: MarketingClawChatMessage
     let isUser: Bool
-    let style: OpenClawChatView.Style
+    let style: MarketingClawChatView.Style
     let markdownVariant: ChatMarkdownVariant
     let userAccent: Color?
     let showsAssistantTrace: Bool
@@ -262,7 +262,7 @@ private struct ChatMessageBody: View {
 
     var body: some View {
         let text = self.primaryText
-        let textColor = self.isUser ? OpenClawChatTheme.userText : OpenClawChatTheme.assistantText
+        let textColor = self.isUser ? MarketingClawChatTheme.userText : MarketingClawChatTheme.assistantText
 
         if self.usesBubble {
             self.messageContent(text: text, textColor: textColor)
@@ -299,7 +299,7 @@ private struct ChatMessageBody: View {
                     text: text,
                     context: .user,
                     variant: self.markdownVariant,
-                    font: OpenClawChatTypography.body,
+                    font: MarketingClawChatTypography.body,
                     textColor: textColor)
             } else {
                 ChatAssistantTextBody(
@@ -359,14 +359,14 @@ private struct ChatMessageBody: View {
             guard kind == "text" || kind.isEmpty else { return nil }
             return content.text
         }
-        return OpenClawChatMessage.displayText(
+        return MarketingClawChatMessage.displayText(
             contentText: parts.joined(separator: "\n"),
             role: self.message.role,
             stopReason: self.message.stopReason,
             errorMessage: self.message.errorMessage)
     }
 
-    private var inlineAttachments: [OpenClawChatMessageContent] {
+    private var inlineAttachments: [MarketingClawChatMessageContent] {
         self.message.content.filter { content in
             switch content.type ?? "text" {
             case "file", "attachment":
@@ -377,7 +377,7 @@ private struct ChatMessageBody: View {
         }
     }
 
-    private var toolCalls: [OpenClawChatMessageContent] {
+    private var toolCalls: [MarketingClawChatMessageContent] {
         self.message.content.filter { content in
             let kind = (content.type ?? "").lowercased()
             if ["toolcall", "tool_call", "tooluse", "tool_use"].contains(kind) {
@@ -387,7 +387,7 @@ private struct ChatMessageBody: View {
         }
     }
 
-    private var inlineToolResults: [OpenClawChatMessageContent] {
+    private var inlineToolResults: [MarketingClawChatMessageContent] {
         self.message.content.filter { content in
             let kind = (content.type ?? "").lowercased()
             return kind == "toolresult" || kind == "tool_result"
@@ -410,12 +410,12 @@ private struct ChatMessageBody: View {
 
     private var bubbleFillColor: Color {
         if self.isUser {
-            return self.userAccent ?? OpenClawChatTheme.userBubble
+            return self.userAccent ?? MarketingClawChatTheme.userBubble
         }
         if self.style == .onboarding {
-            return OpenClawChatTheme.onboardingAssistantBubble
+            return MarketingClawChatTheme.onboardingAssistantBubble
         }
-        return OpenClawChatTheme.assistantBubble
+        return MarketingClawChatTheme.assistantBubble
     }
 
     private var bubbleBackground: AnyShapeStyle {
@@ -427,7 +427,7 @@ private struct ChatMessageBody: View {
             return Color.white.opacity(0.12)
         }
         if self.style == .onboarding {
-            return OpenClawChatTheme.onboardingAssistantBorder
+            return MarketingClawChatTheme.onboardingAssistantBorder
         }
         return Color.white.opacity(0.08)
     }
@@ -473,23 +473,23 @@ private struct ChatMessageBody: View {
 }
 
 private struct AttachmentRow: View {
-    let att: OpenClawChatMessageContent
+    let att: MarketingClawChatMessageContent
     let isUser: Bool
 
     var body: some View {
         HStack(spacing: 8) {
             Image(systemName: self.isAudio ? "waveform" : "paperclip")
             Text(self.isAudio ? "Voice note" : (self.att.fileName ?? "Attachment"))
-                .font(OpenClawChatTypography.footnote)
+                .font(MarketingClawChatTypography.footnote)
                 .lineLimit(1)
-                .foregroundStyle(self.isUser ? OpenClawChatTheme.userText : OpenClawChatTheme.assistantText)
+                .foregroundStyle(self.isUser ? MarketingClawChatTheme.userText : MarketingClawChatTheme.assistantText)
             if self.isAudio, let durationSeconds = self.att.durationSeconds {
-                Text(openClawVoiceNoteDurationLabel(durationSeconds))
-                    .font(OpenClawChatTypography.footnote)
+                Text(marketingClawVoiceNoteDurationLabel(durationSeconds))
+                    .font(MarketingClawChatTypography.footnote)
                     .foregroundStyle(
                         self.isUser
-                            ? OpenClawChatTheme.userText.opacity(0.72)
-                            : OpenClawChatTheme.assistantText.opacity(0.72))
+                            ? MarketingClawChatTheme.userText.opacity(0.72)
+                            : MarketingClawChatTheme.assistantText.opacity(0.72))
             }
             Spacer()
         }
@@ -504,20 +504,20 @@ private struct AttachmentRow: View {
 }
 
 private struct ToolCallCard: View {
-    let content: OpenClawChatMessageContent
+    let content: MarketingClawChatMessageContent
     let isUser: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 6) {
                 Text(self.toolName)
-                    .font(OpenClawChatTypography.footnoteSemiBold)
+                    .font(MarketingClawChatTypography.footnoteSemiBold)
                 Spacer(minLength: 0)
             }
 
             if let summary = self.summary, !summary.isEmpty {
                 Text(summary)
-                    .font(OpenClawChatTypography.mono(size: 13, relativeTo: .footnote))
+                    .font(MarketingClawChatTypography.mono(size: 13, relativeTo: .footnote))
                     .foregroundStyle(.secondary)
                     .lineLimit(2)
             }
@@ -525,7 +525,7 @@ private struct ToolCallCard: View {
         .padding(10)
         .background(
             RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(OpenClawChatTheme.subtleCard)
+                .fill(MarketingClawChatTheme.subtleCard)
                 .overlay(
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
                         .strokeBorder(Color.white.opacity(0.08), lineWidth: 1)))
@@ -556,13 +556,13 @@ private struct ToolResultCard: View {
             VStack(alignment: .leading, spacing: 8) {
                 HStack(spacing: 6) {
                     Text(self.title)
-                        .font(OpenClawChatTypography.footnoteSemiBold)
+                        .font(MarketingClawChatTypography.footnoteSemiBold)
                     Spacer(minLength: 0)
                 }
 
                 Text(self.displayText)
-                    .font(OpenClawChatTypography.mono(size: 13, relativeTo: .footnote))
-                    .foregroundStyle(self.isUser ? OpenClawChatTheme.userText : OpenClawChatTheme.assistantText)
+                    .font(MarketingClawChatTypography.mono(size: 13, relativeTo: .footnote))
+                    .foregroundStyle(self.isUser ? MarketingClawChatTheme.userText : MarketingClawChatTheme.assistantText)
                     .lineLimit(self.expanded ? nil : Self.previewLineLimit)
 
                 if self.shouldShowToggle {
@@ -570,14 +570,14 @@ private struct ToolResultCard: View {
                         self.expanded.toggle()
                     }
                     .buttonStyle(.plain)
-                    .font(OpenClawChatTypography.caption)
+                    .font(MarketingClawChatTypography.caption)
                     .foregroundStyle(.secondary)
                 }
             }
             .padding(10)
             .background(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(OpenClawChatTheme.subtleCard)
+                    .fill(MarketingClawChatTheme.subtleCard)
                     .overlay(
                         RoundedRectangle(cornerRadius: 12, style: .continuous)
                             .strokeBorder(Color.white.opacity(0.08), lineWidth: 1)))
@@ -606,7 +606,7 @@ private struct ToolResultCard: View {
 
 @MainActor
 struct ChatTypingIndicatorBubble: View {
-    let style: OpenClawChatView.Style
+    let style: MarketingClawChatView.Style
     let assistantName: String?
     let assistantAvatarText: String?
     let assistantAvatarTint: Color?
@@ -626,7 +626,7 @@ struct ChatTypingIndicatorBubble: View {
             HStack(spacing: 9) {
                 TypingDots()
                 Text("Writing")
-                    .font(OpenClawChatTypography.captionSemiBold)
+                    .font(MarketingClawChatTypography.captionSemiBold)
                     .foregroundStyle(.secondary)
             }
             .padding(.vertical, self.isClean ? 5 : (self.style == .standard ? 10 : 9))
@@ -652,10 +652,10 @@ struct ChatSpeechStatusChip: View {
                     .font(.system(size: 10, weight: .semibold))
                 if self.isPreparing {
                     Text("Preparing audio…")
-                        .font(OpenClawChatTypography.caption)
+                        .font(MarketingClawChatTypography.caption)
                 } else {
                     Text("Speaking…")
-                        .font(OpenClawChatTypography.caption)
+                        .font(MarketingClawChatTypography.caption)
                 }
             }
             .foregroundStyle(.secondary)
@@ -670,16 +670,16 @@ struct ChatSpeechStatusChip: View {
 /// Status footer for a user bubble backed by the durable offline outbox.
 @MainActor
 struct ChatOutboxStatusLabel: View {
-    let state: OpenClawChatOutboxMessageState
+    let state: MarketingClawChatOutboxMessageState
 
     var body: some View {
         HStack(spacing: 4) {
             Image(systemName: self.iconName)
                 .font(.system(size: 10, weight: .semibold))
             Text(self.title)
-                .font(OpenClawChatTypography.caption)
+                .font(MarketingClawChatTypography.caption)
         }
-        .foregroundStyle(self.state.isFailed ? AnyShapeStyle(OpenClawChatTheme.danger) : AnyShapeStyle(.secondary))
+        .foregroundStyle(self.state.isFailed ? AnyShapeStyle(MarketingClawChatTheme.danger) : AnyShapeStyle(.secondary))
         .accessibilityElement(children: .combine)
         .accessibilityLabel(self.accessibilityText)
     }
@@ -692,7 +692,7 @@ struct ChatOutboxStatusLabel: View {
             "Sending…"
         case .confirming:
             "Confirming…"
-        case let .failed(reason) where reason == OpenClawChatSQLiteTranscriptCache.outboxUnconfirmedError:
+        case let .failed(reason) where reason == MarketingClawChatSQLiteTranscriptCache.outboxUnconfirmedError:
             "Delivery unknown"
         case .failed:
             "Not sent"
@@ -707,7 +707,7 @@ struct ChatOutboxStatusLabel: View {
             "arrow.up.circle"
         case .confirming:
             "checkmark.circle"
-        case let .failed(reason) where reason == OpenClawChatSQLiteTranscriptCache.outboxUnconfirmedError:
+        case let .failed(reason) where reason == MarketingClawChatSQLiteTranscriptCache.outboxUnconfirmedError:
             "questionmark.circle"
         case .failed:
             "exclamationmark.circle"
@@ -722,7 +722,7 @@ struct ChatOutboxStatusLabel: View {
             "Sending"
         case .confirming:
             "Sent, waiting for chat history confirmation"
-        case let .failed(reason) where reason == OpenClawChatSQLiteTranscriptCache.outboxUnconfirmedError:
+        case let .failed(reason) where reason == MarketingClawChatSQLiteTranscriptCache.outboxUnconfirmedError:
             "Delivery unconfirmed, touch and hold to retry or delete"
         case .failed:
             "Not sent, touch and hold to retry or delete"
@@ -743,14 +743,14 @@ extension ChatTypingIndicatorBubble: @MainActor Equatable {
 extension EnvironmentValues {
     /// Clients that want iMessage-style assistant bubbles in the clean chrome
     /// (the iOS app) opt in; the default keeps the plain clean look elsewhere.
-    @Entry public var openClawAssistantBubblesInCleanChrome: Bool = false
+    @Entry public var marketingClawAssistantBubblesInCleanChrome: Bool = false
 }
 
 private struct AssistantBubbleContainerStyle: ViewModifier {
     let isClean: Bool
     let cornerRadius: CGFloat
 
-    @Environment(\.openClawAssistantBubblesInCleanChrome) private var bubblesInClean
+    @Environment(\.marketingClawAssistantBubblesInCleanChrome) private var bubblesInClean
 
     func body(content: Content) -> some View {
         if self.isClean, !self.bubblesInClean {
@@ -761,7 +761,7 @@ private struct AssistantBubbleContainerStyle: ViewModifier {
                     .padding(self.isClean ? 8 : 0)
                     .background(
                         RoundedRectangle(cornerRadius: self.cornerRadius, style: .continuous)
-                            .fill(OpenClawChatTheme.assistantBubble))
+                            .fill(MarketingClawChatTheme.assistantBubble))
                     .overlay(
                         RoundedRectangle(cornerRadius: self.cornerRadius, style: .continuous)
                             .strokeBorder(Color.white.opacity(0.08), lineWidth: 1))
@@ -814,13 +814,13 @@ struct ChatStreamingAssistantBubble: View {
 
 @MainActor
 struct ChatPendingToolsBubble: View {
-    let toolCalls: [OpenClawChatPendingToolCall]
+    let toolCalls: [MarketingClawChatPendingToolCall]
     let isClean: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Label("Running tools…", systemImage: "hammer")
-                .font(OpenClawChatTypography.caption)
+                .font(MarketingClawChatTypography.caption)
                 .foregroundStyle(.secondary)
 
             ForEach(self.toolCalls) { call in
@@ -828,14 +828,14 @@ struct ChatPendingToolsBubble: View {
                 VStack(alignment: .leading, spacing: 4) {
                     HStack(alignment: .firstTextBaseline, spacing: 8) {
                         Text("\(display.emoji) \(display.label)")
-                            .font(OpenClawChatTypography.mono(size: 13, relativeTo: .footnote))
+                            .font(MarketingClawChatTypography.mono(size: 13, relativeTo: .footnote))
                             .lineLimit(1)
                         Spacer(minLength: 0)
                         ProgressView().controlSize(.mini)
                     }
                     if let detail = display.detailLine, !detail.isEmpty {
                         Text(detail)
-                            .font(OpenClawChatTypography.mono(size: 12, relativeTo: .caption))
+                            .font(MarketingClawChatTypography.mono(size: 12, relativeTo: .caption))
                             .foregroundStyle(.secondary)
                             .lineLimit(2)
                     }
@@ -918,8 +918,8 @@ private struct ChatAssistantTextBody: View {
         return VStack(alignment: .leading, spacing: 10) {
             ForEach(segments) { segment in
                 let font = segment.kind == .thinking
-                    ? OpenClawChatTypography.callout.italic()
-                    : OpenClawChatTypography.body
+                    ? MarketingClawChatTypography.callout.italic()
+                    : MarketingClawChatTypography.body
                 let inlineMathTypography: ChatMarkdownRenderer.InlineMathTypography = segment.kind == .thinking
                     ? .callout
                     : .body
@@ -928,7 +928,7 @@ private struct ChatAssistantTextBody: View {
                     context: .assistant,
                     variant: self.markdownVariant,
                     font: font,
-                    textColor: OpenClawChatTheme.assistantText,
+                    textColor: MarketingClawChatTheme.assistantText,
                     inlineMathTypography: inlineMathTypography,
                     isComplete: self.isComplete)
             }
@@ -1005,8 +1005,8 @@ private struct ChatStreamingAssistantTextBody: View {
             ForEach(Array(self.snapshot.segments.enumerated()), id: \.offset) { entry in
                 let segment = entry.element
                 let font = segment.kind == .thinking
-                    ? OpenClawChatTypography.callout.italic()
-                    : OpenClawChatTypography.body
+                    ? MarketingClawChatTypography.callout.italic()
+                    : MarketingClawChatTypography.body
                 let inlineMathTypography: ChatMarkdownRenderer.InlineMathTypography = segment.kind == .thinking
                     ? .callout
                     : .body
@@ -1018,7 +1018,7 @@ private struct ChatStreamingAssistantTextBody: View {
                     context: .assistant,
                     variant: self.markdownVariant,
                     font: font,
-                    textColor: OpenClawChatTheme.assistantText,
+                    textColor: MarketingClawChatTheme.assistantText,
                     inlineMathTypography: inlineMathTypography,
                     reveal: reveal)
             }

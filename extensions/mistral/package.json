@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/mistral-provider",
+  "name": "@marketingclaw/mistral-provider",
   "version": "2026.6.11",
   "private": true,
-  "description": "OpenClaw Mistral provider plugin",
+  "description": "MarketingClaw Mistral provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@marketingclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "marketingclaw": {
     "extensions": [
       "./index.ts"
     ]

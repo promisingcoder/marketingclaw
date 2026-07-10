@@ -7,8 +7,8 @@ import {
   readStringParam,
   type AnyAgentTool,
   type PluginRuntime,
-} from "openclaw/plugin-sdk/core";
-import type { OpenClawPluginToolContext } from "openclaw/plugin-sdk/plugin-entry";
+} from "marketingclaw/plugin-sdk/core";
+import type { MarketingClawPluginToolContext } from "marketingclaw/plugin-sdk/plugin-entry";
 import { Type } from "typebox";
 import { CODEX_CONTROL_METHODS } from "./app-server/capabilities.js";
 import { readCodexPluginConfig } from "./app-server/config.js";
@@ -46,7 +46,7 @@ const ForkParamsSchema = Type.Object(
     attach: Type.Optional(
       Type.Boolean({
         default: true,
-        description: "Attach the fork to this OpenClaw session for its next turn.",
+        description: "Attach the fork to this MarketingClaw session for its next turn.",
       }),
     ),
   },
@@ -92,7 +92,7 @@ const CodexThreadsParamsSchema = Type.Union([
 
 type CodexThreadsToolOptions = {
   bindingStore: CodexAppServerBindingStore;
-  context: OpenClawPluginToolContext;
+  context: MarketingClawPluginToolContext;
   runtime: PluginRuntime;
   getPluginConfig: () => unknown;
   request?: typeof codexControlRequest;
@@ -115,7 +115,7 @@ function readLimit(value: unknown): number | undefined {
 }
 
 function resolveToolSession(
-  context: OpenClawPluginToolContext,
+  context: MarketingClawPluginToolContext,
   runtime: PluginRuntime,
 ): { sessionId: string; sessionFile: string } | undefined {
   const sessionKey = context.sessionKey?.trim();
@@ -260,7 +260,7 @@ export function createCodexThreadsTool(options: CodexThreadsToolOptions): AnyAge
             requestOptions(),
           );
           if (readThreadStatusType(current) === "active") {
-            throw new Error("cannot archive the Codex thread active in this OpenClaw session");
+            throw new Error("cannot archive the Codex thread active in this MarketingClaw session");
           }
         }
         await request(
@@ -283,7 +283,7 @@ export function createCodexThreadsTool(options: CodexThreadsToolOptions): AnyAge
 
       const attach = readBoolean(params.attach, true);
       if (attach && !session) {
-        throw new Error("cannot attach a Codex fork without an active OpenClaw session");
+        throw new Error("cannot attach a Codex fork without an active MarketingClaw session");
       }
       if (attach && binding?.threadId === threadId) {
         const current = await request(
@@ -293,7 +293,7 @@ export function createCodexThreadsTool(options: CodexThreadsToolOptions): AnyAge
           requestOptions(),
         );
         if (readThreadStatusType(current) === "active") {
-          throw new Error("cannot replace the Codex thread active in this OpenClaw turn");
+          throw new Error("cannot replace the Codex thread active in this MarketingClaw turn");
         }
       }
       const response = await request(

@@ -219,7 +219,7 @@ public enum GatewayConnectionProblemMapper {
                 actionCommand: authError.actionCommand,
                 docsURL: self.docsURL(
                     authError.docsURLString,
-                    fallback: "https://docs.openclaw.ai/gateway/authentication"),
+                    fallback: "https://docs.marketingclaw.ai/gateway/authentication"),
                 requestId: authError.requestId,
                 retryable: false,
                 pauseReconnect: true,
@@ -236,7 +236,7 @@ public enum GatewayConnectionProblemMapper {
                 actionCommand: authError.actionCommand,
                 docsURL: self.docsURL(
                     authError.docsURLString,
-                    fallback: "https://docs.openclaw.ai/gateway/authentication"),
+                    fallback: "https://docs.marketingclaw.ai/gateway/authentication"),
                 requestId: authError.requestId,
                 retryable: authError.retryableOverride ?? authError.canRetryWithDeviceToken,
                 pauseReconnect: authError.pauseReconnectOverride ?? !authError.canRetryWithDeviceToken,
@@ -249,10 +249,10 @@ public enum GatewayConnectionProblemMapper {
                 message: authError.userMessageOverride
                     ?? "This gateway is set to token auth, but no gateway token is configured on the gateway.",
                 actionLabel: authError.actionLabel ?? "Fix on gateway",
-                actionCommand: authError.actionCommand ?? "openclaw config set gateway.auth.token <new-token>",
+                actionCommand: authError.actionCommand ?? "marketingclaw config set gateway.auth.token <new-token>",
                 docsURL: self.docsURL(
                     authError.docsURLString,
-                    fallback: "https://docs.openclaw.ai/gateway/authentication"),
+                    fallback: "https://docs.marketingclaw.ai/gateway/authentication"),
                 requestId: authError.requestId,
                 retryable: false,
                 pauseReconnect: true,
@@ -268,7 +268,7 @@ public enum GatewayConnectionProblemMapper {
                 actionCommand: authError.actionCommand,
                 docsURL: self.docsURL(
                     authError.docsURLString,
-                    fallback: "https://docs.openclaw.ai/gateway/authentication"),
+                    fallback: "https://docs.marketingclaw.ai/gateway/authentication"),
                 requestId: authError.requestId,
                 retryable: false,
                 pauseReconnect: true,
@@ -284,7 +284,7 @@ public enum GatewayConnectionProblemMapper {
                 actionCommand: authError.actionCommand,
                 docsURL: self.docsURL(
                     authError.docsURLString,
-                    fallback: "https://docs.openclaw.ai/gateway/authentication"),
+                    fallback: "https://docs.marketingclaw.ai/gateway/authentication"),
                 requestId: authError.requestId,
                 retryable: false,
                 pauseReconnect: true,
@@ -297,10 +297,10 @@ public enum GatewayConnectionProblemMapper {
                 message: authError.userMessageOverride
                     ?? "This gateway is set to password auth, but no gateway password is configured on the gateway.",
                 actionLabel: authError.actionLabel ?? "Fix on gateway",
-                actionCommand: authError.actionCommand ?? "openclaw config set gateway.auth.password <new-password>",
+                actionCommand: authError.actionCommand ?? "marketingclaw config set gateway.auth.password <new-password>",
                 docsURL: self.docsURL(
                     authError.docsURLString,
-                    fallback: "https://docs.openclaw.ai/gateway/authentication"),
+                    fallback: "https://docs.marketingclaw.ai/gateway/authentication"),
                 requestId: authError.requestId,
                 retryable: false,
                 pauseReconnect: true,
@@ -314,7 +314,7 @@ public enum GatewayConnectionProblemMapper {
                     ?? "The setup QR or bootstrap token is no longer valid.",
                 actionLabel: authError.actionLabel ?? "Scan QR again",
                 actionCommand: authError.actionCommand,
-                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.openclaw.ai/platforms/ios"),
+                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.marketingclaw.ai/platforms/ios"),
                 requestId: authError.requestId,
                 retryable: false,
                 pauseReconnect: true,
@@ -328,7 +328,7 @@ public enum GatewayConnectionProblemMapper {
                     ?? "The gateway rejected the stored device token for this role.",
                 actionLabel: authError.actionLabel ?? "Repair pairing",
                 actionCommand: authError.actionCommand ?? pairingCommand,
-                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.openclaw.ai/gateway/pairing"),
+                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.marketingclaw.ai/gateway/pairing"),
                 requestId: authError.requestId,
                 retryable: false,
                 pauseReconnect: true,
@@ -342,7 +342,7 @@ public enum GatewayConnectionProblemMapper {
                     ?? "The gateway accepted this device token but rejected the requested operator scopes.",
                 actionLabel: authError.actionLabel ?? "Review pairing",
                 actionCommand: authError.actionCommand ?? pairingCommand,
-                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.openclaw.ai/gateway/pairing"),
+                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.marketingclaw.ai/gateway/pairing"),
                 requestId: authError.requestId,
                 retryable: false,
                 pauseReconnect: true,
@@ -361,7 +361,7 @@ public enum GatewayConnectionProblemMapper {
                     "This connection must include a signed device identity before the gateway can bind permissions to this device.",
                 actionLabel: authError.actionLabel ?? "Retry from the app",
                 actionCommand: authError.actionCommand,
-                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.openclaw.ai/platforms/ios"),
+                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.marketingclaw.ai/platforms/ios"),
                 requestId: authError.requestId,
                 retryable: false,
                 pauseReconnect: true,
@@ -376,7 +376,7 @@ public enum GatewayConnectionProblemMapper {
                 actionCommand: authError.actionCommand,
                 docsURL: self.docsURL(
                     authError.docsURLString,
-                    fallback: "https://docs.openclaw.ai/gateway/troubleshooting"),
+                    fallback: "https://docs.marketingclaw.ai/gateway/troubleshooting"),
                 requestId: authError.requestId,
                 retryable: true,
                 pauseReconnect: true,
@@ -392,7 +392,7 @@ public enum GatewayConnectionProblemMapper {
                 actionCommand: authError.actionCommand,
                 docsURL: self.docsURL(
                     authError.docsURLString,
-                    fallback: "https://docs.openclaw.ai/gateway/troubleshooting"),
+                    fallback: "https://docs.marketingclaw.ai/gateway/troubleshooting"),
                 requestId: authError.requestId,
                 retryable: true,
                 pauseReconnect: true,
@@ -407,7 +407,7 @@ public enum GatewayConnectionProblemMapper {
                 actionCommand: authError.actionCommand,
                 docsURL: self.docsURL(
                     authError.docsURLString,
-                    fallback: "https://docs.openclaw.ai/gateway/troubleshooting"),
+                    fallback: "https://docs.marketingclaw.ai/gateway/troubleshooting"),
                 requestId: authError.requestId,
                 retryable: true,
                 pauseReconnect: true,
@@ -421,7 +421,7 @@ public enum GatewayConnectionProblemMapper {
                     ?? "The gateway could not verify the identity this device presented.",
                 actionLabel: authError.actionLabel ?? "Re-pair this device",
                 actionCommand: authError.actionCommand,
-                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.openclaw.ai/gateway/pairing"),
+                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.marketingclaw.ai/gateway/pairing"),
                 requestId: authError.requestId,
                 retryable: false,
                 pauseReconnect: true,
@@ -435,7 +435,7 @@ public enum GatewayConnectionProblemMapper {
                     ?? "The gateway could not verify the public key this device presented.",
                 actionLabel: authError.actionLabel ?? "Re-pair this device",
                 actionCommand: authError.actionCommand,
-                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.openclaw.ai/gateway/pairing"),
+                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.marketingclaw.ai/gateway/pairing"),
                 requestId: authError.requestId,
                 retryable: false,
                 pauseReconnect: true,
@@ -449,7 +449,7 @@ public enum GatewayConnectionProblemMapper {
                     ?? "The gateway rejected the device identity because the device ID did not match.",
                 actionLabel: authError.actionLabel ?? "Re-pair this device",
                 actionCommand: authError.actionCommand,
-                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.openclaw.ai/gateway/pairing"),
+                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.marketingclaw.ai/gateway/pairing"),
                 requestId: authError.requestId,
                 retryable: false,
                 pauseReconnect: true,
@@ -463,7 +463,7 @@ public enum GatewayConnectionProblemMapper {
                     ?? "This connection expected Tailscale identity headers, but they were not available.",
                 actionLabel: authError.actionLabel ?? "Turn on Tailscale",
                 actionCommand: authError.actionCommand,
-                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.openclaw.ai/gateway/tailscale"),
+                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.marketingclaw.ai/gateway/tailscale"),
                 requestId: authError.requestId,
                 retryable: false,
                 pauseReconnect: true,
@@ -477,7 +477,7 @@ public enum GatewayConnectionProblemMapper {
                     ?? "The gateway expected a Tailscale auth proxy, but it was not configured.",
                 actionLabel: authError.actionLabel ?? "Review Tailscale setup",
                 actionCommand: authError.actionCommand,
-                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.openclaw.ai/gateway/tailscale"),
+                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.marketingclaw.ai/gateway/tailscale"),
                 requestId: authError.requestId,
                 retryable: false,
                 pauseReconnect: true,
@@ -491,7 +491,7 @@ public enum GatewayConnectionProblemMapper {
                     ?? "The gateway could not verify this Tailscale client identity.",
                 actionLabel: authError.actionLabel ?? "Review Tailscale setup",
                 actionCommand: authError.actionCommand,
-                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.openclaw.ai/gateway/tailscale"),
+                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.marketingclaw.ai/gateway/tailscale"),
                 requestId: authError.requestId,
                 retryable: false,
                 pauseReconnect: true,
@@ -505,7 +505,7 @@ public enum GatewayConnectionProblemMapper {
                     ?? "The forwarded Tailscale identity did not match the verified identity.",
                 actionLabel: authError.actionLabel ?? "Review Tailscale setup",
                 actionCommand: authError.actionCommand,
-                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.openclaw.ai/gateway/tailscale"),
+                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.marketingclaw.ai/gateway/tailscale"),
                 requestId: authError.requestId,
                 retryable: false,
                 pauseReconnect: true,
@@ -521,7 +521,7 @@ public enum GatewayConnectionProblemMapper {
                 actionCommand: authError.actionCommand,
                 docsURL: self.docsURL(
                     authError.docsURLString,
-                    fallback: "https://docs.openclaw.ai/gateway/troubleshooting"),
+                    fallback: "https://docs.marketingclaw.ai/gateway/troubleshooting"),
                 requestId: authError.requestId,
                 retryable: false,
                 pauseReconnect: true,
@@ -579,7 +579,7 @@ public enum GatewayConnectionProblemMapper {
                 message: "The saved TLS certificate pin for \(failure.host) no longer matches the gateway certificate.\(trustedSuffix)",
                 actionLabel: "Review certificate",
                 actionCommand: nil,
-                docsURL: URL(string: "https://docs.openclaw.ai/gateway/troubleshooting"),
+                docsURL: URL(string: "https://docs.marketingclaw.ai/gateway/troubleshooting"),
                 retryable: false,
                 pauseReconnect: true,
                 technicalDetails: tlsError.localizedDescription,
@@ -592,10 +592,10 @@ public enum GatewayConnectionProblemMapper {
                 kind: .tlsCertificateUnavailable,
                 owner: .network,
                 title: "Gateway certificate unavailable",
-                message: "OpenClaw could not read the gateway certificate for \(failure.host).",
+                message: "MarketingClaw could not read the gateway certificate for \(failure.host).",
                 actionLabel: "Retry",
                 actionCommand: nil,
-                docsURL: URL(string: "https://docs.openclaw.ai/gateway/troubleshooting"),
+                docsURL: URL(string: "https://docs.marketingclaw.ai/gateway/troubleshooting"),
                 retryable: true,
                 pauseReconnect: false,
                 technicalDetails: tlsError.localizedDescription)
@@ -607,7 +607,7 @@ public enum GatewayConnectionProblemMapper {
                 message: "This device does not trust the TLS certificate presented by \(failure.host).",
                 actionLabel: "Check certificate",
                 actionCommand: nil,
-                docsURL: URL(string: "https://docs.openclaw.ai/gateway/troubleshooting"),
+                docsURL: URL(string: "https://docs.marketingclaw.ai/gateway/troubleshooting"),
                 retryable: false,
                 pauseReconnect: true,
                 technicalDetails: tlsError.localizedDescription)
@@ -633,7 +633,7 @@ public enum GatewayConnectionProblemMapper {
                     message: "The gateway did not respond before the connection timed out.",
                     actionLabel: "Retry",
                     actionCommand: nil,
-                    docsURL: URL(string: "https://docs.openclaw.ai/gateway/troubleshooting"),
+                    docsURL: URL(string: "https://docs.marketingclaw.ai/gateway/troubleshooting"),
                     retryable: true,
                     pauseReconnect: false,
                     technicalDetails: rawMessage)
@@ -645,7 +645,7 @@ public enum GatewayConnectionProblemMapper {
                     message: "The gateway host was reachable, but it refused the connection.",
                     actionLabel: "Retry",
                     actionCommand: nil,
-                    docsURL: URL(string: "https://docs.openclaw.ai/gateway/troubleshooting"),
+                    docsURL: URL(string: "https://docs.marketingclaw.ai/gateway/troubleshooting"),
                     retryable: true,
                     pauseReconnect: false,
                     technicalDetails: rawMessage)
@@ -655,10 +655,10 @@ public enum GatewayConnectionProblemMapper {
                     kind: .reachabilityFailed,
                     owner: .network,
                     title: "Gateway is not reachable",
-                    message: "OpenClaw could not reach the gateway over the current network.",
+                    message: "MarketingClaw could not reach the gateway over the current network.",
                     actionLabel: "Check network",
                     actionCommand: nil,
-                    docsURL: URL(string: "https://docs.openclaw.ai/gateway/troubleshooting"),
+                    docsURL: URL(string: "https://docs.marketingclaw.ai/gateway/troubleshooting"),
                     retryable: true,
                     pauseReconnect: false,
                     technicalDetails: rawMessage)
@@ -670,7 +670,7 @@ public enum GatewayConnectionProblemMapper {
                     message: "The connection to the gateway was interrupted before setup completed.",
                     actionLabel: "Retry",
                     actionCommand: nil,
-                    docsURL: URL(string: "https://docs.openclaw.ai/gateway/troubleshooting"),
+                    docsURL: URL(string: "https://docs.marketingclaw.ai/gateway/troubleshooting"),
                     retryable: true,
                     pauseReconnect: false,
                     technicalDetails: rawMessage)
@@ -687,7 +687,7 @@ public enum GatewayConnectionProblemMapper {
                 message: "The gateway did not respond before the connection timed out.",
                 actionLabel: "Retry",
                 actionCommand: nil,
-                docsURL: URL(string: "https://docs.openclaw.ai/gateway/troubleshooting"),
+                docsURL: URL(string: "https://docs.marketingclaw.ai/gateway/troubleshooting"),
                 retryable: true,
                 pauseReconnect: false,
                 technicalDetails: rawMessage)
@@ -700,7 +700,7 @@ public enum GatewayConnectionProblemMapper {
                 message: "The gateway host was reachable, but it refused the connection.",
                 actionLabel: "Retry",
                 actionCommand: nil,
-                docsURL: URL(string: "https://docs.openclaw.ai/gateway/troubleshooting"),
+                docsURL: URL(string: "https://docs.marketingclaw.ai/gateway/troubleshooting"),
                 retryable: true,
                 pauseReconnect: false,
                 technicalDetails: rawMessage)
@@ -712,10 +712,10 @@ public enum GatewayConnectionProblemMapper {
                 kind: .reachabilityFailed,
                 owner: .network,
                 title: "Gateway is not reachable",
-                message: "OpenClaw could not reach the gateway over the current network.",
+                message: "MarketingClaw could not reach the gateway over the current network.",
                 actionLabel: "Check network",
                 actionCommand: nil,
-                docsURL: URL(string: "https://docs.openclaw.ai/gateway/troubleshooting"),
+                docsURL: URL(string: "https://docs.marketingclaw.ai/gateway/troubleshooting"),
                 retryable: true,
                 pauseReconnect: false,
                 technicalDetails: rawMessage)
@@ -728,7 +728,7 @@ public enum GatewayConnectionProblemMapper {
                 message: "The connection to the gateway was interrupted before setup completed.",
                 actionLabel: "Retry",
                 actionCommand: nil,
-                docsURL: URL(string: "https://docs.openclaw.ai/gateway/troubleshooting"),
+                docsURL: URL(string: "https://docs.marketingclaw.ai/gateway/troubleshooting"),
                 retryable: true,
                 pauseReconnect: false,
                 technicalDetails: rawMessage)
@@ -751,7 +751,7 @@ public enum GatewayConnectionProblemMapper {
                     "This device is already paired, but it is requesting a new role that was not previously approved.",
                 actionLabel: authError.actionLabel ?? "Approve on gateway",
                 actionCommand: authError.actionCommand ?? pairingCommand,
-                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.openclaw.ai/gateway/pairing"),
+                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.marketingclaw.ai/gateway/pairing"),
                 requestId: requestId,
                 retryable: false,
                 pauseReconnect: true,
@@ -765,7 +765,7 @@ public enum GatewayConnectionProblemMapper {
                     ?? "This device is already paired, but it is requesting new permissions that require approval.",
                 actionLabel: authError.actionLabel ?? "Approve on gateway",
                 actionCommand: authError.actionCommand ?? pairingCommand,
-                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.openclaw.ai/gateway/pairing"),
+                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.marketingclaw.ai/gateway/pairing"),
                 requestId: requestId,
                 retryable: false,
                 pauseReconnect: true,
@@ -780,7 +780,7 @@ public enum GatewayConnectionProblemMapper {
                     "The gateway detected a change in this device's approved identity metadata and requires re-approval.",
                 actionLabel: authError.actionLabel ?? "Approve on gateway",
                 actionCommand: authError.actionCommand ?? pairingCommand,
-                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.openclaw.ai/gateway/pairing"),
+                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.marketingclaw.ai/gateway/pairing"),
                 requestId: requestId,
                 retryable: false,
                 pauseReconnect: true,
@@ -794,7 +794,7 @@ public enum GatewayConnectionProblemMapper {
                     ?? "The gateway received the connection request, but this device must be approved first.",
                 actionLabel: authError.actionLabel ?? "Approve on gateway",
                 actionCommand: authError.actionCommand ?? pairingCommand,
-                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.openclaw.ai/gateway/pairing"),
+                docsURL: self.docsURL(authError.docsURLString, fallback: "https://docs.marketingclaw.ai/gateway/pairing"),
                 requestId: requestId,
                 retryable: false,
                 pauseReconnect: true,
@@ -814,7 +814,7 @@ public enum GatewayConnectionProblemMapper {
         {
             title = authError.titleOverride ?? "App update required"
             message = authError.userMessageOverride
-                ?? "This app is older than the gateway. Update OpenClaw on this device, then retry."
+                ?? "This app is older than the gateway. Update MarketingClaw on this device, then retry."
             owner = .iphone
             actionLabel = authError.actionLabel ?? "Update app"
             actionCommand = authError.actionCommand
@@ -824,16 +824,16 @@ public enum GatewayConnectionProblemMapper {
         {
             title = authError.titleOverride ?? "Gateway update required"
             message = authError.userMessageOverride
-                ?? "The gateway is older than this app. Update OpenClaw on the gateway host, then retry."
+                ?? "The gateway is older than this app. Update MarketingClaw on the gateway host, then retry."
             owner = .gateway
             actionLabel = authError.actionLabel ?? "Copy update command"
-            actionCommand = authError.actionCommand ?? "openclaw update"
+            actionCommand = authError.actionCommand ?? "marketingclaw update"
         } else {
-            title = authError.titleOverride ?? "OpenClaw update required"
+            title = authError.titleOverride ?? "MarketingClaw update required"
             message = authError.userMessageOverride
-                ?? "The app and gateway use incompatible protocol versions. Update OpenClaw on both, then retry."
+                ?? "The app and gateway use incompatible protocol versions. Update MarketingClaw on both, then retry."
             owner = .both
-            actionLabel = authError.actionLabel ?? "Update OpenClaw"
+            actionLabel = authError.actionLabel ?? "Update MarketingClaw"
             actionCommand = authError.actionCommand
         }
         return self.problem(
@@ -845,7 +845,7 @@ public enum GatewayConnectionProblemMapper {
             actionCommand: actionCommand,
             docsURL: self.docsURL(
                 authError.docsURLString,
-                fallback: "https://docs.openclaw.ai/gateway/troubleshooting"),
+                fallback: "https://docs.marketingclaw.ai/gateway/troubleshooting"),
             requestId: authError.requestId,
             retryable: false,
             pauseReconnect: true,
@@ -882,9 +882,9 @@ public enum GatewayConnectionProblemMapper {
 
     private static func approvalCommand(requestId: String?) -> String {
         if let requestId = self.nonEmpty(requestId) {
-            return "openclaw devices approve \(requestId)"
+            return "marketingclaw devices approve \(requestId)"
         }
-        return "openclaw devices list"
+        return "marketingclaw devices list"
     }
 
     private static func technicalDetails(for authError: GatewayConnectAuthError) -> String? {

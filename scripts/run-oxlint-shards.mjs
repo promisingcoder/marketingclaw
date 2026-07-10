@@ -119,7 +119,7 @@ export function createWindowsExtensionShards({
 export function resolveWindowsExtensionChunkSize(env = process.env) {
   return resolvePositiveEnvIntWithFallback(
     env,
-    "OPENCLAW_OXLINT_WINDOWS_EXTENSION_CHUNK_SIZE",
+    "MARKETINGCLAW_OXLINT_WINDOWS_EXTENSION_CHUNK_SIZE",
     DEFAULT_WINDOWS_EXTENSION_CHUNK_SIZE,
   );
 }
@@ -132,7 +132,7 @@ export function shouldRunOxlintShardsSerial({
   platform = process.platform,
   hostResources,
 } = {}) {
-  const explicitMode = env.OPENCLAW_OXLINT_SHARDS_SERIAL?.trim();
+  const explicitMode = env.MARKETINGCLAW_OXLINT_SHARDS_SERIAL?.trim();
   if (explicitMode === "1") {
     return true;
   }
@@ -142,7 +142,7 @@ export function shouldRunOxlintShardsSerial({
   if (explicitMode === "0") {
     return false;
   }
-  const localCheckMode = env.OPENCLAW_LOCAL_CHECK_MODE?.trim().toLowerCase();
+  const localCheckMode = env.MARKETINGCLAW_LOCAL_CHECK_MODE?.trim().toLowerCase();
   if (!isRemoteChangedGateEnv(env)) {
     if (localCheckMode === "full" || localCheckMode === "fast") {
       return false;
@@ -166,7 +166,8 @@ export function shouldRunOxlintShardsSerial({
 
 function isRemoteChangedGateEnv(env) {
   return (
-    env.OPENCLAW_CHECK_CHANGED_REMOTE_CHILD === "1" || env.OPENCLAW_CHANGED_LANES_RAW_SYNC === "1"
+    env.MARKETINGCLAW_CHECK_CHANGED_REMOTE_CHILD === "1" ||
+    env.MARKETINGCLAW_CHANGED_LANES_RAW_SYNC === "1"
   );
 }
 
@@ -233,7 +234,7 @@ export async function main(extraArgs = process.argv.slice(2), runtimeEnv = proce
       env,
     });
   const releaseLock =
-    env.OPENCLAW_OXLINT_SKIP_LOCK === "1"
+    env.MARKETINGCLAW_OXLINT_SKIP_LOCK === "1"
       ? () => {}
       : shouldAcquireParentLock
         ? acquireLocalHeavyCheckLockSync({
@@ -369,7 +370,7 @@ export function resolveOxlintShardConcurrency({
     return 1;
   }
 
-  const explicitConcurrency = resolvePositiveEnvInt(env, "OPENCLAW_OXLINT_SHARD_CONCURRENCY");
+  const explicitConcurrency = resolvePositiveEnvInt(env, "MARKETINGCLAW_OXLINT_SHARD_CONCURRENCY");
   if (explicitConcurrency !== null) {
     return explicitConcurrency;
   }
@@ -435,8 +436,8 @@ export async function runShard({ env, extraArgs, runner, shard }) {
     detached: useProcessGroup,
     env: {
       ...env,
-      OPENCLAW_OXLINT_SKIP_LOCK: "1",
-      OPENCLAW_OXLINT_SKIP_PREPARE: "1",
+      MARKETINGCLAW_OXLINT_SKIP_LOCK: "1",
+      MARKETINGCLAW_OXLINT_SKIP_PREPARE: "1",
     },
   });
   const unregisterShardChild = registerShardChild({ child, killGraceMs, useProcessGroup });
@@ -543,7 +544,7 @@ export async function runShard({ env, extraArgs, runner, shard }) {
 export function resolveShardHeartbeatMs(env) {
   return resolveNonNegativeEnvInt(
     env,
-    "OPENCLAW_OXLINT_SHARD_HEARTBEAT_MS",
+    "MARKETINGCLAW_OXLINT_SHARD_HEARTBEAT_MS",
     DEFAULT_SHARD_HEARTBEAT_MS,
   );
 }
@@ -554,7 +555,7 @@ export function resolveShardHeartbeatMs(env) {
 export function resolveShardTimeoutMs(env) {
   return resolveNonNegativeEnvInt(
     env,
-    "OPENCLAW_OXLINT_SHARD_TIMEOUT_MS",
+    "MARKETINGCLAW_OXLINT_SHARD_TIMEOUT_MS",
     DEFAULT_SHARD_TIMEOUT_MS,
   );
 }
@@ -565,7 +566,7 @@ export function resolveShardTimeoutMs(env) {
 export function resolveShardKillGraceMs(env) {
   return resolveNonNegativeEnvInt(
     env,
-    "OPENCLAW_OXLINT_SHARD_KILL_GRACE_MS",
+    "MARKETINGCLAW_OXLINT_SHARD_KILL_GRACE_MS",
     DEFAULT_SHARD_KILL_GRACE_MS,
   );
 }

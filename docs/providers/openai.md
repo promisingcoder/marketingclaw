@@ -1,13 +1,13 @@
 ---
-summary: "Use OpenAI via API keys or Codex subscription in OpenClaw"
+summary: "Use OpenAI via API keys or Codex subscription in MarketingClaw"
 read_when:
-  - You want to use OpenAI models in OpenClaw
+  - You want to use OpenAI models in MarketingClaw
   - You want Codex subscription auth instead of API keys
   - You need stricter GPT-5 agent execution behavior
 title: "OpenAI"
 ---
 
-OpenClaw uses one provider id, `openai`, for both direct API-key auth and
+MarketingClaw uses one provider id, `openai`, for both direct API-key auth and
 ChatGPT/Codex subscription auth. `openai/*` is the canonical model route.
 Embedded agent turns on `openai/*` run through the bundled Codex app-server
 runtime by default; direct API-key auth stays available for non-agent OpenAI
@@ -20,21 +20,21 @@ compatibility route for agent turns.
 - **Non-agent OpenAI APIs** - direct OpenAI Platform access, billed per use,
   through `OPENAI_API_KEY` or an `openai` API-key auth profile.
 - **Legacy config** - old Codex model refs and profile ids are repaired to
-  `openai/*` by `openclaw doctor --fix`.
+  `openai/*` by `marketingclaw doctor --fix`.
 
 OpenAI explicitly supports subscription OAuth usage in external tools and
-workflows like OpenClaw.
+workflows like MarketingClaw.
 
 ## Usage and cost tracking
 
-OpenClaw keeps subscription quota and Platform API billing distinct:
+MarketingClaw keeps subscription quota and Platform API billing distinct:
 
 - ChatGPT/Codex OAuth shows the subscription plan, quota windows, and credit balance.
 - `OPENAI_ADMIN_KEY` shows 30 days of provider-reported organization cost and completions usage in Control UI **Usage**, including daily spend, request/token totals, top models, and cost categories.
 - `OPENAI_PROJECT_ID` optionally scopes Admin API history to one project.
-- OpenClaw never sends `OPENAI_API_KEY` or an `openai` inference profile to organization APIs; those credentials may belong to custom, Azure, or agent-local endpoints.
+- MarketingClaw never sends `OPENAI_API_KEY` or an `openai` inference profile to organization APIs; those credentials may belong to custom, Azure, or agent-local endpoints.
 
-An explicit Admin key takes precedence over OAuth. Provider-reported history is not merged with OpenClaw's session-derived estimated cost; it can include API activity from other clients and provider-side billing adjustments.
+An explicit Admin key takes precedence over OAuth. Provider-reported history is not merged with MarketingClaw's session-derived estimated cost; it can include API activity from other clients and provider-side billing adjustments.
 
 OpenAI's [API Usage Dashboard](https://help.openai.com/en/articles/10478918) documentation describes the organization-owner and explicit Usage Dashboard permission requirements for usage data.
 
@@ -44,15 +44,15 @@ changing config.
 
 ## Quick choice
 
-| Goal                                              | Use                                                                | Notes                                                                   |
-| ------------------------------------------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------------- |
-| ChatGPT/Codex subscription, native Codex runtime  | `openai/gpt-5.5`                                                   | Default setup. Sign in with Codex auth.                                 |
-| GPT-5.6 limited preview                           | `openai/gpt-5.6-sol`, `-terra`, or `-luna`                         | Needs an OpenAI-approved API org or Codex workspace allowlist entry.    |
-| Direct API-key billing for agent turns            | `openai/gpt-5.5` plus an ordered API-key auth profile              | Set `auth.order.openai` to put the key profile after subscription auth. |
-| Direct API-key billing, explicit OpenClaw runtime | `openai/gpt-5.5` plus provider/model `agentRuntime.id: "openclaw"` | Select a normal `openai` API-key profile.                               |
-| Latest ChatGPT Instant model alias                | `openai/chat-latest`                                               | Direct API-key only; moving alias, not the stable default.              |
-| Image generation or editing                       | `openai/gpt-image-2`                                               | Works with `OPENAI_API_KEY` or Codex OAuth.                             |
-| Transparent-background images                     | `openai/gpt-image-1.5`                                             | Set `outputFormat` to `png` or `webp` and `background=transparent`.     |
+| Goal                                                   | Use                                                                     | Notes                                                                   |
+| ------------------------------------------------------ | ----------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| ChatGPT/Codex subscription, native Codex runtime       | `openai/gpt-5.5`                                                        | Default setup. Sign in with Codex auth.                                 |
+| GPT-5.6 limited preview                                | `openai/gpt-5.6-sol`, `-terra`, or `-luna`                              | Needs an OpenAI-approved API org or Codex workspace allowlist entry.    |
+| Direct API-key billing for agent turns                 | `openai/gpt-5.5` plus an ordered API-key auth profile                   | Set `auth.order.openai` to put the key profile after subscription auth. |
+| Direct API-key billing, explicit MarketingClaw runtime | `openai/gpt-5.5` plus provider/model `agentRuntime.id: "marketingclaw"` | Select a normal `openai` API-key profile.                               |
+| Latest ChatGPT Instant model alias                     | `openai/chat-latest`                                                    | Direct API-key only; moving alias, not the stable default.              |
+| Image generation or editing                            | `openai/gpt-image-2`                                                    | Works with `OPENAI_API_KEY` or Codex OAuth.                             |
+| Transparent-background images                          | `openai/gpt-image-1.5`                                                  | Set `outputFormat` to `png` or `webp` and `background=transparent`.     |
 
 ## Naming map
 
@@ -64,7 +64,7 @@ changing config.
 | `/codex ...`                            | Chat command set  | Bind/control Codex app-server threads from a conversation.                               |
 | `runtime: "acp", agentId: "codex"`      | ACP session route | Explicit fallback path that runs Codex through ACP/acpx.                                 |
 
-`openclaw doctor --fix` migrates legacy Codex model refs, legacy Codex auth
+`marketingclaw doctor --fix` migrates legacy Codex model refs, legacy Codex auth
 profile ids, and legacy Codex auth-order entries to the canonical `openai`
 route. Use `auth.order.openai` for new auth-order config.
 
@@ -78,7 +78,7 @@ direct API-key auth for an agent model.
 
 ## GPT-5.6 limited preview
 
-OpenClaw recognizes three public GPT-5.6 model ids: `openai/gpt-5.6-sol`,
+MarketingClaw recognizes three public GPT-5.6 model ids: `openai/gpt-5.6-sol`,
 `openai/gpt-5.6-terra`, and `openai/gpt-5.6-luna`. All three expose `xhigh` and
 `max` reasoning in the current catalog. OpenAI describes Sol as the flagship
 tier, Terra as the balanced tier, and Luna as the fast, lower-cost tier. See
@@ -86,24 +86,24 @@ the [GPT-5.6 launch announcement](https://openai.com/index/previewing-gpt-5-6-so
 and [preview access guide](https://help.openai.com/en/articles/20001325-a-preview-of-gpt-5-6-sol-terra-and-luna).
 
 Access is allowlisted during the preview and can be granted separately for the
-API and Codex; a paid ChatGPT plan alone does not grant access. OpenClaw keeps
+API and Codex; a paid ChatGPT plan alone does not grant access. MarketingClaw keeps
 `openai/gpt-5.5` as the default and does not special-case the access error, so
 selecting a GPT-5.6 ref without access surfaces the upstream error directly
 instead of falling back silently.
 
 <Note>
 Agent model turns on `openai/*` require the bundled Codex app-server plugin by
-default. Explicit OpenClaw runtime config remains available as an opt-in
-compatibility route: when OpenClaw is explicitly selected with an `openai`
+default. Explicit MarketingClaw runtime config remains available as an opt-in
+compatibility route: when MarketingClaw is explicitly selected with an `openai`
 OAuth profile, the model ref stays `openai/*` but requests route through the
-Codex-auth transport internally. Run `openclaw doctor --fix` to repair stale
+Codex-auth transport internally. Run `marketingclaw doctor --fix` to repair stale
 legacy Codex model refs, `codex-cli/*` refs, or old runtime session pins that
 were not set by explicit runtime config.
 </Note>
 
-## OpenClaw feature coverage
+## MarketingClaw feature coverage
 
-| OpenAI capability         | OpenClaw surface                                                                              | Status                                                          |
+| OpenAI capability         | MarketingClaw surface                                                                         | Status                                                          |
 | ------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
 | Chat / Responses          | `openai/<model>` model provider                                                               | Yes                                                             |
 | Codex subscription models | `openai/<model>` with OpenAI OAuth                                                            | Yes                                                             |
@@ -128,7 +128,7 @@ If API-key auth reports missing billing, top up Platform credits at
 [platform.openai.com/account/billing](https://platform.openai.com/account/billing)
 for the organization backing your realtime credentials when using API-key
 auth. Realtime voice accepts the `openai` API-key auth profile created by
-`openclaw onboard --auth-choice openai-api-key`, a Platform API key set via
+`marketingclaw onboard --auth-choice openai-api-key`, a Platform API key set via
 `talk.realtime.providers.openai.apiKey` for Control UI Talk, or
 `plugins.entries.voice-call.config.realtime.providers.openai.apiKey` for Voice
 Call, or the `OPENAI_API_KEY` environment variable.
@@ -136,7 +136,7 @@ Call, or the `OPENAI_API_KEY` environment variable.
 
 ## Memory embeddings
 
-OpenClaw can use OpenAI, or an OpenAI-compatible embedding endpoint, for
+MarketingClaw can use OpenAI, or an OpenAI-compatible embedding endpoint, for
 `memory_search` indexing and query embeddings:
 
 ```json5
@@ -153,7 +153,7 @@ OpenClaw can use OpenAI, or an OpenAI-compatible embedding endpoint, for
 ```
 
 For OpenAI-compatible endpoints that require asymmetric embedding labels, set
-`queryInputType` and `documentInputType` under `memorySearch`. OpenClaw
+`queryInputType` and `documentInputType` under `memorySearch`. MarketingClaw
 forwards these as provider-specific `input_type` request fields: query
 embeddings use `queryInputType`; indexed memory chunks and batch indexing use
 `documentInputType`. See the
@@ -172,18 +172,18 @@ for the full example.
       </Step>
       <Step title="Run onboarding">
         ```bash
-        openclaw onboard --auth-choice openai-api-key
+        marketingclaw onboard --auth-choice openai-api-key
         ```
 
         Or pass the key directly:
 
         ```bash
-        openclaw onboard --openai-api-key "$OPENAI_API_KEY"
+        marketingclaw onboard --openai-api-key "$OPENAI_API_KEY"
         ```
       </Step>
       <Step title="Verify the model is available">
         ```bash
-        openclaw models list --provider openai
+        marketingclaw models list --provider openai
         ```
       </Step>
     </Steps>
@@ -194,13 +194,13 @@ for the full example.
     | ----------------------- | ------------------------------------------------------ | --------------------------- | ------------------------------------ |
     | `openai/gpt-5.5`       | unset, or provider/model `agentRuntime.id: "codex"`   | Codex app-server harness   | Ordered API-key auth profile       |
     | `openai/gpt-5.4-mini`  | unset, or provider/model `agentRuntime.id: "codex"`   | Codex app-server harness   | Ordered API-key auth profile       |
-    | `openai/gpt-5.5`       | provider/model `agentRuntime.id: "openclaw"`          | OpenClaw embedded runtime  | Selected `openai` API-key profile  |
+    | `openai/gpt-5.5`       | provider/model `agentRuntime.id: "marketingclaw"`          | MarketingClaw embedded runtime  | Selected `openai` API-key profile  |
 
     <Note>
     Agent turns on `openai/*` use the Codex app-server harness by default. For
     API-key auth on an agent model, create an `openai` API-key auth profile and
     order it with `auth.order.openai`; `OPENAI_API_KEY` remains the direct
-    fallback for non-agent OpenAI API surfaces. Run `openclaw doctor --fix` to
+    fallback for non-agent OpenAI API surfaces. Run `marketingclaw doctor --fix` to
     migrate older legacy Codex auth-order entries.
     </Note>
 
@@ -226,10 +226,10 @@ for the full example.
     `chat-latest` is a moving alias. OpenAI recommends `gpt-5.5` for production
     API usage, so keep `openai/gpt-5.5` as the stable default unless you want
     that alias behavior. The alias only accepts `medium` text verbosity;
-    OpenClaw forces any other requested verbosity to `medium` for this model.
+    MarketingClaw forces any other requested verbosity to `medium` for this model.
 
     <Warning>
-    OpenClaw does **not** expose `gpt-5.3-codex-spark` on the direct OpenAI
+    MarketingClaw does **not** expose `gpt-5.3-codex-spark` on the direct OpenAI
     API-key route. It is available only through Codex subscription catalog
     entries when your signed-in account exposes it.
     </Warning>
@@ -244,13 +244,13 @@ for the full example.
     <Steps>
       <Step title="Run Codex OAuth">
         ```bash
-        openclaw onboard --auth-choice openai
+        marketingclaw onboard --auth-choice openai
         ```
 
         Or run OAuth directly:
 
         ```bash
-        openclaw models auth login --provider openai
+        marketingclaw models auth login --provider openai
         ```
 
         For headless or callback-hostile setups, add `--device-code` to sign
@@ -258,22 +258,22 @@ for the full example.
         callback:
 
         ```bash
-        openclaw models auth login --provider openai --device-code
+        marketingclaw models auth login --provider openai --device-code
         ```
       </Step>
       <Step title="Use the canonical OpenAI model route">
         ```bash
-        openclaw config set agents.defaults.model.primary openai/gpt-5.5
+        marketingclaw config set agents.defaults.model.primary openai/gpt-5.5
         ```
 
         No runtime config is required for the default path. OpenAI agent
         turns select the native Codex app-server runtime automatically, and
-        OpenClaw installs or repairs the bundled Codex plugin when this route
+        MarketingClaw installs or repairs the bundled Codex plugin when this route
         is chosen.
       </Step>
       <Step title="Verify Codex auth is available">
         ```bash
-        openclaw models list --provider openai
+        marketingclaw models list --provider openai
         ```
 
         After the gateway is running, send `/codex status` or `/codex models`
@@ -286,14 +286,14 @@ for the full example.
     | Model ref                | Runtime config                                | Route                                                  | Auth                                            |
     | -------------------------- | ------------------------------------------------ | --------------------------------------------------------- | -------------------------------------------------- |
     | `openai/gpt-5.5`         | unset, or provider/model `agentRuntime.id: "codex"` | Native Codex app-server harness                        | Codex sign-in, or an ordered `openai` auth profile |
-    | `openai/gpt-5.5`         | provider/model `agentRuntime.id: "openclaw"`  | OpenClaw embedded runtime, internal Codex-auth transport | Selected `openai` OAuth profile                 |
+    | `openai/gpt-5.5`         | provider/model `agentRuntime.id: "marketingclaw"`  | MarketingClaw embedded runtime, internal Codex-auth transport | Selected `openai` OAuth profile                 |
     | Legacy Codex GPT-5.5 ref | repaired by doctor                            | Rewritten to `openai/gpt-5.5`                            | Migrated OpenAI OAuth profile                   |
     | `codex-cli/gpt-5.5`      | repaired by doctor                            | Rewritten to `openai/gpt-5.5`                            | Codex app-server auth                           |
 
     <Warning>
     Prefer `openai/gpt-5.5` for new subscription-backed agent config. Older
-    Codex GPT refs are legacy OpenClaw routes, not the native Codex runtime
-    path; run `openclaw doctor --fix` to migrate them. `gpt-5.3-codex-spark`
+    Codex GPT refs are legacy MarketingClaw routes, not the native Codex runtime
+    path; run `marketingclaw doctor --fix` to migrate them. `gpt-5.3-codex-spark`
     stays limited to accounts whose Codex subscription catalog advertises it;
     direct OpenAI API-key and Azure refs for it stay suppressed.
     </Warning>
@@ -317,7 +317,7 @@ for the full example.
     ```
 
     With an API-key backup, keep the model on `openai/gpt-5.5` and put the
-    auth order under `openai`. OpenClaw tries the subscription first, then the
+    auth order under `openai`. MarketingClaw tries the subscription first, then the
     API key, while staying on the Codex harness:
 
     ```json5
@@ -341,51 +341,51 @@ for the full example.
 
     <Note>
     Onboarding no longer imports OAuth material from `~/.codex`. Sign in with
-    browser OAuth (default) or the device-code flow above; OpenClaw manages the
+    browser OAuth (default) or the device-code flow above; MarketingClaw manages the
     resulting credentials in its own agent auth store.
     </Note>
 
     ### Check and recover Codex OAuth routing
 
     ```bash
-    openclaw models status
-    openclaw models auth list --provider openai
-    openclaw config get agents.defaults.model --json
-    openclaw config get models.providers.openai.agentRuntime --json
+    marketingclaw models status
+    marketingclaw models auth list --provider openai
+    marketingclaw config get agents.defaults.model --json
+    marketingclaw config get models.providers.openai.agentRuntime --json
     ```
 
     For a specific agent, add `--agent <id>`:
 
     ```bash
-    openclaw models status --agent <id>
-    openclaw models auth list --agent <id> --provider openai
+    marketingclaw models status --agent <id>
+    marketingclaw models auth list --agent <id> --provider openai
     ```
 
     If an older config still has legacy Codex GPT refs, or a stale OpenAI
     runtime session pin without explicit runtime config, repair it:
 
     ```bash
-    openclaw doctor --fix
-    openclaw config validate
+    marketingclaw doctor --fix
+    marketingclaw config validate
     ```
 
     If `models auth list --provider openai` shows no usable profile, sign in
     again:
 
     ```bash
-    openclaw models auth login --provider openai
-    openclaw models status --probe --probe-provider openai
+    marketingclaw models auth login --provider openai
+    marketingclaw models status --probe --probe-provider openai
     ```
 
     Use `--profile-id` for multiple Codex OAuth logins in the same agent, then
     control them via auth ordering or `/model ...@<profileId>`:
 
     ```bash
-    openclaw models auth login --provider openai --profile-id openai:ritsuko
-    openclaw models auth login --provider openai --profile-id openai:lain
+    marketingclaw models auth login --provider openai --profile-id openai:ritsuko
+    marketingclaw models auth login --provider openai --profile-id openai:lain
     ```
 
-    Run `openclaw doctor --fix` to migrate older legacy OpenAI Codex prefix
+    Run `marketingclaw doctor --fix` to migrate older legacy OpenAI Codex prefix
     profile ids and order entries before relying on profile ordering.
 
     ### Status indicator
@@ -393,17 +393,17 @@ for the full example.
     Chat `/status` shows which model runtime is active for the current
     session. The bundled Codex app-server harness appears as
     `Runtime: OpenAI Codex` for `openai/*` agent turns. Stale OpenAI runtime
-    session pins are repaired to Codex unless config explicitly pins OpenClaw.
+    session pins are repaired to Codex unless config explicitly pins MarketingClaw.
 
     ### Doctor warning
 
     If legacy Codex model refs or stale OpenAI runtime pins remain in config
-    or session state, `openclaw doctor --fix` rewrites them to `openai/*` with
-    the Codex runtime unless OpenClaw is explicitly configured.
+    or session state, `marketingclaw doctor --fix` rewrites them to `openai/*` with
+    the Codex runtime unless MarketingClaw is explicitly configured.
 
     ### Context window cap
 
-    OpenClaw treats model metadata and the runtime context cap as separate
+    MarketingClaw treats model metadata and the runtime context cap as separate
     values. For `openai/gpt-5.5` through the Codex OAuth catalog:
 
     - Native `contextWindow`: `400000`
@@ -433,9 +433,9 @@ for the full example.
 
     ### Catalog recovery
 
-    OpenClaw uses upstream Codex catalog metadata for `gpt-5.5` when it is
+    MarketingClaw uses upstream Codex catalog metadata for `gpt-5.5` when it is
     present. If live Codex discovery omits the `gpt-5.5` row while the account
-    is authenticated, OpenClaw synthesizes that OAuth model row so cron,
+    is authenticated, MarketingClaw synthesizes that OAuth model row so cron,
     sub-agent, and configured default-model runs do not fail with
     `Unknown model`.
 
@@ -446,10 +446,10 @@ for the full example.
 
 The native Codex app-server harness uses `openai/*` model refs with runtime
 config unset or provider/model `agentRuntime.id: "codex"`, but its auth is
-still account-based. OpenClaw selects auth in this order:
+still account-based. MarketingClaw selects auth in this order:
 
 1. Ordered OpenAI auth profiles for the agent, preferably under
-   `auth.order.openai`. Run `openclaw doctor --fix` to migrate older legacy
+   `auth.order.openai`. Run `marketingclaw doctor --fix` to migrate older legacy
    Codex auth profile ids and auth order.
 2. The app-server's existing account, such as a local Codex CLI ChatGPT
    sign-in.
@@ -460,11 +460,11 @@ A local ChatGPT/Codex subscription sign-in is not replaced just because the
 gateway process also has `OPENAI_API_KEY` for direct OpenAI models or
 embeddings. The env API-key fallback applies only to the local stdio no-account
 path; it is never sent over WebSocket app-server connections. When a
-subscription-style Codex profile is selected, OpenClaw also keeps
+subscription-style Codex profile is selected, MarketingClaw also keeps
 `CODEX_API_KEY` and `OPENAI_API_KEY` out of the spawned stdio app-server child
 and sends the selected credentials through the app-server login RPC instead.
 
-When that subscription profile is blocked by a Codex usage limit, OpenClaw
+When that subscription profile is blocked by a Codex usage limit, MarketingClaw
 marks the profile blocked until Codex's advertised reset time and lets auth
 ordering rotate to the next `openai:*` profile, without changing the selected
 model or dropping out of the Codex harness. Once the reset time passes, the
@@ -510,7 +510,7 @@ transparent-background PNG/WebP output; the current `gpt-image-2` API rejects
 For a transparent-background request, call `image_generate` with
 `model: "openai/gpt-image-1.5"`, `outputFormat: "png"` or `"webp"`, and
 `background: "transparent"`; the older `openai.background` provider option is
-still accepted. OpenClaw also protects the public OpenAI and OpenAI Codex OAuth
+still accepted. MarketingClaw also protects the public OpenAI and OpenAI Codex OAuth
 routes by rewriting default `openai/gpt-image-2` transparent requests to
 `gpt-image-1.5`; Azure and custom OpenAI-compatible endpoints keep their
 configured deployment/model names.
@@ -518,7 +518,7 @@ configured deployment/model names.
 The same setting is exposed for headless CLI runs:
 
 ```bash
-openclaw infer image generate \
+marketingclaw infer image generate \
   --model openai/gpt-image-1.5 \
   --output-format png \
   --background transparent \
@@ -527,27 +527,27 @@ openclaw infer image generate \
 ```
 
 Use the same `--output-format` and `--background` flags with
-`openclaw infer image edit` when starting from an input file.
+`marketingclaw infer image edit` when starting from an input file.
 `--openai-background` remains available as an OpenAI-specific alias. Use
 `--quality low|medium|high|auto` to control OpenAI Images quality and cost.
 Use `--openai-moderation low|auto` to pass OpenAI's moderation hint from either
 `image generate` or `image edit`.
 
 For ChatGPT/Codex OAuth installs, keep the same `openai/gpt-image-2` ref. When
-an `openai` OAuth profile is configured, OpenClaw resolves that stored OAuth
+an `openai` OAuth profile is configured, MarketingClaw resolves that stored OAuth
 access token and sends image requests through the Codex Responses backend; it
 does not first try `OPENAI_API_KEY` or silently fall back to an API key.
 Configure `models.providers.openai` explicitly with an API key, custom base
 URL, or Azure endpoint when you want the direct OpenAI Images API route
 instead. If that custom image endpoint is on a trusted LAN/private address,
-also set `browser.ssrfPolicy.dangerouslyAllowPrivateNetwork: true`; OpenClaw
+also set `browser.ssrfPolicy.dangerouslyAllowPrivateNetwork: true`; MarketingClaw
 keeps private/internal OpenAI-compatible image endpoints blocked unless this
 opt-in is present.
 
 Generate:
 
 ```
-/tool image_generate model=openai/gpt-image-2 prompt="A polished launch poster for OpenClaw on macOS" size=3840x2160 count=1
+/tool image_generate model=openai/gpt-image-2 prompt="A polished launch poster for MarketingClaw on macOS" size=3840x2160 count=1
 ```
 
 Generate a transparent PNG:
@@ -595,7 +595,7 @@ See [Video Generation](/tools/video-generation) for shared tool parameters,
 provider selection, and failover behavior.
 
 The OpenAI provider declares `supportsSize` but not `supportsAspectRatio` or
-`supportsResolution`. OpenClaw's shared normalization layer converts a
+`supportsResolution`. MarketingClaw's shared normalization layer converts a
 requested `aspectRatio` into the closest matching OpenAI `size` before the
 request reaches the provider, so aspect-ratio requests generally still work.
 `resolution` has no size fallback and is dropped, surfaced to the caller as
@@ -604,7 +604,7 @@ request reaches the provider, so aspect-ratio requests generally still work.
 
 ## GPT-5 prompt contribution
 
-OpenClaw adds a shared GPT-5 prompt contribution for GPT-5-family models on
+MarketingClaw adds a shared GPT-5 prompt contribution for GPT-5-family models on
 the `openai` provider (including legacy pre-repair Codex refs that normalize
 to `openai/*`). Other providers that also serve GPT-5-family model ids, such
 as OpenRouter or opencode routes, do not receive this overlay; it is gated on
@@ -614,19 +614,19 @@ receive it.
 The native Codex app-server harness does not receive the persona/tool-
 discipline behavior contract or the friendly interaction-style overlay through
 developer instructions; native Codex keeps Codex-owned base, model, and
-project-doc behavior, and OpenClaw disables Codex's built-in personality for
+project-doc behavior, and MarketingClaw disables Codex's built-in personality for
 native threads so agent workspace personality files stay authoritative.
-OpenClaw contributes only runtime context to native Codex threads: channel
-delivery, OpenClaw dynamic tools, ACP delegation, workspace context, and
-OpenClaw skills. The heartbeat-guidance text from this same contribution is the
+MarketingClaw contributes only runtime context to native Codex threads: channel
+delivery, MarketingClaw dynamic tools, ACP delegation, workspace context, and
+MarketingClaw skills. The heartbeat-guidance text from this same contribution is the
 one exception: native Codex heartbeat turns do get it, injected as dedicated
 collaboration instructions rather than through the shared prompt-contribution
 hook.
 
 The GPT-5 contribution adds a tagged behavior contract for persona
 persistence, execution safety, tool discipline, output shape, completion
-checks, and verification on matching OpenClaw-assembled prompts. Channel-
-specific reply and silent-message behavior stays in the shared OpenClaw system
+checks, and verification on matching MarketingClaw-assembled prompts. Channel-
+specific reply and silent-message behavior stays in the shared MarketingClaw system
 prompt and outbound delivery policy. The friendly interaction-style layer is
 separate and configurable.
 
@@ -652,7 +652,7 @@ separate and configurable.
   </Tab>
   <Tab title="CLI">
     ```bash
-    openclaw config set agents.defaults.promptOverlays.gpt5.personality off
+    marketingclaw config set agents.defaults.promptOverlays.gpt5.personality off
     ```
   </Tab>
 </Tabs>
@@ -690,7 +690,7 @@ compatibility fallback when the shared
     `alloy`, `ash`, `ballad`, `cedar`, `coral`, `echo`, `fable`, `juniper`,
     `marin`, `onyx`, `nova`, `sage`, `shimmer`, `verse`.
 
-    `extraBody` is merged into `/audio/speech` request JSON after OpenClaw's
+    `extraBody` is merged into `/audio/speech` request JSON after MarketingClaw's
     generated fields, so use it for OpenAI-compatible endpoints that require
     additional keys such as `lang`. Prototype keys are ignored.
 
@@ -717,7 +717,7 @@ compatibility fallback when the shared
 
   <Accordion title="Speech-to-text">
     The bundled `openai` plugin registers batch speech-to-text through
-    OpenClaw's media-understanding transcription surface.
+    MarketingClaw's media-understanding transcription surface.
 
     - Default model: `gpt-4o-transcribe`
     - Endpoint: OpenAI REST `/v1/audio/transcriptions`
@@ -809,7 +809,7 @@ compatibility fallback when the shared
     <Note>
     Realtime voice is selected when the session is created. OpenAI allows most
     session fields to change later, but the voice cannot be changed after the
-    model has emitted audio in that session. OpenClaw currently exposes the
+    model has emitted audio in that session. MarketingClaw currently exposes the
     built-in Realtime voice ids as strings.
     </Note>
 
@@ -834,7 +834,7 @@ compatibility fallback when the shared
 ## Azure OpenAI endpoints
 
 The bundled `openai` provider can target an Azure OpenAI resource for image
-generation by overriding the base URL. On the image-generation path, OpenClaw
+generation by overriding the base URL. On the image-generation path, MarketingClaw
 detects Azure hostnames on `models.providers.openai.baseUrl` and switches to
 Azure's request shape automatically.
 
@@ -872,14 +872,14 @@ the Azure OpenAI key (not an OpenAI Platform key):
 }
 ```
 
-OpenClaw recognizes these Azure host suffixes for the Azure image-generation
+MarketingClaw recognizes these Azure host suffixes for the Azure image-generation
 route:
 
 - `*.openai.azure.com`
 - `*.services.ai.azure.com`
 - `*.cognitiveservices.azure.com`
 
-For image-generation requests on a recognized Azure host, OpenClaw:
+For image-generation requests on a recognized Azure host, MarketingClaw:
 
 - Sends the `api-key` header instead of `Authorization: Bearer`
 - Uses deployment-scoped paths (`/openai/deployments/{deployment}/...`)
@@ -892,7 +892,7 @@ OpenAI image request shape.
 
 <Note>
 Azure routing for the `openai` provider's image-generation path requires
-OpenClaw 2026.4.22 or later. Earlier versions treat any custom
+MarketingClaw 2026.4.22 or later. Earlier versions treat any custom
 `openai.baseUrl` like the public OpenAI endpoint and fail against Azure image
 deployments.
 </Note>
@@ -911,7 +911,7 @@ The default is `2024-12-01-preview` when the variable is unset.
 ### Model names are deployment names
 
 Azure OpenAI binds models to deployments. For Azure image-generation requests
-routed through the bundled `openai` provider, the `model` field in OpenClaw
+routed through the bundled `openai` provider, the `model` field in MarketingClaw
 must be the **Azure deployment name** you configured in the Azure portal, not
 the public OpenAI model id.
 
@@ -937,13 +937,13 @@ Azure OpenAI and public OpenAI do not always accept the same image parameters.
 Azure may reject options public OpenAI allows (for example certain
 `background` values on `gpt-image-2`) or expose them only on specific model
 versions. These differences come from Azure and the underlying model, not
-OpenClaw. If an Azure request fails with a validation error, check the
+MarketingClaw. If an Azure request fails with a validation error, check the
 parameter set supported by your specific deployment and API version in the
 Azure portal.
 
 <Note>
 Azure OpenAI uses native transport and compat behavior but does not receive
-OpenClaw's hidden attribution headers - see the **Native vs OpenAI-compatible
+MarketingClaw's hidden attribution headers - see the **Native vs OpenAI-compatible
 routes** accordion under [Advanced configuration](#advanced-configuration).
 
 For chat or Responses traffic on Azure (beyond image generation), use the
@@ -957,9 +957,9 @@ accordion below.
 
 <AccordionGroup>
   <Accordion title="Transport (WebSocket vs SSE)">
-    OpenClaw uses WebSocket-first with SSE fallback (`"auto"`) for `openai/*`.
+    MarketingClaw uses WebSocket-first with SSE fallback (`"auto"`) for `openai/*`.
 
-    In `"auto"` mode, OpenClaw:
+    In `"auto"` mode, MarketingClaw:
     - Retries one early WebSocket failure before falling back to SSE
     - After a failure, marks WebSocket as degraded for 60 seconds and uses SSE
       during cool-down
@@ -995,12 +995,12 @@ accordion below.
   </Accordion>
 
   <Accordion title="Fast mode">
-    OpenClaw exposes a shared fast-mode toggle for `openai/*`:
+    MarketingClaw exposes a shared fast-mode toggle for `openai/*`:
 
     - **Chat/UI:** `/fast status|auto|on|off`
     - **Config:** `agents.defaults.models["<provider>/<model>"].params.fastMode`
 
-    When enabled, OpenClaw maps fast mode to OpenAI priority processing
+    When enabled, MarketingClaw maps fast mode to OpenAI priority processing
     (`service_tier = "priority"`). Existing `service_tier` values are
     preserved, and fast mode does not rewrite `reasoning` or
     `text.verbosity`. `fastMode: "auto"` starts new model calls fast until the
@@ -1029,7 +1029,7 @@ accordion below.
 
   <Accordion title="Priority processing (service_tier)">
     OpenAI's API exposes priority processing via `service_tier`. Set it per
-    model in OpenClaw:
+    model in MarketingClaw:
 
     ```json5
     {
@@ -1048,7 +1048,7 @@ accordion below.
     <Warning>
     `serviceTier` is forwarded only to native OpenAI endpoints
     (`api.openai.com`) and native Codex endpoints (`chatgpt.com/backend-api`).
-    If you route either provider through a proxy, OpenClaw leaves
+    If you route either provider through a proxy, MarketingClaw leaves
     `service_tier` untouched.
     </Warning>
 
@@ -1056,7 +1056,7 @@ accordion below.
 
   <Accordion title="Server-side compaction (Responses API)">
     For direct OpenAI Responses models (`openai/*` on `api.openai.com`), the
-    OpenAI plugin's OpenClaw stream wrapper auto-enables server-side
+    OpenAI plugin's MarketingClaw stream wrapper auto-enables server-side
     compaction:
 
     - Forces `store: true` (unless model compat sets `supportsStore: false`)
@@ -1064,7 +1064,7 @@ accordion below.
     - Default `compact_threshold`: 70% of `contextWindow` (or `80000` when
       unavailable)
 
-    This applies to the built-in OpenClaw runtime path and to OpenAI provider
+    This applies to the built-in MarketingClaw runtime path and to OpenAI provider
     hooks used by embedded runs. The native Codex app-server harness manages
     its own context through Codex and is not affected by this setting.
 
@@ -1130,8 +1130,8 @@ accordion below.
   </Accordion>
 
   <Accordion title="Strict-agentic GPT mode">
-    For `openai` provider GPT-5-family models run through OpenClaw's embedded
-    runtime, OpenClaw already defaults to a stricter execution contract called
+    For `openai` provider GPT-5-family models run through MarketingClaw's embedded
+    runtime, MarketingClaw already defaults to a stricter execution contract called
     `strict-agentic`. It auto-activates whenever the resolved provider is
     `openai` and the model id matches the GPT-5 family, unless config
     explicitly opts back out:
@@ -1149,18 +1149,18 @@ accordion below.
     Setting `"strict-agentic"` explicitly is a no-op on a supported lane (it
     is already the default) and inert on unsupported provider/model pairs.
 
-    With `strict-agentic` active, OpenClaw:
+    With `strict-agentic` active, MarketingClaw:
     - Auto-enables `update_plan` for substantial work
     - Retries structurally empty or reasoning-only turns with a visible-answer
       continuation
     - Uses explicit harness plan events when the selected harness provides
       them
 
-    OpenClaw does not classify assistant prose to decide whether a turn is a
+    MarketingClaw does not classify assistant prose to decide whether a turn is a
     plan, progress update, or final answer.
 
     <Note>
-    This contract lives entirely in OpenClaw's embedded agent runner. It does
+    This contract lives entirely in MarketingClaw's embedded agent runner. It does
     not apply to the native Codex app-server harness, which manages its own
     turn and plan behavior; the harness selection matters more than the
     execution-contract setting for native Codex runs.
@@ -1169,7 +1169,7 @@ accordion below.
   </Accordion>
 
   <Accordion title="Native vs OpenAI-compatible routes">
-    OpenClaw treats direct OpenAI, Codex, and Azure OpenAI endpoints
+    MarketingClaw treats direct OpenAI, Codex, and Azure OpenAI endpoints
     differently from generic OpenAI-compatible `/v1` proxies:
 
     **Native routes** (`openai/*`, Azure OpenAI):

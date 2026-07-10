@@ -1,8 +1,8 @@
 /** Computes which manifest-owned plugins need activation for commands, routes, providers, or capabilities. */
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
-import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
-import type { OpenClawConfig } from "../config/types.js";
+import { normalizeProviderId } from "@marketingclaw/model-catalog-core/provider-id";
+import { normalizeOptionalLowercaseString } from "@marketingclaw/normalization-core/string-coerce";
+import { uniqueStrings } from "@marketingclaw/normalization-core/string-normalization";
+import type { MarketingClawConfig } from "../config/types.js";
 import { normalizePluginsConfig } from "./config-state.js";
 import {
   hasExplicitManifestOwnerTrust,
@@ -60,7 +60,7 @@ export type PluginActivationPlan = {
 
 type ResolveManifestActivationPlanParams = {
   trigger: PluginActivationPlannerTrigger;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   origin?: PluginOrigin;

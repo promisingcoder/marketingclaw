@@ -3,8 +3,11 @@
  * routing, notification fanout, server request handlers, and version checks.
  */
 import { createInterface, type Interface as ReadlineInterface } from "node:readline";
-import { embeddedAgentLog, OPENCLAW_VERSION } from "openclaw/plugin-sdk/agent-harness-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+import {
+  embeddedAgentLog,
+  MARKETINGCLAW_VERSION,
+} from "marketingclaw/plugin-sdk/agent-harness-runtime";
+import { truncateUtf16Safe } from "marketingclaw/plugin-sdk/text-utility-runtime";
 import { resolveCodexAppServerRuntimeOptions, type CodexAppServerStartOptions } from "./config.js";
 import {
   type CodexAppServerRequestMethod,
@@ -205,9 +208,9 @@ export class CodexAppServerClient {
     // which matters when callers override the binary or app-server args.
     const response = await this.request("initialize", {
       clientInfo: {
-        name: "openclaw",
-        title: "OpenClaw",
-        version: OPENCLAW_VERSION,
+        name: "marketingclaw",
+        title: "MarketingClaw",
+        version: MARKETINGCLAW_VERSION,
       },
       capabilities: {
         experimentalApi: true,
@@ -314,7 +317,7 @@ export class CodexAppServerClient {
     this.writeMessage({ method, params });
   }
 
-  /** Registers a handler for app-server requests sent back to OpenClaw. */
+  /** Registers a handler for app-server requests sent back to MarketingClaw. */
   addRequestHandler(handler: CodexServerRequestHandler): () => void {
     this.requestHandlers.add(handler);
     return () => this.requestHandlers.delete(handler);
@@ -571,7 +574,7 @@ function defaultServerRequestResponse(
       contentItems: [
         {
           type: "inputText",
-          text: "OpenClaw did not register a handler for this app-server tool call.",
+          text: "MarketingClaw did not register a handler for this app-server tool call.",
         },
       ],
       success: false,
@@ -617,7 +620,7 @@ function timeoutServerRequestResponse(
     contentItems: [
       {
         type: "inputText",
-        text: `OpenClaw dynamic tool call timed out after ${CODEX_DYNAMIC_TOOL_SERVER_REQUEST_TIMEOUT_MS}ms before sending a response to Codex.`,
+        text: `MarketingClaw dynamic tool call timed out after ${CODEX_DYNAMIC_TOOL_SERVER_REQUEST_TIMEOUT_MS}ms before sending a response to Codex.`,
       },
     ],
     success: false,
@@ -631,7 +634,7 @@ export class CodexAppServerVersionError extends Error {
   constructor(detectedVersion: string | undefined) {
     const detected = detectedVersion
       ? `detected ${detectedVersion}`
-      : "OpenClaw could not determine the running Codex version";
+      : "MarketingClaw could not determine the running Codex version";
     super(
       `Codex app-server ${MIN_CODEX_APP_SERVER_VERSION} or newer is required, but ${detected}. Update the configured Codex app-server binary, or remove custom command overrides to use the managed binary.`,
     );
@@ -680,7 +683,7 @@ function readNonEmptyInitializeString(value: string | undefined): string | undef
 /** Extracts the Codex version from the app-server initialize user-agent field. */
 export function readCodexVersionFromUserAgent(userAgent: string | undefined): string | undefined {
   // Codex returns `<originator>/<codex-version> ...`; the originator can be
-  // OpenClaw, Codex Desktop, or an env override, so only the slash-delimited
+  // MarketingClaw, Codex Desktop, or an env override, so only the slash-delimited
   // version in the leading product field is stable.
   const match = userAgent?.match(
     /^[^/]+\/(\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?)(?:[\s(]|$)/,
@@ -792,7 +795,7 @@ const CODEX_APP_SERVER_APPROVAL_REQUEST_METHODS = new Set([
   "item/permissions/requestApproval",
 ]);
 
-/** Returns true for app-server approval request methods OpenClaw can answer. */
+/** Returns true for app-server approval request methods MarketingClaw can answer. */
 export function isCodexAppServerApprovalRequest(method: string): boolean {
   return CODEX_APP_SERVER_APPROVAL_REQUEST_METHODS.has(method);
 }

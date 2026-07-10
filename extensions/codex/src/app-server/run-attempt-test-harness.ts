@@ -7,12 +7,12 @@ import {
   queueAgentHarnessMessage,
   resetAgentEventsForTest,
   type EmbeddedRunAttemptParams,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import { resetDiagnosticEventsForTest } from "openclaw/plugin-sdk/diagnostic-runtime";
-import { clearInternalHooks, resetGlobalHookRunner } from "openclaw/plugin-sdk/hook-runtime";
-import { clearMemoryPluginState } from "openclaw/plugin-sdk/memory-core-host-runtime-core";
-import { clearPluginCommands } from "openclaw/plugin-sdk/plugin-runtime";
-import { resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
+} from "marketingclaw/plugin-sdk/agent-harness-runtime";
+import { resetDiagnosticEventsForTest } from "marketingclaw/plugin-sdk/diagnostic-runtime";
+import { clearInternalHooks, resetGlobalHookRunner } from "marketingclaw/plugin-sdk/hook-runtime";
+import { clearMemoryPluginState } from "marketingclaw/plugin-sdk/memory-core-host-runtime-core";
+import { clearPluginCommands } from "marketingclaw/plugin-sdk/plugin-runtime";
+import { resolvePreferredMarketingClawTmpDir } from "marketingclaw/plugin-sdk/temp-path";
 import { afterEach, beforeEach, expect, vi } from "vitest";
 import { defaultCodexAppInventoryCache } from "./app-inventory-cache.js";
 import type { CodexAppServerClient } from "./client.js";
@@ -295,7 +295,7 @@ export function threadStartResult(threadId = "thread-1") {
       updatedAt: 1,
       status: { type: "idle" },
       path: null,
-      cwd: tempDir || "/tmp/openclaw-codex-test",
+      cwd: tempDir || "/tmp/marketingclaw-codex-test",
       cliVersion: "0.125.0",
       source: "unknown",
       agentNickname: null,
@@ -307,7 +307,7 @@ export function threadStartResult(threadId = "thread-1") {
     model: "gpt-5.4-codex",
     modelProvider: "openai",
     serviceTier: null,
-    cwd: tempDir || "/tmp/openclaw-codex-test",
+    cwd: tempDir || "/tmp/marketingclaw-codex-test",
     instructionSources: [],
     approvalPolicy: "never",
     approvalsReviewer: "user",
@@ -597,17 +597,19 @@ export function setupRunAttemptTestHooks(): void {
     clearMemoryPluginState();
     resetAgentEventsForTest();
     resetDiagnosticEventsForTest();
-    vi.stubEnv("OPENCLAW_TRAJECTORY", "0");
+    vi.stubEnv("MARKETINGCLAW_TRAJECTORY", "0");
     vi.stubEnv("CODEX_API_KEY", "");
     vi.stubEnv("OPENAI_API_KEY", "");
-    tempDir = await fs.mkdtemp(path.join(resolvePreferredOpenClawTmpDir(), "openclaw-codex-run-"));
+    tempDir = await fs.mkdtemp(
+      path.join(resolvePreferredMarketingClawTmpDir(), "marketingclaw-codex-run-"),
+    );
   });
 
   afterEach(async () => {
     await drainActiveAppServerAttemptsForTest();
     await closeCodexSandboxExecServersForTests();
     resetCodexAppServerClientFactoryForTest();
-    testing.resetOpenClawCodingToolsFactoryForTests();
+    testing.resetMarketingClawCodingToolsFactoryForTests();
     testing.resetEnsuredCodexWorkspaceDirsForTests();
     testing.clearPendingCodexNativeHookRelayUnregistersForTests();
     nativeHookRelayTesting.clearNativeHookRelaysForTests();

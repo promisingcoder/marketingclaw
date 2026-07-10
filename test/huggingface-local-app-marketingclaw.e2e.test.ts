@@ -1,12 +1,12 @@
 import fs from "node:fs/promises";
-// Hugging Face local-app CLI contract tests cover OpenClaw's snippet-facing commands.
+// Hugging Face local-app CLI contract tests cover MarketingClaw's snippet-facing commands.
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import type { AddressInfo } from "node:net";
 import { afterEach, describe, expect, it } from "vitest";
 import {
-  createOpenClawTestInstance,
-  type OpenClawTestInstance,
-} from "./helpers/openclaw-test-instance.js";
+  createMarketingClawTestInstance,
+  type MarketingClawTestInstance,
+} from "./helpers/marketingclaw-test-instance.js";
 
 type CapturedChatRequest = {
   path: string;
@@ -34,7 +34,7 @@ const HF_LOCAL_APP_CASES = [
   },
 ] as const;
 
-const instances: OpenClawTestInstance[] = [];
+const instances: MarketingClawTestInstance[] = [];
 const fakeServers: FakeOpenAiServer[] = [];
 
 afterEach(async () => {
@@ -42,17 +42,17 @@ afterEach(async () => {
   await Promise.allSettled(fakeServers.splice(0).map((server) => server.close()));
 });
 
-describe("Hugging Face OpenClaw local-app CLI contract", () => {
+describe("Hugging Face MarketingClaw local-app CLI contract", () => {
   it.each(HF_LOCAL_APP_CASES)(
     "runs onboard and local agent commands for $name",
     async ({ providerId, modelId }) => {
       const fakeServer = await startFakeOpenAiServer({ modelId });
       fakeServers.push(fakeServer);
-      const instance = await createOpenClawTestInstance({
+      const instance = await createMarketingClawTestInstance({
         name: `hf-local-app-${providerId}`,
         env: {
           CUSTOM_API_KEY: undefined,
-          OPENCLAW_TEST_FAST: "1",
+          MARKETINGCLAW_TEST_FAST: "1",
         },
       });
       instances.push(instance);
@@ -214,7 +214,7 @@ async function handleFakeOpenAiRequest(
   const providerId = modelId.startsWith("mlx-community/") ? "mlx-lm" : "llama-cpp";
   const created = Math.floor(Date.now() / 1000);
   writeSse(res, {
-    id: "chatcmpl-hf-openclaw-contract",
+    id: "chatcmpl-hf-marketingclaw-contract",
     object: "chat.completion.chunk",
     created,
     model: modelId,
@@ -227,7 +227,7 @@ async function handleFakeOpenAiRequest(
     ],
   });
   writeSse(res, {
-    id: "chatcmpl-hf-openclaw-contract",
+    id: "chatcmpl-hf-marketingclaw-contract",
     object: "chat.completion.chunk",
     created,
     model: modelId,

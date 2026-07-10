@@ -1,6 +1,6 @@
 // Base64 mime sniffing helpers infer media types from encoded payload bytes.
-import { canonicalizeBase64 } from "@openclaw/media-core/base64";
-import { detectMime } from "@openclaw/media-core/mime";
+import { canonicalizeBase64 } from "@marketingclaw/media-core/base64";
+import { detectMime } from "@marketingclaw/media-core/mime";
 
 const BASE64_SNIFF_PREFIX_CHARS = 256;
 

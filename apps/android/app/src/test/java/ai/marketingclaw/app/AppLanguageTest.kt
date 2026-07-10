@@ -1,4 +1,4 @@
-package ai.openclaw.app
+package ai.marketingclaw.app
 
 import androidx.core.os.LocaleListCompat
 import org.junit.Assert.assertEquals
@@ -105,7 +105,7 @@ class AppLanguageTest {
   @Test
   fun systemSubtitleReportsTheActualSystemLocale() {
     assertEquals("Follow Android · en-US", appLanguageRowSubtitle(AppLanguage.System, "en-US"))
-    assertEquals("OpenClaw translations · ja", appLanguageRowSubtitle(AppLanguage.Japanese, "en-US"))
+    assertEquals("MarketingClaw translations · ja", appLanguageRowSubtitle(AppLanguage.Japanese, "en-US"))
   }
 
   private companion object {

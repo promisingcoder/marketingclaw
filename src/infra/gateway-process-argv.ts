@@ -1,6 +1,6 @@
 // Parses gateway process command lines for process discovery.
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
-import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
+import { normalizeLowercaseStringOrEmpty } from "@marketingclaw/normalization-core/string-coerce";
+import { normalizeStringEntries } from "@marketingclaw/normalization-core/string-normalization";
 
 function normalizeProcArg(arg: string): string {
   return normalizeLowercaseStringOrEmpty(arg.replaceAll("\\", "/"));
@@ -13,7 +13,7 @@ export function parseProcCmdline(raw: string): string[] {
 export function isGatewayArgv(args: string[], opts?: { allowGatewayBinary?: boolean }): boolean {
   const normalized = args.map(normalizeProcArg);
   const exe = (normalized[0] ?? "").replace(/\.(bat|cmd|exe)$/i, "");
-  const isGatewayBinary = exe.endsWith("/openclaw-gateway") || exe === "openclaw-gateway";
+  const isGatewayBinary = exe.endsWith("/marketingclaw-gateway") || exe === "marketingclaw-gateway";
   if (!normalized.includes("gateway")) {
     return opts?.allowGatewayBinary === true && isGatewayBinary;
   }
@@ -21,7 +21,7 @@ export function isGatewayArgv(args: string[], opts?: { allowGatewayBinary?: bool
   const entryCandidates = [
     "dist/index.js",
     "dist/entry.js",
-    "openclaw.mjs",
+    "marketingclaw.mjs",
     "scripts/run-node.mjs",
     "src/entry.ts",
     "src/index.ts",
@@ -31,8 +31,8 @@ export function isGatewayArgv(args: string[], opts?: { allowGatewayBinary?: bool
   }
 
   return (
-    exe.endsWith("/openclaw") ||
-    exe === "openclaw" ||
+    exe.endsWith("/marketingclaw") ||
+    exe === "marketingclaw" ||
     (opts?.allowGatewayBinary === true && isGatewayBinary)
   );
 }

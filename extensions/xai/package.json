@@ -1,17 +1,17 @@
 {
-  "name": "@openclaw/xai-plugin",
+  "name": "@marketingclaw/xai-plugin",
   "version": "2026.6.11",
   "private": true,
-  "description": "OpenClaw xAI plugin",
+  "description": "MarketingClaw xAI plugin",
   "type": "module",
   "dependencies": {
     "typebox": "1.3.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
+    "@marketingclaw/plugin-sdk": "workspace:*",
     "ws": "8.21.0"
   },
-  "openclaw": {
+  "marketingclaw": {
     "extensions": [
       "./index.ts"
     ]

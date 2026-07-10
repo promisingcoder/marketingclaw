@@ -2,7 +2,7 @@
 import {
   createPluginRegistryFixture,
   registerTestPlugin,
-} from "openclaw/plugin-sdk/plugin-test-contracts";
+} from "marketingclaw/plugin-sdk/plugin-test-contracts";
 import { describe, expect, it } from "vitest";
 import { createPluginRecord } from "./status.test-helpers.js";
 

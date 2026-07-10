@@ -1,18 +1,18 @@
 import SwiftUI
 
 /// Host-provided voice-note recording state for the shared chat composer.
-public struct OpenClawChatVoiceNoteControl {
-    public var recorder: OpenClawVoiceNoteRecorder
+public struct MarketingClawChatVoiceNoteControl {
+    public var recorder: MarketingClawVoiceNoteRecorder
     public var isTalkActive: Bool
 
-    public init(recorder: OpenClawVoiceNoteRecorder, isTalkActive: Bool) {
+    public init(recorder: MarketingClawVoiceNoteRecorder, isTalkActive: Bool) {
         self.recorder = recorder
         self.isTalkActive = isTalkActive
     }
 }
 
-struct OpenClawVoiceNoteButton: View {
-    let control: OpenClawChatVoiceNoteControl
+struct MarketingClawVoiceNoteButton: View {
+    let control: MarketingClawChatVoiceNoteControl
     let compact: Bool
     let isComposerEnabled: Bool
     let isAttachmentInputEnabled: Bool
@@ -33,7 +33,7 @@ struct OpenClawVoiceNoteButton: View {
                     .controlSize(.mini)
             } else {
                 Image(systemName: "mic")
-                    .font(OpenClawChatTypography.display(size: 15, weight: .semibold, relativeTo: .subheadline))
+                    .font(MarketingClawChatTypography.display(size: 15, weight: .semibold, relativeTo: .subheadline))
             }
         }
         .help("Record Voice Note")
@@ -47,13 +47,13 @@ struct OpenClawVoiceNoteButton: View {
     }
 }
 
-struct OpenClawVoiceNoteRecordingRow: View {
-    let recorder: OpenClawVoiceNoteRecorder
+struct MarketingClawVoiceNoteRecordingRow: View {
+    let recorder: MarketingClawVoiceNoteRecorder
 
     var body: some View {
         HStack(spacing: 10) {
             Circle()
-                .fill(OpenClawChatTheme.danger)
+                .fill(MarketingClawChatTheme.danger)
                 .frame(width: 9, height: 9)
 
             // Live capture wave replaces a static "Recording" label; the level is
@@ -62,8 +62,8 @@ struct OpenClawVoiceNoteRecordingRow: View {
                 .frame(maxWidth: .infinity, minHeight: 26, maxHeight: 26)
                 .accessibilityLabel("Recording")
 
-            Text(openClawVoiceNoteDurationLabel(self.recorder.elapsedSeconds))
-                .font(OpenClawChatTypography.mono(size: 13, relativeTo: .footnote))
+            Text(marketingClawVoiceNoteDurationLabel(self.recorder.elapsedSeconds))
+                .font(MarketingClawChatTypography.mono(size: 13, relativeTo: .footnote))
                 .foregroundStyle(.secondary)
 
             Spacer(minLength: 8)
@@ -90,10 +90,10 @@ struct OpenClawVoiceNoteRecordingRow: View {
         .padding(.vertical, 10)
         .background(
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(OpenClawChatTheme.composerField)
+                .fill(MarketingClawChatTheme.composerField)
                 .overlay(
                     RoundedRectangle(cornerRadius: 14, style: .continuous)
-                        .strokeBorder(OpenClawChatTheme.composerBorder)))
+                        .strokeBorder(MarketingClawChatTheme.composerBorder)))
     }
 }
 

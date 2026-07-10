@@ -1,10 +1,10 @@
 // Sends APNs notifications through the configured relay endpoint.
 import { URL } from "node:url";
-import { resolveTimerTimeoutMs } from "@openclaw/normalization-core/number-coercion";
+import { resolveTimerTimeoutMs } from "@marketingclaw/normalization-core/number-coercion";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@marketingclaw/normalization-core/string-coerce";
 import type { GatewayConfig } from "../config/types.gateway.js";
 import {
   loadOrCreateProcessDeviceIdentity,
@@ -57,16 +57,17 @@ export type ApnsRelayRequestSender = (params: {
 }) => Promise<ApnsRelayPushResponse>;
 
 /** Hosted APNs relay origin used only when registrations prove they were minted there. */
-export const DEFAULT_APNS_RELAY_BASE_URL = "https://ios-push-relay.openclaw.ai";
-export const DEFAULT_APNS_SANDBOX_RELAY_BASE_URL = "https://ios-push-relay-sandbox.openclaw.ai";
+export const DEFAULT_APNS_RELAY_BASE_URL = "https://ios-push-relay.marketingclaw.ai";
+export const DEFAULT_APNS_SANDBOX_RELAY_BASE_URL =
+  "https://ios-push-relay-sandbox.marketingclaw.ai";
 const DEFAULT_APNS_RELAY_TIMEOUT_MS = 10_000;
 // Hard cap on the relay response body. The hosted relay reply is a tiny JSON status object;
 // without a cap a buggy/hostile/compromised relay could stream an unbounded body and exhaust
 // gateway memory (the existing AbortSignal.timeout only bounds connection latency, not body size).
 const APNS_RELAY_MAX_RESPONSE_BYTES = 16 * 1024 * 1024;
-const GATEWAY_DEVICE_ID_HEADER = "x-openclaw-gateway-device-id";
-const GATEWAY_SIGNATURE_HEADER = "x-openclaw-gateway-signature";
-const GATEWAY_SIGNED_AT_HEADER = "x-openclaw-gateway-signed-at-ms";
+const GATEWAY_DEVICE_ID_HEADER = "x-marketingclaw-gateway-device-id";
+const GATEWAY_SIGNATURE_HEADER = "x-marketingclaw-gateway-signature";
+const GATEWAY_SIGNED_AT_HEADER = "x-marketingclaw-gateway-signed-at-ms";
 
 function normalizeNonEmptyString(value: string | undefined): string | null {
   const trimmed = normalizeOptionalString(value) ?? "";
@@ -130,9 +131,9 @@ export function normalizeApnsRelayBaseUrl(
       throw new Error("host required");
     }
     // Plain HTTP is only for local relay development; production relay URLs must use TLS.
-    if (parsed.protocol === "http:" && !readAllowHttp(env.OPENCLAW_APNS_RELAY_ALLOW_HTTP)) {
+    if (parsed.protocol === "http:" && !readAllowHttp(env.MARKETINGCLAW_APNS_RELAY_ALLOW_HTTP)) {
       throw new Error(
-        "http relay URLs require OPENCLAW_APNS_RELAY_ALLOW_HTTP=true (development only)",
+        "http relay URLs require MARKETINGCLAW_APNS_RELAY_ALLOW_HTTP=true (development only)",
       );
     }
     if (parsed.protocol === "http:" && !isLoopbackRelayHostname(parsed.hostname)) {
@@ -157,7 +158,7 @@ function buildRelayGatewaySignaturePayload(params: {
 }): string {
   // Domain-separate relay send signatures from other gateway/device signatures.
   return [
-    "openclaw-relay-send-v1",
+    "marketingclaw-relay-send-v1",
     params.gatewayDeviceId.trim(),
     String(Math.trunc(params.signedAtMs)),
     params.bodyJson,
@@ -171,7 +172,7 @@ export function resolveApnsRelayConfigFromEnv(
   options: ApnsRelayConfigResolutionOptions = {},
 ): ApnsRelayConfigResolution {
   const configuredRelay = gatewayConfig?.push?.apns?.relay;
-  const envBaseUrl = normalizeNonEmptyString(env.OPENCLAW_APNS_RELAY_BASE_URL);
+  const envBaseUrl = normalizeNonEmptyString(env.MARKETINGCLAW_APNS_RELAY_BASE_URL);
   const configBaseUrl = normalizeNonEmptyString(configuredRelay?.baseUrl);
   const explicitBaseUrl = envBaseUrl ?? configBaseUrl;
   const normalizedRegistrationOrigin = options.registrationRelayOrigin
@@ -192,7 +193,7 @@ export function resolveApnsRelayConfigFromEnv(
         : undefined;
   const baseUrl = explicitBaseUrl ?? hostedRelayBaseUrl;
   const baseUrlSource = envBaseUrl
-    ? "OPENCLAW_APNS_RELAY_BASE_URL"
+    ? "MARKETINGCLAW_APNS_RELAY_BASE_URL"
     : configBaseUrl
       ? "gateway.push.apns.relay.baseUrl"
       : "default APNs relay base URL";
@@ -200,7 +201,7 @@ export function resolveApnsRelayConfigFromEnv(
     return {
       ok: false,
       error:
-        "APNs relay config missing: set gateway.push.apns.relay.baseUrl or OPENCLAW_APNS_RELAY_BASE_URL for relay registrations without the hosted relay origin",
+        "APNs relay config missing: set gateway.push.apns.relay.baseUrl or MARKETINGCLAW_APNS_RELAY_BASE_URL for relay registrations without the hosted relay origin",
     };
   }
 
@@ -225,7 +226,7 @@ export function resolveApnsRelayConfigFromEnv(
     value: {
       baseUrl: normalizedBaseUrl.value,
       timeoutMs: normalizeTimeoutMs(
-        env.OPENCLAW_APNS_RELAY_TIMEOUT_MS ?? configuredRelay?.timeoutMs,
+        env.MARKETINGCLAW_APNS_RELAY_TIMEOUT_MS ?? configuredRelay?.timeoutMs,
       ),
     },
   };

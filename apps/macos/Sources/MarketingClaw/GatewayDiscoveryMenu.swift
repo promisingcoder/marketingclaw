@@ -1,4 +1,4 @@
-import OpenClawDiscovery
+import MarketingClawDiscovery
 import SwiftUI
 
 struct GatewayDiscoveryInlineList: View {
@@ -50,7 +50,7 @@ struct GatewayDiscoveryInlineList: View {
                                 Spacer(minLength: 0)
                                 SelectionStateIndicator(selected: selected)
                             }
-                            .openClawSelectableRowChrome(
+                            .marketingClawSelectableRowChrome(
                                 selected: selected,
                                 hovered: self.hoveredGatewayID == gateway.id)
                             .contentShape(Rectangle())
@@ -112,6 +112,6 @@ struct GatewayDiscoveryMenu: View {
         } label: {
             Image(systemName: "dot.radiowaves.left.and.right")
         }
-        .help("Discover OpenClaw gateways on your LAN")
+        .help("Discover MarketingClaw gateways on your LAN")
     }
 }

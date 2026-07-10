@@ -7,9 +7,9 @@ import { promisify } from "node:util";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@marketingclaw/normalization-core/string-coerce";
 import { note } from "../../packages/terminal-core/src/note.js";
-import { replaceConfigFile, type OpenClawConfig } from "../config/config.js";
+import { replaceConfigFile, type MarketingClawConfig } from "../config/config.js";
 import { resolveGatewayPort, resolveIsNixMode } from "../config/paths.js";
 import { resolveSecretInputRef } from "../config/types.secrets.js";
 import {
@@ -17,7 +17,7 @@ import {
   renderGatewayServiceCleanupHints,
   type ExtraGatewayService,
 } from "../daemon/inspect.js";
-import { OPENCLAW_WRAPPER_ENV_KEY } from "../daemon/program-args.js";
+import { MARKETINGCLAW_WRAPPER_ENV_KEY } from "../daemon/program-args.js";
 import { renderSystemNodeWarning, resolveSystemNodeInfo } from "../daemon/runtime-paths.js";
 import { readWindowsStartupFallbackRuntimeForUpdate } from "../daemon/schtasks.js";
 import {
@@ -139,24 +139,24 @@ function findGatewayEntrypoint(programArguments?: string[]): string | null {
 function buildGatewayServiceRepairEnv(
   command: GatewayServiceCommandConfig | null,
 ): NodeJS.ProcessEnv {
-  const wrapperPath = command?.environment?.[OPENCLAW_WRAPPER_ENV_KEY]?.trim();
-  if (!wrapperPath || Object.hasOwn(process.env, OPENCLAW_WRAPPER_ENV_KEY)) {
+  const wrapperPath = command?.environment?.[MARKETINGCLAW_WRAPPER_ENV_KEY]?.trim();
+  if (!wrapperPath || Object.hasOwn(process.env, MARKETINGCLAW_WRAPPER_ENV_KEY)) {
     return process.env;
   }
   return {
     ...process.env,
-    [OPENCLAW_WRAPPER_ENV_KEY]: wrapperPath,
+    [MARKETINGCLAW_WRAPPER_ENV_KEY]: wrapperPath,
   };
 }
 
 function resolveGatewayServiceWrapperPath(
   command: GatewayServiceCommandConfig | null,
 ): string | null {
-  return normalizeOptionalString(command?.environment?.[OPENCLAW_WRAPPER_ENV_KEY]) ?? null;
+  return normalizeOptionalString(command?.environment?.[MARKETINGCLAW_WRAPPER_ENV_KEY]) ?? null;
 }
 
 async function buildExpectedGatewayServicePlan(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   command: GatewayServiceCommandConfig;
   serviceInstallEnv: NodeJS.ProcessEnv;
   port: number;
@@ -176,7 +176,7 @@ async function buildExpectedGatewayServicePlan(params: {
 }
 
 async function buildGatewayServiceAuditInputs(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   command: GatewayServiceCommandConfig;
   serviceInstallEnv: NodeJS.ProcessEnv;
 }) {
@@ -227,7 +227,7 @@ function resolveSystemdScopeFromServicePath(sourcePath: string | undefined): Sys
 
 function resolveSystemdUnitNameFromServicePath(sourcePath: string | undefined): string {
   const base = sourcePath ? path.posix.basename(sourcePath.replaceAll("\\", "/")) : "";
-  return base.endsWith(".service") ? base : "openclaw-gateway.service";
+  return base.endsWith(".service") ? base : "marketingclaw-gateway.service";
 }
 
 function shouldDeferUpdateModeSystemdServiceRepair(params: {
@@ -318,7 +318,7 @@ export function extraGatewayServiceToHealthFinding(service: ExtraGatewayService)
     target: service.label,
     fixHint:
       service.legacy === true
-        ? "Run openclaw doctor --fix to remove legacy gateway services."
+        ? "Run marketingclaw doctor --fix to remove legacy gateway services."
         : "Run a single gateway per machine unless this extra gateway is intentional.",
   };
 }
@@ -465,12 +465,12 @@ async function cleanupLegacyLinuxUserServices(
  * stay staged except for running Windows services, which must be activated to replace a fallback.
  */
 export async function maybeRepairGatewayServiceConfig(
-  cfg: OpenClawConfig,
+  cfg: MarketingClawConfig,
   mode: "local" | "remote",
   runtime: RuntimeEnv,
   prompter: DoctorPrompter,
   options: GatewayServiceConfigRepairOptions = {},
-): Promise<OpenClawConfig> {
+): Promise<MarketingClawConfig> {
   if (resolveIsNixMode(process.env)) {
     note("Nix mode detected; skip service updates.", "Gateway");
     return cfg;
@@ -494,13 +494,16 @@ export async function maybeRepairGatewayServiceConfig(
   const serviceInstallEnv = buildGatewayServiceRepairEnv(command);
   const serviceWrapperPath = resolveGatewayServiceWrapperPath(command);
   if (serviceWrapperPath) {
-    note(`Gateway service invokes ${OPENCLAW_WRAPPER_ENV_KEY}: ${serviceWrapperPath}`, "Gateway");
+    note(
+      `Gateway service invokes ${MARKETINGCLAW_WRAPPER_ENV_KEY}: ${serviceWrapperPath}`,
+      "Gateway",
+    );
   }
   const serviceLayout = await summarizeGatewayServiceLayout(command);
   const sourceCheckoutWarning = serviceLayout?.entrypointSourceCheckout
     ? [
         `Gateway service entrypoint resolves to a source checkout: ${serviceLayout.packageRootReal ?? serviceLayout.packageRoot ?? serviceLayout.entrypointReal ?? serviceLayout.entrypoint}.`,
-        "Run `openclaw doctor --fix` from the intended package install, or reinstall the gateway service with `openclaw gateway install --force`.",
+        "Run `marketingclaw doctor --fix` from the intended package install, or reinstall the gateway service with `marketingclaw gateway install --force`.",
       ].join("\n")
     : null;
 
@@ -539,7 +542,7 @@ export async function maybeRepairGatewayServiceConfig(
     audit.issues.push({
       code: SERVICE_AUDIT_CODES.gatewayTokenMismatch,
       message:
-        "Gateway service OPENCLAW_GATEWAY_TOKEN should be unset when gateway.auth.token is SecretRef-managed",
+        "Gateway service MARKETINGCLAW_GATEWAY_TOKEN should be unset when gateway.auth.token is SecretRef-managed",
       detail: "service token is stale",
       level: "recommended",
     });
@@ -646,7 +649,7 @@ export async function maybeRepairGatewayServiceConfig(
 
   if (serviceRewriteBlocked) {
     note(
-      "Gateway service is running; leaving supervisor metadata unchanged. Stop the service first or use `openclaw gateway install --force` when you want to replace the active launcher.",
+      "Gateway service is running; leaving supervisor metadata unchanged. Stop the service first or use `marketingclaw gateway install --force` when you want to replace the active launcher.",
       "Gateway service config",
     );
     return cfg;
@@ -667,7 +670,7 @@ export async function maybeRepairGatewayServiceConfig(
     })
   ) {
     note(
-      "Update-mode doctor detected gateway service drift but left the live systemd unit unchanged. Review the service file and run `openclaw gateway install --force` when you want OpenClaw to replace operator-owned systemd directives.",
+      "Update-mode doctor detected gateway service drift but left the live systemd unit unchanged. Review the service file and run `marketingclaw gateway install --force` when you want MarketingClaw to replace operator-owned systemd directives.",
       "Gateway service config",
     );
     return cfg;
@@ -694,7 +697,7 @@ export async function maybeRepairGatewayServiceConfig(
   if (!repair) {
     if (!emittedSourceCheckoutWarning) {
       note(
-        "Run `openclaw gateway install --force` when you want to replace the gateway service definition.",
+        "Run `marketingclaw gateway install --force` when you want to replace the gateway service definition.",
         "Gateway service config",
       );
     }
@@ -714,12 +717,12 @@ export async function maybeRepairGatewayServiceConfig(
     ...serviceInstallEnv,
     ...command.environment,
   };
-  const installedWindowsTaskName = command.environment?.OPENCLAW_WINDOWS_TASK_NAME?.trim();
+  const installedWindowsTaskName = command.environment?.MARKETINGCLAW_WINDOWS_TASK_NAME?.trim();
   const serviceRepairEnv =
     updateRepairWillRewriteWindowsTask && installedWindowsTaskName
       ? {
           ...serviceInstallEnv,
-          OPENCLAW_WINDOWS_TASK_NAME: installedWindowsTaskName,
+          MARKETINGCLAW_WINDOWS_TASK_NAME: installedWindowsTaskName,
         }
       : serviceInstallEnv;
   const updateRepairCanActivateGateway =
@@ -768,7 +771,7 @@ export async function maybeRepairGatewayServiceConfig(
       );
       return cfg;
     }
-    const nextCfg: OpenClawConfig = {
+    const nextCfg: MarketingClawConfig = {
       ...cfg,
       gateway: {
         ...cfg.gateway,
@@ -840,7 +843,7 @@ export async function maybeRepairGatewayServiceConfig(
       if (installedWindowsTaskName) {
         // Scheduled Task identity is caller-owned; a canonical rebuilt plan must
         // not redirect restart/cleanup to the default task after profile repair.
-        restartEnv.OPENCLAW_WINDOWS_TASK_NAME = installedWindowsTaskName;
+        restartEnv.MARKETINGCLAW_WINDOWS_TASK_NAME = installedWindowsTaskName;
       }
       await service.restart({
         env: restartEnv,
@@ -913,7 +916,7 @@ export async function maybeScanExtraGatewayServices(
         note(failed.map((line) => `- ${line}`).join("\n"), "Legacy gateway cleanup skipped");
       }
       if (removed.length > 0) {
-        runtime.log("Legacy gateway services removed. Installing OpenClaw gateway next.");
+        runtime.log("Legacy gateway services removed. Installing MarketingClaw gateway next.");
       }
     }
   }

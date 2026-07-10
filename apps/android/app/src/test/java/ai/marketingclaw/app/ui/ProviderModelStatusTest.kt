@@ -1,7 +1,7 @@
-package ai.openclaw.app.ui
+package ai.marketingclaw.app.ui
 
-import ai.openclaw.app.GatewayModelProviderSummary
-import ai.openclaw.app.GatewayModelSummary
+import ai.marketingclaw.app.GatewayModelProviderSummary
+import ai.marketingclaw.app.GatewayModelSummary
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

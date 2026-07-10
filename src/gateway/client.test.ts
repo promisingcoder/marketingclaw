@@ -266,7 +266,7 @@ function expectSecurityConnectError(
 ) {
   const error = firstMockArg(onConnectError, "connect error") as Error;
   expect(error.message).toContain("SECURITY ERROR");
-  expect(error.message).toContain("openclaw doctor --fix");
+  expect(error.message).toContain("marketingclaw doctor --fix");
   if (params?.expectTailscaleHint) {
     expect(error.message).toContain("Tailscale Serve/Funnel");
   }
@@ -278,17 +278,17 @@ beforeAll(async () => {
 
 describe("GatewayClient security checks", () => {
   const envSnapshot = captureEnv([
-    "OPENCLAW_ALLOW_INSECURE_PRIVATE_WS",
-    "OPENCLAW_PROXY_ACTIVE",
-    "OPENCLAW_PROXY_LOOPBACK_MODE",
+    "MARKETINGCLAW_ALLOW_INSECURE_PRIVATE_WS",
+    "MARKETINGCLAW_PROXY_ACTIVE",
+    "MARKETINGCLAW_PROXY_LOOPBACK_MODE",
     "HTTP_PROXY",
   ]);
 
   beforeEach(async () => {
     envSnapshot.restore();
-    delete process.env.OPENCLAW_ALLOW_INSECURE_PRIVATE_WS;
-    delete process.env.OPENCLAW_PROXY_ACTIVE;
-    delete process.env.OPENCLAW_PROXY_LOOPBACK_MODE;
+    delete process.env.MARKETINGCLAW_ALLOW_INSECURE_PRIVATE_WS;
+    delete process.env.MARKETINGCLAW_PROXY_ACTIVE;
+    delete process.env.MARKETINGCLAW_PROXY_LOOPBACK_MODE;
     delete process.env.HTTP_PROXY;
     const { resetProxyLifecycleForTests } = await import("../infra/net/proxy/proxy-lifecycle.js");
     resetProxyLifecycleForTests();
@@ -302,9 +302,9 @@ describe("GatewayClient security checks", () => {
 
   afterEach(async () => {
     envSnapshot.restore();
-    delete process.env.OPENCLAW_ALLOW_INSECURE_PRIVATE_WS;
-    delete process.env.OPENCLAW_PROXY_ACTIVE;
-    delete process.env.OPENCLAW_PROXY_LOOPBACK_MODE;
+    delete process.env.MARKETINGCLAW_ALLOW_INSECURE_PRIVATE_WS;
+    delete process.env.MARKETINGCLAW_PROXY_ACTIVE;
+    delete process.env.MARKETINGCLAW_PROXY_LOOPBACK_MODE;
     delete process.env.HTTP_PROXY;
     const { resetProxyLifecycleForTests } = await import("../infra/net/proxy/proxy-lifecycle.js");
     resetProxyLifecycleForTests();
@@ -383,8 +383,8 @@ describe("GatewayClient security checks", () => {
   });
 
   it("bootstraps inherited managed proxy routing before proxy-mode loopback WebSocket creation", () => {
-    process.env.OPENCLAW_PROXY_ACTIVE = "1";
-    process.env.OPENCLAW_PROXY_LOOPBACK_MODE = "proxy";
+    process.env.MARKETINGCLAW_PROXY_ACTIVE = "1";
+    process.env.MARKETINGCLAW_PROXY_LOOPBACK_MODE = "proxy";
     process.env.HTTP_PROXY = "http://127.0.0.1:3128";
     const onConnectError = vi.fn();
     const client = new GatewayClient({
@@ -409,8 +409,8 @@ describe("GatewayClient security checks", () => {
   });
 
   it("keeps gateway-only loopback bypass active only during WebSocket construction", () => {
-    process.env.OPENCLAW_PROXY_ACTIVE = "1";
-    process.env.OPENCLAW_PROXY_LOOPBACK_MODE = "gateway-only";
+    process.env.MARKETINGCLAW_PROXY_ACTIVE = "1";
+    process.env.MARKETINGCLAW_PROXY_LOOPBACK_MODE = "gateway-only";
     process.env.HTTP_PROXY = "http://127.0.0.1:3128";
     const onConnectError = vi.fn();
     const bypassActiveDuringConstruction: boolean[] = [];
@@ -440,8 +440,8 @@ describe("GatewayClient security checks", () => {
   });
 
   it("clears gateway-only loopback bypass when WebSocket connection errors before opening", () => {
-    process.env.OPENCLAW_PROXY_ACTIVE = "1";
-    process.env.OPENCLAW_PROXY_LOOPBACK_MODE = "gateway-only";
+    process.env.MARKETINGCLAW_PROXY_ACTIVE = "1";
+    process.env.MARKETINGCLAW_PROXY_LOOPBACK_MODE = "gateway-only";
     process.env.HTTP_PROXY = "http://127.0.0.1:3128";
     const onConnectError = vi.fn();
     const client = new GatewayClient({
@@ -553,11 +553,11 @@ describe("GatewayClient security checks", () => {
     client.stop();
   });
 
-  it("allows ws:// hostnames with OPENCLAW_ALLOW_INSECURE_PRIVATE_WS=1", () => {
-    process.env.OPENCLAW_ALLOW_INSECURE_PRIVATE_WS = "1";
+  it("allows ws:// hostnames with MARKETINGCLAW_ALLOW_INSECURE_PRIVATE_WS=1", () => {
+    process.env.MARKETINGCLAW_ALLOW_INSECURE_PRIVATE_WS = "1";
     const onConnectError = vi.fn();
     const client = new GatewayClient({
-      url: "ws://openclaw-gateway.ai:18789",
+      url: "ws://marketingclaw-gateway.ai:18789",
       onConnectError,
     });
 
@@ -705,7 +705,7 @@ describe("GatewayClient close handling", () => {
 
   it("clears stale token on device token mismatch close", () => {
     const onClose = vi.fn();
-    const env = { OPENCLAW_HOME: "/tmp/custom-openclaw-home" };
+    const env = { MARKETINGCLAW_HOME: "/tmp/custom-marketingclaw-home" };
     const client = createClientWithIdentity("dev-1", onClose, { env });
 
     client.start();
@@ -1717,7 +1717,7 @@ describe("GatewayClient connect auth payload", () => {
     });
     const env = {
       ...process.env,
-      OPENCLAW_STATE_DIR: "/tmp/openclaw-client-service-state",
+      MARKETINGCLAW_STATE_DIR: "/tmp/marketingclaw-client-service-state",
     } as NodeJS.ProcessEnv;
     const client = new GatewayClient({
       url: "ws://127.0.0.1:18789",
@@ -2037,7 +2037,7 @@ describe("GatewayClient connect auth payload", () => {
       token: "stored-device-token",
       scopes: ["operator.read"],
     });
-    const env = { OPENCLAW_HOME: "/tmp/custom-openclaw-home" };
+    const env = { MARKETINGCLAW_HOME: "/tmp/custom-marketingclaw-home" };
     const client = new GatewayClient({
       url: "ws://127.0.0.1:18789",
       env,

@@ -177,7 +177,7 @@ vi.mock("../gateway/call.js", () => ({
 
 vi.mock("../utils.js", async (importOriginal) => ({
   ...(await importOriginal<typeof import("../utils.js")>()),
-  CONFIG_DIR: "/tmp/openclaw-config",
+  CONFIG_DIR: "/tmp/marketingclaw-config",
 }));
 
 vi.mock("../config/config.js", () => ({
@@ -315,7 +315,7 @@ describe("skills cli commands", () => {
       decision: "pass",
       reasons: [],
       skill: { slug: "agentreceipt", displayName: "Agent Receipt" },
-      publisher: { handle: "openclaw" },
+      publisher: { handle: "marketingclaw" },
       version: { version: "1.2.3" },
       card: {
         available: true,
@@ -445,8 +445,8 @@ describe("skills cli commands", () => {
 
     expect(help).toContain("<skill-ref>");
     expect(help).toContain("@owner/slug");
-    expect(help).toContain("openclaw skills install @owner/weather");
-    expect(help).not.toContain("openclaw skills install weather");
+    expect(help).toContain("marketingclaw skills install @owner/weather");
+    expect(help).not.toContain("marketingclaw skills install weather");
   });
 
   it("documents owner-qualified ClawHub verify refs in command help", () => {
@@ -463,8 +463,8 @@ describe("skills cli commands", () => {
 
     expect(help).toContain("<skill-ref>");
     expect(help).toContain("@owner/slug");
-    expect(help).toContain("openclaw skills verify @owner/weather");
-    expect(help).not.toContain("openclaw skills verify weather");
+    expect(help).toContain("marketingclaw skills verify @owner/weather");
+    expect(help).not.toContain("marketingclaw skills verify weather");
   });
 
   it("installs a skill from a git source into the active workspace", async () => {
@@ -625,7 +625,7 @@ describe("skills cli commands", () => {
       ok: true,
       slug: "calendar",
       version: "1.2.3",
-      targetDir: "/tmp/openclaw-config/skills/calendar",
+      targetDir: "/tmp/marketingclaw-config/skills/calendar",
     });
 
     await runCommand(["skills", "install", "calendar", "--global"]);
@@ -635,7 +635,7 @@ describe("skills cli commands", () => {
     expect(resolveAgentWorkspaceDirMock).not.toHaveBeenCalled();
     expect(installSkillFromClawHubMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        workspaceDir: "/tmp/openclaw-config",
+        workspaceDir: "/tmp/marketingclaw-config",
       }),
     );
   });
@@ -906,7 +906,7 @@ describe("skills cli commands", () => {
         previousVersion: "1.2.2",
         version: "1.2.3",
         changed: true,
-        targetDir: "/tmp/openclaw-config/skills/calendar",
+        targetDir: "/tmp/marketingclaw-config/skills/calendar",
       },
     ]);
 
@@ -915,9 +915,9 @@ describe("skills cli commands", () => {
     expect(resolveAgentIdByWorkspacePathMock).not.toHaveBeenCalled();
     expect(resolveDefaultAgentIdMock).not.toHaveBeenCalled();
     expect(resolveAgentWorkspaceDirMock).not.toHaveBeenCalled();
-    expect(readTrackedClawHubSkillSlugsMock).toHaveBeenCalledWith("/tmp/openclaw-config");
+    expect(readTrackedClawHubSkillSlugsMock).toHaveBeenCalledWith("/tmp/marketingclaw-config");
     expect(updateSkillsFromClawHubMock).toHaveBeenCalledWith({
-      workspaceDir: "/tmp/openclaw-config",
+      workspaceDir: "/tmp/marketingclaw-config",
       slug: undefined,
       logger: expect.any(Object),
       config: {},
@@ -933,7 +933,7 @@ describe("skills cli commands", () => {
         previousVersion: "1.2.2",
         version: "1.2.3",
         changed: true,
-        targetDir: "/tmp/openclaw-config/skills/calendar",
+        targetDir: "/tmp/marketingclaw-config/skills/calendar",
       },
     ]);
 
@@ -942,9 +942,9 @@ describe("skills cli commands", () => {
     expect(resolveAgentIdByWorkspacePathMock).not.toHaveBeenCalled();
     expect(resolveDefaultAgentIdMock).not.toHaveBeenCalled();
     expect(resolveAgentWorkspaceDirMock).not.toHaveBeenCalled();
-    expect(readTrackedClawHubSkillSlugsMock).toHaveBeenCalledWith("/tmp/openclaw-config");
+    expect(readTrackedClawHubSkillSlugsMock).toHaveBeenCalledWith("/tmp/marketingclaw-config");
     expect(updateSkillsFromClawHubMock).toHaveBeenCalledWith({
-      workspaceDir: "/tmp/openclaw-config",
+      workspaceDir: "/tmp/marketingclaw-config",
       slug: "calendar",
       logger: expect.any(Object),
       config: {},
@@ -1006,7 +1006,7 @@ describe("skills cli commands", () => {
     expect(payload.schema).toBe("clawhub.skill.verify.v1");
     expect(payload.ok).toBe(true);
     expect(payload.signature).toEqual({ status: "unsigned" });
-    expect(payload.openclaw).toEqual({
+    expect(payload.marketingclaw).toEqual({
       resolution: {
         source: "installed",
         selector: "installed-version",
@@ -1090,7 +1090,7 @@ describe("skills cli commands", () => {
     expect(resolveDefaultAgentIdMock).not.toHaveBeenCalled();
     expect(resolveAgentWorkspaceDirMock).not.toHaveBeenCalled();
     expect(resolveClawHubSkillVerificationTargetMock).toHaveBeenCalledWith({
-      workspaceDir: "/tmp/openclaw-config",
+      workspaceDir: "/tmp/marketingclaw-config",
       slug: "agentreceipt",
       version: "2.0.0",
       tag: undefined,
@@ -1100,7 +1100,7 @@ describe("skills cli commands", () => {
   it("includes verified ClawHub source URLs in verify JSON output", async () => {
     const provenance = {
       source: "server-resolved-github-import",
-      repo: "openclaw/skills",
+      repo: "marketingclaw/skills",
       commit: "0123456789abcdef0123456789abcdef01234567",
       path: "agentreceipt",
     };
@@ -1113,7 +1113,7 @@ describe("skills cli commands", () => {
       decision: "pass",
       reasons: [],
       skill: { slug: "agentreceipt", displayName: "Agent Receipt" },
-      publisher: { handle: "openclaw" },
+      publisher: { handle: "marketingclaw" },
       version: { version: "1.2.3" },
       card: {
         available: true,
@@ -1132,9 +1132,9 @@ describe("skills cli commands", () => {
 
     expect(readVerifiedClawHubSkillSourceUrlMock).toHaveBeenCalledWith(provenance);
     const payload = JSON.parse(runtimeStdout.at(-1) ?? "{}") as {
-      openclaw?: { verifiedSourceUrl?: string };
+      marketingclaw?: { verifiedSourceUrl?: string };
     };
-    expect(payload.openclaw?.verifiedSourceUrl).toBe(verifiedSourceUrl);
+    expect(payload.marketingclaw?.verifiedSourceUrl).toBe(verifiedSourceUrl);
     expect(defaultRuntime.exit).not.toHaveBeenCalled();
   });
 
@@ -1145,7 +1145,7 @@ describe("skills cli commands", () => {
       decision: "pass",
       reasons: [],
       skill: { slug: "agentreceipt", displayName: "Agent Receipt" },
-      publisher: { handle: "openclaw" },
+      publisher: { handle: "marketingclaw" },
       version: { version: "1.2.3" },
       card: {
         available: true,
@@ -1464,6 +1464,6 @@ describe("skills cli commands", () => {
     expect(defaultRuntime.log).not.toHaveBeenCalled();
     expect(runtimeErrors).toStrictEqual([]);
     expect(runtimeStdout.at(-1)).toContain("calendar");
-    expect(runtimeStdout.at(-1)).toContain("openclaw skills search");
+    expect(runtimeStdout.at(-1)).toContain("marketingclaw skills search");
   });
 });

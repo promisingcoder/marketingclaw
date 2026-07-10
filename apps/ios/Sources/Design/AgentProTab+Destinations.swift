@@ -1,5 +1,5 @@
-import OpenClawKit
-import OpenClawProtocol
+import MarketingClawKit
+import MarketingClawProtocol
 import SwiftUI
 
 extension AgentProTab {
@@ -48,11 +48,11 @@ extension AgentProTab {
         .refreshable {
             await self.refreshOverview(force: true)
         }
-        .font(OpenClawType.body)
+        .font(MarketingClawType.body)
         .toolbar {
             if let headerLeadingAction {
                 ToolbarItem(placement: .topBarLeading) {
-                    OpenClawSidebarHeaderLeadingSlot(action: headerLeadingAction)
+                    MarketingClawSidebarHeaderLeadingSlot(action: headerLeadingAction)
                 }
             }
             ToolbarItemGroup(placement: .topBarTrailing) {
@@ -64,7 +64,7 @@ extension AgentProTab {
 
     var skillsDestination: some View {
         ZStack {
-            OpenClawProBackground()
+            MarketingClawProBackground()
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
                     self.detailSummaryCard(
@@ -72,19 +72,19 @@ extension AgentProTab {
                         title: "Skills",
                         value: self.skillsValue,
                         detail: self.skillsDetail,
-                        color: self.gatewayConnected ? OpenClawBrand.accent : .secondary)
+                        color: self.gatewayConnected ? MarketingClawBrand.accent : .secondary)
                     self.skillsPolicyControls
                     self.skillsFilterField
                     self.clawHubSearchCard
                     self.skillsList
                 }
                 .padding(.vertical, 18)
-                .font(OpenClawType.body)
+                .font(MarketingClawType.body)
             }
             .refreshable {
                 await self.refreshOverview(force: true)
             }
-            .safeAreaPadding(.bottom, OpenClawProMetric.bottomScrollInset)
+            .safeAreaPadding(.bottom, MarketingClawProMetric.bottomScrollInset)
         }
         .navigationTitle("Skills")
         .navigationBarTitleDisplayMode(.inline)
@@ -106,7 +106,7 @@ extension AgentProTab {
 
     var cronDestination: some View {
         ZStack {
-            OpenClawProBackground()
+            MarketingClawProBackground()
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
                     self.directHeader(
@@ -123,12 +123,12 @@ extension AgentProTab {
                     self.cronJobsList(limit: nil)
                 }
                 .padding(.vertical, 18)
-                .font(OpenClawType.body)
+                .font(MarketingClawType.body)
             }
             .refreshable {
                 await self.refreshOverview(force: true)
             }
-            .safeAreaPadding(.bottom, OpenClawProMetric.bottomScrollInset)
+            .safeAreaPadding(.bottom, MarketingClawProMetric.bottomScrollInset)
         }
         .navigationTitle("Cron Jobs")
         .navigationBarTitleDisplayMode(.inline)
@@ -136,7 +136,7 @@ extension AgentProTab {
 
     var usageDestination: some View {
         ZStack {
-            OpenClawProBackground()
+            MarketingClawProBackground()
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
                     self.directHeader(
@@ -148,17 +148,17 @@ extension AgentProTab {
                         title: "Usage",
                         value: self.usageValue,
                         detail: self.usageDetail,
-                        color: self.gatewayConnected ? OpenClawBrand.accent : .secondary)
+                        color: self.gatewayConnected ? MarketingClawBrand.accent : .secondary)
                     self.usageTotalsCard
                     self.usageDailyList
                 }
                 .padding(.vertical, 18)
-                .font(OpenClawType.body)
+                .font(MarketingClawType.body)
             }
             .refreshable {
                 await self.refreshOverview(force: true)
             }
-            .safeAreaPadding(.bottom, OpenClawProMetric.bottomScrollInset)
+            .safeAreaPadding(.bottom, MarketingClawProMetric.bottomScrollInset)
         }
         .navigationTitle("Usage")
         .navigationBarTitleDisplayMode(.inline)
@@ -181,21 +181,21 @@ extension AgentProTab {
     @ViewBuilder
     func directHeader(for route: AgentRoute, title: String, subtitle: String) -> some View {
         if let headerLeadingAction = self.directHeaderLeadingAction(for: route) {
-            OpenClawAdaptiveHeaderRow(
+            MarketingClawAdaptiveHeaderRow(
                 title: title,
                 subtitle: subtitle,
-                titleFont: OpenClawType.title3SemiBold,
-                subtitleFont: OpenClawType.subheadMedium)
+                titleFont: MarketingClawType.title3SemiBold,
+                subtitleFont: MarketingClawType.subheadMedium)
             {
-                OpenClawSidebarHeaderLeadingSlot(action: headerLeadingAction)
+                MarketingClawSidebarHeaderLeadingSlot(action: headerLeadingAction)
             } accessory: {
                 EmptyView()
             }
-            .padding(.horizontal, OpenClawProMetric.pagePadding)
+            .padding(.horizontal, MarketingClawProMetric.pagePadding)
         }
     }
 
-    func directHeaderLeadingAction(for route: AgentRoute) -> OpenClawSidebarHeaderAction? {
+    func directHeaderLeadingAction(for route: AgentRoute) -> MarketingClawSidebarHeaderAction? {
         self.directRoute == route ? self.headerLeadingAction : nil
     }
 
@@ -211,15 +211,15 @@ extension AgentProTab {
                 ProIconBadge(systemName: icon, color: color)
                 VStack(alignment: .leading, spacing: 3) {
                     Text(title)
-                        .font(OpenClawType.headline)
+                        .font(MarketingClawType.headline)
                     Text(detail)
-                        .font(OpenClawType.caption)
+                        .font(MarketingClawType.caption)
                         .foregroundStyle(.secondary)
                 }
                 Spacer(minLength: 8)
                 ProValuePill(value: value, color: color)
             }
         }
-        .padding(.horizontal, OpenClawProMetric.pagePadding)
+        .padding(.horizontal, MarketingClawProMetric.pagePadding)
     }
 }

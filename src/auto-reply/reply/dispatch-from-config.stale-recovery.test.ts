@@ -1,5 +1,5 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import type { ReplyPayload } from "../types.js";
 import {
   createDispatcher,
@@ -40,7 +40,7 @@ function createVisibleDispatchParams(replyResolver: () => Promise<ReplyPayload>)
         stuckSessionWarnMs: 1_000,
         stuckSessionAbortMs: 1_000,
       },
-    } as OpenClawConfig,
+    } as MarketingClawConfig,
     dispatcher: createDispatcher(),
     replyResolver,
   };

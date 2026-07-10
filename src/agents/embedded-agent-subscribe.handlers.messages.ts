@@ -2,10 +2,10 @@
  * Handles embedded-agent assistant message events, block replies, reasoning
  * streams, reply directives, and pending tool media attachment handoff.
  */
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
-import { resolveSendableOutboundReplyParts } from "openclaw/plugin-sdk/reply-payload";
+import { normalizeOptionalString } from "@marketingclaw/normalization-core/string-coerce";
+import { uniqueStrings } from "@marketingclaw/normalization-core/string-normalization";
+import { truncateUtf16Safe } from "@marketingclaw/normalization-core/utf16-slice";
+import { resolveSendableOutboundReplyParts } from "marketingclaw/plugin-sdk/reply-payload";
 import { createInlineCodeState } from "../../packages/markdown-core/src/code-spans.js";
 import {
   parseReplyDirectives,
@@ -55,13 +55,15 @@ function shouldSuppressAssistantVisibleOutput(message: AgentMessage | undefined)
   return resolveAssistantMessagePhase(message) === "commentary";
 }
 
-function isTranscriptOnlyOpenClawAssistantMessage(message: AgentMessage | undefined): boolean {
+function isTranscriptOnlyMarketingClawAssistantMessage(message: AgentMessage | undefined): boolean {
   if (!message || message.role !== "assistant") {
     return false;
   }
   const provider = normalizeOptionalString(message.provider) ?? "";
   const model = normalizeOptionalString(message.model) ?? "";
-  return provider === "openclaw" && (model === "delivery-mirror" || model === "gateway-injected");
+  return (
+    provider === "marketingclaw" && (model === "delivery-mirror" || model === "gateway-injected")
+  );
 }
 
 function isOpenAiResponsesAssistantMessage(message: AgentMessage | undefined): boolean {
@@ -85,14 +87,14 @@ function isOpenAiCompletionsAssistantMessage(message: AgentMessage | undefined):
     return false;
   }
   const api = normalizeOptionalString((message as { api?: unknown }).api) ?? "";
-  return api === "openai-completions" || api === "openclaw-openai-completions-transport";
+  return api === "openai-completions" || api === "marketingclaw-openai-completions-transport";
 }
 
 export function preservePendingAssistantUsage(
   message: AssistantMessage,
   pendingUsage: NormalizedUsage | undefined,
 ): AssistantMessage {
-  if (isTranscriptOnlyOpenClawAssistantMessage(message) || !hasNonzeroUsage(pendingUsage)) {
+  if (isTranscriptOnlyMarketingClawAssistantMessage(message) || !hasNonzeroUsage(pendingUsage)) {
     return message;
   }
   const messageUsage = normalizeUsage((message as { usage?: UsageLike }).usage);
@@ -126,7 +128,7 @@ export function capturePendingAssistantUsage(
   evt: AgentEvent & { message: AgentMessage; assistantMessageEvent?: unknown },
 ): void {
   const msg = evt.message;
-  if (msg?.role !== "assistant" || isTranscriptOnlyOpenClawAssistantMessage(msg)) {
+  if (msg?.role !== "assistant" || isTranscriptOnlyMarketingClawAssistantMessage(msg)) {
     return;
   }
   const assistantRecord =
@@ -143,7 +145,7 @@ export function resetPendingAssistantUsage(
   ctx: EmbeddedAgentSubscribeContext,
   message: AgentMessage,
 ): void {
-  if (message?.role !== "assistant" || isTranscriptOnlyOpenClawAssistantMessage(message)) {
+  if (message?.role !== "assistant" || isTranscriptOnlyMarketingClawAssistantMessage(message)) {
     return;
   }
   ctx.state.pendingAssistantUsage = undefined;
@@ -641,7 +643,7 @@ export function handleMessageStart(
   evt: AgentEvent & { message: AgentMessage },
 ) {
   const msg = evt.message;
-  if (msg?.role !== "assistant" || isTranscriptOnlyOpenClawAssistantMessage(msg)) {
+  if (msg?.role !== "assistant" || isTranscriptOnlyMarketingClawAssistantMessage(msg)) {
     return;
   }
 
@@ -661,7 +663,7 @@ export function handleMessageUpdate(
   evt: AgentEvent & { message: AgentMessage; assistantMessageEvent?: unknown },
 ) {
   const msg = evt.message;
-  if (msg?.role !== "assistant" || isTranscriptOnlyOpenClawAssistantMessage(msg)) {
+  if (msg?.role !== "assistant" || isTranscriptOnlyMarketingClawAssistantMessage(msg)) {
     return;
   }
 
@@ -1030,7 +1032,7 @@ export function handleMessageEnd(
   evt: AgentEvent & { message: AgentMessage },
 ): void | Promise<void> {
   const msg = evt.message;
-  if (msg?.role !== "assistant" || isTranscriptOnlyOpenClawAssistantMessage(msg)) {
+  if (msg?.role !== "assistant" || isTranscriptOnlyMarketingClawAssistantMessage(msg)) {
     return;
   }
 

@@ -1,8 +1,8 @@
-package ai.openclaw.app
+package ai.marketingclaw.app
 
 import android.content.res.AssetManager
 
-internal const val ANDROID_LICENSE_ASSET_DIRECTORY = "openclaw/licenses"
+internal const val ANDROID_LICENSE_ASSET_DIRECTORY = "marketingclaw/licenses"
 
 internal data class AndroidLicenseNotice(
   val title: String,

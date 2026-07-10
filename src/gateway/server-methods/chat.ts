@@ -4,17 +4,17 @@ import { createHash, randomUUID } from "node:crypto";
 import path from "node:path";
 import { performance } from "node:perf_hooks";
 import { fileURLToPath } from "node:url";
-import { isAudioFileName } from "@openclaw/media-core/mime";
-import { isFutureDateTimestampMs } from "@openclaw/normalization-core/number-coercion";
-import { asOptionalRecord } from "@openclaw/normalization-core/record-coerce";
-import type { FastMode } from "@openclaw/normalization-core/string-coerce";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { isAudioFileName } from "@marketingclaw/media-core/mime";
+import { isFutureDateTimestampMs } from "@marketingclaw/normalization-core/number-coercion";
+import { asOptionalRecord } from "@marketingclaw/normalization-core/record-coerce";
+import type { FastMode } from "@marketingclaw/normalization-core/string-coerce";
+import { uniqueStrings } from "@marketingclaw/normalization-core/string-normalization";
 import {
   buildTtsSupplementMediaPayload,
   getReplyPayloadTtsSupplement,
   isReplyPayloadTtsSupplement,
   resolveSendableOutboundReplyParts,
-} from "openclaw/plugin-sdk/reply-payload";
+} from "marketingclaw/plugin-sdk/reply-payload";
 import {
   GATEWAY_CLIENT_CAPS,
   GATEWAY_CLIENT_MODES,
@@ -76,7 +76,7 @@ import {
   type TranscriptEvent,
 } from "../../config/sessions/session-accessor.js";
 import { resolveMirroredTranscriptText } from "../../config/sessions/transcript-mirror.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import {
   claimAgentRunContext,
   clearAgentRunContext,
@@ -442,7 +442,7 @@ async function handleChatMetadataRequest({
 }
 
 async function buildChatMetadataResult(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   context: GatewayRequestContext;
   agentId: string;
   preloadedModelCatalog?: ModelCatalogEntry[];
@@ -471,7 +471,7 @@ async function buildChatMetadataResult(params: {
 }
 
 async function buildChatStartupMetadataResult(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   context: GatewayRequestContext;
   agentId: string;
   modelCatalog: ModelCatalogEntry[] | undefined;
@@ -582,7 +582,7 @@ function resolveWebchatPromptCacheKey(params: {
     )
     .digest("hex")
     .slice(0, 32);
-  return `openclaw-webchat-${digest}`;
+  return `marketingclaw-webchat-${digest}`;
 }
 
 async function buildWebchatAssistantMediaMessage(
@@ -688,7 +688,7 @@ function buildAbortedChatSendPayload(params: {
 }
 
 function validateChatSelectedAgent(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   requestedSessionKey: string;
   agentId?: string;
 }): { ok: true; agentId?: string } | { ok: false; error: string } {
@@ -723,7 +723,7 @@ function validateChatSelectedAgent(params: {
 }
 
 function resolveRequestedChatAgentId(params: {
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
   requestedSessionKey: string;
   agentId?: string;
 }): string | undefined {
@@ -871,10 +871,10 @@ async function buildPairingQrAssistantContentBlock(
     renderQrTerminal(qr.setupCode, { small: true }),
   ]);
   return {
-    type: "openclaw_pairing_qr",
+    type: "marketingclaw_pairing_qr",
     image_url: imageUrl,
     terminalText,
-    alt: "OpenClaw pairing QR code",
+    alt: "MarketingClaw pairing QR code",
     expiresAtMs: qr.expiresAtMs,
     sensitive: true,
   };
@@ -1406,7 +1406,7 @@ function shouldPassThroughManagedInboundPdfOffloadRef(ref: OffloadedRef): boolea
 async function prestageMediaPathOffloads(params: {
   offloadedRefs: OffloadedRef[];
   includeImageRefs?: boolean;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   sessionKey: string;
   agentId: string;
 }): Promise<{ paths: string[]; types: string[]; workspaceDir?: string }> {
@@ -1610,7 +1610,7 @@ function buildOversizedHistoryPlaceholder(message?: unknown): Record<string, unk
       : Date.now();
   const rawMetadata =
     message && typeof message === "object"
-      ? (message as Record<string, unknown>)["__openclaw"]
+      ? (message as Record<string, unknown>)["__marketingclaw"]
       : undefined;
   const metadata =
     rawMetadata && typeof rawMetadata === "object" && !Array.isArray(rawMetadata)
@@ -1624,7 +1624,7 @@ function buildOversizedHistoryPlaceholder(message?: unknown): Record<string, unk
     role,
     timestamp,
     content: [{ type: "text", text: CHAT_HISTORY_OVERSIZED_PLACEHOLDER }],
-    __openclaw: {
+    __marketingclaw: {
       ...(metadataId ? { id: metadataId } : {}),
       ...(metadataSeq !== undefined ? { seq: metadataSeq } : {}),
       ...(metadataIdempotencyKey ? { idempotencyKey: metadataIdempotencyKey } : {}),
@@ -1798,7 +1798,7 @@ function findSourceReplyTranscriptMirrorByIdempotencyKeyInEvents(
   idempotencyKey: string,
 ): { messageId: string; message: Record<string, unknown> } | null {
   const found = findAssistantTranscriptMessageByIdempotencyKeyInEvents(events, idempotencyKey);
-  if (found?.message.provider !== "openclaw" || found.message.model !== "delivery-mirror") {
+  if (found?.message.provider !== "marketingclaw" || found.message.model !== "delivery-mirror") {
     return null;
   }
   return found;
@@ -1848,7 +1848,7 @@ function findSourceReplyTranscriptMirrorByMetadataInEvents(params: {
     return (
       typeof transcriptEventId(event) === "string" &&
       message?.role === "assistant" &&
-      message.provider === "openclaw" &&
+      message.provider === "marketingclaw" &&
       message.model === "delivery-mirror" &&
       extractAssistantTranscriptText(message) === expectedText
     );
@@ -1891,7 +1891,7 @@ async function appendAssistantTranscriptMessage(params: {
     runId: string;
   };
   ttsSupplement?: GatewayInjectedTtsSupplementMarker;
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
 }): Promise<TranscriptAppendResult> {
   const scope = assistantTranscriptScope(params);
   if (!scope) {
@@ -1949,7 +1949,7 @@ async function rewriteSourceReplyTranscriptMirrors(params: {
     state: SourceReplyContentState;
   }[];
   scope: SessionTranscriptWriteScope;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
 }): Promise<
   Array<{
     messageId?: string;
@@ -2854,7 +2854,7 @@ function sendGlobalAwareNodeChatPayload(params: {
   payload: unknown;
 }) {
   const deliveryKeys = resolveGlobalAwareNodeChatDeliveryKeys({
-    cfg: params.context.getRuntimeConfig?.() ?? ({} as OpenClawConfig),
+    cfg: params.context.getRuntimeConfig?.() ?? ({} as MarketingClawConfig),
     sessionKey: params.sessionKey,
     agentId: params.agentId,
   });
@@ -2864,7 +2864,7 @@ function sendGlobalAwareNodeChatPayload(params: {
 }
 
 function resolveGlobalAwareNodeChatDeliveryKeys(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   sessionKey: string;
   agentId?: string;
 }): string[] {
@@ -2885,12 +2885,12 @@ function isSourceReplyTranscriptMirrorPayload(payload: ReplyPayload | undefined)
 }
 
 function readChatHistoryMessageId(message: unknown): string | undefined {
-  const metadata = asOptionalRecord(asOptionalRecord(message)?.["__openclaw"]);
+  const metadata = asOptionalRecord(asOptionalRecord(message)?.["__marketingclaw"]);
   return typeof metadata?.id === "string" ? metadata.id : undefined;
 }
 
 function readChatHistoryMessageSeq(message: unknown): number | undefined {
-  const metadata = asOptionalRecord(asOptionalRecord(message)?.["__openclaw"]);
+  const metadata = asOptionalRecord(asOptionalRecord(message)?.["__marketingclaw"]);
   const seq = metadata?.seq;
   return typeof seq === "number" && Number.isSafeInteger(seq) && seq > 0 ? seq : undefined;
 }
@@ -3151,7 +3151,7 @@ async function handleChatHistoryRequest({
   };
   const agentIdOverride = normalizeOptionalText((params as { agentId?: string }).agentId);
   const requestedAgentId = resolveRequestedChatAgentId({
-    cfg: (context as { getRuntimeConfig?: () => OpenClawConfig }).getRuntimeConfig?.(),
+    cfg: (context as { getRuntimeConfig?: () => MarketingClawConfig }).getRuntimeConfig?.(),
     requestedSessionKey: sessionKey,
     agentId: agentIdOverride,
   });
@@ -3353,7 +3353,7 @@ export const chatHandlers: GatewayRequestHandlers = {
     };
     const agentIdOverride = normalizeOptionalText((params as { agentId?: string }).agentId);
     const requestedAgentId = resolveRequestedChatAgentId({
-      cfg: (context as { getRuntimeConfig?: () => OpenClawConfig }).getRuntimeConfig?.(),
+      cfg: (context as { getRuntimeConfig?: () => MarketingClawConfig }).getRuntimeConfig?.(),
       requestedSessionKey: sessionKey,
       agentId: agentIdOverride,
     });
@@ -3806,7 +3806,7 @@ export const chatHandlers: GatewayRequestHandlers = {
     const clientRunId = p.idempotencyKey;
     const pendingChatSendKey = pendingChatSendDedupeKey(clientRunId);
     const requestedAgentId = resolveRequestedChatAgentId({
-      cfg: (context as { getRuntimeConfig?: () => OpenClawConfig }).getRuntimeConfig?.(),
+      cfg: (context as { getRuntimeConfig?: () => MarketingClawConfig }).getRuntimeConfig?.(),
       requestedSessionKey: rawSessionKey,
       agentId: agentIdOverride,
     });
@@ -3827,7 +3827,7 @@ export const chatHandlers: GatewayRequestHandlers = {
     const sessionLoadMs = roundedChatSendTimingMs(performance.now() - sessionLoadStartedAtMs);
     const { cfg, storePath, entry, canonicalKey: sessionKey, legacyKey } = sessionLoadResult;
     const expectedSessionRoutingContract = normalizeOptionalText(p.expectedSessionRoutingContract);
-    const sessionRoutingChanged = (candidateConfig: OpenClawConfig) =>
+    const sessionRoutingChanged = (candidateConfig: MarketingClawConfig) =>
       expectedSessionRoutingContract !== undefined &&
       expectedSessionRoutingContract.toLowerCase() !==
         resolveSessionRoutingContract(candidateConfig);
@@ -4265,7 +4265,7 @@ export const chatHandlers: GatewayRequestHandlers = {
               explicitOriginTargetsAcpSession(explicitOriginResult.value) ||
               explicitOriginTargetsPlugin;
             // Bound plugin sessions own the real recipient model, so keep image
-            // attachments even when the parent OpenClaw session model is text-only.
+            // attachments even when the parent MarketingClaw session model is text-only.
             const supportsImages = supportsSessionModelImages || explicitOriginSupportsInlineImages;
             const routeImageOffloadsAsMediaPaths = !supportsImages;
             const parsed = await parseMessageWithAttachments(
@@ -4503,7 +4503,7 @@ export const chatHandlers: GatewayRequestHandlers = {
       // identical bytes on the wire. BodyForAgent uses the same bare text as
       // Body; the transient gateway stamp is removed (stamping the live turn
       // here would diverge from bare stored history and bust the prompt cache).
-      // See: https://github.com/openclaw/openclaw/issues/3658
+      // See: https://github.com/promisingcoder/marketingclaw/issues/3658
       const ctx: MsgContext = {
         Body: messageForAgent,
         BodyForAgent: messageForAgent,
@@ -4960,7 +4960,7 @@ export const chatHandlers: GatewayRequestHandlers = {
               }
               let broadcastedSourceReplyFinal = false;
               // WebChat persistence has two owners. Agent runs persist model-visible turns
-              // through OpenClaw runtime's SessionManager; this dispatcher only owns live delivery payloads.
+              // through MarketingClaw runtime's SessionManager; this dispatcher only owns live delivery payloads.
               // Do not blindly mirror agent-run final payloads into JSONL or chat.history can
               // duplicate normal embedded-agent assistant turns. The non-agent branch below has no
               // runtime-owned assistant turn, so it appends a gateway-injected assistant entry before
@@ -5412,7 +5412,7 @@ export const chatHandlers: GatewayRequestHandlers = {
                         ...(fallbackText ? { text: fallbackText } : {}),
                         timestamp: nowValue,
                         ...(ttsSupplementMarker
-                          ? { openclawTtsSupplement: ttsSupplementMarker }
+                          ? { marketingclawTtsSupplement: ttsSupplementMarker }
                           : {}),
                         // Keep this compatible with runner stopReason enums even though this message isn't
                         // persisted to the transcript due to the append failure.
@@ -5937,7 +5937,7 @@ export const chatHandlers: GatewayRequestHandlers = {
     // Load session to find transcript file
     const rawSessionKey = p.sessionKey;
     const requestedAgentId = resolveRequestedChatAgentId({
-      cfg: (context as { getRuntimeConfig?: () => OpenClawConfig }).getRuntimeConfig?.(),
+      cfg: (context as { getRuntimeConfig?: () => MarketingClawConfig }).getRuntimeConfig?.(),
       requestedSessionKey: rawSessionKey,
       agentId: p.agentId,
     });

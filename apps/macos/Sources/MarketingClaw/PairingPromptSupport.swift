@@ -1,5 +1,5 @@
 import Foundation
-import OpenClawKit
+import MarketingClawKit
 import OSLog
 
 /// Shared plumbing for the node/device pairing prompters: gateway push

@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import OpenClaw
+@testable import MarketingClaw
 
 struct ControlChannelStateDebouncerTests {
     @Test func `terminal states apply immediately`() {

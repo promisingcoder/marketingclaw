@@ -1,6 +1,6 @@
 // Target resolver combines plugin id heuristics, cached directory searches,
 // live fallback lookups, and normalized fallback targets.
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@marketingclaw/normalization-core/string-coerce";
 import { getChannelPlugin } from "../../channels/plugins/index.js";
 import type { ChannelPlugin } from "../../channels/plugins/types.plugin.js";
 import type {
@@ -8,7 +8,7 @@ import type {
   ChannelDirectoryEntryKind,
   ChannelId,
 } from "../../channels/plugins/types.public.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import { defaultRuntime, type RuntimeEnv } from "../../runtime.js";
 import { buildDirectoryCacheKey, DirectoryCache } from "./directory-cache.js";
 import {
@@ -57,7 +57,7 @@ export { maybeResolveIdLikeTarget } from "./target-id-resolution.js";
 
 /** Resolves a channel target using the shared outbound target resolver. */
 export async function resolveChannelTarget(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   channel: ChannelId;
   input: string;
   accountId?: string | null;
@@ -276,7 +276,7 @@ function resolveMatch(params: {
 }
 
 async function listDirectoryEntries(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   channel: ChannelId;
   accountId?: string | null;
   kind: ChannelDirectoryEntryKind;
@@ -313,7 +313,7 @@ async function listDirectoryEntries(params: {
 }
 
 async function getDirectoryEntries(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   channel: ChannelId;
   accountId?: string | null;
   kind: ChannelDirectoryEntryKind;
@@ -409,7 +409,7 @@ function pickAmbiguousMatch(
 
 /** Resolves a user target through id-like, directory, plugin, and normalized fallback paths. */
 export async function resolveMessagingTarget(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   channel: ChannelId;
   input: string;
   accountId?: string | null;
@@ -551,7 +551,7 @@ export async function resolveMessagingTarget(params: {
 
 /** Looks up a display label for a resolved target id from cached/live directory entries. */
 export async function lookupDirectoryDisplay(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   channel: ChannelId;
   targetId: string;
   accountId?: string | null;

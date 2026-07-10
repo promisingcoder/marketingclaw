@@ -1,19 +1,19 @@
 services:
   - type: web
-    name: openclaw
+    name: marketingclaw
     runtime: docker
     plan: starter
     healthCheckPath: /health
     envVars:
-      - key: OPENCLAW_GATEWAY_PORT
+      - key: MARKETINGCLAW_GATEWAY_PORT
         value: "8080"
-      - key: OPENCLAW_STATE_DIR
-        value: /data/.openclaw
-      - key: OPENCLAW_WORKSPACE_DIR
+      - key: MARKETINGCLAW_STATE_DIR
+        value: /data/.marketingclaw
+      - key: MARKETINGCLAW_WORKSPACE_DIR
         value: /data/workspace
-      - key: OPENCLAW_GATEWAY_TOKEN
+      - key: MARKETINGCLAW_GATEWAY_TOKEN
         generateValue: true
     disk:
-      name: openclaw-data
+      name: marketingclaw-data
       mountPath: /data
       sizeGB: 1

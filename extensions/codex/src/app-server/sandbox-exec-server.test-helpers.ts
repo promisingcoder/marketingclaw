@@ -2,7 +2,7 @@
  * Test helpers for standing up fake sandbox contexts and driving the Codex
  * sandbox exec-server JSON-RPC/WebSocket protocol.
  */
-import type { SandboxContext } from "openclaw/plugin-sdk/sandbox";
+import type { SandboxContext } from "marketingclaw/plugin-sdk/sandbox";
 import { vi } from "vitest";
 import WebSocket from "ws";
 
@@ -30,17 +30,17 @@ export function createSandboxContext(overrides: {
     workspaceDir: "/host/workspace",
     agentWorkspaceDir: "/host/workspace",
     workspaceAccess: "rw",
-    runtimeId: "openclaw-test-runtime",
-    runtimeLabel: "openclaw-test-runtime",
-    containerName: "openclaw-test-runtime",
+    runtimeId: "marketingclaw-test-runtime",
+    runtimeLabel: "marketingclaw-test-runtime",
+    containerName: "marketingclaw-test-runtime",
     containerWorkdir: "/workspace",
     docker: { binds: [], image: "test", workdir: "/workspace", env: {}, network: "none" },
     tools: {},
     browserAllowHostControl: false,
     backend: {
       id: "docker",
-      runtimeId: "openclaw-test-runtime",
-      runtimeLabel: "openclaw-test-runtime",
+      runtimeId: "marketingclaw-test-runtime",
+      runtimeLabel: "marketingclaw-test-runtime",
       workdir: "/workspace",
       buildExecSpec:
         overrides.buildExecSpec ??

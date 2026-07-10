@@ -1,4 +1,4 @@
-package ai.openclaw.app
+package ai.marketingclaw.app
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -7,12 +7,12 @@ import org.junit.Test
 class WakeWordsTest {
   @Test
   fun parseCommaSeparatedTrimsAndDropsEmpty() {
-    assertEquals(listOf("openclaw", "claude"), WakeWords.parseCommaSeparated("  openclaw , claude, ,  "))
+    assertEquals(listOf("marketingclaw", "claude"), WakeWords.parseCommaSeparated("  marketingclaw , claude, ,  "))
   }
 
   @Test
   fun sanitizeTrimsCapsAndFallsBack() {
-    val defaults = listOf("openclaw", "claude")
+    val defaults = listOf("marketingclaw", "claude")
     val long = "x".repeat(WakeWords.maxWordLength + 10)
     val words = listOf(" ", "  hello  ", long)
 
@@ -26,7 +26,7 @@ class WakeWordsTest {
 
   @Test
   fun sanitizeLimitsWordCount() {
-    val defaults = listOf("openclaw")
+    val defaults = listOf("marketingclaw")
     val words = (1..(WakeWords.maxWords + 5)).map { "w$it" }
     val sanitized = WakeWords.sanitize(words, defaults)
     assertEquals(WakeWords.maxWords, sanitized.size)
@@ -36,15 +36,15 @@ class WakeWordsTest {
 
   @Test
   fun parseIfChangedSkipsWhenUnchanged() {
-    val current = listOf("openclaw", "claude")
-    val parsed = WakeWords.parseIfChanged(" openclaw , claude ", current)
+    val current = listOf("marketingclaw", "claude")
+    val parsed = WakeWords.parseIfChanged(" marketingclaw , claude ", current)
     assertNull(parsed)
   }
 
   @Test
   fun parseIfChangedReturnsUpdatedList() {
-    val current = listOf("openclaw")
-    val parsed = WakeWords.parseIfChanged(" openclaw , jarvis ", current)
-    assertEquals(listOf("openclaw", "jarvis"), parsed)
+    val current = listOf("marketingclaw")
+    val parsed = WakeWords.parseIfChanged(" marketingclaw , jarvis ", current)
+    assertEquals(listOf("marketingclaw", "jarvis"), parsed)
   }
 }

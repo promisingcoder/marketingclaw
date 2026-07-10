@@ -1,7 +1,7 @@
 import Foundation
 import Observation
-import OpenClawKit
-import OpenClawProtocol
+import MarketingClawKit
+import MarketingClawProtocol
 import UserNotifications
 import WatchKit
 
@@ -63,16 +63,16 @@ final class WatchDirectNode {
         }
     }
 
-    private static let keychainService = "ai.openclaw.watch.direct-node"
+    private static let keychainService = "ai.marketingclaw.watch.direct-node"
     private static let keychainAccount = "gateway"
     private static let enabledDefaultsKey = "watch.directNode.enabled"
     private static let lastSetupSentAtDefaultsKey = "watch.directNode.lastSetupSentAtMs"
     private static let maximumSetupAgeMs: Int64 = 12 * 60 * 1000
     private static let maximumSetupClockSkewMs: Int64 = 2 * 60 * 1000
     private static let commands = [
-        OpenClawDeviceCommand.info.rawValue,
-        OpenClawDeviceCommand.status.rawValue,
-        OpenClawSystemCommand.notify.rawValue,
+        MarketingClawDeviceCommand.info.rawValue,
+        MarketingClawDeviceCommand.status.rawValue,
+        MarketingClawSystemCommand.notify.rawValue,
     ]
 
     private let networkMetrics: WatchURLSessionMetrics
@@ -213,7 +213,7 @@ final class WatchDirectNode {
         self.connectTask = nil
         self.isConnected = false
         if self.isEnabled, self.isConfigured {
-            self.statusText = "Reconnects when OpenClaw is active"
+            self.statusText = "Reconnects when MarketingClaw is active"
         }
     }
 
@@ -433,7 +433,7 @@ final class WatchDirectNode {
         let signedAtMs = Int64(Date().timeIntervalSince1970 * 1000)
         let payload = GatewayDeviceAuthPayload.buildV3(
             deviceId: identity.deviceId,
-            clientId: "openclaw-watchos",
+            clientId: "marketingclaw-watchos",
             clientMode: "node",
             role: "node",
             scopes: [],
@@ -451,7 +451,7 @@ final class WatchDirectNode {
             throw HTTPError(status: 0, detail: "Could not sign watch identity")
         }
         var client: [String: AnyCodable] = [
-            "id": AnyCodable("openclaw-watchos"),
+            "id": AnyCodable("marketingclaw-watchos"),
             "displayName": AnyCodable(InstanceIdentity.displayName),
             "version": AnyCodable(
                 Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "dev"),
@@ -572,11 +572,11 @@ final class WatchDirectNode {
     private func handleInvoke(_ request: BridgeInvokeRequest) async -> BridgeInvokeResponse {
         do {
             switch request.command {
-            case OpenClawDeviceCommand.info.rawValue:
+            case MarketingClawDeviceCommand.info.rawValue:
                 return try self.encodedResponse(id: request.id, payload: self.deviceInfo())
-            case OpenClawDeviceCommand.status.rawValue:
+            case MarketingClawDeviceCommand.status.rawValue:
                 return try self.encodedResponse(id: request.id, payload: self.deviceStatus())
-            case OpenClawSystemCommand.notify.rawValue:
+            case MarketingClawSystemCommand.notify.rawValue:
                 return try await self.handleNotification(request)
             default:
                 return Self.errorResponse(
@@ -593,7 +593,7 @@ final class WatchDirectNode {
     }
 
     private func handleNotification(_ request: BridgeInvokeRequest) async throws -> BridgeInvokeResponse {
-        let params = try Self.decode(OpenClawSystemNotifyParams.self, from: request.paramsJSON)
+        let params = try Self.decode(MarketingClawSystemNotifyParams.self, from: request.paramsJSON)
         let title = params.title.trimmingCharacters(in: .whitespacesAndNewlines)
         let body = params.body.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !title.isEmpty || !body.isEmpty else {
@@ -631,12 +631,12 @@ final class WatchDirectNode {
         return BridgeInvokeResponse(id: request.id, ok: true)
     }
 
-    private func deviceInfo() -> OpenClawDeviceInfoPayload {
+    private func deviceInfo() -> MarketingClawDeviceInfoPayload {
         let device = WKInterfaceDevice.current()
         let info = Bundle.main.infoDictionary ?? [:]
         let appVersion = (info["CFBundleShortVersionString"] as? String) ?? "0"
         let appBuild = (info["CFBundleVersion"] as? String) ?? "0"
-        return OpenClawDeviceInfoPayload(
+        return MarketingClawDeviceInfoPayload(
             deviceName: device.name,
             modelIdentifier: InstanceIdentity.modelIdentifier ?? "Apple Watch",
             systemName: "watchOS",
@@ -646,21 +646,21 @@ final class WatchDirectNode {
             locale: Locale.preferredLanguages.first ?? Locale.current.identifier)
     }
 
-    private func deviceStatus() -> OpenClawDeviceStatusPayload {
+    private func deviceStatus() -> MarketingClawDeviceStatusPayload {
         let device = WKInterfaceDevice.current()
         device.isBatteryMonitoringEnabled = true
-        let batteryState: OpenClawBatteryState = switch device.batteryState {
+        let batteryState: MarketingClawBatteryState = switch device.batteryState {
         case .charging: .charging
         case .full: .full
         case .unplugged: .unplugged
         case .unknown: .unknown
         @unknown default: .unknown
         }
-        let battery = OpenClawBatteryStatusPayload(
+        let battery = MarketingClawBatteryStatusPayload(
             level: device.batteryLevel >= 0 ? Double(device.batteryLevel) : nil,
             state: batteryState,
             lowPowerModeEnabled: ProcessInfo.processInfo.isLowPowerModeEnabled)
-        let thermalState: OpenClawThermalState = switch ProcessInfo.processInfo.thermalState {
+        let thermalState: MarketingClawThermalState = switch ProcessInfo.processInfo.thermalState {
         case .nominal: .nominal
         case .fair: .fair
         case .serious: .serious
@@ -671,14 +671,14 @@ final class WatchDirectNode {
         let total = (attributes[.systemSize] as? NSNumber)?.int64Value ?? 0
         let free = (attributes[.systemFreeSize] as? NSNumber)?.int64Value ?? 0
         let networkMetrics = self.networkMetrics.snapshot()
-        return OpenClawDeviceStatusPayload(
+        return MarketingClawDeviceStatusPayload(
             battery: battery,
-            thermal: OpenClawThermalStatusPayload(state: thermalState),
-            storage: OpenClawStorageStatusPayload(
+            thermal: MarketingClawThermalStatusPayload(state: thermalState),
+            storage: MarketingClawStorageStatusPayload(
                 totalBytes: total,
                 freeBytes: free,
                 usedBytes: max(0, total - free)),
-            network: OpenClawNetworkStatusPayload(
+            network: MarketingClawNetworkStatusPayload(
                 status: self.isConnected ? .satisfied : .requiresConnection,
                 isExpensive: networkMetrics?.isExpensive ?? false,
                 isConstrained: networkMetrics?.isConstrained ?? false,
@@ -700,13 +700,13 @@ final class WatchDirectNode {
 
     private static func errorResponse(
         id: String,
-        code: OpenClawNodeErrorCode,
+        code: MarketingClawNodeErrorCode,
         message: String) -> BridgeInvokeResponse
     {
         BridgeInvokeResponse(
             id: id,
             ok: false,
-            error: OpenClawNodeError(code: code, message: message))
+            error: MarketingClawNodeError(code: code, message: message))
     }
 
     private static func httpBaseURL(for link: GatewayConnectDeepLink) -> URL? {

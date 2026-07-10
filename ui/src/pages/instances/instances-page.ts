@@ -13,7 +13,7 @@ import {
   formatMissingOperatorReadScopeMessage,
   isMissingOperatorReadScopeError,
 } from "../../lib/gateway-errors.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { MarketingClawLightDomElement } from "../../lit/marketingclaw-element.ts";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
 import { renderInstances } from "./view.ts";
 
@@ -23,7 +23,7 @@ function readPresence(value: unknown): PresenceEntry[] | null {
   return Array.isArray(presence) ? (presence as PresenceEntry[]) : null;
 }
 
-class InstancesPage extends OpenClawLightDomElement {
+class InstancesPage extends MarketingClawLightDomElement {
   @consume({ context: applicationContext, subscribe: true })
   private context!: ApplicationContext;
 
@@ -185,4 +185,4 @@ class InstancesPage extends OpenClawLightDomElement {
   }
 }
 
-customElements.define("openclaw-instances-page", InstancesPage);
+customElements.define("marketingclaw-instances-page", InstancesPage);

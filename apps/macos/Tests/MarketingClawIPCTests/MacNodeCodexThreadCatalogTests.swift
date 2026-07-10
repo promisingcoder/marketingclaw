@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import OpenClaw
+@testable import MarketingClaw
 
 struct MacNodeCodexThreadCatalogTests {
     private struct FakeCodex {
@@ -11,7 +11,7 @@ struct MacNodeCodexThreadCatalogTests {
 
     private func makeFakeCodex(_ script: String) throws -> FakeCodex {
         let directory = FileManager.default.temporaryDirectory
-            .appendingPathComponent("openclaw-fake-codex-\(UUID().uuidString)", isDirectory: true)
+            .appendingPathComponent("marketingclaw-fake-codex-\(UUID().uuidString)", isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         let executable = directory.appendingPathComponent("codex")
         try script.write(to: executable, atomically: true, encoding: .utf8)

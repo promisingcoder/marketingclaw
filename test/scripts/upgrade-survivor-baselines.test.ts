@@ -6,7 +6,7 @@ import { describe, expect, it } from "vitest";
 import { parseArgs, resolveBaselines } from "../../scripts/resolve-upgrade-survivor-baselines.mjs";
 
 function withReleaseFixture<T>(releases: unknown[], fn: (file: string) => T): T {
-  const dir = mkdtempSync(path.join(tmpdir(), "openclaw-upgrade-baselines-"));
+  const dir = mkdtempSync(path.join(tmpdir(), "marketingclaw-upgrade-baselines-"));
   try {
     const file = path.join(dir, "releases.json");
     writeFileSync(file, `${JSON.stringify(releases)}\n`);
@@ -17,7 +17,7 @@ function withReleaseFixture<T>(releases: unknown[], fn: (file: string) => T): T 
 }
 
 function withJsonFixture<T>(name: string, contents: unknown, fn: (file: string) => T): T {
-  const dir = mkdtempSync(path.join(tmpdir(), "openclaw-upgrade-baselines-"));
+  const dir = mkdtempSync(path.join(tmpdir(), "marketingclaw-upgrade-baselines-"));
   try {
     const file = path.join(dir, name);
     writeFileSync(file, `${JSON.stringify(contents)}\n`);

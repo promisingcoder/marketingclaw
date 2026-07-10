@@ -3,11 +3,11 @@ import { html, nothing } from "lit";
 import { property } from "lit/decorators.js";
 import type { UpdateAvailable } from "../api/types.ts";
 import { t } from "../i18n/index.ts";
-import { OpenClawLightDomContentsElement } from "../lit/openclaw-element.ts";
+import { MarketingClawLightDomContentsElement } from "../lit/marketingclaw-element.ts";
 import { getSafeLocalStorage } from "../local-storage.ts";
 import { icons } from "./icons.ts";
 
-const UPDATE_BANNER_DISMISS_KEY = "openclaw:control-ui:update-banner-dismissed:v1";
+const UPDATE_BANNER_DISMISS_KEY = "marketingclaw:control-ui:update-banner-dismissed:v1";
 
 type DismissedUpdateBanner = {
   latestVersion: string;
@@ -68,7 +68,7 @@ type UpdateBannerProps = {
   onDismiss: () => void;
 };
 
-class UpdateBanner extends OpenClawLightDomContentsElement {
+class UpdateBanner extends MarketingClawLightDomContentsElement {
   @property({ attribute: false }) props?: UpdateBannerProps;
 
   override render() {
@@ -96,7 +96,7 @@ class UpdateBanner extends OpenClawLightDomContentsElement {
             >
               ${props.updateRunning ? t("chat.updating") : t("chat.updateNow")}
             </button>
-            <openclaw-tooltip .content=${t("common.dismiss")}>
+            <marketingclaw-tooltip .content=${t("common.dismiss")}>
               <button
                 class="update-banner__close"
                 type="button"
@@ -108,13 +108,13 @@ class UpdateBanner extends OpenClawLightDomContentsElement {
               >
                 ${icons.x}
               </button>
-            </openclaw-tooltip>
+            </marketingclaw-tooltip>
           </div>`
         : nothing}
     `;
   }
 }
 
-if (!customElements.get("openclaw-update-banner")) {
-  customElements.define("openclaw-update-banner", UpdateBanner);
+if (!customElements.get("marketingclaw-update-banner")) {
+  customElements.define("marketingclaw-update-banner", UpdateBanner);
 }

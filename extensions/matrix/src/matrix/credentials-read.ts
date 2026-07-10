@@ -2,8 +2,8 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "openclaw/plugin-sdk/account-id";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "marketingclaw/plugin-sdk/account-id";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
 import {
   requiresExplicitMatrixDefaultAccount,
   resolveMatrixDefaultOrOnlyAccountId,
@@ -41,12 +41,12 @@ function resolveStateDir(env: NodeJS.ProcessEnv): string {
   } catch {
     // Some config-only helpers read stored credentials before the Matrix plugin
     // runtime is installed. Fall back to the standard state-dir env contract.
-    const override = env.OPENCLAW_STATE_DIR?.trim();
+    const override = env.MARKETINGCLAW_STATE_DIR?.trim();
     if (override) {
       return path.resolve(override);
     }
-    const homeDir = env.OPENCLAW_HOME?.trim() || env.HOME?.trim() || os.homedir();
-    return path.join(homeDir, ".openclaw");
+    const homeDir = env.MARKETINGCLAW_HOME?.trim() || env.HOME?.trim() || os.homedir();
+    return path.join(homeDir, ".marketingclaw");
   }
 }
 
@@ -56,7 +56,7 @@ function resolveLegacyMatrixCredentialsPath(env: NodeJS.ProcessEnv): string {
 
 function shouldReadLegacyCredentialsForAccount(accountId?: string | null): boolean {
   const normalizedAccountId = normalizeAccountId(accountId);
-  const cfg = getMatrixRuntime().config.current() as OpenClawConfig;
+  const cfg = getMatrixRuntime().config.current() as MarketingClawConfig;
   if (!cfg.channels?.matrix || typeof cfg.channels.matrix !== "object") {
     return normalizedAccountId === DEFAULT_ACCOUNT_ID;
   }

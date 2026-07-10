@@ -7,7 +7,7 @@ read_when:
 title: "Streaming and chunking"
 ---
 
-OpenClaw has two independent streaming layers, and there is **no true
+MarketingClaw has two independent streaming layers, and there is **no true
 token-delta streaming** to channel messages today:
 
 - **Block streaming (channels):** emit completed **blocks** as the assistant
@@ -61,12 +61,12 @@ limit.
 
 Streaming media must use structured payload fields such as `mediaUrl` or
 `mediaUrls`; streamed text is not parsed as an attachment command. When block
-streaming sends media early, OpenClaw remembers that delivery for the turn. If
+streaming sends media early, MarketingClaw remembers that delivery for the turn. If
 the final assistant payload repeats the same media URL, final delivery strips
 the duplicate media instead of sending the attachment again.
 
 Exact duplicate final payloads are suppressed. If the final payload adds
-distinct text around media that was already streamed, OpenClaw still sends the
+distinct text around media that was already streamed, MarketingClaw still sends the
 new text while keeping the media single-delivery. This prevents duplicate voice
 notes or files on channels such as Telegram.
 
@@ -86,7 +86,7 @@ per-channel caps.
 
 ## Coalescing (merge streamed blocks)
 
-When block streaming is enabled, OpenClaw can **merge consecutive block
+When block streaming is enabled, MarketingClaw can **merge consecutive block
 chunks** before sending them, reducing single-line spam while still providing
 progressive output.
 
@@ -174,11 +174,11 @@ Slack-only:
 
 ### Legacy key migration
 
-| Channel  | Legacy keys                                                 | Status                                                                                                                                                       |
-| -------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Telegram | `streamMode`, scalar/boolean `streaming`                    | Detected and migrated to `streaming.mode` by doctor/config compatibility paths                                                                               |
-| Discord  | `streamMode`, boolean `streaming`                           | Runtime aliases for the `streaming` enum; run `openclaw doctor --fix` to rewrite persisted config                                                            |
-| Slack    | `streamMode`; boolean `streaming`; legacy `nativeStreaming` | Runtime aliases for `streaming.mode` (and `streaming.nativeTransport` for the boolean/legacy forms); run `openclaw doctor --fix` to rewrite persisted config |
+| Channel  | Legacy keys                                                 | Status                                                                                                                                                            |
+| -------- | ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Telegram | `streamMode`, scalar/boolean `streaming`                    | Detected and migrated to `streaming.mode` by doctor/config compatibility paths                                                                                    |
+| Discord  | `streamMode`, boolean `streaming`                           | Runtime aliases for the `streaming` enum; run `marketingclaw doctor --fix` to rewrite persisted config                                                            |
+| Slack    | `streamMode`; boolean `streaming`; legacy `nativeStreaming` | Runtime aliases for `streaming.mode` (and `streaming.nativeTransport` for the boolean/legacy forms); run `marketingclaw doctor --fix` to rewrite persisted config |
 
 ## Runtime behavior
 
@@ -199,14 +199,14 @@ Slack-only:
   the status label when answer streaming is active but no tool line is
   available yet, clears the draft at completion, and sends the final answer
   through normal delivery.
-- If the final edit fails before the completed text is confirmed, OpenClaw uses
+- If the final edit fails before the completed text is confirmed, MarketingClaw uses
   normal final delivery and cleans up the stale preview.
 - Preview streaming is skipped when Telegram block streaming is explicitly
   enabled, to avoid double-streaming.
 - `/reasoning stream` can write reasoning to a transient preview that is
   deleted after final delivery.
 - Telegram selected quote replies are an exception: when `replyToMode` is not
-  `"off"` and selected quote text is present, OpenClaw skips the answer preview
+  `"off"` and selected quote text is present, MarketingClaw skips the answer preview
   stream for that turn (the final answer must go through the native quote-reply
   path) so tool-progress preview lines cannot render. Current-message replies
   without selected quote text still keep preview streaming. See
@@ -290,7 +290,7 @@ Supported surfaces:
   set `streaming.preview.commandText` to `"status"` or
   `streaming.progress.commandText` to `"status"`; the default is `"raw"` to
   preserve released behavior. This policy is shared by draft/progress channels
-  that use OpenClaw's compact progress renderer, including Discord, Matrix,
+  that use MarketingClaw's compact progress renderer, including Discord, Matrix,
   Microsoft Teams, Mattermost, Slack draft previews, and Telegram. To disable
   preview edits entirely, set `streaming.mode` to `off`.
 

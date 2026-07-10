@@ -2,9 +2,9 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { createInterface } from "node:readline/promises";
 import { fileURLToPath } from "node:url";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/plugin-entry";
-import { resolveSecretPlanTargetByPath } from "openclaw/plugin-sdk/secret-ref-runtime";
-import { resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/plugin-entry";
+import { resolveSecretPlanTargetByPath } from "marketingclaw/plugin-sdk/secret-ref-runtime";
+import { resolvePreferredMarketingClawTmpDir } from "marketingclaw/plugin-sdk/temp-path";
 import { parseVaultSecretId } from "../vault-secret-id.js";
 
 type CommandLike = {
@@ -65,7 +65,7 @@ type SecretsApplyPlan = {
 
 type RegisterVaultCommandsParams = {
   program: CommandLike;
-  config: OpenClawConfig;
+  config: MarketingClawConfig;
 };
 
 type StatusOptions = {
@@ -147,7 +147,7 @@ function assertValidVaultSecretId(label: string, value: string): void {
   }
 }
 
-function readProviderStatus(config: OpenClawConfig, providerAlias: string): ProviderStatus {
+function readProviderStatus(config: MarketingClawConfig, providerAlias: string): ProviderStatus {
   const provider = config.secrets?.providers?.[providerAlias];
   if (!isRecord(provider)) {
     return { configured: false };
@@ -181,7 +181,7 @@ function isVaultIntegrationProvider(value: unknown): boolean {
   );
 }
 
-function resolveStatusProviderAlias(config: OpenClawConfig, requestedAlias?: string): string {
+function resolveStatusProviderAlias(config: MarketingClawConfig, requestedAlias?: string): string {
   const explicitAlias = normalizeOptionalString(requestedAlias);
   if (explicitAlias) {
     assertValidProviderAlias(explicitAlias);
@@ -275,7 +275,7 @@ function parseTargetSpecifier(value: string): {
     return { agentId, path: targetPath };
   }
   return {
-    path: value.startsWith("openclaw:") ? value.slice("openclaw:".length) : value,
+    path: value.startsWith("marketingclaw:") ? value.slice("marketingclaw:".length) : value,
   };
 }
 
@@ -295,7 +295,7 @@ function createConfigSecretTarget(params: {
     throw new Error(`Invalid --target config path: ${params.path}`);
   }
   const resolved = resolveSecretPlanTargetByPath({
-    configFile: params.agentId ? "auth-profiles.json" : "openclaw.json",
+    configFile: params.agentId ? "auth-profiles.json" : "marketingclaw.json",
     pathSegments,
   });
   if (!resolved) {
@@ -337,7 +337,7 @@ function parseConfigTargetMappings(values: string[] | undefined): ConfigTargetSe
     const separator = value.indexOf("=");
     if (separator <= 0 || separator === value.length - 1) {
       throw new Error(
-        `Invalid --target value "${value}". Use <openclaw-config-path>=<vault-secret-id>.`,
+        `Invalid --target value "${value}". Use <marketingclaw-config-path>=<vault-secret-id>.`,
       );
     }
     const target = parseTargetSpecifier(value.slice(0, separator).trim());
@@ -384,7 +384,7 @@ function assertNoDuplicatePlanTargets(targets: SecretsPlanTarget[]): void {
   for (const target of targets) {
     const key = target.agentId
       ? `auth-profiles:${target.agentId}:${target.path}`
-      : `openclaw:${target.path}`;
+      : `marketingclaw:${target.path}`;
     if (seen.has(key)) {
       throw new Error(`Duplicate secret target path in Vault setup: ${target.path}`);
     }
@@ -464,10 +464,11 @@ async function promptProviderSecrets(options: SetupOptions): Promise<ProviderSec
   });
 }
 
-async function runStatus(config: OpenClawConfig, options: StatusOptions): Promise<void> {
+async function runStatus(config: MarketingClawConfig, options: StatusOptions): Promise<void> {
   const providerAlias = resolveStatusProviderAlias(config, options.providerAlias);
   const provider = readProviderStatus(config, providerAlias);
-  const authMethod = normalizeOptionalString(process.env.OPENCLAW_VAULT_AUTH_METHOD) ?? "token";
+  const authMethod =
+    normalizeOptionalString(process.env.MARKETINGCLAW_VAULT_AUTH_METHOD) ?? "token";
   const result = {
     providerAlias,
     provider,
@@ -475,13 +476,13 @@ async function runStatus(config: OpenClawConfig, options: StatusOptions): Promis
     vaultAddr: normalizeOptionalString(process.env.VAULT_ADDR),
     authMethod,
     authMount:
-      normalizeOptionalString(process.env.OPENCLAW_VAULT_AUTH_MOUNT) ??
+      normalizeOptionalString(process.env.MARKETINGCLAW_VAULT_AUTH_MOUNT) ??
       (authMethod === "kubernetes" ? "kubernetes" : "jwt"),
-    authRole: normalizeOptionalString(process.env.OPENCLAW_VAULT_AUTH_ROLE),
-    hasJwtFile: Boolean(normalizeOptionalString(process.env.OPENCLAW_VAULT_JWT_FILE)),
+    authRole: normalizeOptionalString(process.env.MARKETINGCLAW_VAULT_AUTH_ROLE),
+    hasJwtFile: Boolean(normalizeOptionalString(process.env.MARKETINGCLAW_VAULT_JWT_FILE)),
     hasVaultTokenFile: Boolean(normalizeOptionalString(process.env.VAULT_TOKEN_FILE)),
-    kvMount: normalizeOptionalString(process.env.OPENCLAW_VAULT_KV_MOUNT) ?? "secret",
-    kvVersion: normalizeOptionalString(process.env.OPENCLAW_VAULT_KV_VERSION) ?? "2",
+    kvMount: normalizeOptionalString(process.env.MARKETINGCLAW_VAULT_KV_MOUNT) ?? "secret",
+    kvVersion: normalizeOptionalString(process.env.MARKETINGCLAW_VAULT_KV_VERSION) ?? "2",
     hasVaultToken: Boolean(normalizeOptionalString(process.env.VAULT_TOKEN)),
   };
   if (options.json) {
@@ -507,7 +508,7 @@ async function runStatus(config: OpenClawConfig, options: StatusOptions): Promis
   writeLine(`VAULT_TOKEN_FILE: ${result.hasVaultTokenFile ? "set" : "not set"}`);
   writeLine(`Auth mount: ${result.authMount}`);
   writeLine(`Auth role: ${result.authRole ?? "not set"}`);
-  writeLine(`OPENCLAW_VAULT_JWT_FILE: ${result.hasJwtFile ? "set" : "not set"}`);
+  writeLine(`MARKETINGCLAW_VAULT_JWT_FILE: ${result.hasJwtFile ? "set" : "not set"}`);
   writeLine(`KV mount: ${result.kvMount}`);
   writeLine(`KV version: ${result.kvVersion}`);
 }
@@ -524,16 +525,19 @@ async function runSetup(options: SetupOptions): Promise<void> {
   });
   const planPath =
     normalizeOptionalString(options.planOut) ??
-    path.join(resolvePreferredOpenClawTmpDir(), `openclaw-vault-secrets-${process.pid}.json`);
+    path.join(
+      resolvePreferredMarketingClawTmpDir(),
+      `marketingclaw-vault-secrets-${process.pid}.json`,
+    );
   await fs.writeFile(planPath, `${JSON.stringify(plan, null, 2)}\n`, "utf8");
   writeLine(`Plan written to ${planPath}`);
   writeLine(`Targets: ${plan.targets.length}`);
   writeLine("");
   writeLine("Next steps:");
-  writeLine(`  openclaw secrets apply --from ${planPath} --dry-run --allow-exec`);
-  writeLine(`  openclaw secrets apply --from ${planPath} --allow-exec`);
-  writeLine("  openclaw secrets audit --check --allow-exec");
-  writeLine("  openclaw secrets reload");
+  writeLine(`  marketingclaw secrets apply --from ${planPath} --dry-run --allow-exec`);
+  writeLine(`  marketingclaw secrets apply --from ${planPath} --allow-exec`);
+  writeLine("  marketingclaw secrets audit --check --allow-exec");
+  writeLine("  marketingclaw secrets reload");
 }
 
 export function registerVaultCommands(params: RegisterVaultCommandsParams): void {

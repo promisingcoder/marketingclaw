@@ -15,30 +15,33 @@ type CommandOptions = Record<string, unknown>;
 
 const SANDBOX_EXAMPLES = {
   main: [
-    ["openclaw sandbox list", "List all sandbox containers."],
-    ["openclaw sandbox list --browser", "List only browser containers."],
-    ["openclaw sandbox recreate --all", "Recreate all containers."],
-    ["openclaw sandbox recreate --session main", "Recreate a specific session."],
-    ["openclaw sandbox recreate --agent mybot", "Recreate agent containers."],
-    ["openclaw sandbox explain", "Explain effective sandbox config."],
+    ["marketingclaw sandbox list", "List all sandbox containers."],
+    ["marketingclaw sandbox list --browser", "List only browser containers."],
+    ["marketingclaw sandbox recreate --all", "Recreate all containers."],
+    ["marketingclaw sandbox recreate --session main", "Recreate a specific session."],
+    ["marketingclaw sandbox recreate --agent mybot", "Recreate agent containers."],
+    ["marketingclaw sandbox explain", "Explain effective sandbox config."],
   ],
   list: [
-    ["openclaw sandbox list", "List all sandbox containers."],
-    ["openclaw sandbox list --browser", "List only browser containers."],
-    ["openclaw sandbox list --json", "JSON output."],
+    ["marketingclaw sandbox list", "List all sandbox containers."],
+    ["marketingclaw sandbox list --browser", "List only browser containers."],
+    ["marketingclaw sandbox list --json", "JSON output."],
   ],
   recreate: [
-    ["openclaw sandbox recreate --all", "Recreate all containers."],
-    ["openclaw sandbox recreate --session main", "Recreate a specific session."],
-    ["openclaw sandbox recreate --agent mybot", "Recreate a specific agent (includes sub-agents)."],
-    ["openclaw sandbox recreate --browser --all", "Recreate only browser containers."],
-    ["openclaw sandbox recreate --all --force", "Skip confirmation."],
+    ["marketingclaw sandbox recreate --all", "Recreate all containers."],
+    ["marketingclaw sandbox recreate --session main", "Recreate a specific session."],
+    [
+      "marketingclaw sandbox recreate --agent mybot",
+      "Recreate a specific agent (includes sub-agents).",
+    ],
+    ["marketingclaw sandbox recreate --browser --all", "Recreate only browser containers."],
+    ["marketingclaw sandbox recreate --all --force", "Skip confirmation."],
   ],
   explain: [
-    ["openclaw sandbox explain", "Show effective sandbox config."],
-    ["openclaw sandbox explain --session agent:main:main", "Explain a specific session."],
-    ["openclaw sandbox explain --agent work", "Explain an agent sandbox."],
-    ["openclaw sandbox explain --json", "JSON output."],
+    ["marketingclaw sandbox explain", "Show effective sandbox config."],
+    ["marketingclaw sandbox explain --session agent:main:main", "Explain a specific session."],
+    ["marketingclaw sandbox explain --agent work", "Explain an agent sandbox."],
+    ["marketingclaw sandbox explain --json", "JSON output."],
   ],
 } as const;
 
@@ -69,7 +72,7 @@ export function registerSandboxCli(program: Command) {
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/sandbox", "docs.openclaw.ai/cli/sandbox")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/sandbox", "docs.marketingclaw.ai/cli/sandbox")}\n`,
     )
     .action(() => {
       sandbox.help({ error: true });

@@ -61,13 +61,13 @@ fi
 package_name="$(node -e 'const pkg = require(require("node:path").resolve(process.argv[1], "package.json")); console.log(pkg.name)' "${package_source}")"
 package_version="$(node -e 'const pkg = require(require("node:path").resolve(process.argv[1], "package.json")); console.log(pkg.version)' "${package_source}")"
 publish_tag="${PACKAGE_TAG:-latest}"
-source_repo="${SOURCE_REPO:-${GITHUB_REPOSITORY:-openclaw/openclaw}}"
+source_repo="${SOURCE_REPO:-${GITHUB_REPOSITORY:-marketingclaw/marketingclaw}}"
 source_commit="${SOURCE_COMMIT:-$(git -C "${invocation_root}" rev-parse HEAD)}"
 source_ref="${SOURCE_REF:-$(git -C "${invocation_root}" symbolic-ref -q HEAD || true)}"
 clawhub_workdir="${CLAWDHUB_WORKDIR:-${CLAWHUB_WORKDIR:-${invocation_root}}}"
-manual_override_reason="${OPENCLAW_CLAWHUB_MANUAL_OVERRIDE_REASON:-}"
+manual_override_reason="${MARKETINGCLAW_CLAWHUB_MANUAL_OVERRIDE_REASON:-}"
 
-pack_dir="$(mktemp -d "${RUNNER_TEMP:-/tmp}/openclaw-clawhub-pack.XXXXXX")"
+pack_dir="$(mktemp -d "${RUNNER_TEMP:-/tmp}/marketingclaw-clawhub-pack.XXXXXX")"
 cleanup() {
   rm -rf "${pack_dir}"
 }
@@ -86,7 +86,7 @@ pack_cmd=(
 )
 
 build_package_runtime() {
-  if [[ "${OPENCLAW_PLUGIN_NPM_RUNTIME_BUILD:-1}" == "0" || "${OPENCLAW_PLUGIN_NPM_RUNTIME_BUILD:-1}" == "false" ]]; then
+  if [[ "${MARKETINGCLAW_PLUGIN_NPM_RUNTIME_BUILD:-1}" == "0" || "${MARKETINGCLAW_PLUGIN_NPM_RUNTIME_BUILD:-1}" == "false" ]]; then
     echo "Package-local runtime build: skipped"
     return
   fi
@@ -146,9 +146,9 @@ fi
 echo "Resolved ClawPack: ${pack_path}"
 
 if [[ "${mode}" == "--pack" ]]; then
-  output_dir="${OPENCLAW_CLAWHUB_PACK_OUTPUT_DIR:-}"
+  output_dir="${MARKETINGCLAW_CLAWHUB_PACK_OUTPUT_DIR:-}"
   if [[ -z "${output_dir}" ]]; then
-    echo "OPENCLAW_CLAWHUB_PACK_OUTPUT_DIR is required for --pack" >&2
+    echo "MARKETINGCLAW_CLAWHUB_PACK_OUTPUT_DIR is required for --pack" >&2
     exit 2
   fi
   mkdir -p "${output_dir}"
@@ -199,16 +199,16 @@ if [[ "${mode}" == "--dry-run" ]]; then
 fi
 
 publish_log="${pack_dir}/publish.log"
-for attempt in $(seq 1 "${OPENCLAW_CLAWHUB_PUBLISH_ATTEMPTS:-8}"); do
+for attempt in $(seq 1 "${MARKETINGCLAW_CLAWHUB_PUBLISH_ATTEMPTS:-8}"); do
   if CLAWHUB_WORKDIR="${clawhub_workdir}" "${publish_cmd[@]}" 2>&1 | tee "${publish_log}"; then
     exit 0
   fi
   if ! grep -Eqi "rate limit|too many requests|\\b429\\b" "${publish_log}"; then
     exit 1
   fi
-  echo "ClawHub publish hit a rate limit; retrying (${attempt}/${OPENCLAW_CLAWHUB_PUBLISH_ATTEMPTS:-8})." >&2
-  sleep "${OPENCLAW_CLAWHUB_PUBLISH_RETRY_DELAY_SECONDS:-60}"
+  echo "ClawHub publish hit a rate limit; retrying (${attempt}/${MARKETINGCLAW_CLAWHUB_PUBLISH_ATTEMPTS:-8})." >&2
+  sleep "${MARKETINGCLAW_CLAWHUB_PUBLISH_RETRY_DELAY_SECONDS:-60}"
 done
 
-echo "ClawHub publish failed after ${OPENCLAW_CLAWHUB_PUBLISH_ATTEMPTS:-8} attempts." >&2
+echo "ClawHub publish failed after ${MARKETINGCLAW_CLAWHUB_PUBLISH_ATTEMPTS:-8} attempts." >&2
 exit 1

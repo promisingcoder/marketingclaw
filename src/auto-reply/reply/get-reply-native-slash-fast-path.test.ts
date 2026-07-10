@@ -1,7 +1,7 @@
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../../test/helpers/temp-dir.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { MarketingClawConfig } from "../../config/config.js";
 import { loadSessionStore, saveSessionStore } from "../../config/sessions/store.js";
 import { getReplyPayloadMetadata } from "../reply-payload.js";
 import { markCompleteReplyConfig } from "./get-reply-fast-path.js";
@@ -65,9 +65,9 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
       ctx,
       cfg: markCompleteReplyConfig({
         session: {
-          store: path.join(tempDirs.make("openclaw-native-slash-"), "sessions.json"),
+          store: path.join(tempDirs.make("marketingclaw-native-slash-"), "sessions.json"),
         },
-      } as OpenClawConfig),
+      } as MarketingClawConfig),
       agentId: "main",
       agentDir: "/tmp/agent",
       agentCfg: undefined,
@@ -129,9 +129,9 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
       ctx,
       cfg: markCompleteReplyConfig({
         session: {
-          store: path.join(tempDirs.make("openclaw-text-slash-"), "sessions.json"),
+          store: path.join(tempDirs.make("marketingclaw-text-slash-"), "sessions.json"),
         },
-      } as OpenClawConfig),
+      } as MarketingClawConfig),
       agentId: "dev",
       agentDir: "/tmp/agent",
       agentCfg: undefined,
@@ -184,9 +184,9 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
       ctx,
       cfg: markCompleteReplyConfig({
         session: {
-          store: path.join(tempDirs.make("openclaw-external-text-slash-"), "sessions.json"),
+          store: path.join(tempDirs.make("marketingclaw-external-text-slash-"), "sessions.json"),
         },
-      } as OpenClawConfig),
+      } as MarketingClawConfig),
       agentId: "dev",
       agentDir: "/tmp/agent",
       agentCfg: undefined,
@@ -207,7 +207,7 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
 
   it("does not create a session for an unauthorized native command", async () => {
     const storePath = path.join(
-      tempDirs.make("openclaw-native-slash-unauthorized-"),
+      tempDirs.make("marketingclaw-native-slash-unauthorized-"),
       "sessions.json",
     );
     const sessionKey = "agent:main:telegram:slash:unauthorized";
@@ -232,7 +232,7 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
           body: "/config show",
         },
       }),
-      cfg: markCompleteReplyConfig({ session: { store: storePath } } as OpenClawConfig),
+      cfg: markCompleteReplyConfig({ session: { store: storePath } } as MarketingClawConfig),
       agentId: "main",
       agentDir: "/tmp/agent",
       agentCfg: undefined,
@@ -276,9 +276,9 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
       }),
       cfg: markCompleteReplyConfig({
         session: {
-          store: path.join(tempDirs.make("openclaw-native-slash-conflict-"), "sessions.json"),
+          store: path.join(tempDirs.make("marketingclaw-native-slash-conflict-"), "sessions.json"),
         },
-      } as OpenClawConfig),
+      } as MarketingClawConfig),
       agentId: "main",
       agentDir: "/tmp/agent",
       agentCfg: undefined,
@@ -323,9 +323,9 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
       }),
       cfg: markCompleteReplyConfig({
         session: {
-          store: path.join(tempDirs.make("openclaw-native-slash-rotation-"), "sessions.json"),
+          store: path.join(tempDirs.make("marketingclaw-native-slash-rotation-"), "sessions.json"),
         },
-      } as OpenClawConfig),
+      } as MarketingClawConfig),
       agentId: "main",
       agentDir: "/tmp/agent",
       agentCfg: undefined,
@@ -347,7 +347,10 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
   });
 
   it("adopts a supported legacy alias before native command initialization", async () => {
-    const storePath = path.join(tempDirs.make("openclaw-native-slash-alias-"), "sessions.json");
+    const storePath = path.join(
+      tempDirs.make("marketingclaw-native-slash-alias-"),
+      "sessions.json",
+    );
     const sessionKey = "agent:main:main";
     await saveSessionStore(
       storePath,
@@ -379,7 +382,7 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
           body: "/compact",
         },
       }),
-      cfg: markCompleteReplyConfig({ session: { store: storePath } } as OpenClawConfig),
+      cfg: markCompleteReplyConfig({ session: { store: storePath } } as MarketingClawConfig),
       agentId: "main",
       agentDir: "/tmp/agent",
       agentCfg: undefined,
@@ -401,7 +404,10 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
   });
 
   it("does not mutate an archived session during native command initialization", async () => {
-    const storePath = path.join(tempDirs.make("openclaw-native-slash-archived-"), "sessions.json");
+    const storePath = path.join(
+      tempDirs.make("marketingclaw-native-slash-archived-"),
+      "sessions.json",
+    );
     const sessionKey = "agent:main:main";
     const archivedEntry = {
       sessionId: "archived-session",
@@ -429,7 +435,7 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
           body: "/compact",
         },
       }),
-      cfg: markCompleteReplyConfig({ session: { store: storePath } } as OpenClawConfig),
+      cfg: markCompleteReplyConfig({ session: { store: storePath } } as MarketingClawConfig),
       agentId: "main",
       agentDir: "/tmp/agent",
       agentCfg: undefined,
@@ -454,7 +460,7 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
   });
 
   it("persists fast-path session initialization before command mutation", async () => {
-    const storePath = path.join(tempDirs.make("openclaw-native-slash-init-"), "sessions.json");
+    const storePath = path.join(tempDirs.make("marketingclaw-native-slash-init-"), "sessions.json");
     const sessionKey = "agent:main:main";
     await saveSessionStore(
       storePath,
@@ -498,7 +504,7 @@ describe("maybeResolveNativeSlashCommandFastReply", () => {
             body: "/compact",
           },
         }),
-        cfg: markCompleteReplyConfig({ session: { store: storePath } } as OpenClawConfig),
+        cfg: markCompleteReplyConfig({ session: { store: storePath } } as MarketingClawConfig),
         agentId: "main",
         agentDir: "/tmp/agent",
         agentCfg: undefined,

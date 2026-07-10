@@ -1,18 +1,18 @@
 ---
-summary: "Messaging platforms OpenClaw can connect to"
+summary: "Messaging platforms MarketingClaw can connect to"
 read_when:
-  - You want to choose a chat channel for OpenClaw
+  - You want to choose a chat channel for MarketingClaw
   - You need a quick overview of supported messaging platforms
 title: "Chat channels"
 ---
 
-OpenClaw can talk to you on any chat app you already use. Each channel connects via the Gateway.
+MarketingClaw can talk to you on any chat app you already use. Each channel connects via the Gateway.
 Text is supported everywhere; media and reactions vary by channel.
 
 iMessage, Telegram, and the WebChat UI ship with the core install. Channels marked
-"official plugin" install with one command (`openclaw plugins install @openclaw/<id>`)
-or on demand during `openclaw onboard` / `openclaw channels add`, then need a Gateway
-restart. "External plugin" channels are maintained outside the OpenClaw repo.
+"official plugin" install with one command (`marketingclaw plugins install @marketingclaw/<id>`)
+or on demand during `marketingclaw onboard` / `marketingclaw channels add`, then need a Gateway
+restart. "External plugin" channels are maintained outside the MarketingClaw repo.
 
 ## Supported channels
 
@@ -63,7 +63,7 @@ restart. "External plugin" channels are maintained outside the OpenClaw repo.
 
 ## Notes
 
-- Channels can run simultaneously; configure multiple and OpenClaw will route per chat.
+- Channels can run simultaneously; configure multiple and MarketingClaw will route per chat.
 - Fastest setup is usually **Telegram** (simple bot token, no plugin install). WhatsApp
   requires QR pairing and stores more state on disk.
 - Group behavior varies by channel; see [Groups](/channels/groups).

@@ -1,11 +1,11 @@
 {
   "entries": [
     {
-      "name": "@openclaw/amazon-bedrock-provider",
-      "description": "OpenClaw Amazon Bedrock provider plugin",
+      "name": "@marketingclaw/amazon-bedrock-provider",
+      "description": "MarketingClaw Amazon Bedrock provider plugin",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "amazon-bedrock",
           "label": "Amazon Bedrock"
@@ -19,18 +19,18 @@
           }
         ],
         "install": {
-          "npmSpec": "@openclaw/amazon-bedrock-provider",
+          "npmSpec": "@marketingclaw/amazon-bedrock-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.5.12-beta.1"
         }
       }
     },
     {
-      "name": "@openclaw/amazon-bedrock-mantle-provider",
-      "description": "OpenClaw Amazon Bedrock Mantle provider plugin",
+      "name": "@marketingclaw/amazon-bedrock-mantle-provider",
+      "description": "MarketingClaw Amazon Bedrock Mantle provider plugin",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "amazon-bedrock-mantle",
           "label": "Amazon Bedrock Mantle"
@@ -44,18 +44,18 @@
           }
         ],
         "install": {
-          "npmSpec": "@openclaw/amazon-bedrock-mantle-provider",
+          "npmSpec": "@marketingclaw/amazon-bedrock-mantle-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.5.12-beta.1"
         }
       }
     },
     {
-      "name": "@openclaw/anthropic-vertex-provider",
-      "description": "OpenClaw Anthropic Vertex provider plugin",
+      "name": "@marketingclaw/anthropic-vertex-provider",
+      "description": "MarketingClaw Anthropic Vertex provider plugin",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "anthropic-vertex",
           "label": "Anthropic Vertex"
@@ -69,18 +69,18 @@
           }
         ],
         "install": {
-          "npmSpec": "@openclaw/anthropic-vertex-provider",
+          "npmSpec": "@marketingclaw/anthropic-vertex-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.5.12-beta.1"
         }
       }
     },
     {
-      "name": "@openclaw/arcee-provider",
-      "description": "OpenClaw Arcee provider plugin.",
+      "name": "@marketingclaw/arcee-provider",
+      "description": "MarketingClaw Arcee provider plugin.",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "arcee",
           "label": "Arcee AI"
@@ -134,19 +134,19 @@
           }
         ],
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/arcee-provider",
-          "npmSpec": "@openclaw/arcee-provider",
+          "clawhubSpec": "clawhub:@marketingclaw/arcee-provider",
+          "npmSpec": "@marketingclaw/arcee-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.8"
         }
       }
     },
     {
-      "name": "@openclaw/cerebras-provider",
-      "description": "OpenClaw Cerebras provider plugin.",
+      "name": "@marketingclaw/cerebras-provider",
+      "description": "MarketingClaw Cerebras provider plugin.",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "cerebras",
           "label": "Cerebras"
@@ -191,19 +191,19 @@
           }
         ],
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/cerebras-provider",
-          "npmSpec": "@openclaw/cerebras-provider",
+          "clawhubSpec": "clawhub:@marketingclaw/cerebras-provider",
+          "npmSpec": "@marketingclaw/cerebras-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.8"
         }
       }
     },
     {
-      "name": "@openclaw/chutes-provider",
-      "description": "OpenClaw Chutes.ai provider plugin.",
+      "name": "@marketingclaw/chutes-provider",
+      "description": "MarketingClaw Chutes.ai provider plugin.",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "chutes",
           "label": "Chutes"
@@ -262,19 +262,19 @@
           }
         ],
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/chutes-provider",
-          "npmSpec": "@openclaw/chutes-provider",
+          "clawhubSpec": "clawhub:@marketingclaw/chutes-provider",
+          "npmSpec": "@marketingclaw/chutes-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.8"
         }
       }
     },
     {
-      "name": "@openclaw/cohere-provider",
-      "description": "OpenClaw Cohere provider plugin",
+      "name": "@marketingclaw/cohere-provider",
+      "description": "MarketingClaw Cohere provider plugin",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "cohere",
           "label": "Cohere"
@@ -308,19 +308,19 @@
           }
         ],
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/cohere-provider",
-          "npmSpec": "@openclaw/cohere-provider",
+          "clawhubSpec": "clawhub:@marketingclaw/cohere-provider",
+          "npmSpec": "@marketingclaw/cohere-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.8"
         }
       }
     },
     {
-      "name": "@openclaw/cloudflare-ai-gateway-provider",
-      "description": "OpenClaw Cloudflare AI Gateway provider plugin.",
+      "name": "@marketingclaw/cloudflare-ai-gateway-provider",
+      "description": "MarketingClaw Cloudflare AI Gateway provider plugin.",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "cloudflare-ai-gateway",
           "label": "Cloudflare AI Gateway"
@@ -358,19 +358,19 @@
           }
         ],
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/cloudflare-ai-gateway-provider",
-          "npmSpec": "@openclaw/cloudflare-ai-gateway-provider",
+          "clawhubSpec": "clawhub:@marketingclaw/cloudflare-ai-gateway-provider",
+          "npmSpec": "@marketingclaw/cloudflare-ai-gateway-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.8"
         }
       }
     },
     {
-      "name": "@openclaw/codex",
-      "description": "OpenClaw Codex harness and model provider plugin",
+      "name": "@marketingclaw/codex",
+      "description": "MarketingClaw Codex harness and model provider plugin",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "codex",
           "label": "Codex"
@@ -400,18 +400,18 @@
           }
         ],
         "install": {
-          "npmSpec": "@openclaw/codex",
+          "npmSpec": "@marketingclaw/codex",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.5.1-beta.1"
         }
       }
     },
     {
-      "name": "@openclaw/deepinfra-provider",
-      "description": "OpenClaw DeepInfra provider plugin.",
+      "name": "@marketingclaw/deepinfra-provider",
+      "description": "MarketingClaw DeepInfra provider plugin.",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "deepinfra",
           "label": "DeepInfra"
@@ -474,19 +474,19 @@
           ]
         },
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/deepinfra-provider",
-          "npmSpec": "@openclaw/deepinfra-provider",
+          "clawhubSpec": "clawhub:@marketingclaw/deepinfra-provider",
+          "npmSpec": "@marketingclaw/deepinfra-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.8"
         }
       }
     },
     {
-      "name": "@openclaw/deepseek-provider",
-      "description": "OpenClaw DeepSeek provider plugin.",
+      "name": "@marketingclaw/deepseek-provider",
+      "description": "MarketingClaw DeepSeek provider plugin.",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "deepseek",
           "label": "DeepSeek"
@@ -531,19 +531,19 @@
           }
         ],
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/deepseek-provider",
-          "npmSpec": "@openclaw/deepseek-provider",
+          "clawhubSpec": "clawhub:@marketingclaw/deepseek-provider",
+          "npmSpec": "@marketingclaw/deepseek-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.8"
         }
       }
     },
     {
-      "name": "@openclaw/featherless-provider",
-      "description": "OpenClaw Featherless AI provider plugin.",
+      "name": "@marketingclaw/featherless-provider",
+      "description": "MarketingClaw Featherless AI provider plugin.",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "featherless",
           "label": "Featherless AI"
@@ -581,19 +581,19 @@
           }
         ],
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/featherless-provider",
-          "npmSpec": "@openclaw/featherless-provider",
+          "clawhubSpec": "clawhub:@marketingclaw/featherless-provider",
+          "npmSpec": "@marketingclaw/featherless-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.11"
         }
       }
     },
     {
-      "name": "@openclaw/gmi-provider",
-      "description": "OpenClaw GMI Cloud provider plugin",
+      "name": "@marketingclaw/gmi-provider",
+      "description": "MarketingClaw GMI Cloud provider plugin",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "gmi",
           "label": "GMI Cloud"
@@ -632,19 +632,19 @@
           }
         ],
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/gmi-provider",
-          "npmSpec": "@openclaw/gmi-provider",
+          "clawhubSpec": "clawhub:@marketingclaw/gmi-provider",
+          "npmSpec": "@marketingclaw/gmi-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.8"
         }
       }
     },
     {
-      "name": "@openclaw/longcat-provider",
-      "description": "OpenClaw LongCat provider plugin",
+      "name": "@marketingclaw/longcat-provider",
+      "description": "MarketingClaw LongCat provider plugin",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "longcat",
           "label": "LongCat"
@@ -675,19 +675,19 @@
           }
         ],
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/longcat-provider",
-          "npmSpec": "@openclaw/longcat-provider",
+          "clawhubSpec": "clawhub:@marketingclaw/longcat-provider",
+          "npmSpec": "@marketingclaw/longcat-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.8"
         }
       }
     },
     {
-      "name": "@openclaw/groq-provider",
-      "description": "OpenClaw Groq media-understanding provider.",
+      "name": "@marketingclaw/groq-provider",
+      "description": "MarketingClaw Groq media-understanding provider.",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "groq",
           "label": "Groq"
@@ -737,19 +737,19 @@
           ]
         },
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/groq-provider",
-          "npmSpec": "@openclaw/groq-provider",
+          "clawhubSpec": "clawhub:@marketingclaw/groq-provider",
+          "npmSpec": "@marketingclaw/groq-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.8"
         }
       }
     },
     {
-      "name": "@openclaw/kilocode-provider",
-      "description": "OpenClaw Kilo Gateway provider plugin.",
+      "name": "@marketingclaw/kilocode-provider",
+      "description": "MarketingClaw Kilo Gateway provider plugin.",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "kilocode",
           "label": "Kilo Gateway"
@@ -787,19 +787,19 @@
           }
         ],
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/kilocode-provider",
-          "npmSpec": "@openclaw/kilocode-provider",
+          "clawhubSpec": "clawhub:@marketingclaw/kilocode-provider",
+          "npmSpec": "@marketingclaw/kilocode-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.8"
         }
       }
     },
     {
-      "name": "@openclaw/kimi-provider",
-      "description": "OpenClaw Kimi provider plugin.",
+      "name": "@marketingclaw/kimi-provider",
+      "description": "MarketingClaw Kimi provider plugin.",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "kimi",
           "label": "Kimi Coding"
@@ -840,19 +840,19 @@
           }
         ],
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/kimi-provider",
-          "npmSpec": "@openclaw/kimi-provider",
+          "clawhubSpec": "clawhub:@marketingclaw/kimi-provider",
+          "npmSpec": "@marketingclaw/kimi-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.8"
         }
       }
     },
     {
-      "name": "@openclaw/pixverse-provider",
-      "description": "OpenClaw PixVerse video provider plugin",
+      "name": "@marketingclaw/pixverse-provider",
+      "description": "MarketingClaw PixVerse video provider plugin",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "pixverse",
           "label": "PixVerse"
@@ -882,18 +882,18 @@
           }
         ],
         "install": {
-          "npmSpec": "@openclaw/pixverse-provider",
+          "npmSpec": "@marketingclaw/pixverse-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.5.26"
         }
       }
     },
     {
-      "name": "@openclaw/qianfan-provider",
-      "description": "OpenClaw Qianfan provider plugin.",
+      "name": "@marketingclaw/qianfan-provider",
+      "description": "MarketingClaw Qianfan provider plugin.",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "qianfan",
           "label": "Qianfan"
@@ -930,19 +930,19 @@
           }
         ],
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/qianfan-provider",
-          "npmSpec": "@openclaw/qianfan-provider",
+          "clawhubSpec": "clawhub:@marketingclaw/qianfan-provider",
+          "npmSpec": "@marketingclaw/qianfan-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.8"
         }
       }
     },
     {
-      "name": "@openclaw/qwen-provider",
-      "description": "OpenClaw Qwen Cloud provider plugin.",
+      "name": "@marketingclaw/qwen-provider",
+      "description": "MarketingClaw Qwen Cloud provider plugin.",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "qwen",
           "label": "Qwen Cloud"
@@ -1106,19 +1106,19 @@
           ]
         },
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/qwen-provider",
-          "npmSpec": "@openclaw/qwen-provider",
+          "clawhubSpec": "clawhub:@marketingclaw/qwen-provider",
+          "npmSpec": "@marketingclaw/qwen-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.8"
         }
       }
     },
     {
-      "name": "@openclaw/fireworks-provider",
-      "description": "OpenClaw Fireworks provider plugin",
+      "name": "@marketingclaw/fireworks-provider",
+      "description": "MarketingClaw Fireworks provider plugin",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "fireworks",
           "label": "Fireworks"
@@ -1159,19 +1159,19 @@
           }
         ],
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/fireworks-provider",
-          "npmSpec": "@openclaw/fireworks-provider",
+          "clawhubSpec": "clawhub:@marketingclaw/fireworks-provider",
+          "npmSpec": "@marketingclaw/fireworks-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.9"
         }
       }
     },
     {
-      "name": "@openclaw/moonshot-provider",
-      "description": "OpenClaw Moonshot provider plugin",
+      "name": "@marketingclaw/moonshot-provider",
+      "description": "MarketingClaw Moonshot provider plugin",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "moonshot",
           "label": "Moonshot"
@@ -1261,25 +1261,25 @@
             ],
             "placeholder": "sk-...",
             "signupUrl": "https://platform.moonshot.cn/",
-            "docsUrl": "https://docs.openclaw.ai/tools/web",
+            "docsUrl": "https://docs.marketingclaw.ai/tools/web",
             "credentialPath": "plugins.entries.moonshot.config.webSearch.apiKey",
             "autoDetectOrder": 40
           }
         ],
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/moonshot-provider",
-          "npmSpec": "@openclaw/moonshot-provider",
+          "clawhubSpec": "clawhub:@marketingclaw/moonshot-provider",
+          "npmSpec": "@marketingclaw/moonshot-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.9"
         }
       }
     },
     {
-      "name": "@openclaw/tencent-provider",
-      "description": "OpenClaw Tencent Cloud provider plugin (TokenHub + Token Plan)",
+      "name": "@marketingclaw/tencent-provider",
+      "description": "MarketingClaw Tencent Cloud provider plugin (TokenHub + Token Plan)",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "tencent",
           "label": "Tencent Cloud"
@@ -1347,19 +1347,19 @@
           }
         ],
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/tencent-provider",
-          "npmSpec": "@openclaw/tencent-provider",
+          "clawhubSpec": "clawhub:@marketingclaw/tencent-provider",
+          "npmSpec": "@marketingclaw/tencent-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.9"
         }
       }
     },
     {
-      "name": "@openclaw/venice-provider",
-      "description": "OpenClaw Venice provider plugin",
+      "name": "@marketingclaw/venice-provider",
+      "description": "MarketingClaw Venice provider plugin",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "venice",
           "label": "Venice"
@@ -1397,19 +1397,19 @@
           }
         ],
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/venice-provider",
-          "npmSpec": "@openclaw/venice-provider",
+          "clawhubSpec": "clawhub:@marketingclaw/venice-provider",
+          "npmSpec": "@marketingclaw/venice-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.9"
         }
       }
     },
     {
-      "name": "@openclaw/vercel-ai-gateway-provider",
-      "description": "OpenClaw Vercel AI Gateway provider plugin",
+      "name": "@marketingclaw/vercel-ai-gateway-provider",
+      "description": "MarketingClaw Vercel AI Gateway provider plugin",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "vercel-ai-gateway",
           "label": "Vercel AI Gateway"
@@ -1447,19 +1447,19 @@
           }
         ],
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/vercel-ai-gateway-provider",
-          "npmSpec": "@openclaw/vercel-ai-gateway-provider",
+          "clawhubSpec": "clawhub:@marketingclaw/vercel-ai-gateway-provider",
+          "npmSpec": "@marketingclaw/vercel-ai-gateway-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.9"
         }
       }
     },
     {
-      "name": "@openclaw/zai-provider",
-      "description": "OpenClaw Z.AI provider plugin",
+      "name": "@marketingclaw/zai-provider",
+      "description": "MarketingClaw Z.AI provider plugin",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "zai",
           "label": "Z.AI"
@@ -1578,19 +1578,19 @@
           ]
         },
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/zai-provider",
-          "npmSpec": "@openclaw/zai-provider",
+          "clawhubSpec": "clawhub:@marketingclaw/zai-provider",
+          "npmSpec": "@marketingclaw/zai-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.9"
         }
       }
     },
     {
-      "name": "@openclaw/stepfun-provider",
-      "description": "OpenClaw StepFun provider plugin.",
+      "name": "@marketingclaw/stepfun-provider",
+      "description": "MarketingClaw StepFun provider plugin.",
       "source": "official",
       "kind": "provider",
-      "openclaw": {
+      "marketingclaw": {
         "plugin": {
           "id": "stepfun",
           "label": "StepFun"
@@ -1690,8 +1690,8 @@
           }
         ],
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/stepfun-provider",
-          "npmSpec": "@openclaw/stepfun-provider",
+          "clawhubSpec": "clawhub:@marketingclaw/stepfun-provider",
+          "npmSpec": "@marketingclaw/stepfun-provider",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.6.9"
         }

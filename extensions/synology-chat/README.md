@@ -1,11 +1,11 @@
-# OpenClaw Synology Chat
+# MarketingClaw Synology Chat
 
-Official OpenClaw channel plugin for Synology Chat conversations and direct messages.
+Official MarketingClaw channel plugin for Synology Chat conversations and direct messages.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugin add @openclaw/synology-chat
+marketingclaw plugin add @marketingclaw/synology-chat
 ```
 
-Configure Synology Chat credentials and allowed conversations in OpenClaw, then use the plugin to route messages between Synology Chat and OpenClaw agents.
+Configure Synology Chat credentials and allowed conversations in MarketingClaw, then use the plugin to route messages between Synology Chat and MarketingClaw agents.

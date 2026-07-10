@@ -2,7 +2,7 @@
 import { spawn } from "node:child_process";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
+import { resolvePreferredMarketingClawTmpDir } from "marketingclaw/plugin-sdk/temp-path";
 import {
   appendQaChildOutput,
   appendQaChildOutputTail,
@@ -180,12 +180,12 @@ export async function loadQaRunnerModelOptions(params: {
 }) {
   const abortKillGraceMs = Math.max(1, params.abortKillGraceMs ?? CATALOG_ABORT_KILL_GRACE_MS);
   const tempRoot = await fs.mkdtemp(
-    path.join(resolvePreferredOpenClawTmpDir(), "openclaw-qa-model-catalog-"),
+    path.join(resolvePreferredMarketingClawTmpDir(), "marketingclaw-qa-model-catalog-"),
   );
   const workspaceDir = path.join(tempRoot, "workspace");
   const stateDir = path.join(tempRoot, "state");
   const homeDir = path.join(tempRoot, "home");
-  const configPath = path.join(tempRoot, "openclaw.json");
+  const configPath = path.join(tempRoot, "marketingclaw.json");
 
   try {
     await Promise.all([
@@ -223,11 +223,11 @@ export async function loadQaRunnerModelOptions(params: {
         env: {
           ...process.env,
           HOME: homeDir,
-          OPENCLAW_HOME: homeDir,
-          OPENCLAW_CONFIG_PATH: configPath,
-          OPENCLAW_STATE_DIR: stateDir,
-          OPENCLAW_OAUTH_DIR: path.join(stateDir, "credentials"),
-          OPENCLAW_CODEX_DISCOVERY_LIVE: "0",
+          MARKETINGCLAW_HOME: homeDir,
+          MARKETINGCLAW_CONFIG_PATH: configPath,
+          MARKETINGCLAW_STATE_DIR: stateDir,
+          MARKETINGCLAW_OAUTH_DIR: path.join(stateDir, "credentials"),
+          MARKETINGCLAW_CODEX_DISCOVERY_LIVE: "0",
         },
         detached: process.platform !== "win32",
         stdio: ["ignore", "pipe", "pipe"],

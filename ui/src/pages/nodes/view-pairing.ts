@@ -6,7 +6,7 @@ import { t } from "../../i18n/index.ts";
 import type { DevicePairSetup } from "../../lib/device-pair-setup.ts";
 
 const PAIRING_DOCS_URL =
-  "https://docs.openclaw.ai/channels/pairing#pair-from-the-control-ui-recommended";
+  "https://docs.marketingclaw.ai/channels/pairing#pair-from-the-control-ui-recommended";
 
 type DevicePairSetupProps = {
   open: boolean;
@@ -31,7 +31,11 @@ export function renderDevicePairSetup(props: DevicePairSetupProps) {
   const gatewayUrls = setup?.gatewayUrls ?? (setup ? [setup.gatewayUrl] : []);
 
   return html`
-    <openclaw-modal-dialog label=${title} description=${description} @modal-cancel=${props.onClose}>
+    <marketingclaw-modal-dialog
+      label=${title}
+      description=${description}
+      @modal-cancel=${props.onClose}
+    >
       <section class="device-pair-setup">
         <header class="device-pair-setup__header">
           <div class="device-pair-setup__phone" aria-hidden="true">${icons.smartphone}</div>
@@ -151,6 +155,6 @@ export function renderDevicePairSetup(props: DevicePairSetupProps) {
           </button>
         </footer>
       </section>
-    </openclaw-modal-dialog>
+    </marketingclaw-modal-dialog>
   `;
 }

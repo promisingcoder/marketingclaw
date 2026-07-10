@@ -3,16 +3,16 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { formatCliCommand } from "../cli/command-format.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../state/openclaw-state-db.generated.js";
+import type { DB as MarketingClawStateKyselyDatabase } from "../state/marketingclaw-state-db.generated.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-  runOpenClawStateWriteTransaction,
-} from "../state/openclaw-state-db.js";
+  closeMarketingClawStateDatabaseForTest,
+  openMarketingClawStateDatabase,
+  runMarketingClawStateWriteTransaction,
+} from "../state/marketingclaw-state-db.js";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../test-utils/openclaw-test-state.js";
+  createMarketingClawTestState,
+  type MarketingClawTestState,
+} from "../test-utils/marketingclaw-test-state.js";
 import {
   executeSqliteQuerySync,
   executeSqliteQueryTakeFirstSync,
@@ -32,8 +32,8 @@ const {
   startManagedServiceUpdateHandoffMock: vi.fn(async () => ({
     status: "started" as const,
     pid: 12345,
-    command: "openclaw update --yes --channel beta --timeout 2700",
-    logPath: "/tmp/openclaw-handoff.log",
+    command: "marketingclaw update --yes --channel beta --timeout 2700",
+    logPath: "/tmp/marketingclaw-handoff.log",
   })),
 }));
 
@@ -41,11 +41,12 @@ vi.mock("../config/config.js", () => ({
   getRuntimeConfig: getRuntimeConfigMock,
 }));
 
-vi.mock("./openclaw-root.js", async () => {
-  const actual = await vi.importActual<typeof import("./openclaw-root.js")>("./openclaw-root.js");
+vi.mock("./marketingclaw-root.js", async () => {
+  const actual =
+    await vi.importActual<typeof import("./marketingclaw-root.js")>("./marketingclaw-root.js");
   return {
     ...actual,
-    resolveOpenClawPackageRoot: vi.fn(),
+    resolveMarketingClawPackageRoot: vi.fn(),
   };
 });
 
@@ -104,7 +105,7 @@ vi.mock("./update-managed-service-handoff.js", () => ({
 
 const UPDATE_CHECK_STATE_KEY = "default";
 
-type UpdateCheckStateDatabase = Pick<OpenClawStateKyselyDatabase, "update_check_state">;
+type UpdateCheckStateDatabase = Pick<MarketingClawStateKyselyDatabase, "update_check_state">;
 type PersistedUpdateCheckState = {
   lastCheckedAt?: string;
   lastNotifiedVersion?: string;
@@ -127,9 +128,9 @@ function presentString(value: string | null): string | undefined {
 
 describe("update-startup", () => {
   let tempDir: string;
-  let testState: OpenClawTestState;
+  let testState: MarketingClawTestState;
 
-  let resolveOpenClawPackageRoot: (typeof import("./openclaw-root.js"))["resolveOpenClawPackageRoot"];
+  let resolveMarketingClawPackageRoot: (typeof import("./marketingclaw-root.js"))["resolveMarketingClawPackageRoot"];
   let checkUpdateStatus: (typeof import("./update-check.js"))["checkUpdateStatus"];
   let resolveNpmChannelTag: (typeof import("./update-check.js"))["resolveNpmChannelTag"];
   let runCommandWithTimeout: (typeof import("../process/exec.js"))["runCommandWithTimeout"];
@@ -148,7 +149,7 @@ describe("update-startup", () => {
   }
 
   function readPersistedUpdateCheckState(): PersistedUpdateCheckState | null {
-    const { db } = openOpenClawStateDatabase();
+    const { db } = openMarketingClawStateDatabase();
     const stateDb = getNodeSqliteKysely<UpdateCheckStateDatabase>(db);
     const row = executeSqliteQueryTakeFirstSync(
       db,
@@ -178,7 +179,7 @@ describe("update-startup", () => {
   }
 
   function writePersistedUpdateCheckState(state: PersistedUpdateCheckState): void {
-    runOpenClawStateWriteTransaction(({ db }) => {
+    runMarketingClawStateWriteTransaction(({ db }) => {
       const stateDb = getNodeSqliteKysely<UpdateCheckStateDatabase>(db);
       executeSqliteQuerySync(
         db,
@@ -210,17 +211,17 @@ describe("update-startup", () => {
   beforeEach(async () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-01-17T10:00:00Z"));
-    testState = await createOpenClawTestState({
+    testState = await createMarketingClawTestState({
       layout: "state-only",
-      prefix: "openclaw-update-check-suite-",
+      prefix: "marketingclaw-update-check-suite-",
       env: {
-        OPENCLAW_NO_AUTO_UPDATE: undefined,
-        OPENCLAW_SERVICE_KIND: undefined,
-        OPENCLAW_SERVICE_MARKER: undefined,
-        OPENCLAW_GATEWAY_SERVICE_PID: undefined,
-        OPENCLAW_LAUNCHD_LABEL: undefined,
-        OPENCLAW_SYSTEMD_UNIT: undefined,
-        OPENCLAW_WINDOWS_TASK_NAME: undefined,
+        MARKETINGCLAW_NO_AUTO_UPDATE: undefined,
+        MARKETINGCLAW_SERVICE_KIND: undefined,
+        MARKETINGCLAW_SERVICE_MARKER: undefined,
+        MARKETINGCLAW_GATEWAY_SERVICE_PID: undefined,
+        MARKETINGCLAW_LAUNCHD_LABEL: undefined,
+        MARKETINGCLAW_SYSTEMD_UNIT: undefined,
+        MARKETINGCLAW_WINDOWS_TASK_NAME: undefined,
         INVOCATION_ID: undefined,
         NODE_ENV: "test",
         VITEST: undefined,
@@ -230,7 +231,7 @@ describe("update-startup", () => {
 
     // Perf: load mocked modules once (after timers/env are set up).
     if (!loaded) {
-      ({ resolveOpenClawPackageRoot } = await import("./openclaw-root.js"));
+      ({ resolveMarketingClawPackageRoot } = await import("./marketingclaw-root.js"));
       ({ checkUpdateStatus, resolveNpmChannelTag } = await import("./update-check.js"));
       ({ runCommandWithTimeout } = await import("../process/exec.js"));
       ({
@@ -241,7 +242,7 @@ describe("update-startup", () => {
       } = await import("./update-startup.js"));
       loaded = true;
     }
-    vi.mocked(resolveOpenClawPackageRoot).mockClear();
+    vi.mocked(resolveMarketingClawPackageRoot).mockClear();
     vi.mocked(checkUpdateStatus).mockClear();
     vi.mocked(resolveNpmChannelTag).mockClear();
     vi.mocked(runCommandWithTimeout).mockClear();
@@ -254,15 +255,15 @@ describe("update-startup", () => {
     startManagedServiceUpdateHandoffMock.mockResolvedValue({
       status: "started",
       pid: 12345,
-      command: "openclaw update --yes --channel beta --timeout 2700",
-      logPath: "/tmp/openclaw-handoff.log",
+      command: "marketingclaw update --yes --channel beta --timeout 2700",
+      logPath: "/tmp/marketingclaw-handoff.log",
     });
     resetUpdateAvailableStateForTest();
   });
 
   afterEach(async () => {
     vi.useRealTimers();
-    closeOpenClawStateDatabaseForTest();
+    closeMarketingClawStateDatabaseForTest();
     await testState.cleanup();
     resetUpdateAvailableStateForTest();
   });
@@ -273,9 +274,9 @@ describe("update-startup", () => {
   }
 
   function mockPackageInstallStatus() {
-    vi.mocked(resolveOpenClawPackageRoot).mockResolvedValue("/opt/openclaw");
+    vi.mocked(resolveMarketingClawPackageRoot).mockResolvedValue("/opt/marketingclaw");
     vi.mocked(checkUpdateStatus).mockResolvedValue({
-      root: "/opt/openclaw",
+      root: "/opt/marketingclaw",
       installKind: "package",
       packageManager: "npm",
     } satisfies UpdateCheckResult);
@@ -442,7 +443,7 @@ describe("update-startup", () => {
     const { log, parsed } = await runUpdateCheckAndReadState(channel);
 
     expect(log.info).toHaveBeenCalledWith(
-      `update available (latest): v2.0.0 (current v1.0.0). Run: ${formatCliCommand("openclaw update")}`,
+      `update available (latest): v2.0.0 (current v1.0.0). Run: ${formatCliCommand("marketingclaw update")}`,
     );
     expect(parsed?.lastNotifiedVersion).toBe("2.0.0");
     expect(parsed?.lastAvailableVersion).toBe("2.0.0");
@@ -721,7 +722,7 @@ describe("update-startup", () => {
     });
     expect(log.info).toHaveBeenCalledTimes(1);
     expect(log.info).toHaveBeenCalledWith(
-      `update available (extended-stable): v2.0.0 (current v1.0.0). Run: ${formatCliCommand("openclaw update")}`,
+      `update available (extended-stable): v2.0.0 (current v1.0.0). Run: ${formatCliCommand("marketingclaw update")}`,
     );
     expect(onUpdateAvailableChange).toHaveBeenCalledTimes(1);
     expect(onUpdateAvailableChange).toHaveBeenCalledWith({
@@ -748,7 +749,7 @@ describe("update-startup", () => {
 
   it("does no extended-stable hint or auto work when checkOnStart is false", async () => {
     await seedExtendedStableAvailability();
-    vi.mocked(resolveOpenClawPackageRoot).mockClear();
+    vi.mocked(resolveMarketingClawPackageRoot).mockClear();
     vi.mocked(checkUpdateStatus).mockClear();
     vi.mocked(resolveNpmChannelTag).mockClear();
     const onUpdateAvailableChange = vi.fn();
@@ -760,7 +761,7 @@ describe("update-startup", () => {
       runAutoUpdate,
     });
 
-    expect(resolveOpenClawPackageRoot).not.toHaveBeenCalled();
+    expect(resolveMarketingClawPackageRoot).not.toHaveBeenCalled();
     expect(checkUpdateStatus).not.toHaveBeenCalled();
     expect(resolveNpmChannelTag).not.toHaveBeenCalled();
     expect(runAutoUpdate).not.toHaveBeenCalled();
@@ -861,12 +862,12 @@ describe("update-startup", () => {
     await seedExtendedStableAvailability();
     seedStableAutoRolloutState();
     resetUpdateAvailableStateForTest();
-    vi.mocked(resolveOpenClawPackageRoot).mockClear();
+    vi.mocked(resolveMarketingClawPackageRoot).mockClear();
     vi.mocked(checkUpdateStatus).mockClear();
     vi.mocked(resolveNpmChannelTag).mockClear();
-    vi.mocked(resolveOpenClawPackageRoot).mockResolvedValue("/opt/openclaw");
+    vi.mocked(resolveMarketingClawPackageRoot).mockResolvedValue("/opt/marketingclaw");
     vi.mocked(checkUpdateStatus).mockResolvedValue({
-      root: "/opt/openclaw",
+      root: "/opt/marketingclaw",
       installKind: "git",
       packageManager: "unknown",
     } satisfies UpdateCheckResult);
@@ -892,7 +893,7 @@ describe("update-startup", () => {
 
     await runExtendedStableUpdateCheck({ isNixMode: true, runAutoUpdate });
 
-    expect(resolveOpenClawPackageRoot).not.toHaveBeenCalled();
+    expect(resolveMarketingClawPackageRoot).not.toHaveBeenCalled();
     expect(checkUpdateStatus).not.toHaveBeenCalled();
     expect(resolveNpmChannelTag).not.toHaveBeenCalled();
     expect(runAutoUpdate).not.toHaveBeenCalled();
@@ -940,7 +941,7 @@ describe("update-startup", () => {
       channel: "stable",
       timeoutMs: 45 * 60 * 1000,
       restartDrainTimeoutMs: 300_000,
-      root: "/opt/openclaw",
+      root: "/opt/marketingclaw",
     });
   });
 
@@ -961,7 +962,7 @@ describe("update-startup", () => {
       channel: "beta",
       timeoutMs: 45 * 60 * 1000,
       restartDrainTimeoutMs: 90_000,
-      root: "/opt/openclaw",
+      root: "/opt/marketingclaw",
     });
   });
 
@@ -977,9 +978,9 @@ describe("update-startup", () => {
     expect(runAutoUpdate).toHaveBeenCalledTimes(1);
   });
 
-  it("honors OPENCLAW_NO_AUTO_UPDATE for configured auto-updates", async () => {
+  it("honors MARKETINGCLAW_NO_AUTO_UPDATE for configured auto-updates", async () => {
     mockPackageUpdateStatus("beta", "2.0.0-beta.1");
-    process.env.OPENCLAW_NO_AUTO_UPDATE = "1";
+    process.env.MARKETINGCLAW_NO_AUTO_UPDATE = "1";
     const log = { info: vi.fn() };
     const runAutoUpdate = createAutoUpdateSuccessMock();
 
@@ -993,10 +994,10 @@ describe("update-startup", () => {
 
     expect(runAutoUpdate).not.toHaveBeenCalled();
     const disabledLogCall = log.info.mock.calls.find(
-      ([message]) => message === "auto-update disabled by OPENCLAW_NO_AUTO_UPDATE",
+      ([message]) => message === "auto-update disabled by MARKETINGCLAW_NO_AUTO_UPDATE",
     );
     expect(disabledLogCall).toEqual([
-      "auto-update disabled by OPENCLAW_NO_AUTO_UPDATE",
+      "auto-update disabled by MARKETINGCLAW_NO_AUTO_UPDATE",
       {
         version: "2.0.0-beta.1",
         tag: "beta",
@@ -1017,7 +1018,7 @@ describe("update-startup", () => {
     });
 
     const originalArgv = process.argv.slice();
-    process.argv = [process.execPath, "/opt/openclaw/dist/entry.js"];
+    process.argv = [process.execPath, "/opt/marketingclaw/dist/entry.js"];
     try {
       await runAutoUpdateCheckWithDefaults({
         cfg: createBetaAutoUpdateConfig(),
@@ -1030,12 +1031,12 @@ describe("update-startup", () => {
     expect(startManagedServiceUpdateHandoffMock).not.toHaveBeenCalled();
     expect(scheduleGatewaySigusr1RestartMock).not.toHaveBeenCalled();
     expect(detectRespawnSupervisorMock).toHaveBeenCalledWith(process.env, process.platform, {
-      includeLinuxOpenClawGatewayServiceMarker: true,
+      includeLinuxMarketingClawGatewayServiceMarker: true,
     });
     const [argv, options] = requireFirstRunCommandCall();
     expect(argv).toEqual([
       process.execPath,
-      "/opt/openclaw/dist/entry.js",
+      "/opt/marketingclaw/dist/entry.js",
       "update",
       "--yes",
       "--channel",
@@ -1047,7 +1048,7 @@ describe("update-startup", () => {
       throw new Error("expected command options object");
     }
     expect(options.timeoutMs).toBe(45 * 60 * 1000);
-    expect(options.env).toEqual({ OPENCLAW_AUTO_UPDATE: "1" });
+    expect(options.env).toEqual({ MARKETINGCLAW_AUTO_UPDATE: "1" });
   });
 
   it("hands supervised auto-updates to a detached service handoff before restarting", async () => {
@@ -1066,7 +1067,7 @@ describe("update-startup", () => {
     expect(runCommandWithTimeout).not.toHaveBeenCalled();
     expect(startManagedServiceUpdateHandoffMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        root: "/opt/openclaw",
+        root: "/opt/marketingclaw",
         timeoutMs: 45 * 60 * 1000,
         restartDrainTimeoutMs: 300_000,
         channel: "beta",
@@ -1099,8 +1100,8 @@ describe("update-startup", () => {
       channel: "beta",
       version: "2.0.0-beta.1",
       tag: "beta",
-      command: "openclaw update --yes --channel beta --timeout 2700",
-      logPath: "/tmp/openclaw-handoff.log",
+      command: "marketingclaw update --yes --channel beta --timeout 2700",
+      logPath: "/tmp/marketingclaw-handoff.log",
     });
   });
 
@@ -1115,11 +1116,11 @@ describe("update-startup", () => {
 
     expect(runCommandWithTimeout).not.toHaveBeenCalled();
     expect(detectRespawnSupervisorMock).toHaveBeenCalledWith(process.env, process.platform, {
-      includeLinuxOpenClawGatewayServiceMarker: true,
+      includeLinuxMarketingClawGatewayServiceMarker: true,
     });
     expect(startManagedServiceUpdateHandoffMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        root: "/opt/openclaw",
+        root: "/opt/marketingclaw",
         timeoutMs: 45 * 60 * 1000,
         channel: "beta",
         restartDelayMs: 2000,
@@ -1180,7 +1181,7 @@ describe("update-startup", () => {
 
     await vi.advanceTimersByTimeAsync(48 * 60 * 60 * 1000);
 
-    expect(resolveOpenClawPackageRoot).not.toHaveBeenCalled();
+    expect(resolveMarketingClawPackageRoot).not.toHaveBeenCalled();
     expect(checkUpdateStatus).not.toHaveBeenCalled();
     expect(resolveNpmChannelTag).not.toHaveBeenCalled();
     stop();

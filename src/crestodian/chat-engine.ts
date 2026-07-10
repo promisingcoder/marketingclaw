@@ -633,7 +633,7 @@ export class CrestodianChatEngine {
     if (operation.kind === "open-setup") {
       if (this.opts.surface === "gateway") {
         return {
-          text: "The app owns the setup screens here — use Settings, or run `openclaw onboard` in a terminal.",
+          text: "The app owns the setup screens here — use Settings, or run `marketingclaw onboard` in a terminal.",
           action: "none",
         };
       }
@@ -715,7 +715,7 @@ export class CrestodianChatEngine {
   }
 
   /**
-   * Post-write hook: re-validate openclaw.json after every applied operation.
+   * Post-write hook: re-validate marketingclaw.json after every applied operation.
    * On failure the exact schema issues go straight back into the conversation
    * (and to the AI, which proposes one corrective command) so a bad write is
    * caught and fixed in the same chat instead of surfacing at gateway start.
@@ -736,7 +736,7 @@ export class CrestodianChatEngine {
     } catch {
       return null;
     }
-    const notice = `⚠ openclaw.json failed validation after that write:\n${issuesText}`;
+    const notice = `⚠ marketingclaw.json failed validation after that write:\n${issuesText}`;
     const recovery = await this.resolveAssistantTurn(
       `[config-verify] The config file is now invalid:\n${issuesText}\nPropose one corrective command from the allowed list.`,
       false,
@@ -892,13 +892,13 @@ export class CrestodianChatEngine {
         if (bridge.kind === "model") {
           return [
             "Sensitive input is not accepted in the Crestodian chat because terminal input is visible.",
-            "Run `openclaw configure --section model` to finish setup with masked prompts.",
+            "Run `marketingclaw configure --section model` to finish setup with masked prompts.",
           ].join("\n");
         }
         this.lastSensitiveChannel = bridge.label;
         return [
           "Sensitive input is not accepted in the Crestodian chat because terminal input is visible.",
-          `Say \`open channel wizard\` and I'll hand you to the masked terminal wizard for ${bridge.label}, or run \`openclaw channels add --channel ${bridge.label}\` yourself later.`,
+          `Say \`open channel wizard\` and I'll hand you to the masked terminal wizard for ${bridge.label}, or run \`marketingclaw channels add --channel ${bridge.label}\` yourself later.`,
         ].join("\n");
       }
       if (bridge.step.type === "note" || bridge.step.type === "progress") {

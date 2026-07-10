@@ -25,7 +25,10 @@ const tempDirs = (() => {
   };
 })();
 
-type ProbeEnv = Pick<NodeJS.ProcessEnv, "HOME" | "OPENCLAW_CONFIG_PATH" | "OPENCLAW_STATE_DIR">;
+type ProbeEnv = Pick<
+  NodeJS.ProcessEnv,
+  "HOME" | "MARKETINGCLAW_CONFIG_PATH" | "MARKETINGCLAW_STATE_DIR"
+>;
 
 type MatrixEnv = NodeJS.ProcessEnv & ProbeEnv;
 
@@ -44,11 +47,11 @@ interface RegistryServer {
 }
 
 function stateDir(env: ProbeEnv = process.env) {
-  return env.OPENCLAW_STATE_DIR || path.join(env.HOME ?? os.homedir(), ".openclaw");
+  return env.MARKETINGCLAW_STATE_DIR || path.join(env.HOME ?? os.homedir(), ".marketingclaw");
 }
 
 function configPath(env: ProbeEnv = process.env) {
-  return env.OPENCLAW_CONFIG_PATH || path.join(stateDir(env), "openclaw.json");
+  return env.MARKETINGCLAW_CONFIG_PATH || path.join(stateDir(env), "marketingclaw.json");
 }
 
 function readJson(file: string) {
@@ -217,32 +220,32 @@ export function parseDurationMs(value: string | undefined, fallback: string) {
 
 function createMatrixStateEnv(resourceDir: string): MatrixEnv {
   const home = fs.mkdtempSync(path.join(resourceDir, "home."));
-  const stateDir = path.join(home, ".openclaw");
+  const stateDir = path.join(home, ".marketingclaw");
   const workspaceDir = path.join(home, "workspace");
-  const configFile = path.join(stateDir, "openclaw.json");
+  const configFile = path.join(stateDir, "marketingclaw.json");
   fs.mkdirSync(stateDir, { recursive: true });
   fs.mkdirSync(workspaceDir, { recursive: true });
   return {
     ...process.env,
     HOME: home,
     USERPROFILE: home,
-    OPENCLAW_HOME: home,
-    OPENCLAW_STATE_DIR: stateDir,
-    OPENCLAW_CONFIG_PATH: configFile,
-    OPENCLAW_TEST_WORKSPACE_DIR: workspaceDir,
-    OPENCLAW_AUTH_PROFILE_SECRET_KEY: randomBytes(32).toString("hex"),
+    MARKETINGCLAW_HOME: home,
+    MARKETINGCLAW_STATE_DIR: stateDir,
+    MARKETINGCLAW_CONFIG_PATH: configFile,
+    MARKETINGCLAW_TEST_WORKSPACE_DIR: workspaceDir,
+    MARKETINGCLAW_AUTH_PROFILE_SECRET_KEY: randomBytes(32).toString("hex"),
   };
 }
 
 function packageEntrypoint(prefix: string) {
-  const packageRoot = path.join(prefix, "lib", "node_modules", "openclaw");
+  const packageRoot = path.join(prefix, "lib", "node_modules", "marketingclaw");
   for (const entry of ["dist/index.mjs", "dist/index.js"]) {
     const candidate = path.join(packageRoot, entry);
     if (fs.existsSync(candidate)) {
       return candidate;
     }
   }
-  throw new Error(`OpenClaw package entrypoint not found under ${packageRoot}/dist/`);
+  throw new Error(`MarketingClaw package entrypoint not found under ${packageRoot}/dist/`);
 }
 
 async function runCommand(command: string, args: readonly string[], options: CommandOptions = {}) {
@@ -385,18 +388,18 @@ async function runCommand(command: string, args: readonly string[], options: Com
   }
 }
 
-async function installOpenClawPackage(prefix: string, env: MatrixEnv) {
-  const packageTgz = env.OPENCLAW_CURRENT_PACKAGE_TGZ;
-  assertProbe(packageTgz, "OPENCLAW_CURRENT_PACKAGE_TGZ is required");
-  const installLog = "/tmp/openclaw-plugin-lifecycle-install.log";
-  process.stdout.write("Installing mounted OpenClaw package...\n");
+async function installMarketingClawPackage(prefix: string, env: MatrixEnv) {
+  const packageTgz = env.MARKETINGCLAW_CURRENT_PACKAGE_TGZ;
+  assertProbe(packageTgz, "MARKETINGCLAW_CURRENT_PACKAGE_TGZ is required");
+  const installLog = "/tmp/marketingclaw-plugin-lifecycle-install.log";
+  process.stdout.write("Installing mounted MarketingClaw package...\n");
   await runCommand(
     "npm",
     ["install", "-g", "--prefix", prefix, packageTgz, "--no-fund", "--no-audit"],
     {
       env,
       outputFile: installLog,
-      timeoutMs: parseDurationMs(env.OPENCLAW_E2E_NPM_INSTALL_TIMEOUT, "600s"),
+      timeoutMs: parseDurationMs(env.MARKETINGCLAW_E2E_NPM_INSTALL_TIMEOUT, "600s"),
     },
   );
 }
@@ -495,7 +498,7 @@ async function runMeasured(
 async function runPluginLifecycleMatrix() {
   const pluginId = "lifecycle-claw";
   const packageName = "@openclaw/lifecycle-claw";
-  const resourceDir = tempDirs.make("openclaw-plugin-lifecycle-matrix-");
+  const resourceDir = tempDirs.make("marketingclaw-plugin-lifecycle-matrix-");
   const npmPrefix = "/tmp/npm-prefix";
   const env = createMatrixStateEnv(resourceDir);
   const tarballV1 = path.join(resourceDir, "lifecycle-claw-1.0.0.tgz");
@@ -512,7 +515,7 @@ async function runPluginLifecycleMatrix() {
   fs.rmSync(npmPrefix, { recursive: true, force: true });
 
   try {
-    await installOpenClawPackage(npmPrefix, env);
+    await installMarketingClawPackage(npmPrefix, env);
     const entry = packageEntrypoint(npmPrefix);
     const matrixEnv: MatrixEnv = {
       ...env,

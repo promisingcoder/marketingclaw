@@ -19,7 +19,7 @@ describe("pairing QR reply channel data", () => {
     expect(
       readPairingQrReplyChannelData({
         channelData: {
-          openclawPairingQr: {
+          marketingclawPairingQr: {
             setupCode: "",
             expiresAtMs: 0,
           },

@@ -1,6 +1,6 @@
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import { resolvePluginConfigObject } from "openclaw/plugin-sdk/plugin-config-runtime";
-import type { WebSearchProviderPlugin } from "openclaw/plugin-sdk/provider-web-search-contract";
+import { createLazyRuntimeModule } from "marketingclaw/plugin-sdk/lazy-runtime";
+import { resolvePluginConfigObject } from "marketingclaw/plugin-sdk/plugin-config-runtime";
+import type { WebSearchProviderPlugin } from "marketingclaw/plugin-sdk/provider-web-search-contract";
 import type { CodexAppServerClientFactory } from "./app-server/shared-client.js";
 import { createCodexWebSearchProviderBase } from "./web-search-provider.shared.js";
 

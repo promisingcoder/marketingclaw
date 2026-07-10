@@ -1,31 +1,31 @@
-package ai.openclaw.app.ui.chat
+package ai.marketingclaw.app.ui.chat
 
-import ai.openclaw.app.GatewayAgentSummary
-import ai.openclaw.app.GatewayModelSummary
-import ai.openclaw.app.MainViewModel
-import ai.openclaw.app.R
-import ai.openclaw.app.chat.ChatCommandEntry
-import ai.openclaw.app.chat.ChatMessage
-import ai.openclaw.app.chat.ChatMessageContent
-import ai.openclaw.app.chat.ChatOutboxItem
-import ai.openclaw.app.chat.ChatPendingToolCall
-import ai.openclaw.app.chat.ChatSessionEntry
-import ai.openclaw.app.chat.MessageSpeechPhase
-import ai.openclaw.app.chat.MessageSpeechState
-import ai.openclaw.app.chat.VoiceNoteRecorderState
-import ai.openclaw.app.resolveAgentIdFromMainSessionKey
-import ai.openclaw.app.ui.copyGatewayDiagnosticsReport
-import ai.openclaw.app.ui.design.ClawListItem
-import ai.openclaw.app.ui.design.ClawLoadingState
-import ai.openclaw.app.ui.design.ClawPanel
-import ai.openclaw.app.ui.design.ClawPrimaryButton
-import ai.openclaw.app.ui.design.ClawSecondaryButton
-import ai.openclaw.app.ui.design.ClawStatus
-import ai.openclaw.app.ui.design.ClawStatusPill
-import ai.openclaw.app.ui.design.ClawTheme
-import ai.openclaw.app.ui.design.OpenClawMascot
-import ai.openclaw.app.ui.gatewayDiagnosticsEndpoint
-import ai.openclaw.app.ui.gatewayStatusForDisplay
+import ai.marketingclaw.app.GatewayAgentSummary
+import ai.marketingclaw.app.GatewayModelSummary
+import ai.marketingclaw.app.MainViewModel
+import ai.marketingclaw.app.R
+import ai.marketingclaw.app.chat.ChatCommandEntry
+import ai.marketingclaw.app.chat.ChatMessage
+import ai.marketingclaw.app.chat.ChatMessageContent
+import ai.marketingclaw.app.chat.ChatOutboxItem
+import ai.marketingclaw.app.chat.ChatPendingToolCall
+import ai.marketingclaw.app.chat.ChatSessionEntry
+import ai.marketingclaw.app.chat.MessageSpeechPhase
+import ai.marketingclaw.app.chat.MessageSpeechState
+import ai.marketingclaw.app.chat.VoiceNoteRecorderState
+import ai.marketingclaw.app.resolveAgentIdFromMainSessionKey
+import ai.marketingclaw.app.ui.copyGatewayDiagnosticsReport
+import ai.marketingclaw.app.ui.design.ClawListItem
+import ai.marketingclaw.app.ui.design.ClawLoadingState
+import ai.marketingclaw.app.ui.design.ClawPanel
+import ai.marketingclaw.app.ui.design.ClawPrimaryButton
+import ai.marketingclaw.app.ui.design.ClawSecondaryButton
+import ai.marketingclaw.app.ui.design.ClawStatus
+import ai.marketingclaw.app.ui.design.ClawStatusPill
+import ai.marketingclaw.app.ui.design.ClawTheme
+import ai.marketingclaw.app.ui.design.MarketingClawMascot
+import ai.marketingclaw.app.ui.gatewayDiagnosticsEndpoint
+import ai.marketingclaw.app.ui.gatewayStatusForDisplay
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
@@ -559,9 +559,9 @@ private fun ChatHeader(
       verticalAlignment = Alignment.CenterVertically,
       horizontalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-      OpenClawMascot(modifier = Modifier.size(25.dp), tint = ClawTheme.colors.text)
+      MarketingClawMascot(modifier = Modifier.size(25.dp), tint = ClawTheme.colors.text)
       Text(
-        text = "OpenClaw",
+        text = "MarketingClaw",
         style = ClawTheme.type.title.copy(fontSize = 17.sp, lineHeight = 21.sp),
         color = ClawTheme.colors.text,
         modifier = Modifier.weight(1f),
@@ -894,9 +894,9 @@ private data class StarterPrompt(
 /** Default prompts shown only for an empty, connected session. */
 private val starterPrompts =
   listOf(
-    StarterPrompt(mark = "1", title = "Catch me up", subtitle = "Summarize recent sessions and next steps.", message = "Catch me up on my recent OpenClaw sessions and suggest next steps."),
+    StarterPrompt(mark = "1", title = "Catch me up", subtitle = "Summarize recent sessions and next steps.", message = "Catch me up on my recent MarketingClaw sessions and suggest next steps."),
     StarterPrompt(mark = "2", title = "Plan the work", subtitle = "Turn a goal into an actionable checklist.", message = "Help me turn this goal into a practical checklist: "),
-    StarterPrompt(mark = "3", title = "Use this phone", subtitle = "Ask OpenClaw to use Android capabilities.", message = "What can you help me do from this phone right now?"),
+    StarterPrompt(mark = "3", title = "Use this phone", subtitle = "Ask MarketingClaw to use Android capabilities.", message = "What can you help me do from this phone right now?"),
   )
 
 @Composable
@@ -957,10 +957,10 @@ private fun ChatBubble(
           Text(
             text =
               when {
-                live -> "OpenClaw · Live"
+                live -> "MarketingClaw · Live"
                 isUser -> "You"
                 normalizedRole == "system" -> "System"
-                else -> "OpenClaw"
+                else -> "MarketingClaw"
               },
             style = ClawTheme.type.caption.copy(fontSize = 12.5.sp, lineHeight = 16.sp, fontWeight = FontWeight.SemiBold),
             color = ClawTheme.colors.text,
@@ -1045,7 +1045,7 @@ private fun ToolBubble(toolCalls: List<ChatPendingToolCall>) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
       ClawStatusPill(text = "Tools running", status = ClawStatus.Warning)
       toolCalls.take(4).forEach { tool ->
-        ClawListItem(title = tool.name, subtitle = "OpenClaw is working")
+        ClawListItem(title = tool.name, subtitle = "MarketingClaw is working")
       }
       if (toolCalls.size > 4) {
         Text(text = "+${toolCalls.size - 4} more", style = ClawTheme.type.caption, color = ClawTheme.colors.textSubtle)
@@ -1059,7 +1059,7 @@ private fun ChatThinkingBubble() {
   ClawPanel {
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
       ClawStatusPill(text = "Thinking", status = ClawStatus.Warning)
-      Text(text = "OpenClaw is preparing a response.", style = ClawTheme.type.body, color = ClawTheme.colors.textMuted)
+      Text(text = "MarketingClaw is preparing a response.", style = ClawTheme.type.body, color = ClawTheme.colors.textMuted)
     }
   }
 }
@@ -1569,7 +1569,7 @@ private fun ChatInputPill(
             decorationBox = { innerTextField ->
               Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterStart) {
                 if (value.isEmpty()) {
-                  Text(text = "Message OpenClaw", style = ClawTheme.type.body, color = ClawTheme.colors.textSubtle)
+                  Text(text = "Message MarketingClaw", style = ClawTheme.type.body, color = ClawTheme.colors.textSubtle)
                 }
                 innerTextField()
               }

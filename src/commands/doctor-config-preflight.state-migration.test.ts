@@ -358,7 +358,7 @@ describe("runDoctorConfigPreflight state migration", () => {
         warnings: [
           {
             message: "Configured plugin discord is not installed.",
-            guidance: ["Run `openclaw update repair` to retry plugin repair."],
+            guidance: ["Run `marketingclaw update repair` to retry plugin repair."],
           },
         ],
       }),
@@ -374,7 +374,7 @@ describe("runDoctorConfigPreflight state migration", () => {
 
     expect(recordSuccessfulStartupMigrations).not.toHaveBeenCalled();
     expect(note).toHaveBeenCalledWith(
-      "- Configured plugin discord is not installed. Run `openclaw update repair` to retry plugin repair.",
+      "- Configured plugin discord is not installed. Run `marketingclaw update repair` to retry plugin repair.",
       "Doctor warnings",
     );
     expect(startupMigrationLeaseRelease).toHaveBeenCalledOnce();
@@ -389,8 +389,8 @@ describe("runDoctorConfigPreflight state migration", () => {
           {
             message: 'Plugin "discord" failed post-core payload smoke check (missing): index.js',
             guidance: [
-              "Run `openclaw update repair` to retry plugin repair.",
-              "Run `openclaw plugins inspect discord --runtime --json` for details.",
+              "Run `marketingclaw update repair` to retry plugin repair.",
+              "Run `marketingclaw plugins inspect discord --runtime --json` for details.",
             ],
           },
         ],
@@ -428,7 +428,7 @@ describe("runDoctorConfigPreflight state migration", () => {
         invalidConfigNote: false,
         requireStartupMigrationCheckpoint: true,
       }),
-    ).rejects.toThrow("OpenClaw config is invalid");
+    ).rejects.toThrow("MarketingClaw config is invalid");
 
     expect(recordSuccessfulStartupMigrations).not.toHaveBeenCalled();
     expect(startupMigrationLeaseRelease).toHaveBeenCalledOnce();

@@ -107,7 +107,7 @@ describe("qa runner model catalog", () => {
   it.runIf(process.platform !== "win32")(
     "kills aborted catalog process groups when the catalog child exits first",
     async () => {
-      const repoRoot = await makeTempDir("openclaw-qa-model-catalog-");
+      const repoRoot = await makeTempDir("marketingclaw-qa-model-catalog-");
       const pidPath = path.join(repoRoot, "descendant.pid");
       let descendantPid: number | undefined;
       const controller = new AbortController();
@@ -150,7 +150,7 @@ describe("qa runner model catalog", () => {
   it.runIf(process.platform !== "win32")(
     "preserves abort grace when catalog descendants exit cleanly",
     async () => {
-      const repoRoot = await makeTempDir("openclaw-qa-model-catalog-clean-");
+      const repoRoot = await makeTempDir("marketingclaw-qa-model-catalog-clean-");
       const readyPath = path.join(repoRoot, "descendant.ready");
       const cleanupPath = path.join(repoRoot, "descendant.cleanup");
       const pidPath = path.join(repoRoot, "descendant.pid");

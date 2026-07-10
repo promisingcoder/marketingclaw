@@ -8,7 +8,7 @@ title: "Skill Workshop"
 sidebarTitle: "Skill Workshop"
 ---
 
-Skill Workshop is OpenClaw's governed path for creating and updating workspace
+Skill Workshop is MarketingClaw's governed path for creating and updating workspace
 skills. Agents and operators never write `SKILL.md` directly through this
 path — they create a **proposal** (pending draft with content, target
 binding, scanner state, hashes, and rollback metadata) that becomes a live
@@ -62,10 +62,10 @@ Lifecycle transitions and restores apply to new sessions; running sessions keep
 their current skill snapshot.
 
 ```bash
-openclaw skills curator status
-openclaw skills curator pin <skill>
-openclaw skills curator unpin <skill>
-openclaw skills curator restore <skill>
+marketingclaw skills curator status
+marketingclaw skills curator pin <skill>
+marketingclaw skills curator unpin <skill>
+marketingclaw skills curator restore <skill>
 ```
 
 All curator commands accept `--json`. Status also reports deterministic overlap
@@ -93,7 +93,7 @@ naming requirements. It gathers the sources with its existing tools, then calls
 `skill_workshop` with `action: "create"`.
 
 The resulting proposal stays `pending`; `/learn` never applies it. Review and
-apply it through the normal approval flow or with `openclaw skills workshop`.
+apply it through the normal approval flow or with `marketingclaw skills workshop`.
 
 Create:
 
@@ -124,32 +124,32 @@ description, support-file count, and body size. Approval requests are bounded
 to finish before the agent tool watchdog. If no decision arrives before the
 prompt expires, the lifecycle action does not run: the proposal stays pending
 and unchanged. Decide later in the Skill Workshop UI or run
-`openclaw skills workshop apply|reject|quarantine <proposal-id>`. Agents should
+`marketingclaw skills workshop apply|reject|quarantine <proposal-id>`. Agents should
 not retry an expired lifecycle action in a loop.
 
 ## CLI
 
 ```bash
 # Create
-openclaw skills workshop propose-create \
+marketingclaw skills workshop propose-create \
   --name morning-catchup \
   --description "Daily inbox catch-up: triage, archive, surface, draft, plan" \
   --proposal ./PROPOSAL.md
 
 # Update an existing workspace skill
-openclaw skills workshop propose-update trip-planning --proposal ./PROPOSAL.md
+marketingclaw skills workshop propose-update trip-planning --proposal ./PROPOSAL.md
 
 # List and inspect
-openclaw skills workshop list
-openclaw skills workshop inspect <proposal-id>
+marketingclaw skills workshop list
+marketingclaw skills workshop inspect <proposal-id>
 
 # Revise before approval
-openclaw skills workshop revise <proposal-id> --proposal ./PROPOSAL.md
+marketingclaw skills workshop revise <proposal-id> --proposal ./PROPOSAL.md
 
 # Close out
-openclaw skills workshop apply <proposal-id>
-openclaw skills workshop reject <proposal-id> --reason "Duplicate"
-openclaw skills workshop quarantine <proposal-id> --reason "Needs security review"
+marketingclaw skills workshop apply <proposal-id>
+marketingclaw skills workshop reject <proposal-id> --reason "Duplicate"
+marketingclaw skills workshop quarantine <proposal-id> --reason "Needs security review"
 ```
 
 Every subcommand takes `--agent <id>` (target workspace; defaults to
@@ -181,7 +181,7 @@ Use `--proposal-dir` when the proposed skill needs files beside
 `PROPOSAL.md`:
 
 ```bash
-openclaw skills workshop propose-create \
+marketingclaw skills workshop propose-create \
   --name weekly-update \
   --description "Friday wrap-up: stats, highlights, next week's top three" \
   --proposal-dir ./weekly-update-proposal
@@ -230,7 +230,7 @@ agent session or the CLI.
 
 ## Suggested skills
 
-OpenClaw detects durable instructions such as “next time,” “remember to,” and reactive corrections
+MarketingClaw detects durable instructions such as “next time,” “remember to,” and reactive corrections
 when an interactive turn ends, including failed turns. On the next turn, the agent offers to save
 the most recent detected workflow through `skill_workshop`; the user decides whether to create a
 proposal. This built-in suggestion does not create or change a skill by itself. Enable
@@ -296,7 +296,7 @@ revise rather than submit literal new content.
 ## Storage
 
 ```text
-<OPENCLAW_STATE_DIR>/skill-workshop/
+<MARKETINGCLAW_STATE_DIR>/skill-workshop/
   proposals.json
   proposals/<proposal-id>/
     proposal.json
@@ -309,7 +309,7 @@ revise rather than submit literal new content.
     templates/
 ```
 
-Default state directory: `~/.openclaw`.
+Default state directory: `~/.marketingclaw`.
 
 - `proposal.json`: canonical proposal record.
 - `proposals.json`: fast listing index, rebuildable from proposal folders.
@@ -336,16 +336,16 @@ Default state directory: `~/.openclaw`.
 | `Proposal scan failed`                         | Inspect scanner findings, then revise or quarantine the proposal.                                                                                                                                           |
 | `untrusted symlink target`                     | Configure `skills.load.allowSymlinkTargets` and enable `skills.workshop.allowSymlinkTargetWrites` only for intentional shared skill roots.                                                                  |
 | `Support file paths must be under one of...`   | Move support files under `assets/`, `examples/`, `references/`, `scripts/`, or `templates/`.                                                                                                                |
-| Proposal does not show in list                 | Check the selected `--agent` workspace and `OPENCLAW_STATE_DIR`.                                                                                                                                            |
+| Proposal does not show in list                 | Check the selected `--agent` workspace and `MARKETINGCLAW_STATE_DIR`.                                                                                                                                       |
 | Agent cannot call `skill_workshop`             | Check the active tool policy and run mode. `coding` includes the tool; restrictive `tools.allow` policies must list it explicitly, and sandboxed runs must use a normal host-side agent session or the CLI. |
 
 ### Tool-policy diagnostic
 
-When autonomous capture is enabled, `openclaw doctor` runs the
+When autonomous capture is enabled, `marketingclaw doctor` runs the
 `core/doctor/skill-workshop-tool-policy` check for the default agent. If policy
 hides `skill_workshop`, the warning names the first excluding config layer and
 the exact `allow` or `alsoAllow` change to make. Older runbooks may still use
-`openclaw plugins inspect skill-workshop`; that command now explains that Skill
+`marketingclaw plugins inspect skill-workshop`; that command now explains that Skill
 Workshop is built in and prints the same policy hint when applicable.
 
 ## Related
@@ -354,4 +354,4 @@ Workshop is built in and prints the same policy hint when applicable.
 - [Creating skills](/tools/creating-skills) for hand-written `SKILL.md`
   basics
 - [Skills config](/tools/skills-config) for the full `skills.workshop` schema
-- [Skills CLI](/cli/skills) for `openclaw skills` commands
+- [Skills CLI](/cli/skills) for `marketingclaw skills` commands

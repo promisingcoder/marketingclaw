@@ -17,8 +17,8 @@ import {
   type EmbeddedRunAttemptParams,
   type NativeHookRelayEvent,
   type NativeHookRelayRegistrationHandle,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import { loadExecApprovals } from "openclaw/plugin-sdk/exec-approvals-runtime";
+} from "marketingclaw/plugin-sdk/agent-harness-runtime";
+import { loadExecApprovals } from "marketingclaw/plugin-sdk/exec-approvals-runtime";
 import { readCodexSupportedReasoningEfforts } from "../../provider.js";
 import { resolveCodexAppServerForModelProvider } from "./app-server-policy.js";
 import { handleCodexAppServerApprovalRequest } from "./approval-bridge.js";
@@ -27,7 +27,7 @@ import { isCodexAppServerApprovalRequest, type CodexAppServerClient } from "./cl
 import {
   canUseCodexModelBackedApprovalsReviewerForModel,
   readCodexPluginConfig,
-  resolveOpenClawExecPolicyForCodexAppServer,
+  resolveMarketingClawExecPolicyForCodexAppServer,
   resolveCodexAppServerRuntimeOptions,
   resolveCodexModelBackedReviewerPolicyContext,
   shouldAutoApproveCodexAppServerApprovals,
@@ -179,7 +179,7 @@ export async function runCodexAppServerSideQuestion(
     config: params.cfg,
     agentId: params.agentId,
   });
-  const execPolicy = resolveOpenClawExecPolicyForCodexAppServer({
+  const execPolicy = resolveMarketingClawExecPolicyForCodexAppServer({
     approvals: loadExecApprovals(),
     config: params.cfg,
     agentId: sessionAgentId,
@@ -798,8 +798,8 @@ async function createCodexSideToolBridge(input: {
   const messageToolProvider = resolveCodexMessageToolProvider(input.params);
   let tools: AnyAgentTool[] = [];
   if (supportsModelTools(runtimeModel)) {
-    const createOpenClawCodingTools = (await import("openclaw/plugin-sdk/agent-harness"))
-      .createOpenClawCodingTools;
+    const createMarketingClawCodingTools = (await import("marketingclaw/plugin-sdk/agent-harness"))
+      .createMarketingClawCodingTools;
     const sandboxSessionKey =
       input.params.sandboxSessionKey?.trim() ||
       input.params.sessionKey?.trim() ||
@@ -810,7 +810,7 @@ async function createCodexSideToolBridge(input: {
       sessionKey: sandboxSessionKey,
       workspaceDir: input.cwd,
     });
-    const allTools = createOpenClawCodingTools({
+    const allTools = createMarketingClawCodingTools({
       agentId: input.sessionAgentId,
       sessionKey: sandboxSessionKey,
       runSessionKey:

@@ -1,109 +1,109 @@
-package ai.openclaw.app.protocol
+package ai.marketingclaw.app.protocol
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class OpenClawProtocolConstantsTest {
+class MarketingClawProtocolConstantsTest {
   @Test
   fun canvasCommandsUseStableStrings() {
-    assertEquals("canvas.present", OpenClawCanvasCommand.Present.rawValue)
-    assertEquals("canvas.hide", OpenClawCanvasCommand.Hide.rawValue)
-    assertEquals("canvas.navigate", OpenClawCanvasCommand.Navigate.rawValue)
-    assertEquals("canvas.eval", OpenClawCanvasCommand.Eval.rawValue)
-    assertEquals("canvas.snapshot", OpenClawCanvasCommand.Snapshot.rawValue)
+    assertEquals("canvas.present", MarketingClawCanvasCommand.Present.rawValue)
+    assertEquals("canvas.hide", MarketingClawCanvasCommand.Hide.rawValue)
+    assertEquals("canvas.navigate", MarketingClawCanvasCommand.Navigate.rawValue)
+    assertEquals("canvas.eval", MarketingClawCanvasCommand.Eval.rawValue)
+    assertEquals("canvas.snapshot", MarketingClawCanvasCommand.Snapshot.rawValue)
   }
 
   @Test
   fun a2uiCommandsUseStableStrings() {
-    assertEquals("canvas.a2ui.push", OpenClawCanvasA2UICommand.Push.rawValue)
-    assertEquals("canvas.a2ui.pushJSONL", OpenClawCanvasA2UICommand.PushJSONL.rawValue)
-    assertEquals("canvas.a2ui.reset", OpenClawCanvasA2UICommand.Reset.rawValue)
+    assertEquals("canvas.a2ui.push", MarketingClawCanvasA2UICommand.Push.rawValue)
+    assertEquals("canvas.a2ui.pushJSONL", MarketingClawCanvasA2UICommand.PushJSONL.rawValue)
+    assertEquals("canvas.a2ui.reset", MarketingClawCanvasA2UICommand.Reset.rawValue)
   }
 
   @Test
   fun capabilitiesUseStableStrings() {
-    assertEquals("canvas", OpenClawCapability.Canvas.rawValue)
-    assertEquals("camera", OpenClawCapability.Camera.rawValue)
-    assertEquals("voiceWake", OpenClawCapability.VoiceWake.rawValue)
-    assertEquals("talk", OpenClawCapability.Talk.rawValue)
-    assertEquals("location", OpenClawCapability.Location.rawValue)
-    assertEquals("sms", OpenClawCapability.Sms.rawValue)
-    assertEquals("device", OpenClawCapability.Device.rawValue)
-    assertEquals("notifications", OpenClawCapability.Notifications.rawValue)
-    assertEquals("system", OpenClawCapability.System.rawValue)
-    assertEquals("photos", OpenClawCapability.Photos.rawValue)
-    assertEquals("contacts", OpenClawCapability.Contacts.rawValue)
-    assertEquals("calendar", OpenClawCapability.Calendar.rawValue)
-    assertEquals("motion", OpenClawCapability.Motion.rawValue)
-    assertEquals("callLog", OpenClawCapability.CallLog.rawValue)
+    assertEquals("canvas", MarketingClawCapability.Canvas.rawValue)
+    assertEquals("camera", MarketingClawCapability.Camera.rawValue)
+    assertEquals("voiceWake", MarketingClawCapability.VoiceWake.rawValue)
+    assertEquals("talk", MarketingClawCapability.Talk.rawValue)
+    assertEquals("location", MarketingClawCapability.Location.rawValue)
+    assertEquals("sms", MarketingClawCapability.Sms.rawValue)
+    assertEquals("device", MarketingClawCapability.Device.rawValue)
+    assertEquals("notifications", MarketingClawCapability.Notifications.rawValue)
+    assertEquals("system", MarketingClawCapability.System.rawValue)
+    assertEquals("photos", MarketingClawCapability.Photos.rawValue)
+    assertEquals("contacts", MarketingClawCapability.Contacts.rawValue)
+    assertEquals("calendar", MarketingClawCapability.Calendar.rawValue)
+    assertEquals("motion", MarketingClawCapability.Motion.rawValue)
+    assertEquals("callLog", MarketingClawCapability.CallLog.rawValue)
   }
 
   @Test
   fun cameraCommandsUseStableStrings() {
-    assertEquals("camera.list", OpenClawCameraCommand.List.rawValue)
-    assertEquals("camera.snap", OpenClawCameraCommand.Snap.rawValue)
-    assertEquals("camera.clip", OpenClawCameraCommand.Clip.rawValue)
+    assertEquals("camera.list", MarketingClawCameraCommand.List.rawValue)
+    assertEquals("camera.snap", MarketingClawCameraCommand.Snap.rawValue)
+    assertEquals("camera.clip", MarketingClawCameraCommand.Clip.rawValue)
   }
 
   @Test
   fun notificationsCommandsUseStableStrings() {
-    assertEquals("notifications.list", OpenClawNotificationsCommand.List.rawValue)
-    assertEquals("notifications.actions", OpenClawNotificationsCommand.Actions.rawValue)
+    assertEquals("notifications.list", MarketingClawNotificationsCommand.List.rawValue)
+    assertEquals("notifications.actions", MarketingClawNotificationsCommand.Actions.rawValue)
   }
 
   @Test
   fun deviceCommandsUseStableStrings() {
-    assertEquals("device.status", OpenClawDeviceCommand.Status.rawValue)
-    assertEquals("device.info", OpenClawDeviceCommand.Info.rawValue)
-    assertEquals("device.permissions", OpenClawDeviceCommand.Permissions.rawValue)
-    assertEquals("device.health", OpenClawDeviceCommand.Health.rawValue)
-    assertEquals("device.apps", OpenClawDeviceCommand.Apps.rawValue)
+    assertEquals("device.status", MarketingClawDeviceCommand.Status.rawValue)
+    assertEquals("device.info", MarketingClawDeviceCommand.Info.rawValue)
+    assertEquals("device.permissions", MarketingClawDeviceCommand.Permissions.rawValue)
+    assertEquals("device.health", MarketingClawDeviceCommand.Health.rawValue)
+    assertEquals("device.apps", MarketingClawDeviceCommand.Apps.rawValue)
   }
 
   @Test
   fun systemCommandsUseStableStrings() {
-    assertEquals("system.notify", OpenClawSystemCommand.Notify.rawValue)
+    assertEquals("system.notify", MarketingClawSystemCommand.Notify.rawValue)
   }
 
   @Test
   fun photosCommandsUseStableStrings() {
-    assertEquals("photos.latest", OpenClawPhotosCommand.Latest.rawValue)
+    assertEquals("photos.latest", MarketingClawPhotosCommand.Latest.rawValue)
   }
 
   @Test
   fun contactsCommandsUseStableStrings() {
-    assertEquals("contacts.search", OpenClawContactsCommand.Search.rawValue)
-    assertEquals("contacts.add", OpenClawContactsCommand.Add.rawValue)
+    assertEquals("contacts.search", MarketingClawContactsCommand.Search.rawValue)
+    assertEquals("contacts.add", MarketingClawContactsCommand.Add.rawValue)
   }
 
   @Test
   fun calendarCommandsUseStableStrings() {
-    assertEquals("calendar.events", OpenClawCalendarCommand.Events.rawValue)
-    assertEquals("calendar.add", OpenClawCalendarCommand.Add.rawValue)
+    assertEquals("calendar.events", MarketingClawCalendarCommand.Events.rawValue)
+    assertEquals("calendar.add", MarketingClawCalendarCommand.Add.rawValue)
   }
 
   @Test
   fun motionCommandsUseStableStrings() {
-    assertEquals("motion.activity", OpenClawMotionCommand.Activity.rawValue)
-    assertEquals("motion.pedometer", OpenClawMotionCommand.Pedometer.rawValue)
+    assertEquals("motion.activity", MarketingClawMotionCommand.Activity.rawValue)
+    assertEquals("motion.pedometer", MarketingClawMotionCommand.Pedometer.rawValue)
   }
 
   @Test
   fun smsCommandsUseStableStrings() {
-    assertEquals("sms.send", OpenClawSmsCommand.Send.rawValue)
-    assertEquals("sms.search", OpenClawSmsCommand.Search.rawValue)
+    assertEquals("sms.send", MarketingClawSmsCommand.Send.rawValue)
+    assertEquals("sms.search", MarketingClawSmsCommand.Search.rawValue)
   }
 
   @Test
   fun talkCommandsUseStableStrings() {
-    assertEquals("talk.ptt.start", OpenClawTalkCommand.PttStart.rawValue)
-    assertEquals("talk.ptt.stop", OpenClawTalkCommand.PttStop.rawValue)
-    assertEquals("talk.ptt.cancel", OpenClawTalkCommand.PttCancel.rawValue)
-    assertEquals("talk.ptt.once", OpenClawTalkCommand.PttOnce.rawValue)
+    assertEquals("talk.ptt.start", MarketingClawTalkCommand.PttStart.rawValue)
+    assertEquals("talk.ptt.stop", MarketingClawTalkCommand.PttStop.rawValue)
+    assertEquals("talk.ptt.cancel", MarketingClawTalkCommand.PttCancel.rawValue)
+    assertEquals("talk.ptt.once", MarketingClawTalkCommand.PttOnce.rawValue)
   }
 
   @Test
   fun callLogCommandsUseStableStrings() {
-    assertEquals("callLog.search", OpenClawCallLogCommand.Search.rawValue)
+    assertEquals("callLog.search", MarketingClawCallLogCommand.Search.rawValue)
   }
 }

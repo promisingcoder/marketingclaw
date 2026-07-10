@@ -1,9 +1,9 @@
 // Qa Channel plugin module implements bus client behavior.
 import http from "node:http";
 import https from "node:https";
-import { readProviderJsonResponse } from "openclaw/plugin-sdk/provider-http";
-import { readByteStreamWithLimit } from "openclaw/plugin-sdk/response-limit-runtime";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
+import { readProviderJsonResponse } from "marketingclaw/plugin-sdk/provider-http";
+import { readByteStreamWithLimit } from "marketingclaw/plugin-sdk/response-limit-runtime";
+import { fetchWithSsrFGuard } from "marketingclaw/plugin-sdk/ssrf-runtime";
 import type {
   QaBusInboundMessageInput,
   QaBusMessage,

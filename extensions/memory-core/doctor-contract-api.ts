@@ -4,7 +4,7 @@ import fsSync from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
 import type { DatabaseSync } from "node:sqlite";
-import { resolveUserPath } from "openclaw/plugin-sdk/memory-core-host-engine-foundation";
+import { resolveUserPath } from "marketingclaw/plugin-sdk/memory-core-host-engine-foundation";
 import {
   ensureMemoryIndexSchema,
   loadSqliteVecExtension,
@@ -15,18 +15,18 @@ import {
   MEMORY_INDEX_SOURCES_TABLE,
   MEMORY_INDEX_VECTOR_TABLE,
   requireNodeSqlite,
-} from "openclaw/plugin-sdk/memory-core-host-engine-storage";
-import { resolveMemoryDreamingWorkspaces } from "openclaw/plugin-sdk/memory-core-host-status";
-import { normalizeAgentId } from "openclaw/plugin-sdk/routing";
+} from "marketingclaw/plugin-sdk/memory-core-host-engine-storage";
+import { resolveMemoryDreamingWorkspaces } from "marketingclaw/plugin-sdk/memory-core-host-status";
+import { normalizeAgentId } from "marketingclaw/plugin-sdk/routing";
 import {
   archiveLegacyStateSource,
   legacyStateFileExists,
   type PluginDoctorStateMigration,
-} from "openclaw/plugin-sdk/runtime-doctor";
+} from "marketingclaw/plugin-sdk/runtime-doctor";
 import {
-  ensureOpenClawAgentDatabaseSchema,
-  resolveOpenClawAgentSqlitePath,
-} from "openclaw/plugin-sdk/sqlite-runtime";
+  ensureMarketingClawAgentDatabaseSchema,
+  resolveMarketingClawAgentSqlitePath,
+} from "marketingclaw/plugin-sdk/sqlite-runtime";
 import {
   DAILY_INGESTION_STATE_RELATIVE_PATH,
   SESSION_INGESTION_STATE_RELATIVE_PATH,
@@ -722,7 +722,7 @@ async function collectLegacyMemorySidecarSources(params: {
     }
   } catch {}
 
-  const migrationEnv = { ...params.env, OPENCLAW_STATE_DIR: params.stateDir };
+  const migrationEnv = { ...params.env, MARKETINGCLAW_STATE_DIR: params.stateDir };
   const sources: LegacyMemorySidecarSource[] = [];
   const seen = new Set<string>();
   async function addSource(agentId: string, legacyPath: string): Promise<void> {
@@ -736,7 +736,7 @@ async function collectLegacyMemorySidecarSources(params: {
       agentId,
       legacyPath: normalizedPath,
       stateDir: params.stateDir,
-      agentDatabasePath: resolveOpenClawAgentSqlitePath({ agentId, env: migrationEnv }),
+      agentDatabasePath: resolveMarketingClawAgentSqlitePath({ agentId, env: migrationEnv }),
     });
   }
   for (const agentId of agentIds) {
@@ -902,9 +902,9 @@ async function migrateLegacyMemorySidecarSource(params: {
   try {
     const migrationEnv = {
       ...params.env,
-      OPENCLAW_STATE_DIR: params.source.stateDir,
+      MARKETINGCLAW_STATE_DIR: params.source.stateDir,
     };
-    ensureOpenClawAgentDatabaseSchema(db, {
+    ensureMarketingClawAgentDatabaseSchema(db, {
       agentId: params.source.agentId,
       env: migrationEnv,
       path: params.source.agentDatabasePath,

@@ -1,7 +1,7 @@
 // Session store facade coordinates reads, writes, maintenance, delivery metadata, and exports.
 import fs from "node:fs";
 import path from "node:path";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@marketingclaw/normalization-core/string-coerce";
 import type { MsgContext } from "../../auto-reply/templating.js";
 import { resolveStoredSessionOwnerAgentId } from "../../gateway/session-store-key.js";
 import { writeTextAtomic } from "../../infra/json-files.js";
@@ -17,7 +17,7 @@ import {
 } from "../../utils/delivery-context.shared.js";
 import type { DeliveryContext } from "../../utils/delivery-context.types.js";
 import { getFileStatSnapshot } from "../cache-utils.js";
-import type { OpenClawConfig } from "../types.openclaw.js";
+import type { MarketingClawConfig } from "../types.marketingclaw.js";
 import { formatSessionArchiveTimestamp } from "./artifacts.js";
 import {
   pruneUnreferencedSessionArtifacts,
@@ -324,7 +324,7 @@ export type SessionEntryLifecycleMutationResult = {
 
 export type DeletedAgentSessionEntryPurgeParams = {
   /** Runtime config used to preserve legacy default-agent key ownership rules. */
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   /** Deleted agent whose session entries should be purged. */
   agentId: string;
   /** Agent id represented by the current store path for legacy unscoped keys. */

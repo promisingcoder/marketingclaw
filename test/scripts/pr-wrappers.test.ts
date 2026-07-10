@@ -16,7 +16,7 @@ describe("scripts/pr wrappers", () => {
     expect(script).toContain("export NO_COLOR=1");
     expect(script).toContain("unset COLORTERM");
     expect(script).toContain('source "$script_parent_dir/lib/plain-gh.sh"');
-    expect(script).toContain("OPENCLAW_GH_BIN=");
+    expect(script).toContain("MARKETINGCLAW_GH_BIN=");
     expect(script).toContain("gh_plain");
     expect(script).toContain("scripts/pr review-init <PR>");
     expect(script).toContain("scripts/pr prepare-run <PR>");
@@ -66,7 +66,7 @@ describe("scripts/pr wrappers", () => {
   });
 
   it("verifies local GitHub auth through GraphQL when REST quota is unavailable", () => {
-    const dir = mkdtempSync(join(tmpdir(), "openclaw-pr-auth-"));
+    const dir = mkdtempSync(join(tmpdir(), "marketingclaw-pr-auth-"));
     const gh = join(dir, "gh");
     writeFileSync(
       gh,
@@ -88,7 +88,7 @@ exit 1
       ],
       {
         cwd: process.cwd(),
-        env: { ...process.env, OPENCLAW_GH_BIN: gh },
+        env: { ...process.env, MARKETINGCLAW_GH_BIN: gh },
         encoding: "utf8",
       },
     );

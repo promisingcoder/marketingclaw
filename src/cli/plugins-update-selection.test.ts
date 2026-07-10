@@ -38,18 +38,18 @@ describe("resolvePluginUpdateSelection", () => {
     expect(
       resolvePluginUpdateSelection({
         installs: {
-          "openclaw-codex-app-server": createNpmInstall({
-            spec: "openclaw-codex-app-server",
-            installPath: "/tmp/openclaw-codex-app-server",
-            resolvedName: "openclaw-codex-app-server",
+          "marketingclaw-codex-app-server": createNpmInstall({
+            spec: "marketingclaw-codex-app-server",
+            installPath: "/tmp/marketingclaw-codex-app-server",
+            resolvedName: "marketingclaw-codex-app-server",
           }),
         },
-        rawId: "openclaw-codex-app-server@beta",
+        rawId: "marketingclaw-codex-app-server@beta",
       }),
     ).toEqual({
-      pluginIds: ["openclaw-codex-app-server"],
+      pluginIds: ["marketingclaw-codex-app-server"],
       specOverrides: {
-        "openclaw-codex-app-server": "openclaw-codex-app-server@beta",
+        "marketingclaw-codex-app-server": "marketingclaw-codex-app-server@beta",
       },
     });
   });
@@ -59,17 +59,17 @@ describe("resolvePluginUpdateSelection", () => {
       resolvePluginUpdateSelection({
         installs: {
           "voice-call": createNpmInstall({
-            spec: "@openclaw/voice-call",
+            spec: "@marketingclaw/voice-call",
             installPath: "/tmp/voice-call",
-            resolvedName: "@openclaw/voice-call",
+            resolvedName: "@marketingclaw/voice-call",
           }),
         },
-        rawId: "@openclaw/voice-call@beta",
+        rawId: "@marketingclaw/voice-call@beta",
       }),
     ).toEqual({
       pluginIds: ["voice-call"],
       specOverrides: {
-        "voice-call": "@openclaw/voice-call@beta",
+        "voice-call": "@marketingclaw/voice-call@beta",
       },
     });
   });
@@ -78,18 +78,18 @@ describe("resolvePluginUpdateSelection", () => {
     expect(
       resolvePluginUpdateSelection({
         installs: {
-          "openclaw-codex-app-server": createNpmInstall({
-            spec: "openclaw-codex-app-server",
-            installPath: "/tmp/openclaw-codex-app-server",
-            resolvedName: "openclaw-codex-app-server",
+          "marketingclaw-codex-app-server": createNpmInstall({
+            spec: "marketingclaw-codex-app-server",
+            installPath: "/tmp/marketingclaw-codex-app-server",
+            resolvedName: "marketingclaw-codex-app-server",
           }),
         },
-        rawId: "openclaw-codex-app-server@0.2.0-beta.4",
+        rawId: "marketingclaw-codex-app-server@0.2.0-beta.4",
       }),
     ).toEqual({
-      pluginIds: ["openclaw-codex-app-server"],
+      pluginIds: ["marketingclaw-codex-app-server"],
       specOverrides: {
-        "openclaw-codex-app-server": "openclaw-codex-app-server@0.2.0-beta.4",
+        "marketingclaw-codex-app-server": "marketingclaw-codex-app-server@0.2.0-beta.4",
       },
     });
   });
@@ -98,16 +98,16 @@ describe("resolvePluginUpdateSelection", () => {
     expect(
       resolvePluginUpdateSelection({
         installs: {
-          "openclaw-codex-app-server": createNpmInstall({
-            spec: "openclaw-codex-app-server@beta",
-            installPath: "/tmp/openclaw-codex-app-server",
-            resolvedName: "openclaw-codex-app-server",
+          "marketingclaw-codex-app-server": createNpmInstall({
+            spec: "marketingclaw-codex-app-server@beta",
+            installPath: "/tmp/marketingclaw-codex-app-server",
+            resolvedName: "marketingclaw-codex-app-server",
           }),
         },
-        rawId: "openclaw-codex-app-server",
+        rawId: "marketingclaw-codex-app-server",
       }),
     ).toEqual({
-      pluginIds: ["openclaw-codex-app-server"],
+      pluginIds: ["marketingclaw-codex-app-server"],
     });
   });
 
@@ -168,8 +168,8 @@ describe("resolveHookPackUpdateSelection", () => {
       resolveHookPackUpdateSelection({
         installs: {
           constructor: createNpmHookInstall({
-            spec: "openclaw-hooks-constructor",
-            resolvedName: "openclaw-hooks-constructor",
+            spec: "marketingclaw-hooks-constructor",
+            resolvedName: "marketingclaw-hooks-constructor",
           }),
         },
         rawId: "constructor",

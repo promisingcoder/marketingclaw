@@ -40,7 +40,7 @@ async function mountMenu(
     ...options.session,
   };
   render(
-    html`<openclaw-session-menu
+    html`<marketingclaw-session-menu
       .session=${session}
       .x=${100}
       .y=${100}
@@ -55,10 +55,12 @@ async function mountMenu(
         : options.workboard}
       .onAction=${options.onAction ?? (() => {})}
       .onClose=${options.onClose ?? (() => {})}
-    ></openclaw-session-menu>`,
+    ></marketingclaw-session-menu>`,
     container,
   );
-  const element = container.querySelector("openclaw-session-menu") as SessionMenuElement | null;
+  const element = container.querySelector(
+    "marketingclaw-session-menu",
+  ) as SessionMenuElement | null;
   if (!element) {
     throw new Error("Expected session menu");
   }

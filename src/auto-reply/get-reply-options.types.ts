@@ -1,4 +1,4 @@
-import type { FastMode } from "@openclaw/normalization-core/string-coerce";
+import type { FastMode } from "@marketingclaw/normalization-core/string-coerce";
 /** Public option types for reply generation callbacks, streaming, and delivery policy. */
 import type { ImageContent } from "../llm/types.js";
 import type { PromptImageOrderEntry } from "../media/prompt-image-order.js";
@@ -118,7 +118,7 @@ export type GetReplyOptions = {
   suppressToolErrorWarnings?: boolean;
   /** Dynamic form used when verbose progress visibility can change mid-run. */
   shouldSuppressToolErrorWarnings?: () => boolean | undefined;
-  /** If true, run the model without OpenClaw tools for this turn. */
+  /** If true, run the model without MarketingClaw tools for this turn. */
   disableTools?: boolean;
   /** Runtime tool allow-list for this turn. Empty means no tools. */
   toolsAllow?: string[];

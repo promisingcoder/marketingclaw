@@ -33,7 +33,7 @@ const CRABBOX_METADATA_PROBE_TIMEOUT_MS = 5_000;
 // first-run init. Retry the metadata probes once with this generous timeout so a
 // single slow probe does not hard-fail the wrapper and block all remote validation.
 const CRABBOX_METADATA_PROBE_RETRY_TIMEOUT_MS = 20_000;
-const ignoreRepoBinary = process.env.OPENCLAW_CRABBOX_WRAPPER_IGNORE_REPO_BINARY === "1";
+const ignoreRepoBinary = process.env.MARKETINGCLAW_CRABBOX_WRAPPER_IGNORE_REPO_BINARY === "1";
 const repoLocal = ignoreRepoBinary ? null : resolveCrabboxBinary(process.env, process.platform);
 const pathLocal = resolvePathBinary("crabbox", process.env, process.platform);
 const binary =
@@ -237,8 +237,8 @@ const shellControlCommandPrefixes = new Set([
 const shellCommandExecutionPrefixes = new Set(["exec"]);
 const shellInlineCommandInterpreters = new Set(["bash", "dash", "ksh", "sh", "zsh"]);
 const remoteChangedGateEnv = [
-  "OPENCLAW_CHECK_CHANGED_REMOTE_CHILD=1",
-  "OPENCLAW_CHANGED_LANES_RAW_SYNC=1",
+  "MARKETINGCLAW_CHECK_CHANGED_REMOTE_CHILD=1",
+  "MARKETINGCLAW_CHANGED_LANES_RAW_SYNC=1",
   "CI=1",
 ];
 const shellInlineCommandOptionsWithNextValue = new Set([
@@ -365,7 +365,11 @@ function buildBatchCommandLine(command, commandArgs) {
   return `"${[escapedCommand, ...escapedArgs].join(" ")}"`;
 }
 
-function checkedOutput(command, commandArgs, timeoutMs = resolveMetadataProbeTimeoutMs(process.env)) {
+function checkedOutput(
+  command,
+  commandArgs,
+  timeoutMs = resolveMetadataProbeTimeoutMs(process.env),
+) {
   const invocation = spawnInvocation(command, commandArgs, process.env, process.platform);
   const result = spawnSync(invocation.command, invocation.args, {
     cwd: repoRoot,
@@ -680,7 +684,7 @@ function selectedProvider(commandArgs, advertisedProviders = []) {
 }
 
 function shouldRequireBrokeredAws(commandArgs, providerName) {
-  if (process.env.OPENCLAW_CRABBOX_ALLOW_DIRECT_AWS === "1") {
+  if (process.env.MARKETINGCLAW_CRABBOX_ALLOW_DIRECT_AWS === "1") {
     return false;
   }
   const canonicalProvider = canonicalProviderName(providerName);
@@ -716,9 +720,9 @@ function enforceBrokeredAws(commandArgs, providerName) {
   }
   console.error(
     [
-      "[crabbox] provider=aws requires a configured Crabbox broker for OpenClaw proof.",
-      "[crabbox] run `crabbox login --url https://crabbox.openclaw.ai --provider aws`, then retry.",
-      "[crabbox] for intentional direct AWS provider debugging, set OPENCLAW_CRABBOX_ALLOW_DIRECT_AWS=1.",
+      "[crabbox] provider=aws requires a configured Crabbox broker for MarketingClaw proof.",
+      "[crabbox] run `crabbox login --url https://crabbox.marketingclaw.ai --provider aws`, then retry.",
+      "[crabbox] for intentional direct AWS provider debugging, set MARKETINGCLAW_CRABBOX_ALLOW_DIRECT_AWS=1.",
     ].join("\n"),
   );
   process.exit(2);
@@ -1972,17 +1976,17 @@ function mergeBaseForChangedGate() {
 function remoteGitBootstrapForChangedGate(changedGateBase) {
   const quotedBase = shellQuote(changedGateBase);
   return [
-    "openclaw_changed_gate_base=${OPENCLAW_CHANGED_GATE_BASE:-" + quotedBase + "};",
-    'if ! command -v git >/dev/null 2>&1; then echo "git is required for OpenClaw remote changed-gate sync" >&2; exit 2; fi;',
-    'openclaw_changed_gate_remote_base="$(git rev-parse --verify refs/remotes/origin/main 2>/dev/null || true)";',
-    'if ! git status --short >/dev/null 2>&1 || [ "$openclaw_changed_gate_remote_base" != "$openclaw_changed_gate_base" ]; then',
+    "marketingclaw_changed_gate_base=${MARKETINGCLAW_CHANGED_GATE_BASE:-" + quotedBase + "};",
+    'if ! command -v git >/dev/null 2>&1; then echo "git is required for MarketingClaw remote changed-gate sync" >&2; exit 2; fi;',
+    'marketingclaw_changed_gate_remote_base="$(git rev-parse --verify refs/remotes/origin/main 2>/dev/null || true)";',
+    'if ! git status --short >/dev/null 2>&1 || [ "$marketingclaw_changed_gate_remote_base" != "$marketingclaw_changed_gate_base" ]; then',
     "rm -rf .git;",
     "git init -q;",
-    "git remote add origin https://github.com/openclaw/openclaw.git 2>/dev/null || git remote set-url origin https://github.com/openclaw/openclaw.git;",
-    'git fetch -q --depth=1 origin "$openclaw_changed_gate_base:refs/remotes/origin/main";',
+    "git remote add origin https://github.com/promisingcoder/marketingclaw.git 2>/dev/null || git remote set-url origin https://github.com/promisingcoder/marketingclaw.git;",
+    'git fetch -q --depth=1 origin "$marketingclaw_changed_gate_base:refs/remotes/origin/main";',
     "git reset --mixed --quiet refs/remotes/origin/main;",
     "git add -A;",
-    "if ! git diff --cached --quiet; then git -c user.name=OpenClaw -c user.email=ci@openclaw.local commit -q --no-gpg-sign -m remote-changed-gate-tree; fi;",
+    "if ! git diff --cached --quiet; then git -c user.name=MarketingClaw -c user.email=ci@marketingclaw.local commit -q --no-gpg-sign -m remote-changed-gate-tree; fi;",
     "fi",
   ].join(" ");
 }
@@ -2095,13 +2099,13 @@ function isHydratedNativeWindowsProvider(providerName) {
 
 function remoteWindowsHydratedNodeModulesBootstrap() {
   return [
-    "$openclawModulesDir = $env:PNPM_CONFIG_MODULES_DIR",
-    "if ($openclawModulesDir) {",
-    'if (-not (Test-Path $openclawModulesDir)) { throw "PNPM_CONFIG_MODULES_DIR does not exist: $openclawModulesDir" }',
-    '$openclawWorkspaceModules = Join-Path (Get-Location).Path "node_modules"',
-    '$openclawSelfModules = Join-Path $openclawModulesDir "node_modules"',
-    'if (-not (Test-Path $openclawSelfModules)) { cmd /c mklink /J "$openclawSelfModules" "$openclawModulesDir" | Out-Host; if ($LASTEXITCODE -ne 0) { throw "failed to link hydrated pnpm node_modules" } }',
-    'if (-not (Test-Path $openclawWorkspaceModules)) { cmd /c mklink /J "$openclawWorkspaceModules" "$openclawModulesDir" | Out-Host; if ($LASTEXITCODE -ne 0) { throw "failed to link workspace node_modules" } }',
+    "$marketingclawModulesDir = $env:PNPM_CONFIG_MODULES_DIR",
+    "if ($marketingclawModulesDir) {",
+    'if (-not (Test-Path $marketingclawModulesDir)) { throw "PNPM_CONFIG_MODULES_DIR does not exist: $marketingclawModulesDir" }',
+    '$marketingclawWorkspaceModules = Join-Path (Get-Location).Path "node_modules"',
+    '$marketingclawSelfModules = Join-Path $marketingclawModulesDir "node_modules"',
+    'if (-not (Test-Path $marketingclawSelfModules)) { cmd /c mklink /J "$marketingclawSelfModules" "$marketingclawModulesDir" | Out-Host; if ($LASTEXITCODE -ne 0) { throw "failed to link hydrated pnpm node_modules" } }',
+    'if (-not (Test-Path $marketingclawWorkspaceModules)) { cmd /c mklink /J "$marketingclawWorkspaceModules" "$marketingclawModulesDir" | Out-Host; if ($LASTEXITCODE -ne 0) { throw "failed to link workspace node_modules" } }',
     "}",
   ].join("; ");
 }
@@ -2177,38 +2181,38 @@ function injectRemoteChangedGateGitBootstrap(commandArgs, changedGateBase) {
 
 function remotePosixJsEnvBootstrap() {
   return [
-    "openclaw_crabbox_env() {",
-    "openclaw_env_args=();",
-    "openclaw_env_ignore=0;",
-    "openclaw_env_path_seen=0;",
+    "marketingclaw_crabbox_env() {",
+    "marketingclaw_env_args=();",
+    "marketingclaw_env_ignore=0;",
+    "marketingclaw_env_path_seen=0;",
     'while [ "$#" -gt 0 ]; do',
     'case "$1" in',
-    '-i|--ignore-environment) openclaw_env_ignore=1; openclaw_env_args+=("$1"); shift ;;',
-    '-S|--split-string|-S*|--split-string=*) command env "${openclaw_env_args[@]}" "$@"; return ;;',
-    '-[!-]*i*) openclaw_env_ignore=1; openclaw_env_args+=("$1"); shift ;;',
-    '-u|--unset|-C|--chdir) openclaw_env_args+=("$1"); shift; if [ "$#" -gt 0 ]; then openclaw_env_args+=("$1"); shift; fi ;;',
-    '--unset=*|--chdir=*) openclaw_env_args+=("$1"); shift ;;',
-    'PATH=*) if [ "$openclaw_env_ignore" = "1" ]; then openclaw_env_args+=("PATH=${OPENCLAW_CRABBOX_BOOTSTRAP_PATH:-$PATH}:${1#PATH=}"); else openclaw_env_args+=("$1"); fi; openclaw_env_path_seen=1; shift ;;',
-    '[A-Za-z_]*=*) openclaw_env_args+=("$1"); shift ;;',
-    '--) openclaw_env_args+=("--"); shift; break ;;',
+    '-i|--ignore-environment) marketingclaw_env_ignore=1; marketingclaw_env_args+=("$1"); shift ;;',
+    '-S|--split-string|-S*|--split-string=*) command env "${marketingclaw_env_args[@]}" "$@"; return ;;',
+    '-[!-]*i*) marketingclaw_env_ignore=1; marketingclaw_env_args+=("$1"); shift ;;',
+    '-u|--unset|-C|--chdir) marketingclaw_env_args+=("$1"); shift; if [ "$#" -gt 0 ]; then marketingclaw_env_args+=("$1"); shift; fi ;;',
+    '--unset=*|--chdir=*) marketingclaw_env_args+=("$1"); shift ;;',
+    'PATH=*) if [ "$marketingclaw_env_ignore" = "1" ]; then marketingclaw_env_args+=("PATH=${MARKETINGCLAW_CRABBOX_BOOTSTRAP_PATH:-$PATH}:${1#PATH=}"); else marketingclaw_env_args+=("$1"); fi; marketingclaw_env_path_seen=1; shift ;;',
+    '[A-Za-z_]*=*) marketingclaw_env_args+=("$1"); shift ;;',
+    '--) marketingclaw_env_args+=("--"); shift; break ;;',
     "*) break ;;",
     "esac;",
     "done;",
-    'if [ "$openclaw_env_ignore" = "1" ] && [ "$openclaw_env_path_seen" = "0" ]; then openclaw_env_args+=("PATH=${OPENCLAW_CRABBOX_BOOTSTRAP_PATH:-$PATH}"); fi;',
-    'command env "${openclaw_env_args[@]}" "$@";',
+    'if [ "$marketingclaw_env_ignore" = "1" ] && [ "$marketingclaw_env_path_seen" = "0" ]; then marketingclaw_env_args+=("PATH=${MARKETINGCLAW_CRABBOX_BOOTSTRAP_PATH:-$PATH}"); fi;',
+    'command env "${marketingclaw_env_args[@]}" "$@";',
     "};",
   ];
 }
 
 function remoteAwsMacosJsBootstrap({ packageManager = false, bun = false } = {}) {
-  const nodeVersion = process.env.OPENCLAW_CRABBOX_MACOS_NODE_VERSION?.trim() || "24.15.0";
+  const nodeVersion = process.env.MARKETINGCLAW_CRABBOX_MACOS_NODE_VERSION?.trim() || "24.15.0";
   const bootstrap = [
-    "openclaw_crabbox_bootstrap_macos_js() {",
-    'tool_root="${OPENCLAW_CRABBOX_MACOS_TOOLCHAIN_DIR:-$HOME/.openclaw-crabbox-toolchain}";',
+    "marketingclaw_crabbox_bootstrap_macos_js() {",
+    'tool_root="${MARKETINGCLAW_CRABBOX_MACOS_TOOLCHAIN_DIR:-$HOME/.marketingclaw-crabbox-toolchain}";',
     `node_version=${shellQuote(nodeVersion)};`,
     'arch="$(uname -m)";',
     'case "$arch" in arm64) node_arch=arm64 ;; x86_64) node_arch=x64 ;; *) echo "unsupported macOS arch: $arch" >&2; return 2 ;; esac;',
-    'macos_locale="${OPENCLAW_CRABBOX_MACOS_LOCALE:-en_US.UTF-8}";',
+    'macos_locale="${MARKETINGCLAW_CRABBOX_MACOS_LOCALE:-en_US.UTF-8}";',
     'case "${LANG:-}" in C.UTF-8|C.utf8|c.UTF-8|c.utf8) export LANG="$macos_locale" ;; esac;',
     'case "${LC_ALL:-}" in C.UTF-8|C.utf8|c.UTF-8|c.utf8) export LC_ALL="$macos_locale" ;; esac;',
     'case "${LC_CTYPE:-}" in C.UTF-8|C.utf8|c.UTF-8|c.utf8) export LC_CTYPE="$macos_locale" ;; esac;',
@@ -2216,7 +2220,7 @@ function remoteAwsMacosJsBootstrap({ packageManager = false, bun = false } = {})
     'if [ ! -d "$TMPDIR" ]; then mkdir -p "$TMPDIR" 2>/dev/null || export TMPDIR="/tmp"; fi;',
     'if [ ! -d "$TMPDIR" ]; then echo "usable TMPDIR not found: $TMPDIR" >&2; return 1; fi;',
     'node_dir="$tool_root/node-v${node_version}-darwin-${node_arch}";',
-    'ready_marker="$node_dir/.openclaw-crabbox-node-ready";',
+    'ready_marker="$node_dir/.marketingclaw-crabbox-node-ready";',
     'export PATH="$node_dir/bin:$PATH";',
     'if [ ! -x "$node_dir/bin/node" ] || [ ! -f "$ready_marker" ]; then',
     'mkdir -p "$tool_root" || { status=$?; return "$status"; };',
@@ -2268,7 +2272,7 @@ function remoteAwsMacosJsBootstrap({ packageManager = false, bun = false } = {})
     bootstrap.push(
       `bun_version=${shellQuote(awsMacosBunVersion)};`,
       'bun_root="$tool_root/bun-v${bun_version}";',
-      'bun_ready_marker="$bun_root/.openclaw-crabbox-bun-ready";',
+      'bun_ready_marker="$bun_root/.marketingclaw-crabbox-bun-ready";',
       'export PATH="$bun_root/bin:$PATH";',
       'if [ ! -x "$bun_root/bin/bun" ] || [ ! -f "$bun_ready_marker" ]; then',
       'mkdir -p "$tool_root" || { status=$?; return "$status"; };',
@@ -2299,16 +2303,16 @@ function remoteAwsMacosJsBootstrap({ packageManager = false, bun = false } = {})
       "bun --version >&2 || return 1;",
     );
   }
-  bootstrap.push('export OPENCLAW_CRABBOX_BOOTSTRAP_PATH="$PATH";');
-  bootstrap.push("};", "openclaw_crabbox_bootstrap_macos_js");
+  bootstrap.push('export MARKETINGCLAW_CRABBOX_BOOTSTRAP_PATH="$PATH";');
+  bootstrap.push("};", "marketingclaw_crabbox_bootstrap_macos_js");
   return bootstrap.join(" ");
 }
 
 function remoteWsl2JsBootstrap({ packageManager = false } = {}) {
-  const nodeVersion = process.env.OPENCLAW_CRABBOX_WSL2_NODE_VERSION?.trim() || "24.15.0";
+  const nodeVersion = process.env.MARKETINGCLAW_CRABBOX_WSL2_NODE_VERSION?.trim() || "24.15.0";
   const bootstrap = [
-    "openclaw_crabbox_bootstrap_wsl2_js() {",
-    'tool_root="${OPENCLAW_CRABBOX_WSL2_TOOLCHAIN_DIR:-$HOME/.openclaw-crabbox-toolchain}";',
+    "marketingclaw_crabbox_bootstrap_wsl2_js() {",
+    'tool_root="${MARKETINGCLAW_CRABBOX_WSL2_TOOLCHAIN_DIR:-$HOME/.marketingclaw-crabbox-toolchain}";',
     `node_version=${shellQuote(nodeVersion)};`,
     'arch="$(uname -m)";',
     'case "$arch" in arm64|aarch64) node_arch=arm64 ;; x86_64|amd64) node_arch=x64 ;; *) echo "unsupported WSL2 arch: $arch" >&2; return 2 ;; esac;',
@@ -2316,7 +2320,7 @@ function remoteWsl2JsBootstrap({ packageManager = false } = {}) {
     'if [ ! -d "$TMPDIR" ]; then mkdir -p "$TMPDIR" 2>/dev/null || export TMPDIR="/tmp"; fi;',
     'if [ ! -d "$TMPDIR" ]; then echo "usable TMPDIR not found: $TMPDIR" >&2; return 1; fi;',
     'node_dir="$tool_root/node-v${node_version}-linux-${node_arch}";',
-    'ready_marker="$node_dir/.openclaw-crabbox-node-ready";',
+    'ready_marker="$node_dir/.marketingclaw-crabbox-node-ready";',
     'export PATH="$node_dir/bin:$PATH";',
     'if [ ! -x "$node_dir/bin/node" ] || [ ! -f "$ready_marker" ]; then',
     'mkdir -p "$tool_root" || { status=$?; return "$status"; };',
@@ -2364,8 +2368,8 @@ function remoteWsl2JsBootstrap({ packageManager = false } = {}) {
       "if [ -f pnpm-lock.yaml ] && [ ! -f node_modules/.modules.yaml ]; then pnpm install --frozen-lockfile || return 1; fi;",
     );
   }
-  bootstrap.push('export OPENCLAW_CRABBOX_BOOTSTRAP_PATH="$PATH";');
-  bootstrap.push("};", "openclaw_crabbox_bootstrap_wsl2_js");
+  bootstrap.push('export MARKETINGCLAW_CRABBOX_BOOTSTRAP_PATH="$PATH";');
+  bootstrap.push("};", "marketingclaw_crabbox_bootstrap_wsl2_js");
   return bootstrap.join(" ");
 }
 
@@ -2393,7 +2397,7 @@ function scopedAwsMacosEnvCommand(commandArgs) {
     runtimeEntrypoint: needsRuntime ? targetEntrypoint : "",
     packageManager: needsPackageManager,
     bun: needsBun,
-    shellCommand: `openclaw_crabbox_env ${shellJoin(commandArgs.slice(1))}`,
+    shellCommand: `marketingclaw_crabbox_env ${shellJoin(commandArgs.slice(1))}`,
   };
 }
 
@@ -2445,7 +2449,7 @@ function shellCommandWithEnvShim(command, eligibleSegments) {
       continue;
     }
     rewritten += command.slice(copiedUntil, envToken.start);
-    rewritten += "openclaw_crabbox_env";
+    rewritten += "marketingclaw_crabbox_env";
     copiedUntil = envToken.end;
     changed = true;
   }
@@ -2662,7 +2666,7 @@ function prepareRemoteWsl2JsBootstrapScript(commandArgs, providerName) {
     return { args: commandArgs, cleanup: () => {}, prepared: false };
   }
 
-  const scriptRoot = mkdtempSync(resolve(tmpdir(), "openclaw-crabbox-wsl2-script-"));
+  const scriptRoot = mkdtempSync(resolve(tmpdir(), "marketingclaw-crabbox-wsl2-script-"));
   const scriptPath = resolve(scriptRoot, "script.sh");
   const remoteCommand = commandArgs.slice(start);
   const originalShellCommand =
@@ -2745,26 +2749,26 @@ function injectRemoteAwsMacosJsBootstrap(commandArgs, providerName) {
 
 function remoteAwsMacosSwiftBootstrap() {
   return [
-    "openclaw_crabbox_require_macos_swift_62() {",
-    'openclaw_xcode="";',
-    'for openclaw_candidate in /Applications/Xcode_26.1.app /Applications/Xcode_26*.app /Applications/Xcode-26*.app; do if [ -d "$openclaw_candidate" ]; then openclaw_xcode="$openclaw_candidate"; fi; done;',
-    'if [ -n "$openclaw_xcode" ]; then openclaw_developer="$openclaw_xcode/Contents/Developer"; if [ ! -d "$openclaw_developer" ]; then openclaw_developer="$openclaw_xcode"; fi; sudo xcode-select -s "$openclaw_developer" || return 1; fi;',
-    'openclaw_swift_version="$(swift --version 2>&1)" || { status=$?; printf "%s\\n" "$openclaw_swift_version" >&2; return "$status"; };',
-    'printf "%s\\n" "$openclaw_swift_version" >&2;',
-    'openclaw_swift_major_minor="$(printf "%s\\n" "$openclaw_swift_version" | sed -nE "s/.*Apple Swift version ([0-9]+)\\.([0-9]+).*/\\1 \\2/p" | head -n 1)";',
-    'if [ -z "$openclaw_swift_major_minor" ]; then echo "[crabbox] OpenClaw macOS app proof requires Swift tools 6.2+; unable to parse swift --version." >&2; return 2; fi;',
-    "set -- $openclaw_swift_major_minor;",
+    "marketingclaw_crabbox_require_macos_swift_62() {",
+    'marketingclaw_xcode="";',
+    'for marketingclaw_candidate in /Applications/Xcode_26.1.app /Applications/Xcode_26*.app /Applications/Xcode-26*.app; do if [ -d "$marketingclaw_candidate" ]; then marketingclaw_xcode="$marketingclaw_candidate"; fi; done;',
+    'if [ -n "$marketingclaw_xcode" ]; then marketingclaw_developer="$marketingclaw_xcode/Contents/Developer"; if [ ! -d "$marketingclaw_developer" ]; then marketingclaw_developer="$marketingclaw_xcode"; fi; sudo xcode-select -s "$marketingclaw_developer" || return 1; fi;',
+    'marketingclaw_swift_version="$(swift --version 2>&1)" || { status=$?; printf "%s\\n" "$marketingclaw_swift_version" >&2; return "$status"; };',
+    'printf "%s\\n" "$marketingclaw_swift_version" >&2;',
+    'marketingclaw_swift_major_minor="$(printf "%s\\n" "$marketingclaw_swift_version" | sed -nE "s/.*Apple Swift version ([0-9]+)\\.([0-9]+).*/\\1 \\2/p" | head -n 1)";',
+    'if [ -z "$marketingclaw_swift_major_minor" ]; then echo "[crabbox] MarketingClaw macOS app proof requires Swift tools 6.2+; unable to parse swift --version." >&2; return 2; fi;',
+    "set -- $marketingclaw_swift_major_minor;",
     'if [ "$1" -lt 6 ] || { [ "$1" -eq 6 ] && [ "$2" -lt 2 ]; }; then',
-    'echo "[crabbox] OpenClaw macOS app proof requires Swift tools 6.2+ (Xcode 26.x)." >&2;',
+    'echo "[crabbox] MarketingClaw macOS app proof requires Swift tools 6.2+ (Xcode 26.x)." >&2;',
     'echo "[crabbox] current Swift is $1.$2; select/install Xcode 26.x or use a Blacksmith macOS runner with Xcode_26.1.app." >&2;',
     "return 2;",
     "fi;",
-    'openclaw_xcodebuild_version="$(xcodebuild -version 2>&1)" || { printf "%s\\n" "$openclaw_xcodebuild_version" >&2; echo "[crabbox] OpenClaw macOS app proof requires Xcode 26.x; active developer directory does not provide usable xcodebuild." >&2; return 2; };',
-    'printf "%s\\n" "$openclaw_xcodebuild_version" >&2;',
-    'openclaw_xcode_major="$(printf "%s\\n" "$openclaw_xcodebuild_version" | sed -nE "s/^Xcode ([0-9]+)(\\..*)?$/\\1/p" | head -n 1)";',
-    'if [ "$openclaw_xcode_major" != "26" ]; then echo "[crabbox] OpenClaw macOS app proof requires Xcode 26.x; current xcodebuild is ${openclaw_xcode_major:-unknown}." >&2; return 2; fi;',
+    'marketingclaw_xcodebuild_version="$(xcodebuild -version 2>&1)" || { printf "%s\\n" "$marketingclaw_xcodebuild_version" >&2; echo "[crabbox] MarketingClaw macOS app proof requires Xcode 26.x; active developer directory does not provide usable xcodebuild." >&2; return 2; };',
+    'printf "%s\\n" "$marketingclaw_xcodebuild_version" >&2;',
+    'marketingclaw_xcode_major="$(printf "%s\\n" "$marketingclaw_xcodebuild_version" | sed -nE "s/^Xcode ([0-9]+)(\\..*)?$/\\1/p" | head -n 1)";',
+    'if [ "$marketingclaw_xcode_major" != "26" ]; then echo "[crabbox] MarketingClaw macOS app proof requires Xcode 26.x; current xcodebuild is ${marketingclaw_xcode_major:-unknown}." >&2; return 2; fi;',
     "};",
-    "openclaw_crabbox_require_macos_swift_62",
+    "marketingclaw_crabbox_require_macos_swift_62",
   ].join(" ");
 }
 
@@ -2846,7 +2850,7 @@ function prepareAwsMacosScriptStdinBootstrap(commandArgs, providerName) {
     return { args: commandArgs, cleanup: () => {}, prepared: false };
   }
 
-  const scriptRoot = mkdtempSync(resolve(tmpdir(), "openclaw-crabbox-macos-script-"));
+  const scriptRoot = mkdtempSync(resolve(tmpdir(), "marketingclaw-crabbox-macos-script-"));
   const scriptPath = resolve(scriptRoot, "script.sh");
   const script = readFileSync(0, "utf8");
   writeFileSync(scriptPath, createAwsMacosScriptStdinWrapper(script), "utf8");
@@ -2866,9 +2870,9 @@ function createAwsMacosScriptStdinWrapper(script) {
   const delimiterValue = uniqueHereDocDelimiter(script);
   return [
     `${remoteAwsMacosScriptBootstrap(requirements)} || exit $?`,
-    'tmp_script="$(mktemp "${TMPDIR:-/tmp}/openclaw-crabbox-script.XXXXXX")" || exit $?',
-    'cleanup_openclaw_crabbox_script() { rm -f "$tmp_script"; }',
-    "trap cleanup_openclaw_crabbox_script EXIT",
+    'tmp_script="$(mktemp "${TMPDIR:-/tmp}/marketingclaw-crabbox-script.XXXXXX")" || exit $?',
+    'cleanup_marketingclaw_crabbox_script() { rm -f "$tmp_script"; }',
+    "trap cleanup_marketingclaw_crabbox_script EXIT",
     `cat >"$tmp_script" <<'${delimiterValue}'`,
     script.endsWith("\n") ? script.slice(0, -1) : script,
     delimiterValue,
@@ -2911,7 +2915,7 @@ function awsMacosScriptBootstrapRequirements(script) {
 function uniqueHereDocDelimiter(script) {
   let index = 0;
   for (;;) {
-    const delimiterLocal = `OPENCLAW_CRABBOX_SCRIPT_${index}`;
+    const delimiterLocal = `MARKETINGCLAW_CRABBOX_SCRIPT_${index}`;
     if (!new RegExp(`^${delimiterLocal}$`, "mu").test(script)) {
       return delimiterLocal;
     }
@@ -2949,13 +2953,13 @@ function shouldUseFullCheckoutForCleanRemoteSync(commandArgs, _providerName) {
 function defaultFullCheckoutSyncRoot() {
   const home = homedir();
   if (home) {
-    return resolve(home, ".cache", "openclaw", "crabbox-sync");
+    return resolve(home, ".cache", "marketingclaw", "crabbox-sync");
   }
-  return resolve(tmpdir(), "openclaw-crabbox-sync");
+  return resolve(tmpdir(), "marketingclaw-crabbox-sync");
 }
 
 function fullCheckoutSyncRoot() {
-  const configured = process.env.OPENCLAW_CRABBOX_SYNC_TMPDIR?.trim();
+  const configured = process.env.MARKETINGCLAW_CRABBOX_SYNC_TMPDIR?.trim();
   const root = configured ? resolve(configured) : defaultFullCheckoutSyncRoot();
   mkdirSync(root, { recursive: true });
   return root;
@@ -2994,7 +2998,7 @@ function formatByteCount(bytes) {
 
 function assertFullCheckoutSyncDisk(root) {
   const requiredBytes = parseNonNegativeIntegerEnv(
-    "OPENCLAW_CRABBOX_SYNC_MIN_FREE_BYTES",
+    "MARKETINGCLAW_CRABBOX_SYNC_MIN_FREE_BYTES",
     1024 * 1024 * 1024,
     "byte count",
   );
@@ -3012,7 +3016,7 @@ function assertFullCheckoutSyncDisk(root) {
       `root=${root}`,
       `free=${formatByteCount(freeBytes)}`,
       `required=${formatByteCount(requiredBytes)}`,
-      "set OPENCLAW_CRABBOX_SYNC_TMPDIR to a roomier filesystem or lower OPENCLAW_CRABBOX_SYNC_MIN_FREE_BYTES if you know this checkout fits",
+      "set MARKETINGCLAW_CRABBOX_SYNC_TMPDIR to a roomier filesystem or lower MARKETINGCLAW_CRABBOX_SYNC_MIN_FREE_BYTES if you know this checkout fits",
     ].join("; "),
   );
 }
@@ -3020,7 +3024,7 @@ function assertFullCheckoutSyncDisk(root) {
 function prepareFullCheckoutForSync(options = {}) {
   const syncRoot = fullCheckoutSyncRoot();
   assertFullCheckoutSyncDisk(syncRoot);
-  const dir = mkdtempSync(resolve(syncRoot, "openclaw-crabbox-sync-"));
+  const dir = mkdtempSync(resolve(syncRoot, "marketingclaw-crabbox-sync-"));
   let active = false;
 
   function create() {
@@ -3127,7 +3131,7 @@ function startFullCheckoutKeepalive(checkout, options = {}) {
 
 function fullCheckoutKeepaliveIntervalMs() {
   return parseNonNegativeIntegerEnv(
-    "OPENCLAW_CRABBOX_SYNC_KEEPALIVE_MS",
+    "MARKETINGCLAW_CRABBOX_SYNC_KEEPALIVE_MS",
     5000,
     "millisecond interval",
   );
@@ -3315,7 +3319,7 @@ if (
       ? `pnpm crabbox:hydrate -- --id ${id}`
       : "pnpm crabbox:warmup, then pnpm crabbox:hydrate -- --id <id>";
     console.error(
-      `[crabbox] warning: provider=aws raw boxes may lack Node/Corepack/pnpm/Bun for ${runtimeEntrypoint}; hydrate first (${hydrate}) or pass --provider blacksmith-testbox for OpenClaw CI-like proof; not switching providers automatically`,
+      `[crabbox] warning: provider=aws raw boxes may lack Node/Corepack/pnpm/Bun for ${runtimeEntrypoint}; hydrate first (${hydrate}) or pass --provider blacksmith-testbox for MarketingClaw CI-like proof; not switching providers automatically`,
     );
   }
 }
@@ -3336,7 +3340,7 @@ if (
 ) {
   childEnv.CRABBOX_LOCAL_CONTAINER_DOCKER_SOCKET = "1";
   console.error(
-    "[crabbox] provider=docker enabling host Docker socket pass-through for OpenClaw Docker tests",
+    "[crabbox] provider=docker enabling host Docker socket pass-through for MarketingClaw Docker tests",
   );
 }
 if (
@@ -3345,9 +3349,9 @@ if (
   !childEnv.CRABBOX_LOCAL_CONTAINER_WORK_ROOT &&
   !hasOption(normalizedArgs, "--local-container-work-root")
 ) {
-  childEnv.CRABBOX_LOCAL_CONTAINER_WORK_ROOT = "/tmp/openclaw-crabbox-docker-work";
+  childEnv.CRABBOX_LOCAL_CONTAINER_WORK_ROOT = "/tmp/marketingclaw-crabbox-docker-work";
   console.error(
-    "[crabbox] provider=docker using short host-visible work root for OpenClaw Docker tests",
+    "[crabbox] provider=docker using short host-visible work root for MarketingClaw Docker tests",
   );
 }
 
@@ -3541,17 +3545,17 @@ async function waitForChildTreeExit(childProcess, timeoutMs) {
 }
 
 function resolveChildKillGraceMs(env) {
-  if (!env.VITEST || !env.OPENCLAW_TEST_CRABBOX_CHILD_KILL_GRACE_MS) {
+  if (!env.VITEST || !env.MARKETINGCLAW_TEST_CRABBOX_CHILD_KILL_GRACE_MS) {
     return 5_000;
   }
-  const value = Number.parseInt(env.OPENCLAW_TEST_CRABBOX_CHILD_KILL_GRACE_MS, 10);
+  const value = Number.parseInt(env.MARKETINGCLAW_TEST_CRABBOX_CHILD_KILL_GRACE_MS, 10);
   return Number.isFinite(value) && value >= 0 ? value : 5_000;
 }
 
 function resolveMetadataProbeTimeoutMs(env) {
-  if (!env.VITEST || !env.OPENCLAW_TEST_CRABBOX_METADATA_PROBE_TIMEOUT_MS) {
+  if (!env.VITEST || !env.MARKETINGCLAW_TEST_CRABBOX_METADATA_PROBE_TIMEOUT_MS) {
     return CRABBOX_METADATA_PROBE_TIMEOUT_MS;
   }
-  const value = Number.parseInt(env.OPENCLAW_TEST_CRABBOX_METADATA_PROBE_TIMEOUT_MS, 10);
+  const value = Number.parseInt(env.MARKETINGCLAW_TEST_CRABBOX_METADATA_PROBE_TIMEOUT_MS, 10);
   return Number.isFinite(value) && value > 0 ? value : CRABBOX_METADATA_PROBE_TIMEOUT_MS;
 }

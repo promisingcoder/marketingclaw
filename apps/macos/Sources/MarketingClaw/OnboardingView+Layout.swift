@@ -5,7 +5,7 @@ extension OnboardingView {
     var body: some View {
         VStack(spacing: 0) {
             // Chat-heavy pages shrink the mascot so the content gets the room.
-            GlowingOpenClawIcon(size: self.heroSize)
+            GlowingMarketingClawIcon(size: self.heroSize)
                 .offset(y: self.usesCompactHero ? 4 : 10)
                 .frame(height: self.heroFrameHeight)
                 .animation(.spring(response: 0.45, dampingFraction: 0.85), value: self.usesCompactHero)

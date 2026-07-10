@@ -681,138 +681,138 @@
         }
       }
     },
-    "Check OpenClaw status": {
+    "Check MarketingClaw status": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Check OpenClaw status"
+            "value": "Check MarketingClaw status"
           }
         },
         "zh-CN": {
           "stringUnit": {
             "state": "translated",
-            "value": "检查 OpenClaw 状态"
+            "value": "检查 MarketingClaw 状态"
           }
         },
         "zh-TW": {
           "stringUnit": {
             "state": "translated",
-            "value": "檢查 OpenClaw 狀態"
+            "value": "檢查 MarketingClaw 狀態"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Verificar status do OpenClaw"
+            "value": "Verificar status do MarketingClaw"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw-Status prüfen"
+            "value": "MarketingClaw-Status prüfen"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Comprobar el estado de OpenClaw"
+            "value": "Comprobar el estado de MarketingClaw"
           }
         },
         "ja-JP": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClawのステータスを確認"
+            "value": "MarketingClawのステータスを確認"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw 상태 확인"
+            "value": "MarketingClaw 상태 확인"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vérifier l’état d’OpenClaw"
+            "value": "Vérifier l’état d’MarketingClaw"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw की स्थिति जाँचें"
+            "value": "MarketingClaw की स्थिति जाँचें"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "التحقق من حالة OpenClaw"
+            "value": "التحقق من حالة MarketingClaw"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Controlla lo stato di OpenClaw"
+            "value": "Controlla lo stato di MarketingClaw"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw durumunu kontrol et"
+            "value": "MarketingClaw durumunu kontrol et"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Перевірити стан OpenClaw"
+            "value": "Перевірити стан MarketingClaw"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Periksa status OpenClaw"
+            "value": "Periksa status MarketingClaw"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sprawdź stan OpenClaw"
+            "value": "Sprawdź stan MarketingClaw"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "ตรวจสอบสถานะ OpenClaw"
+            "value": "ตรวจสอบสถานะ MarketingClaw"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kiểm tra trạng thái OpenClaw"
+            "value": "Kiểm tra trạng thái MarketingClaw"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw-status controleren"
+            "value": "MarketingClaw-status controleren"
           }
         },
         "fa": {
           "stringUnit": {
             "state": "translated",
-            "value": "بررسی وضعیت OpenClaw"
+            "value": "بررسی وضعیت MarketingClaw"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Проверить состояние OpenClaw"
+            "value": "Проверить состояние MarketingClaw"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kontrollera OpenClaw-status"
+            "value": "Kontrollera MarketingClaw-status"
           }
         }
       }
@@ -2993,138 +2993,138 @@
         }
       }
     },
-    "Message OpenClaw": {
+    "Message MarketingClaw": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Message OpenClaw"
+            "value": "Message MarketingClaw"
           }
         },
         "zh-CN": {
           "stringUnit": {
             "state": "translated",
-            "value": "给 OpenClaw 发消息"
+            "value": "给 MarketingClaw 发消息"
           }
         },
         "zh-TW": {
           "stringUnit": {
             "state": "translated",
-            "value": "傳訊息給 OpenClaw"
+            "value": "傳訊息給 MarketingClaw"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enviar mensagem ao OpenClaw"
+            "value": "Enviar mensagem ao MarketingClaw"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw eine Nachricht senden"
+            "value": "MarketingClaw eine Nachricht senden"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enviar mensaje a OpenClaw"
+            "value": "Enviar mensaje a MarketingClaw"
           }
         },
         "ja-JP": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw にメッセージ"
+            "value": "MarketingClaw にメッセージ"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw에 메시지 보내기"
+            "value": "MarketingClaw에 메시지 보내기"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Envoyer un message à OpenClaw"
+            "value": "Envoyer un message à MarketingClaw"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw को संदेश भेजें"
+            "value": "MarketingClaw को संदेश भेजें"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "مراسلة OpenClaw"
+            "value": "مراسلة MarketingClaw"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Invia un messaggio a OpenClaw"
+            "value": "Invia un messaggio a MarketingClaw"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw’a mesaj gönder"
+            "value": "MarketingClaw’a mesaj gönder"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Написати в OpenClaw"
+            "value": "Написати в MarketingClaw"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kirim pesan ke OpenClaw"
+            "value": "Kirim pesan ke MarketingClaw"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wyślij wiadomość do OpenClaw"
+            "value": "Wyślij wiadomość do MarketingClaw"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "ส่งข้อความถึง OpenClaw"
+            "value": "ส่งข้อความถึง MarketingClaw"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nhắn tin cho OpenClaw"
+            "value": "Nhắn tin cho MarketingClaw"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bericht naar OpenClaw"
+            "value": "Bericht naar MarketingClaw"
           }
         },
         "fa": {
           "stringUnit": {
             "state": "translated",
-            "value": "پیام به OpenClaw"
+            "value": "پیام به MarketingClaw"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Написать OpenClaw"
+            "value": "Написать MarketingClaw"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Skicka meddelande till OpenClaw"
+            "value": "Skicka meddelande till MarketingClaw"
           }
         }
       }
@@ -3673,138 +3673,138 @@
         }
       }
     },
-    "OpenClaw is not connected to a gateway yet.": {
+    "MarketingClaw is not connected to a gateway yet.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw is not connected to a gateway yet."
+            "value": "MarketingClaw is not connected to a gateway yet."
           }
         },
         "zh-CN": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw 尚未连接到网关。"
+            "value": "MarketingClaw 尚未连接到网关。"
           }
         },
         "zh-TW": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw 尚未連線到 gateway。"
+            "value": "MarketingClaw 尚未連線到 gateway。"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "O OpenClaw ainda não está conectado a um gateway."
+            "value": "O MarketingClaw ainda não está conectado a um gateway."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw ist noch nicht mit einem Gateway verbunden."
+            "value": "MarketingClaw ist noch nicht mit einem Gateway verbunden."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw aún no está conectado a un gateway."
+            "value": "MarketingClaw aún no está conectado a un gateway."
           }
         },
         "ja-JP": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw はまだゲートウェイに接続されていません。"
+            "value": "MarketingClaw はまだゲートウェイに接続されていません。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw가 아직 게이트웨이에 연결되어 있지 않습니다."
+            "value": "MarketingClaw가 아직 게이트웨이에 연결되어 있지 않습니다."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw n’est pas encore connecté à une passerelle."
+            "value": "MarketingClaw n’est pas encore connecté à une passerelle."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw अभी तक किसी गेटवे से कनेक्ट नहीं है।"
+            "value": "MarketingClaw अभी तक किसी गेटवे से कनेक्ट नहीं है।"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw غير متصل ببوابة بعد."
+            "value": "MarketingClaw غير متصل ببوابة بعد."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw non è ancora connesso a un gateway."
+            "value": "MarketingClaw non è ancora connesso a un gateway."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw henüz bir gateway’e bağlı değil."
+            "value": "MarketingClaw henüz bir gateway’e bağlı değil."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw ще не підключено до шлюзу."
+            "value": "MarketingClaw ще не підключено до шлюзу."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw belum terhubung ke gateway."
+            "value": "MarketingClaw belum terhubung ke gateway."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw nie jest jeszcze połączony z gatewayem."
+            "value": "MarketingClaw nie jest jeszcze połączony z gatewayem."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw ยังไม่ได้เชื่อมต่อกับ gateway"
+            "value": "MarketingClaw ยังไม่ได้เชื่อมต่อกับ gateway"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw chưa được kết nối với gateway."
+            "value": "MarketingClaw chưa được kết nối với gateway."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw is nog niet verbonden met een gateway."
+            "value": "MarketingClaw is nog niet verbonden met een gateway."
           }
         },
         "fa": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw هنوز به gateway متصل نشده است."
+            "value": "MarketingClaw هنوز به gateway متصل نشده است."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw еще не подключен к шлюзу."
+            "value": "MarketingClaw еще не подключен к шлюзу."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw är inte ansluten till någon gateway ännu."
+            "value": "MarketingClaw är inte ansluten till någon gateway ännu."
           }
         }
       }
@@ -4625,410 +4625,410 @@
         }
       }
     },
-    "Send to OpenClaw": {
+    "Send to MarketingClaw": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Send to OpenClaw"
+            "value": "Send to MarketingClaw"
           }
         },
         "zh-CN": {
           "stringUnit": {
             "state": "translated",
-            "value": "发送到 OpenClaw"
+            "value": "发送到 MarketingClaw"
           }
         },
         "zh-TW": {
           "stringUnit": {
             "state": "translated",
-            "value": "傳送到 OpenClaw"
+            "value": "傳送到 MarketingClaw"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enviar para o OpenClaw"
+            "value": "Enviar para o MarketingClaw"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "An OpenClaw senden"
+            "value": "An MarketingClaw senden"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enviar a OpenClaw"
+            "value": "Enviar a MarketingClaw"
           }
         },
         "ja-JP": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw に送信"
+            "value": "MarketingClaw に送信"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw로 보내기"
+            "value": "MarketingClaw로 보내기"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Envoyer à OpenClaw"
+            "value": "Envoyer à MarketingClaw"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw को भेजें"
+            "value": "MarketingClaw को भेजें"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "إرسال إلى OpenClaw"
+            "value": "إرسال إلى MarketingClaw"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Invia a OpenClaw"
+            "value": "Invia a MarketingClaw"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw’a gönder"
+            "value": "MarketingClaw’a gönder"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Надіслати в OpenClaw"
+            "value": "Надіслати в MarketingClaw"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kirim ke OpenClaw"
+            "value": "Kirim ke MarketingClaw"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wyślij do OpenClaw"
+            "value": "Wyślij do MarketingClaw"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "ส่งไปยัง OpenClaw"
+            "value": "ส่งไปยัง MarketingClaw"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gửi đến OpenClaw"
+            "value": "Gửi đến MarketingClaw"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Naar OpenClaw sturen"
+            "value": "Naar MarketingClaw sturen"
           }
         },
         "fa": {
           "stringUnit": {
             "state": "translated",
-            "value": "ارسال به OpenClaw"
+            "value": "ارسال به MarketingClaw"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Отправить в OpenClaw"
+            "value": "Отправить в MarketingClaw"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Skicka till OpenClaw"
+            "value": "Skicka till MarketingClaw"
           }
         }
       }
     },
-    "Sending to OpenClaw gateway…": {
+    "Sending to MarketingClaw gateway…": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sending to OpenClaw gateway…"
+            "value": "Sending to MarketingClaw gateway…"
           }
         },
         "zh-CN": {
           "stringUnit": {
             "state": "translated",
-            "value": "正在发送到 OpenClaw 网关…"
+            "value": "正在发送到 MarketingClaw 网关…"
           }
         },
         "zh-TW": {
           "stringUnit": {
             "state": "translated",
-            "value": "正在傳送到 OpenClaw gateway…"
+            "value": "正在傳送到 MarketingClaw gateway…"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enviando para o gateway OpenClaw…"
+            "value": "Enviando para o gateway MarketingClaw…"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wird an OpenClaw-Gateway gesendet…"
+            "value": "Wird an MarketingClaw-Gateway gesendet…"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enviando al gateway de OpenClaw…"
+            "value": "Enviando al gateway de MarketingClaw…"
           }
         },
         "ja-JP": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw ゲートウェイに送信中…"
+            "value": "MarketingClaw ゲートウェイに送信中…"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw 게이트웨이로 보내는 중…"
+            "value": "MarketingClaw 게이트웨이로 보내는 중…"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Envoi à la passerelle OpenClaw…"
+            "value": "Envoi à la passerelle MarketingClaw…"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw गेटवे को भेजा जा रहा है…"
+            "value": "MarketingClaw गेटवे को भेजा जा रहा है…"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "جارٍ الإرسال إلى بوابة OpenClaw…"
+            "value": "جارٍ الإرسال إلى بوابة MarketingClaw…"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Invio al gateway OpenClaw…"
+            "value": "Invio al gateway MarketingClaw…"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw gateway’ine gönderiliyor…"
+            "value": "MarketingClaw gateway’ine gönderiliyor…"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Надсилання до шлюзу OpenClaw…"
+            "value": "Надсилання до шлюзу MarketingClaw…"
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mengirim ke gateway OpenClaw…"
+            "value": "Mengirim ke gateway MarketingClaw…"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wysyłanie do gatewaya OpenClaw…"
+            "value": "Wysyłanie do gatewaya MarketingClaw…"
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "กำลังส่งไปยัง gateway ของ OpenClaw…"
+            "value": "กำลังส่งไปยัง gateway ของ MarketingClaw…"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Đang gửi đến gateway OpenClaw…"
+            "value": "Đang gửi đến gateway MarketingClaw…"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Verzenden naar OpenClaw-gateway…"
+            "value": "Verzenden naar MarketingClaw-gateway…"
           }
         },
         "fa": {
           "stringUnit": {
             "state": "translated",
-            "value": "در حال ارسال به gateway OpenClaw…"
+            "value": "در حال ارسال به gateway MarketingClaw…"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Отправка на шлюз OpenClaw…"
+            "value": "Отправка на шлюз MarketingClaw…"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Skickar till OpenClaw-gateway…"
+            "value": "Skickar till MarketingClaw-gateway…"
           }
         }
       }
     },
-    "Sent to OpenClaw.": {
+    "Sent to MarketingClaw.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sent to OpenClaw."
+            "value": "Sent to MarketingClaw."
           }
         },
         "zh-CN": {
           "stringUnit": {
             "state": "translated",
-            "value": "已发送到 OpenClaw。"
+            "value": "已发送到 MarketingClaw。"
           }
         },
         "zh-TW": {
           "stringUnit": {
             "state": "translated",
-            "value": "已傳送到 OpenClaw。"
+            "value": "已傳送到 MarketingClaw。"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enviado para o OpenClaw."
+            "value": "Enviado para o MarketingClaw."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "An OpenClaw gesendet."
+            "value": "An MarketingClaw gesendet."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enviado a OpenClaw."
+            "value": "Enviado a MarketingClaw."
           }
         },
         "ja-JP": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw に送信しました。"
+            "value": "MarketingClaw に送信しました。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw로 보냈습니다."
+            "value": "MarketingClaw로 보냈습니다."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Envoyé à OpenClaw."
+            "value": "Envoyé à MarketingClaw."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw को भेज दिया गया।"
+            "value": "MarketingClaw को भेज दिया गया।"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "تم الإرسال إلى OpenClaw."
+            "value": "تم الإرسال إلى MarketingClaw."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Inviato a OpenClaw."
+            "value": "Inviato a MarketingClaw."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw’a gönderildi."
+            "value": "MarketingClaw’a gönderildi."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Надіслано в OpenClaw."
+            "value": "Надіслано в MarketingClaw."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Terkirim ke OpenClaw."
+            "value": "Terkirim ke MarketingClaw."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wysłano do OpenClaw."
+            "value": "Wysłano do MarketingClaw."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "ส่งไปยัง OpenClaw แล้ว"
+            "value": "ส่งไปยัง MarketingClaw แล้ว"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Đã gửi đến OpenClaw."
+            "value": "Đã gửi đến MarketingClaw."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Verzonden naar OpenClaw."
+            "value": "Verzonden naar MarketingClaw."
           }
         },
         "fa": {
           "stringUnit": {
             "state": "translated",
-            "value": "به OpenClaw ارسال شد."
+            "value": "به MarketingClaw ارسال شد."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Отправлено в OpenClaw."
+            "value": "Отправлено в MarketingClaw."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Skickat till OpenClaw."
+            "value": "Skickat till MarketingClaw."
           }
         }
       }
@@ -5305,138 +5305,138 @@
         }
       }
     },
-    "Summarize the current OpenClaw status and tell me what needs attention.": {
+    "Summarize the current MarketingClaw status and tell me what needs attention.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Summarize the current OpenClaw status and tell me what needs attention."
+            "value": "Summarize the current MarketingClaw status and tell me what needs attention."
           }
         },
         "zh-CN": {
           "stringUnit": {
             "state": "translated",
-            "value": "总结当前的 OpenClaw 状态，并告诉我哪些方面需要注意。"
+            "value": "总结当前的 MarketingClaw 状态，并告诉我哪些方面需要注意。"
           }
         },
         "zh-TW": {
           "stringUnit": {
             "state": "translated",
-            "value": "總結目前的 OpenClaw 狀態，並告訴我哪些方面需要注意。"
+            "value": "總結目前的 MarketingClaw 狀態，並告訴我哪些方面需要注意。"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Resuma o status atual do OpenClaw e diga o que precisa de atenção."
+            "value": "Resuma o status atual do MarketingClaw e diga o que precisa de atenção."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Fasse den aktuellen OpenClaw-Status zusammen und sage mir, was Aufmerksamkeit erfordert."
+            "value": "Fasse den aktuellen MarketingClaw-Status zusammen und sage mir, was Aufmerksamkeit erfordert."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Resume el estado actual de OpenClaw y dime qué necesita atención."
+            "value": "Resume el estado actual de MarketingClaw y dime qué necesita atención."
           }
         },
         "ja-JP": {
           "stringUnit": {
             "state": "translated",
-            "value": "現在のOpenClawの状態を要約し、注意が必要な点を教えてください。"
+            "value": "現在のMarketingClawの状態を要約し、注意が必要な点を教えてください。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "현재 OpenClaw 상태를 요약하고 주의가 필요한 항목을 알려 주세요."
+            "value": "현재 MarketingClaw 상태를 요약하고 주의가 필요한 항목을 알려 주세요."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Résumez l’état actuel d’OpenClaw et indiquez-moi ce qui nécessite mon attention."
+            "value": "Résumez l’état actuel d’MarketingClaw et indiquez-moi ce qui nécessite mon attention."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenClaw की मौजूदा स्थिति का सारांश दें और बताएं कि किन चीज़ों पर ध्यान देने की ज़रूरत है।"
+            "value": "MarketingClaw की मौजूदा स्थिति का सारांश दें और बताएं कि किन चीज़ों पर ध्यान देने की ज़रूरत है।"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "لخّص حالة OpenClaw الحالية وأخبرني بما يحتاج إلى الاهتمام."
+            "value": "لخّص حالة MarketingClaw الحالية وأخبرني بما يحتاج إلى الاهتمام."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Riassumi lo stato attuale di OpenClaw e dimmi cosa richiede attenzione."
+            "value": "Riassumi lo stato attuale di MarketingClaw e dimmi cosa richiede attenzione."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mevcut OpenClaw durumunu özetle ve nelerin ilgilenilmesi gerektiğini söyle."
+            "value": "Mevcut MarketingClaw durumunu özetle ve nelerin ilgilenilmesi gerektiğini söyle."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Підсумуй поточний стан OpenClaw і скажи, що потребує уваги."
+            "value": "Підсумуй поточний стан MarketingClaw і скажи, що потребує уваги."
           }
         },
         "id": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ringkas status OpenClaw saat ini dan beri tahu saya apa yang perlu diperhatikan."
+            "value": "Ringkas status MarketingClaw saat ini dan beri tahu saya apa yang perlu diperhatikan."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Podsumuj bieżący stan OpenClaw i powiedz mi, co wymaga uwagi."
+            "value": "Podsumuj bieżący stan MarketingClaw i powiedz mi, co wymaga uwagi."
           }
         },
         "th": {
           "stringUnit": {
             "state": "translated",
-            "value": "สรุปสถานะ OpenClaw ปัจจุบันและบอกฉันว่ามีอะไรที่ต้องตรวจสอบ"
+            "value": "สรุปสถานะ MarketingClaw ปัจจุบันและบอกฉันว่ามีอะไรที่ต้องตรวจสอบ"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tóm tắt trạng thái OpenClaw hiện tại và cho tôi biết những gì cần chú ý."
+            "value": "Tóm tắt trạng thái MarketingClaw hiện tại và cho tôi biết những gì cần chú ý."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vat de huidige OpenClaw-status samen en vertel me wat aandacht nodig heeft."
+            "value": "Vat de huidige MarketingClaw-status samen en vertel me wat aandacht nodig heeft."
           }
         },
         "fa": {
           "stringUnit": {
             "state": "translated",
-            "value": "وضعیت فعلی OpenClaw را خلاصه کن و بگو چه چیزهایی نیاز به توجه دارند."
+            "value": "وضعیت فعلی MarketingClaw را خلاصه کن و بگو چه چیزهایی نیاز به توجه دارند."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Подведи итог текущего состояния OpenClaw и скажи, что требует внимания."
+            "value": "Подведи итог текущего состояния MarketingClaw и скажи, что требует внимания."
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sammanfatta aktuell OpenClaw-status och berätta vad som behöver uppmärksammas."
+            "value": "Sammanfatta aktuell MarketingClaw-status och berätta vad som behöver uppmärksammas."
           }
         }
       }

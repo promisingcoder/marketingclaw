@@ -45,9 +45,9 @@ type ShellEpochState = {
   disconnectedCallback: () => void;
 };
 
-describe("OpenClaw app lifecycle", () => {
+describe("MarketingClaw app lifecycle", () => {
   it("hides revealed login credentials when the app connection epoch ends", () => {
-    const app = document.createElement("openclaw-app") as unknown as AppLifecycleState;
+    const app = document.createElement("marketingclaw-app") as unknown as AppLifecycleState;
     app.loginShowGatewayToken = true;
     app.loginShowGatewayPassword = true;
 
@@ -58,7 +58,7 @@ describe("OpenClaw app lifecycle", () => {
   });
 
   it("hides revealed login credentials when the Gateway source changes", () => {
-    const app = document.createElement("openclaw-app") as unknown as AppLifecycleState;
+    const app = document.createElement("marketingclaw-app") as unknown as AppLifecycleState;
     const snapshot = {
       client: null,
       connected: false,
@@ -91,9 +91,9 @@ describe("OpenClaw app lifecycle", () => {
   });
 });
 
-describe("OpenClaw shell source initialization", () => {
+describe("MarketingClaw shell source initialization", () => {
   it("clears retained presentation and source ownership when its context epoch ends", () => {
-    const shell = document.createElement("openclaw-app-shell") as unknown as ShellEpochState;
+    const shell = document.createElement("marketingclaw-app-shell") as unknown as ShellEpochState;
     const client = {} as GatewayBrowserClient;
     const agents = {} as ApplicationContext["agents"];
     const runtimeConfig = {} as ApplicationContext["runtimeConfig"];
@@ -130,7 +130,7 @@ describe("OpenClaw shell source initialization", () => {
 
   it("initializes replacement capabilities even when the Gateway client is unchanged", () => {
     const shell = document.createElement(
-      "openclaw-app-shell",
+      "marketingclaw-app-shell",
     ) as unknown as ShellInitializationState;
     shell.routeState = { routeId: "overview" };
     const client = {} as GatewayBrowserClient;

@@ -3,8 +3,8 @@ import { createHash, randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
-import type { OpenKeyedStoreOptions } from "openclaw/plugin-sdk/plugin-state-runtime";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { OpenKeyedStoreOptions } from "marketingclaw/plugin-sdk/plugin-state-runtime";
+import { isRecord } from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import { loadMatrixQaE2eeRuntime } from "../../substrate/e2ee-client.js";
 import type { MatrixQaScenarioContext } from "./scenario-runtime-shared.js";
 
@@ -185,7 +185,7 @@ async function readMatrixSyncCacheCursorsFromSqlite(params: {
   userId?: string;
 }): Promise<MatrixSyncStoreCursor[]> {
   const databasePaths = await findFilesByName({
-    filename: "openclaw.sqlite",
+    filename: "marketingclaw.sqlite",
     rootDir: params.stateDir,
     maxDepth: 10,
   });
@@ -541,7 +541,7 @@ async function hasPersistedMatrixPluginStateDedupeEntry(params: {
   });
   const dedupeStoreRuntime = params.dedupeStoreRuntime ?? (await loadMatrixQaE2eeRuntime());
   const databasePaths = await findFilesByName({
-    filename: "openclaw.sqlite",
+    filename: "marketingclaw.sqlite",
     rootDir: params.stateDir,
     maxDepth: 10,
   });
@@ -557,10 +557,10 @@ async function hasPersistedMatrixPluginStateDedupeEntry(params: {
       const options = dedupeStoreRuntime.openMatrixInboundDedupeStoreOptions({
         stateDir: storageRootDir,
       });
-      const stateRoot = options.env?.OPENCLAW_STATE_DIR?.trim();
+      const stateRoot = options.env?.MARKETINGCLAW_STATE_DIR?.trim();
       if (
         !stateRoot ||
-        path.resolve(stateRoot, "state", "openclaw.sqlite") !== path.resolve(databasePath)
+        path.resolve(stateRoot, "state", "marketingclaw.sqlite") !== path.resolve(databasePath)
       ) {
         continue;
       }

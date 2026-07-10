@@ -2,7 +2,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import { resolveBrewExecutable as defaultResolveBrewExecutable } from "../../infra/brew.js";
 import { isContainerEnvironment as defaultIsContainerEnvironment } from "../../infra/container-environment.js";
 import { formatErrorMessage } from "../../infra/errors.js";
@@ -28,7 +28,7 @@ export type SkillInstallRequest = {
   skillName: string;
   installId: string;
   timeoutMs?: number;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
 };
 export type { SkillInstallResult, SkillInstallSkipReason } from "./install-types.js";
 
@@ -123,9 +123,9 @@ function resolveDefaultNodeInstallStateDir({
   platform?: NodeJS.Platform;
 } = {}): string {
   if (platform !== "win32" && getuid?.() === 0) {
-    return path.join(path.parse(cwd).root, "var", "lib", "openclaw");
+    return path.join(path.parse(cwd).root, "var", "lib", "marketingclaw");
   }
-  return path.join(homedir(), ".openclaw");
+  return path.join(homedir(), ".marketingclaw");
 }
 
 async function buildNodeInstallEnv(prefs: SkillsInstallPreferences): Promise<NodeJS.ProcessEnv> {
@@ -709,10 +709,10 @@ export async function installSkill(params: SkillInstallRequest): Promise<SkillIn
       installId: params.installId,
     },
     source:
-      skillSource === "openclaw-bundled"
-        ? { kind: "bundled", authority: "openclaw", mutable: false, network: false }
-        : skillSource === "openclaw-managed" || skillSource === "openclaw-extra"
-          ? { kind: "managed", authority: "openclaw", mutable: false, network: false }
+      skillSource === "marketingclaw-bundled"
+        ? { kind: "bundled", authority: "marketingclaw", mutable: false, network: false }
+        : skillSource === "marketingclaw-managed" || skillSource === "marketingclaw-extra"
+          ? { kind: "managed", authority: "marketingclaw", mutable: false, network: false }
           : { kind: "workspace", authority: "user", mutable: true, network: false },
     requestedSpecifier: `${params.skillName}:${params.installId}`,
     skillName: params.skillName,
@@ -732,7 +732,11 @@ export async function installSkill(params: SkillInstallRequest): Promise<SkillIn
   }
   // Warn when install is triggered from a non-bundled source.
   // Workspace/project/personal agent skills can contain attacker-controlled metadata.
-  const trustedInstallSources = new Set(["openclaw-bundled", "openclaw-managed", "openclaw-extra"]);
+  const trustedInstallSources = new Set([
+    "marketingclaw-bundled",
+    "marketingclaw-managed",
+    "marketingclaw-extra",
+  ]);
   if (!trustedInstallSources.has(skillSource)) {
     warnings.push(
       `WARNING: Skill "${params.skillName}" install triggered from non-bundled source "${skillSource}". Verify the install recipe is trusted.`,

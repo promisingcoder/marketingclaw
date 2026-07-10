@@ -2,15 +2,15 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@marketingclaw/normalization-core/string-coerce";
 import type { Command as CommanderCommand, Option as CommanderOption } from "commander";
 import { resolveStateDir } from "../config/paths.js";
-import type { ConfigFileSnapshot, OpenClawConfig } from "../config/types.openclaw.js";
+import type { ConfigFileSnapshot, MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { isLoopbackAddress, isSecureWebSocketUrl } from "../gateway/net.js";
 import { FLAG_TERMINATOR, isValueToken } from "../infra/cli-root-options.js";
 import { isTruthyEnvValue, normalizeEnv } from "../infra/env.js";
 import type { ProxyHandle } from "../infra/net/proxy/proxy-lifecycle.js";
-import { ensureOpenClawCliOnPath } from "../infra/path-env.js";
+import { ensureMarketingClawCliOnPath } from "../infra/path-env.js";
 import { assertSupportedRuntime } from "../infra/runtime-guard.js";
 import { tryProcessCwd } from "../infra/safe-cwd.js";
 import type { PluginManifestCommandAliasRegistry } from "../plugins/manifest-command-aliases.js";
@@ -183,7 +183,7 @@ async function tryRunGatewayRunFastPath(
     emitCliBanner(VERSION, { argv });
   }
   const program = new Command();
-  program.name("openclaw");
+  program.name("marketingclaw");
   program.enablePositionalOptions();
   program.option("--no-color", "Disable ANSI colors", false);
   program.exitOverride((err) => {
@@ -315,7 +315,7 @@ async function resolveBareRootLaunchTarget(argv: string[]): Promise<BareRootLaun
 }
 
 async function resolveConfiguredTuiLaunchTarget(
-  config: OpenClawConfig,
+  config: MarketingClawConfig,
 ): Promise<BareRootLaunchTarget> {
   const gateway = await resolveReachableGateway(config);
   if (gateway) {
@@ -345,7 +345,9 @@ type GatewayProbeAuth = {
   authSource?: "config";
 };
 
-async function resolveReachableGateway(config: OpenClawConfig): Promise<ReachableGateway | null> {
+async function resolveReachableGateway(
+  config: MarketingClawConfig,
+): Promise<ReachableGateway | null> {
   const targets = await resolveGatewayProbeTargets(config);
   if (targets.length === 0) {
     return null;
@@ -377,7 +379,7 @@ async function resolveReachableGateway(config: OpenClawConfig): Promise<Reachabl
 }
 
 async function resolveGatewayProbeAuth(
-  config: OpenClawConfig,
+  config: MarketingClawConfig,
   auth: "local" | "remote",
 ): Promise<GatewayProbeAuth> {
   const gateway = config.gateway;
@@ -395,8 +397,9 @@ async function resolveGatewayProbeAuth(
     }),
   ]);
   const resolved: GatewayProbeAuth = {};
-  const token = configToken ?? normalizeOptionalString(process.env.OPENCLAW_GATEWAY_TOKEN);
-  const password = configPassword ?? normalizeOptionalString(process.env.OPENCLAW_GATEWAY_PASSWORD);
+  const token = configToken ?? normalizeOptionalString(process.env.MARKETINGCLAW_GATEWAY_TOKEN);
+  const password =
+    configPassword ?? normalizeOptionalString(process.env.MARKETINGCLAW_GATEWAY_PASSWORD);
   if (token) {
     resolved.token = token;
   }
@@ -409,7 +412,9 @@ async function resolveGatewayProbeAuth(
   return resolved;
 }
 
-async function resolveGatewayProbeTargets(config: OpenClawConfig): Promise<GatewayProbeTarget[]> {
+async function resolveGatewayProbeTargets(
+  config: MarketingClawConfig,
+): Promise<GatewayProbeTarget[]> {
   const remoteUrl = normalizeOptionalString(config.gateway?.remote?.url);
   if (normalizeOptionalString(config.gateway?.mode) === "remote" && remoteUrl) {
     const url = await resolveValidatedRemoteGatewayUrl(config);
@@ -427,7 +432,7 @@ function isSafeGatewayProbeTarget(target: GatewayProbeTarget): boolean {
     return isSafeRemoteGatewayProbeUrl(target.url);
   }
   return isSecureWebSocketUrl(target.url, {
-    allowPrivateWs: process.env.OPENCLAW_ALLOW_INSECURE_PRIVATE_WS === "1",
+    allowPrivateWs: process.env.MARKETINGCLAW_ALLOW_INSECURE_PRIVATE_WS === "1",
   });
 }
 
@@ -450,7 +455,7 @@ function isSafeRemoteGatewayProbeUrl(url: string): boolean {
     return true;
   }
   return (
-    process.env.OPENCLAW_ALLOW_INSECURE_PRIVATE_WS === "1" &&
+    process.env.MARKETINGCLAW_ALLOW_INSECURE_PRIVATE_WS === "1" &&
     isSecureWebSocketUrl(url, { allowPrivateWs: true })
   );
 }
@@ -465,7 +470,9 @@ function isLoopbackGatewayHost(hostname: string): boolean {
   return isLoopbackAddress(hostForIpCheck);
 }
 
-async function resolveValidatedRemoteGatewayUrl(config: OpenClawConfig): Promise<string | null> {
+async function resolveValidatedRemoteGatewayUrl(
+  config: MarketingClawConfig,
+): Promise<string | null> {
   try {
     const { buildGatewayConnectionDetailsWithResolvers } =
       await import("../gateway/connection-details.js");
@@ -479,7 +486,7 @@ async function resolveValidatedRemoteGatewayUrl(config: OpenClawConfig): Promise
 }
 
 async function resolveGatewayProbeSecret(params: {
-  config: OpenClawConfig;
+  config: MarketingClawConfig;
   value: unknown;
   path: string;
 }): Promise<string | undefined> {
@@ -491,7 +498,7 @@ async function resolveGatewayProbeSecret(params: {
   }
 }
 
-async function resolveLocalGatewayWebSocketUrls(config: OpenClawConfig): Promise<string[]> {
+async function resolveLocalGatewayWebSocketUrls(config: MarketingClawConfig): Promise<string[]> {
   const [{ resolveGatewayPort }, { resolveControlUiLinks }] = await Promise.all([
     import("../config/paths.js"),
     import("../gateway/control-ui-links.js"),
@@ -534,7 +541,7 @@ function pauseNonTtyStdinForCliExit(): void {
 
 export function resolveMissingPluginCommandMessage(
   pluginId: string,
-  config?: OpenClawConfig,
+  config?: MarketingClawConfig,
   options?: { registry?: PluginManifestCommandAliasRegistry },
 ): string | null {
   return resolveMissingPluginCommandMessageFromPolicy(
@@ -686,8 +693,8 @@ async function ensureCliEnvProxyDispatcher(): Promise<void> {
 
 function shouldBootstrapCliProxyBeforeFastPath(env: NodeJS.ProcessEnv = process.env): boolean {
   if (
-    isTruthyEnvValue(env.OPENCLAW_DEBUG_PROXY_ENABLED) ||
-    isTruthyEnvValue(env.OPENCLAW_DEBUG_PROXY_REQUIRE)
+    isTruthyEnvValue(env.MARKETINGCLAW_DEBUG_PROXY_ENABLED) ||
+    isTruthyEnvValue(env.MARKETINGCLAW_DEBUG_PROXY_REQUIRE)
   ) {
     return true;
   }
@@ -706,7 +713,7 @@ function isKnownBuiltInCommandRoot(primary: string): boolean {
 
 async function isPluginCliRoot(params: {
   primary: string;
-  config: OpenClawConfig;
+  config: MarketingClawConfig;
 }): Promise<boolean | null> {
   try {
     const { resolvePluginCliRootOwnerIds } = await loadCliRegistryLoaderModule();
@@ -721,7 +728,7 @@ async function isPluginCliRoot(params: {
   }
 }
 
-function createAllowlistAgnosticCliLookupConfig(config: OpenClawConfig): OpenClawConfig {
+function createAllowlistAgnosticCliLookupConfig(config: MarketingClawConfig): MarketingClawConfig {
   if (!Array.isArray(config.plugins?.allow) || config.plugins.allow.length === 0) {
     return config;
   }
@@ -736,7 +743,7 @@ function createAllowlistAgnosticCliLookupConfig(config: OpenClawConfig): OpenCla
 
 async function resolveCliCommandSurfaceOwner(params: {
   primary: string;
-  config: OpenClawConfig;
+  config: MarketingClawConfig;
 }): Promise<string | undefined> {
   const { resolveManifestCliCommandSurfaceOwner } = await loadManifestCommandAliasesRuntimeModule();
   const manifestOwner = resolveManifestCliCommandSurfaceOwner({
@@ -777,7 +784,7 @@ function resolveUnownedCliPrimaryCandidate(argv: string[]): string | null {
 
 async function resolveUnownedCliPrimary(params: {
   argv: string[];
-  config: OpenClawConfig;
+  config: MarketingClawConfig;
 }): Promise<string | null> {
   const primary = resolveUnownedCliPrimaryCandidate(params.argv);
   if (!primary) {
@@ -792,7 +799,7 @@ async function resolveUnownedCliPrimary(params: {
 
 async function resolveUnownedCliPrimaryMessage(params: {
   primary: string;
-  config: OpenClawConfig;
+  config: MarketingClawConfig;
 }): Promise<string> {
   const { resolveManifestCommandAliasOwner, resolveManifestToolOwner } =
     await loadManifestCommandAliasesRuntimeModule();
@@ -811,7 +818,7 @@ async function resolveUnownedCliPrimaryMessage(params: {
   }
   const suggestion = formatCliCommandSuggestions(params.primary);
   return [
-    `Unknown command: openclaw ${params.primary}. No built-in command or plugin CLI metadata owns "${params.primary}".`,
+    `Unknown command: marketingclaw ${params.primary}. No built-in command or plugin CLI metadata owns "${params.primary}".`,
     suggestion,
   ]
     .filter(Boolean)
@@ -853,7 +860,9 @@ export async function runCli(argv: string[] = process.argv) {
     applyCliProfileEnv({ profile: parsedProfile.profile });
   }
   const containerTargetName =
-    parsedContainer.container ?? normalizeOptionalString(process.env.OPENCLAW_CONTAINER) ?? null;
+    parsedContainer.container ??
+    normalizeOptionalString(process.env.MARKETINGCLAW_CONTAINER) ??
+    null;
   if (containerTargetName && parsedProfile.profile) {
     throw new Error("--container cannot be combined with --profile/--dev");
   }
@@ -897,7 +906,7 @@ export async function runCli(argv: string[] = process.argv) {
   }
   normalizeEnv();
   if (shouldEnsureCliPath(normalizedArgv)) {
-    ensureOpenClawCliOnPath();
+    ensureMarketingClawCliOnPath();
   }
 
   // Activate operator-managed proxy routing for network-capable commands.
@@ -908,9 +917,9 @@ export async function runCli(argv: string[] = process.argv) {
   let onSigint: (() => void) | null = null;
   let onExit: (() => void) | null = null;
   let unregisterProxySignalExitBarrier: (() => void) | null = null;
-  let bestEffortConfigPromise: Promise<OpenClawConfig> | null = null;
+  let bestEffortConfigPromise: Promise<MarketingClawConfig> | null = null;
   const isolateProxyConfigEnv = isGatewayRunInvocation;
-  const readBestEffortCliConfig = async (): Promise<OpenClawConfig> => {
+  const readBestEffortCliConfig = async (): Promise<MarketingClawConfig> => {
     if (!bestEffortConfigPromise) {
       bestEffortConfigPromise = import("../config/io.js").then(({ readBestEffortConfig }) =>
         readBestEffortConfig(
@@ -967,7 +976,7 @@ export async function runCli(argv: string[] = process.argv) {
     process.once("SIGINT", onSigint);
     process.once("exit", onExit);
   };
-  const replaceStartedProxy = async (config: OpenClawConfig["proxy"]) => {
+  const replaceStartedProxy = async (config: MarketingClawConfig["proxy"]) => {
     await stopStartedProxy();
     const { startProxy } = await loadProxyLifecycleModule();
     proxyHandle = await startProxy(config);
@@ -1054,8 +1063,8 @@ export async function runCli(argv: string[] = process.argv) {
     }
 
     // Reject unowned command roots before help/version routing, so that
-    // `openclaw <typo> --help` surfaces the same Unknown command error as
-    // `openclaw <typo>` instead of silently showing generic top-level help.
+    // `marketingclaw <typo> --help` surfaces the same Unknown command error as
+    // `marketingclaw <typo>` instead of silently showing generic top-level help.
     // Runs after legitimate precomputed help fast paths so known help commands
     // still dispatch normally. See #81077.
     {
@@ -1084,7 +1093,7 @@ export async function runCli(argv: string[] = process.argv) {
       if (bareRootLaunchTarget.kind === "onboarding") {
         if (!process.stdin.isTTY || !process.stdout.isTTY) {
           console.error(
-            "Onboarding needs an interactive TTY. Use `openclaw onboard --non-interactive --accept-risk ...` for automation.",
+            "Onboarding needs an interactive TTY. Use `marketingclaw onboard --non-interactive --accept-risk ...` for automation.",
           );
           process.exitCode = 1;
           return;
@@ -1096,7 +1105,7 @@ export async function runCli(argv: string[] = process.argv) {
       if (bareRootLaunchTarget.kind === "tui") {
         if (!process.stdin.isTTY || !process.stdout.isTTY) {
           console.error(
-            "OpenClaw TUI needs an interactive TTY. Use `openclaw agent --local ...` for automation.",
+            "MarketingClaw TUI needs an interactive TTY. Use `marketingclaw agent --local ...` for automation.",
           );
           process.exitCode = 1;
           return;
@@ -1117,7 +1126,7 @@ export async function runCli(argv: string[] = process.argv) {
       }
       if (!process.stdin.isTTY || !process.stdout.isTTY) {
         console.error(
-          'Crestodian needs an interactive TTY. Use `openclaw crestodian --message "status"` for one command.',
+          'Crestodian needs an interactive TTY. Use `marketingclaw crestodian --message "status"` for one command.',
         );
         process.exitCode = 1;
         return;
@@ -1191,7 +1200,7 @@ export async function runCli(argv: string[] = process.argv) {
     const suppressStartupProgress = hasJsonOutputFlag(parseArgv);
     const { createCliProgress } = await loadProgressModule();
     const startupProgress = createCliProgress({
-      label: "Loading OpenClaw CLI…",
+      label: "Loading MarketingClaw CLI…",
       indeterminate: true,
       delayMs: 0,
       ...(suppressStartupProgress ? { enabled: false } : {}),
@@ -1243,20 +1252,20 @@ export async function runCli(argv: string[] = process.argv) {
         }
         if (isBenignUncaughtExceptionError(error)) {
           console.warn(
-            "[openclaw] Non-fatal uncaught exception (continuing):",
+            "[marketingclaw] Non-fatal uncaught exception (continuing):",
             formatUncaughtError(error),
           );
           return;
         }
         for (const line of formatCliFailureLines({
-          title: "OpenClaw hit an unexpected runtime error.",
+          title: "MarketingClaw hit an unexpected runtime error.",
           error,
           argv: normalizedArgv,
         })) {
           console.error(line);
         }
         for (const message of runFatalErrorHooks({ reason: "uncaught_exception", error })) {
-          console.error("[openclaw]", message);
+          console.error("[marketingclaw]", message);
         }
         restoreTerminalState("uncaught exception", { resumeStdinIfPaused: false });
         process.exit(1);

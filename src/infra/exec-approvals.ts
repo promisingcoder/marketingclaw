@@ -7,7 +7,7 @@ import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
   readStringValue,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@marketingclaw/normalization-core/string-coerce";
 import { DEFAULT_AGENT_ID } from "../routing/session-key.js";
 import type { CommandExplanationSummary } from "./command-analysis/explain.js";
 import { sha256Hex, sha256HexPrefix } from "./crypto-digest.js";
@@ -298,7 +298,7 @@ const DEFAULT_SECURITY: ExecSecurity = "full";
 const DEFAULT_ASK: ExecAsk = "off";
 export const DEFAULT_EXEC_APPROVAL_ASK_FALLBACK: ExecSecurity = "deny";
 const DEFAULT_AUTO_ALLOW_SKILLS = false;
-const DEFAULT_EXEC_APPROVALS_STATE_DIR = "~/.openclaw";
+const DEFAULT_EXEC_APPROVALS_STATE_DIR = "~/.marketingclaw";
 const EXEC_APPROVALS_FILE = "exec-approvals.json";
 const EXEC_APPROVALS_SOCKET = "exec-approvals.sock";
 
@@ -310,7 +310,7 @@ function resolveExecApprovalsStateDir(env: NodeJS.ProcessEnv = process.env): {
   path: string;
   displayPath: string;
 } {
-  const override = env.OPENCLAW_STATE_DIR?.trim();
+  const override = env.MARKETINGCLAW_STATE_DIR?.trim();
   if (override) {
     const resolved = resolveHomeRelativePath(override, { env });
     return {
@@ -340,8 +340,8 @@ export function resolveExecApprovalsDisplayPath(): string {
 }
 
 export function resolveExecApprovalsTranscriptPath(): string {
-  return process.env.OPENCLAW_STATE_DIR?.trim()
-    ? `$OPENCLAW_STATE_DIR/${EXEC_APPROVALS_FILE}`
+  return process.env.MARKETINGCLAW_STATE_DIR?.trim()
+    ? `$MARKETINGCLAW_STATE_DIR/${EXEC_APPROVALS_FILE}`
     : `${DEFAULT_EXEC_APPROVALS_STATE_DIR}/${EXEC_APPROVALS_FILE}`;
 }
 
@@ -350,7 +350,7 @@ function resolveLegacyExecApprovalsPath(): string {
 }
 
 function hasUnmigratedLegacyExecApprovals(filePath: string): boolean {
-  if (!process.env.OPENCLAW_STATE_DIR?.trim()) {
+  if (!process.env.MARKETINGCLAW_STATE_DIR?.trim()) {
     return false;
   }
   const legacyPath = resolveLegacyExecApprovalsPath();
@@ -1252,8 +1252,8 @@ function textMentionsSecurityAuditSuppressions(value: string): boolean {
 
 function isReadOnlySecurityAuditSuppressionInspection(argv: string[]): boolean {
   const command = normalizeCommandName(argv[0]);
-  let offset = command === "pnpm" && argv[1] === "openclaw" ? 1 : 0;
-  if (normalizeCommandName(argv[offset]) !== "openclaw") {
+  let offset = command === "pnpm" && argv[1] === "marketingclaw" ? 1 : 0;
+  if (normalizeCommandName(argv[offset]) !== "marketingclaw") {
     return false;
   }
   offset += 1;

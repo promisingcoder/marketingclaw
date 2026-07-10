@@ -1,5 +1,5 @@
 ---
-summary: "Automated, hardened OpenClaw installation with Ansible, Tailscale VPN, and firewall isolation"
+summary: "Automated, hardened MarketingClaw installation with Ansible, Tailscale VPN, and firewall isolation"
 read_when:
   - You want automated server deployment with security hardening
   - You need firewall-isolated setup with VPN access
@@ -7,10 +7,10 @@ read_when:
 title: "Ansible"
 ---
 
-Deploy OpenClaw to production servers with **[openclaw-ansible](https://github.com/openclaw/openclaw-ansible)**, an automated installer with a security-first architecture.
+Deploy MarketingClaw to production servers with **[marketingclaw-ansible](https://github.com/openclaw/openclaw-ansible)**, an automated installer with a security-first architecture.
 
 <Info>
-The [openclaw-ansible](https://github.com/openclaw/openclaw-ansible) repo is the source of truth for Ansible deployment. This page is a quick overview.
+The [marketingclaw-ansible](https://github.com/openclaw/openclaw-ansible) repo is the source of truth for Ansible deployment. This page is a quick overview.
 </Info>
 
 ## Prerequisites
@@ -41,8 +41,8 @@ curl -fsSL https://raw.githubusercontent.com/openclaw/openclaw-ansible/main/inst
 1. Tailscale (mesh VPN for secure remote access)
 2. UFW firewall (SSH + Tailscale ports only)
 3. Docker CE + Compose V2 (default agent sandbox backend)
-4. Node.js and pnpm (OpenClaw requires Node 22.19+ or 23.11+; Node 24 is recommended)
-5. OpenClaw, installed host-based, not containerized
+4. Node.js and pnpm (MarketingClaw requires Node 22.19+ or 23.11+; Node 24 is recommended)
+5. MarketingClaw, installed host-based, not containerized
 6. A systemd service with security hardening
 
 <Note>
@@ -54,24 +54,24 @@ backend. See [Sandboxing](/gateway/sandboxing) for other backends.
 ## Post-install setup
 
 <Steps>
-  <Step title="Switch to the openclaw user">
+  <Step title="Switch to the marketingclaw user">
     ```bash
-    sudo -i -u openclaw
+    sudo -i -u marketingclaw
     ```
   </Step>
   <Step title="Run the onboarding wizard">
-    The post-install script guides you through configuring OpenClaw.
+    The post-install script guides you through configuring MarketingClaw.
   </Step>
   <Step title="Connect messaging channels">
     Log in to WhatsApp, Telegram, Discord, or Signal:
     ```bash
-    openclaw channels login --channel <name>
+    marketingclaw channels login --channel <name>
     ```
   </Step>
   <Step title="Verify the installation">
     ```bash
-    sudo systemctl status openclaw
-    sudo journalctl -u openclaw -f
+    sudo systemctl status marketingclaw
+    sudo journalctl -u marketingclaw -f
     ```
   </Step>
   <Step title="Connect to Tailscale">
@@ -83,17 +83,17 @@ backend. See [Sandboxing](/gateway/sandboxing) for other backends.
 
 ```bash
 # Check service status
-sudo systemctl status openclaw
+sudo systemctl status marketingclaw
 
 # View live logs
-sudo journalctl -u openclaw -f
+sudo journalctl -u marketingclaw -f
 
 # Restart gateway
-sudo systemctl restart openclaw
+sudo systemctl restart marketingclaw
 
-# Channel login (run as openclaw user)
-sudo -i -u openclaw
-openclaw channels login --channel <name>
+# Channel login (run as marketingclaw user)
+sudo -i -u marketingclaw
+marketingclaw channels login --channel <name>
 ```
 
 ## Security architecture
@@ -126,7 +126,7 @@ Docker is installed for agent sandboxes (isolated tool execution), not for runni
   <Step title="Clone the repository">
     ```bash
     git clone https://github.com/openclaw/openclaw-ansible.git
-    cd openclaw-ansible
+    cd marketingclaw-ansible
     ```
   </Step>
   <Step title="Install Ansible collections">
@@ -142,7 +142,7 @@ Docker is installed for agent sandboxes (isolated tool execution), not for runni
     Or run the playbook directly and then run the setup script manually:
     ```bash
     ansible-playbook playbook.yml --ask-become-pass
-    # Then run: /tmp/openclaw-setup.sh
+    # Then run: /tmp/marketingclaw-setup.sh
     ```
 
   </Step>
@@ -150,12 +150,12 @@ Docker is installed for agent sandboxes (isolated tool execution), not for runni
 
 ## Updating
 
-The Ansible installer sets up OpenClaw for manual updates; see [Updating](/install/updating) for the standard flow.
+The Ansible installer sets up MarketingClaw for manual updates; see [Updating](/install/updating) for the standard flow.
 
 To re-run the playbook (for example, after configuration changes):
 
 ```bash
-cd openclaw-ansible
+cd marketingclaw-ansible
 ./run-playbook.sh
 ```
 
@@ -172,15 +172,15 @@ This is idempotent and safe to run multiple times.
   <Accordion title="Service will not start">
     ```bash
     # Check logs
-    sudo journalctl -u openclaw -n 100
+    sudo journalctl -u marketingclaw -n 100
 
     # Verify permissions
-    sudo ls -la /opt/openclaw
+    sudo ls -la /opt/marketingclaw
 
     # Test manual start
-    sudo -i -u openclaw
-    cd ~/openclaw
-    openclaw gateway run
+    sudo -i -u marketingclaw
+    cd ~/marketingclaw
+    marketingclaw gateway run
     ```
 
   </Accordion>
@@ -190,28 +190,28 @@ This is idempotent and safe to run multiple times.
     sudo systemctl status docker
 
     # Check sandbox image
-    sudo docker images | grep openclaw-sandbox
+    sudo docker images | grep marketingclaw-sandbox
 
     # Build the sandbox image if missing (requires a source checkout)
-    cd /opt/openclaw/openclaw
-    sudo -u openclaw ./scripts/sandbox-setup.sh
+    cd /opt/marketingclaw/marketingclaw
+    sudo -u marketingclaw ./scripts/sandbox-setup.sh
     # For npm installs without a source checkout, see
-    # https://docs.openclaw.ai/gateway/sandboxing#images-and-setup
+    # https://docs.marketingclaw.ai/gateway/sandboxing#images-and-setup
     ```
 
   </Accordion>
   <Accordion title="Channel login fails">
-    Make sure you are running as the `openclaw` user:
+    Make sure you are running as the `marketingclaw` user:
     ```bash
-    sudo -i -u openclaw
-    openclaw channels login --channel <name>
+    sudo -i -u marketingclaw
+    marketingclaw channels login --channel <name>
     ```
   </Accordion>
 </AccordionGroup>
 
 ## Advanced configuration
 
-For detailed security architecture and troubleshooting, see the openclaw-ansible repo:
+For detailed security architecture and troubleshooting, see the marketingclaw-ansible repo:
 
 - [Security Architecture](https://github.com/openclaw/openclaw-ansible/blob/main/docs/security.md)
 - [Technical Details](https://github.com/openclaw/openclaw-ansible/blob/main/docs/architecture.md)
@@ -219,7 +219,7 @@ For detailed security architecture and troubleshooting, see the openclaw-ansible
 
 ## Related
 
-- [openclaw-ansible](https://github.com/openclaw/openclaw-ansible): full deployment guide
+- [marketingclaw-ansible](https://github.com/openclaw/openclaw-ansible): full deployment guide
 - [Docker](/install/docker): containerized gateway setup
 - [Sandboxing](/gateway/sandboxing): agent sandbox configuration
 - [Multi-Agent Sandbox and Tools](/tools/multi-agent-sandbox-tools): per-agent isolation

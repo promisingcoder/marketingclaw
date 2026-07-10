@@ -1,5 +1,5 @@
-// Signal plugin entrypoint registers its OpenClaw integration.
-import { defineBundledChannelEntry } from "openclaw/plugin-sdk/channel-entry-contract";
+// Signal plugin entrypoint registers its MarketingClaw integration.
+import { defineBundledChannelEntry } from "marketingclaw/plugin-sdk/channel-entry-contract";
 
 export default defineBundledChannelEntry({
   id: "signal",

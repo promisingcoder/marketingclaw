@@ -1,8 +1,8 @@
-// Doctor contribution for low disk space around the OpenClaw state directory.
+// Doctor contribution for low disk space around the MarketingClaw state directory.
 import os from "node:os";
-import { formatByteSize } from "@openclaw/normalization-core";
+import { formatByteSize } from "@marketingclaw/normalization-core";
 import { note } from "../../packages/terminal-core/src/note.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { MarketingClawConfig } from "../config/config.js";
 import { resolveStateDir } from "../config/paths.js";
 import type { HealthFinding } from "../flows/health-checks.js";
 import { tryReadDiskSpace } from "../infra/disk-space.js";
@@ -98,7 +98,7 @@ function collectDiskSpaceWarnings(params: {
 
 /** Collects read-only structured findings for low disk space around the state directory. */
 export function collectDiskSpaceHealthFindings(
-  _cfg: OpenClawConfig, // reserved for API consistency with other Doctor contributions
+  _cfg: MarketingClawConfig, // reserved for API consistency with other Doctor contributions
   deps?: {
     env?: NodeJS.ProcessEnv;
     readDiskSpace?: (targetPath: string) => { availableBytes: number } | null;
@@ -131,7 +131,7 @@ export function collectDiskSpaceHealthFindings(
  * Doctor health contribution: check free disk space on the partition that
  * holds the state directory and warn when it drops below safe thresholds.
  *
- * This catches a common operational failure mode where OpenClaw silently
+ * This catches a common operational failure mode where MarketingClaw silently
  * fails to write config, sessions, or logs because the disk is full.
  *
  * Disk-space probing (statfs + nearest-existing-ancestor resolution) is
@@ -141,7 +141,7 @@ export function collectDiskSpaceHealthFindings(
  * are specific to this health contribution.
  */
 export function noteDiskSpace(
-  _cfg: OpenClawConfig, // reserved for API consistency with other Doctor contributions
+  _cfg: MarketingClawConfig, // reserved for API consistency with other Doctor contributions
   deps?: {
     env?: NodeJS.ProcessEnv;
     readDiskSpace?: (targetPath: string) => { availableBytes: number } | null;

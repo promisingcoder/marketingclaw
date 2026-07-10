@@ -1,3 +1,4 @@
+import { truncateUtf16Safe } from "@marketingclaw/normalization-core/utf16-slice";
 // Mistral provider adapts Mistral streams and tool calls to the runtime.
 import { HTTPClient, Mistral, type Fetcher } from "@mistralai/mistralai";
 import type {
@@ -7,7 +8,6 @@ import type {
   ContentChunk,
   FunctionTool,
 } from "@mistralai/mistralai/models/components";
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
 import { getEnvApiKey } from "../env-api-keys.js";
 import { getAiTransportHost } from "../host.js";
 import { calculateCost, clampThinkingLevel } from "../model-utils.js";

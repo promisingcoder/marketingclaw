@@ -2,23 +2,23 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { EmbeddedRunAttemptParams } from "openclaw/plugin-sdk/agent-harness";
+import type { EmbeddedRunAttemptParams } from "marketingclaw/plugin-sdk/agent-harness";
 import {
   embeddedAgentLog,
   resetAgentEventsForTest,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import { SessionManager } from "openclaw/plugin-sdk/agent-sessions";
+} from "marketingclaw/plugin-sdk/agent-harness-runtime";
+import { SessionManager } from "marketingclaw/plugin-sdk/agent-sessions";
 import {
   onInternalDiagnosticEvent,
   resetDiagnosticEventsForTest,
   type DiagnosticEventPayload,
-} from "openclaw/plugin-sdk/diagnostic-runtime";
+} from "marketingclaw/plugin-sdk/diagnostic-runtime";
 import {
   initializeGlobalHookRunner,
   resetGlobalHookRunner,
-} from "openclaw/plugin-sdk/hook-runtime";
-import { createMockPluginRegistry } from "openclaw/plugin-sdk/plugin-test-runtime";
-import { withTempDir } from "openclaw/plugin-sdk/test-env";
+} from "marketingclaw/plugin-sdk/hook-runtime";
+import { createMockPluginRegistry } from "marketingclaw/plugin-sdk/plugin-test-runtime";
+import { withTempDir } from "marketingclaw/plugin-sdk/test-env";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   CodexAppServerEventProjector,
@@ -62,7 +62,7 @@ function assistantMessage(text: string, timestamp: number) {
 }
 
 async function createParams(): Promise<EmbeddedRunAttemptParams> {
-  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-projector-"));
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-codex-projector-"));
   tempDirs.add(tempDir);
   const sessionFile = path.join(tempDir, "session.jsonl");
   SessionManager.open(sessionFile).appendMessage(assistantMessage("history", Date.now()));
@@ -642,9 +642,9 @@ describe("CodexAppServerEventProjector", () => {
   });
 
   it("saves raw Codex image-generation results as reply media", async () => {
-    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-media-state-"));
+    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-codex-media-state-"));
     tempDirs.add(stateDir);
-    vi.stubEnv("OPENCLAW_STATE_DIR", stateDir);
+    vi.stubEnv("MARKETINGCLAW_STATE_DIR", stateDir);
     const projector = await createProjector();
 
     await projector.handleNotification(
@@ -707,9 +707,9 @@ describe("CodexAppServerEventProjector", () => {
   });
 
   it("dedupes raw and typed Codex image-generation media for the same item", async () => {
-    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-media-state-"));
+    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-codex-media-state-"));
     tempDirs.add(stateDir);
-    vi.stubEnv("OPENCLAW_STATE_DIR", stateDir);
+    vi.stubEnv("MARKETINGCLAW_STATE_DIR", stateDir);
     const projector = await createProjector();
     const savedPath = "/tmp/codex-home/generated_images/session-1/ig_123.png";
 
@@ -743,8 +743,8 @@ describe("CodexAppServerEventProjector", () => {
   });
 
   it("prefers gateway-managed image media when the typed event arrives first", async () => {
-    await withTempDir("openclaw-codex-media-state-", async (stateDir) => {
-      vi.stubEnv("OPENCLAW_STATE_DIR", stateDir);
+    await withTempDir("marketingclaw-codex-media-state-", async (stateDir) => {
+      vi.stubEnv("MARKETINGCLAW_STATE_DIR", stateDir);
       const projector = await createProjector();
       const savedPath = "/home/dev-user/.codex/generated_images/session-1/ig_123.png";
 
@@ -784,9 +784,9 @@ describe("CodexAppServerEventProjector", () => {
   });
 
   it("preserves distinct raw image-generation items with identical image bytes", async () => {
-    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-media-state-"));
+    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-codex-media-state-"));
     tempDirs.add(stateDir);
-    vi.stubEnv("OPENCLAW_STATE_DIR", stateDir);
+    vi.stubEnv("MARKETINGCLAW_STATE_DIR", stateDir);
     const projector = await createProjector();
 
     for (const id of ["ig_raw_1", "ig_raw_2"]) {
@@ -3625,7 +3625,7 @@ describe("CodexAppServerEventProjector", () => {
     });
   });
 
-  it("records dynamic OpenClaw tool calls in mirrored transcript snapshots", async () => {
+  it("records dynamic MarketingClaw tool calls in mirrored transcript snapshots", async () => {
     const projector = await createProjector();
 
     projector.recordDynamicToolCall({
@@ -3844,7 +3844,7 @@ describe("CodexAppServerEventProjector", () => {
       tool: "message",
       success: false,
       terminalType: "error",
-      contentItems: [{ type: "inputText", text: "Unknown OpenClaw tool: message" }],
+      contentItems: [{ type: "inputText", text: "Unknown MarketingClaw tool: message" }],
     });
 
     const result = projector.buildResult(buildEmptyToolTelemetry());
@@ -4199,7 +4199,7 @@ describe("CodexAppServerEventProjector", () => {
       tool: "bash",
       arguments: {
         command:
-          '/bin/bash -lc \'/home/openclaw/.openclaw/workspace/bin/log_activity.sh "web_search" "Grilled salmon research"\'',
+          '/bin/bash -lc \'/home/marketingclaw/.marketingclaw/workspace/bin/log_activity.sh "web_search" "Grilled salmon research"\'',
         cwd: "/workspace",
       },
     });

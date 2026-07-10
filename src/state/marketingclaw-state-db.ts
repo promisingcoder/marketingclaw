@@ -1,4 +1,4 @@
-// OpenClaw state database manages shared persisted state and migrations.
+// MarketingClaw state database manages shared persisted state and migrations.
 import { existsSync, mkdirSync } from "node:fs";
 import path from "node:path";
 import type { DatabaseSync } from "node:sqlite";
@@ -17,53 +17,53 @@ import {
   type SqliteWalMaintenance,
 } from "../infra/sqlite-wal.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
-import type { DB as OpenClawStateKyselyDatabase } from "./openclaw-state-db.generated.js";
+import type { DB as MarketingClawStateKyselyDatabase } from "./marketingclaw-state-db.generated.js";
 import {
-  resolveOpenClawStateSqliteDir,
-  resolveOpenClawStateSqlitePath,
-} from "./openclaw-state-db.paths.js";
-import { OPENCLAW_STATE_SCHEMA_SQL } from "./openclaw-state-schema.generated.js";
+  resolveMarketingClawStateSqliteDir,
+  resolveMarketingClawStateSqlitePath,
+} from "./marketingclaw-state-db.paths.js";
+import { MARKETINGCLAW_STATE_SCHEMA_SQL } from "./marketingclaw-state-schema.generated.js";
 
 /**
- * Shared OpenClaw SQLite state database lifecycle and metadata writers.
+ * Shared MarketingClaw SQLite state database lifecycle and metadata writers.
  *
  * This module owns schema creation, additive migrations for released state
  * tables, private file permissions, cached handles, and audit rows for
  * migrations/backups that operate on local state.
  */
-export const OPENCLAW_STATE_SCHEMA_VERSION = 1;
+export const MARKETINGCLAW_STATE_SCHEMA_VERSION = 1;
 /** Shared timeout used by state and agent SQLite handles before surfacing busy errors. */
-export const OPENCLAW_SQLITE_BUSY_TIMEOUT_MS = 30_000;
-const OPENCLAW_STATE_DIR_MODE = 0o700;
-const OPENCLAW_STATE_FILE_MODE = 0o600;
+export const MARKETINGCLAW_SQLITE_BUSY_TIMEOUT_MS = 30_000;
+const MARKETINGCLAW_STATE_DIR_MODE = 0o700;
+const MARKETINGCLAW_STATE_FILE_MODE = 0o600;
 
 /** Open shared SQLite database handle plus WAL maintenance lifecycle. */
-export type OpenClawStateDatabase = {
+export type MarketingClawStateDatabase = {
   db: DatabaseSync;
   path: string;
   walMaintenance: SqliteWalMaintenance;
 };
 
 /** Options for resolving or overriding the shared state database path. */
-export type OpenClawStateDatabaseOptions = {
+export type MarketingClawStateDatabaseOptions = {
   env?: NodeJS.ProcessEnv;
   path?: string;
 };
 
-export type OpenClawStateDatabaseSchemaMigration = {
+export type MarketingClawStateDatabaseSchemaMigration = {
   kind: "agent-databases-composite-primary-key";
   path: string;
 };
 
-const cachedDatabases = new Map<string, OpenClawStateDatabase>();
+const cachedDatabases = new Map<string, MarketingClawStateDatabase>();
 
-type OpenClawStateMetadataDatabase = Pick<OpenClawStateKyselyDatabase, "schema_meta">;
+type MarketingClawStateMetadataDatabase = Pick<MarketingClawStateKyselyDatabase, "schema_meta">;
 
 function assertSupportedSchemaVersion(db: DatabaseSync, pathname: string): void {
   const userVersion = readSqliteUserVersion(db);
-  if (userVersion > OPENCLAW_STATE_SCHEMA_VERSION) {
+  if (userVersion > MARKETINGCLAW_STATE_SCHEMA_VERSION) {
     throw new Error(
-      `OpenClaw state database ${pathname} uses newer schema version ${userVersion}; this OpenClaw build supports ${OPENCLAW_STATE_SCHEMA_VERSION}.`,
+      `MarketingClaw state database ${pathname} uses newer schema version ${userVersion}; this MarketingClaw build supports ${MARKETINGCLAW_STATE_SCHEMA_VERSION}.`,
     );
   }
 }
@@ -86,23 +86,28 @@ function bestEffortChmodSync(target: string, mode: number): void {
   stateDbLog.warn(`skipped permission hardening for ${target}: ${String(result.error)}`);
 }
 
-export function ensureOpenClawStatePermissions(pathname: string, env: NodeJS.ProcessEnv): void {
+export function ensureMarketingClawStatePermissions(
+  pathname: string,
+  env: NodeJS.ProcessEnv,
+): void {
   const dir = path.dirname(pathname);
-  const defaultDir = resolveOpenClawStateSqliteDir(env);
+  const defaultDir = resolveMarketingClawStateSqliteDir(env);
   const isDefaultStateDatabase =
-    path.resolve(pathname) === path.resolve(resolveOpenClawStateSqlitePath(env));
+    path.resolve(pathname) === path.resolve(resolveMarketingClawStateSqlitePath(env));
   if (isDefaultStateDatabase && dir !== defaultDir) {
-    throw new Error(`OpenClaw state database path resolved outside its state dir: ${pathname}`);
+    throw new Error(
+      `MarketingClaw state database path resolved outside its state dir: ${pathname}`,
+    );
   }
   const dirExisted = existsSync(dir);
-  mkdirSync(dir, { recursive: true, mode: OPENCLAW_STATE_DIR_MODE });
+  mkdirSync(dir, { recursive: true, mode: MARKETINGCLAW_STATE_DIR_MODE });
   // Default state contains credentials-adjacent metadata; custom existing dirs keep caller modes.
   if (isDefaultStateDatabase || !dirExisted) {
-    bestEffortChmodSync(dir, OPENCLAW_STATE_DIR_MODE);
+    bestEffortChmodSync(dir, MARKETINGCLAW_STATE_DIR_MODE);
   }
   for (const candidate of resolveSqliteDatabaseFilePaths(pathname)) {
     if (existsSync(candidate)) {
-      bestEffortChmodSync(candidate, OPENCLAW_STATE_FILE_MODE);
+      bestEffortChmodSync(candidate, MARKETINGCLAW_STATE_FILE_MODE);
     }
   }
 }
@@ -250,13 +255,13 @@ function assertCanonicalStateSchemaShape(db: DatabaseSync, pathname: string): vo
     return;
   }
   throw new Error(
-    `OpenClaw state database ${pathname} has a legacy agent database registry schema; run openclaw doctor --fix to migrate it.`,
+    `MarketingClaw state database ${pathname} has a legacy agent database registry schema; run marketingclaw doctor --fix to migrate it.`,
   );
 }
 
-export function detectOpenClawStateDatabaseSchemaMigrations(
-  options: OpenClawStateDatabaseOptions = {},
-): OpenClawStateDatabaseSchemaMigration[] {
+export function detectMarketingClawStateDatabaseSchemaMigrations(
+  options: MarketingClawStateDatabaseOptions = {},
+): MarketingClawStateDatabaseSchemaMigration[] {
   const pathname = resolveDatabasePath(options);
   if (!existsSync(pathname)) {
     return [];
@@ -272,7 +277,9 @@ export function detectOpenClawStateDatabaseSchemaMigrations(
   }
 }
 
-export function repairOpenClawStateDatabaseSchema(options: OpenClawStateDatabaseOptions = {}): {
+export function repairMarketingClawStateDatabaseSchema(
+  options: MarketingClawStateDatabaseOptions = {},
+): {
   changes: string[];
   warnings: string[];
 } {
@@ -281,10 +288,10 @@ export function repairOpenClawStateDatabaseSchema(options: OpenClawStateDatabase
   if (!existsSync(pathname)) {
     return { changes: [], warnings: [] };
   }
-  ensureOpenClawStatePermissions(pathname, env);
+  ensureMarketingClawStatePermissions(pathname, env);
   const sqlite = requireNodeSqlite();
   const db = new sqlite.DatabaseSync(pathname);
-  db.exec(`PRAGMA busy_timeout = ${OPENCLAW_SQLITE_BUSY_TIMEOUT_MS};`);
+  db.exec(`PRAGMA busy_timeout = ${MARKETINGCLAW_SQLITE_BUSY_TIMEOUT_MS};`);
   try {
     assertSupportedSchemaVersion(db, pathname);
     const repaired = runSqliteImmediateTransactionSync(db, () =>
@@ -303,7 +310,7 @@ export function repairOpenClawStateDatabaseSchema(options: OpenClawStateDatabase
     };
   } finally {
     db.close();
-    ensureOpenClawStatePermissions(pathname, env);
+    ensureMarketingClawStatePermissions(pathname, env);
   }
 }
 
@@ -339,22 +346,22 @@ function ensureStartupMigrationCheckpointSchema(db: DatabaseSync, pathname: stri
   ensureColumn(db, "schema_meta", "app_version TEXT");
 }
 
-export function withOpenClawStateStartupMigrationCheckpointDatabase<T>(
+export function withMarketingClawStateStartupMigrationCheckpointDatabase<T>(
   callback: (db: DatabaseSync) => T,
-  options: OpenClawStateDatabaseOptions = {},
+  options: MarketingClawStateDatabaseOptions = {},
 ): T {
   const env = options.env ?? process.env;
   const pathname = resolveDatabasePath(options);
-  ensureOpenClawStatePermissions(pathname, env);
+  ensureMarketingClawStatePermissions(pathname, env);
   const sqlite = requireNodeSqlite();
   const db = new sqlite.DatabaseSync(pathname);
-  db.exec(`PRAGMA busy_timeout = ${OPENCLAW_SQLITE_BUSY_TIMEOUT_MS};`);
+  db.exec(`PRAGMA busy_timeout = ${MARKETINGCLAW_SQLITE_BUSY_TIMEOUT_MS};`);
   try {
     ensureStartupMigrationCheckpointSchema(db, pathname);
     return callback(db);
   } finally {
     db.close();
-    ensureOpenClawStatePermissions(pathname, env);
+    ensureMarketingClawStatePermissions(pathname, env);
   }
 }
 
@@ -928,11 +935,11 @@ function ensureSchema(db: DatabaseSync, pathname: string): void {
   assertSupportedSchemaVersion(db, pathname);
   ensureAdditiveStateColumns(db);
   assertCanonicalStateSchemaShape(db, pathname);
-  db.exec(OPENCLAW_STATE_SCHEMA_SQL);
+  db.exec(MARKETINGCLAW_STATE_SCHEMA_SQL);
   ensureAdditiveStateColumns(db);
-  db.exec(`PRAGMA user_version = ${OPENCLAW_STATE_SCHEMA_VERSION};`);
+  db.exec(`PRAGMA user_version = ${MARKETINGCLAW_STATE_SCHEMA_VERSION};`);
   const now = Date.now();
-  const kysely = getNodeSqliteKysely<OpenClawStateMetadataDatabase>(db);
+  const kysely = getNodeSqliteKysely<MarketingClawStateMetadataDatabase>(db);
   executeSqliteQuerySync(
     db,
     kysely
@@ -940,7 +947,7 @@ function ensureSchema(db: DatabaseSync, pathname: string): void {
       .values({
         meta_key: "primary",
         role: "global",
-        schema_version: OPENCLAW_STATE_SCHEMA_VERSION,
+        schema_version: MARKETINGCLAW_STATE_SCHEMA_VERSION,
         agent_id: null,
         app_version: null,
         created_at: now,
@@ -949,7 +956,7 @@ function ensureSchema(db: DatabaseSync, pathname: string): void {
       .onConflict((conflict) =>
         conflict.column("meta_key").doUpdateSet({
           role: "global",
-          schema_version: OPENCLAW_STATE_SCHEMA_VERSION,
+          schema_version: MARKETINGCLAW_STATE_SCHEMA_VERSION,
           agent_id: null,
           app_version: null,
           updated_at: now,
@@ -958,14 +965,16 @@ function ensureSchema(db: DatabaseSync, pathname: string): void {
   );
 }
 
-function resolveDatabasePath(options: OpenClawStateDatabaseOptions = {}): string {
-  return path.resolve(options.path ?? resolveOpenClawStateSqlitePath(options.env ?? process.env));
+function resolveDatabasePath(options: MarketingClawStateDatabaseOptions = {}): string {
+  return path.resolve(
+    options.path ?? resolveMarketingClawStateSqlitePath(options.env ?? process.env),
+  );
 }
 
 /** Open or return a cached shared state database after schema and migration checks. */
-export function openOpenClawStateDatabase(
-  options: OpenClawStateDatabaseOptions = {},
-): OpenClawStateDatabase {
+export function openMarketingClawStateDatabase(
+  options: MarketingClawStateDatabaseOptions = {},
+): MarketingClawStateDatabase {
   const env = options.env ?? process.env;
   const pathname = resolveDatabasePath(options);
   const cached = cachedDatabases.get(pathname);
@@ -979,15 +988,15 @@ export function openOpenClawStateDatabase(
     cachedDatabases.delete(pathname);
   }
 
-  ensureOpenClawStatePermissions(pathname, env);
+  ensureMarketingClawStatePermissions(pathname, env);
   const sqlite = requireNodeSqlite();
   const db = new sqlite.DatabaseSync(pathname);
   const walMaintenance = (() => {
     let maintenance: SqliteWalMaintenance | undefined;
     try {
       maintenance = configureSqliteConnectionPragmas(db, {
-        busyTimeoutMs: OPENCLAW_SQLITE_BUSY_TIMEOUT_MS,
-        databaseLabel: "openclaw-state",
+        busyTimeoutMs: MARKETINGCLAW_SQLITE_BUSY_TIMEOUT_MS,
+        databaseLabel: "marketingclaw-state",
         databasePath: pathname,
         foreignKeys: true,
         synchronous: "NORMAL",
@@ -1000,21 +1009,21 @@ export function openOpenClawStateDatabase(
       throw err;
     }
   })();
-  ensureOpenClawStatePermissions(pathname, env);
+  ensureMarketingClawStatePermissions(pathname, env);
   const database = { db, path: pathname, walMaintenance };
   cachedDatabases.set(pathname, database);
   return database;
 }
 
 /** Run a synchronous immediate transaction against the shared state database. */
-export function runOpenClawStateWriteTransaction<T>(
-  operation: (database: OpenClawStateDatabase) => T,
-  options: OpenClawStateDatabaseOptions = {},
+export function runMarketingClawStateWriteTransaction<T>(
+  operation: (database: MarketingClawStateDatabase) => T,
+  options: MarketingClawStateDatabaseOptions = {},
 ): T {
-  const database = openOpenClawStateDatabase(options);
+  const database = openMarketingClawStateDatabase(options);
   const result = runSqliteImmediateTransactionSync(database.db, () => operation(database));
   try {
-    ensureOpenClawStatePermissions(database.path, options.env ?? process.env);
+    ensureMarketingClawStatePermissions(database.path, options.env ?? process.env);
   } catch {
     // The write already committed; permission hardening is best-effort here so
     // callers never retry an operation that is durable in SQLite.
@@ -1023,7 +1032,7 @@ export function runOpenClawStateWriteTransaction<T>(
 }
 
 /** Close all cached shared state database handles. */
-export function closeOpenClawStateDatabase(): void {
+export function closeMarketingClawStateDatabase(): void {
   for (const database of cachedDatabases.values()) {
     database.walMaintenance.close();
     clearNodeSqliteKyselyCacheForDatabase(database.db);
@@ -1035,9 +1044,9 @@ export function closeOpenClawStateDatabase(): void {
 }
 
 /** Test whether any cached shared state database handle is still open. */
-export function isOpenClawStateDatabaseOpen(): boolean {
+export function isMarketingClawStateDatabaseOpen(): boolean {
   return Array.from(cachedDatabases.values()).some((database) => database.db.isOpen);
 }
 
 /** Test alias for closing shared state handles from teardown code. */
-export const closeOpenClawStateDatabaseForTest = closeOpenClawStateDatabase;
+export const closeMarketingClawStateDatabaseForTest = closeMarketingClawStateDatabase;

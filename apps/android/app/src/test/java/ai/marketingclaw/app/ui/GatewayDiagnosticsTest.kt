@@ -1,4 +1,4 @@
-package ai.openclaw.app.ui
+package ai.marketingclaw.app.ui
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -84,7 +84,7 @@ class GatewayDiagnosticsTest {
   }
 
   private fun authProblem(code: String) =
-    ai.openclaw.app.GatewayConnectionProblem(
+    ai.marketingclaw.app.GatewayConnectionProblem(
       code = code,
       message = "Authentication failed.",
       reason = null,

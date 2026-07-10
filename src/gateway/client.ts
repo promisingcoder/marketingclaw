@@ -1,5 +1,5 @@
-// OpenClaw Gateway client facade.
-// Injects OpenClaw host dependencies into the shared gateway-client package.
+// MarketingClaw Gateway client facade.
+// Injects MarketingClaw host dependencies into the shared gateway-client package.
 import { GatewayClient as BaseGatewayClient } from "../../packages/gateway-client/src/index.js";
 import type {
   GatewayClientConnectionMetadata,
@@ -44,11 +44,11 @@ export type {
   GatewayReconnectPausedInfo,
 } from "../../packages/gateway-client/src/index.js";
 
-function createOpenClawGatewayClientHostDeps(
+function createMarketingClawGatewayClientHostDeps(
   overrides?: GatewayClientHostDeps,
 ): GatewayClientHostDeps {
   return {
-    // This wrapper is the only place the package reaches into OpenClaw runtime
+    // This wrapper is the only place the package reaches into MarketingClaw runtime
     // state. Keep device identity, token storage, proxy, and redaction here.
     loadOrCreateDeviceIdentity,
     signDevicePayload,
@@ -73,7 +73,7 @@ export class GatewayClient {
     this.#client = new BaseGatewayClient({
       ...opts,
       clientVersion: opts.clientVersion ?? VERSION,
-      hostDeps: createOpenClawGatewayClientHostDeps(opts.hostDeps),
+      hostDeps: createMarketingClawGatewayClientHostDeps(opts.hostDeps),
     });
   }
 

@@ -3,10 +3,10 @@ export {
   getSessionEntry,
   resolveStorePath,
   type SessionEntry,
-} from "openclaw/plugin-sdk/session-store-runtime";
-export { resolveMarkdownTableMode } from "openclaw/plugin-sdk/markdown-table-runtime";
-export { getAgentScopedMediaLocalRoots } from "openclaw/plugin-sdk/media-runtime";
-export { resolveChunkMode } from "openclaw/plugin-sdk/reply-dispatch-runtime";
+} from "marketingclaw/plugin-sdk/session-store-runtime";
+export { resolveMarkdownTableMode } from "marketingclaw/plugin-sdk/markdown-table-runtime";
+export { getAgentScopedMediaLocalRoots } from "marketingclaw/plugin-sdk/media-runtime";
+export { resolveChunkMode } from "marketingclaw/plugin-sdk/reply-dispatch-runtime";
 export {
   generateTelegramTopicLabel as generateTopicLabel,
   resolveAutoTopicLabelConfig,

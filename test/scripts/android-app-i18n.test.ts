@@ -9,6 +9,6 @@ describe("Android app i18n resources", () => {
 
   it("preserves the existing Swedish app name", async () => {
     const strings = await readFile("apps/android/app/src/main/res/values-sv/strings.xml", "utf8");
-    expect(strings).toContain('<string name="app_name">OpenClaw-nod</string>');
+    expect(strings).toContain('<string name="app_name">MarketingClaw-nod</string>');
   });
 });

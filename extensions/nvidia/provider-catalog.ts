@@ -3,18 +3,18 @@ import { lookup as dnsLookup } from "node:dns/promises";
 import {
   clearLiveCatalogCacheForTests,
   getCachedLiveProviderModelRows,
-} from "openclaw/plugin-sdk/provider-catalog-live-runtime";
-import { buildManifestModelProviderConfig } from "openclaw/plugin-sdk/provider-catalog-shared";
+} from "marketingclaw/plugin-sdk/provider-catalog-live-runtime";
+import { buildManifestModelProviderConfig } from "marketingclaw/plugin-sdk/provider-catalog-shared";
 import type {
   ModelDefinitionConfig,
   ModelProviderConfig,
-} from "openclaw/plugin-sdk/provider-model-shared";
+} from "marketingclaw/plugin-sdk/provider-model-shared";
 import {
   type LookupFn,
   ssrfPolicyFromHttpBaseUrlAllowedHostname,
-} from "openclaw/plugin-sdk/ssrf-runtime";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
-import manifest from "./openclaw.plugin.json" with { type: "json" };
+} from "marketingclaw/plugin-sdk/ssrf-runtime";
+import { isRecord } from "marketingclaw/plugin-sdk/string-coerce-runtime";
+import manifest from "./marketingclaw.plugin.json" with { type: "json" };
 
 export const NVIDIA_DEFAULT_MODEL_ID = "nvidia/nemotron-3-ultra-550b-a55b";
 export const NVIDIA_FEATURED_MODELS_URL =

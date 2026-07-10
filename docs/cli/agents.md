@@ -1,13 +1,13 @@
 ---
-summary: "CLI reference for `openclaw agents` (list/add/delete/bindings/bind/unbind/set identity)"
+summary: "CLI reference for `marketingclaw agents` (list/add/delete/bindings/bind/unbind/set identity)"
 read_when:
   - You want multiple isolated agents (workspaces + routing + auth)
 title: "Agents"
 ---
 
-# `openclaw agents`
+# `marketingclaw agents`
 
-Manage isolated agents (workspaces + auth + routing). Running `openclaw agents` with no subcommand is equivalent to `openclaw agents list`.
+Manage isolated agents (workspaces + auth + routing). Running `marketingclaw agents` with no subcommand is equivalent to `marketingclaw agents list`.
 
 Related:
 
@@ -18,17 +18,17 @@ Related:
 ## Examples
 
 ```bash
-openclaw agents list
-openclaw agents list --bindings
-openclaw agents add work --workspace ~/.openclaw/workspace-work
-openclaw agents add work --workspace ~/.openclaw/workspace-work --bind telegram:*
-openclaw agents add ops --workspace ~/.openclaw/workspace-ops --bind telegram:ops --non-interactive
-openclaw agents bindings
-openclaw agents bind --agent work --bind telegram:ops
-openclaw agents unbind --agent work --bind telegram:ops
-openclaw agents set-identity --workspace ~/.openclaw/workspace --from-identity
-openclaw agents set-identity --agent main --avatar avatars/openclaw.png
-openclaw agents delete work
+marketingclaw agents list
+marketingclaw agents list --bindings
+marketingclaw agents add work --workspace ~/.marketingclaw/workspace-work
+marketingclaw agents add work --workspace ~/.marketingclaw/workspace-work --bind telegram:*
+marketingclaw agents add ops --workspace ~/.marketingclaw/workspace-ops --bind telegram:ops --non-interactive
+marketingclaw agents bindings
+marketingclaw agents bind --agent work --bind telegram:ops
+marketingclaw agents unbind --agent work --bind telegram:ops
+marketingclaw agents set-identity --workspace ~/.marketingclaw/workspace --from-identity
+marketingclaw agents set-identity --agent main --avatar avatars/marketingclaw.png
+marketingclaw agents delete work
 ```
 
 ## Command surface
@@ -76,31 +76,31 @@ Options: `--force`, `--json`.
 
 Use routing bindings to pin inbound channel traffic to a specific agent.
 
-If you also want different visible skills per agent, configure `agents.defaults.skills` and `agents.list[].skills` in `openclaw.json`. See [Skills config](/tools/skills-config) and [Configuration reference](/gateway/config-agents#agentsdefaultsskills).
+If you also want different visible skills per agent, configure `agents.defaults.skills` and `agents.list[].skills` in `marketingclaw.json`. See [Skills config](/tools/skills-config) and [Configuration reference](/gateway/config-agents#agentsdefaultsskills).
 
 List bindings:
 
 ```bash
-openclaw agents bindings
-openclaw agents bindings --agent work
-openclaw agents bindings --json
+marketingclaw agents bindings
+marketingclaw agents bindings --agent work
+marketingclaw agents bindings --json
 ```
 
 Add bindings:
 
 ```bash
-openclaw agents bind --agent work --bind telegram:ops --bind discord:guild-a
+marketingclaw agents bind --agent work --bind telegram:ops --bind discord:guild-a
 ```
 
 You can also add bindings when creating an agent:
 
 ```bash
-openclaw agents add work --workspace ~/.openclaw/workspace-work --bind telegram:* --bind discord:*
+marketingclaw agents add work --workspace ~/.marketingclaw/workspace-work --bind telegram:* --bind discord:*
 ```
 
-If you omit `accountId` (`--bind <channel>`), OpenClaw resolves it from plugin setup hooks, forced account binding, or the channel's configured account count.
+If you omit `accountId` (`--bind <channel>`), MarketingClaw resolves it from plugin setup hooks, forced account binding, or the channel's configured account count.
 
-If you omit `--agent` for `bind` or `unbind`, OpenClaw targets the current default agent.
+If you omit `--agent` for `bind` or `unbind`, MarketingClaw targets the current default agent.
 
 ### `--bind` format
 
@@ -114,22 +114,22 @@ If you omit `--agent` for `bind` or `unbind`, OpenClaw targets the current defau
 
 - A stored binding without `accountId` matches the channel default account only.
 - `accountId: "*"` is the channel-wide fallback (all accounts) and is less specific than an explicit account binding.
-- If the same agent already has a matching channel binding without `accountId`, and you later bind with an explicit or resolved `accountId`, OpenClaw upgrades that existing binding in place instead of adding a duplicate.
+- If the same agent already has a matching channel binding without `accountId`, and you later bind with an explicit or resolved `accountId`, MarketingClaw upgrades that existing binding in place instead of adding a duplicate.
 
 Examples:
 
 ```bash
 # match all accounts on the channel
-openclaw agents bind --agent work --bind telegram:*
+marketingclaw agents bind --agent work --bind telegram:*
 
 # match a specific account
-openclaw agents bind --agent work --bind telegram:ops
+marketingclaw agents bind --agent work --bind telegram:ops
 
 # initial channel-only binding
-openclaw agents bind --agent work --bind telegram
+marketingclaw agents bind --agent work --bind telegram
 
 # later upgrade to account-scoped binding
-openclaw agents bind --agent work --bind telegram:alerts
+marketingclaw agents bind --agent work --bind telegram:alerts
 ```
 
 After the upgrade, routing for that binding is scoped to `telegram:alerts`. If you also want default-account routing, add it explicitly (for example `--bind telegram:default`).
@@ -137,15 +137,15 @@ After the upgrade, routing for that binding is scoped to `telegram:alerts`. If y
 Remove bindings:
 
 ```bash
-openclaw agents unbind --agent work --bind telegram:ops
-openclaw agents unbind --agent work --all
+marketingclaw agents unbind --agent work --bind telegram:ops
+marketingclaw agents unbind --agent work --all
 ```
 
 ## Identity files
 
 Each agent workspace can include an `IDENTITY.md` at the workspace root:
 
-- Example path: `~/.openclaw/workspace/IDENTITY.md`
+- Example path: `~/.marketingclaw/workspace/IDENTITY.md`
 - `set-identity --from-identity` reads from the workspace root (or an explicit `--identity-file`).
 
 Avatar paths resolve relative to the workspace root and cannot escape it, even through a symlink.
@@ -161,13 +161,13 @@ Avatar paths resolve relative to the workspace root and cannot escape it, even t
 Load from `IDENTITY.md`:
 
 ```bash
-openclaw agents set-identity --workspace ~/.openclaw/workspace --from-identity
+marketingclaw agents set-identity --workspace ~/.marketingclaw/workspace --from-identity
 ```
 
 Override fields explicitly:
 
 ```bash
-openclaw agents set-identity --agent main --name "OpenClaw" --emoji "🦞" --avatar avatars/openclaw.png
+marketingclaw agents set-identity --agent main --name "MarketingClaw" --emoji "🦞" --avatar avatars/marketingclaw.png
 ```
 
 Config sample:
@@ -179,10 +179,10 @@ Config sample:
       {
         id: "main",
         identity: {
-          name: "OpenClaw",
+          name: "MarketingClaw",
           theme: "space lobster",
           emoji: "🦞",
-          avatar: "avatars/openclaw.png",
+          avatar: "avatars/marketingclaw.png",
         },
       },
     ],

@@ -1,10 +1,10 @@
 // Private local-only SQLite lifecycle helpers for first-party tests.
 
 export {
-  closeOpenClawAgentDatabasesForTest,
-  openOpenClawAgentDatabase,
-} from "../state/openclaw-agent-db.js";
+  closeMarketingClawAgentDatabasesForTest,
+  openMarketingClawAgentDatabase,
+} from "../state/marketingclaw-agent-db.js";
 export {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-} from "../state/openclaw-state-db.js";
+  closeMarketingClawStateDatabaseForTest,
+  openMarketingClawStateDatabase,
+} from "../state/marketingclaw-state-db.js";

@@ -1,12 +1,12 @@
-package ai.openclaw.app.ui
+package ai.marketingclaw.app.ui
 
-import ai.openclaw.app.GatewayDreamDiaryEntry
-import ai.openclaw.app.GatewayDreamingSummary
-import ai.openclaw.app.MainViewModel
-import ai.openclaw.app.ui.design.ClawPanel
-import ai.openclaw.app.ui.design.ClawSecondaryButton
-import ai.openclaw.app.ui.design.ClawStatusRow
-import ai.openclaw.app.ui.design.ClawTheme
+import ai.marketingclaw.app.GatewayDreamDiaryEntry
+import ai.marketingclaw.app.GatewayDreamingSummary
+import ai.marketingclaw.app.MainViewModel
+import ai.marketingclaw.app.ui.design.ClawPanel
+import ai.marketingclaw.app.ui.design.ClawSecondaryButton
+import ai.marketingclaw.app.ui.design.ClawStatusRow
+import ai.marketingclaw.app.ui.design.ClawTheme
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

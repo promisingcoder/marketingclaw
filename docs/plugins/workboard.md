@@ -12,7 +12,7 @@ The Workboard plugin adds an optional Kanban-style board to the
 and a link back to the card's task, run, and dashboard session.
 
 Workboard is intentionally small: it tracks local operating work for one
-OpenClaw Gateway. It is not a replacement for GitHub Issues, Linear, Jira, or
+MarketingClaw Gateway. It is not a replacement for GitHub Issues, Linear, Jira, or
 other team project management systems.
 
 ## Enable it
@@ -20,9 +20,9 @@ other team project management systems.
 Workboard is bundled but disabled by default:
 
 ```bash
-openclaw plugins enable workboard
-openclaw gateway restart
-openclaw dashboard
+marketingclaw plugins enable workboard
+marketingclaw gateway restart
+marketingclaw dashboard
 ```
 
 The Workboard tab appears in the dashboard nav once the plugin is enabled;
@@ -50,8 +50,8 @@ plugin entry:
 ```
 
 ```bash
-openclaw plugins disable workboard
-openclaw gateway restart
+marketingclaw plugins disable workboard
+marketingclaw gateway restart
 ```
 
 ## Card fields
@@ -79,7 +79,7 @@ session; it is local operating context, not a replacement for session
 transcripts or GitHub issue history.
 
 Cards are stored in the plugin's own Gateway state and move with the rest of
-that Gateway's OpenClaw state (see [Storage](#storage)).
+that Gateway's MarketingClaw state (see [Storage](#storage)).
 
 ## Starting work from a card
 
@@ -141,7 +141,7 @@ require the token.
 ## Dispatch
 
 Dispatch is Gateway-local: it does not spawn arbitrary OS processes. Normal
-OpenClaw subagent sessions still own execution. One dispatch pass:
+MarketingClaw subagent sessions still own execution. One dispatch pass:
 
 1. Promotes dependency-ready cards.
 2. Records dispatch metadata on ready cards.
@@ -178,14 +178,14 @@ diagnostics.
 ### Entry points
 
 - Dashboard dispatch action
-- `openclaw workboard dispatch`
+- `marketingclaw workboard dispatch`
 - `/workboard dispatch` on a command-capable channel
 
 All three use the Gateway subagent runtime when the Gateway is available. The
 CLI has one operator fallback: if the Gateway call fails with a
 connection/unavailable error (or an `unknown method` error for older
 Gateways), and no explicit `--url`/`--token` target and no configured remote
-Gateway (`OPENCLAW_GATEWAY_URL` or `gateway.mode: remote`) apply, the CLI runs
+Gateway (`MARKETINGCLAW_GATEWAY_URL` or `gateway.mode: remote`) apply, the CLI runs
 data-only dispatch against local SQLite state - it can promote dependencies,
 clean stale claims, and block timed-out runs, but cannot start workers. Auth,
 permission, and validation failures from a reachable Gateway are not treated
@@ -193,17 +193,17 @@ as unavailable; they surface as command errors, and so does any Gateway
 failure when an explicit `--url`/`--token` target was given.
 
 Board metadata can set `autoDecompose`, `autoDecomposePerDispatch`,
-`defaultAssignee`, and `orchestratorProfile`. OpenClaw records this intent and
+`defaultAssignee`, and `orchestratorProfile`. MarketingClaw records this intent and
 exposes it in worker context; actual specification/decomposition still runs
 through the normal Workboard tools.
 
 ## CLI and slash command
 
 ```bash
-openclaw workboard list [--board <id>] [--status <status>] [--include-archived] [--json]
-openclaw workboard create "Fix stale card lifecycle" --priority high --labels bug,workboard
-openclaw workboard show <card-id> [--json]
-openclaw workboard dispatch [--board <id>] [--json]
+marketingclaw workboard list [--board <id>] [--status <status>] [--include-archived] [--json]
+marketingclaw workboard create "Fix stale card lifecycle" --priority high --labels bug,workboard
+marketingclaw workboard show <card-id> [--json]
+marketingclaw workboard dispatch [--board <id>] [--json]
 ```
 
 `list` text output hides archived cards by default (`--include-archived`
@@ -298,7 +298,7 @@ operator access can inspect the board but cannot mutate cards.
 ## Storage
 
 Workboard stores durable data in a plugin-owned relational SQLite database
-under the OpenClaw state directory: boards, cards, labels, lifecycle events,
+under the MarketingClaw state directory: boards, cards, labels, lifecycle events,
 run attempts, comments, dependency links, proof, artifact references,
 attachment metadata and blobs, diagnostics, notifications, worker logs,
 protocol state, and subscriptions all live in Workboard tables (not
@@ -306,7 +306,7 @@ plugin key-value entries). A card export preserves the board narrative
 without inlining attachment blob contents.
 
 Installations that used Workboard in the `.28` release can run
-`openclaw doctor --fix` to migrate the shipped legacy plugin-state namespaces
+`marketingclaw doctor --fix` to migrate the shipped legacy plugin-state namespaces
 (`workboard.cards`, `workboard.boards`, `workboard.notify`, and, if present,
 `workboard.attachments`) into the relational database.
 
@@ -315,7 +315,7 @@ Installations that used Workboard in the `.28` release can run
 **The tab says Workboard is unavailable**
 
 ```bash
-openclaw plugins inspect workboard --runtime --json
+marketingclaw plugins inspect workboard --runtime --json
 ```
 
 If `plugins.allow` is configured, add `workboard` to it. If `plugins.deny`
@@ -336,7 +336,7 @@ inspect the actual run state.
 Confirm there is at least one `ready` card without an active claim:
 
 ```bash
-openclaw workboard list --status ready
+marketingclaw workboard list --status ready
 ```
 
 If the CLI reports data-only dispatch, start or restart the Gateway and

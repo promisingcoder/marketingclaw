@@ -782,7 +782,7 @@ export function renderUsage(props: UsageProps) {
                     class="usage-export-item"
                     @click=${() =>
                       downloadTextFile(
-                        `openclaw-usage-sessions-${exportStamp}.csv`,
+                        `marketingclaw-usage-sessions-${exportStamp}.csv`,
                         buildSessionsCsv(filteredSessions),
                         "text/csv",
                       )}
@@ -794,7 +794,7 @@ export function renderUsage(props: UsageProps) {
                     class="usage-export-item"
                     @click=${() =>
                       downloadTextFile(
-                        `openclaw-usage-daily-${exportStamp}.csv`,
+                        `marketingclaw-usage-daily-${exportStamp}.csv`,
                         buildDailyCsv(filteredDaily),
                         "text/csv",
                       )}
@@ -806,7 +806,7 @@ export function renderUsage(props: UsageProps) {
                     class="usage-export-item"
                     @click=${() =>
                       downloadTextFile(
-                        `openclaw-usage-${exportStamp}.json`,
+                        `marketingclaw-usage-${exportStamp}.json`,
                         JSON.stringify(
                           {
                             totals: displayTotals,
@@ -982,7 +982,7 @@ export function renderUsage(props: UsageProps) {
                     return html`
                       <span class="usage-query-chip">
                         ${label}
-                        <openclaw-tooltip .content=${t("usage.filters.remove")}>
+                        <marketingclaw-tooltip .content=${t("usage.filters.remove")}>
                           <button
                             aria-label=${t("usage.filters.remove")}
                             @click=${() =>
@@ -992,7 +992,7 @@ export function renderUsage(props: UsageProps) {
                           >
                             ×
                           </button>
-                        </openclaw-tooltip>
+                        </marketingclaw-tooltip>
                       </span>
                     `;
                   })}

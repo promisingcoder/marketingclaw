@@ -1,4 +1,4 @@
-package ai.openclaw.app
+package ai.marketingclaw.app
 
 /**
  * Wake-word parsing limits and sanitizers shared by settings and voice runtime paths.

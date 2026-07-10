@@ -1,5 +1,5 @@
 // Copilot tests cover SDK ask_user bridge behavior.
-import type { EmbeddedRunAttemptParams } from "openclaw/plugin-sdk/agent-harness-runtime";
+import type { EmbeddedRunAttemptParams } from "marketingclaw/plugin-sdk/agent-harness-runtime";
 import { describe, expect, it, vi } from "vitest";
 import { createCopilotUserInputBridge } from "./user-input-bridge.js";
 
@@ -24,7 +24,7 @@ function expectFirstBlockReplyText(params: EmbeddedRunAttemptParams): string {
 }
 
 describe("Copilot user input bridge", () => {
-  it("prompts through OpenClaw and resolves the SDK request from the next queued message", async () => {
+  it("prompts through MarketingClaw and resolves the SDK request from the next queued message", async () => {
     const params = createParams();
     const bridge = createCopilotUserInputBridge({ paramsForRun: params });
 

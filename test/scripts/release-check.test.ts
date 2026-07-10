@@ -31,12 +31,12 @@ describe("release-check", () => {
   });
 
   it("resolves exactly one prepacked local dependency tarball", () => {
-    const root = mkdtempSync(join(tmpdir(), "openclaw-release-check-tarball-test-"));
+    const root = mkdtempSync(join(tmpdir(), "marketingclaw-release-check-tarball-test-"));
     try {
-      writeFileSync(join(root, "openclaw-ai-2026.6.33.tgz"), "fixture");
+      writeFileSync(join(root, "marketingclaw-ai-2026.6.33.tgz"), "fixture");
       writeFileSync(join(root, "SHA256SUMS"), "fixture");
       expect(resolveReleaseCheckLocalPackageTarballs(root)).toEqual([
-        join(root, "openclaw-ai-2026.6.33.tgz"),
+        join(root, "marketingclaw-ai-2026.6.33.tgz"),
       ]);
       expect(resolveReleaseCheckLocalPackageTarballs(undefined)).toEqual([]);
     } finally {
@@ -45,17 +45,19 @@ describe("release-check", () => {
   });
 
   it("writes an explicit local project for unpublished core and AI tarballs", () => {
-    const root = mkdtempSync(join(tmpdir(), "openclaw-release-check-install-test-"));
+    const root = mkdtempSync(join(tmpdir(), "marketingclaw-release-check-install-test-"));
     try {
-      writePackedTarballInstallManifest(root, "/tmp/openclaw.tgz", ["/tmp/openclaw-ai.tgz"]);
+      writePackedTarballInstallManifest(root, "/tmp/marketingclaw.tgz", [
+        "/tmp/marketingclaw-ai.tgz",
+      ]);
       const manifest = JSON.parse(readFileSync(join(root, "package.json"), "utf8")) as {
         dependencies?: Record<string, string>;
         private?: boolean;
       };
       expect(manifest.private).toBe(true);
       expect(manifest.dependencies).toEqual({
-        "@openclaw/ai": "file:///tmp/openclaw-ai.tgz",
-        openclaw: "file:///tmp/openclaw.tgz",
+        "@marketingclaw/ai": "file:///tmp/marketingclaw-ai.tgz",
+        marketingclaw: "file:///tmp/marketingclaw.tgz",
       });
     } finally {
       rmSync(root, { recursive: true, force: true });
@@ -63,16 +65,16 @@ describe("release-check", () => {
   });
 
   it("preserves the no-env local release check path", () => {
-    const root = mkdtempSync(join(tmpdir(), "openclaw-release-check-install-test-"));
+    const root = mkdtempSync(join(tmpdir(), "marketingclaw-release-check-install-test-"));
     try {
-      writePackedTarballInstallManifest(root, "/tmp/openclaw.tgz", []);
+      writePackedTarballInstallManifest(root, "/tmp/marketingclaw.tgz", []);
       const manifest = JSON.parse(readFileSync(join(root, "package.json"), "utf8")) as {
         dependencies?: Record<string, string>;
         private?: boolean;
       };
       expect(manifest.private).toBe(true);
       expect(manifest.dependencies).toEqual({
-        openclaw: "file:///tmp/openclaw.tgz",
+        marketingclaw: "file:///tmp/marketingclaw.tgz",
       });
     } finally {
       rmSync(root, { recursive: true, force: true });
@@ -80,7 +82,7 @@ describe("release-check", () => {
   });
 
   it("rejects missing, empty, or ambiguous local dependency tarball directories", () => {
-    const root = mkdtempSync(join(tmpdir(), "openclaw-release-check-tarball-test-"));
+    const root = mkdtempSync(join(tmpdir(), "marketingclaw-release-check-tarball-test-"));
     try {
       expect(() => resolveReleaseCheckLocalPackageTarballs(join(root, "missing"))).toThrow(
         RELEASE_CHECK_LOCAL_PACKAGE_TARBALL_DIR_ENV,
@@ -97,11 +99,11 @@ describe("release-check", () => {
   });
 
   it("seeds packaged activation smoke with an included channel plugin", () => {
-    const homeDir = mkdtempSync(join(tmpdir(), "openclaw-release-check-test-"));
+    const homeDir = mkdtempSync(join(tmpdir(), "marketingclaw-release-check-test-"));
     try {
       writePackedBundledPluginActivationConfig(homeDir);
       const config = JSON.parse(
-        readFileSync(join(homeDir, ".openclaw", "openclaw.json"), "utf8"),
+        readFileSync(join(homeDir, ".marketingclaw", "marketingclaw.json"), "utf8"),
       ) as {
         channels?: Record<string, unknown>;
         plugins?: { entries?: Record<string, unknown> };

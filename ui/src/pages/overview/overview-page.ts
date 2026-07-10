@@ -28,7 +28,7 @@ import { createInitialCronState, loadCronJobsPage, loadCronStatus } from "../../
 import { isMonitoredAuthProvider, loadModelAuthStatus } from "../../lib/model-auth.ts";
 import { requestSessionUsage } from "../../lib/sessions/index.ts";
 import { loadSkillStatusReport } from "../../lib/skills/index.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { MarketingClawLightDomElement } from "../../lit/marketingclaw-element.ts";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
 import { renderOverview } from "./view.ts";
 
@@ -69,7 +69,7 @@ type OverviewRefreshScope = {
   client: GatewayBrowserClient;
 };
 
-class OverviewPage extends OpenClawLightDomElement {
+class OverviewPage extends MarketingClawLightDomElement {
   @consume({ context: applicationContext, subscribe: true })
   private context!: ApplicationContext;
 
@@ -368,7 +368,7 @@ class OverviewPage extends OpenClawLightDomElement {
         title: "Missing operator.read scope",
         description:
           "This connection does not have the operator.read scope. Some features may be unavailable.",
-        href: "https://docs.openclaw.ai/web/dashboard",
+        href: "https://docs.marketingclaw.ai/web/dashboard",
         external: true,
       });
     }
@@ -512,6 +512,6 @@ class OverviewPage extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-overview-page")) {
-  customElements.define("openclaw-overview-page", OverviewPage);
+if (!customElements.get("marketingclaw-overview-page")) {
+  customElements.define("marketingclaw-overview-page", OverviewPage);
 }

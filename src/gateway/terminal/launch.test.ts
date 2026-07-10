@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../../test/helpers/temp-dir.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import {
   buildTerminalEnv,
   createTerminalLaunchPolicy,
@@ -41,7 +41,7 @@ describe("resolveTerminalShell", () => {
 
 describe("resolveTerminalLaunch", () => {
   it("blocks when the terminal is disabled", () => {
-    const result = resolveTerminalLaunch({ config: {} as OpenClawConfig, enabled: false });
+    const result = resolveTerminalLaunch({ config: {} as MarketingClawConfig, enabled: false });
     expect(result).toEqual({ ok: false, block: { kind: "disabled" } });
   });
 
@@ -49,7 +49,7 @@ describe("resolveTerminalLaunch", () => {
     const workspace = tempDirs.make("term-ws-");
     const config = {
       agents: { defaults: { workspace } },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
     const result = resolveTerminalLaunch({
       config,
       enabled: true,
@@ -68,7 +68,7 @@ describe("resolveTerminalLaunch", () => {
   it("fails closed for a fully sandboxed (mode: all) agent", () => {
     const config = {
       agents: { defaults: { sandbox: { mode: "all" } } },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
     const result = resolveTerminalLaunch({ config, enabled: true });
     expect(result.ok).toBe(false);
     if (!result.ok) {
@@ -83,7 +83,7 @@ describe("resolveTerminalLaunch", () => {
     const workspace = tempDirs.make("term-ws-nm-");
     const config = {
       agents: { defaults: { workspace, sandbox: { mode: "non-main" } } },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
     const result = resolveTerminalLaunch({
       config,
       enabled: true,
@@ -103,7 +103,7 @@ describe("resolveTerminalLaunch", () => {
       agents: {
         list: [{ id: "locked", sandbox: { mode: "all" } }],
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
     const result = resolveTerminalLaunch({
       config,
       enabled: true,
@@ -121,7 +121,7 @@ describe("resolveTerminalLaunch", () => {
         defaults: { workspace },
         list: [{ id: "Ops" }],
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as MarketingClawConfig;
     const result = resolveTerminalLaunch({
       config,
       enabled: true,
@@ -140,7 +140,7 @@ describe("createTerminalLaunchPolicy", () => {
   it("applies restart-bound revocations without granting access early", () => {
     const enabled = {
       gateway: { terminal: { enabled: true } },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
     const policy = createTerminalLaunchPolicy(enabled);
 
     policy.prepareConfig({}, { restartPending: true });
@@ -156,7 +156,7 @@ describe("createTerminalLaunchPolicy", () => {
 
   it("preserves sandbox revocations across later restart-bound updates", () => {
     const workspace = tempDirs.make("term-policy-agent-");
-    const baseConfig: OpenClawConfig = {
+    const baseConfig: MarketingClawConfig = {
       gateway: { terminal: { enabled: true } },
       agents: { defaults: { workspace }, list: [{ id: "ops" }] },
     };
@@ -253,7 +253,7 @@ describe("createTerminalLaunchPolicy", () => {
   });
 
   it("retains failed hot-reload revocations until a later commit succeeds", () => {
-    const baseConfig: OpenClawConfig = {
+    const baseConfig: MarketingClawConfig = {
       gateway: { terminal: { enabled: true } },
       agents: { defaults: { sandbox: { mode: "off" } } },
     };
@@ -334,7 +334,7 @@ describe("buildTerminalEnv", () => {
     expect(env.PATH).toBe("/usr/bin");
     expect(env.FOO).toBe("bar");
     expect(env.TERM).toBe("xterm-256color");
-    expect(env.OPENCLAW_TERMINAL).toBe("1");
+    expect(env.MARKETINGCLAW_TERMINAL).toBe("1");
   });
 
   it("preserves an existing TERM", () => {

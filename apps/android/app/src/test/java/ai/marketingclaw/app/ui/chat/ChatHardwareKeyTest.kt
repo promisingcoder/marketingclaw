@@ -1,4 +1,4 @@
-package ai.openclaw.app.ui.chat
+package ai.marketingclaw.app.ui.chat
 
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.text.input.TextFieldValue

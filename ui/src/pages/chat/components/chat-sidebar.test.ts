@@ -126,7 +126,7 @@ describe("markdown sidebar", () => {
   });
 
   it("opens workspace files from markdown preview clicks", async () => {
-    const panel = document.createElement("openclaw-chat-detail-panel") as HTMLElement & {
+    const panel = document.createElement("marketingclaw-chat-detail-panel") as HTMLElement & {
       content: unknown;
       onOpenWorkspaceFile?: (target: { path: string; line?: number | null }) => void;
       updateComplete?: Promise<unknown>;

@@ -1,11 +1,11 @@
-# OpenClaw Google Chat
+# MarketingClaw Google Chat
 
-Official OpenClaw channel plugin for Google Chat spaces and direct messages.
+Official MarketingClaw channel plugin for Google Chat spaces and direct messages.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugin add @openclaw/googlechat
+marketingclaw plugin add @marketingclaw/googlechat
 ```
 
-Configure the Google Chat app credentials and allowed spaces in OpenClaw. The plugin lets agents receive Google Chat events and reply through the configured app.
+Configure the Google Chat app credentials and allowed spaces in MarketingClaw. The plugin lets agents receive Google Chat events and reply through the configured app.

@@ -28,7 +28,7 @@ import { copyToClipboard } from "../lib/clipboard.ts";
 import { isGatewayMethodAdvertised } from "../lib/gateway-methods.ts";
 import { isWorkboardEnabledInConfigSnapshot } from "../lib/plugin-activation.ts";
 import { searchForSession } from "../lib/sessions/index.ts";
-import { OpenClawLightDomElement } from "../lit/openclaw-element.ts";
+import { MarketingClawLightDomElement } from "../lit/marketingclaw-element.ts";
 import { SubscriptionsController } from "../lit/subscriptions-controller.ts";
 import { renderDevicePairSetup } from "../pages/nodes/view-pairing.ts";
 import { pluginTabKey, pluginTabRefFromSearch } from "../pages/plugin/route.ts";
@@ -120,7 +120,7 @@ function isMobileNavLayout(): boolean {
   return globalThis.matchMedia?.("(max-width: 1100px)").matches ?? false;
 }
 
-class OpenClawApp extends OpenClawLightDomElement {
+class MarketingClawApp extends MarketingClawLightDomElement {
   // Pinned while a connect submitted from the visible login gate is in
   // flight, so a failed manual attempt cannot flash the shell in between.
   @state() private loginGatePinned = false;
@@ -178,7 +178,7 @@ class OpenClawApp extends OpenClawLightDomElement {
     // their lazy source getters bind on both the initial mount and reconnect.
     this.requestUpdate();
     void this.runtime.start().catch((error: unknown) => {
-      console.error("[openclaw] application start failed", error);
+      console.error("[marketingclaw] application start failed", error);
     });
   }
 
@@ -239,7 +239,7 @@ class OpenClawApp extends OpenClawLightDomElement {
     const gatewaySnapshot = context.gateway.snapshot;
     const gatewayUrlConfirmation = this.pendingGatewayUrl
       ? html`
-          <openclaw-gateway-url-confirmation
+          <marketingclaw-gateway-url-confirmation
             .props=${{
               pendingGatewayUrl: this.pendingGatewayUrl,
               onConfirm: () => {
@@ -251,7 +251,7 @@ class OpenClawApp extends OpenClawLightDomElement {
                 this.pendingGatewayUrl = null;
               },
             }}
-          ></openclaw-gateway-url-confirmation>
+          ></marketingclaw-gateway-url-confirmation>
         `
       : nothing;
     // Embedded mobile terminals own the whole document. Keep the generic login
@@ -262,12 +262,12 @@ class OpenClawApp extends OpenClawLightDomElement {
         context.config.current.terminalEnabled ?? false,
       );
       return html`
-        <openclaw-terminal-panel
+        <marketingclaw-terminal-panel
           .client=${gatewaySnapshot.connected ? gatewaySnapshot.client : null}
           .available=${terminalAvailable}
           .themeMode=${resolveTerminalThemeMode()}
           fullscreen
-        ></openclaw-terminal-panel>
+        ></marketingclaw-terminal-panel>
         ${!terminalAvailable && (gatewaySnapshot.connected || gatewaySnapshot.lastError)
           ? html`<div class="terminal-view-unavailable">${t("terminal.unavailable")}</div>`
           : nothing}
@@ -288,17 +288,17 @@ class OpenClawApp extends OpenClawLightDomElement {
       gatewaySnapshot.client !== null;
     if (initialConnectPending) {
       return html`
-        <openclaw-tooltip-provider>
+        <marketingclaw-tooltip-provider>
           ${renderConnectingSplash(context.basePath)} ${gatewayUrlConfirmation}
-        </openclaw-tooltip-provider>
+        </marketingclaw-tooltip-provider>
       `;
     }
     const showLoginGate =
       !gatewaySnapshot.connected && (this.loginGatePinned || !gatewaySnapshot.reconnecting);
     if (showLoginGate) {
       return html`
-        <openclaw-tooltip-provider>
-          <openclaw-login-gate
+        <marketingclaw-tooltip-provider>
+          <marketingclaw-login-gate
             .props=${{
               basePath: context.basePath,
               connected: gatewaySnapshot.connected,
@@ -335,33 +335,33 @@ class OpenClawApp extends OpenClawLightDomElement {
                 });
               },
             }}
-          ></openclaw-login-gate>
+          ></marketingclaw-login-gate>
           ${gatewayUrlConfirmation}
-        </openclaw-tooltip-provider>
+        </marketingclaw-tooltip-provider>
       `;
     }
     return html`
-      <openclaw-tooltip-provider>
-        <openclaw-github-link-hovercard-provider .client=${gatewaySnapshot.client}>
+      <marketingclaw-tooltip-provider>
+        <marketingclaw-github-link-hovercard-provider .client=${gatewaySnapshot.client}>
           ${gatewayUrlConfirmation}
-          <openclaw-app-shell
+          <marketingclaw-app-shell
             .runtime=${runtime}
             .onboarding=${this.onboarding}
-          ></openclaw-app-shell>
-        </openclaw-github-link-hovercard-provider>
-      </openclaw-tooltip-provider>
+          ></marketingclaw-app-shell>
+        </marketingclaw-github-link-hovercard-provider>
+      </marketingclaw-tooltip-provider>
     `;
   }
 }
 
-class OpenClawShell extends OpenClawLightDomElement {
+class MarketingClawShell extends MarketingClawLightDomElement {
   @property({ attribute: false }) runtime?: ApplicationRuntime;
   @property({ attribute: false }) onboarding = false;
 
   @state() private navDrawerOpen = false;
   @state() private activeSessionKey = "";
   @state() private routeState: ShellRouteState = {};
-  @query("openclaw-command-palette") private commandPalette?: CommandPalette;
+  @query("marketingclaw-command-palette") private commandPalette?: CommandPalette;
   private commandPaletteTarget?: CommandPaletteTargetDetail;
   private navDrawerTrigger: HTMLElement | null = null;
   // Where "Back to app" / Escape leaves the settings takeover; falls back to
@@ -784,14 +784,14 @@ class OpenClawShell extends OpenClawLightDomElement {
     const navCollapsed = navigationSnapshot.navCollapsed && !navDrawerOpen && !settingsTakeover;
     const shellWidth = Math.max(globalThis.innerWidth || 0, NAV_WIDTH_MAX);
     return html`
-      <openclaw-command-palette
+      <marketingclaw-command-palette
         .onNavigate=${(routeId: RouteId) => this.navigate(routeId)}
         .onSelectSession=${(sessionKey: string) => {
           context.gateway.setSessionKey(sessionKey);
           this.navigate("chat", { search: searchForSession(sessionKey) });
         }}
         .onSlashCommand=${this.handleCommandPaletteSlashCommand}
-      ></openclaw-command-palette>
+      ></marketingclaw-command-palette>
       <div
         class="shell ${activeRoute === "chat" ? "shell--chat" : ""} ${navCollapsed
           ? "shell--nav-collapsed"
@@ -808,14 +808,14 @@ class OpenClawShell extends OpenClawLightDomElement {
           aria-label="Close navigation"
           @click=${() => this.closeNavDrawer({ restoreFocus: true })}
         ></button>
-        <openclaw-app-topbar
+        <marketingclaw-app-topbar
           .basePath=${context.basePath}
           .searchDisabled=${false}
           .navDrawerOpen=${navDrawerOpen}
           .onboarding=${this.onboarding}
           .onOpenPalette=${this.openPalette}
           .onToggleDrawer=${(trigger: HTMLElement) => this.toggleNavigationSurface(trigger)}
-        ></openclaw-app-topbar>
+        ></marketingclaw-app-topbar>
         <div class="shell-nav">
           ${settingsTakeover
             ? renderSettingsSidebar({
@@ -831,7 +831,7 @@ class OpenClawShell extends OpenClawLightDomElement {
                 onPreload: (routeId) => context.preload(routeId),
                 preloadTimers: this.settingsPreloadTimers,
               })
-            : html`<openclaw-app-sidebar
+            : html`<marketingclaw-app-sidebar
                 .basePath=${context.basePath}
                 .activeRouteId=${activeRoute}
                 .activePluginTabId=${activePluginTabId}
@@ -857,7 +857,7 @@ class OpenClawShell extends OpenClawLightDomElement {
                   this.navigate(routeId, options)}
                 .onPreloadRoute=${(routeId: string) =>
                   isRouteId(routeId) ? context.preload(routeId) : Promise.resolve()}
-              ></openclaw-app-sidebar>`}
+              ></marketingclaw-app-sidebar>`}
         </div>
         ${!navCollapsed && !this.onboarding && !settingsTakeover
           ? html`
@@ -882,13 +882,13 @@ class OpenClawShell extends OpenClawLightDomElement {
         >
           ${gatewaySnapshot.connected
             ? nothing
-            : html`<openclaw-connection-banner
+            : html`<marketingclaw-connection-banner
                 .props=${{
                   lastError: gatewaySnapshot.lastError,
                   onRetry: () => context.gateway.connect(),
                 }}
-              ></openclaw-connection-banner>`}
-          <openclaw-update-banner
+              ></marketingclaw-connection-banner>`}
+          <marketingclaw-update-banner
             .props=${{
               statusBanner: overlaySnapshot.updateStatusBanner,
               updateAvailable: overlaySnapshot.updateAvailable,
@@ -897,19 +897,19 @@ class OpenClawShell extends OpenClawLightDomElement {
               onUpdate: () => context.overlays.runUpdate(),
               onDismiss: () => context.overlays.dismissUpdate(),
             }}
-          ></openclaw-update-banner>
-          <openclaw-router-outlet
+          ></marketingclaw-update-banner>
+          <marketingclaw-router-outlet
             .router=${runtime.router}
             .retryContext=${context}
             .onNotFound=${() => this.replaceChatWithCurrentSession()}
-          ></openclaw-router-outlet>
+          ></marketingclaw-router-outlet>
         </main>
-        <openclaw-terminal-panel
+        <marketingclaw-terminal-panel
           .client=${gatewaySnapshot.connected ? gatewaySnapshot.client : null}
           .available=${terminalAvailable}
           .themeMode=${resolveTerminalThemeMode()}
-        ></openclaw-terminal-panel>
-        <openclaw-exec-approval
+        ></marketingclaw-terminal-panel>
+        <marketingclaw-exec-approval
           .props=${{
             queue: overlaySnapshot.approvalQueue,
             busy: overlaySnapshot.approvalBusy,
@@ -917,7 +917,7 @@ class OpenClawShell extends OpenClawLightDomElement {
             onDecision: (decision: Parameters<typeof context.overlays.decideApproval>[0]) =>
               context.overlays.decideApproval(decision),
           }}
-        ></openclaw-exec-approval>
+        ></marketingclaw-exec-approval>
         ${renderDevicePairSetup({
           open: overlaySnapshot.devicePairSetupOpen,
           loading: overlaySnapshot.devicePairSetupLoading,
@@ -937,9 +937,9 @@ class OpenClawShell extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-app")) {
-  customElements.define("openclaw-app", OpenClawApp);
+if (!customElements.get("marketingclaw-app")) {
+  customElements.define("marketingclaw-app", MarketingClawApp);
 }
-if (!customElements.get("openclaw-app-shell")) {
-  customElements.define("openclaw-app-shell", OpenClawShell);
+if (!customElements.get("marketingclaw-app-shell")) {
+  customElements.define("marketingclaw-app-shell", MarketingClawShell);
 }

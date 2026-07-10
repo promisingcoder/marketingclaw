@@ -2,7 +2,10 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { BUNDLED_PLUGIN_TEST_GLOB, bundledPluginFile } from "openclaw/plugin-sdk/test-fixtures";
+import {
+  BUNDLED_PLUGIN_TEST_GLOB,
+  bundledPluginFile,
+} from "marketingclaw/plugin-sdk/test-fixtures";
 import { describe, expect, it } from "vitest";
 import { cleanupTempDirs, makeTempDir } from "./helpers/temp-dir.js";
 import { normalizeConfigPath, normalizeConfigPaths } from "./helpers/vitest-config-paths.js";
@@ -153,29 +156,29 @@ function expectForkedIsolatedRunner(config: {
 describe("resolveVitestIsolation", () => {
   it("aliases private QA plugin SDK subpaths for source tests only", () => {
     for (const subpath of PRIVATE_PLUGIN_SDK_SUBPATHS) {
-      expect(findAlias(sharedVitestConfig.resolve.alias, `openclaw/plugin-sdk/${subpath}`)).toEqual(
-        {
-          find: `openclaw/plugin-sdk/${subpath}`,
-          replacement: path.join(process.cwd(), "src", "plugin-sdk", `${subpath}.ts`),
-        },
-      );
+      expect(
+        findAlias(sharedVitestConfig.resolve.alias, `marketingclaw/plugin-sdk/${subpath}`),
+      ).toEqual({
+        find: `marketingclaw/plugin-sdk/${subpath}`,
+        replacement: path.join(process.cwd(), "src", "plugin-sdk", `${subpath}.ts`),
+      });
       expect(() =>
-        findAlias(sharedVitestConfig.resolve.alias, `@openclaw/plugin-sdk/${subpath}`),
-      ).toThrow(`missing alias @openclaw/plugin-sdk/${subpath}`);
+        findAlias(sharedVitestConfig.resolve.alias, `@marketingclaw/plugin-sdk/${subpath}`),
+      ).toThrow(`missing alias @marketingclaw/plugin-sdk/${subpath}`);
     }
   });
 
   it("aliases private core packages to source for clean checkout tests", () => {
-    expect(findAlias(sharedVitestConfig.resolve.alias, "@openclaw/media-core/mime")).toEqual({
-      find: "@openclaw/media-core/mime",
+    expect(findAlias(sharedVitestConfig.resolve.alias, "@marketingclaw/media-core/mime")).toEqual({
+      find: "@marketingclaw/media-core/mime",
       replacement: path.join(process.cwd(), "packages", "media-core", "src", "mime.ts"),
     });
-    expect(findAlias(sharedVitestConfig.resolve.alias, "@openclaw/acp-core/runtime/types")).toEqual(
-      {
-        find: "@openclaw/acp-core/runtime/types",
-        replacement: path.join(process.cwd(), "packages", "acp-core", "src", "runtime", "types.ts"),
-      },
-    );
+    expect(
+      findAlias(sharedVitestConfig.resolve.alias, "@marketingclaw/acp-core/runtime/types"),
+    ).toEqual({
+      find: "@marketingclaw/acp-core/runtime/types",
+      replacement: path.join(process.cwd(), "packages", "acp-core", "src", "runtime", "types.ts"),
+    });
   });
 
   it("defaults shared scoped configs to the non-isolated runner", () => {
@@ -183,9 +186,9 @@ describe("resolveVitestIsolation", () => {
   });
 
   it("ignores the legacy isolation escape hatches", () => {
-    expect(resolveVitestIsolation({ OPENCLAW_TEST_ISOLATE: "1" })).toBe(false);
-    expect(resolveVitestIsolation({ OPENCLAW_TEST_NO_ISOLATE: "0" })).toBe(false);
-    expect(resolveVitestIsolation({ OPENCLAW_TEST_NO_ISOLATE: "false" })).toBe(false);
+    expect(resolveVitestIsolation({ MARKETINGCLAW_TEST_ISOLATE: "1" })).toBe(false);
+    expect(resolveVitestIsolation({ MARKETINGCLAW_TEST_NO_ISOLATE: "0" })).toBe(false);
+    expect(resolveVitestIsolation({ MARKETINGCLAW_TEST_NO_ISOLATE: "false" })).toBe(false);
   });
 
   it("resolves scoped discovery dirs from the repo root after config relocation", () => {
@@ -206,7 +209,7 @@ describe("createScopedVitestConfig", () => {
     expect(normalizeConfigPath(testConfig.runner)).toBe("test/non-isolated-runner.ts");
     expect(normalizeConfigPaths(testConfig.setupFiles)).toEqual([
       "test/setup.ts",
-      "test/setup-openclaw-runtime.ts",
+      "test/setup-marketingclaw-runtime.ts",
     ]);
   });
 
@@ -363,8 +366,8 @@ describe("createScopedVitestConfig", () => {
     expect(testConfig.passWithNoTests).toBe(true);
   });
 
-  it("loads scoped include overrides from OPENCLAW_VITEST_INCLUDE_FILE", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-vitest-scoped-"));
+  it("loads scoped include overrides from MARKETINGCLAW_VITEST_INCLUDE_FILE", () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-vitest-scoped-"));
     try {
       const includeFile = path.join(tempDir, "include.json");
       fs.writeFileSync(includeFile, JSON.stringify(["src/utils/utils-misc.test.ts"]), "utf8");
@@ -372,7 +375,7 @@ describe("createScopedVitestConfig", () => {
       const config = createScopedVitestConfig(["src/utils/**/*.test.ts"], {
         dir: "src",
         env: {
-          OPENCLAW_VITEST_INCLUDE_FILE: includeFile,
+          MARKETINGCLAW_VITEST_INCLUDE_FILE: includeFile,
         },
       });
 
@@ -391,7 +394,7 @@ describe("createScopedVitestConfig", () => {
     expect(normalizeConfigPaths(requireTestConfig(config).setupFiles)).toEqual([
       "test/setup.ts",
       "test/setup.extensions.ts",
-      "test/setup-openclaw-runtime.ts",
+      "test/setup-marketingclaw-runtime.ts",
     ]);
   });
 
@@ -498,7 +501,7 @@ describe("scoped vitest configs", () => {
     expectForkedIsolatedRunner(defaultInfraConfig);
   });
 
-  it("keeps the process lane off the openclaw runtime setup", () => {
+  it("keeps the process lane off the marketingclaw runtime setup", () => {
     expect(normalizeConfigPaths(requireTestConfig(defaultProcessConfig).setupFiles)).toEqual([
       "test/setup.ts",
     ]);
@@ -507,7 +510,7 @@ describe("scoped vitest configs", () => {
     ]);
     expect(normalizeConfigPaths(requireTestConfig(defaultPluginSdkConfig).setupFiles)).toEqual([
       "test/setup.ts",
-      "test/setup-openclaw-runtime.ts",
+      "test/setup-marketingclaw-runtime.ts",
     ]);
   });
 
@@ -525,7 +528,7 @@ describe("scoped vitest configs", () => {
     );
   });
 
-  it("keeps selected plugin-sdk and commands light lanes off the openclaw runtime setup", () => {
+  it("keeps selected plugin-sdk and commands light lanes off the marketingclaw runtime setup", () => {
     expect(normalizeConfigPaths(requireTestConfig(defaultPluginSdkLightConfig).setupFiles)).toEqual(
       ["test/setup.ts"],
     );
@@ -534,7 +537,7 @@ describe("scoped vitest configs", () => {
     ]);
   });
 
-  it("keeps the ui lane off both the openclaw runtime setup and unit-fast excludes", () => {
+  it("keeps the ui lane off both the marketingclaw runtime setup and unit-fast excludes", () => {
     const testConfig = requireTestConfig(defaultUiConfig);
     expect(normalizeConfigPaths(testConfig.setupFiles)).toEqual([
       "test/setup.ts",
@@ -551,9 +554,9 @@ describe("scoped vitest configs", () => {
     expect(requireTestConfig(defaultChannelsConfig).include).toEqual(["src/channels/**/*.test.ts"]);
   });
 
-  it("loads channel include overrides from OPENCLAW_VITEST_INCLUDE_FILE", () => {
+  it("loads channel include overrides from MARKETINGCLAW_VITEST_INCLUDE_FILE", () => {
     const tempDirs: string[] = [];
-    const tempDir = makeTempDir(tempDirs, "openclaw-vitest-channels-");
+    const tempDir = makeTempDir(tempDirs, "marketingclaw-vitest-channels-");
     try {
       const includeFile = path.join(tempDir, "include.json");
       fs.writeFileSync(
@@ -568,7 +571,7 @@ describe("scoped vitest configs", () => {
       );
 
       const config = createChannelsVitestConfig({
-        OPENCLAW_VITEST_INCLUDE_FILE: includeFile,
+        MARKETINGCLAW_VITEST_INCLUDE_FILE: includeFile,
       });
 
       expect(requireTestConfig(config).include).toEqual([
@@ -762,12 +765,12 @@ describe("scoped vitest configs", () => {
     expect(normalizeConfigPaths(extensionsTestConfig.setupFiles)).toEqual([
       "test/setup.ts",
       "test/setup.extensions.ts",
-      "test/setup-openclaw-runtime.ts",
+      "test/setup-marketingclaw-runtime.ts",
     ]);
     expect(normalizeConfigPaths(telegramTestConfig.setupFiles)).toEqual([
       "test/setup.ts",
       "test/setup.extensions.ts",
-      "test/setup-openclaw-runtime.ts",
+      "test/setup-marketingclaw-runtime.ts",
     ]);
   });
 
@@ -981,7 +984,7 @@ describe("scoped vitest configs", () => {
     const testConfig = requireTestConfig(defaultToolingConfig);
     expect(testConfig.include).toEqual(["test/**/*.test.ts", "src/scripts/**/*.test.ts"]);
     expect(testConfig.exclude).toEqual(expect.arrayContaining(toolingDockerTestFiles));
-    expect(testConfig.exclude).toContain("test/scripts/openclaw-e2e-instance.test.ts");
+    expect(testConfig.exclude).toContain("test/scripts/marketingclaw-e2e-instance.test.ts");
     expect(testConfig.include).not.toContain("src/config/doc-baseline.integration.test.ts");
   });
 
@@ -993,7 +996,7 @@ describe("scoped vitest configs", () => {
 
   it("runs shell helper tooling tests isolated from shared mocks", () => {
     const testConfig = requireTestConfig(createToolingIsolatedVitestConfig({}));
-    expect(testConfig.include).toEqual(["test/scripts/openclaw-e2e-instance.test.ts"]);
+    expect(testConfig.include).toEqual(["test/scripts/marketingclaw-e2e-instance.test.ts"]);
     expect(testConfig.isolate).toBe(true);
     expect(testConfig.runner).toBeUndefined();
   });

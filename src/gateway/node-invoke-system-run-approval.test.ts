@@ -209,7 +209,7 @@ describe("sanitizeSystemRunParamsForForwarding", () => {
     const record = makeRecord(echoSafeCommand, echoSafeArgv);
     record.requestedByConnId = overrides.requestedByConnId ?? "control-ui-conn";
     record.requestedByDeviceId = overrides.requestedByDeviceId ?? null;
-    record.requestedByClientId = overrides.requestedByClientId ?? "openclaw-control-ui";
+    record.requestedByClientId = overrides.requestedByClientId ?? "marketingclaw-control-ui";
     record.requestedByDeviceTokenAuth = overrides.requestedByDeviceTokenAuth ?? false;
     return record;
   }
@@ -594,7 +594,7 @@ describe("sanitizeSystemRunParamsForForwarding", () => {
         connId: "other-control-ui-conn",
         connect: {
           scopes: ["operator.write", "operator.approvals"],
-          client: { id: "openclaw-control-ui", mode: "ui" },
+          client: { id: "marketingclaw-control-ui", mode: "ui" },
           device: null,
         },
       },

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">OpenClaw Node</string>
+    <string name="app_name">MarketingClaw Node</string>
     <string name="trust_this_gateway">このゲートウェイを信頼しますか？</string>
     <string name="trust_and_continue">信頼して続行</string>
     <string name="cancel">キャンセル</string>

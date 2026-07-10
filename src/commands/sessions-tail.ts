@@ -6,7 +6,7 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { isRecord } from "@marketingclaw/normalization-core/record-coerce";
 import { readAcpSessionMeta } from "../acp/runtime/session-meta.js";
 import { getRuntimeConfig } from "../config/config.js";
 import { resolveSessionFilePath } from "../config/sessions/paths.js";
@@ -103,7 +103,7 @@ function toOptionalString(value: unknown): string | undefined {
 function isTrajectoryEvent(value: unknown): value is TrajectoryEvent {
   return (
     isRecord(value) &&
-    value.traceSchema === "openclaw-trajectory" &&
+    value.traceSchema === "marketingclaw-trajectory" &&
     value.schemaVersion === 1 &&
     typeof value.type === "string" &&
     typeof value.ts === "string" &&

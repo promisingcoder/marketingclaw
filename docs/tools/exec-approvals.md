@@ -31,7 +31,7 @@ prompting even if session or config defaults request `ask: "on-miss"`.
 
 Exec approvals are enforced locally on the execution host:
 
-- **Gateway host** -> `openclaw` process on the gateway machine.
+- **Gateway host** -> `marketingclaw` process on the gateway machine.
 - **Node host** -> node runner (macOS companion app or headless node host).
 
 ### Trust model
@@ -41,8 +41,8 @@ Exec approvals are enforced locally on the execution host:
 - Approvals reduce accidental execution risk, but are **not** a per-user auth boundary or filesystem read-only policy.
 - Once approved, a command can mutate files according to the selected host or sandbox filesystem permissions.
 - Approved node-host runs bind canonical execution context: cwd, exact argv, env binding when present, and pinned executable path when applicable.
-- For shell scripts and direct interpreter/runtime file invocations, OpenClaw also tries to bind one concrete local file operand. If that file changes after approval but before execution, the run is denied instead of executing drifted content.
-- File binding is best-effort, not a complete model of every interpreter/runtime loader path. If exactly one concrete local file cannot be identified, OpenClaw refuses to mint an approval-backed run rather than pretend full coverage.
+- For shell scripts and direct interpreter/runtime file invocations, MarketingClaw also tries to bind one concrete local file operand. If that file changes after approval but before execution, the run is denied instead of executing drifted content.
+- File binding is best-effort, not a complete model of every interpreter/runtime loader path. If exactly one concrete local file cannot be identified, MarketingClaw refuses to mint an approval-backed run rather than pretend full coverage.
 
 ### macOS split
 
@@ -51,11 +51,11 @@ Exec approvals are enforced locally on the execution host:
 
 ## Inspecting the effective policy
 
-| Command                                                          | What it shows                                                                          |
-| ---------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `openclaw approvals get` / `--gateway` / `--node <id\|name\|ip>` | Requested policy, host policy sources, and the effective result.                       |
-| `openclaw exec-policy show`                                      | Local-machine merged view.                                                             |
-| `openclaw exec-policy set` / `preset`                            | Synchronize the local requested policy with the local host approvals file in one step. |
+| Command                                                               | What it shows                                                                          |
+| --------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `marketingclaw approvals get` / `--gateway` / `--node <id\|name\|ip>` | Requested policy, host policy sources, and the effective result.                       |
+| `marketingclaw exec-policy show`                                      | Local-machine merged view.                                                             |
+| `marketingclaw exec-policy set` / `preset`                            | Synchronize the local requested policy with the local host approvals file in one step. |
 
 Full CLI reference (flags, JSON output, allowlist add/remove): [Approvals CLI](/cli/approvals).
 
@@ -76,18 +76,18 @@ message as a fallback.
 ## Settings and storage
 
 Approvals live in a local JSON file on the execution host. When
-`OPENCLAW_STATE_DIR` is set, the file follows that state directory;
-otherwise it uses the default OpenClaw state directory:
+`MARKETINGCLAW_STATE_DIR` is set, the file follows that state directory;
+otherwise it uses the default MarketingClaw state directory:
 
 ```text
-$OPENCLAW_STATE_DIR/exec-approvals.json
+$MARKETINGCLAW_STATE_DIR/exec-approvals.json
 # otherwise
-~/.openclaw/exec-approvals.json
+~/.marketingclaw/exec-approvals.json
 ```
 
 The default approval socket follows the same root:
-`$OPENCLAW_STATE_DIR/exec-approvals.sock`, or
-`~/.openclaw/exec-approvals.sock` when the variable is unset.
+`$MARKETINGCLAW_STATE_DIR/exec-approvals.sock`, or
+`~/.marketingclaw/exec-approvals.sock` when the variable is unset.
 
 Example schema:
 
@@ -95,7 +95,7 @@ Example schema:
 {
   "version": 1,
   "socket": {
-    "path": "~/.openclaw/exec-approvals.sock",
+    "path": "~/.marketingclaw/exec-approvals.sock",
     "token": "base64url-token"
   },
   "defaults": {
@@ -132,13 +132,13 @@ Example schema:
 
 `tools.exec.mode` is the preferred normalized policy surface for host exec:
 
-| Value       | Behavior                                                                                                                                                                  |
-| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `deny`      | Block host exec.                                                                                                                                                          |
-| `allowlist` | Run only allowlisted commands without asking.                                                                                                                             |
-| `ask`       | Use allowlist policy and ask on misses.                                                                                                                                   |
-| `auto`      | Use allowlist policy, run deterministic matches directly, and send approval misses through OpenClaw's native auto reviewer before falling back to a human approval route. |
-| `full`      | Run host exec without approval prompts.                                                                                                                                   |
+| Value       | Behavior                                                                                                                                                                       |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `deny`      | Block host exec.                                                                                                                                                               |
+| `allowlist` | Run only allowlisted commands without asking.                                                                                                                                  |
+| `ask`       | Use allowlist policy and ask on misses.                                                                                                                                        |
+| `auto`      | Use allowlist policy, run deterministic matches directly, and send approval misses through MarketingClaw's native auto reviewer before falling back to a human approval route. |
+| `full`      | Run host exec without approval prompts.                                                                                                                                        |
 
 Legacy `tools.exec.security` / `tools.exec.ask` remain supported and still
 apply wherever `mode` is unset at that scope.
@@ -200,7 +200,7 @@ automatically.
 ### `tools.exec.commandHighlighting`
 
 <ParamField path="commandHighlighting" type="boolean" default="false">
-  Presentation only: when enabled, OpenClaw may attach parser-derived
+  Presentation only: when enabled, MarketingClaw may attach parser-derived
   command spans so Web approval prompts can highlight command tokens. Does
   **not** change `security`, `ask`, allowlist matching, strict inline-eval
   behavior, approval forwarding, or command execution.
@@ -212,7 +212,7 @@ Set globally under `tools.exec.commandHighlighting` or per agent under
 ## YOLO mode (no-approval)
 
 To run host exec without approval prompts, open **both** policy layers:
-requested exec policy in OpenClaw config (`tools.exec.*`) **and**
+requested exec policy in MarketingClaw config (`tools.exec.*`) **and**
 host-local approvals policy in the execution host approvals file.
 
 Omitted `askFallback` defaults to `deny`. Set host `askFallback` to `full`
@@ -236,15 +236,15 @@ explicitly when a no-UI approval prompt should fall back to allow.
 
 CLI-backed providers that expose their own noninteractive permission mode
 can follow this policy. Claude CLI adds
-`--permission-mode bypassPermissions` when OpenClaw's effective exec
-policy is YOLO. For OpenClaw-managed Claude live sessions, OpenClaw's
+`--permission-mode bypassPermissions` when MarketingClaw's effective exec
+policy is YOLO. For MarketingClaw-managed Claude live sessions, MarketingClaw's
 effective exec policy is authoritative over Claude's native permission mode:
 YOLO normalizes live launches to `--permission-mode bypassPermissions`, and
 restrictive effective exec policy normalizes live launches to
 `--permission-mode default`, even if raw Claude backend args specify another
 mode.
 
-If you want a more conservative setup, tighten OpenClaw exec policy back to
+If you want a more conservative setup, tighten MarketingClaw exec policy back to
 `allowlist` / `on-miss` or `deny`.
 
 ### Persistent gateway-host "never prompt" setup
@@ -252,15 +252,15 @@ If you want a more conservative setup, tighten OpenClaw exec policy back to
 <Steps>
   <Step title="Set the requested config policy">
     ```bash
-    openclaw config set tools.exec.host gateway
-    openclaw config set tools.exec.security full
-    openclaw config set tools.exec.ask off
-    openclaw gateway restart
+    marketingclaw config set tools.exec.host gateway
+    marketingclaw config set tools.exec.security full
+    marketingclaw config set tools.exec.ask off
+    marketingclaw gateway restart
     ```
   </Step>
   <Step title="Match the host approvals file">
     ```bash
-    openclaw approvals set --stdin <<'EOF'
+    marketingclaw approvals set --stdin <<'EOF'
     {
       version: 1,
       defaults: {
@@ -277,22 +277,22 @@ If you want a more conservative setup, tighten OpenClaw exec policy back to
 ### Local shortcut
 
 ```bash
-openclaw exec-policy preset yolo
+marketingclaw exec-policy preset yolo
 ```
 
 Updates both local `tools.exec.host/security/ask` and the local approvals
 file defaults (including `askFallback: "full"`). It is intentionally
 local-only. To change gateway-host or node-host approvals remotely, use
-`openclaw approvals set --gateway` or `openclaw approvals set --node
+`marketingclaw approvals set --gateway` or `marketingclaw approvals set --node
 <id|name|ip>`.
 
 Other built-in presets: `cautious` (`host=gateway`, `security=allowlist`,
 `ask=on-miss`, `askFallback=deny`) and `deny-all` (`host=gateway`,
 `security=deny`, `ask=off`, `askFallback=deny`). Apply the same way:
-`openclaw exec-policy preset cautious`.
+`marketingclaw exec-policy preset cautious`.
 
 To set individual fields instead of a full preset, use
-`openclaw exec-policy set --host <auto|sandbox|gateway|node> --security
+`marketingclaw exec-policy set --host <auto|sandbox|gateway|node> --security
 <deny|allowlist|full> --ask <off|on-miss|always> --ask-fallback
 <deny|allowlist|full>` with any subset of those flags.
 
@@ -301,7 +301,7 @@ To set individual fields instead of a full preset, use
 Apply the same approvals file on the node instead:
 
 ```bash
-openclaw approvals set --node <id|name|ip> --stdin <<'EOF'
+marketingclaw approvals set --node <id|name|ip> --stdin <<'EOF'
 {
   version: 1,
   defaults: {
@@ -316,9 +316,9 @@ EOF
 <Note>
 **Local-only limitations:**
 
-- `openclaw exec-policy` does not synchronize node approvals.
-- `openclaw exec-policy set --host node` is rejected.
-- Node exec approvals are fetched from the node at runtime, so node-targeted updates must use `openclaw approvals --node ...`.
+- `marketingclaw exec-policy` does not synchronize node approvals.
+- `marketingclaw exec-policy set --host node` is rejected.
+- Node exec approvals are fetched from the node at runtime, so node-targeted updates must use `marketingclaw approvals --node ...`.
 
 </Note>
 
@@ -357,7 +357,7 @@ Examples:
 ### Restricting arguments with argPattern
 
 Add `argPattern` when an allowlist entry should match a binary and a
-specific argument shape. OpenClaw evaluates the regular expression against
+specific argument shape. MarketingClaw evaluates the regular expression against
 the parsed command arguments, excluding the executable token (`argv[0]`).
 For hand-authored entries, arguments are joined with a single space, so
 anchor the pattern when you need an exact match.
@@ -385,7 +385,7 @@ entry when the goal is to restrict the binary to the declared arguments.
 
 Entries saved by approval flows use an internal separator format for exact
 argv matching. Prefer the UI or approval flow to regenerate those entries
-instead of hand-editing the encoded value. If OpenClaw cannot parse argv
+instead of hand-editing the encoded value. If MarketingClaw cannot parse argv
 for a command segment, entries with `argPattern` do not match.
 
 Each allowlist entry supports:
@@ -437,10 +437,10 @@ local approvals file directly.
 
 Some node hosts, including the Windows companion, own a different approval
 policy format. Control UI shows these host-native policies read-only. Use the
-companion app or `openclaw approvals set --node <id|name|ip>` with the native
+companion app or `marketingclaw approvals set --node <id|name|ip>` with the native
 policy shape to edit them; see [Approvals CLI](/cli/approvals).
 
-CLI: `openclaw approvals` supports gateway or node editing - see
+CLI: `marketingclaw approvals` supports gateway or node editing - see
 [Approvals CLI](/cli/approvals).
 
 ## Approval flow
@@ -462,17 +462,17 @@ context when forwarding approved `system.run` requests:
 ## System events and denials
 
 Exec lifecycle posts an `Exec finished` system message to the agent's
-session after the node reports completion. OpenClaw can also emit an
+session after the node reports completion. MarketingClaw can also emit an
 in-progress notice once an approval is granted, after
 `tools.exec.approvalRunningNoticeMs` elapses (default `10000`, `0` disables
 it). Denied exec approvals are terminal for the host command: the command
 does not run.
 
-- For main-agent async approvals with an originating session, OpenClaw
+- For main-agent async approvals with an originating session, MarketingClaw
   posts the denial back into that session as an internal followup so the
   agent can stop waiting on the async command and avoid a missing-result
   repair.
-- If there is no session or the session cannot be resumed, OpenClaw can
+- If there is no session or the session cannot be resumed, MarketingClaw can
   still report a concise denial to the operator or direct chat route.
 - Denials for subagent and cron sessions are not posted back into that
   session.

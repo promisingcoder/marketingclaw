@@ -1,15 +1,15 @@
-package ai.openclaw.app.ui
+package ai.marketingclaw.app.ui
 
-import ai.openclaw.app.GatewaySkillSummary
-import ai.openclaw.app.MainViewModel
-import ai.openclaw.app.ui.design.ClawDetailRow
-import ai.openclaw.app.ui.design.ClawListPanel
-import ai.openclaw.app.ui.design.ClawPanel
-import ai.openclaw.app.ui.design.ClawSecondaryButton
-import ai.openclaw.app.ui.design.ClawStatus
-import ai.openclaw.app.ui.design.ClawStatusPill
-import ai.openclaw.app.ui.design.ClawTextBadge
-import ai.openclaw.app.ui.design.ClawTheme
+import ai.marketingclaw.app.GatewaySkillSummary
+import ai.marketingclaw.app.MainViewModel
+import ai.marketingclaw.app.ui.design.ClawDetailRow
+import ai.marketingclaw.app.ui.design.ClawListPanel
+import ai.marketingclaw.app.ui.design.ClawPanel
+import ai.marketingclaw.app.ui.design.ClawSecondaryButton
+import ai.marketingclaw.app.ui.design.ClawStatus
+import ai.marketingclaw.app.ui.design.ClawStatusPill
+import ai.marketingclaw.app.ui.design.ClawTextBadge
+import ai.marketingclaw.app.ui.design.ClawTheme
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -65,7 +65,7 @@ internal fun SkillsSettingsScreen(
 
   SettingsDetailFrame(
     title = "Skills",
-    subtitle = "Installed capabilities available to OpenClaw.",
+    subtitle = "Installed capabilities available to MarketingClaw.",
     icon = Icons.Default.Settings,
     onBack = onBack,
   ) {
@@ -257,10 +257,10 @@ private fun skillConfigurationText(skill: GatewaySkillSummary): String =
 
 private fun skillSourceLabel(skill: GatewaySkillSummary): String =
   when (skill.source) {
-    "openclaw-bundled" -> if (skill.bundled) "Built-in" else "Bundled"
-    "openclaw-managed" -> "Installed"
-    "openclaw-workspace" -> "Workspace"
-    "openclaw-extra" -> "Extra"
+    "marketingclaw-bundled" -> if (skill.bundled) "Built-in" else "Bundled"
+    "marketingclaw-managed" -> "Installed"
+    "marketingclaw-workspace" -> "Workspace"
+    "marketingclaw-extra" -> "Extra"
     else -> "Skill"
   }
 

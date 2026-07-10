@@ -58,7 +58,7 @@ afterEach(async () => {
 });
 
 async function writeSummary(summary: unknown) {
-  const outputDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-whatsapp-cli-"));
+  const outputDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-whatsapp-cli-"));
   tempDirs.push(outputDir);
   const summaryPath = path.join(outputDir, QA_EVIDENCE_FILENAME);
   await fs.writeFile(summaryPath, `${JSON.stringify(summary, null, 2)}\n`, "utf8");
@@ -67,7 +67,7 @@ async function writeSummary(summary: unknown) {
 
 function makeEvidenceSummary(status: "pass" | "fail" | "blocked" | "skipped") {
   return {
-    kind: "openclaw.qa.evidence-summary",
+    kind: "marketingclaw.qa.evidence-summary",
     schemaVersion: 2,
     generatedAt: "2026-05-01T00:00:00.000Z",
     evidenceMode: "full",
@@ -194,7 +194,7 @@ describe("WhatsApp QA CLI runtime", () => {
   it("rejects unknown mixed WhatsApp selections before starting canonical scenarios", async () => {
     await expect(
       runQaWhatsAppCommand({
-        repoRoot: "/tmp/openclaw-repo",
+        repoRoot: "/tmp/marketingclaw-repo",
         scenarioIds: ["whatsapp-help-command", "missing-whatsapp-scenario"],
       }),
     ).rejects.toThrow("unknown WhatsApp QA scenario id(s): missing-whatsapp-scenario");

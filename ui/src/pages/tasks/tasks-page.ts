@@ -11,7 +11,7 @@ import {
 import { hasOperatorWriteAccess } from "../../app/operator-access.ts";
 import { t } from "../../i18n/index.ts";
 import { searchForSession } from "../../lib/sessions/index.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { MarketingClawLightDomElement } from "../../lit/marketingclaw-element.ts";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
 import {
   applyTaskEvent,
@@ -29,7 +29,7 @@ function formatTaskError(error: unknown, fallback: string): string {
   return typeof error === "string" && error.trim() ? error.trim() : fallback;
 }
 
-class TasksPage extends OpenClawLightDomElement {
+class TasksPage extends MarketingClawLightDomElement {
   @consume({ context: applicationContext, subscribe: true })
   private context!: ApplicationContext;
 
@@ -259,6 +259,6 @@ class TasksPage extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-tasks-page")) {
-  customElements.define("openclaw-tasks-page", TasksPage);
+if (!customElements.get("marketingclaw-tasks-page")) {
+  customElements.define("marketingclaw-tasks-page", TasksPage);
 }

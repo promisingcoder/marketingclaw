@@ -1,13 +1,13 @@
-# Mattermost OpenClaw channel
+# Mattermost MarketingClaw channel
 
-Official OpenClaw channel plugin for Mattermost.
+Official MarketingClaw channel plugin for Mattermost.
 
 ## Install
 
 ```sh
-openclaw plugins install @openclaw/mattermost
+marketingclaw plugins install @marketingclaw/mattermost
 ```
 
 ## Docs
 
-See `docs/channels/mattermost.md` in the OpenClaw repository, or the published docs at `https://docs.openclaw.ai/channels/mattermost`.
+See `docs/channels/mattermost.md` in the MarketingClaw repository, or the published docs at `https://docs.marketingclaw.ai/channels/mattermost`.

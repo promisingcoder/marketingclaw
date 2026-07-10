@@ -28,7 +28,7 @@ describe("renderDiffDocument", () => {
     expect(rendered.title).toBe("src/example.ts");
     expect(rendered.fileCount).toBe(1);
     expect(rendered.viewerRuntime).toBe("base");
-    expect(rendered.html).toContain("data-openclaw-diff-root");
+    expect(rendered.html).toContain("data-marketingclaw-diff-root");
     expect(rendered.html).toContain("src/example.ts");
     expect(rendered.html).toContain("../../assets/viewer.js");
     expect(rendered.imageHtml).toContain("../../assets/viewer.js");
@@ -88,8 +88,9 @@ describe("renderDiffDocument", () => {
     const loaderSrc = html.match(/<script type="module" src="([^"]+)"><\/script>/)?.[1];
     expect(loaderSrc).toBe("../../assets/viewer.js");
     expect(
-      new URL(loaderSrc ?? "", "https://example.com/openclaw/plugins/diffs/view/id/token").pathname,
-    ).toBe("/openclaw/plugins/diffs/assets/viewer.js");
+      new URL(loaderSrc ?? "", "https://example.com/marketingclaw/plugins/diffs/view/id/token")
+        .pathname,
+    ).toBe("/marketingclaw/plugins/diffs/assets/viewer.js");
   });
 
   it("downgrades invalid language hints to plain text", async () => {
@@ -113,7 +114,7 @@ describe("renderDiffDocument", () => {
     expect(html).toContain("diff.txt");
     expect(html).not.toContain("not-a-real-language");
 
-    const payloads = [...html.matchAll(/data-openclaw-diff-payload>(.*?)<\/script>/g)].map(
+    const payloads = [...html.matchAll(/data-marketingclaw-diff-payload>(.*?)<\/script>/g)].map(
       (match) => parseViewerPayloadJson(match[1] ?? ""),
     );
     expect(payloads).toHaveLength(1);
@@ -140,7 +141,7 @@ describe("renderDiffDocument", () => {
 
     const html = rendered.html ?? "";
     const payload = parseViewerPayloadJson(
-      html.match(/data-openclaw-diff-payload>(.*?)<\/script>/)?.[1] ?? "",
+      html.match(/data-marketingclaw-diff-payload>(.*?)<\/script>/)?.[1] ?? "",
     );
 
     expect(rendered.viewerRuntime).toBe("base");
@@ -168,7 +169,7 @@ describe("renderDiffDocument", () => {
 
     const html = rendered.html ?? "";
     const payload = parseViewerPayloadJson(
-      html.match(/data-openclaw-diff-payload>(.*?)<\/script>/)?.[1] ?? "",
+      html.match(/data-marketingclaw-diff-payload>(.*?)<\/script>/)?.[1] ?? "",
     );
 
     expect(rendered.viewerRuntime).toBe("language-pack");

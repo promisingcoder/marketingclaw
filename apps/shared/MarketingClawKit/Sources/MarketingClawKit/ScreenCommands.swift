@@ -1,26 +1,26 @@
 import Foundation
 
-public enum OpenClawScreenCommand: String, Codable, Sendable {
+public enum MarketingClawScreenCommand: String, Codable, Sendable {
     case snapshot = "screen.snapshot"
     case record = "screen.record"
 }
 
-public enum OpenClawScreenSnapshotFormat: String, Codable, Sendable {
+public enum MarketingClawScreenSnapshotFormat: String, Codable, Sendable {
     case jpeg
     case png
 }
 
-public struct OpenClawScreenSnapshotParams: Codable, Sendable, Equatable {
+public struct MarketingClawScreenSnapshotParams: Codable, Sendable, Equatable {
     public var screenIndex: Int?
     public var maxWidth: Int?
     public var quality: Double?
-    public var format: OpenClawScreenSnapshotFormat?
+    public var format: MarketingClawScreenSnapshotFormat?
 
     public init(
         screenIndex: Int? = nil,
         maxWidth: Int? = nil,
         quality: Double? = nil,
-        format: OpenClawScreenSnapshotFormat? = nil)
+        format: MarketingClawScreenSnapshotFormat? = nil)
     {
         self.screenIndex = screenIndex
         self.maxWidth = maxWidth
@@ -29,7 +29,7 @@ public struct OpenClawScreenSnapshotParams: Codable, Sendable, Equatable {
     }
 }
 
-public struct OpenClawScreenRecordParams: Codable, Sendable, Equatable {
+public struct MarketingClawScreenRecordParams: Codable, Sendable, Equatable {
     public var screenIndex: Int?
     public var durationMs: Int?
     public var fps: Double?

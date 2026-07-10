@@ -148,7 +148,7 @@ function createContext(
 }
 
 async function createPage(context: ApplicationContext): Promise<TestSessionsPage> {
-  const page = document.createElement("openclaw-sessions-page") as TestSessionsPage;
+  const page = document.createElement("marketingclaw-sessions-page") as TestSessionsPage;
   page.context = context;
   page.render = () => nothing;
   document.body.append(page);
@@ -171,7 +171,7 @@ describe("sessions page lifecycle", () => {
     const freshResult = { count: 1, sessions: [{ key: "fresh" }] } as SessionsListResult;
     const sessions = createSessions({ list: vi.fn(async () => freshResult) });
     const context = createContext(mutableGateway.gateway, sessions);
-    const page = document.createElement("openclaw-sessions-page") as TestSessionsPage;
+    const page = document.createElement("marketingclaw-sessions-page") as TestSessionsPage;
     page.context = context;
     page.render = () => nothing;
     page.routeData = {

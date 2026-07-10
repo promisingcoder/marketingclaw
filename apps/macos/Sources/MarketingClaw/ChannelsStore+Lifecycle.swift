@@ -1,5 +1,5 @@
 import Foundation
-import OpenClawProtocol
+import MarketingClawProtocol
 
 func whatsappLoginWaitRequestTimeoutMs(
     startedAt: Date,

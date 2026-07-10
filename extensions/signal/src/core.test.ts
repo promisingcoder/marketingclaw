@@ -1,12 +1,12 @@
-import { buildExecApprovalPendingReplyPayload } from "openclaw/plugin-sdk/approval-reply-runtime";
+import { buildExecApprovalPendingReplyPayload } from "marketingclaw/plugin-sdk/approval-reply-runtime";
 // Signal tests cover core plugin behavior.
 import {
   createMessageReceiptFromOutboundResults,
   verifyChannelMessageAdapterCapabilityProofs,
-} from "openclaw/plugin-sdk/channel-outbound";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { createPluginSetupWizardStatus } from "openclaw/plugin-sdk/plugin-test-runtime";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
+} from "marketingclaw/plugin-sdk/channel-outbound";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import { createPluginSetupWizardStatus } from "marketingclaw/plugin-sdk/plugin-test-runtime";
+import type { ReplyPayload } from "marketingclaw/plugin-sdk/reply-runtime";
 import { describe, expect, it, vi } from "vitest";
 import {
   clearSignalApprovalReactionTargetsForTest,
@@ -227,7 +227,7 @@ describe("probeSignal", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       accountOverrides: {},
     });
 
@@ -253,7 +253,7 @@ describe("signal outbound", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       input: "signal:ops",
       normalized: "ops",
       preferredKind: "group",
@@ -277,7 +277,7 @@ describe("signal outbound", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       to: "signal:me",
       accountId: "default",
     });
@@ -312,7 +312,7 @@ describe("signal outbound", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       to: "signal:me",
       text: "approval",
       deps: { signal: send },
@@ -345,7 +345,7 @@ describe("signal outbound", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       to: "signal:ops",
       text: "approval",
       deps: { signal: send },
@@ -369,7 +369,7 @@ describe("signal outbound", () => {
 
     await expect(
       signalPlugin.outbound?.sendFormattedText?.({
-        cfg: {} as OpenClawConfig,
+        cfg: {} as MarketingClawConfig,
         to: "+15551234567",
         text: "a".repeat(5000),
         deps: { signal: send },
@@ -402,7 +402,7 @@ describe("signal outbound", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       to: "signal:ops",
       text: "approval",
       mediaUrl: "file:///tmp/signal-proof.png",
@@ -430,7 +430,7 @@ describe("signal outbound", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       to: "signal:home",
     });
 
@@ -453,7 +453,7 @@ describe("signal outbound", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       input: "signal:home",
       normalized: "home",
       preferredKind: "user",
@@ -473,7 +473,7 @@ describe("signal outbound", () => {
           defaultTo: "signal:home",
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     const defaultTo = signalPlugin.config.resolveDefaultTo?.({
       cfg,
@@ -505,7 +505,7 @@ describe("signal outbound", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       agentId: "main",
       target: "signal:ops",
       resolvedTarget: {
@@ -531,7 +531,7 @@ describe("signal outbound", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     await expect(
       signalPlugin.directory?.listPeers?.({ cfg, query: "me", runtime: {} as never }),
@@ -566,7 +566,7 @@ describe("signal outbound", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(resolveReplyToMode({ cfg, accountId: "work", chatType: "group" })).toBe("all");
     expect(resolveReplyToMode({ cfg, accountId: "work", chatType: "direct" })).toBe("off");
@@ -619,7 +619,7 @@ describe("signal outbound", () => {
               enabled: true,
             },
           },
-        } as OpenClawConfig,
+        } as MarketingClawConfig,
         accountId: "default",
         payload: {
           text: "Approval required.",
@@ -657,7 +657,7 @@ describe("signal outbound", () => {
           targets: [{ channel: "signal", to: "+15551230000" }],
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
     const payload = buildExecApprovalPendingReplyPayload({
       approvalId: "exec-after-delivery",
       approvalSlug: "exec-aft",
@@ -733,7 +733,7 @@ describe("signal outbound", () => {
           targets: [{ channel: "signal", to: "+15551230000" }],
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
     const payload = buildExecApprovalPendingReplyPayload({
       approvalId: "exec-rendered-approval",
       approvalSlug: "exec-ren",
@@ -805,7 +805,7 @@ describe("signal outbound", () => {
           targets: [{ channel: "signal", to: "+15551230000" }],
         },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
     const payload: ReplyPayload = {
       text: ["Exec approval required", "ID: exec-1"].join("\n"),
       channelData: {
@@ -888,7 +888,7 @@ describe("signal outbound", () => {
       proofs: {
         text: async () => {
           const result = await signalPlugin.message?.send?.text?.({
-            cfg: {} as OpenClawConfig,
+            cfg: {} as MarketingClawConfig,
             to: "signal:+15555550123",
             text: "hello",
             deps,
@@ -904,7 +904,7 @@ describe("signal outbound", () => {
         },
         media: async () => {
           const result = await signalPlugin.message?.send?.media?.({
-            cfg: {} as OpenClawConfig,
+            cfg: {} as MarketingClawConfig,
             to: "signal:+15555550123",
             text: "image",
             mediaUrl: "https://example.com/image.png",
@@ -1048,7 +1048,7 @@ describe("signal setup parsing", () => {
   });
 
   it("uses configured defaultAccount for omitted DM policy account context", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: MarketingClawConfig = {
       channels: {
         signal: {
           defaultAccount: "work",
@@ -1078,7 +1078,7 @@ describe("signal setup parsing", () => {
   });
 
   it('writes open policy state to the named account and stores inherited allowFrom with "*"', () => {
-    const cfg: OpenClawConfig = {
+    const cfg: MarketingClawConfig = {
       channels: {
         signal: {
           allowFrom: ["+15555550123"],

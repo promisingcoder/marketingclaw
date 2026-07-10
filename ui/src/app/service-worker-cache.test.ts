@@ -19,7 +19,7 @@ describe("Control UI service worker cache versioning", () => {
     expect(mainSource).toContain('navigator.serviceWorker.addEventListener("message"');
     expect(mainSource).toContain("event.data.version !== currentControlUiBuildId");
     expect(serviceWorkerSource).toContain(
-      'const EMBEDDED_CACHE_VERSION = "__OPENCLAW_CONTROL_UI_BUILD_ID__"',
+      'const EMBEDDED_CACHE_VERSION = "__MARKETINGCLAW_CONTROL_UI_BUILD_ID__"',
     );
     expect(serviceWorkerSource).toContain("URL_CACHE_VERSION");
     expect(serviceWorkerSource).toContain("CONTROL_CACHE_LIMIT = 3");
@@ -30,7 +30,7 @@ describe("Control UI service worker cache versioning", () => {
       'postMessage({ type: "sw-updated", version: CACHE_VERSION },',
     );
     expect(viteConfigSource).toContain("source.replace(placeholder, JSON.stringify(buildId))");
-    expect(serviceWorkerSource).not.toContain('const CACHE_NAME = "openclaw-control-v1"');
+    expect(serviceWorkerSource).not.toContain('const CACHE_NAME = "marketingclaw-control-v1"');
   });
 
   it("broadcasts updated versions to uncontrolled window clients during activation", async () => {
@@ -46,10 +46,10 @@ describe("Control UI service worker cache versioning", () => {
     const caches = {
       delete: cacheDelete,
       keys: vi.fn(async () => [
-        "openclaw-control-oldest",
-        "openclaw-control-older",
-        "openclaw-control-previous",
-        "openclaw-control-new-build",
+        "marketingclaw-control-oldest",
+        "marketingclaw-control-older",
+        "marketingclaw-control-previous",
+        "marketingclaw-control-new-build",
         "other-cache",
       ]),
       open: vi.fn(),
@@ -95,7 +95,7 @@ describe("Control UI service worker cache versioning", () => {
 
     expect(clients.matchAll).toHaveBeenCalledWith({ type: "window", includeUncontrolled: true });
     expect(clients.claim).toHaveBeenCalled();
-    expect(cacheDelete).toHaveBeenCalledWith("openclaw-control-oldest");
+    expect(cacheDelete).toHaveBeenCalledWith("marketingclaw-control-oldest");
     expect(windowClient.postMessage).toHaveBeenCalledWith({
       type: "sw-updated",
       version: "new-build",

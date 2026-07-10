@@ -5,7 +5,7 @@ import { forkSessionEntryFromParent } from "../auto-reply/reply/session-fork.js"
 import { resolveSessionWorkStartError } from "../config/sessions/lifecycle.js";
 import { parseSessionThreadInfoFast } from "../config/sessions/thread-info.js";
 import type { SessionEntry } from "../config/sessions/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import type { RuntimeLogger, PluginRuntimeCore } from "../plugins/runtime/types-core.js";
 import { parseAgentSessionKey } from "../routing/session-key.js";
 import { beginSessionWorkAdmission } from "../sessions/session-lifecycle-admission.js";
@@ -129,7 +129,7 @@ function resolveRealtimeVoiceAgentDeliveryContext(params: {
 
 async function resolveRealtimeVoiceAgentConsultSessionEntry(params: {
   agentId: string;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   sessionKey: string;
   spawnedBy?: string | null;
   contextMode?: RealtimeVoiceAgentConsultContextMode;
@@ -210,7 +210,7 @@ async function resolveRealtimeVoiceAgentConsultSessionEntry(params: {
  * Runs an embedded agent consult and returns concise speakable text for realtime voice playback.
  */
 export async function consultRealtimeVoiceAgent(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   agentRuntime: RealtimeVoiceAgentConsultRuntime;
   logger: Pick<RuntimeLogger, "warn">;
   sessionKey: string;
@@ -347,7 +347,7 @@ export async function consultRealtimeVoiceAgent(params: {
         lane: params.lane,
         extraSystemPrompt:
           params.extraSystemPrompt ??
-          "You are the configured OpenClaw agent receiving delegated requests from a live voice bridge. Act on behalf of the user, use available tools when appropriate, and return a brief speakable result.",
+          "You are the configured MarketingClaw agent receiving delegated requests from a live voice bridge. Act on behalf of the user, use available tools when appropriate, and return a brief speakable result.",
         agentDir,
         abortSignal: lifecycleAbortController.signal,
       });

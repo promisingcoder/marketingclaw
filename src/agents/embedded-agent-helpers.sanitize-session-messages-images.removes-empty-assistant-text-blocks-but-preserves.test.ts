@@ -1,7 +1,11 @@
 // Covers session-message sanitization for empty blocks, tool ids, and
 // thought-signature replay rules.
-import type { AgentMessage } from "openclaw/plugin-sdk/agent-core";
-import type { AssistantMessage, ToolResultMessage, UserMessage } from "openclaw/plugin-sdk/llm";
+import type { AgentMessage } from "marketingclaw/plugin-sdk/agent-core";
+import type {
+  AssistantMessage,
+  ToolResultMessage,
+  UserMessage,
+} from "marketingclaw/plugin-sdk/llm";
 import { describe, expect, it } from "vitest";
 import {
   sanitizeGoogleTurnOrdering,
@@ -348,7 +352,7 @@ describe("sanitizeSessionMessagesImages", () => {
 
   describe("thought_signature stripping", () => {
     it("strips msg_-prefixed thought_signature from assistant message content blocks", async () => {
-      // msg_ values are OpenClaw message ids, not provider signatures.
+      // msg_ values are MarketingClaw message ids, not provider signatures.
       const input = castAgentMessages([
         {
           role: "assistant",

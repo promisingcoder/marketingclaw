@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import JSZip from "jszip";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
+import type { RuntimeEnv } from "marketingclaw/plugin-sdk/runtime-env";
 import * as tar from "tar";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ReleaseAsset } from "./install-signal-cli.js";
@@ -15,19 +15,19 @@ const { fetchWithSsrFGuardMock, resolveBrewExecutableMock, runPluginCommandWithT
     runPluginCommandWithTimeoutMock: vi.fn(),
   }));
 
-vi.mock("openclaw/plugin-sdk/ssrf-runtime", () => ({
+vi.mock("marketingclaw/plugin-sdk/ssrf-runtime", () => ({
   fetchWithSsrFGuard: fetchWithSsrFGuardMock,
 }));
 
-vi.mock("openclaw/plugin-sdk/setup-tools", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/setup-tools")>();
+vi.mock("marketingclaw/plugin-sdk/setup-tools", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("marketingclaw/plugin-sdk/setup-tools")>();
   return {
     ...actual,
     resolveBrewExecutable: resolveBrewExecutableMock,
   };
 });
 
-vi.mock("openclaw/plugin-sdk/run-command", () => ({
+vi.mock("marketingclaw/plugin-sdk/run-command", () => ({
   runPluginCommandWithTimeout: runPluginCommandWithTimeoutMock,
 }));
 
@@ -80,7 +80,7 @@ function okDownloadResponse(body: BodyInit, init: ResponseInit = {}) {
 }
 
 async function withTempFile(run: (filePath: string) => Promise<void>) {
-  const workDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-signal-download-"));
+  const workDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-signal-download-"));
   try {
     await run(path.join(workDir, "signal-cli.tgz"));
   } finally {
@@ -365,7 +365,7 @@ describe("installSignalCliFromRelease", () => {
       auditContext: "signal-cli-release-info",
       init: {
         headers: {
-          "User-Agent": "openclaw",
+          "User-Agent": "marketingclaw",
           Accept: "application/vnd.github+json",
         },
       },
@@ -390,7 +390,7 @@ describe("installSignalCli", () => {
 
   it("uses Homebrew on macOS instead of downloading the first GitHub release archive", async () => {
     setProcessPlatform("darwin", "arm64");
-    const brewPrefix = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-signal-brew-"));
+    const brewPrefix = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-signal-brew-"));
     await fs.mkdir(path.join(brewPrefix, "bin"), { recursive: true });
     await fs.writeFile(path.join(brewPrefix, "bin", "signal-cli"), "");
     resolveBrewExecutableMock.mockReturnValue("/opt/homebrew/bin/brew");
@@ -416,7 +416,7 @@ describe("installSignalCli", () => {
 
 describe("extractSignalCliArchive", () => {
   async function withArchiveWorkspace(run: (workDir: string) => Promise<void>) {
-    const workDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-signal-install-"));
+    const workDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-signal-install-"));
     try {
       await run(workDir);
     } finally {

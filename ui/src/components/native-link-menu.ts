@@ -1,12 +1,12 @@
 import { html } from "lit";
 import { property } from "lit/decorators.js";
 import { t } from "../i18n/index.ts";
-import { OpenClawLightDomElement } from "../lit/openclaw-element.ts";
+import { MarketingClawLightDomElement } from "../lit/marketingclaw-element.ts";
 import { icons } from "./icons.ts";
 
 export type NativeLinkMenuAction = "inline" | "external" | "copy";
 
-export class NativeLinkMenu extends OpenClawLightDomElement {
+export class NativeLinkMenu extends MarketingClawLightDomElement {
   @property({ attribute: false }) x = 0;
   @property({ attribute: false }) y = 0;
   @property({ attribute: false }) trigger: HTMLAnchorElement | null = null;
@@ -98,6 +98,6 @@ export class NativeLinkMenu extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-native-link-menu")) {
-  customElements.define("openclaw-native-link-menu", NativeLinkMenu);
+if (!customElements.get("marketingclaw-native-link-menu")) {
+  customElements.define("marketingclaw-native-link-menu", NativeLinkMenu);
 }

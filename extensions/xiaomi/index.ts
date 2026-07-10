@@ -1,14 +1,14 @@
-// Xiaomi plugin entrypoint registers its OpenClaw integration.
-import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
+// Xiaomi plugin entrypoint registers its MarketingClaw integration.
+import { definePluginEntry } from "marketingclaw/plugin-sdk/plugin-entry";
 import type {
-  OpenClawConfig,
+  MarketingClawConfig,
   ProviderAuthContext,
   ProviderAuthMethod,
   ProviderAuthMethodNonInteractiveContext,
   ProviderCatalogContext,
   ProviderAuthResult,
   ProviderRuntimeModel,
-} from "openclaw/plugin-sdk/plugin-entry";
+} from "marketingclaw/plugin-sdk/plugin-entry";
 import {
   applyAuthProfileConfig,
   buildApiKeyCredential,
@@ -18,12 +18,12 @@ import {
   type SecretInput,
   upsertAuthProfileWithLock,
   validateApiKeyInput,
-} from "openclaw/plugin-sdk/provider-auth-api-key";
+} from "marketingclaw/plugin-sdk/provider-auth-api-key";
 import {
   applyModelCompatPatch,
   buildProviderReplayFamilyHooks,
-} from "openclaw/plugin-sdk/provider-model-shared";
-import { PROVIDER_LABELS } from "openclaw/plugin-sdk/provider-usage";
+} from "marketingclaw/plugin-sdk/provider-model-shared";
+import { PROVIDER_LABELS } from "marketingclaw/plugin-sdk/provider-usage";
 import {
   applyXiaomiConfig,
   applyXiaomiTokenPlanConfig,
@@ -177,7 +177,7 @@ async function runXiaomiApiKeyAuth(
     promptMessage: string;
     expectedKind: "payg" | "token-plan";
     defaultModel: string;
-    applyConfig: (cfg: OpenClawConfig) => OpenClawConfig;
+    applyConfig: (cfg: MarketingClawConfig) => MarketingClawConfig;
   },
 ): Promise<ProviderAuthResult> {
   let capturedSecretInput: SecretInput | undefined;
@@ -243,7 +243,7 @@ async function runXiaomiApiKeyAuthNonInteractive(
     flagName: `--${string}`;
     envVar: string;
     expectedKind: "payg" | "token-plan";
-    applyConfig: (cfg: OpenClawConfig) => OpenClawConfig;
+    applyConfig: (cfg: MarketingClawConfig) => MarketingClawConfig;
   },
 ) {
   const resolved = await ctx.resolveApiKey({

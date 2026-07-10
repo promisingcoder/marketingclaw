@@ -2,16 +2,16 @@
 import {
   resolveInlineImageJsonResponseMaxBytes,
   type ImageGenerationProvider,
-} from "openclaw/plugin-sdk/image-generation";
-import { canonicalizeBase64, MAX_IMAGE_BYTES } from "openclaw/plugin-sdk/media-runtime";
-import { isProviderApiKeyConfigured } from "openclaw/plugin-sdk/provider-auth";
-import { resolveApiKeyForProvider } from "openclaw/plugin-sdk/provider-auth-runtime";
+} from "marketingclaw/plugin-sdk/image-generation";
+import { canonicalizeBase64, MAX_IMAGE_BYTES } from "marketingclaw/plugin-sdk/media-runtime";
+import { isProviderApiKeyConfigured } from "marketingclaw/plugin-sdk/provider-auth";
+import { resolveApiKeyForProvider } from "marketingclaw/plugin-sdk/provider-auth-runtime";
 import {
   assertOkOrThrowHttpError,
   postJsonRequest,
   readProviderJsonResponse,
   resolveProviderHttpRequestConfig,
-} from "openclaw/plugin-sdk/provider-http";
+} from "marketingclaw/plugin-sdk/provider-http";
 
 const DEFAULT_MINIMAX_IMAGE_BASE_URL = "https://api.minimax.io";
 const CN_MINIMAX_IMAGE_BASE_URL = "https://api.minimaxi.com";

@@ -25,8 +25,8 @@ type AimockRequestSnapshot = {
 
 // Runtime-context delimiters are owned by src/agents/internal-runtime-context.ts.
 // This mock mirrors the wire shape so delimiter drift fails through QA timeouts.
-const INTERNAL_RUNTIME_CONTEXT_BEGIN = "<<<BEGIN_OPENCLAW_INTERNAL_CONTEXT>>>";
-const INTERNAL_RUNTIME_CONTEXT_END = "<<<END_OPENCLAW_INTERNAL_CONTEXT>>>";
+const INTERNAL_RUNTIME_CONTEXT_BEGIN = "<<<BEGIN_MARKETINGCLAW_INTERNAL_CONTEXT>>>";
+const INTERNAL_RUNTIME_CONTEXT_END = "<<<END_MARKETINGCLAW_INTERNAL_CONTEXT>>>";
 
 function stringifyContent(content: unknown): string {
   if (typeof content === "string") {

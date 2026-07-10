@@ -1,5 +1,5 @@
 import Foundation
-import OpenClawKit
+import MarketingClawKit
 import Testing
 
 struct ComputerInputGeometryTests {
@@ -7,9 +7,9 @@ struct ComputerInputGeometryTests {
         originX: Double = 0,
         originY: Double = 0,
         width: Double,
-        height: Double) -> OpenClawComputerDisplayGeometry
+        height: Double) -> MarketingClawComputerDisplayGeometry
     {
-        OpenClawComputerDisplayGeometry(
+        MarketingClawComputerDisplayGeometry(
             originX: originX,
             originY: originY,
             widthPoints: width,
@@ -17,7 +17,7 @@ struct ComputerInputGeometryTests {
     }
 
     private func capturedWidth(refWidth: Int?, sourceWidth: Double, sourceHeight: Double = 0) -> Double {
-        OpenClawComputerInputGeometry.capturedWidth(
+        MarketingClawComputerInputGeometry.capturedWidth(
             refWidth: refWidth,
             sourceWidth: sourceWidth,
             sourceHeight: sourceHeight)
@@ -28,7 +28,7 @@ struct ComputerInputGeometryTests {
         // a 1280pt display → 1:1.
         let captured = self.capturedWidth(refWidth: 1280, sourceWidth: 1280)
         #expect(captured == 1280)
-        let mapped = OpenClawComputerInputGeometry.mapReferencePointToGlobal(
+        let mapped = MarketingClawComputerInputGeometry.mapReferencePointToGlobal(
             x: 100,
             y: 200,
             capturedWidthPixels: captured,
@@ -42,7 +42,7 @@ struct ComputerInputGeometryTests {
         // full source width, so mapping over a matching-point display stays 1:1.
         let captured = self.capturedWidth(refWidth: 4000, sourceWidth: 1512)
         #expect(captured == 1512)
-        let mapped = OpenClawComputerInputGeometry.mapReferencePointToGlobal(
+        let mapped = MarketingClawComputerInputGeometry.mapReferencePointToGlobal(
             x: 300,
             y: 150,
             capturedWidthPixels: captured,
@@ -56,7 +56,7 @@ struct ComputerInputGeometryTests {
         // refWidth 1280 → captured 1280px, scale 2x.
         let captured = self.capturedWidth(refWidth: 1280, sourceWidth: 2560)
         #expect(captured == 1280)
-        let mapped = OpenClawComputerInputGeometry.mapReferencePointToGlobal(
+        let mapped = MarketingClawComputerInputGeometry.mapReferencePointToGlobal(
             x: 100,
             y: 50,
             capturedWidthPixels: captured,
@@ -71,7 +71,7 @@ struct ComputerInputGeometryTests {
         // 1280px screenshot must map back onto the 1024pt display (scale 0.8).
         let captured = self.capturedWidth(refWidth: 1280, sourceWidth: 2048)
         #expect(captured == 1280)
-        let mapped = OpenClawComputerInputGeometry.mapReferencePointToGlobal(
+        let mapped = MarketingClawComputerInputGeometry.mapReferencePointToGlobal(
             x: 1280,
             y: 0,
             capturedWidthPixels: captured,
@@ -82,7 +82,7 @@ struct ComputerInputGeometryTests {
 
     @Test func `adds display origin after scaling`() {
         let captured = self.capturedWidth(refWidth: 1280, sourceWidth: 2560)
-        let mapped = OpenClawComputerInputGeometry.mapReferencePointToGlobal(
+        let mapped = MarketingClawComputerInputGeometry.mapReferencePointToGlobal(
             x: 100,
             y: 0,
             capturedWidthPixels: captured,
@@ -100,7 +100,7 @@ struct ComputerInputGeometryTests {
         #expect(captured == 720)
         // The 720px-wide delivered frame maps back onto the 1080pt portrait
         // display (scale 1.5), so replayed coordinates land on target.
-        let mapped = OpenClawComputerInputGeometry.mapReferencePointToGlobal(
+        let mapped = MarketingClawComputerInputGeometry.mapReferencePointToGlobal(
             x: 360,
             y: 0,
             capturedWidthPixels: captured,
@@ -120,18 +120,18 @@ struct ComputerInputGeometryTests {
         let display = self.display(originX: 100, originY: 200, width: 1280, height: 800)
         // The far right/bottom edge maps to origin + size, which belongs to the
         // adjacent display; clamp keeps it on the last in-bounds point.
-        let farEdge = OpenClawComputerInputGeometry.clampToDisplay(
+        let farEdge = MarketingClawComputerInputGeometry.clampToDisplay(
             x: 100 + 1280,
             y: 200 + 800,
             display: display)
         #expect(farEdge.x == 100 + 1279)
         #expect(farEdge.y == 200 + 799)
         // A slightly-negative epsilon overrun clamps back to the origin.
-        let negative = OpenClawComputerInputGeometry.clampToDisplay(x: 99, y: 199, display: display)
+        let negative = MarketingClawComputerInputGeometry.clampToDisplay(x: 99, y: 199, display: display)
         #expect(negative.x == 100)
         #expect(negative.y == 200)
         // A point already inside is unchanged.
-        let inside = OpenClawComputerInputGeometry.clampToDisplay(x: 640, y: 400, display: display)
+        let inside = MarketingClawComputerInputGeometry.clampToDisplay(x: 640, y: 400, display: display)
         #expect(inside.x == 640)
         #expect(inside.y == 400)
     }
@@ -145,7 +145,7 @@ struct ComputerInputGeometryTests {
     }
 
     @Test func `falls back to origin for degenerate display`() {
-        let mapped = OpenClawComputerInputGeometry.mapReferencePointToGlobal(
+        let mapped = MarketingClawComputerInputGeometry.mapReferencePointToGlobal(
             x: 42,
             y: 42,
             capturedWidthPixels: 0,
@@ -159,7 +159,7 @@ struct ComputerInputGeometryTests {
         {"action":"left_click","x":12,"y":34,"modifiers":"shift","screenIndex":0,"refWidth":1280}
         """
         let data = try #require(json.data(using: .utf8))
-        let params = try JSONDecoder().decode(OpenClawComputerActParams.self, from: data)
+        let params = try JSONDecoder().decode(MarketingClawComputerActParams.self, from: data)
         #expect(params.action == .leftClick)
         #expect(params.x == 12)
         #expect(params.modifiers == "shift")
@@ -169,14 +169,14 @@ struct ComputerInputGeometryTests {
     @Test func `decodes scroll and hold actions`() throws {
         let scroll = try #require(
             "{\"action\":\"scroll\",\"scrollDirection\":\"down\",\"scrollAmount\":3}".data(using: .utf8))
-        let scrollParams = try JSONDecoder().decode(OpenClawComputerActParams.self, from: scroll)
+        let scrollParams = try JSONDecoder().decode(MarketingClawComputerActParams.self, from: scroll)
         #expect(scrollParams.action == .scroll)
         #expect(scrollParams.scrollDirection == .down)
         #expect(scrollParams.scrollAmount == 3)
 
         let hold = try #require(
             "{\"action\":\"hold_key\",\"keys\":\"space\",\"durationMs\":2000}".data(using: .utf8))
-        let holdParams = try JSONDecoder().decode(OpenClawComputerActParams.self, from: hold)
+        let holdParams = try JSONDecoder().decode(MarketingClawComputerActParams.self, from: hold)
         #expect(holdParams.action == .holdKey)
         #expect(holdParams.keys == "space")
         #expect(holdParams.durationMs == 2000)

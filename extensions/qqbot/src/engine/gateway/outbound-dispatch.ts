@@ -10,12 +10,18 @@
  * Separated from gateway.ts for testability and to keep handleMessage thin.
  */
 
-import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "openclaw/plugin-sdk/agent-runtime";
-import { buildChannelInboundEventContext } from "openclaw/plugin-sdk/channel-inbound";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { isSilentReplyPayloadText, SILENT_REPLY_TOKEN } from "openclaw/plugin-sdk/reply-chunking";
-import type { FinalizedMsgContext } from "openclaw/plugin-sdk/reply-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+import {
+  resolveAgentWorkspaceDir,
+  resolveDefaultAgentId,
+} from "marketingclaw/plugin-sdk/agent-runtime";
+import { buildChannelInboundEventContext } from "marketingclaw/plugin-sdk/channel-inbound";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import {
+  isSilentReplyPayloadText,
+  SILENT_REPLY_TOKEN,
+} from "marketingclaw/plugin-sdk/reply-chunking";
+import type { FinalizedMsgContext } from "marketingclaw/plugin-sdk/reply-runtime";
+import { truncateUtf16Safe } from "marketingclaw/plugin-sdk/text-utility-runtime";
 import { createQQBotMarkdownChunker } from "../messaging/markdown-table-chunking.js";
 import {
   parseAndSendMediaTags,
@@ -139,9 +145,9 @@ export async function dispatchOutbound(
   const { runtime, cfg, account, log } = deps;
   const { event, qualifiedTarget } = inbound;
 
-  const openClawCfg = cfg as OpenClawConfig;
-  const routeAgentId = inbound.route.agentId ?? resolveDefaultAgentId(openClawCfg);
-  const workspaceDir = resolveAgentWorkspaceDir(openClawCfg, routeAgentId);
+  const marketingClawCfg = cfg as MarketingClawConfig;
+  const routeAgentId = inbound.route.agentId ?? resolveDefaultAgentId(marketingClawCfg);
+  const workspaceDir = resolveAgentWorkspaceDir(marketingClawCfg, routeAgentId);
   const gatewayMediaContext = workspaceDir
     ? { mediaAccess: { workspaceDir }, mediaLocalRoots: [workspaceDir] }
     : {};
@@ -795,7 +801,7 @@ async function buildCtxPayload(
       id: inbound.peerId,
     },
     route: {
-      agentId: inbound.route.agentId ?? resolveDefaultAgentId(cfg as OpenClawConfig),
+      agentId: inbound.route.agentId ?? resolveDefaultAgentId(cfg as MarketingClawConfig),
       routeSessionKey: inbound.route.sessionKey,
       accountId: inbound.route.accountId,
     },

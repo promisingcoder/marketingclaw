@@ -1,8 +1,8 @@
-package ai.openclaw.app.node
+package ai.marketingclaw.app.node
 
-import ai.openclaw.app.BuildConfig
-import ai.openclaw.app.CameraHudKind
-import ai.openclaw.app.gateway.GatewaySession
+import ai.marketingclaw.app.BuildConfig
+import ai.marketingclaw.app.CameraHudKind
+import ai.marketingclaw.app.gateway.GatewaySession
 import android.content.Context
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
@@ -68,7 +68,7 @@ class CameraHandler(
       if (!BuildConfig.DEBUG) return
       val ts = java.text.SimpleDateFormat("HH:mm:ss.SSS", java.util.Locale.US).format(java.util.Date())
       logFile?.appendText("[$ts] $msg\n")
-      android.util.Log.w("openclaw", "camera.snap: $msg")
+      android.util.Log.w("marketingclaw", "camera.snap: $msg")
     }
     try {
       logFile?.writeText("") // clear
@@ -110,7 +110,7 @@ class CameraHandler(
       if (!BuildConfig.DEBUG) return
       val ts = java.text.SimpleDateFormat("HH:mm:ss.SSS", java.util.Locale.US).format(java.util.Date())
       clipLogFile?.appendText("[CLIP $ts] $msg\n")
-      android.util.Log.w("openclaw", "camera.clip: $msg")
+      android.util.Log.w("marketingclaw", "camera.clip: $msg")
     }
     val includeAudio = parseIncludeAudio(paramsJson) ?: true
     if (includeAudio) externalAudioCaptureActive.value = true

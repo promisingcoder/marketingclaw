@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/microsoft-foundry",
+  "name": "@marketingclaw/microsoft-foundry",
   "version": "2026.6.11",
   "private": true,
-  "description": "OpenClaw Microsoft Foundry provider plugin",
+  "description": "MarketingClaw Microsoft Foundry provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@marketingclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "marketingclaw": {
     "extensions": [
       "./index.ts"
     ]

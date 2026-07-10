@@ -4,22 +4,22 @@
 
 #include "build/Version.xcconfig"
 
-OPENCLAW_CODE_SIGN_STYLE = Manual
-OPENCLAW_CODE_SIGN_IDENTITY = Apple Development
-OPENCLAW_CODE_SIGN_ENTITLEMENTS = Sources/OpenClaw.entitlements
-OPENCLAW_DEVELOPMENT_TEAM = FWJYW4S8P8
+MARKETINGCLAW_CODE_SIGN_STYLE = Manual
+MARKETINGCLAW_CODE_SIGN_IDENTITY = Apple Development
+MARKETINGCLAW_CODE_SIGN_ENTITLEMENTS = Sources/MarketingClaw.entitlements
+MARKETINGCLAW_DEVELOPMENT_TEAM = FWJYW4S8P8
 
-OPENCLAW_APP_BUNDLE_ID = ai.openclawfoundation.app
-OPENCLAW_SHARE_BUNDLE_ID = ai.openclawfoundation.app.share
-OPENCLAW_APP_GROUP_ID = group.ai.openclawfoundation.app.shared
-OPENCLAW_WATCH_APP_BUNDLE_ID = ai.openclawfoundation.app.watchkitapp
-OPENCLAW_ACTIVITY_WIDGET_BUNDLE_ID = ai.openclawfoundation.app.activitywidget
-OPENCLAW_APNS_ENTITLEMENT_ENVIRONMENT = development
+MARKETINGCLAW_APP_BUNDLE_ID = ai.marketingclaw.app
+MARKETINGCLAW_SHARE_BUNDLE_ID = ai.marketingclaw.app.share
+MARKETINGCLAW_APP_GROUP_ID = group.ai.marketingclaw.app.shared
+MARKETINGCLAW_WATCH_APP_BUNDLE_ID = ai.marketingclaw.app.watchkitapp
+MARKETINGCLAW_ACTIVITY_WIDGET_BUNDLE_ID = ai.marketingclaw.app.activitywidget
+MARKETINGCLAW_APNS_ENTITLEMENT_ENVIRONMENT = development
 
-OPENCLAW_APP_PROFILE = ai.openclawfoundation.app Development
-OPENCLAW_SHARE_PROFILE = ai.openclawfoundation.app.share Development
-OPENCLAW_ACTIVITY_WIDGET_PROFILE =
-OPENCLAW_WATCH_APP_PROFILE =
+MARKETINGCLAW_APP_PROFILE = ai.marketingclaw.app Development
+MARKETINGCLAW_SHARE_PROFILE = ai.marketingclaw.app.share Development
+MARKETINGCLAW_ACTIVITY_WIDGET_PROFILE =
+MARKETINGCLAW_WATCH_APP_PROFILE =
 
 // Keep local includes after defaults: xcconfig is evaluated top-to-bottom,
 // so later assignments in local files override the defaults above.
@@ -27,8 +27,8 @@ OPENCLAW_WATCH_APP_PROFILE =
 #include? "LocalSigning.xcconfig"
 
 // Debug products install alongside release products and keep their app-group data separate.
-OPENCLAW_DEBUG_APP_BUNDLE_ID = $(OPENCLAW_APP_BUNDLE_ID).debug
-OPENCLAW_DEBUG_SHARE_BUNDLE_ID = $(OPENCLAW_DEBUG_APP_BUNDLE_ID).share
-OPENCLAW_DEBUG_ACTIVITY_WIDGET_BUNDLE_ID = $(OPENCLAW_DEBUG_APP_BUNDLE_ID).activitywidget
-OPENCLAW_DEBUG_WATCH_APP_BUNDLE_ID = $(OPENCLAW_DEBUG_APP_BUNDLE_ID).watchkitapp
-OPENCLAW_DEBUG_APP_GROUP_ID = $(OPENCLAW_APP_GROUP_ID).debug
+MARKETINGCLAW_DEBUG_APP_BUNDLE_ID = $(MARKETINGCLAW_APP_BUNDLE_ID).debug
+MARKETINGCLAW_DEBUG_SHARE_BUNDLE_ID = $(MARKETINGCLAW_DEBUG_APP_BUNDLE_ID).share
+MARKETINGCLAW_DEBUG_ACTIVITY_WIDGET_BUNDLE_ID = $(MARKETINGCLAW_DEBUG_APP_BUNDLE_ID).activitywidget
+MARKETINGCLAW_DEBUG_WATCH_APP_BUNDLE_ID = $(MARKETINGCLAW_DEBUG_APP_BUNDLE_ID).watchkitapp
+MARKETINGCLAW_DEBUG_APP_GROUP_ID = $(MARKETINGCLAW_APP_GROUP_ID).debug

@@ -1,10 +1,10 @@
 // Imported CLI history merge helpers.
-// Deduplicates external history messages against local OpenClaw transcripts.
-import { asFiniteNumber } from "@openclaw/normalization-core/number-coercion";
+// Deduplicates external history messages against local MarketingClaw transcripts.
+import { asFiniteNumber } from "@marketingclaw/normalization-core/number-coercion";
 import {
   normalizeOptionalString,
   readStringValue,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@marketingclaw/normalization-core/string-coerce";
 import { stripInboundMetadata } from "../auto-reply/reply/strip-inbound-meta.js";
 
 const DEDUPE_TIMESTAMP_WINDOW_MS = 5 * 60 * 1000;
@@ -72,10 +72,10 @@ function resolveImportedExternalIdentity(message: unknown): ImportedExternalIden
     return undefined;
   }
   const meta =
-    "__openclaw" in message &&
-    (message as { __openclaw?: unknown })["__openclaw"] &&
-    typeof (message as { __openclaw?: unknown })["__openclaw"] === "object"
-      ? ((message as { __openclaw?: Record<string, unknown> })["__openclaw"] ?? {})
+    "__marketingclaw" in message &&
+    (message as { __marketingclaw?: unknown })["__marketingclaw"] &&
+    typeof (message as { __marketingclaw?: unknown })["__marketingclaw"] === "object"
+      ? ((message as { __marketingclaw?: Record<string, unknown> })["__marketingclaw"] ?? {})
       : undefined;
   const externalId = normalizeOptionalString(meta?.externalId);
   return externalId

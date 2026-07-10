@@ -283,7 +283,7 @@ class ProfilePage extends LitElement {
         <div class="profile-hero__name">${name}</div>
         <div class="profile-hero__handle">
           <span>@${agentId}</span>
-          <span class="profile-hero__badge">OpenClaw</span>
+          <span class="profile-hero__badge">MarketingClaw</span>
         </div>
         <div class="profile-hero__chips">
           ${since
@@ -549,4 +549,4 @@ class ProfilePage extends LitElement {
   }
 }
 
-customElements.define("openclaw-profile-page", ProfilePage);
+customElements.define("marketingclaw-profile-page", ProfilePage);

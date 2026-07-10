@@ -4,7 +4,7 @@ import Foundation
 /// action per invoke; pointer coordinates are in reference-screenshot pixels
 /// (the `screen.snapshot` frame captured at `maxWidth == refWidth`), which the
 /// fulfilling node maps back to display points.
-public enum OpenClawComputerCommand: String, Codable, Sendable {
+public enum MarketingClawComputerCommand: String, Codable, Sendable {
     case act = "computer.act"
 }
 
@@ -12,7 +12,7 @@ public enum OpenClawComputerCommand: String, Codable, Sendable {
 /// onto the embedded Peekaboo automation engine plus a narrow CoreGraphics
 /// path for primitives Peekaboo does not express (middle/triple click,
 /// separate mouse down/up, modifier-held clicks/scroll).
-public enum OpenClawComputerAction: String, Codable, Sendable {
+public enum MarketingClawComputerAction: String, Codable, Sendable {
     case leftClick = "left_click"
     case rightClick = "right_click"
     case middleClick = "middle_click"
@@ -28,7 +28,7 @@ public enum OpenClawComputerAction: String, Codable, Sendable {
     case holdKey = "hold_key"
 }
 
-public enum OpenClawComputerScrollDirection: String, Codable, Sendable {
+public enum MarketingClawComputerScrollDirection: String, Codable, Sendable {
     case up
     case down
     case left
@@ -38,8 +38,8 @@ public enum OpenClawComputerScrollDirection: String, Codable, Sendable {
 /// Wire params for `computer.act`. All coordinate fields are reference-screenshot
 /// pixels at `refWidth`; `keys` is a chord for key/hold_key; `modifiers` are
 /// modifier keys held during pointer actions; `scrollAmount` is wheel ticks.
-public struct OpenClawComputerActParams: Codable, Sendable, Equatable {
-    public var action: OpenClawComputerAction
+public struct MarketingClawComputerActParams: Codable, Sendable, Equatable {
+    public var action: MarketingClawComputerAction
     public var x: Double?
     public var y: Double?
     public var fromX: Double?
@@ -47,14 +47,14 @@ public struct OpenClawComputerActParams: Codable, Sendable, Equatable {
     public var text: String?
     public var keys: String?
     public var modifiers: String?
-    public var scrollDirection: OpenClawComputerScrollDirection?
+    public var scrollDirection: MarketingClawComputerScrollDirection?
     public var scrollAmount: Int?
     public var durationMs: Int?
     public var screenIndex: Int?
     public var refWidth: Int?
 
     public init(
-        action: OpenClawComputerAction,
+        action: MarketingClawComputerAction,
         x: Double? = nil,
         y: Double? = nil,
         fromX: Double? = nil,
@@ -62,7 +62,7 @@ public struct OpenClawComputerActParams: Codable, Sendable, Equatable {
         text: String? = nil,
         keys: String? = nil,
         modifiers: String? = nil,
-        scrollDirection: OpenClawComputerScrollDirection? = nil,
+        scrollDirection: MarketingClawComputerScrollDirection? = nil,
         scrollAmount: Int? = nil,
         durationMs: Int? = nil,
         screenIndex: Int? = nil,
@@ -85,7 +85,7 @@ public struct OpenClawComputerActParams: Codable, Sendable, Equatable {
 }
 
 /// Result of a `computer.act` input action.
-public struct OpenClawComputerActResult: Codable, Sendable, Equatable {
+public struct MarketingClawComputerActResult: Codable, Sendable, Equatable {
     public var ok: Bool
     public var cursorX: Double
     public var cursorY: Double

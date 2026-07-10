@@ -1,8 +1,8 @@
 // Discord plugin module implements native command status behavior.
-import { resolveDirectStatusReplyForSession } from "openclaw/plugin-sdk/command-status-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolveChunkMode, resolveTextChunkLimit } from "openclaw/plugin-sdk/reply-chunking";
-import type { ResolvedAgentRoute } from "openclaw/plugin-sdk/routing";
+import { resolveDirectStatusReplyForSession } from "marketingclaw/plugin-sdk/command-status-runtime";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import { resolveChunkMode, resolveTextChunkLimit } from "marketingclaw/plugin-sdk/reply-chunking";
+import type { ResolvedAgentRoute } from "marketingclaw/plugin-sdk/routing";
 import { resolveDiscordMaxLinesPerMessage } from "../accounts.js";
 import type {
   ButtonInteraction,
@@ -22,7 +22,7 @@ export async function maybeDeliverDiscordDirectStatus(params: {
   commandName: string;
   suppressReplies?: boolean;
   resolveDirectStatusReplyForSession: ResolveDirectStatusReplyForSession;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   discordConfig: DiscordConfig;
   accountId: string;
   sessionKey: string;

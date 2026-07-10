@@ -1,22 +1,22 @@
 {
-  "name": "@openclaw/groq-provider",
+  "name": "@marketingclaw/groq-provider",
   "version": "2026.6.11",
-  "description": "OpenClaw Groq media-understanding provider.",
+  "description": "MarketingClaw Groq media-understanding provider.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/promisingcoder/marketingclaw"
   },
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@marketingclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "marketingclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@openclaw/groq-provider",
-      "npmSpec": "@openclaw/groq-provider",
+      "clawhubSpec": "clawhub:@marketingclaw/groq-provider",
+      "npmSpec": "@marketingclaw/groq-provider",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.6.8"
     },
@@ -24,7 +24,7 @@
       "pluginApi": ">=2026.6.11"
     },
     "build": {
-      "openclawVersion": "2026.6.11",
+      "marketingclawVersion": "2026.6.11",
       "bundledDist": false
     },
     "release": {

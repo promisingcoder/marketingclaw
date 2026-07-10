@@ -1867,7 +1867,7 @@ export function renderConfig(props: ConfigProps) {
                                   >${sensitiveCount} secret${sensitiveCount === 1 ? "" : "s"}
                                   ${blurred ? "redacted" : "visible"}</span
                                 >
-                                <openclaw-tooltip
+                                <marketingclaw-tooltip
                                   .content=${blurred
                                     ? "Reveal sensitive values"
                                     : "Hide sensitive values"}
@@ -1885,7 +1885,7 @@ export function renderConfig(props: ConfigProps) {
                                   >
                                     ${blurred ? icons.eyeOff : icons.eye}
                                   </button>
-                                </openclaw-tooltip>
+                                </marketingclaw-tooltip>
                               `
                             : nothing}
                         </span>

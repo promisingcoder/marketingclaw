@@ -3,14 +3,14 @@ summary: "Progress drafts: one visible work-in-progress message that updates whi
 read_when:
   - Configuring visible progress updates for long-running chat turns
   - Choosing between partial, block, and progress streaming modes
-  - Explaining how OpenClaw updates one channel message while work is in progress
+  - Explaining how MarketingClaw updates one channel message while work is in progress
   - Troubleshooting progress drafts, standalone progress messages, or finalization fallback
 title: "Progress drafts"
 ---
 
 Progress drafts turn one channel message into a live status line while an
 agent works, instead of a stack of temporary "still working" replies. Set
-`channels.<channel>.streaming.mode: "progress"` and OpenClaw creates the
+`channels.<channel>.streaming.mode: "progress"` and MarketingClaw creates the
 message once real work starts, edits it as the agent reads, plans, calls
 tools, or waits for approval, then turns it into the final answer.
 
@@ -67,7 +67,7 @@ appears only for real work updates, for example `🛠️ Bash: run tests`,
 `🔎 Web Search: for "discord edit message"`, or `✍️ Write: to /tmp/file`.
 
 The final answer replaces the draft in place when the channel can safely do
-that; otherwise OpenClaw sends the final answer through normal delivery and
+that; otherwise MarketingClaw sends the final answer through normal delivery and
 cleans up or stops updating the draft (see [Finalization](#finalization)).
 
 ## Choose a mode
@@ -91,7 +91,7 @@ block-reply delivery — use `streaming.block.enabled` (or legacy
 ## Configure labels
 
 Progress labels live under `channels.<channel>.streaming.progress`. The
-default `label` is `"auto"`, which picks from OpenClaw's built-in single-word
+default `label` is `"auto"`, which picks from MarketingClaw's built-in single-word
 label pool:
 
 ```text
@@ -175,7 +175,7 @@ empty model content and explicit public channel metadata:
 }
 ```
 
-OpenClaw renders only `progress.text` in the channel progress UI. The normal
+MarketingClaw renders only `progress.text` in the channel progress UI. The normal
 tool result still arrives later as `content`/`details` and is the only part
 returned to the model.
 
@@ -205,7 +205,7 @@ fetched content, command output, or page text.
 
 ### Detail mode
 
-OpenClaw uses the same formatter for progress drafts and `/verbose`:
+MarketingClaw uses the same formatter for progress drafts and `/verbose`:
 
 ```json5
 {
@@ -277,7 +277,7 @@ Limit how many lines stay visible (default 8):
 ```
 
 Progress lines are compacted automatically to reduce chat-bubble reflow while
-the draft is edited, and OpenClaw truncates long lines so repeated draft edits
+the draft is edited, and MarketingClaw truncates long lines so repeated draft edits
 do not wrap differently on every update. The default per-line budget is 120
 characters; prose cuts at a word boundary, while long details such as paths or
 raw commands are shortened with a middle ellipsis so the suffix stays visible.
@@ -342,7 +342,7 @@ Keep the single progress draft but hide tool and task lines:
 }
 ```
 
-With `toolProgress: false`, OpenClaw still suppresses the older standalone
+With `toolProgress: false`, MarketingClaw still suppresses the older standalone
 tool-progress messages for that turn — the channel stays visually quiet until
 the final answer, except for the label if one is configured.
 
@@ -363,13 +363,13 @@ full runtime-behavior breakdown per channel.
 
 ## Finalization
 
-When the final answer is ready, OpenClaw tries to keep the chat clean:
+When the final answer is ready, MarketingClaw tries to keep the chat clean:
 
-- If the draft can safely become the final answer, OpenClaw edits it in place.
-- If the channel uses native progress streaming, OpenClaw finalizes that
+- If the draft can safely become the final answer, MarketingClaw edits it in place.
+- If the channel uses native progress streaming, MarketingClaw finalizes that
   stream when the native transport accepts the final text.
 - Otherwise (media, an approval prompt, an explicit reply target, too many
-  chunks, or a failed edit/send) OpenClaw sends the final answer through the
+  chunks, or a failed edit/send) MarketingClaw sends the final answer through the
   normal channel delivery path instead of overwriting the draft.
 
 The fallback is intentional: sending a fresh final answer beats losing text,
@@ -387,7 +387,7 @@ message.
 
 **I see the label but no tool lines.**
 
-Check `streaming.progress.toolProgress`. If it is `false`, OpenClaw keeps the
+Check `streaming.progress.toolProgress`. If it is `false`, MarketingClaw keeps the
 single draft behavior but hides tool and task progress lines.
 
 **I see a fresh final message instead of an edited draft.**

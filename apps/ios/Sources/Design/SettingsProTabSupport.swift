@@ -1,5 +1,5 @@
 import Darwin
-import OpenClawKit
+import MarketingClawKit
 import SwiftUI
 import UserNotifications
 
@@ -18,7 +18,7 @@ enum SettingsRoute: Hashable {
 }
 
 enum SettingsLayout {
-    static let cardRadius: CGFloat = OpenClawProMetric.cardRadius
+    static let cardRadius: CGFloat = MarketingClawProMetric.cardRadius
     static let rowHeight: CGFloat = 58
 }
 
@@ -37,12 +37,12 @@ struct SettingsDetailRow: View {
     var body: some View {
         LabeledContent {
             Text(self.value)
-                .font(OpenClawType.subhead)
+                .font(MarketingClawType.subhead)
                 .lineLimit(1)
                 .truncationMode(.middle)
         } label: {
             Text(self.label)
-                .font(OpenClawType.body)
+                .font(MarketingClawType.body)
         }
     }
 }
@@ -62,7 +62,7 @@ struct SettingsApprovalRow: View {
     var body: some View {
         HStack(spacing: 10) {
             Image(systemName: self.item.icon)
-                .font(OpenClawType.captionBold)
+                .font(MarketingClawType.captionBold)
                 .foregroundStyle(.white)
                 .frame(width: 30, height: 30)
                 .background {
@@ -71,16 +71,16 @@ struct SettingsApprovalRow: View {
                 }
             VStack(alignment: .leading, spacing: 2) {
                 Text(self.item.title)
-                    .font(OpenClawType.subheadSemiBold)
+                    .font(MarketingClawType.subheadSemiBold)
                     .lineLimit(1)
                 Text(self.item.detail)
-                    .font(OpenClawType.caption2Medium)
+                    .font(MarketingClawType.caption2Medium)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
             }
             Spacer(minLength: 8)
             Text(self.item.priority)
-                .font(OpenClawType.captionBold)
+                .font(MarketingClawType.captionBold)
                 .foregroundStyle(self.item.color)
                 .padding(.horizontal, 9)
                 .padding(.vertical, 5)
@@ -144,9 +144,9 @@ enum SettingsNotificationPresentation: Equatable {
         case .checking:
             "Checking iOS notification permission."
         case .enabled:
-            "OpenClaw can show approval prompts and event alerts when the app is not active."
+            "MarketingClaw can show approval prompts and event alerts when the app is not active."
         case .off:
-            "OpenClaw notifications are off."
+            "MarketingClaw notifications are off."
         case .setup:
             "Finish notification setup to receive alerts when the app is not active."
         case .denied:
@@ -154,16 +154,16 @@ enum SettingsNotificationPresentation: Equatable {
         case .notSet:
             "Enable notifications to receive approval prompts and event alerts outside the app."
         case .unknown:
-            "OpenClaw cannot determine the current notification permission state."
+            "MarketingClaw cannot determine the current notification permission state."
         }
     }
 
     var color: Color {
         switch self {
         case .enabled:
-            OpenClawBrand.ok
+            MarketingClawBrand.ok
         case .denied, .setup, .unknown:
-            OpenClawBrand.warn
+            MarketingClawBrand.warn
         case .checking, .notSet, .off:
             .secondary
         }
@@ -274,18 +274,18 @@ extension SettingsProTab {
 private struct SettingsGatewayStatesPreview: View {
     var body: some View {
         ZStack {
-            OpenClawProBackground()
+            MarketingClawProBackground()
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
                     self.stateSection("Connected") {
                         self.gatewayStatusCard(
                             title: "Gateway online",
-                            detail: "Connected to openclaw-gateway.tailnet.ts.net.",
+                            detail: "Connected to marketingclaw-gateway.tailnet.ts.net.",
                             value: "online",
-                            color: OpenClawBrand.ok)
+                            color: MarketingClawBrand.ok)
                         self.gatewayFactsCard(
                             address: "100.88.41.20:18789",
-                            server: "openclaw-gateway",
+                            server: "marketingclaw-gateway",
                             discovered: "3",
                             agent: "Aiden")
                     }
@@ -295,7 +295,7 @@ private struct SettingsGatewayStatesPreview: View {
                             title: "Checking gateway",
                             detail: "Refreshing connection, discovery, and device trust state.",
                             value: "loading",
-                            color: OpenClawBrand.accent)
+                            color: MarketingClawBrand.accent)
                         self.gatewayActionsCard(isBusy: true)
                     }
 
@@ -313,10 +313,10 @@ private struct SettingsGatewayStatesPreview: View {
                             title: "Tailscale warning",
                             detail: "Tailscale is off on this device. Turn it on, then try again.",
                             value: "network",
-                            color: OpenClawBrand.warn)
+                            color: MarketingClawBrand.warn)
                     }
                 }
-                .padding(.horizontal, OpenClawProMetric.pagePadding)
+                .padding(.horizontal, MarketingClawProMetric.pagePadding)
                 .padding(.vertical, 18)
             }
         }
@@ -328,7 +328,7 @@ private struct SettingsGatewayStatesPreview: View {
     {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
-                .font(OpenClawType.subheadSemiBold)
+                .font(MarketingClawType.subheadSemiBold)
                 .foregroundStyle(.secondary)
             content()
         }
@@ -374,11 +374,11 @@ private struct SettingsGatewayStatesPreview: View {
     private func factRow(_ label: String, value: String) -> some View {
         HStack {
             Text(label)
-                .font(OpenClawType.caption)
+                .font(MarketingClawType.caption)
                 .foregroundStyle(.secondary)
             Spacer(minLength: 8)
             Text(value)
-                .font(OpenClawType.captionMedium)
+                .font(MarketingClawType.captionMedium)
                 .lineLimit(1)
                 .truncationMode(.middle)
         }
@@ -402,7 +402,7 @@ private struct SettingsGatewayStatesPreview: View {
                     self.previewButton("Connect", systemImage: "link", isBusy: false)
                 }
                 Text("Discovered gateways and manual setup live here when the gateway has not connected yet.")
-                    .font(OpenClawType.caption)
+                    .font(MarketingClawType.caption)
                     .foregroundStyle(.secondary)
             }
         }
@@ -415,10 +415,10 @@ private struct SettingsGatewayStatesPreview: View {
     {
         Button {} label: {
             Label(title, systemImage: systemImage)
-                .font(OpenClawType.captionSemiBold)
+                .font(MarketingClawType.captionSemiBold)
                 .frame(maxWidth: .infinity)
         }
-        .font(OpenClawType.captionSemiBold)
+        .font(MarketingClawType.captionSemiBold)
         .buttonStyle(.bordered)
         .controlSize(.small)
         .disabled(isBusy)

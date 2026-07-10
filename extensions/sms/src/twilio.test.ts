@@ -16,8 +16,8 @@ import type { ResolvedSmsAccount } from "./types.js";
 
 const fetchWithSsrFGuardMock = vi.hoisted(() => vi.fn());
 
-vi.mock("openclaw/plugin-sdk/ssrf-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/ssrf-runtime")>();
+vi.mock("marketingclaw/plugin-sdk/ssrf-runtime", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("marketingclaw/plugin-sdk/ssrf-runtime")>();
   return {
     ...actual,
     fetchWithSsrFGuard: (...args: unknown[]) => fetchWithSsrFGuardMock(...args),
@@ -556,7 +556,11 @@ describe("Twilio SMS helpers", () => {
 
   it("rejects malformed JSON from Twilio Messaging Service lookup", async () => {
     const fetchImpl = vi.fn<typeof fetch>(
-      async () => new Response("NOT JSON {{{", { status: 200, headers: { "content-type": "application/json" } }),
+      async () =>
+        new Response("NOT JSON {{{", {
+          status: 200,
+          headers: { "content-type": "application/json" },
+        }),
     );
 
     await expect(
@@ -570,7 +574,11 @@ describe("Twilio SMS helpers", () => {
 
   it("returns empty list on malformed JSON from Twilio incoming phone number list", async () => {
     const fetchImpl = vi.fn<typeof fetch>(
-      async () => new Response("NOT JSON {{{", { status: 200, headers: { "content-type": "application/json" } }),
+      async () =>
+        new Response("NOT JSON {{{", {
+          status: 200,
+          headers: { "content-type": "application/json" },
+        }),
     );
 
     const result = await listTwilioIncomingPhoneNumbers({

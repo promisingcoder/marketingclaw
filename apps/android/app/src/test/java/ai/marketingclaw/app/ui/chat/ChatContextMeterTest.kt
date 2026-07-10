@@ -1,6 +1,6 @@
-package ai.openclaw.app.ui.chat
+package ai.marketingclaw.app.ui.chat
 
-import ai.openclaw.app.chat.ChatSessionEntry
+import ai.marketingclaw.app.chat.ChatSessionEntry
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

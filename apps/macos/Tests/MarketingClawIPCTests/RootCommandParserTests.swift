@@ -1,5 +1,5 @@
 import Testing
-@testable import OpenClawMacCLI
+@testable import MarketingClawMacCLI
 
 struct RootCommandParserTests {
     @Test func `parse root command returns nil for empty args`() {

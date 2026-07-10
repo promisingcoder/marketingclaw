@@ -1,6 +1,6 @@
 import Combine
 import CoreImage
-import OpenClawKit
+import MarketingClawKit
 import PhotosUI
 import SwiftUI
 import UIKit
@@ -227,15 +227,15 @@ struct OnboardingWizardView: View {
             }
             .navigationTitle(self.isFullScreenStep ? "" : self.step.title)
             .navigationBarTitleDisplayMode(.inline)
-            .tint(OpenClawBrand.activationPrimaryAction)
+            .tint(MarketingClawBrand.activationPrimaryAction)
             .toolbar {
                 if !self.isFullScreenStep {
                     ToolbarItem(placement: .principal) {
                         VStack(spacing: 2) {
                             Text(self.step.title)
-                                .font(OpenClawType.headline)
+                                .font(MarketingClawType.headline)
                             Text(self.step.manualProgressTitle)
-                                .font(OpenClawType.caption2)
+                                .font(MarketingClawType.caption2)
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -257,11 +257,11 @@ struct OnboardingWizardView: View {
         {
             Button(role: .cancel) {} label: {
                 Text("OK")
-                    .font(OpenClawType.subheadSemiBold)
+                    .font(MarketingClawType.subheadSemiBold)
             }
         } message: {
             Text(self.scannerError ?? "")
-                .font(OpenClawType.subhead)
+                .font(MarketingClawType.subhead)
         }
         .sheet(
                 isPresented: self.$showQRScanner,
@@ -362,7 +362,7 @@ struct OnboardingWizardView: View {
                 .toolbar {
                     ToolbarItem(placement: .principal) {
                         Text("Scan Setup Code")
-                            .font(OpenClawType.headline)
+                            .font(MarketingClawType.headline)
                     }
                     ToolbarItem(placement: .topBarLeading) {
                         Button {
@@ -370,14 +370,14 @@ struct OnboardingWizardView: View {
                             self.showQRScanner = false
                         } label: {
                             Text("Cancel")
-                                .font(OpenClawType.subheadSemiBold)
+                                .font(MarketingClawType.subheadSemiBold)
                         }
-                        .font(OpenClawType.subheadSemiBold)
+                        .font(MarketingClawType.subheadSemiBold)
                     }
                     ToolbarItem(placement: .topBarTrailing) {
                         PhotosPicker(selection: self.$selectedPhoto, matching: .images) {
                             Label("Photos", systemImage: "photo")
-                                .font(OpenClawType.subheadSemiBold)
+                                .font(MarketingClawType.subheadSemiBold)
                         }
                     }
                 }
@@ -416,19 +416,19 @@ struct OnboardingWizardView: View {
                 self.navigateBack()
             } label: {
                 Image(systemName: "chevron.left")
-                    .font(OpenClawType.subheadSemiBold)
+                    .font(MarketingClawType.subheadSemiBold)
                     .accessibilityLabel("Back")
             }
-            .buttonStyle(OpenClawCloseButtonStyle())
+            .buttonStyle(MarketingClawCloseButtonStyle())
         } else if self.allowSkip {
             Button {
                 self.invalidateSetupAttempt()
                 self.onClose()
             } label: {
                 Text("Close")
-                    .font(OpenClawType.subheadSemiBold)
+                    .font(MarketingClawType.subheadSemiBold)
             }
-            .buttonStyle(OpenClawCloseButtonStyle())
+            .buttonStyle(MarketingClawCloseButtonStyle())
         }
     }
 
@@ -439,16 +439,16 @@ struct OnboardingWizardView: View {
                 self.dismissKeyboard()
             } label: {
                 Image(systemName: "keyboard.chevron.compact.down")
-                    .font(OpenClawType.headline)
+                    .font(MarketingClawType.headline)
                     .frame(width: 50, height: 44)
                     .contentShape(Capsule(style: .continuous))
             }
             .buttonStyle(.plain)
-            .foregroundStyle(OpenClawBrand.activationPrimaryAction)
+            .foregroundStyle(MarketingClawBrand.activationPrimaryAction)
             .background(.ultraThinMaterial, in: Capsule(style: .continuous))
             .overlay {
                 Capsule(style: .continuous)
-                    .stroke(OpenClawBrand.activationNeutralStroke, lineWidth: 0.6)
+                    .stroke(MarketingClawBrand.activationNeutralStroke, lineWidth: 0.6)
             }
             .shadow(color: Color.black.opacity(0.08), radius: 14, x: 0, y: 4)
             .accessibilityLabel("Dismiss Keyboard")
@@ -514,7 +514,7 @@ struct OnboardingWizardView: View {
             }
         } header: {
             Text("Manual Connection")
-                .font(OpenClawType.footnoteSemiBold)
+                .font(MarketingClawType.footnoteSemiBold)
                 .padding(.top, 12)
         }
         .disabled(self.connectingGatewayID != nil)
@@ -524,10 +524,10 @@ struct OnboardingWizardView: View {
                 self.navigate(to: .connect)
             } label: {
                 Text("Continue")
-                    .font(OpenClawType.subheadSemiBold)
+                    .font(MarketingClawType.subheadSemiBold)
             }
             .disabled(self.selectedMode == nil || self.connectingGatewayID != nil)
-            .buttonStyle(OpenClawPrimaryActionButtonStyle(height: 48, cornerRadius: 16))
+            .buttonStyle(MarketingClawPrimaryActionButtonStyle(height: 48, cornerRadius: 16))
             .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
             .listRowBackground(Color.clear)
             .listRowSeparator(.hidden)
@@ -560,12 +560,12 @@ struct OnboardingWizardView: View {
                 }
 
                 Text(title)
-                    .font(OpenClawType.subheadSemiBold)
+                    .font(MarketingClawType.subheadSemiBold)
                     .foregroundStyle(.primary)
             }
             .frame(minHeight: 52)
         }
-        .tint(OpenClawBrand.activationPrimaryAction)
+        .tint(MarketingClawBrand.activationPrimaryAction)
         .contentShape(Rectangle())
         .overlay {
             Button {
@@ -589,7 +589,7 @@ struct OnboardingWizardView: View {
                 self.onboardingLabeledContent("Discovery", value: self.gatewayController.discoveryStatusText)
             } header: {
                 Text("Status")
-                    .font(OpenClawType.footnoteSemiBold)
+                    .font(MarketingClawType.footnoteSemiBold)
             }
 
             if let stagedLink = self.setupLinkStaging.link {
@@ -607,12 +607,12 @@ struct OnboardingWizardView: View {
         } else {
             Section {
                 Text("Choose a mode first.")
-                    .font(OpenClawType.body)
+                    .font(MarketingClawType.body)
                 Button {
                     self.navigate(to: .mode)
                 } label: {
                     Text("Back to Mode Selection")
-                        .font(OpenClawType.subheadSemiBold)
+                        .font(MarketingClawType.subheadSemiBold)
                 }
             }
         }
@@ -627,9 +627,9 @@ struct OnboardingWizardView: View {
                     .progressViewStyle(.circular)
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Connecting…")
-                        .font(OpenClawType.subheadSemiBold)
+                        .font(MarketingClawType.subheadSemiBold)
                     Text(verbatim: detail)
-                        .font(OpenClawType.footnote)
+                        .font(MarketingClawType.footnote)
                         .foregroundStyle(.secondary)
                 }
             }
@@ -653,16 +653,16 @@ struct OnboardingWizardView: View {
             let onRetry: (() -> Void)? = allowsRetry
                 ? { Task { await self.retryLastAttempt() } }
                 : nil
-            OpenClawNoticeBanner(
+            MarketingClawNoticeBanner(
                 icon: "exclamationmark.triangle.fill",
                 title: "Connection Failed",
                 message: message,
                 ownerLabel: "Needs attention",
-                tint: OpenClawBrand.danger,
+                tint: MarketingClawBrand.danger,
                 primaryActionTitle: allowsRetry ? "Retry" : nil,
                 onPrimaryAction: onRetry)
         case .ready:
-            OpenClawStatusBadge(label: "Ready to Connect", tone: .muted)
+            MarketingClawStatusBadge(label: "Ready to Connect", tone: .muted)
         }
     }
 
@@ -680,33 +680,33 @@ struct OnboardingWizardView: View {
                         ProgressView()
                             .progressViewStyle(.circular)
                         Text("Connecting…")
-                            .font(OpenClawType.subheadSemiBold)
+                            .font(MarketingClawType.subheadSemiBold)
                     }
                 } else {
                     Text("Connect")
-                        .font(OpenClawType.subheadSemiBold)
+                        .font(MarketingClawType.subheadSemiBold)
                 }
             }
-            .font(OpenClawType.subheadSemiBold)
+            .font(MarketingClawType.subheadSemiBold)
             .disabled(self.connectingGatewayID != nil)
 
             Button {
                 self.clearStagedGatewaySetupLink()
             } label: {
                 Text("Use Manual Setup")
-                    .font(OpenClawType.subheadSemiBold)
+                    .font(MarketingClawType.subheadSemiBold)
             }
-            .font(OpenClawType.subheadSemiBold)
+            .font(MarketingClawType.subheadSemiBold)
             .disabled(self.connectingGatewayID != nil)
         } header: {
             Text("Setup Link")
-                .font(OpenClawType.footnoteSemiBold)
+                .font(MarketingClawType.footnoteSemiBold)
         } footer: {
             Text(link.tls
                 ? "Review this endpoint. Credentials are applied only after you tap Connect."
                 :
                 "Plaintext may expose credentials. Continue only if you trust this local network and host.")
-                .font(OpenClawType.footnote)
+                .font(MarketingClawType.footnote)
         }
     }
 
@@ -715,7 +715,7 @@ struct OnboardingWizardView: View {
             Section {
                 if self.gatewayController.gateways.isEmpty {
                     Text("No gateways found yet.")
-                        .font(OpenClawType.body)
+                        .font(MarketingClawType.body)
                         .foregroundStyle(.secondary)
                 } else {
                     ForEach(self.gatewayController.gateways) { gateway in
@@ -724,10 +724,10 @@ struct OnboardingWizardView: View {
                         HStack {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(gateway.name)
-                                    .font(OpenClawType.body)
+                                    .font(MarketingClawType.body)
                                 if let host = gateway.lanHost ?? gateway.tailnetDns {
                                     Text(host)
-                                        .font(OpenClawType.footnote)
+                                        .font(MarketingClawType.footnote)
                                         .foregroundStyle(.secondary)
                                 }
                             }
@@ -740,13 +740,13 @@ struct OnboardingWizardView: View {
                                         .progressViewStyle(.circular)
                                 } else if !hasHost {
                                     Text("Resolving…")
-                                        .font(OpenClawType.subheadSemiBold)
+                                        .font(MarketingClawType.subheadSemiBold)
                                 } else {
                                     Text("Connect")
-                                        .font(OpenClawType.subheadSemiBold)
+                                        .font(MarketingClawType.subheadSemiBold)
                                 }
                             }
-                            .font(OpenClawType.subheadSemiBold)
+                            .font(MarketingClawType.subheadSemiBold)
                             .disabled(self.connectingGatewayID != nil || !hasHost)
                         }
                     }
@@ -756,13 +756,13 @@ struct OnboardingWizardView: View {
                     self.gatewayController.restartDiscovery()
                 } label: {
                     Text("Restart Discovery")
-                        .font(OpenClawType.subheadSemiBold)
+                        .font(MarketingClawType.subheadSemiBold)
                 }
-                .font(OpenClawType.subheadSemiBold)
+                .font(MarketingClawType.subheadSemiBold)
                 .disabled(self.connectingGatewayID != nil)
             } header: {
                 Text("Discovered Gateways")
-                    .font(OpenClawType.footnoteSemiBold)
+                    .font(MarketingClawType.footnoteSemiBold)
             }
 
             self.manualConnectionFieldsSection(title: "Manual Fallback")
@@ -782,10 +782,10 @@ struct OnboardingWizardView: View {
             self.manualConnectButton
         } header: {
             Text("Developer Local")
-                .font(OpenClawType.footnoteSemiBold)
+                .font(MarketingClawType.footnoteSemiBold)
         } footer: {
             Text("Default host is localhost. Use your Mac LAN IP if simulator networking requires it.")
-                .font(OpenClawType.footnote)
+                .font(MarketingClawType.footnote)
         }
     }
 
@@ -813,16 +813,16 @@ struct OnboardingWizardView: View {
                         })
                 } else if self.issue.needsAuthToken {
                     Text("Gateway rejected credentials. Scan a fresh setup code or update token/password.")
-                        .font(OpenClawType.footnote)
+                        .font(MarketingClawType.footnote)
                         .foregroundStyle(.secondary)
                 } else {
-                    Text("OpenClaw is checking gateway and node access.")
-                        .font(OpenClawType.footnote)
+                    Text("MarketingClaw is checking gateway and node access.")
+                        .font(MarketingClawType.footnote)
                         .foregroundStyle(.secondary)
                 }
             } header: {
                 Text(self.gatewayStatusSectionTitle)
-                    .font(OpenClawType.footnoteSemiBold)
+                    .font(MarketingClawType.footnoteSemiBold)
             }
 
             if self.issue.needsPairing {
@@ -831,28 +831,28 @@ struct OnboardingWizardView: View {
                         self.resumeAfterPairingApproval()
                     } label: {
                         Label("Resume After Approval", systemImage: "arrow.clockwise")
-                            .font(OpenClawType.subheadSemiBold)
+                            .font(MarketingClawType.subheadSemiBold)
                     }
-                    .font(OpenClawType.subheadSemiBold)
+                    .font(MarketingClawType.subheadSemiBold)
                     .disabled(self.connectingGatewayID != nil)
                 } header: {
                     Text("Pairing Approval")
-                        .font(OpenClawType.footnoteSemiBold)
+                        .font(MarketingClawType.footnoteSemiBold)
                 } footer: {
                     let requestLine: String = {
                         if let id = self.currentProblem?.requestId ?? self.issue.requestId, !id.isEmpty {
                             return "Request ID: \(id)"
                         }
-                        return "Request ID: check `openclaw devices list`."
+                        return "Request ID: check `marketingclaw devices list`."
                     }()
-                    let commandLine = self.currentProblem?.actionCommand ?? "openclaw devices approve <requestId>"
+                    let commandLine = self.currentProblem?.actionCommand ?? "marketingclaw devices approve <requestId>"
                     Text(
                         "Approve this device on the gateway.\n"
                             + "1) `\(commandLine)`\n"
-                            + "2) `/pair approve` in your OpenClaw chat\n"
+                            + "2) `/pair approve` in your MarketingClaw chat\n"
                             + "\(requestLine)\n"
-                            + "OpenClaw will also retry automatically when you return to this app.")
-                        .font(OpenClawType.caption)
+                            + "MarketingClaw will also retry automatically when you return to this app.")
+                        .font(MarketingClawType.caption)
                 }
             }
 
@@ -861,9 +861,9 @@ struct OnboardingWizardView: View {
                     self.openQRScannerFromOnboarding()
                 } label: {
                     Label("Scan Setup Code Again", systemImage: "qrcode.viewfinder")
-                        .font(OpenClawType.subheadSemiBold)
+                        .font(MarketingClawType.subheadSemiBold)
                 }
-                .font(OpenClawType.subheadSemiBold)
+                .font(MarketingClawType.subheadSemiBold)
                 .disabled(self.connectingGatewayID != nil)
 
                 Button {
@@ -874,10 +874,10 @@ struct OnboardingWizardView: View {
                             .progressViewStyle(.circular)
                     } else {
                         Text("Retry Connection")
-                            .font(OpenClawType.subheadSemiBold)
+                            .font(MarketingClawType.subheadSemiBold)
                     }
                 }
-                .font(OpenClawType.subheadSemiBold)
+                .font(MarketingClawType.subheadSemiBold)
                 .disabled(self.connectingGatewayID != nil)
             }
         }
@@ -922,28 +922,28 @@ extension OnboardingWizardView {
                             .controlSize(.small)
                     } else {
                         Text("Apply")
-                            .font(OpenClawType.subheadSemiBold)
+                            .font(MarketingClawType.subheadSemiBold)
                     }
                 }
                 .buttonStyle(.bordered)
                 .buttonBorderShape(.capsule)
                 .controlSize(.regular)
-                .tint(OpenClawBrand.activationPrimaryAction)
+                .tint(MarketingClawBrand.activationPrimaryAction)
                 .disabled(!self.canApplySetupCode)
             }
             .frame(minHeight: 50)
 
             if let setupCodeStatus, !setupCodeStatus.isEmpty {
                 Text(setupCodeStatus)
-                    .font(OpenClawType.footnote)
+                    .font(MarketingClawType.footnote)
                     .foregroundStyle(.secondary)
             }
         } header: {
             Text("Setup Code")
-                .font(OpenClawType.footnoteSemiBold)
+                .font(MarketingClawType.footnoteSemiBold)
         } footer: {
             Text("Use this if you have a setup code instead of scanning.")
-                .font(OpenClawType.footnote)
+                .font(MarketingClawType.footnote)
         }
     }
 
@@ -975,7 +975,7 @@ extension OnboardingWizardView {
             self.manualConnectButton
         } header: {
             Text(title)
-                .font(OpenClawType.footnoteSemiBold)
+                .font(MarketingClawType.footnoteSemiBold)
         }
     }
 
@@ -998,10 +998,10 @@ extension OnboardingWizardView {
     private var manualConnectionSecurityRows: some View {
         Picker("Connection security", selection: self.manualTLSBinding) {
             Text("Unencrypted")
-                .font(OpenClawType.captionSemiBold)
+                .font(MarketingClawType.captionSemiBold)
                 .tag(false)
             Text("Secure (TLS)")
-                .font(OpenClawType.captionSemiBold)
+                .font(MarketingClawType.captionSemiBold)
                 .tag(true)
         }
         .pickerStyle(.segmented)
@@ -1009,7 +1009,7 @@ extension OnboardingWizardView {
 
         if let helperText = self.manualTransport.helperText {
             Text(helperText)
-                .font(OpenClawType.footnote)
+                .font(MarketingClawType.footnote)
                 .foregroundStyle(.secondary)
         }
     }
@@ -1017,10 +1017,10 @@ extension OnboardingWizardView {
     private func onboardingLabeledContent(_ title: LocalizedStringKey, value: String) -> some View {
         LabeledContent {
             Text(verbatim: value)
-                .font(OpenClawType.body)
+                .font(MarketingClawType.body)
         } label: {
             Text(title)
-                .font(OpenClawType.body)
+                .font(MarketingClawType.body)
         }
     }
 
@@ -1033,9 +1033,9 @@ extension OnboardingWizardView {
             "",
             text: text,
             prompt: Text(placeholder)
-                .font(OpenClawType.subhead)
+                .font(MarketingClawType.subhead)
                 .foregroundStyle(.tertiary))
-            .font(OpenClawType.subhead)
+            .font(MarketingClawType.subhead)
             .textInputAutocapitalization(.never)
             .autocorrectionDisabled()
             .focused(self.$focusedField, equals: focusedField)
@@ -1050,12 +1050,12 @@ extension OnboardingWizardView {
         ZStack(alignment: .leading) {
             if text.wrappedValue.isEmpty {
                 Text(placeholder)
-                    .font(OpenClawType.subhead)
+                    .font(MarketingClawType.subhead)
                     .foregroundStyle(.tertiary)
                     .accessibilityHidden(true)
             }
             SecureField("", text: text)
-                .font(OpenClawType.subhead)
+                .font(MarketingClawType.subhead)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
                 .focused(self.$focusedField, equals: focusedField)
@@ -1072,14 +1072,14 @@ extension OnboardingWizardView {
                     ProgressView()
                         .progressViewStyle(.circular)
                     Text("Connecting…")
-                        .font(OpenClawType.subheadSemiBold)
+                        .font(MarketingClawType.subheadSemiBold)
                 }
             } else {
                 Text("Connect")
-                    .font(OpenClawType.subheadSemiBold)
+                    .font(MarketingClawType.subheadSemiBold)
             }
         }
-        .font(OpenClawType.subheadSemiBold)
+        .font(MarketingClawType.subheadSemiBold)
         .disabled(!self.canConnectManual || self.connectingGatewayID != nil)
     }
 
@@ -1444,7 +1444,7 @@ extension OnboardingWizardView {
                 self.manualPort = port
                 self.manualTLS = active.useTLS
             } else {
-                self.manualHost = "openclaw.local"
+                self.manualHost = "marketingclaw.local"
                 self.manualPort = 18789
                 self.manualTLS = true
             }
@@ -1459,7 +1459,7 @@ extension OnboardingWizardView {
                 self.selectedMode = lastMode
             }
         }
-        if self.selectedMode == .developerLocal, self.manualHost == "openclaw.local" {
+        if self.selectedMode == .developerLocal, self.manualHost == "marketingclaw.local" {
             self.manualHost = "localhost"
             self.manualTLS = false
         }
@@ -1642,15 +1642,15 @@ extension OnboardingWizardView {
             }
         }
         let host = self.manualHost.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-        let hostIsDefaultLike = host.isEmpty || host == "openclaw.local" || host == "localhost"
+        let hostIsDefaultLike = host.isEmpty || host == "marketingclaw.local" || host == "localhost"
 
         switch mode {
         case .homeNetwork:
-            if hostIsDefaultLike { self.manualHost = "openclaw.local" }
+            if hostIsDefaultLike { self.manualHost = "marketingclaw.local" }
             self.manualTLS = true
             if self.manualPort <= 0 || self.manualPort > 65535 { self.manualPort = 18789 }
         case .remoteDomain:
-            if host == "openclaw.local" || host == "localhost" { self.manualHost = "" }
+            if host == "marketingclaw.local" || host == "localhost" { self.manualHost = "" }
             self.manualTLS = true
             if self.manualPort <= 0 || self.manualPort > 65535 { self.manualPort = 18789 }
         case .developerLocal:

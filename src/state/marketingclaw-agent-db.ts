@@ -1,4 +1,4 @@
-// OpenClaw agent database stores agent-scoped persisted runtime state.
+// MarketingClaw agent database stores agent-scoped persisted runtime state.
 import { chmodSync, existsSync, mkdirSync, statSync } from "node:fs";
 import path from "node:path";
 import type { DatabaseSync } from "node:sqlite";
@@ -17,30 +17,30 @@ import {
   type SqliteWalMaintenance,
 } from "../infra/sqlite-wal.js";
 import { normalizeAgentId } from "../routing/session-key.js";
-import type { DB as OpenClawAgentKyselyDatabase } from "./openclaw-agent-db.generated.js";
-import { resolveOpenClawAgentSqlitePath } from "./openclaw-agent-db.paths.js";
-import { OPENCLAW_AGENT_SCHEMA_SQL } from "./openclaw-agent-schema.generated.js";
-import type { DB as OpenClawStateKyselyDatabase } from "./openclaw-state-db.generated.js";
+import type { DB as MarketingClawAgentKyselyDatabase } from "./marketingclaw-agent-db.generated.js";
+import { resolveMarketingClawAgentSqlitePath } from "./marketingclaw-agent-db.paths.js";
+import { MARKETINGCLAW_AGENT_SCHEMA_SQL } from "./marketingclaw-agent-schema.generated.js";
+import type { DB as MarketingClawStateKyselyDatabase } from "./marketingclaw-state-db.generated.js";
 import {
-  OPENCLAW_SQLITE_BUSY_TIMEOUT_MS,
-  runOpenClawStateWriteTransaction,
-  type OpenClawStateDatabaseOptions,
-} from "./openclaw-state-db.js";
-export { resolveOpenClawAgentSqlitePath } from "./openclaw-agent-db.paths.js";
+  MARKETINGCLAW_SQLITE_BUSY_TIMEOUT_MS,
+  runMarketingClawStateWriteTransaction,
+  type MarketingClawStateDatabaseOptions,
+} from "./marketingclaw-state-db.js";
+export { resolveMarketingClawAgentSqlitePath } from "./marketingclaw-agent-db.paths.js";
 
 /**
  * Per-agent SQLite database lifecycle and shared-state registration.
  *
  * Each opened agent database is schema-owned by one normalized agent id, cached
  * per pathname, protected with private file modes, and registered in the shared
- * OpenClaw state database for discovery and maintenance.
+ * MarketingClaw state database for discovery and maintenance.
  */
-const OPENCLAW_AGENT_SCHEMA_VERSION = 1;
-const OPENCLAW_AGENT_DB_DIR_MODE = 0o700;
-const OPENCLAW_AGENT_DB_FILE_MODE = 0o600;
+const MARKETINGCLAW_AGENT_SCHEMA_VERSION = 1;
+const MARKETINGCLAW_AGENT_DB_DIR_MODE = 0o700;
+const MARKETINGCLAW_AGENT_DB_FILE_MODE = 0o600;
 
 /** Open per-agent SQLite database handle plus lifecycle maintenance. */
-export type OpenClawAgentDatabase = {
+export type MarketingClawAgentDatabase = {
   agentId: string;
   db: DatabaseSync;
   path: string;
@@ -48,14 +48,14 @@ export type OpenClawAgentDatabase = {
 };
 
 /** Options for resolving and opening one agent database. */
-export type OpenClawAgentDatabaseOptions = OpenClawStateDatabaseOptions & {
+export type MarketingClawAgentDatabaseOptions = MarketingClawStateDatabaseOptions & {
   agentId: string;
 };
 
-type OpenClawAgentMetadataDatabase = Pick<OpenClawAgentKyselyDatabase, "schema_meta">;
-type OpenClawAgentRegistryDatabase = Pick<OpenClawStateKyselyDatabase, "agent_databases">;
+type MarketingClawAgentMetadataDatabase = Pick<MarketingClawAgentKyselyDatabase, "schema_meta">;
+type MarketingClawAgentRegistryDatabase = Pick<MarketingClawStateKyselyDatabase, "agent_databases">;
 
-const cachedDatabases = new Map<string, OpenClawAgentDatabase>();
+const cachedDatabases = new Map<string, MarketingClawAgentDatabase>();
 
 type ExistingSchemaMeta = {
   agentId: string | null;
@@ -64,32 +64,32 @@ type ExistingSchemaMeta = {
 
 function assertSupportedAgentSchemaVersion(db: DatabaseSync, pathname: string): void {
   const userVersion = readSqliteUserVersion(db);
-  if (userVersion > OPENCLAW_AGENT_SCHEMA_VERSION) {
+  if (userVersion > MARKETINGCLAW_AGENT_SCHEMA_VERSION) {
     throw new Error(
-      `OpenClaw agent database ${pathname} uses newer schema version ${userVersion}; this OpenClaw build supports ${OPENCLAW_AGENT_SCHEMA_VERSION}.`,
+      `MarketingClaw agent database ${pathname} uses newer schema version ${userVersion}; this MarketingClaw build supports ${MARKETINGCLAW_AGENT_SCHEMA_VERSION}.`,
     );
   }
 }
 
-function ensureOpenClawAgentDatabasePermissions(
+function ensureMarketingClawAgentDatabasePermissions(
   pathname: string,
-  options: OpenClawAgentDatabaseOptions,
+  options: MarketingClawAgentDatabaseOptions,
 ): void {
   const dir = path.dirname(pathname);
-  const defaultPath = resolveOpenClawAgentSqlitePath({
+  const defaultPath = resolveMarketingClawAgentSqlitePath({
     agentId: options.agentId,
     env: options.env,
   });
   const isDefaultAgentDatabase = path.resolve(pathname) === path.resolve(defaultPath);
   const dirExisted = existsSync(dir);
-  mkdirSync(dir, { recursive: true, mode: OPENCLAW_AGENT_DB_DIR_MODE });
+  mkdirSync(dir, { recursive: true, mode: MARKETINGCLAW_AGENT_DB_DIR_MODE });
   // Default agent state is private by contract; custom pre-existing dirs keep caller ownership.
   if (isDefaultAgentDatabase || !dirExisted) {
-    chmodSync(dir, OPENCLAW_AGENT_DB_DIR_MODE);
+    chmodSync(dir, MARKETINGCLAW_AGENT_DB_DIR_MODE);
   }
   for (const candidate of resolveSqliteDatabaseFilePaths(pathname)) {
     if (existsSync(candidate)) {
-      chmodSync(candidate, OPENCLAW_AGENT_DB_FILE_MODE);
+      chmodSync(candidate, MARKETINGCLAW_AGENT_DB_FILE_MODE);
     }
   }
 }
@@ -124,15 +124,15 @@ function assertExistingSchemaOwner(
   // Agent DB files are not interchangeable; opening another role/id would corrupt ownership.
   if (existing.role !== "agent") {
     throw new Error(
-      `OpenClaw agent database ${pathname} has schema role ${existing.role ?? "unknown"}; expected agent.`,
+      `MarketingClaw agent database ${pathname} has schema role ${existing.role ?? "unknown"}; expected agent.`,
     );
   }
   if (!existing.agentId) {
-    throw new Error(`OpenClaw agent database ${pathname} has no agent owner.`);
+    throw new Error(`MarketingClaw agent database ${pathname} has no agent owner.`);
   }
   if (normalizeAgentId(existing.agentId) !== agentId) {
     throw new Error(
-      `OpenClaw agent database ${pathname} belongs to agent ${existing.agentId}; requested agent ${agentId}.`,
+      `MarketingClaw agent database ${pathname} belongs to agent ${existing.agentId}; requested agent ${agentId}.`,
     );
   }
 }
@@ -140,9 +140,9 @@ function assertExistingSchemaOwner(
 function ensureAgentSchema(db: DatabaseSync, agentId: string, pathname: string): void {
   assertSupportedAgentSchemaVersion(db, pathname);
   assertExistingSchemaOwner(readExistingSchemaMeta(db), agentId, pathname);
-  db.exec(OPENCLAW_AGENT_SCHEMA_SQL);
-  const kysely = getNodeSqliteKysely<OpenClawAgentMetadataDatabase>(db);
-  db.exec(`PRAGMA user_version = ${OPENCLAW_AGENT_SCHEMA_VERSION};`);
+  db.exec(MARKETINGCLAW_AGENT_SCHEMA_SQL);
+  const kysely = getNodeSqliteKysely<MarketingClawAgentMetadataDatabase>(db);
+  db.exec(`PRAGMA user_version = ${MARKETINGCLAW_AGENT_SCHEMA_VERSION};`);
   const now = Date.now();
   executeSqliteQuerySync(
     db,
@@ -151,7 +151,7 @@ function ensureAgentSchema(db: DatabaseSync, agentId: string, pathname: string):
       .values({
         meta_key: "primary",
         role: "agent",
-        schema_version: OPENCLAW_AGENT_SCHEMA_VERSION,
+        schema_version: MARKETINGCLAW_AGENT_SCHEMA_VERSION,
         agent_id: agentId,
         app_version: null,
         created_at: now,
@@ -160,7 +160,7 @@ function ensureAgentSchema(db: DatabaseSync, agentId: string, pathname: string):
       .onConflict((conflict) =>
         conflict.column("meta_key").doUpdateSet({
           role: "agent",
-          schema_version: OPENCLAW_AGENT_SCHEMA_VERSION,
+          schema_version: MARKETINGCLAW_AGENT_SCHEMA_VERSION,
           agent_id: agentId,
           app_version: null,
           updated_at: now,
@@ -170,16 +170,16 @@ function ensureAgentSchema(db: DatabaseSync, agentId: string, pathname: string):
 }
 
 /** Initialize agent schema/ownership metadata on an independently managed connection. */
-export function ensureOpenClawAgentDatabaseSchema(
+export function ensureMarketingClawAgentDatabaseSchema(
   db: DatabaseSync,
-  options: OpenClawAgentDatabaseOptions & { register?: boolean },
+  options: MarketingClawAgentDatabaseOptions & { register?: boolean },
 ): void {
   const agentId = normalizeAgentId(options.agentId);
   const databaseOptions = { ...options, agentId };
-  const pathname = resolveOpenClawAgentSqlitePath(databaseOptions);
-  ensureOpenClawAgentDatabasePermissions(pathname, databaseOptions);
+  const pathname = resolveMarketingClawAgentSqlitePath(databaseOptions);
+  ensureMarketingClawAgentDatabasePermissions(pathname, databaseOptions);
   ensureAgentSchema(db, agentId, pathname);
-  ensureOpenClawAgentDatabasePermissions(pathname, databaseOptions);
+  ensureMarketingClawAgentDatabasePermissions(pathname, databaseOptions);
   if (options.register === true) {
     registerAgentDatabase({ agentId, path: pathname, env: options.env });
   }
@@ -197,9 +197,9 @@ function registerAgentDatabase(params: {
     sizeBytes = null;
   }
   const lastSeenAt = Date.now();
-  runOpenClawStateWriteTransaction(
+  runMarketingClawStateWriteTransaction(
     (database) => {
-      const db = getNodeSqliteKysely<OpenClawAgentRegistryDatabase>(database.db);
+      const db = getNodeSqliteKysely<MarketingClawAgentRegistryDatabase>(database.db);
       executeSqliteQuerySync(
         database.db,
         db
@@ -207,13 +207,13 @@ function registerAgentDatabase(params: {
           .values({
             agent_id: params.agentId,
             path: params.path,
-            schema_version: OPENCLAW_AGENT_SCHEMA_VERSION,
+            schema_version: MARKETINGCLAW_AGENT_SCHEMA_VERSION,
             last_seen_at: lastSeenAt,
             size_bytes: sizeBytes,
           })
           .onConflict((conflict) =>
             conflict.columns(["agent_id", "path"]).doUpdateSet({
-              schema_version: OPENCLAW_AGENT_SCHEMA_VERSION,
+              schema_version: MARKETINGCLAW_AGENT_SCHEMA_VERSION,
               last_seen_at: lastSeenAt,
               size_bytes: sizeBytes,
             }),
@@ -225,17 +225,17 @@ function registerAgentDatabase(params: {
 }
 
 /** Open or return a cached per-agent database after schema and owner validation. */
-export function openOpenClawAgentDatabase(
-  options: OpenClawAgentDatabaseOptions,
-): OpenClawAgentDatabase {
+export function openMarketingClawAgentDatabase(
+  options: MarketingClawAgentDatabaseOptions,
+): MarketingClawAgentDatabase {
   const agentId = normalizeAgentId(options.agentId);
   const databaseOptions = { ...options, agentId };
-  const pathname = resolveOpenClawAgentSqlitePath(databaseOptions);
+  const pathname = resolveMarketingClawAgentSqlitePath(databaseOptions);
   const cached = cachedDatabases.get(pathname);
   if (cached?.db.isOpen) {
     if (cached.agentId !== agentId) {
       throw new Error(
-        `OpenClaw agent database ${pathname} is already open for agent ${cached.agentId}; requested agent ${agentId}.`,
+        `MarketingClaw agent database ${pathname} is already open for agent ${cached.agentId}; requested agent ${agentId}.`,
       );
     }
     registerAgentDatabase({ agentId, path: pathname, env: options.env });
@@ -248,15 +248,15 @@ export function openOpenClawAgentDatabase(
     cachedDatabases.delete(pathname);
   }
 
-  ensureOpenClawAgentDatabasePermissions(pathname, databaseOptions);
+  ensureMarketingClawAgentDatabasePermissions(pathname, databaseOptions);
   const sqlite = requireNodeSqlite();
   const db = new sqlite.DatabaseSync(pathname);
   const walMaintenance = (() => {
     let maintenance: SqliteWalMaintenance | undefined;
     try {
       maintenance = configureSqliteConnectionPragmas(db, {
-        busyTimeoutMs: OPENCLAW_SQLITE_BUSY_TIMEOUT_MS,
-        databaseLabel: `openclaw-agent:${agentId}`,
+        busyTimeoutMs: MARKETINGCLAW_SQLITE_BUSY_TIMEOUT_MS,
+        databaseLabel: `marketingclaw-agent:${agentId}`,
         databasePath: pathname,
         foreignKeys: true,
         synchronous: "NORMAL",
@@ -269,31 +269,31 @@ export function openOpenClawAgentDatabase(
       throw err;
     }
   })();
-  ensureOpenClawAgentDatabasePermissions(pathname, databaseOptions);
+  ensureMarketingClawAgentDatabasePermissions(pathname, databaseOptions);
   const database = { agentId, db, path: pathname, walMaintenance };
   cachedDatabases.set(pathname, database);
   // Safety net for processes that end without an orderly close: agent DBs have
   // no shutdown owner like the ACP/gateway state DB closes. Closing unregisters.
-  unregisterExitClose ??= registerSqliteCacheExitClose(closeOpenClawAgentDatabases);
+  unregisterExitClose ??= registerSqliteCacheExitClose(closeMarketingClawAgentDatabases);
   registerAgentDatabase({ agentId, path: pathname, env: options.env });
   return database;
 }
 
 /** Run a synchronous immediate transaction against an agent database. */
-export function runOpenClawAgentWriteTransaction<T>(
-  operation: (database: OpenClawAgentDatabase) => T,
-  options: OpenClawAgentDatabaseOptions,
+export function runMarketingClawAgentWriteTransaction<T>(
+  operation: (database: MarketingClawAgentDatabase) => T,
+  options: MarketingClawAgentDatabaseOptions,
 ): T {
-  const database = openOpenClawAgentDatabase(options);
+  const database = openMarketingClawAgentDatabase(options);
   const result = runSqliteImmediateTransactionSync(database.db, () => operation(database));
-  ensureOpenClawAgentDatabasePermissions(database.path, options);
+  ensureMarketingClawAgentDatabasePermissions(database.path, options);
   return result;
 }
 
 let unregisterExitClose: (() => void) | null = null;
 
 /** Close all cached agent database handles. */
-export function closeOpenClawAgentDatabases(): void {
+export function closeMarketingClawAgentDatabases(): void {
   unregisterExitClose?.();
   unregisterExitClose = null;
   for (const database of cachedDatabases.values()) {
@@ -307,4 +307,4 @@ export function closeOpenClawAgentDatabases(): void {
 }
 
 /** Test alias for closing cached agent database handles from teardown code. */
-export const closeOpenClawAgentDatabasesForTest = closeOpenClawAgentDatabases;
+export const closeMarketingClawAgentDatabasesForTest = closeMarketingClawAgentDatabases;

@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: openclaw
+  name: marketingclaw
   labels:
-    app: openclaw
+    app: marketingclaw
 spec:
   type: ClusterIP
   selector:
-    app: openclaw
+    app: marketingclaw
   ports:
     - name: gateway
       port: 18789

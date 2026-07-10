@@ -1,6 +1,6 @@
-package ai.openclaw.app.gateway
+package ai.marketingclaw.app.gateway
 
-import ai.openclaw.app.SecurePrefs
+import ai.marketingclaw.app.SecurePrefs
 import android.content.Context
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
@@ -64,7 +64,7 @@ class GatewaySessionCustomHeadersTest {
   fun tlsUpgradeRequest_carriesLatestSanitizedHeadersForOnlyThisGateway() {
     val app = RuntimeEnvironment.getApplication()
     val securePrefsBacking =
-      app.getSharedPreferences("openclaw.node.secure.test.${UUID.randomUUID()}", Context.MODE_PRIVATE)
+      app.getSharedPreferences("marketingclaw.node.secure.test.${UUID.randomUUID()}", Context.MODE_PRIVATE)
     val prefs = SecurePrefs(app, securePrefsOverride = securePrefsBacking)
     val stableId = "manual|gateway.example|443"
     val endpoint = GatewayEndpoint.manual(host = "gateway.example", port = 443)
@@ -95,7 +95,7 @@ class GatewaySessionCustomHeadersTest {
     runBlocking {
       val app = RuntimeEnvironment.getApplication()
       val securePrefsBacking =
-        app.getSharedPreferences("openclaw.node.secure.test.${UUID.randomUUID()}", Context.MODE_PRIVATE)
+        app.getSharedPreferences("marketingclaw.node.secure.test.${UUID.randomUUID()}", Context.MODE_PRIVATE)
       val prefs = SecurePrefs(app, securePrefsOverride = securePrefsBacking)
 
       val handshake = AtomicReference<RecordedRequest?>(null)
@@ -146,7 +146,7 @@ class GatewaySessionCustomHeadersTest {
               permissions = emptyMap(),
               client =
                 GatewayClientInfo(
-                  id = "openclaw-android-test",
+                  id = "marketingclaw-android-test",
                   displayName = "Android Test",
                   version = "1.0.0-test",
                   platform = "android",

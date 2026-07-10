@@ -32,7 +32,7 @@ import {
   type ExecApprovalsTarget,
   type NodesPageDataState,
 } from "../../lib/nodes/index.ts";
-import { OpenClawLightDomElement } from "../../lit/openclaw-element.ts";
+import { MarketingClawLightDomElement } from "../../lit/marketingclaw-element.ts";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
 import { renderNodes } from "./view.ts";
 
@@ -45,7 +45,7 @@ export type NodesRouteData = {
 
 const NODES_ACTIVE_POLL_INTERVAL_MS = 30_000;
 
-class NodesPage extends OpenClawLightDomElement implements NodesPageDataState {
+class NodesPage extends MarketingClawLightDomElement implements NodesPageDataState {
   @consume({ context: applicationContext, subscribe: true })
   private context!: ApplicationContext;
 
@@ -347,6 +347,6 @@ class NodesPage extends OpenClawLightDomElement implements NodesPageDataState {
   }
 }
 
-if (!customElements.get("openclaw-nodes-page")) {
-  customElements.define("openclaw-nodes-page", NodesPage);
+if (!customElements.get("marketingclaw-nodes-page")) {
+  customElements.define("marketingclaw-nodes-page", NodesPage);
 }

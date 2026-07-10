@@ -1,9 +1,10 @@
-import { sendDurableMessageBatch as sendDurableMessageBatchImpl } from "openclaw/plugin-sdk/channel-outbound";
-import { transcribeFirstAudio as transcribeFirstAudioImpl } from "openclaw/plugin-sdk/media-runtime";
+import { sendDurableMessageBatch as sendDurableMessageBatchImpl } from "marketingclaw/plugin-sdk/channel-outbound";
+import { transcribeFirstAudio as transcribeFirstAudioImpl } from "marketingclaw/plugin-sdk/media-runtime";
 
-type TranscribeFirstAudio = typeof import("openclaw/plugin-sdk/media-runtime").transcribeFirstAudio;
+type TranscribeFirstAudio =
+  typeof import("marketingclaw/plugin-sdk/media-runtime").transcribeFirstAudio;
 type SendDurableMessageBatch =
-  typeof import("openclaw/plugin-sdk/channel-outbound").sendDurableMessageBatch;
+  typeof import("marketingclaw/plugin-sdk/channel-outbound").sendDurableMessageBatch;
 
 export async function transcribeFirstAudio(
   ...args: Parameters<TranscribeFirstAudio>

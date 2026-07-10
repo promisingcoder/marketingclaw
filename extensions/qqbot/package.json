@@ -1,11 +1,11 @@
 {
-  "name": "@openclaw/qqbot",
+  "name": "@marketingclaw/qqbot",
   "version": "2026.6.11",
   "private": false,
-  "description": "OpenClaw QQ Bot channel plugin for group and direct-message workflows.",
+  "description": "MarketingClaw QQ Bot channel plugin for group and direct-message workflows.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/promisingcoder/marketingclaw"
   },
   "type": "module",
   "dependencies": {
@@ -16,19 +16,19 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
+    "@marketingclaw/plugin-sdk": "workspace:*",
     "@types/ws": "8.18.1",
-    "openclaw": "workspace:*"
+    "marketingclaw": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.6.11"
+    "marketingclaw": ">=2026.6.11"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "marketingclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "marketingclaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -44,7 +44,7 @@
       "systemImage": "bubble.left.and.bubble.right"
     },
     "install": {
-      "npmSpec": "@openclaw/qqbot",
+      "npmSpec": "@marketingclaw/qqbot",
       "localPath": "extensions/qqbot",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.10"
@@ -53,7 +53,7 @@
       "pluginApi": ">=2026.6.11"
     },
     "build": {
-      "openclawVersion": "2026.6.11"
+      "marketingclawVersion": "2026.6.11"
     },
     "release": {
       "publishToClawHub": true,

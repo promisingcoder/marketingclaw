@@ -5,7 +5,7 @@ import type {
   TaskSuggestionDeliveryMode,
 } from "../auto-reply/get-reply-options.types.js";
 import type { InboundEventKind } from "../channels/inbound-event/kind.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import {
   buildMcpToolSchema,
   type McpLoopbackTool,
@@ -24,12 +24,12 @@ type CachedScopedTools = {
   agentId: string | undefined;
   tools: McpLoopbackTool[];
   toolSchema: McpToolSchemaEntry[];
-  configRef: OpenClawConfig;
+  configRef: MarketingClawConfig;
   time: number;
 };
 
 type McpLoopbackScopeParams = {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   sessionKey: string;
   sessionId?: string;
   yieldContextCacheKey?: string;

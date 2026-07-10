@@ -20,7 +20,7 @@ describe("managed worktree protocol schemas", () => {
       Value.Check(SessionsCreateResultSchema, {
         ok: true,
         key: "agent:main:dashboard:test",
-        worktree: { id: "id", path: "/worktree", branch: "openclaw/wt-test" },
+        worktree: { id: "id", path: "/worktree", branch: "marketingclaw/wt-test" },
       }),
     ).toBe(true);
   });

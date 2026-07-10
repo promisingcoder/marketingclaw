@@ -14,9 +14,9 @@ type EvaluatedModules = {
   idToModuleMap: Map<string, EvaluatedModuleNode>;
 };
 
-const SHARED_TEST_SETUP = Symbol.for("openclaw.sharedTestSetup");
-const EMBEDDED_RUN_STATE = Symbol.for("openclaw.embeddedRunState");
-const REPLY_RUN_REGISTRY = Symbol.for("openclaw.replyRunRegistry");
+const SHARED_TEST_SETUP = Symbol.for("marketingclaw.sharedTestSetup");
+const EMBEDDED_RUN_STATE = Symbol.for("marketingclaw.embeddedRunState");
+const REPLY_RUN_REGISTRY = Symbol.for("marketingclaw.replyRunRegistry");
 const nativeTimerGlobals = {
   setTimeout: globalThis.setTimeout,
   clearTimeout: globalThis.clearTimeout,
@@ -31,7 +31,7 @@ function getSharedTestHome(): string | undefined {
   const globalState = globalThis as typeof globalThis & {
     [SHARED_TEST_SETUP]?: { tempHome?: string };
   };
-  return globalState[SHARED_TEST_SETUP]?.tempHome ?? process.env.OPENCLAW_TEST_HOME;
+  return globalState[SHARED_TEST_SETUP]?.tempHome ?? process.env.MARKETINGCLAW_TEST_HOME;
 }
 
 function resetEvaluatedModules(modules: EvaluatedModules, resetMocks: boolean) {
@@ -61,10 +61,10 @@ function restoreSharedTestHomeAfterEnvUnstub(testHomeRaw: string | undefined): v
 
   process.env.HOME = testHome;
   process.env.USERPROFILE = testHome;
-  process.env.OPENCLAW_TEST_HOME = testHome;
-  delete process.env.OPENCLAW_CONFIG_PATH;
-  delete process.env.OPENCLAW_STATE_DIR;
-  delete process.env.OPENCLAW_AGENT_DIR;
+  process.env.MARKETINGCLAW_TEST_HOME = testHome;
+  delete process.env.MARKETINGCLAW_CONFIG_PATH;
+  delete process.env.MARKETINGCLAW_STATE_DIR;
+  delete process.env.MARKETINGCLAW_AGENT_DIR;
   process.env.XDG_CONFIG_HOME = path.join(testHome, ".config");
   process.env.XDG_DATA_HOME = path.join(testHome, ".local", "share");
   process.env.XDG_STATE_HOME = path.join(testHome, ".local", "state");
@@ -141,7 +141,7 @@ function runCleanupActions(actions: CleanupAction[]): unknown {
   return firstError;
 }
 
-function resetOpenClawGlobalRunState(): void {
+function resetMarketingClawGlobalRunState(): void {
   const cleanupActions: CleanupAction[] = [];
   const globalStore = globalThis as Record<PropertyKey, unknown>;
   const embeddedRunState = globalStore[EMBEDDED_RUN_STATE] as EmbeddedRunStateForTest | undefined;
@@ -201,13 +201,13 @@ function resetOpenClawGlobalRunState(): void {
   replyRunState?.waitersByKey?.clear();
 }
 
-export default class OpenClawNonIsolatedRunner extends TestRunner {
+export default class MarketingClawNonIsolatedRunner extends TestRunner {
   override onCollectStart(file: { filepath: string }) {
     super.onCollectStart(file);
     restoreRealTimers();
     restoreNativeTimerGlobals();
     restoreSharedTestHomeAfterEnvUnstub(getSharedTestHome());
-    const orderLogPath = process.env.OPENCLAW_VITEST_FILE_ORDER_LOG?.trim();
+    const orderLogPath = process.env.MARKETINGCLAW_VITEST_FILE_ORDER_LOG?.trim();
     if (orderLogPath) {
       fs.appendFileSync(orderLogPath, `START ${file.filepath}\n`);
     }
@@ -231,7 +231,7 @@ export default class OpenClawNonIsolatedRunner extends TestRunner {
       return;
     }
 
-    const orderLogPath = process.env.OPENCLAW_VITEST_FILE_ORDER_LOG?.trim();
+    const orderLogPath = process.env.MARKETINGCLAW_VITEST_FILE_ORDER_LOG?.trim();
     if (orderLogPath) {
       fs.appendFileSync(orderLogPath, `END ${suite.filepath}\n`);
     }
@@ -245,7 +245,7 @@ export default class OpenClawNonIsolatedRunner extends TestRunner {
     vi.unstubAllEnvs();
     restoreSharedTestHomeAfterEnvUnstub(testHome);
     vi.clearAllMocks();
-    resetOpenClawGlobalRunState();
+    resetMarketingClawGlobalRunState();
     vi.resetModules();
     this.moduleRunner?.mocker?.reset?.();
     resetEvaluatedModules(this.workerState.evaluatedModules as EvaluatedModules, true);

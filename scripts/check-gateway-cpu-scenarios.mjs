@@ -252,15 +252,15 @@ function buildPrivateQaEnv(env, qaState) {
       ? {
           HOME: qaState.home,
           USERPROFILE: qaState.home,
-          OPENCLAW_HOME: qaState.home,
-          OPENCLAW_STATE_DIR: qaState.stateDir,
-          OPENCLAW_CONFIG_PATH: qaState.configPath,
+          MARKETINGCLAW_HOME: qaState.home,
+          MARKETINGCLAW_STATE_DIR: qaState.stateDir,
+          MARKETINGCLAW_CONFIG_PATH: qaState.configPath,
         }
       : {}),
-    OPENCLAW_BUILD_PRIVATE_QA: "1",
-    OPENCLAW_ENABLE_PRIVATE_QA_CLI: "1",
-    OPENCLAW_RUN_NODE_SKIP_DTS_BUILD: env.OPENCLAW_RUN_NODE_SKIP_DTS_BUILD ?? "1",
-    OPENCLAW_TEST_DISABLE_UPDATE_CHECK: env.OPENCLAW_TEST_DISABLE_UPDATE_CHECK ?? "1",
+    MARKETINGCLAW_BUILD_PRIVATE_QA: "1",
+    MARKETINGCLAW_ENABLE_PRIVATE_QA_CLI: "1",
+    MARKETINGCLAW_RUN_NODE_SKIP_DTS_BUILD: env.MARKETINGCLAW_RUN_NODE_SKIP_DTS_BUILD ?? "1",
+    MARKETINGCLAW_TEST_DISABLE_UPDATE_CHECK: env.MARKETINGCLAW_TEST_DISABLE_UPDATE_CHECK ?? "1",
     PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: env.PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN ?? "false",
   };
 }
@@ -270,7 +270,7 @@ function createQaState(outputDir) {
   const home = path.join(root, "home");
   const stateDir = path.join(root, "state");
   return {
-    configPath: path.join(stateDir, "openclaw.json"),
+    configPath: path.join(stateDir, "marketingclaw.json"),
     home,
     root,
     stateDir,
@@ -348,7 +348,7 @@ async function runGatewayCpuScenarios(options, params = {}) {
   if (!options.skipQa) {
     const qaCommand = pnpmCommand(
       [
-        "openclaw",
+        "marketingclaw",
         "qa",
         "suite",
         "--provider-mode",

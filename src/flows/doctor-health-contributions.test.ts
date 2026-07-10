@@ -4,7 +4,7 @@ import os from "node:os";
 import nodePath from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { DoctorPrompter } from "../commands/doctor-prompter.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { CORE_HEALTH_CHECKS } from "./doctor-core-checks.js";
 import "./doctor-tool-result-cap-advice.js";
 import {
@@ -47,7 +47,7 @@ const mocks = vi.hoisted(() => ({
   maybeScanExtraGatewayServices: vi.fn().mockResolvedValue(undefined),
   noteMacLaunchAgentOverrides: vi.fn(),
   noteMacLaunchctlGatewayEnvOverrides: vi.fn(),
-  noteMacStaleOpenClawUpdateLaunchdJobs: vi.fn(),
+  noteMacStaleMarketingClawUpdateLaunchdJobs: vi.fn(),
   gatewaySecretInputPathCanWin: vi.fn(),
   readGatewaySecretInputValue: vi.fn((..._args: unknown[]) => undefined as string | undefined),
   checkGatewayHealth: vi.fn(async () => ({
@@ -68,7 +68,7 @@ const mocks = vi.hoisted(() => ({
       checkId: "core/doctor/legacy-plugin-manifests",
       severity: "warning" as const,
       message: `Plugin manifest ${migration.pluginId} uses legacy top-level capability keys.`,
-      path: "/tmp/openclaw-plugin/openclaw.plugin.json",
+      path: "/tmp/marketingclaw-plugin/marketingclaw.plugin.json",
       target: migration.pluginId,
       requirement: "contracts-capability-keys",
     }),
@@ -76,7 +76,7 @@ const mocks = vi.hoisted(() => ({
   maybeRepairLegacyPluginManifestContracts: vi.fn().mockResolvedValue(undefined),
   detectLegacyClawdBrowserProfileResidue: vi.fn(),
   maybeArchiveLegacyClawdBrowserProfileResidue: vi.fn(),
-  resolveAgentWorkspaceDir: vi.fn(() => "/tmp/openclaw-workspace"),
+  resolveAgentWorkspaceDir: vi.fn(() => "/tmp/marketingclaw-workspace"),
   resolveDefaultAgentId: vi.fn(() => "default"),
   resolveAgentContextLimits: vi.fn(
     (cfg: { agents?: { defaults?: { contextLimits?: unknown } } }) =>
@@ -261,7 +261,7 @@ vi.mock("../gateway/call.js", () => ({
 vi.mock("../commands/doctor-platform-notes.js", () => ({
   noteMacLaunchAgentOverrides: mocks.noteMacLaunchAgentOverrides,
   noteMacLaunchctlGatewayEnvOverrides: mocks.noteMacLaunchctlGatewayEnvOverrides,
-  noteMacStaleOpenClawUpdateLaunchdJobs: mocks.noteMacStaleOpenClawUpdateLaunchdJobs,
+  noteMacStaleMarketingClawUpdateLaunchdJobs: mocks.noteMacStaleMarketingClawUpdateLaunchdJobs,
 }));
 
 vi.mock("../gateway/credentials-secret-inputs.js", async (importOriginal) => {
@@ -352,7 +352,7 @@ vi.mock("../version.js", async () => ({
 }));
 
 vi.mock("../config/config.js", () => ({
-  CONFIG_PATH: "/tmp/fake-openclaw.json",
+  CONFIG_PATH: "/tmp/fake-marketingclaw.json",
   replaceConfigFile: mocks.replaceConfigFile,
   readConfigFileSnapshot: mocks.readConfigFileSnapshot,
 }));
@@ -435,7 +435,7 @@ vi.mock("../utils.js", async (importOriginal) => {
   return {
     ...actual,
     isRecord: mocks.isRecord,
-    resolveConfigDir: vi.fn(() => "/tmp/openclaw-config"),
+    resolveConfigDir: vi.fn(() => "/tmp/marketingclaw-config"),
     resolveUserPath: vi.fn((value: string) => value),
     shortenHomePath: mocks.shortenHomePath,
   };
@@ -453,7 +453,7 @@ vi.mock("../commands/doctor-gateway-services.js", () => ({
 vi.mock("../commands/doctor-platform-notes.js", () => ({
   noteMacLaunchAgentOverrides: mocks.noteMacLaunchAgentOverrides,
   noteMacLaunchctlGatewayEnvOverrides: mocks.noteMacLaunchctlGatewayEnvOverrides,
-  noteMacStaleOpenClawUpdateLaunchdJobs: mocks.noteMacStaleOpenClawUpdateLaunchdJobs,
+  noteMacStaleMarketingClawUpdateLaunchdJobs: mocks.noteMacStaleMarketingClawUpdateLaunchdJobs,
 }));
 
 function requireDoctorContribution(id: string) {
@@ -549,7 +549,7 @@ describe("doctor health contributions", () => {
     mocks.maybeScanExtraGatewayServices.mockResolvedValue(undefined);
     mocks.noteMacLaunchAgentOverrides.mockClear();
     mocks.noteMacLaunchctlGatewayEnvOverrides.mockClear();
-    mocks.noteMacStaleOpenClawUpdateLaunchdJobs.mockClear();
+    mocks.noteMacStaleMarketingClawUpdateLaunchdJobs.mockClear();
     mocks.gatewaySecretInputPathCanWin.mockClear();
     mocks.gatewaySecretInputPathCanWin.mockReset();
     mocks.readGatewaySecretInputValue.mockClear();
@@ -600,7 +600,7 @@ describe("doctor health contributions", () => {
       warnings: [],
     });
     mocks.resolveAgentWorkspaceDir.mockReset();
-    mocks.resolveAgentWorkspaceDir.mockReturnValue("/tmp/openclaw-workspace");
+    mocks.resolveAgentWorkspaceDir.mockReturnValue("/tmp/marketingclaw-workspace");
     mocks.resolveDefaultAgentId.mockReset();
     mocks.resolveDefaultAgentId.mockReturnValue("default");
     mocks.resolveAgentContextLimits.mockReset();
@@ -688,8 +688,8 @@ describe("doctor health contributions", () => {
     mocks.noteMacLaunchAgentOverrides.mockResolvedValue(undefined);
     mocks.noteMacLaunchctlGatewayEnvOverrides.mockReset();
     mocks.noteMacLaunchctlGatewayEnvOverrides.mockResolvedValue(undefined);
-    mocks.noteMacStaleOpenClawUpdateLaunchdJobs.mockReset();
-    mocks.noteMacStaleOpenClawUpdateLaunchdJobs.mockResolvedValue(undefined);
+    mocks.noteMacStaleMarketingClawUpdateLaunchdJobs.mockReset();
+    mocks.noteMacStaleMarketingClawUpdateLaunchdJobs.mockResolvedValue(undefined);
   });
 
   afterEach(() => {
@@ -704,14 +704,14 @@ describe("doctor health contributions", () => {
     expect(check.defaultEnabled).toBe(false);
 
     const migration = {
-      manifestPath: "/tmp/openclaw-plugin/openclaw.plugin.json",
+      manifestPath: "/tmp/marketingclaw-plugin/marketingclaw.plugin.json",
       pluginId: "legacy-plugin",
       nextRaw: {},
       changeLines: ["- moved tools to contracts.tools"],
     };
     mocks.collectLegacyPluginManifestContractMigrations.mockReturnValueOnce([migration]);
     const ctx = {
-      cfg: { plugins: { load: { paths: ["/tmp/openclaw-plugin"] } } },
+      cfg: { plugins: { load: { paths: ["/tmp/marketingclaw-plugin"] } } },
       mode: "lint" as const,
       runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
     };
@@ -775,7 +775,7 @@ describe("doctor health contributions", () => {
       runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
       options: {},
       cfgForPersistence: {},
-      configPath: "/tmp/fake-openclaw.json",
+      configPath: "/tmp/fake-marketingclaw.json",
       env: {},
     } as Parameters<(typeof contribution)["run"]>[0];
 
@@ -823,7 +823,7 @@ describe("doctor health contributions", () => {
       runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
       options: {},
       cfgForPersistence: cfg,
-      configPath: "/tmp/fake-openclaw.json",
+      configPath: "/tmp/fake-marketingclaw.json",
       env: {},
     } as Parameters<(typeof contribution)["run"]>[0];
 
@@ -868,7 +868,7 @@ describe("doctor health contributions", () => {
       runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
       options: {},
       cfgForPersistence: cfg,
-      configPath: "/tmp/fake-openclaw.json",
+      configPath: "/tmp/fake-marketingclaw.json",
       env: {},
     } as Parameters<(typeof contribution)["run"]>[0];
 
@@ -943,10 +943,10 @@ describe("doctor health contributions", () => {
       runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
       options: {},
       cfgForPersistence: {},
-      configPath: "/tmp/fake-openclaw.json",
+      configPath: "/tmp/fake-marketingclaw.json",
       env: {
-        OPENCLAW_UPDATE_IN_PROGRESS: "1",
-        OPENCLAW_UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE: "1",
+        MARKETINGCLAW_UPDATE_IN_PROGRESS: "1",
+        MARKETINGCLAW_UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE: "1",
       },
     } as unknown as Parameters<(typeof contribution)["run"]>[0];
 
@@ -1288,7 +1288,7 @@ describe("doctor health contributions", () => {
     expect(heartbeatTemplateCheck).toBeDefined();
 
     const ctx = {
-      cfg: { agents: { defaults: { workspace: "/tmp/openclaw-workspace" } } },
+      cfg: { agents: { defaults: { workspace: "/tmp/marketingclaw-workspace" } } },
       mode: "lint",
       runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
     } as const;
@@ -1305,7 +1305,7 @@ describe("doctor health contributions", () => {
         checkId: "core/doctor/heartbeat-template",
         severity: "warning",
         message: "HEARTBEAT.md contains an older heartbeat documentation template.",
-        path: "/tmp/openclaw-workspace/HEARTBEAT.md",
+        path: "/tmp/marketingclaw-workspace/HEARTBEAT.md",
         requirement: "legacy-template",
       },
     ]);
@@ -1348,7 +1348,7 @@ describe("doctor health contributions", () => {
           },
         },
         bindings: [{ agentId: "ops", match: { channel: "telegram" } }],
-      } as unknown as OpenClawConfig,
+      } as unknown as MarketingClawConfig,
       mode: "lint" as const,
       runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
     };
@@ -1383,7 +1383,7 @@ describe("doctor health contributions", () => {
       prompter: buildDoctorPrompter(false),
       runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
       options: { allowExec: true, nonInteractive: true },
-      env: { OPENCLAW_TEST_GATEWAY_TOKEN: "1" },
+      env: { MARKETINGCLAW_TEST_GATEWAY_TOKEN: "1" },
     } as unknown as Parameters<(typeof contribution)["run"]>[0];
 
     await contribution.run(ctx);
@@ -1838,12 +1838,14 @@ describe("doctor health contributions", () => {
   });
 
   it("keeps legacy plugin dependency lint opt-in and read-only", async () => {
-    const previousStateDir = process.env.OPENCLAW_STATE_DIR;
-    const tempDir = fs.mkdtempSync(nodePath.join(os.tmpdir(), "openclaw-legacy-plugin-deps-lint-"));
+    const previousStateDir = process.env.MARKETINGCLAW_STATE_DIR;
+    const tempDir = fs.mkdtempSync(
+      nodePath.join(os.tmpdir(), "marketingclaw-legacy-plugin-deps-lint-"),
+    );
     const stateDir = nodePath.join(tempDir, "state");
     const legacyRuntimeRoot = nodePath.join(stateDir, "plugin-runtime-deps");
     fs.mkdirSync(legacyRuntimeRoot, { recursive: true });
-    process.env.OPENCLAW_STATE_DIR = stateDir;
+    process.env.MARKETINGCLAW_STATE_DIR = stateDir;
     try {
       const contributionChecks = await resolveDoctorContributionHealthChecks();
       const check = contributionChecks.find(
@@ -1881,9 +1883,9 @@ describe("doctor health contributions", () => {
       expect(fs.existsSync(legacyRuntimeRoot)).toBe(true);
     } finally {
       if (previousStateDir === undefined) {
-        delete process.env.OPENCLAW_STATE_DIR;
+        delete process.env.MARKETINGCLAW_STATE_DIR;
       } else {
-        process.env.OPENCLAW_STATE_DIR = previousStateDir;
+        process.env.MARKETINGCLAW_STATE_DIR = previousStateDir;
       }
       fs.rmSync(tempDir, { recursive: true, force: true });
     }
@@ -2024,7 +2026,7 @@ describe("doctor health contributions", () => {
         }),
       ],
     });
-    expect(mocks.collectWorkspaceBackupTip).toHaveBeenCalledWith("/tmp/openclaw-workspace");
+    expect(mocks.collectWorkspaceBackupTip).toHaveBeenCalledWith("/tmp/marketingclaw-workspace");
   });
 
   it("keeps disk space opt-in for default lint selection", async () => {
@@ -2052,8 +2054,8 @@ describe("doctor health contributions", () => {
       {
         checkId: "core/doctor/disk-space",
         severity: "warning",
-        message: "Low disk space: 300 MB free on the partition containing ~/.openclaw.",
-        path: "/home/test/.openclaw",
+        message: "Low disk space: 300 MB free on the partition containing ~/.marketingclaw.",
+        path: "/home/test/.marketingclaw",
         requirement: "low-free-space",
       },
     ]);
@@ -2234,7 +2236,7 @@ describe("doctor health contributions", () => {
     expect(cronStoreCheck).toBeDefined();
 
     const ctx = {
-      cfg: { cron: { store: "/tmp/openclaw-cron/jobs.json" } },
+      cfg: { cron: { store: "/tmp/marketingclaw-cron/jobs.json" } },
       mode: "lint",
       runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
     } as const;
@@ -2251,7 +2253,7 @@ describe("doctor health contributions", () => {
         checkId: "core/doctor/legacy-cron-store",
         severity: "warning",
         message: "Legacy JSON cron store was found.",
-        path: "/tmp/openclaw-cron/jobs.json",
+        path: "/tmp/marketingclaw-cron/jobs.json",
         requirement: "legacy-cron-store",
       },
     ]);
@@ -2437,7 +2439,7 @@ describe("doctor health contributions", () => {
       prompter: buildDoctorPrompter(true),
       runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
       options: {},
-      configPath: "/tmp/fake-openclaw.json",
+      configPath: "/tmp/fake-marketingclaw.json",
     } as unknown as Parameters<(typeof contribution)["run"]>[0];
 
     await contribution.run(ctx);
@@ -2484,15 +2486,15 @@ describe("doctor health contributions", () => {
       prompter: buildDoctorPrompter(true),
       runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
       options: {},
-      configPath: "/tmp/fake-openclaw.json",
+      configPath: "/tmp/fake-marketingclaw.json",
     } as unknown as Parameters<(typeof contribution)["run"]>[0];
 
     await contribution.run(ctx);
 
     expect(mocks.runDoctorHealthRepairs).toHaveBeenCalledWith(
       expect.objectContaining({
-        cwd: "/tmp/openclaw-workspace",
-        configPath: "/tmp/fake-openclaw.json",
+        cwd: "/tmp/marketingclaw-workspace",
+        configPath: "/tmp/fake-marketingclaw.json",
       }),
       {
         checks: contribution.healthChecks,
@@ -2517,9 +2519,9 @@ describe("doctor health contributions", () => {
           checkId: "core/doctor/test-structured-findings",
           severity: "warning",
           message: "structured finding needs attention",
-          path: "openclaw.json",
+          path: "marketingclaw.json",
           line: 12,
-          fixHint: "run openclaw doctor --fix",
+          fixHint: "run marketingclaw doctor --fix",
         },
       ],
       remainingFindings: [],
@@ -2544,15 +2546,15 @@ describe("doctor health contributions", () => {
       prompter: buildDoctorPrompter(false),
       runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
       options: {},
-      configPath: "/tmp/fake-openclaw.json",
+      configPath: "/tmp/fake-marketingclaw.json",
     } as unknown as Parameters<(typeof contribution)["run"]>[0];
 
     await contribution.run(ctx);
 
     expect(ctx.runtime.log).toHaveBeenCalledWith(
-      "[warning] core/doctor/test-structured-findings openclaw.json:12 - structured finding needs attention",
+      "[warning] core/doctor/test-structured-findings marketingclaw.json:12 - structured finding needs attention",
     );
-    expect(ctx.runtime.log).toHaveBeenCalledWith("  fix: run openclaw doctor --fix");
+    expect(ctx.runtime.log).toHaveBeenCalledWith("  fix: run marketingclaw doctor --fix");
   });
 
   it("runs structured-only contributions in dry-run mode when doctor is not repairing", async () => {
@@ -2573,13 +2575,13 @@ describe("doctor health contributions", () => {
       prompter: buildDoctorPrompter(false),
       runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
       options: {},
-      configPath: "/tmp/fake-openclaw.json",
+      configPath: "/tmp/fake-marketingclaw.json",
     } as unknown as Parameters<(typeof contribution)["run"]>[0];
 
     await contribution.run(ctx);
 
     expect(mocks.runDoctorHealthRepairs).toHaveBeenCalledWith(
-      expect.objectContaining({ cwd: "/tmp/openclaw-workspace" }),
+      expect.objectContaining({ cwd: "/tmp/marketingclaw-workspace" }),
       {
         checks: contribution.healthChecks,
         dryRun: true,
@@ -2635,7 +2637,7 @@ describe("doctor health contributions", () => {
       prompter: buildDoctorPrompter(true),
       runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
       options: {},
-      configPath: "/tmp/fake-openclaw.json",
+      configPath: "/tmp/fake-marketingclaw.json",
     } as unknown as Parameters<(typeof contribution)["run"]>[0];
 
     await contribution.run(ctx);
@@ -2665,7 +2667,7 @@ describe("doctor health contributions", () => {
       runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
       options: {},
       cfgForPersistence: {},
-      configPath: "/tmp/fake-openclaw.json",
+      configPath: "/tmp/fake-marketingclaw.json",
       env: {},
     } as unknown as Parameters<(typeof contribution)["run"]>[0];
 
@@ -2690,7 +2692,7 @@ describe("doctor health contributions", () => {
       runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
       options: {},
       cfgForPersistence: {},
-      configPath: "/tmp/fake-openclaw.json",
+      configPath: "/tmp/fake-marketingclaw.json",
       env: {},
     } as unknown as Parameters<(typeof contribution)["run"]>[0];
 
@@ -2714,7 +2716,7 @@ describe("doctor health contributions", () => {
       runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
       options: {},
       cfgForPersistence: {},
-      configPath: "/tmp/fake-openclaw.json",
+      configPath: "/tmp/fake-marketingclaw.json",
       env: {},
     } as unknown as Parameters<(typeof contribution)["run"]>[0];
 
@@ -2750,7 +2752,7 @@ describe("doctor health contributions", () => {
       runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
       options: {},
       cfgForPersistence: {},
-      configPath: "/tmp/fake-openclaw.json",
+      configPath: "/tmp/fake-marketingclaw.json",
       env: {},
     } as unknown as Parameters<(typeof contribution)["run"]>[0];
 
@@ -2793,7 +2795,7 @@ describe("doctor health contributions", () => {
       runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
       options: {},
       cfgForPersistence: {},
-      configPath: "/tmp/fake-openclaw.json",
+      configPath: "/tmp/fake-marketingclaw.json",
       env: {},
     } as Parameters<(typeof contribution)["run"]>[0];
 
@@ -2840,14 +2842,14 @@ describe("doctor health contributions", () => {
             },
           },
           bindings: [{ agentId: "ops", match: { channel: "telegram" } }],
-        } as unknown as OpenClawConfig,
+        } as unknown as MarketingClawConfig,
         configResult: { cfg: {} },
         sourceConfigValid: true,
         prompter: buildDoctorPrompter(shouldRepair),
         runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
         options: {},
         cfgForPersistence: {},
-        configPath: "/tmp/fake-openclaw.json",
+        configPath: "/tmp/fake-marketingclaw.json",
         env: {},
       } as unknown as Parameters<(typeof contribution)["run"]>[0];
 
@@ -2872,7 +2874,7 @@ describe("doctor health contributions", () => {
   it("skips doctor config writes under legacy update parents", () => {
     expect(
       shouldSkipLegacyUpdateDoctorConfigWrite({
-        env: { OPENCLAW_UPDATE_IN_PROGRESS: "1" },
+        env: { MARKETINGCLAW_UPDATE_IN_PROGRESS: "1" },
       }),
     ).toBe(true);
   });
@@ -2889,8 +2891,8 @@ describe("doctor health contributions", () => {
     expect(
       shouldSkipLegacyUpdateDoctorConfigWrite({
         env: {
-          OPENCLAW_UPDATE_IN_PROGRESS: "1",
-          OPENCLAW_UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE: "1",
+          MARKETINGCLAW_UPDATE_IN_PROGRESS: "1",
+          MARKETINGCLAW_UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE: "1",
         },
       }),
     ).toBe(false);
@@ -2900,7 +2902,7 @@ describe("doctor health contributions", () => {
     expect(
       shouldSkipLegacyUpdateDoctorConfigWrite({
         env: {
-          OPENCLAW_UPDATE_IN_PROGRESS: "0",
+          MARKETINGCLAW_UPDATE_IN_PROGRESS: "0",
         },
       }),
     ).toBe(false);
@@ -2920,7 +2922,7 @@ describe("doctor health contributions", () => {
         cfg: {},
         mode: "lint" as const,
         runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
-        configPath: "/tmp/fake-openclaw.json",
+        configPath: "/tmp/fake-marketingclaw.json",
       };
 
       await expect(runDoctorLintChecks(ctx, { checks: [check] })).resolves.toMatchObject({
@@ -2931,7 +2933,7 @@ describe("doctor health contributions", () => {
     });
 
     it("reports Nix immutable config mode when selected", async () => {
-      vi.stubEnv("OPENCLAW_NIX_MODE", "1");
+      vi.stubEnv("MARKETINGCLAW_NIX_MODE", "1");
 
       await expect(
         runDoctorLintChecks(
@@ -2939,7 +2941,7 @@ describe("doctor health contributions", () => {
             cfg: {},
             mode: "lint" as const,
             runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
-            configPath: "/tmp/fake-openclaw.json",
+            configPath: "/tmp/fake-marketingclaw.json",
           },
           { checks: [check], onlyIds: ["core/doctor/write-config"] },
         ),
@@ -2949,7 +2951,7 @@ describe("doctor health contributions", () => {
         findings: [
           expect.objectContaining({
             checkId: "core/doctor/write-config",
-            path: "/tmp/fake-openclaw.json",
+            path: "/tmp/fake-marketingclaw.json",
             requirement: "mutable-config-write-path",
           }),
         ],
@@ -2957,7 +2959,7 @@ describe("doctor health contributions", () => {
     });
 
     it("skips a read-only existing config when its directory is writable", async () => {
-      const configPath = "/tmp/openclaw-home/openclaw.json";
+      const configPath = "/tmp/marketingclaw-home/marketingclaw.json";
       vi.spyOn(fs, "existsSync").mockImplementation((path) => path === configPath);
       vi.spyOn(fs, "statSync").mockReturnValue({
         isDirectory: () => true,
@@ -2978,13 +2980,13 @@ describe("doctor health contributions", () => {
         findings: [],
       });
       expect(accessSpy).toHaveBeenCalledWith(
-        "/tmp/openclaw-home",
+        "/tmp/marketingclaw-home",
         fs.constants.W_OK | fs.constants.X_OK,
       );
     });
 
     it("reports an unwritable config directory for an existing config", async () => {
-      const configPath = "/tmp/openclaw-home/openclaw.json";
+      const configPath = "/tmp/marketingclaw-home/marketingclaw.json";
       vi.spyOn(fs, "existsSync").mockImplementation((path) => path === configPath);
       vi.spyOn(fs, "statSync").mockReturnValue({
         isDirectory: () => true,
@@ -3007,7 +3009,7 @@ describe("doctor health contributions", () => {
         findings: [
           expect.objectContaining({
             checkId: "core/doctor/write-config",
-            path: "/tmp/openclaw-home",
+            path: "/tmp/marketingclaw-home",
             target: configPath,
             requirement: "writable-config-directory",
           }),
@@ -3025,7 +3027,7 @@ describe("doctor health contributions", () => {
             cfg: {},
             mode: "lint" as const,
             runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
-            configPath: "/tmp/openclaw-home/openclaw.json",
+            configPath: "/tmp/marketingclaw-home/marketingclaw.json",
           },
           { checks: [check], onlyIds: ["core/doctor/write-config"] },
         ),
@@ -3047,7 +3049,7 @@ describe("doctor health contributions", () => {
             cfg: {},
             mode: "lint" as const,
             runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
-            configPath: "/tmp/openclaw-home/openclaw.json",
+            configPath: "/tmp/marketingclaw-home/marketingclaw.json",
           },
           { checks: [check], onlyIds: ["core/doctor/write-config"] },
         ),
@@ -3056,7 +3058,7 @@ describe("doctor health contributions", () => {
           expect.objectContaining({
             checkId: "core/doctor/write-config",
             path: "/tmp",
-            target: "/tmp/openclaw-home",
+            target: "/tmp/marketingclaw-home",
             requirement: "writable-config-directory",
           }),
         ],
@@ -3077,7 +3079,7 @@ describe("doctor health contributions", () => {
             cfg: {},
             mode: "lint" as const,
             runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
-            configPath: "/tmp/openclaw-home/openclaw.json",
+            configPath: "/tmp/marketingclaw-home/marketingclaw.json",
           },
           { checks: [check], onlyIds: ["core/doctor/write-config"] },
         ),
@@ -3086,7 +3088,7 @@ describe("doctor health contributions", () => {
           expect.objectContaining({
             checkId: "core/doctor/write-config",
             path: "/tmp",
-            target: "/tmp/openclaw-home",
+            target: "/tmp/marketingclaw-home",
             requirement: "writable-config-directory",
           }),
         ],
@@ -3094,7 +3096,7 @@ describe("doctor health contributions", () => {
     });
 
     it("reports an existing file that blocks the config directory path", async () => {
-      vi.spyOn(fs, "existsSync").mockImplementation((path) => path === "/tmp/openclaw-home");
+      vi.spyOn(fs, "existsSync").mockImplementation((path) => path === "/tmp/marketingclaw-home");
       vi.spyOn(fs, "statSync").mockReturnValue({
         isDirectory: () => false,
       } as fs.Stats);
@@ -3106,7 +3108,7 @@ describe("doctor health contributions", () => {
             cfg: {},
             mode: "lint" as const,
             runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
-            configPath: "/tmp/openclaw-home/openclaw.json",
+            configPath: "/tmp/marketingclaw-home/marketingclaw.json",
           },
           { checks: [check], onlyIds: ["core/doctor/write-config"] },
         ),
@@ -3114,8 +3116,8 @@ describe("doctor health contributions", () => {
         findings: [
           expect.objectContaining({
             checkId: "core/doctor/write-config",
-            path: "/tmp/openclaw-home",
-            target: "/tmp/openclaw-home",
+            path: "/tmp/marketingclaw-home",
+            target: "/tmp/marketingclaw-home",
             requirement: "config-directory-path",
           }),
         ],
@@ -3126,7 +3128,7 @@ describe("doctor health contributions", () => {
     it("reports a dangling symlink that blocks the config directory path", async () => {
       vi.spyOn(fs, "existsSync").mockImplementation((path) => path === "/tmp");
       vi.spyOn(fs, "lstatSync").mockImplementation((path) => {
-        if (path === "/tmp/openclaw-home") {
+        if (path === "/tmp/marketingclaw-home") {
           return { isDirectory: () => false } as fs.Stats;
         }
         throw Object.assign(new Error("ENOENT"), { code: "ENOENT" });
@@ -3142,7 +3144,7 @@ describe("doctor health contributions", () => {
             cfg: {},
             mode: "lint" as const,
             runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
-            configPath: "/tmp/openclaw-home/openclaw.json",
+            configPath: "/tmp/marketingclaw-home/marketingclaw.json",
           },
           { checks: [check], onlyIds: ["core/doctor/write-config"] },
         ),
@@ -3150,8 +3152,8 @@ describe("doctor health contributions", () => {
         findings: [
           expect.objectContaining({
             checkId: "core/doctor/write-config",
-            path: "/tmp/openclaw-home",
-            target: "/tmp/openclaw-home",
+            path: "/tmp/marketingclaw-home",
+            target: "/tmp/marketingclaw-home",
             requirement: "config-directory-path",
           }),
         ],
@@ -3183,7 +3185,7 @@ describe("doctor health contributions", () => {
         shouldWriteConfig: true,
         skipPluginValidationOnWrite: true,
       },
-      configPath: "/tmp/fake-openclaw.json",
+      configPath: "/tmp/fake-marketingclaw.json",
       sourceConfigValid: true,
       prompter: buildDoctorPrompter(true),
       runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
@@ -3231,7 +3233,7 @@ describe("doctor health contributions", () => {
           shouldWriteConfig: true,
           skipPluginValidationOnWrite: false,
         },
-        configPath: "/tmp/fake-openclaw.json",
+        configPath: "/tmp/fake-marketingclaw.json",
         sourceConfigValid: true,
         prompter: buildDoctorPrompter(true),
         runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
@@ -3244,10 +3246,10 @@ describe("doctor health contributions", () => {
       (entry) => entry.id === "doctor:write-config",
     )!;
 
-    it("allows config size drops when OPENCLAW_UPDATE_IN_PROGRESS=1", async () => {
+    it("allows config size drops when MARKETINGCLAW_UPDATE_IN_PROGRESS=1", async () => {
       const ctx = buildWriteConfigCtx({
-        OPENCLAW_UPDATE_IN_PROGRESS: "1",
-        OPENCLAW_UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE: "1",
+        MARKETINGCLAW_UPDATE_IN_PROGRESS: "1",
+        MARKETINGCLAW_UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE: "1",
       });
       await writeConfigContribution.run(ctx);
       expect(mocks.replaceConfigFile).toHaveBeenCalledWith(
@@ -3261,8 +3263,8 @@ describe("doctor health contributions", () => {
 
     it("skips plugin schema validation during update doctor writes", async () => {
       const ctx = buildWriteConfigCtx({
-        OPENCLAW_UPDATE_IN_PROGRESS: "1",
-        OPENCLAW_UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE: "1",
+        MARKETINGCLAW_UPDATE_IN_PROGRESS: "1",
+        MARKETINGCLAW_UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE: "1",
       });
       await writeConfigContribution.run(ctx);
       expect(mocks.replaceConfigFile).toHaveBeenCalledWith(
@@ -3276,8 +3278,8 @@ describe("doctor health contributions", () => {
 
     it("preserves source config version for legacy parent writable update doctor writes", async () => {
       const ctx = buildWriteConfigCtx({
-        OPENCLAW_UPDATE_IN_PROGRESS: "1",
-        OPENCLAW_UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE: "1",
+        MARKETINGCLAW_UPDATE_IN_PROGRESS: "1",
+        MARKETINGCLAW_UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE: "1",
       });
       ctx.configResult.sourceLastTouchedVersion = "2026.5.16-beta.4";
 
@@ -3294,9 +3296,9 @@ describe("doctor health contributions", () => {
 
     it("does not preserve source config version for explicit deferral update doctors", async () => {
       const ctx = buildWriteConfigCtx({
-        OPENCLAW_UPDATE_IN_PROGRESS: "1",
-        OPENCLAW_UPDATE_DEFER_CONFIGURED_PLUGIN_INSTALL_REPAIR: "1",
-        OPENCLAW_UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE: "1",
+        MARKETINGCLAW_UPDATE_IN_PROGRESS: "1",
+        MARKETINGCLAW_UPDATE_DEFER_CONFIGURED_PLUGIN_INSTALL_REPAIR: "1",
+        MARKETINGCLAW_UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE: "1",
       });
       ctx.configResult.sourceLastTouchedVersion = "2026.5.16-beta.4";
 
@@ -3326,14 +3328,14 @@ describe("doctor health contributions", () => {
     it("points update-time config rewrites at the pre-update backup", async () => {
       vi.mocked(fs.existsSync).mockImplementation((value) => String(value).endsWith(".pre-update"));
       const ctx = buildWriteConfigCtx({
-        OPENCLAW_UPDATE_IN_PROGRESS: "1",
-        OPENCLAW_UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE: "1",
+        MARKETINGCLAW_UPDATE_IN_PROGRESS: "1",
+        MARKETINGCLAW_UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE: "1",
       });
 
       await writeConfigContribution.run(ctx);
 
       expect(ctx.runtime.log).toHaveBeenCalledWith(
-        "Update changed config; pre-update backup: /tmp/fake-openclaw.json.pre-update",
+        "Update changed config; pre-update backup: /tmp/fake-marketingclaw.json.pre-update",
       );
     });
 
@@ -3344,13 +3346,13 @@ describe("doctor health contributions", () => {
         cfg: {},
         cfgForPersistence: {},
         configResult: { cfg: {} },
-        configPath: "/tmp/fake-openclaw.json",
+        configPath: "/tmp/fake-marketingclaw.json",
         sourceConfigValid: true,
         prompter: buildDoctorPrompter(true),
         runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },
         options: {},
         env: {
-          OPENCLAW_UPDATE_IN_PROGRESS: "1",
+          MARKETINGCLAW_UPDATE_IN_PROGRESS: "1",
         },
       } as DoctorContributionRunContext);
 
@@ -3366,7 +3368,7 @@ describe("doctor health contributions", () => {
         cfg: {},
         cfgForPersistence: {},
         configResult: { cfg: {} },
-        configPath: "/tmp/fake-openclaw.json",
+        configPath: "/tmp/fake-marketingclaw.json",
         sourceConfigValid: true,
         prompter: buildDoctorPrompter(true),
         runtime: { log: vi.fn(), error: vi.fn(), exit: vi.fn() },

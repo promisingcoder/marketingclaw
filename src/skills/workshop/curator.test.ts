@@ -8,7 +8,7 @@ import {
   setDiagnosticsEnabledForProcess,
   waitForDiagnosticEventsDrained,
 } from "../../infra/diagnostic-events.js";
-import { closeOpenClawStateDatabaseForTest } from "../../state/openclaw-state-db.js";
+import { closeMarketingClawStateDatabaseForTest } from "../../state/marketingclaw-state-db.js";
 import { loadSkills } from "../loading/session.js";
 import {
   buildWorkspaceSkillSnapshot,
@@ -77,7 +77,7 @@ function addAppliedSkill(params: {
     scanState: "clean",
   });
   store.records.set(id, {
-    schema: "openclaw.skill-workshop.proposal.v1",
+    schema: "marketingclaw.skill-workshop.proposal.v1",
     id,
     kind,
     status: "applied",
@@ -119,15 +119,15 @@ function writeSkill(agentDir: string, key: string, name: string): void {
 }
 
 beforeEach(() => {
-  rootDir = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-curator-")));
+  rootDir = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-curator-")));
   stateDir = path.join(rootDir, "state-root");
   fs.mkdirSync(stateDir, { recursive: true });
-  originalStateDir = process.env.OPENCLAW_STATE_DIR;
-  process.env.OPENCLAW_STATE_DIR = stateDir;
+  originalStateDir = process.env.MARKETINGCLAW_STATE_DIR;
+  process.env.MARKETINGCLAW_STATE_DIR = stateDir;
   store.entries.length = 0;
   store.records.clear();
   store.readManifest.mockReset().mockImplementation(async () => ({
-    schema: "openclaw.skill-workshop.proposals-manifest.v1",
+    schema: "marketingclaw.skill-workshop.proposals-manifest.v1",
     updatedAt: new Date(0).toISOString(),
     proposals: store.entries,
   }));
@@ -137,12 +137,12 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  closeOpenClawStateDatabaseForTest();
+  closeMarketingClawStateDatabaseForTest();
   resetDiagnosticEventsForTest();
   if (originalStateDir === undefined) {
-    delete process.env.OPENCLAW_STATE_DIR;
+    delete process.env.MARKETINGCLAW_STATE_DIR;
   } else {
-    process.env.OPENCLAW_STATE_DIR = originalStateDir;
+    process.env.MARKETINGCLAW_STATE_DIR = originalStateDir;
   }
   fs.rmSync(rootDir, { recursive: true, force: true });
 });
@@ -508,7 +508,7 @@ describe("skill curator lifecycle", () => {
     ).toContain("skill curator has not completed a sweep");
 
     resolveManifest?.({
-      schema: "openclaw.skill-workshop.proposals-manifest.v1",
+      schema: "marketingclaw.skill-workshop.proposals-manifest.v1",
       updatedAt: new Date(nowMs).toISOString(),
       proposals: [],
     });

@@ -1,5 +1,5 @@
 // Qa Lab plugin module plans bounded CI smoke shards.
-import { OPENCLAW_CRABLINE_DEFAULT_CHANNEL } from "@openclaw/crabline";
+import { MARKETINGCLAW_CRABLINE_DEFAULT_CHANNEL } from "@openclaw/crabline";
 import { defaultQaModelForMode, normalizeQaProviderMode } from "./model-selection.js";
 import { readQaScenarioPack, type QaSeedScenarioWithSource } from "./scenario-catalog.js";
 import { readQaScorecardTaxonomyReport } from "./scorecard-taxonomy.js";
@@ -90,7 +90,7 @@ export function createQaSmokeCiMatrix(): { include: QaSmokeCiShard[] } {
 
   const scenariosByChannel = new Map<string, QaSeedScenarioWithSource[]>();
   for (const scenario of scenarios) {
-    const channel = scenario.execution.channel ?? OPENCLAW_CRABLINE_DEFAULT_CHANNEL;
+    const channel = scenario.execution.channel ?? MARKETINGCLAW_CRABLINE_DEFAULT_CHANNEL;
     const channelScenarios = scenariosByChannel.get(channel) ?? [];
     channelScenarios.push(scenario);
     scenariosByChannel.set(channel, channelScenarios);
@@ -100,7 +100,7 @@ export function createQaSmokeCiMatrix(): { include: QaSmokeCiShard[] } {
     .toSorted(([left], [right]) => left.localeCompare(right))
     .flatMap(([channel, channelScenarios]) => {
       const shardCount =
-        channel === OPENCLAW_CRABLINE_DEFAULT_CHANNEL
+        channel === MARKETINGCLAW_CRABLINE_DEFAULT_CHANNEL
           ? Math.min(QA_SMOKE_DEFAULT_CHANNEL_SHARDS, channelScenarios.length)
           : 1;
       return splitBalanced(channelScenarios, shardCount).map((shardScenarios, index) => {

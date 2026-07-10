@@ -1,6 +1,6 @@
 // Model list result building resolves visible model catalogs for an agent and
 // strips runtime-only provider params before sending the browse API payload.
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
+import { normalizeProviderId } from "@marketingclaw/model-catalog-core/provider-id";
 import {
   resolveAgentDir,
   resolveAgentEffectiveModelPrimary,
@@ -26,7 +26,7 @@ import {
 import type { ModelCatalogEntry } from "../../agents/model-catalog.types.js";
 import { resolveCliRuntimeExecutionProvider } from "../../agents/model-runtime-aliases.js";
 import { resolveDefaultAgentWorkspaceDir } from "../../agents/workspace.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import { isSecretRef } from "../../config/types.secrets.js";
 import type { GatewayRequestContext } from "./types.js";
 
@@ -134,7 +134,7 @@ function profileHasReadOnlyAvailableAuth(params: {
 function hasReadOnlyAvailableProfileAuth(params: {
   provider: string;
   modelApi?: string;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   store: AuthProfileStore;
 }): ModelsListAvailability {
   const now = Date.now();
@@ -165,7 +165,7 @@ function hasReadOnlyAvailableProfileAuth(params: {
 }
 
 function createModelsListProviderAuthChecker(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   agentId: string;
   workspaceDir: string;
 }): ModelsListProviderAuthChecker {
@@ -196,7 +196,7 @@ function createModelsListProviderAuthChecker(params: {
 async function resolveModelsListEntryAvailability(
   providerAuthChecker: ModelsListProviderAuthChecker,
   entry: ModelCatalogEntry,
-  cfg: OpenClawConfig,
+  cfg: MarketingClawConfig,
   agentId: string,
 ): Promise<ModelsListAvailability> {
   const primary = await providerAuthChecker(entry.provider, entry.api);
@@ -231,7 +231,7 @@ async function resolveModelsListEntryAvailability(
 
 async function buildPublicModelsListEntry(params: {
   entry: ModelCatalogEntry;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   agentId: string;
   providerAuthChecker?: ModelsListProviderAuthChecker;
 }): Promise<ModelsListEntry> {
@@ -253,7 +253,7 @@ async function buildPublicModelsListEntry(params: {
 
 async function buildPublicModelsListEntries(params: {
   catalog: ModelCatalogEntry[];
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   agentId: string;
   workspaceDir: string;
 }): Promise<ModelsListEntry[]> {

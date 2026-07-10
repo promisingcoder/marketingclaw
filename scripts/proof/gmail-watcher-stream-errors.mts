@@ -19,7 +19,7 @@ const require = createRequire(import.meta.url);
 const childProcess = require("node:child_process") as typeof import("node:child_process");
 const originalSpawn = childProcess.spawn;
 
-const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-proof-gog-"));
+const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-proof-gog-"));
 const fakeGog = path.join(tmpDir, "gog");
 
 // Fake gog that succeeds for `watch start` and sleeps for `watch serve`.

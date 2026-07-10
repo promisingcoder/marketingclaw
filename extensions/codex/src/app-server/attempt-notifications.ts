@@ -1,7 +1,7 @@
 /**
  * Predicates and readers for Codex app-server notification envelopes.
  */
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+import { truncateUtf16Safe } from "marketingclaw/plugin-sdk/text-utility-runtime";
 import {
   isJsonObject,
   type CodexServerNotification,
@@ -199,16 +199,16 @@ export function readNotificationItemId(notification: CodexServerNotification): s
   );
 }
 
-/** Detects completion for an OpenClaw dynamic tool result still awaited by Codex. */
-export function isPendingOpenClawDynamicToolCompletionNotification(
+/** Detects completion for an MarketingClaw dynamic tool result still awaited by Codex. */
+export function isPendingMarketingClawDynamicToolCompletionNotification(
   notification: CodexServerNotification,
-  pendingOpenClawDynamicToolCompletionIds: ReadonlySet<string>,
+  pendingMarketingClawDynamicToolCompletionIds: ReadonlySet<string>,
 ): boolean {
   if (notification.method !== "item/completed" || !isJsonObject(notification.params)) {
     return false;
   }
   const itemId = readNotificationItemId(notification);
-  if (!itemId || !pendingOpenClawDynamicToolCompletionIds.has(itemId)) {
+  if (!itemId || !pendingMarketingClawDynamicToolCompletionIds.has(itemId)) {
     return false;
   }
   const item = isJsonObject(notification.params.item) ? notification.params.item : undefined;

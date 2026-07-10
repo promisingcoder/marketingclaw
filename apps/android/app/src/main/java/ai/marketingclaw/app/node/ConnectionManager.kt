@@ -1,15 +1,15 @@
-package ai.openclaw.app.node
+package ai.marketingclaw.app.node
 
-import ai.openclaw.app.BuildConfig
-import ai.openclaw.app.LocationMode
-import ai.openclaw.app.SecurePrefs
-import ai.openclaw.app.VoiceWakeMode
-import ai.openclaw.app.gateway.GatewayClientInfo
-import ai.openclaw.app.gateway.GatewayConnectOptions
-import ai.openclaw.app.gateway.GatewayEndpoint
-import ai.openclaw.app.gateway.GatewayTlsParams
-import ai.openclaw.app.gateway.isLocalCleartextGatewayHost
-import ai.openclaw.app.gateway.isLoopbackGatewayHost
+import ai.marketingclaw.app.BuildConfig
+import ai.marketingclaw.app.LocationMode
+import ai.marketingclaw.app.SecurePrefs
+import ai.marketingclaw.app.VoiceWakeMode
+import ai.marketingclaw.app.gateway.GatewayClientInfo
+import ai.marketingclaw.app.gateway.GatewayConnectOptions
+import ai.marketingclaw.app.gateway.GatewayEndpoint
+import ai.marketingclaw.app.gateway.GatewayTlsParams
+import ai.marketingclaw.app.gateway.isLocalCleartextGatewayHost
+import ai.marketingclaw.app.gateway.isLoopbackGatewayHost
 import android.os.Build
 
 /**
@@ -182,7 +182,7 @@ class ConnectionManager(
         ?.trim()
         .orEmpty()
     val releaseLabel = if (release.isEmpty()) "unknown" else release
-    return "OpenClawAndroid/$version (Android $releaseLabel; SDK ${Build.VERSION.SDK_INT})"
+    return "MarketingClawAndroid/$version (Android $releaseLabel; SDK ${Build.VERSION.SDK_INT})"
   }
 
   /** Client identity block shared by node and operator gateway sessions. */
@@ -209,7 +209,7 @@ class ConnectionManager(
       caps = buildCapabilities(),
       commands = buildInvokeCommands(),
       permissions = emptyMap(),
-      client = buildClientInfo(clientId = "openclaw-android", clientMode = "node"),
+      client = buildClientInfo(clientId = "marketingclaw-android", clientMode = "node"),
       userAgent = buildUserAgent(),
     )
 
@@ -223,7 +223,7 @@ class ConnectionManager(
       caps = emptyList(),
       commands = emptyList(),
       permissions = emptyMap(),
-      client = buildClientInfo(clientId = "openclaw-android", clientMode = "ui"),
+      client = buildClientInfo(clientId = "marketingclaw-android", clientMode = "ui"),
       userAgent = buildUserAgent(),
     )
 

@@ -1,29 +1,29 @@
 // Signal plugin module implements channel behavior.
-import { DEFAULT_ACCOUNT_ID } from "openclaw/plugin-sdk/account-id";
-import { buildDmGroupAccountAllowlistAdapter } from "openclaw/plugin-sdk/allowlist-config-edit";
-import type { ChannelOutboundAdapter } from "openclaw/plugin-sdk/channel-contract";
-import { createChatChannelPlugin, type ChannelPlugin } from "openclaw/plugin-sdk/channel-core";
-import { defineChannelMessageAdapter } from "openclaw/plugin-sdk/channel-outbound";
-import { resolveOutboundSendDep } from "openclaw/plugin-sdk/channel-outbound";
-import { createPairingPrefixStripper } from "openclaw/plugin-sdk/channel-pairing";
-import { attachChannelToResult } from "openclaw/plugin-sdk/channel-send-result";
-import { PAIRING_APPROVED_MESSAGE } from "openclaw/plugin-sdk/channel-status";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import { resolveMarkdownTableMode } from "openclaw/plugin-sdk/markdown-table-runtime";
-import { resolveChannelMediaMaxBytes } from "openclaw/plugin-sdk/media-runtime";
-import { chunkText, resolveTextChunkLimit } from "openclaw/plugin-sdk/reply-chunking";
-import { buildOutboundBaseSessionKey, type RoutePeer } from "openclaw/plugin-sdk/routing";
+import { DEFAULT_ACCOUNT_ID } from "marketingclaw/plugin-sdk/account-id";
+import { buildDmGroupAccountAllowlistAdapter } from "marketingclaw/plugin-sdk/allowlist-config-edit";
+import type { ChannelOutboundAdapter } from "marketingclaw/plugin-sdk/channel-contract";
+import { createChatChannelPlugin, type ChannelPlugin } from "marketingclaw/plugin-sdk/channel-core";
+import { defineChannelMessageAdapter } from "marketingclaw/plugin-sdk/channel-outbound";
+import { resolveOutboundSendDep } from "marketingclaw/plugin-sdk/channel-outbound";
+import { createPairingPrefixStripper } from "marketingclaw/plugin-sdk/channel-pairing";
+import { attachChannelToResult } from "marketingclaw/plugin-sdk/channel-send-result";
+import { PAIRING_APPROVED_MESSAGE } from "marketingclaw/plugin-sdk/channel-status";
+import { createLazyRuntimeModule } from "marketingclaw/plugin-sdk/lazy-runtime";
+import { resolveMarkdownTableMode } from "marketingclaw/plugin-sdk/markdown-table-runtime";
+import { resolveChannelMediaMaxBytes } from "marketingclaw/plugin-sdk/media-runtime";
+import { chunkText, resolveTextChunkLimit } from "marketingclaw/plugin-sdk/reply-chunking";
+import { buildOutboundBaseSessionKey, type RoutePeer } from "marketingclaw/plugin-sdk/routing";
 import {
   buildBaseChannelStatusSummary,
   collectStatusIssuesFromLastError,
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "openclaw/plugin-sdk/status-helpers";
+} from "marketingclaw/plugin-sdk/status-helpers";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
-import { sanitizeAssistantVisibleText } from "openclaw/plugin-sdk/text-chunking";
+} from "marketingclaw/plugin-sdk/string-coerce-runtime";
+import { sanitizeAssistantVisibleText } from "marketingclaw/plugin-sdk/text-chunking";
 import {
   resolveSignalAccount,
   resolveSignalReplyToMode,

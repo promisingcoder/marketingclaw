@@ -204,10 +204,10 @@ function buildRenderVariants(params: { options: DiffRenderOptions; target: DiffR
 
 function renderDiffCard(payload: DiffViewerPayload, anchorId?: string): string {
   return `<section class="oc-diff-card"${anchorId ? ` id="${anchorId}"` : ""}>
-    <diffs-container class="oc-diff-host" data-openclaw-diff-host>
+    <diffs-container class="oc-diff-host" data-marketingclaw-diff-host>
       <template shadowrootmode="open">${payload.prerenderedHTML}</template>
     </diffs-container>
-    <script type="application/json" data-openclaw-diff-payload>${escapeJsonScript(payload)}</script>
+    <script type="application/json" data-marketingclaw-diff-payload>${escapeJsonScript(payload)}</script>
   </section>`;
 }
 
@@ -363,7 +363,7 @@ function buildHtmlDocument(params: {
       }
 ${imageTypographyCss}
 
-      [data-openclaw-diff-root] {
+      [data-marketingclaw-diff-root] {
         display: grid;
         gap: 18px;
       }
@@ -479,7 +479,7 @@ ${imageTypographyCss}
           padding: 12px;
         }
 
-        [data-openclaw-diff-root] {
+        [data-marketingclaw-diff-root] {
           gap: 12px;
         }
       }
@@ -487,7 +487,7 @@ ${imageTypographyCss}
   </head>
   <body data-theme="${params.theme}">
     <main class="oc-frame" data-render-mode="${params.runtimeMode}">
-      <div data-openclaw-diff-root>
+      <div data-marketingclaw-diff-root>
         ${params.bodyHtml}
       </div>
     </main>

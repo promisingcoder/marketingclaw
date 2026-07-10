@@ -1,8 +1,8 @@
 import type {
-  OpenClawPluginNodeInvokePolicy,
-  OpenClawPluginNodeInvokePolicyContext,
-  OpenClawPluginNodeInvokePolicyResult,
-} from "openclaw/plugin-sdk/plugin-entry";
+  MarketingClawPluginNodeInvokePolicy,
+  MarketingClawPluginNodeInvokePolicyContext,
+  MarketingClawPluginNodeInvokePolicyResult,
+} from "marketingclaw/plugin-sdk/plugin-entry";
 import type { GoogleMeetConfig } from "./config.js";
 import { normalizeMeetUrl } from "./runtime.js";
 
@@ -12,7 +12,7 @@ const START_MODES = new Set(["agent", "bidi", "realtime", "transcribe"]);
 
 type PolicyDecision =
   | { approved: true; params: Record<string, unknown> }
-  | { approved: false; result: OpenClawPluginNodeInvokePolicyResult };
+  | { approved: false; result: MarketingClawPluginNodeInvokePolicyResult };
 
 function asRecord(value: unknown): Record<string, unknown> {
   return value && typeof value === "object" && !Array.isArray(value)
@@ -164,11 +164,11 @@ function buildForwardParams(params: Record<string, unknown>): Record<string, unk
 
 export function createGoogleMeetChromeNodeInvokePolicy(
   config: GoogleMeetConfig,
-): OpenClawPluginNodeInvokePolicy {
+): MarketingClawPluginNodeInvokePolicy {
   return {
     commands: [GOOGLE_MEET_CHROME_NODE_COMMAND],
     dangerous: true,
-    async handle(ctx: OpenClawPluginNodeInvokePolicyContext) {
+    async handle(ctx: MarketingClawPluginNodeInvokePolicyContext) {
       if (ctx.command !== GOOGLE_MEET_CHROME_NODE_COMMAND) {
         return denied(`unsupported Google Meet node command: ${ctx.command}`);
       }

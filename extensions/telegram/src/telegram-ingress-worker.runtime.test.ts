@@ -56,7 +56,7 @@ function createRuntime(responses: Response[]): {
       token: "TEST:TOKEN",
       accountId: "acct",
       initialUpdateId: null,
-      spoolDir: "/tmp/openclaw-telegram-ingress-worker-test",
+      spoolDir: "/tmp/marketingclaw-telegram-ingress-worker-test",
       apiRoot: "https://api.telegram.test",
       timeoutSeconds: 1,
     },

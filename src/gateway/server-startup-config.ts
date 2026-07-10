@@ -16,7 +16,7 @@ import { applyPluginAutoEnable } from "../config/plugin-auto-enable.js";
 import { isPluginPackagingRuntimeOutputInvalidConfigSnapshot } from "../config/recovery-policy.js";
 import { applyConfigOverrides } from "../config/runtime-overrides.js";
 import type { GatewayAuthConfig, GatewayTailscaleConfig } from "../config/types.gateway.js";
-import type { ConfigFileSnapshot, OpenClawConfig } from "../config/types.openclaw.js";
+import type { ConfigFileSnapshot, MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { measureDiagnosticsTimelineSpan } from "../infra/diagnostics-timeline.js";
 import { isTruthyEnvValue } from "../infra/env.js";
 import type { PluginManifestRegistry } from "../plugins/manifest-registry.js";
@@ -65,7 +65,7 @@ type RuntimeSecretsActivationParams = {
 
 /** Gateway startup hook that prepares secrets and optionally activates the prepared snapshot. */
 export type ActivateRuntimeSecrets = ((
-  config: OpenClawConfig,
+  config: MarketingClawConfig,
   params: RuntimeSecretsActivationParams,
 ) => Promise<PreparedRuntimeSecretsSnapshot>) & {
   activatePreparedSnapshot?: (
@@ -87,7 +87,7 @@ type GatewayStartupConfigMeasure = <T>(
 
 /** Timeline attributes kept small and deterministic for startup secret preparation spans. */
 function secretsPrepareTimelineAttributes(
-  config: OpenClawConfig,
+  config: MarketingClawConfig,
   activationParams: RuntimeSecretsActivationParams,
 ) {
   return {
@@ -162,7 +162,7 @@ export async function loadGatewayStartupConfigSnapshot(params: {
 
 function withRuntimeConfig(
   snapshot: ConfigFileSnapshot,
-  runtimeConfig: OpenClawConfig,
+  runtimeConfig: MarketingClawConfig,
 ): ConfigFileSnapshot {
   return {
     ...snapshot,
@@ -177,7 +177,7 @@ export function createRuntimeSecretsActivator(params: {
   emitStateEvent: (
     code: GatewaySecretsStateEventCode,
     message: string,
-    cfg: OpenClawConfig,
+    cfg: MarketingClawConfig,
   ) => void;
   prepareRuntimeSecretsSnapshot?: PrepareRuntimeSecretsSnapshot;
   activateRuntimeSecretsSnapshot?: ActivateRuntimeSecretsSnapshot;
@@ -242,7 +242,7 @@ export function createRuntimeSecretsActivator(params: {
   const handleSecretsActivationError = (
     err: unknown,
     activationParams: RuntimeSecretsActivationParams,
-    eventConfig: OpenClawConfig,
+    eventConfig: MarketingClawConfig,
   ): never => {
     const details = String(err);
     if (!secretsDegraded) {
@@ -286,7 +286,7 @@ export function createRuntimeSecretsActivator(params: {
             // until refresh/preflight needs dynamic provider or auth-store work.
             const coercePreflightSnapshot = (
               value: unknown,
-              sourceConfig: OpenClawConfig,
+              sourceConfig: MarketingClawConfig,
             ): PreparedRuntimeSecretsSnapshot | null => {
               if (!value || typeof value !== "object") {
                 return null;
@@ -296,7 +296,7 @@ export function createRuntimeSecretsActivator(params: {
             };
             const prepareFastPathRuntimeSnapshot = async (
               secretsRuntime: typeof import("../secrets/runtime.js"),
-              sourceConfig: OpenClawConfig,
+              sourceConfig: MarketingClawConfig,
               includeAuthStoreRefs: boolean | undefined,
             ) =>
               await secretsRuntime.prepareSecretsRuntimeSnapshot({
@@ -470,13 +470,13 @@ export async function prepareGatewayStartupConfig(params: {
     },
     { omitErrorMessage: true },
   );
-  const canReusePreflightPreparedSnapshot = (config: OpenClawConfig): boolean =>
+  const canReusePreflightPreparedSnapshot = (config: MarketingClawConfig): boolean =>
     Boolean(
       preflightPrepared &&
       params.activateRuntimeSecrets.activatePreparedSnapshot &&
       isDeepStrictEqual(pruneSkippedStartupSecretSurfaces(config), preflightPrepared.sourceConfig),
     );
-  const activateStartupSecrets = async (config: OpenClawConfig) => {
+  const activateStartupSecrets = async (config: MarketingClawConfig) => {
     // Reuse the preflight snapshot only if generated startup auth did not
     // change the secret-relevant source config.
     if (preflightPrepared && canReusePreflightPreparedSnapshot(config)) {
@@ -535,7 +535,7 @@ export async function prepareGatewayStartupConfig(params: {
   };
 }
 
-function hasActiveGatewayAuthSecretRef(config: OpenClawConfig): boolean {
+function hasActiveGatewayAuthSecretRef(config: MarketingClawConfig): boolean {
   const states = evaluateGatewayAuthSurfaceStates({
     config,
     defaults: config.secrets?.defaults,
@@ -547,10 +547,10 @@ function hasActiveGatewayAuthSecretRef(config: OpenClawConfig): boolean {
   });
 }
 
-function pruneSkippedStartupSecretSurfaces(config: OpenClawConfig): OpenClawConfig {
+function pruneSkippedStartupSecretSurfaces(config: MarketingClawConfig): MarketingClawConfig {
   const skipChannels =
-    isTruthyEnvValue(process.env.OPENCLAW_SKIP_CHANNELS) ||
-    isTruthyEnvValue(process.env.OPENCLAW_SKIP_PROVIDERS);
+    isTruthyEnvValue(process.env.MARKETINGCLAW_SKIP_CHANNELS) ||
+    isTruthyEnvValue(process.env.MARKETINGCLAW_SKIP_PROVIDERS);
   if (!skipChannels || !config.channels) {
     return config;
   }
@@ -560,7 +560,7 @@ function pruneSkippedStartupSecretSurfaces(config: OpenClawConfig): OpenClawConf
   };
 }
 
-function assertRuntimeGatewayAuthNotKnownWeak(config: OpenClawConfig): void {
+function assertRuntimeGatewayAuthNotKnownWeak(config: MarketingClawConfig): void {
   assertGatewayAuthNotKnownWeak(
     resolveGatewayAuth({
       authConfig: config.gateway?.auth,
@@ -572,7 +572,7 @@ function assertRuntimeGatewayAuthNotKnownWeak(config: OpenClawConfig): void {
 
 function logGatewayAuthSurfaceDiagnostics(
   prepared: {
-    sourceConfig: OpenClawConfig;
+    sourceConfig: MarketingClawConfig;
     warnings: Array<{ code: string; path: string; message: string }>;
   },
   logSecrets: GatewayStartupLog,
@@ -603,9 +603,9 @@ function logGatewayAuthSurfaceDiagnostics(
 }
 
 function applyGatewayAuthOverridesForStartupPreflight(
-  config: OpenClawConfig,
+  config: MarketingClawConfig,
   overrides: GatewayStartupConfigOverrides,
-): OpenClawConfig {
+): MarketingClawConfig {
   if (!overrides.auth && !overrides.tailscale) {
     return config;
   }

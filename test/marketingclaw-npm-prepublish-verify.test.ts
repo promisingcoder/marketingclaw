@@ -1,50 +1,57 @@
 import { describe, expect, it } from "vitest";
 import {
-  openClawNpmPrepublishVerifyUsage,
-  parseOpenClawNpmPrepublishVerifyArgs,
+  marketingClawNpmPrepublishVerifyUsage,
+  parseMarketingClawNpmPrepublishVerifyArgs,
   usesPreparedLocalDependencyInstall,
-} from "../scripts/openclaw-npm-prepublish-verify.ts";
+} from "../scripts/marketingclaw-npm-prepublish-verify.ts";
 
-describe("parseOpenClawNpmPrepublishVerifyArgs", () => {
+describe("parseMarketingClawNpmPrepublishVerifyArgs", () => {
   it("supports help, optional versions, and package-manager separators", () => {
-    expect(parseOpenClawNpmPrepublishVerifyArgs(["--help"])).toEqual({
+    expect(parseMarketingClawNpmPrepublishVerifyArgs(["--help"])).toEqual({
       dependencyTarballPaths: [],
       help: true,
       tarballPath: "",
     });
-    expect(parseOpenClawNpmPrepublishVerifyArgs(["openclaw.tgz"])).toEqual({
+    expect(parseMarketingClawNpmPrepublishVerifyArgs(["marketingclaw.tgz"])).toEqual({
       dependencyTarballPaths: [],
       help: false,
-      tarballPath: "openclaw.tgz",
+      tarballPath: "marketingclaw.tgz",
     });
-    expect(parseOpenClawNpmPrepublishVerifyArgs(["--", "openclaw.tgz", "2026.3.23"])).toEqual({
+    expect(
+      parseMarketingClawNpmPrepublishVerifyArgs(["--", "marketingclaw.tgz", "2026.3.23"]),
+    ).toEqual({
       dependencyTarballPaths: [],
       expectedVersion: "2026.3.23",
       help: false,
-      tarballPath: "openclaw.tgz",
+      tarballPath: "marketingclaw.tgz",
     });
   });
 
   it("rejects missing, option-like, and extra arguments before installing", () => {
-    expect(() => parseOpenClawNpmPrepublishVerifyArgs([])).toThrow(
-      openClawNpmPrepublishVerifyUsage(),
+    expect(() => parseMarketingClawNpmPrepublishVerifyArgs([])).toThrow(
+      marketingClawNpmPrepublishVerifyUsage(),
     );
-    expect(() => parseOpenClawNpmPrepublishVerifyArgs(["--tag"])).toThrow(
-      "Unknown openclaw npm prepublish verifier option: --tag",
+    expect(() => parseMarketingClawNpmPrepublishVerifyArgs(["--tag"])).toThrow(
+      "Unknown marketingclaw npm prepublish verifier option: --tag",
     );
-    expect(() => parseOpenClawNpmPrepublishVerifyArgs(["openclaw.tgz", "--tag"])).toThrow(
-      "Unknown openclaw npm prepublish verifier option: --tag",
+    expect(() => parseMarketingClawNpmPrepublishVerifyArgs(["marketingclaw.tgz", "--tag"])).toThrow(
+      "Unknown marketingclaw npm prepublish verifier option: --tag",
     );
     expect(
-      parseOpenClawNpmPrepublishVerifyArgs(["openclaw.tgz", "2026.3.23", "llm-core.tgz", "ai.tgz"]),
+      parseMarketingClawNpmPrepublishVerifyArgs([
+        "marketingclaw.tgz",
+        "2026.3.23",
+        "llm-core.tgz",
+        "ai.tgz",
+      ]),
     ).toEqual({
       dependencyTarballPaths: ["llm-core.tgz", "ai.tgz"],
       expectedVersion: "2026.3.23",
       help: false,
-      tarballPath: "openclaw.tgz",
+      tarballPath: "marketingclaw.tgz",
     });
     expect(() =>
-      parseOpenClawNpmPrepublishVerifyArgs(["openclaw.tgz", "2026.3.23", "--bad"]),
+      parseMarketingClawNpmPrepublishVerifyArgs(["marketingclaw.tgz", "2026.3.23", "--bad"]),
     ).toThrow("Invalid dependency tarball path: --bad");
   });
 });

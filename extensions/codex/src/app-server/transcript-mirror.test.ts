@@ -3,17 +3,17 @@ import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { AgentMessage } from "openclaw/plugin-sdk/agent-harness-runtime";
+import type { AgentMessage } from "marketingclaw/plugin-sdk/agent-harness-runtime";
 import {
   initializeGlobalHookRunner,
   resetGlobalHookRunner,
-} from "openclaw/plugin-sdk/hook-runtime";
-import { createMockPluginRegistry } from "openclaw/plugin-sdk/plugin-test-runtime";
+} from "marketingclaw/plugin-sdk/hook-runtime";
+import { createMockPluginRegistry } from "marketingclaw/plugin-sdk/plugin-test-runtime";
 import {
   castAgentMessage,
   makeAgentAssistantMessage,
   makeAgentUserMessage,
-} from "openclaw/plugin-sdk/test-fixtures";
+} from "marketingclaw/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   attachCodexMirrorIdentity,
@@ -24,9 +24,9 @@ import {
 
 const publishSessionTranscriptUpdateByIdentityMock = vi.hoisted(() => vi.fn());
 
-vi.mock("openclaw/plugin-sdk/session-transcript-runtime", async (importOriginal) => {
+vi.mock("marketingclaw/plugin-sdk/session-transcript-runtime", async (importOriginal) => {
   const actual =
-    await importOriginal<typeof import("openclaw/plugin-sdk/session-transcript-runtime")>();
+    await importOriginal<typeof import("marketingclaw/plugin-sdk/session-transcript-runtime")>();
   return {
     ...actual,
     publishSessionTranscriptUpdateByIdentity: publishSessionTranscriptUpdateByIdentityMock,
@@ -53,7 +53,7 @@ afterEach(async () => {
 });
 
 async function createTempSessionFile() {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-transcript-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-codex-transcript-"));
   tempDirs.push(dir);
   return path.join(dir, "session.jsonl");
 }
@@ -302,7 +302,7 @@ describe("mirrorCodexAppServerTranscript", () => {
   });
 
   it("leaves the assistant unowned when transcript persistence fails", async () => {
-    const root = await makeRoot("openclaw-codex-transcript-failure-");
+    const root = await makeRoot("marketingclaw-codex-transcript-failure-");
     const invalidParent = path.join(root, "not-a-directory");
     await fs.writeFile(invalidParent, "file blocks transcript directory creation", "utf8");
     const assistantMessage = attachCodexMirrorIdentity(
@@ -370,7 +370,7 @@ describe("mirrorCodexAppServerTranscript", () => {
   });
 
   it("creates the transcript directory on first mirror", async () => {
-    const root = await makeRoot("openclaw-codex-transcript-missing-dir-");
+    const root = await makeRoot("marketingclaw-codex-transcript-missing-dir-");
     const sessionFile = path.join(root, "nested", "sessions", "session.jsonl");
 
     await mirrorCodexAppServerTranscript({

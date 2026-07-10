@@ -23,11 +23,11 @@ import path from "node:path";
 import {
   asDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,
-} from "@openclaw/normalization-core/number-coercion";
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+} from "@marketingclaw/normalization-core/number-coercion";
+import { truncateUtf16Safe } from "@marketingclaw/normalization-core/utf16-slice";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import { toErrorObject } from "../../infra/errors.js";
-import { resolveOpenClawPackageRootSync } from "../../infra/openclaw-root.js";
+import { resolveMarketingClawPackageRootSync } from "../../infra/marketingclaw-root.js";
 import { privateFileStoreSync } from "../../infra/private-file-store.js";
 import { createSubsystemLogger } from "../../logging/subsystem.js";
 import { hasGlobalHooks } from "../../plugins/hook-runner-global.js";
@@ -104,7 +104,7 @@ export type NativeHookRelayRegistration = {
   agentId?: string;
   sessionId: string;
   sessionKey?: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   runId: string;
   channelId?: string;
   allowedEvents: readonly NativeHookRelayEvent[];
@@ -137,7 +137,7 @@ export type RegisterNativeHookRelayParams = {
   agentId?: string;
   sessionId: string;
   sessionKey?: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   runId: string;
   channelId?: string;
   allowedEvents?: readonly NativeHookRelayEvent[];
@@ -265,7 +265,7 @@ type ActiveNativeHookRelayRegistrationHandle = NativeHookRelayRegistrationHandle
   generation: string;
 };
 
-const NATIVE_HOOK_RELAY_STATE_SYMBOL = Symbol.for("openclaw.nativeHookRelay.state");
+const NATIVE_HOOK_RELAY_STATE_SYMBOL = Symbol.for("marketingclaw.nativeHookRelay.state");
 
 function getNativeHookRelaySharedState(): NativeHookRelaySharedState {
   const globalRecord = globalThis as typeof globalThis & {
@@ -413,7 +413,7 @@ const nativeHookRelayProviderAdapters: Record<
               ? { behavior: "allow" }
               : {
                   behavior: "deny",
-                  message: message?.trim() || "Denied by OpenClaw",
+                  message: message?.trim() || "Denied by MarketingClaw",
                 },
         },
       })}\n`,
@@ -575,10 +575,10 @@ export function buildNativeHookRelayCommand(params: {
   nodeExecutable?: string;
 }): string {
   const timeoutMs = normalizePositiveInteger(params.timeoutMs, DEFAULT_RELAY_TIMEOUT_MS);
-  const executable = params.executable ?? resolveOpenClawCliExecutable();
+  const executable = params.executable ?? resolveMarketingClawCliExecutable();
   const argv =
-    executable === "openclaw"
-      ? ["openclaw"]
+    executable === "marketingclaw"
+      ? ["marketingclaw"]
       : [params.nodeExecutable ?? process.execPath, executable];
   const nicePrefix = resolveNativeHookRelayNicePrefix(params.nice);
   return shellQuoteArgs([
@@ -811,7 +811,7 @@ async function resolveNativeHookRelayPreToolUseApproval(
       handled: true,
       outcome: "denied",
       reason:
-        "OpenClaw tool policy rewrote Codex app-server approval params; refusing original request.",
+        "MarketingClaw tool policy rewrote Codex app-server approval params; refusing original request.",
     };
   }
   return {
@@ -1004,7 +1004,7 @@ function isNativeHookRelayBridgePidDead(pid: number): boolean {
 
 function registerNativeHookRelayBridge(registration: ActiveNativeHookRelayRegistration): void {
   // Prune actually stale bridge files from prior gateway processes. The bridge
-  // directory is scoped by OS user (uid) and is shared across all OpenClaw
+  // directory is scoped by OS user (uid) and is shared across all MarketingClaw
   // gateways/profiles run by that user, so a record with a non-current PID is
   // NOT automatically stale — it can legitimately belong to another live
   // gateway under the same uid. Only prune records whose owning PID is dead
@@ -1400,7 +1400,7 @@ function isRetryableNativeHookRelayBridgeLookupError(params: {
 
 function nativeHookRelayBridgeDir(): string {
   const uid = typeof process.getuid === "function" ? process.getuid() : "nouid";
-  return path.join(tmpdir(), `openclaw-native-hook-relays-${uid}`);
+  return path.join(tmpdir(), `marketingclaw-native-hook-relays-${uid}`);
 }
 
 function ensureNativeHookRelayBridgeDir(): string {
@@ -1520,7 +1520,7 @@ async function runNativeHookRelayPreToolUse(params: {
     // Codex app-server may continue with the original params when updatedInput
     // is unsupported, so rewrites must fail closed here.
     return params.adapter.renderPreToolUseBlockResponse(
-      "OpenClaw tool policy rewrote Codex app-server approval params; refusing original request.",
+      "MarketingClaw tool policy rewrote Codex app-server approval params; refusing original request.",
     );
   }
   return params.adapter.renderNoopResponse(params.invocation.event);
@@ -1686,7 +1686,7 @@ function nativeHookRelayPermissionAllowAlwaysKey(params: {
   request: NativeHookRelayPermissionApprovalRequest;
 }): string {
   const hash = createHash("sha256");
-  hash.update("openclaw:native-hook-relay:permission-allow-always:v2");
+  hash.update("marketingclaw:native-hook-relay:permission-allow-always:v2");
   hash.update("\0");
   hash.update(params.registration.relayId);
   hash.update("\0");
@@ -2067,7 +2067,7 @@ function readCodexToolResponse(rawPayload: JsonValue): unknown {
 
 function readNativeHookRelayApprovalMode(rawPayload: JsonValue): "report" | undefined {
   const payload = isJsonObject(rawPayload) ? rawPayload : {};
-  return payload.openclaw_approval_mode === "report" ? "report" : undefined;
+  return payload.marketingclaw_approval_mode === "report" ? "report" : undefined;
 }
 
 function normalizeNativeHookToolName(toolName: string | undefined): string {
@@ -2086,7 +2086,7 @@ async function requestNativeHookRelayPermissionApproval(
     "plugin.approval.request",
     { timeoutMs: timeoutMs + 10_000 },
     {
-      pluginId: `openclaw-native-hook-relay-${request.provider}`,
+      pluginId: `marketingclaw-native-hook-relay-${request.provider}`,
       title: truncateText(
         `${nativeHookRelayProviderDisplayName(request.provider)} permission request`,
         MAX_APPROVAL_TITLE_LENGTH,
@@ -2230,19 +2230,19 @@ function truncateText(value: string, maxLength: number): string {
   return `${truncateUtf16Safe(value, Math.max(0, maxLength - 3))}...`;
 }
 
-function resolveOpenClawCliExecutable(): string {
-  const envPath = process.env.OPENCLAW_CLI_PATH?.trim();
+function resolveMarketingClawCliExecutable(): string {
+  const envPath = process.env.MARKETINGCLAW_CLI_PATH?.trim();
   if (envPath && existsSync(envPath)) {
     return envPath;
   }
-  const packageRoot = resolveOpenClawPackageRootSync({
+  const packageRoot = resolveMarketingClawPackageRootSync({
     moduleUrl: import.meta.url,
     argv1: process.argv[1],
     cwd: process.cwd(),
   });
   if (packageRoot) {
     for (const candidate of [
-      path.join(packageRoot, "openclaw.mjs"),
+      path.join(packageRoot, "marketingclaw.mjs"),
       path.join(packageRoot, "dist", "entry.js"),
       path.join(packageRoot, "scripts", "run-node.mjs"),
     ]) {
@@ -2258,7 +2258,7 @@ function resolveOpenClawCliExecutable(): string {
       return resolved;
     }
   }
-  throw new Error("Cannot resolve OpenClaw CLI executable path for native hook relay");
+  throw new Error("Cannot resolve MarketingClaw CLI executable path for native hook relay");
 }
 
 function normalizeAllowedEvents(

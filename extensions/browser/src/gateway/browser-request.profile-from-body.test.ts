@@ -9,10 +9,10 @@ const { loadConfigMock, isNodeCommandAllowedMock, resolveNodeCommandAllowlistMoc
   }),
 );
 
-vi.mock("openclaw/plugin-sdk/runtime-config-snapshot", async () => {
+vi.mock("marketingclaw/plugin-sdk/runtime-config-snapshot", async () => {
   const actual = await vi.importActual<
-    typeof import("openclaw/plugin-sdk/runtime-config-snapshot")
-  >("openclaw/plugin-sdk/runtime-config-snapshot");
+    typeof import("marketingclaw/plugin-sdk/runtime-config-snapshot")
+  >("marketingclaw/plugin-sdk/runtime-config-snapshot");
   return {
     ...actual,
     loadConfig: loadConfigMock,
@@ -178,7 +178,7 @@ describe("browser.request profile selection", () => {
       error: "headed mode needs a display",
       reason: "no_display_for_headed_profile",
       details: {
-        profile: "openclaw",
+        profile: "marketingclaw",
         requestedHeadless: false,
         headlessSource: "config",
         displayPresent: false,

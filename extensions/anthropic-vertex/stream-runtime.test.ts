@@ -1,5 +1,5 @@
 // Anthropic Vertex tests cover stream runtime plugin behavior.
-import { createAssistantMessageEventStream, type Model } from "openclaw/plugin-sdk/llm";
+import { createAssistantMessageEventStream, type Model } from "marketingclaw/plugin-sdk/llm";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import type { AnthropicVertexStreamDeps } from "./stream-runtime.js";
 
@@ -182,7 +182,7 @@ describe("createAnthropicVertexStreamFn", () => {
     const streamFn = createAnthropicVertexStreamFn("vertex-project", "us-east5", undefined, deps);
     const model = {
       ...makeModel({ id: "claude-fable-5", maxTokens: 128000 }),
-      api: "openclaw-anthropic-vertex-simple:default",
+      api: "marketingclaw-anthropic-vertex-simple:default",
     };
 
     void streamFn(model as never, { messages: [] }, {});

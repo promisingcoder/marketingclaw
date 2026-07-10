@@ -1,12 +1,12 @@
-package ai.openclaw.app
+package ai.marketingclaw.app
 
 import android.content.Intent
 
 /** Android Assistant entry point used by manifest-declared app actions. */
-const val actionAskOpenClaw = "ai.openclaw.app.action.ASK_OPENCLAW"
+const val actionAskMarketingClaw = "ai.marketingclaw.app.action.ASK_MARKETINGCLAW"
 
 /** Debug action that opens the Voice tab directly for Android E2E automation. */
-const val actionOpenVoiceE2e = "ai.openclaw.app.debug.OPEN_VOICE_E2E"
+const val actionOpenVoiceE2e = "ai.marketingclaw.app.debug.OPEN_VOICE_E2E"
 
 /** Intent extra that carries an optional assistant prompt for app actions. */
 const val extraAssistantPrompt = "prompt"
@@ -56,7 +56,7 @@ fun parseAssistantLaunchIntent(intent: Intent?): AssistantLaunchRequest? {
         autoSend = false,
       )
 
-    actionAskOpenClaw -> {
+    actionAskMarketingClaw -> {
       val prompt = intent.getStringExtra(extraAssistantPrompt)?.trim()?.ifEmpty { null }
       AssistantLaunchRequest(
         source = "app_action",

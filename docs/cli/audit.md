@@ -6,7 +6,7 @@ read_when:
 title: "Audit records"
 ---
 
-# `openclaw audit`
+# `marketingclaw audit`
 
 Query the Gateway's metadata-only audit ledger for agent runs and tool actions.
 
@@ -17,17 +17,17 @@ ordering, provenance, action, status, and normalized error codes, but never
 stores prompts, messages, tool arguments, tool results, command output, or raw
 error text.
 
-The Gateway writes records to the shared OpenClaw state database through a
+The Gateway writes records to the shared MarketingClaw state database through a
 bounded background writer. Queries never return records older than 30 days,
 and the ledger is capped at 100,000 rows. Expired rows are deleted during
 Gateway startup, hourly maintenance, and later writes.
 
 ```bash
-openclaw audit
-openclaw audit --agent main --status failed
-openclaw audit --session "agent:main:main" --after 2026-07-01T00:00:00Z
-openclaw audit --run 8c69f72e-8b11-4c54-98d5-1a3dd67450c3
-openclaw audit --kind tool_action --limit 50 --json
+marketingclaw audit
+marketingclaw audit --agent main --status failed
+marketingclaw audit --session "agent:main:main" --after 2026-07-01T00:00:00Z
+marketingclaw audit --run 8c69f72e-8b11-4c54-98d5-1a3dd67450c3
+marketingclaw audit --kind tool_action --limit 50 --json
 ```
 
 ## Filters
@@ -79,7 +79,7 @@ copying conversation content into another store.
 `audit.list` requires `operator.read` and accepts the same filters. Example:
 
 ```bash
-openclaw gateway call audit.list --params '{"agentId":"main","status":"failed","limit":50}'
+marketingclaw gateway call audit.list --params '{"agentId":"main","status":"failed","limit":50}'
 ```
 
 The result is `{ "events": AuditEvent[], "nextCursor"?: string }`. Results are

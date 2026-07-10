@@ -562,7 +562,7 @@ function renderChatModelReasoningSelect(params: {
           ? "chat-controls__combined-model--default"
           : ""}"
       >
-        <openclaw-tooltip .content=${entry.label}>
+        <marketingclaw-tooltip .content=${entry.label}>
           <button
             class="chat-controls__inline-select-option chat-controls__combined-model-option ${selected
               ? "chat-controls__inline-select-option--selected"
@@ -597,7 +597,7 @@ function renderChatModelReasoningSelect(params: {
                 `
               : ""}
           </button>
-        </openclaw-tooltip>
+        </marketingclaw-tooltip>
       </div>
     `;
   };

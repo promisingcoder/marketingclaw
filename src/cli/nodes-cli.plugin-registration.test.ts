@@ -38,7 +38,7 @@ describe("registerNodesCli plugin registration", () => {
   it("skips plugin CLI/runtime registration for built-in nodes subcommands", async () => {
     for (const subcommand of ["status", "list", "describe", "invoke", "pending", "camera"]) {
       registerPluginCliCommandsFromValidatedConfig.mockClear();
-      await registerWithArgv(["node", "openclaw", "nodes", subcommand, "--json"]);
+      await registerWithArgv(["node", "marketingclaw", "nodes", subcommand, "--json"]);
       expect(registerPluginCliCommandsFromValidatedConfig).not.toHaveBeenCalled();
     }
   });
@@ -52,7 +52,7 @@ describe("registerNodesCli plugin registration", () => {
 
     const program = await registerWithArgv([
       "node",
-      "openclaw",
+      "marketingclaw",
       "nodes",
       "canvas",
       "snapshot",
@@ -70,7 +70,7 @@ describe("registerNodesCli plugin registration", () => {
   });
 
   it("surfaces plugin subcommands for bare `nodes` listing", async () => {
-    const program = await registerWithArgv(["node", "openclaw", "nodes"]);
+    const program = await registerWithArgv(["node", "marketingclaw", "nodes"]);
     expect(registerPluginCliCommandsFromValidatedConfig).toHaveBeenCalledWith(
       program,
       undefined,
@@ -86,7 +86,7 @@ describe("registerNodesCli plugin registration", () => {
       return {};
     });
 
-    await registerWithArgv(["node", "openclaw", "nodes", "canvas", "--", "--json"]);
+    await registerWithArgv(["node", "marketingclaw", "nodes", "canvas", "--", "--json"]);
 
     expect(forceStderrDuringRegistration).toBe(false);
     expect(loggingState.forceConsoleToStderr).toBe(false);

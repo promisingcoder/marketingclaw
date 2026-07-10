@@ -1,6 +1,6 @@
 import AppKit
 import Foundation
-import OpenClawKit
+import MarketingClawKit
 import OSLog
 
 struct MacNodeGatewayTLSSessionCache {
@@ -72,7 +72,7 @@ final class MacNodeModeCoordinator: NSObject {
         return selected
     }
 
-    private let logger = Logger(subsystem: "ai.openclaw", category: "mac-node")
+    private let logger = Logger(subsystem: "ai.marketingclaw", category: "mac-node")
     private var task: Task<Void, Never>?
     private var endpointRefreshTask: Task<Void, Never>?
     private var reconnectProbeTask: Task<Void, Never>?
@@ -107,7 +107,7 @@ final class MacNodeModeCoordinator: NSObject {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(self.refreshNodeConfiguration),
-            name: .openclawPermissionsChanged,
+            name: .marketingclawPermissionsChanged,
             object: nil)
     }
 
@@ -170,8 +170,8 @@ final class MacNodeModeCoordinator: NSObject {
             }
 
             let cameraEnabled = defaults.object(forKey: cameraEnabledKey) as? Bool ?? false
-            let browserControlEnabled = OpenClawConfigFile.browserControlEnabled()
-            let codexThreadCatalogEnabled = OpenClawConfigFile.explicitlyEnabledPlugin(
+            let browserControlEnabled = MarketingClawConfigFile.browserControlEnabled()
+            let codexThreadCatalogEnabled = MarketingClawConfigFile.explicitlyEnabledPlugin(
                 MacNodeCodexThreadCatalogContract.pluginId)
 
             var attemptedURL: URL?
@@ -186,7 +186,7 @@ final class MacNodeModeCoordinator: NSObject {
                 // computer.act service is still holding rather than waiting for
                 // the idle watchdog. This refresh loop re-runs on the settings
                 // change that drops the cap.
-                if !caps.contains(OpenClawCapability.computer.rawValue) {
+                if !caps.contains(MarketingClawCapability.computer.rawValue) {
                     await self.runtime.releaseHeldComputerInput()
                 }
                 let commands = self.currentCommands(caps: caps)
@@ -197,7 +197,7 @@ final class MacNodeModeCoordinator: NSObject {
                     caps: caps,
                     commands: commands,
                     permissions: permissions,
-                    clientId: "openclaw-macos",
+                    clientId: "marketingclaw-macos",
                     clientMode: "node",
                     clientDisplayName: InstanceIdentity.displayName,
                     deviceIdentityProfile: Self.nodeIdentityProfile)
@@ -235,7 +235,7 @@ final class MacNodeModeCoordinator: NSObject {
                             return BridgeInvokeResponse(
                                 id: req.id,
                                 ok: false,
-                                error: OpenClawNodeError(code: .unavailable, message: "UNAVAILABLE: node not ready"))
+                                error: MarketingClawNodeError(code: .unavailable, message: "UNAVAILABLE: node not ready"))
                         }
                         return await self.runtime.handleInvoke(req)
                     })
@@ -282,27 +282,27 @@ final class MacNodeModeCoordinator: NSObject {
         browserControlEnabled: Bool,
         cameraEnabled: Bool,
         computerControlEnabled: Bool,
-        locationMode: OpenClawLocationMode,
+        locationMode: MarketingClawLocationMode,
         connectionMode: AppState.ConnectionMode,
         codexThreadCatalogEnabled: Bool = false) -> [String]
     {
         var caps: [String] = [
-            OpenClawCapability.canvas.rawValue,
-            OpenClawCapability.screen.rawValue,
+            MarketingClawCapability.canvas.rawValue,
+            MarketingClawCapability.screen.rawValue,
         ]
         if browserControlEnabled, connectionMode == .local {
-            caps.append(OpenClawCapability.browser.rawValue)
+            caps.append(MarketingClawCapability.browser.rawValue)
         }
         if cameraEnabled {
-            caps.append(OpenClawCapability.camera.rawValue)
+            caps.append(MarketingClawCapability.camera.rawValue)
         }
         // Advertised only when the operator has enabled Computer Control; the
         // command is dangerous and stays disarmed until allowlisted on the gateway.
         if computerControlEnabled {
-            caps.append(OpenClawCapability.computer.rawValue)
+            caps.append(MarketingClawCapability.computer.rawValue)
         }
         if locationMode != .off {
-            caps.append(OpenClawCapability.location.rawValue)
+            caps.append(MarketingClawCapability.location.rawValue)
         }
         if codexThreadCatalogEnabled {
             caps.append(MacNodeCodexThreadCatalogContract.capability)
@@ -322,7 +322,7 @@ final class MacNodeModeCoordinator: NSObject {
             browserControlEnabled: browserControlEnabled,
             cameraEnabled: cameraEnabled,
             computerControlEnabled: computerControlEnabled,
-            locationMode: OpenClawLocationMode(rawValue: rawLocationMode) ?? .off,
+            locationMode: MarketingClawLocationMode(rawValue: rawLocationMode) ?? .off,
             connectionMode: AppStateStore.shared.connectionMode,
             codexThreadCatalogEnabled: codexThreadCatalogEnabled)
     }
@@ -334,40 +334,40 @@ final class MacNodeModeCoordinator: NSObject {
 
     nonisolated static func resolvedCommands(caps: [String]) -> [String] {
         var commands: [String] = [
-            OpenClawCanvasCommand.present.rawValue,
-            OpenClawCanvasCommand.hide.rawValue,
-            OpenClawCanvasCommand.navigate.rawValue,
-            OpenClawCanvasCommand.evalJS.rawValue,
-            OpenClawCanvasCommand.snapshot.rawValue,
-            OpenClawCanvasA2UICommand.push.rawValue,
-            OpenClawCanvasA2UICommand.pushJSONL.rawValue,
-            OpenClawCanvasA2UICommand.reset.rawValue,
+            MarketingClawCanvasCommand.present.rawValue,
+            MarketingClawCanvasCommand.hide.rawValue,
+            MarketingClawCanvasCommand.navigate.rawValue,
+            MarketingClawCanvasCommand.evalJS.rawValue,
+            MarketingClawCanvasCommand.snapshot.rawValue,
+            MarketingClawCanvasA2UICommand.push.rawValue,
+            MarketingClawCanvasA2UICommand.pushJSONL.rawValue,
+            MarketingClawCanvasA2UICommand.reset.rawValue,
             MacNodeScreenCommand.snapshot.rawValue,
             MacNodeScreenCommand.record.rawValue,
-            OpenClawSystemCommand.notify.rawValue,
-            OpenClawSystemCommand.which.rawValue,
-            OpenClawSystemCommand.run.rawValue,
-            OpenClawSystemCommand.execApprovalsGet.rawValue,
-            OpenClawSystemCommand.execApprovalsSet.rawValue,
+            MarketingClawSystemCommand.notify.rawValue,
+            MarketingClawSystemCommand.which.rawValue,
+            MarketingClawSystemCommand.run.rawValue,
+            MarketingClawSystemCommand.execApprovalsGet.rawValue,
+            MarketingClawSystemCommand.execApprovalsSet.rawValue,
         ]
 
         let capsSet = Set(caps)
-        if capsSet.contains(OpenClawCapability.browser.rawValue) {
-            commands.append(OpenClawBrowserCommand.proxy.rawValue)
+        if capsSet.contains(MarketingClawCapability.browser.rawValue) {
+            commands.append(MarketingClawBrowserCommand.proxy.rawValue)
         }
-        if capsSet.contains(OpenClawCapability.camera.rawValue) {
-            commands.append(OpenClawCameraCommand.list.rawValue)
-            commands.append(OpenClawCameraCommand.snap.rawValue)
-            commands.append(OpenClawCameraCommand.clip.rawValue)
+        if capsSet.contains(MarketingClawCapability.camera.rawValue) {
+            commands.append(MarketingClawCameraCommand.list.rawValue)
+            commands.append(MarketingClawCameraCommand.snap.rawValue)
+            commands.append(MarketingClawCameraCommand.clip.rawValue)
         }
-        if capsSet.contains(OpenClawCapability.location.rawValue) {
-            commands.append(OpenClawLocationCommand.get.rawValue)
+        if capsSet.contains(MarketingClawCapability.location.rawValue) {
+            commands.append(MarketingClawLocationCommand.get.rawValue)
         }
         if capsSet.contains(MacNodeCodexThreadCatalogContract.capability) {
             commands.append(MacNodeCodexThreadCatalogContract.listCommand)
         }
-        if capsSet.contains(OpenClawCapability.computer.rawValue) {
-            commands.append(OpenClawComputerCommand.act.rawValue)
+        if capsSet.contains(MarketingClawCapability.computer.rawValue) {
+            commands.append(MarketingClawComputerCommand.act.rawValue)
         }
 
         return commands
@@ -446,7 +446,7 @@ final class MacNodeModeCoordinator: NSObject {
         guard let params = Self.tlsParams(
             for: url,
             connectionMode: connectionMode,
-            root: OpenClawConfigFile.loadDict(),
+            root: MarketingClawConfigFile.loadDict(),
             storedFingerprint: stored)
         else {
             self.tlsSessionCache.invalidate()

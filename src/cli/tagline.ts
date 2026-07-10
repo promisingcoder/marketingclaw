@@ -1,7 +1,7 @@
 // CLI tagline selection helpers, including deterministic random/default/holiday modes.
 import { parseStrictNonNegativeInteger } from "../infra/parse-finite-number.js";
 
-const DEFAULT_TAGLINE = "All your chats, one OpenClaw.";
+const DEFAULT_TAGLINE = "All your chats, one MarketingClaw.";
 export type TaglineMode = "random" | "default" | "off";
 
 const HOLIDAY_TAGLINES = {
@@ -91,16 +91,16 @@ const TAGLINES: string[] = [
   "The lobster in your shell. 🦞",
   "Alexa, but with taste.",
   "I'm not AI-powered, I'm AI-possessed. Big difference.",
-  "You had me at 'openclaw gateway start.'",
+  "You had me at 'marketingclaw gateway start.'",
   "Fresh shell, same claws—molting is just semver for crustaceans.",
   "Frequently forked, never molted.",
   "Sideways is a perfectly valid direction of progress—trust me, I'm a crustacean.",
   "I contain multitudes. Mostly subagents.",
   "Technically a daemon, spiritually a familiar.",
-  "If found wandering, please return to ~/.openclaw.",
+  "If found wandering, please return to ~/.marketingclaw.",
   "You configured four subagents; I found 120. We're calling it initiative.",
   "No, I can't solve captchas. Yes, that's exactly what a robot would say.",
-  "OpenClaw Support will never DM you first. I, on the other hand, absolutely will.",
+  "MarketingClaw Support will never DM you first. I, on the other hand, absolutely will.",
   "You'll name me something adorable, then ask me to do DevOps.",
   "Your mom texts me now. We're good, actually.",
   "Four bots roasting each other in a group chat isn't a bug—it's a support group.",
@@ -316,7 +316,7 @@ export function pickTagline(options: TaglineOptions = {}): string {
     return DEFAULT_TAGLINE;
   }
   const env = options.env ?? process.env;
-  const override = env?.OPENCLAW_TAGLINE_INDEX;
+  const override = env?.MARKETINGCLAW_TAGLINE_INDEX;
   if (override !== undefined) {
     const parsed = parseStrictNonNegativeInteger(override);
     if (parsed !== undefined) {

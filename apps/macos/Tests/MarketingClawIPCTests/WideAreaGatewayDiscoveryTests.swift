@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import OpenClawDiscovery
+@testable import MarketingClawDiscovery
 
 private final class NameserverQueryLog: @unchecked Sendable {
     private let lock = NSLock()
@@ -38,23 +38,23 @@ struct WideAreaGatewayDiscoveryTests {
                 let nameserver = args.first(where: { $0.hasPrefix("@") }) ?? ""
                 if recordType == "PTR" {
                     if nameserver == "@100.100.100.100" {
-                        return "steipetacstudio-gateway._openclaw-gw._tcp.openclaw.internal.\n"
+                        return "steipetacstudio-gateway._marketclaw-gw._tcp.marketingclaw.internal.\n"
                     }
                     return ""
                 }
                 if recordType == "SRV" {
-                    return "0 0 18789 steipetacstudio.openclaw.internal."
+                    return "0 0 18789 steipetacstudio.marketingclaw.internal."
                 }
                 if recordType == "TXT" {
-                    return "\"displayName=Peter\\226\\128\\153s Mac Studio (OpenClaw)\" \"gatewayPort=18789\" \"tailnetDns=peters-mac-studio-1.sheep-coho.ts.net\" \"cliPath=/Users/steipete/openclaw/src/entry.ts\""
+                    return "\"displayName=Peter\\226\\128\\153s Mac Studio (MarketingClaw)\" \"gatewayPort=18789\" \"tailnetDns=peters-mac-studio-1.sheep-coho.ts.net\" \"cliPath=/Users/steipete/marketingclaw/src/entry.ts\""
                 }
                 return ""
             })
 
         // Env mutation must hold TestIsolationLock; raw setenv races parallel
-        // tests scanning environ (e.g. OPENCLAW_CONFIG_PATH readers).
+        // tests scanning environ (e.g. MARKETINGCLAW_CONFIG_PATH readers).
         let beacons = await TestIsolation.withEnvValues(
-            ["OPENCLAW_WIDE_AREA_DOMAIN": "openclaw.internal"])
+            ["MARKETINGCLAW_WIDE_AREA_DOMAIN": "marketingclaw.internal"])
         {
             WideAreaGatewayDiscovery.discover(
                 timeoutSeconds: 2.0,
@@ -63,12 +63,12 @@ struct WideAreaGatewayDiscoveryTests {
 
         #expect(beacons.count == 1)
         let beacon = beacons[0]
-        let expectedDisplay = "Peter\u{2019}s Mac Studio (OpenClaw)"
+        let expectedDisplay = "Peter\u{2019}s Mac Studio (MarketingClaw)"
         #expect(beacon.displayName == expectedDisplay)
         #expect(beacon.port == 18789)
         #expect(beacon.gatewayPort == 18789)
         #expect(beacon.tailnetDns == "peters-mac-studio-1.sheep-coho.ts.net")
-        #expect(beacon.cliPath == "/Users/steipete/openclaw/src/entry.ts")
+        #expect(beacon.cliPath == "/Users/steipete/marketingclaw/src/entry.ts")
     }
 
     @Test func `attacker peer cannot become nameserver`() async {
@@ -91,7 +91,7 @@ struct WideAreaGatewayDiscoveryTests {
                 let recordType = args.last ?? ""
                 if recordType == "PTR" {
                     if nameserver == "@100.64.0.2" {
-                        return "evil._openclaw-gw._tcp.openclaw.internal.\n"
+                        return "evil._marketclaw-gw._tcp.marketingclaw.internal.\n"
                     }
                     return ""
                 }
@@ -105,7 +105,7 @@ struct WideAreaGatewayDiscoveryTests {
             })
 
         let beacons = await TestIsolation.withEnvValues(
-            ["OPENCLAW_WIDE_AREA_DOMAIN": "openclaw.internal"])
+            ["MARKETINGCLAW_WIDE_AREA_DOMAIN": "marketingclaw.internal"])
         {
             WideAreaGatewayDiscovery.discover(
                 timeoutSeconds: 2.0,

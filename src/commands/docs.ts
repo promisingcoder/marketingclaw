@@ -1,11 +1,11 @@
 import { formatDocsLink } from "../../packages/terminal-core/src/links.js";
 import { isRich, theme } from "../../packages/terminal-core/src/theme.js";
 import { formatCliCommand } from "../cli/command-format.js";
-// Implements docs link/search output for `openclaw docs`.
+// Implements docs link/search output for `marketingclaw docs`.
 import { readResponseWithLimit } from "../infra/http-body.js";
 import type { RuntimeEnv } from "../runtime.js";
 
-const SEARCH_API = "https://docs.openclaw.ai/api/search";
+const SEARCH_API = "https://docs.marketingclaw.ai/api/search";
 const SEARCH_TIMEOUT_MS = 30_000;
 const DOCS_SEARCH_RESPONSE_MAX_BYTES = 8 * 1024 * 1024;
 
@@ -114,13 +114,15 @@ function parseDocsSearchResults(raw: unknown): DocResult[] {
 export async function docsSearchCommand(queryParts: string[], runtime: RuntimeEnv) {
   const query = queryParts.join(" ").trim();
   if (!query) {
-    const docs = formatDocsLink("/", "docs.openclaw.ai");
+    const docs = formatDocsLink("/", "docs.marketingclaw.ai");
     if (isRich()) {
       runtime.log(`${theme.muted("Docs:")} ${docs}`);
-      runtime.log(`${theme.muted("Search:")} ${formatCliCommand('openclaw docs "your query"')}`);
+      runtime.log(
+        `${theme.muted("Search:")} ${formatCliCommand('marketingclaw docs "your query"')}`,
+      );
     } else {
-      runtime.log("Docs: https://docs.openclaw.ai/");
-      runtime.log(`Search: ${formatCliCommand('openclaw docs "your query"')}`);
+      runtime.log("Docs: https://docs.marketingclaw.ai/");
+      runtime.log(`Search: ${formatCliCommand('marketingclaw docs "your query"')}`);
     }
     return;
   }

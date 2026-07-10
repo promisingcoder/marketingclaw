@@ -1,5 +1,5 @@
 // Nextcloud Talk tests cover monitor.replay plugin behavior.
-import { createMockIncomingRequest } from "openclaw/plugin-sdk/test-env";
+import { createMockIncomingRequest } from "marketingclaw/plugin-sdk/test-env";
 import { describe, expect, it, vi } from "vitest";
 import {
   NextcloudTalkRetryableWebhookError,

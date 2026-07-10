@@ -1,6 +1,6 @@
-import OpenClawChatUI
+import MarketingClawChatUI
 import Testing
-@testable import OpenClaw
+@testable import MarketingClaw
 
 struct TalkProStateTests {
     @Test func `disabled talk without loaded config can start and retry load`() {

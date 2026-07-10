@@ -125,7 +125,7 @@ prepare_validate_commit() {
   local subject
   subject=$(git log -1 --pretty=%s)
 
-  if echo "$subject" | rg -qi "(^|[[:space:]])openclaw#$pr_number([[:space:]]|$)|\\(#$pr_number\\)"; then
+  if echo "$subject" | rg -qi "(^|[[:space:]])marketingclaw#$pr_number([[:space:]]|$)|\\(#$pr_number\\)"; then
     echo "ERROR: prep commit subject should not include PR number metadata"
     exit 1
   fi
@@ -269,7 +269,7 @@ prepare_sync_head() {
     fi
     git rebase origin/main
     rebased=true
-    if [ "${OPENCLAW_TESTBOX:-}" = "1" ]; then
+    if [ "${MARKETINGCLAW_TESTBOX:-}" = "1" ]; then
       prep_sync_patch_id=$(compute_pr_patch_id origin/main HEAD)
       if [ "$prep_sync_patch_id" != "$pre_sync_patch_id" ]; then
         echo "Rebase changed the PR patch; fresh hosted evidence is required."
@@ -322,7 +322,7 @@ prepare_sync_head() {
 - Verified the remote PR head tree matches the local prep head.
 EOF_PREP
 
-  if [ "$rebased" = "true" ] && [ "${OPENCLAW_TESTBOX:-}" = "1" ]; then
+  if [ "$rebased" = "true" ] && [ "${MARKETINGCLAW_TESTBOX:-}" = "1" ]; then
     local prep_sync_tree
     prep_sync_tree=$(git rev-parse "${local_prep_head_sha}^{tree}")
     local prep_sync_evidence_sha=""

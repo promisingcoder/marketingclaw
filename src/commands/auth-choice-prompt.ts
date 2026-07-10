@@ -1,8 +1,8 @@
 // Interactive grouped auth-choice prompt used by onboarding and agent setup.
-import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
+import { normalizeProviderId } from "@marketingclaw/model-catalog-core/provider-id";
 import type { AuthProfileStore } from "../agents/auth-profiles/types.js";
 import { resolveAgentModelPrimaryValue } from "../config/model-input.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import type { WizardPrompter, WizardSelectOption } from "../wizard/prompts.js";
 import { buildAuthChoiceGroups, compareAuthChoiceGroups } from "./auth-choice-options.js";
 import type { AuthChoiceGroup } from "./auth-choice-options.static.js";
@@ -19,7 +19,7 @@ type PromptAuthChoiceGroupedParams = {
   prompter: WizardPrompter;
   store: AuthProfileStore;
   includeSkip: boolean;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   allowKeepCurrentProvider?: boolean;
@@ -29,11 +29,11 @@ function isGroupFeatured(group: AuthChoiceGroup): boolean {
   return group.options.some((option) => option.onboardingFeatured);
 }
 
-function resolveConfiguredModelRef(config?: OpenClawConfig): string | undefined {
+function resolveConfiguredModelRef(config?: MarketingClawConfig): string | undefined {
   return resolveAgentModelPrimaryValue(config?.agents?.defaults?.model);
 }
 
-function resolveConfiguredProvider(config?: OpenClawConfig): string | undefined {
+function resolveConfiguredProvider(config?: MarketingClawConfig): string | undefined {
   const modelRef = resolveConfiguredModelRef(config);
   const slashIndex = modelRef?.indexOf("/") ?? -1;
   if (!modelRef || slashIndex <= 0) {

@@ -3,7 +3,8 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 import { ensureExecApprovals, loadExecApprovals } from "../infra/exec-approvals.js";
 import { normalizeAgentId } from "../routing/session-key.js";
 
-const AGENT_RUNTIME_IDENTITY_TOKEN_CONTEXT = "openclaw:gateway-agent-runtime-identity-token:v1";
+const AGENT_RUNTIME_IDENTITY_TOKEN_CONTEXT =
+  "marketingclaw:gateway-agent-runtime-identity-token:v1";
 const AGENT_RUNTIME_IDENTITY_TOKEN_KIND = "agent-runtime";
 
 export type AgentRuntimeIdentity = {

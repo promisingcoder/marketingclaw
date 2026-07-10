@@ -12,7 +12,7 @@ import {
   shouldShowInsecureContextHint,
 } from "../lib/overview-hints.ts";
 import { normalizeLowercaseStringOrEmpty } from "../lib/string-coerce.ts";
-import { OpenClawLightDomContentsElement } from "../lit/openclaw-element.ts";
+import { MarketingClawLightDomContentsElement } from "../lit/marketingclaw-element.ts";
 import { renderConnectCommand } from "./connect-command.ts";
 import { icons } from "./icons.ts";
 
@@ -97,7 +97,7 @@ function buildFeedback(params: {
   stepKeys: string[];
   stepParams?: Record<string, string>;
 }): LoginFailureFeedback {
-  const docsHref = params.docsHref ?? "https://docs.openclaw.ai/web/dashboard";
+  const docsHref = params.docsHref ?? "https://docs.marketingclaw.ai/web/dashboard";
   return {
     kind: params.kind,
     title: t(params.titleKey, params.stepParams),
@@ -125,7 +125,7 @@ function resolveLoginFailureFeedback(
     return buildFeedback({
       kind: "pairing-required",
       rawError,
-      docsHref: "https://docs.openclaw.ai/web/control-ui#device-pairing-first-connection",
+      docsHref: "https://docs.marketingclaw.ai/web/control-ui#device-pairing-first-connection",
       titleKey:
         pairing.kind === "scope-upgrade-pending"
           ? "login.failure.pairing.scopeTitle"
@@ -171,7 +171,7 @@ function resolveLoginFailureFeedback(
     return buildFeedback({
       kind: "insecure-context",
       rawError,
-      docsHref: "https://docs.openclaw.ai/web/control-ui#insecure-http",
+      docsHref: "https://docs.marketingclaw.ai/web/control-ui#insecure-http",
       titleKey: "login.failure.insecure.title",
       summaryKey: "login.failure.insecure.summary",
       stepKeys: [
@@ -190,7 +190,7 @@ function resolveLoginFailureFeedback(
       kind: "origin-not-allowed",
       rawError,
       docsHref:
-        "https://docs.openclaw.ai/web/control-ui#debuggingtesting-dev-server--remote-gateway",
+        "https://docs.marketingclaw.ai/web/control-ui#debuggingtesting-dev-server--remote-gateway",
       titleKey: "login.failure.origin.title",
       summaryKey: "login.failure.origin.summary",
       stepKeys: [
@@ -206,7 +206,7 @@ function resolveLoginFailureFeedback(
       kind: "protocol-mismatch",
       rawError,
       docsHref:
-        "https://docs.openclaw.ai/web/control-ui#debuggingtesting-dev-server--remote-gateway",
+        "https://docs.marketingclaw.ai/web/control-ui#debuggingtesting-dev-server--remote-gateway",
       titleKey: "login.failure.protocol.title",
       summaryKey: "login.failure.protocol.summary",
       stepKeys: [
@@ -307,8 +307,8 @@ function renderLoginGate(props: LoginGateProps) {
     <div class="login-gate">
       <div class="login-gate__card">
         <div class="login-gate__header">
-          <img class="login-gate__logo" src=${faviconSrc} alt="OpenClaw" />
-          <div class="login-gate__title">OpenClaw</div>
+          <img class="login-gate__logo" src=${faviconSrc} alt="MarketingClaw" />
+          <div class="login-gate__title">MarketingClaw</div>
           <div class="login-gate__sub">${t("login.subtitle")}</div>
         </div>
         <div class="login-gate__form">
@@ -345,14 +345,14 @@ function renderLoginGate(props: LoginGateProps) {
                 @input=${(e: Event) => {
                   props.onTokenChange((e.target as HTMLInputElement).value);
                 }}
-                placeholder="OPENCLAW_GATEWAY_TOKEN (${t("login.passwordPlaceholder")})"
+                placeholder="MARKETINGCLAW_GATEWAY_TOKEN (${t("login.passwordPlaceholder")})"
                 @keydown=${(e: KeyboardEvent) => {
                   if (e.key === "Enter") {
                     props.onConnect();
                   }
                 }}
               />
-              <openclaw-tooltip
+              <marketingclaw-tooltip
                 .content=${props.showGatewayToken ? t("login.hideToken") : t("login.showToken")}
               >
                 <button
@@ -364,7 +364,7 @@ function renderLoginGate(props: LoginGateProps) {
                 >
                   ${props.showGatewayToken ? icons.eye : icons.eyeOff}
                 </button>
-              </openclaw-tooltip>
+              </marketingclaw-tooltip>
             </div>
           </label>
           <label class="field">
@@ -386,7 +386,7 @@ function renderLoginGate(props: LoginGateProps) {
                   }
                 }}
               />
-              <openclaw-tooltip
+              <marketingclaw-tooltip
                 .content=${props.showGatewayPassword
                   ? t("login.hidePassword")
                   : t("login.showPassword")}
@@ -400,7 +400,7 @@ function renderLoginGate(props: LoginGateProps) {
                 >
                   ${props.showGatewayPassword ? icons.eye : icons.eyeOff}
                 </button>
-              </openclaw-tooltip>
+              </marketingclaw-tooltip>
             </div>
           </label>
           <button class="btn primary login-gate__connect" @click=${props.onConnect}>
@@ -412,15 +412,17 @@ function renderLoginGate(props: LoginGateProps) {
           <summary class="login-gate__help-title">${t("overview.connection.title")}</summary>
           <ol class="login-gate__steps">
             <li>
-              ${t("overview.connection.step1")}${renderConnectCommand("openclaw gateway run")}
+              ${t("overview.connection.step1")}${renderConnectCommand("marketingclaw gateway run")}
             </li>
-            <li>${t("overview.connection.step2")} ${renderConnectCommand("openclaw dashboard")}</li>
+            <li>
+              ${t("overview.connection.step2")} ${renderConnectCommand("marketingclaw dashboard")}
+            </li>
             <li>${t("overview.connection.step3")}</li>
           </ol>
           <div class="login-gate__docs">
             <a
               class="session-link"
-              href="https://docs.openclaw.ai/web/dashboard"
+              href="https://docs.marketingclaw.ai/web/dashboard"
               target="_blank"
               rel="noreferrer"
               >${t("overview.connection.docsLink")}</a
@@ -432,7 +434,7 @@ function renderLoginGate(props: LoginGateProps) {
   `;
 }
 
-class LoginGate extends OpenClawLightDomContentsElement {
+class LoginGate extends MarketingClawLightDomContentsElement {
   @property({ attribute: false }) props?: LoginGateProps;
 
   override render() {
@@ -440,6 +442,6 @@ class LoginGate extends OpenClawLightDomContentsElement {
   }
 }
 
-if (!customElements.get("openclaw-login-gate")) {
-  customElements.define("openclaw-login-gate", LoginGate);
+if (!customElements.get("marketingclaw-login-gate")) {
+  customElements.define("marketingclaw-login-gate", LoginGate);
 }

@@ -1,13 +1,13 @@
-# @openclaw/diagnostics-prometheus
+# @marketingclaw/diagnostics-prometheus
 
-Official Prometheus diagnostics exporter for OpenClaw.
+Official Prometheus diagnostics exporter for MarketingClaw.
 
-This plugin exposes OpenClaw Gateway runtime metrics in Prometheus text format for Prometheus, Grafana, VictoriaMetrics, and compatible scrapers.
+This plugin exposes MarketingClaw Gateway runtime metrics in Prometheus text format for Prometheus, Grafana, VictoriaMetrics, and compatible scrapers.
 
 ## Install
 
 ```bash
-openclaw plugins install @openclaw/diagnostics-prometheus
+marketingclaw plugins install @marketingclaw/diagnostics-prometheus
 ```
 
 Restart the Gateway after installing or updating the plugin.
@@ -18,10 +18,10 @@ Enable the plugin and set the scrape endpoint options in `plugins.entries.diagno
 
 The full config surface, metric names, and scrape examples live in the docs:
 
-- https://docs.openclaw.ai/gateway/prometheus
+- https://docs.marketingclaw.ai/gateway/prometheus
 
 ## Package
 
 - Plugin id: `diagnostics-prometheus`
-- Package: `@openclaw/diagnostics-prometheus`
-- Minimum OpenClaw host: `2026.4.25`
+- Package: `@marketingclaw/diagnostics-prometheus`
+- Minimum MarketingClaw host: `2026.4.25`

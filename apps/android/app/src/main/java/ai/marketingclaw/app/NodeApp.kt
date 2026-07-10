@@ -1,8 +1,8 @@
-package ai.openclaw.app
+package ai.marketingclaw.app
 
-import ai.openclaw.app.chat.ChatCacheDatabase
-import ai.openclaw.app.gateway.DeviceAuthStore
-import ai.openclaw.app.gateway.DeviceIdentityStore
+import ai.marketingclaw.app.chat.ChatCacheDatabase
+import ai.marketingclaw.app.gateway.DeviceAuthStore
+import ai.marketingclaw.app.gateway.DeviceIdentityStore
 import android.app.Application
 import android.os.StrictMode
 import androidx.room.withTransaction

@@ -1,4 +1,4 @@
-package ai.openclaw.app.gateway
+package ai.marketingclaw.app.gateway
 
 /**
  * Canonical device-auth payload builder shared with gateway verification rules.

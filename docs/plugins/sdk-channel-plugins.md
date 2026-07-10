@@ -1,18 +1,18 @@
 ---
-summary: "Step-by-step guide to building a messaging channel plugin for OpenClaw"
+summary: "Step-by-step guide to building a messaging channel plugin for MarketingClaw"
 title: "Building channel plugins"
 sidebarTitle: "Channel Plugins"
 read_when:
   - You are building a new messaging channel plugin
-  - You want to connect OpenClaw to a messaging platform
+  - You want to connect MarketingClaw to a messaging platform
   - You need to understand the ChannelPlugin adapter surface
 ---
 
-This guide builds a channel plugin that connects OpenClaw to a messaging
+This guide builds a channel plugin that connects MarketingClaw to a messaging
 platform: DM security, pairing, reply threading, and outbound messaging.
 
 <Info>
-  New to OpenClaw plugins? Read [Getting Started](/plugins/building-plugins)
+  New to MarketingClaw plugins? Read [Getting Started](/plugins/building-plugins)
   first for package structure and manifest setup.
 </Info>
 
@@ -37,7 +37,7 @@ generic `:thread:` bookkeeping, and dispatch.
 ## Message adapter
 
 Expose a `message` adapter with `defineChannelMessageAdapter` from
-`openclaw/plugin-sdk/channel-outbound`. Declare only the durable final-send
+`marketingclaw/plugin-sdk/channel-outbound`. Declare only the durable final-send
 capabilities your native transport actually supports, backed by a contract
 test that proves the native side effect and returned receipt. Point text/media
 sends at the same transport functions the legacy `outbound` adapter uses. For
@@ -79,12 +79,12 @@ Legacy reply helpers such as `createChannelTurnReplyPipeline`,
 `dispatchInboundReplyWithBase`, and `recordInboundSessionAndDispatchReply`
 remain available for compatibility dispatchers. Do not use them for new
 channel code; start with the `message` adapter, receipts, and receive/send
-lifecycle helpers on `openclaw/plugin-sdk/channel-outbound` instead.
+lifecycle helpers on `marketingclaw/plugin-sdk/channel-outbound` instead.
 
 ### Inbound ingress (experimental)
 
 Channels migrating inbound authorization can use the experimental
-`openclaw/plugin-sdk/channel-ingress-runtime` subpath from runtime receive
+`marketingclaw/plugin-sdk/channel-ingress-runtime` subpath from runtime receive
 paths. It accepts platform facts, raw allowlists, route descriptors, command
 facts, and access group config, then returns sender/route/command/activation
 projections plus the ordered ingress graph, while platform lookup and side
@@ -93,7 +93,7 @@ descriptor you pass to the resolver; do not serialize raw match values from
 the resolved state or decision. See
 [Channel ingress API](/plugins/sdk-channel-ingress) for the API design,
 ownership boundary, and test expectations. The older
-`openclaw/plugin-sdk/channel-ingress` subpath stays exported as a deprecated
+`marketingclaw/plugin-sdk/channel-ingress` subpath stays exported as a deprecated
 compatibility facade for third-party plugins.
 
 ### Typing indicators
@@ -118,7 +118,7 @@ still works for params intentionally shared across every exposed action.
 
 Channels that must expose a temporary public URL for a platform-side media
 fetch can use `createHostedOutboundMediaStore(...)` from
-`openclaw/plugin-sdk/outbound-media` with plugin state stores. Keep platform
+`marketingclaw/plugin-sdk/outbound-media` with plugin state stores. Keep platform
 route parsing and token enforcement in the channel plugin; the shared helper
 only owns media loading, expiry metadata, chunk rows, and cleanup.
 
@@ -153,7 +153,7 @@ can expose a top-level `session-key-api.ts` file with a matching
 plugins). Core uses that bootstrap-safe surface only when the runtime plugin
 registry is not available yet.
 
-Use `openclaw/plugin-sdk/channel-route` when plugin code needs to normalize
+Use `marketingclaw/plugin-sdk/channel-route` when plugin code needs to normalize
 route-like fields, compare a child thread with its parent route, or build a
 stable dedupe key from `{ channel, to, accountId, threadId }`. The helper
 normalizes numeric thread ids the same way core does, so prefer it over ad hoc
@@ -179,7 +179,7 @@ hook gates only generic current-conversation bindings; it does not replace
 configured binding rules or plugin-owned session routing. Contract tests
 should cover at least one supported and one unsupported account through the
 `ChannelPlugin["conversationBindings"]` contract exported by
-`openclaw/plugin-sdk/channel-core`.
+`marketingclaw/plugin-sdk/channel-core`.
 
 ## Approvals and channel capabilities
 
@@ -212,11 +212,11 @@ custom approval payloads instead of the shared renderer.
   the common case.
 - If a channel can infer stable owner-like DM identities from existing config,
   use `createResolvedApproverActionAuthAdapter` from
-  `openclaw/plugin-sdk/approval-runtime` to restrict same-chat `/approve`
+  `marketingclaw/plugin-sdk/approval-runtime` to restrict same-chat `/approve`
   without adding approval-specific core logic.
 - If custom approval auth intentionally allows only same-chat fallback, return
   `markImplicitSameChatApprovalAuthorization({ authorized: true })` from
-  `openclaw/plugin-sdk/approval-auth-runtime`; otherwise core treats the
+  `marketingclaw/plugin-sdk/approval-auth-runtime`; otherwise core treats the
   result as explicit approver authorization.
 - If a channel-owned native callback resolves approvals directly, use
   `isImplicitSameChatApprovalAuthorization(...)` before resolving so implicit
@@ -247,7 +247,7 @@ target normalization plus transport/presentation facts. Use
 `createChannelExecApprovalProfile`, `createChannelNativeOriginTargetResolver`,
 `createChannelApproverDmTargetResolver`, and
 `createApproverRestrictedNativeApprovalCapability` from
-`openclaw/plugin-sdk/approval-runtime`. Put the channel-specific facts behind
+`marketingclaw/plugin-sdk/approval-runtime`. Put the channel-specific facts behind
 `approvalCapability.nativeRuntime`, ideally via
 `createChannelApprovalNativeRuntimeAdapter(...)` or
 `createLazyChannelApprovalNativeRuntimeAdapter(...)`, so core can assemble the
@@ -273,7 +273,7 @@ subscription, and routed-elsewhere notices.
 Other approval helpers:
 
 - Use `createNativeApprovalChannelRouteGates` from
-  `openclaw/plugin-sdk/approval-native-runtime` when a channel supports both
+  `marketingclaw/plugin-sdk/approval-native-runtime` when a channel supports both
   session-origin native delivery and explicit approval forwarding targets. The
   helper centralizes approval config selection, `mode` handling, agent/session
   filters, account binding, session-target matching, and target-list matching
@@ -291,7 +291,7 @@ Other approval helpers:
   delivery target itself should be canonicalized.
 - If the channel needs runtime-owned objects such as a client, token, Bolt
   app, or webhook receiver, register them through
-  `openclaw/plugin-sdk/channel-runtime-context`. The generic runtime-context
+  `marketingclaw/plugin-sdk/channel-runtime-context`. The generic runtime-context
   registry lets core bootstrap capability-driven handlers from channel
   startup state without adding approval-specific wrapper glue.
 - Reach for the lower-level `createChannelApprovalHandler` or
@@ -325,36 +325,36 @@ Other approval helpers:
 For hot channel entrypoints, prefer these narrower subpaths over the broader
 `approval-runtime` barrel when you only need one part of that family:
 
-- `openclaw/plugin-sdk/approval-auth-runtime`
-- `openclaw/plugin-sdk/approval-client-runtime`
-- `openclaw/plugin-sdk/approval-delivery-runtime`
-- `openclaw/plugin-sdk/approval-gateway-runtime`
-- `openclaw/plugin-sdk/approval-handler-adapter-runtime`
-- `openclaw/plugin-sdk/approval-handler-runtime`
-- `openclaw/plugin-sdk/approval-native-runtime`
-- `openclaw/plugin-sdk/approval-reply-runtime`
-- `openclaw/plugin-sdk/channel-runtime-context`
+- `marketingclaw/plugin-sdk/approval-auth-runtime`
+- `marketingclaw/plugin-sdk/approval-client-runtime`
+- `marketingclaw/plugin-sdk/approval-delivery-runtime`
+- `marketingclaw/plugin-sdk/approval-gateway-runtime`
+- `marketingclaw/plugin-sdk/approval-handler-adapter-runtime`
+- `marketingclaw/plugin-sdk/approval-handler-runtime`
+- `marketingclaw/plugin-sdk/approval-native-runtime`
+- `marketingclaw/plugin-sdk/approval-reply-runtime`
+- `marketingclaw/plugin-sdk/channel-runtime-context`
 
-Likewise, prefer `openclaw/plugin-sdk/reply-runtime`,
-`openclaw/plugin-sdk/reply-dispatch-runtime`,
-`openclaw/plugin-sdk/reply-reference`, and
-`openclaw/plugin-sdk/reply-chunking` over broader umbrella surfaces when you
+Likewise, prefer `marketingclaw/plugin-sdk/reply-runtime`,
+`marketingclaw/plugin-sdk/reply-dispatch-runtime`,
+`marketingclaw/plugin-sdk/reply-reference`, and
+`marketingclaw/plugin-sdk/reply-chunking` over broader umbrella surfaces when you
 do not need them all.
 
 ### Setup subpaths
 
-- `openclaw/plugin-sdk/setup-runtime` covers the runtime-safe setup helpers:
+- `marketingclaw/plugin-sdk/setup-runtime` covers the runtime-safe setup helpers:
   `createSetupTranslator`, import-safe setup patch adapters
   (`createPatchedAccountSetupAdapter`, `createEnvPatchedAccountSetupAdapter`,
   `createSetupInputPresenceValidator`), lookup-note output,
   `promptResolvedAllowFrom`, `splitSetupEntries`, and the delegated
   setup-proxy builders.
-- `openclaw/plugin-sdk/channel-setup` covers the optional-install setup
+- `marketingclaw/plugin-sdk/channel-setup` covers the optional-install setup
   builders plus a few setup-safe primitives: `createOptionalChannelSetupSurface`,
   `createOptionalChannelSetupAdapter`, `createOptionalChannelSetupWizard`,
   `DEFAULT_ACCOUNT_ID`, `createTopLevelChannelDmPolicy`,
   `setSetupChannelEnabled`, and `splitSetupEntries`.
-- Use the broader `openclaw/plugin-sdk/setup` seam only when you also need
+- Use the broader `marketingclaw/plugin-sdk/setup` seam only when you also need
   the heavier shared setup/config helpers such as
   `moveSingleAccountChannelSectionToDefaultAccount(...)`.
 
@@ -370,7 +370,7 @@ plugin manifest with `channelEnvVars`. Keep channel runtime `envVars` or local
 constants for operator-facing copy only.
 
 If your channel can appear in `status`, `channels list`, `channels status`, or
-SecretRef scans before the plugin runtime starts, add `openclaw.setupEntry` in
+SecretRef scans before the plugin runtime starts, add `marketingclaw.setupEntry` in
 `package.json`. That entrypoint should be safe to import in read-only command
 paths and should return the channel metadata, setup-safe config adapter,
 status adapter, and channel secret target metadata needed for those
@@ -390,28 +390,28 @@ setters, or lazy capability adapters.
 For other hot channel paths, prefer the narrow helpers over broader legacy
 surfaces:
 
-- `openclaw/plugin-sdk/account-core`, `openclaw/plugin-sdk/account-id`,
-  `openclaw/plugin-sdk/account-resolution`, and
-  `openclaw/plugin-sdk/account-helpers` for multi-account config and
+- `marketingclaw/plugin-sdk/account-core`, `marketingclaw/plugin-sdk/account-id`,
+  `marketingclaw/plugin-sdk/account-resolution`, and
+  `marketingclaw/plugin-sdk/account-helpers` for multi-account config and
   default-account fallback
-- `openclaw/plugin-sdk/inbound-envelope` and
-  `openclaw/plugin-sdk/channel-inbound` for inbound route/envelope and
+- `marketingclaw/plugin-sdk/inbound-envelope` and
+  `marketingclaw/plugin-sdk/channel-inbound` for inbound route/envelope and
   record-and-dispatch wiring
-- `openclaw/plugin-sdk/channel-targets` for target parsing helpers
-- `openclaw/plugin-sdk/outbound-media` for media loading and
-  `openclaw/plugin-sdk/channel-outbound` for outbound identity/send delegates
+- `marketingclaw/plugin-sdk/channel-targets` for target parsing helpers
+- `marketingclaw/plugin-sdk/outbound-media` for media loading and
+  `marketingclaw/plugin-sdk/channel-outbound` for outbound identity/send delegates
   and payload planning
 - `buildThreadAwareOutboundSessionRoute(...)` from
-  `openclaw/plugin-sdk/channel-core` when an outbound route should preserve
+  `marketingclaw/plugin-sdk/channel-core` when an outbound route should preserve
   an explicit `replyToId`/`threadId` or recover the current `:thread:`
   session after the base session key still matches. Provider plugins can
   override precedence, suffix behavior, and thread id normalization when
   their platform has native thread delivery semantics.
-- `openclaw/plugin-sdk/thread-bindings-runtime` for thread-binding lifecycle
+- `marketingclaw/plugin-sdk/thread-bindings-runtime` for thread-binding lifecycle
   and adapter registration
-- `openclaw/plugin-sdk/agent-media-payload` only when a legacy agent/media
+- `marketingclaw/plugin-sdk/agent-media-payload` only when a legacy agent/media
   payload field layout is still required
-- `openclaw/plugin-sdk/telegram-command-config` (deprecated: no bundled
+- `marketingclaw/plugin-sdk/telegram-command-config` (deprecated: no bundled
   plugin uses it in production) for Telegram custom-command normalization,
   duplicate/conflict validation, and a fallback-stable command config
   contract; prefer plugin-local command config handling for new plugin code
@@ -429,8 +429,8 @@ Keep inbound mention handling split in two layers:
 - plugin-owned evidence gathering
 - shared policy evaluation
 
-Use `openclaw/plugin-sdk/channel-mention-gating` for mention-policy decisions.
-Use `openclaw/plugin-sdk/channel-inbound` only when you need the broader
+Use `marketingclaw/plugin-sdk/channel-mention-gating` for mention-policy decisions.
+Use `marketingclaw/plugin-sdk/channel-inbound` only when you need the broader
 inbound helper barrel.
 
 Good fit for plugin-local logic:
@@ -461,7 +461,7 @@ import {
   implicitMentionKindWhen,
   matchesMentionWithExplicit,
   resolveInboundMentionDecision,
-} from "openclaw/plugin-sdk/channel-inbound";
+} from "marketingclaw/plugin-sdk/channel-inbound";
 
 const wasMentioned = matchesMentionWithExplicit({
   text,
@@ -509,7 +509,7 @@ bundled channel plugins that already depend on runtime injection:
 `implicitMentionKindWhen`, `resolveInboundMentionDecision`.
 
 If you only need `implicitMentionKindWhen` and `resolveInboundMentionDecision`,
-import from `openclaw/plugin-sdk/channel-mention-gating` to avoid loading
+import from `marketingclaw/plugin-sdk/channel-mention-gating` to avoid loading
 unrelated inbound runtime helpers.
 
 ## Walkthrough
@@ -518,29 +518,29 @@ unrelated inbound runtime helpers.
   <a id="step-1-package-and-manifest"></a>
   <Step title="Package and manifest">
     Create the standard plugin files. The `channels` field in
-    `openclaw.plugin.json` (not a `kind` field) is what marks a manifest as
+    `marketingclaw.plugin.json` (not a `kind` field) is what marks a manifest as
     owning a channel. For the full package-metadata surface, see
-    [Plugin Setup and Config](/plugins/sdk-setup#openclaw-channel):
+    [Plugin Setup and Config](/plugins/sdk-setup#marketingclaw-channel):
 
     <CodeGroup>
     ```json package.json
     {
-      "name": "@myorg/openclaw-acme-chat",
+      "name": "@myorg/marketingclaw-acme-chat",
       "version": "1.0.0",
       "type": "module",
-      "openclaw": {
+      "marketingclaw": {
         "extensions": ["./index.ts"],
         "setupEntry": "./setup-entry.ts",
         "channel": {
           "id": "acme-chat",
           "label": "Acme Chat",
-          "blurb": "Connect OpenClaw to Acme Chat."
+          "blurb": "Connect MarketingClaw to Acme Chat."
         }
       }
     }
     ```
 
-    ```json openclaw.plugin.json
+    ```json marketingclaw.plugin.json
     {
       "id": "acme-chat",
       "channels": ["acme-chat"],
@@ -596,8 +596,8 @@ unrelated inbound runtime helpers.
     import {
       createChatChannelPlugin,
       createChannelPluginBase,
-    } from "openclaw/plugin-sdk/channel-core";
-    import type { OpenClawConfig } from "openclaw/plugin-sdk/channel-core";
+    } from "marketingclaw/plugin-sdk/channel-core";
+    import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/channel-core";
     import { acmeChatApi } from "./client.js"; // your platform API client
 
     type ResolvedAccount = {
@@ -608,7 +608,7 @@ unrelated inbound runtime helpers.
     };
 
     function resolveAccount(
-      cfg: OpenClawConfig,
+      cfg: MarketingClawConfig,
       accountId?: string | null,
     ): ResolvedAccount {
       const section = (cfg.channels as Record<string, any>)?.["acme-chat"];
@@ -727,7 +727,7 @@ unrelated inbound runtime helpers.
     Create `index.ts`:
 
     ```typescript index.ts
-    import { defineChannelPluginEntry } from "openclaw/plugin-sdk/channel-core";
+    import { defineChannelPluginEntry } from "marketingclaw/plugin-sdk/channel-core";
     import { acmeChatPlugin } from "./src/channel.js";
 
     export default defineChannelPluginEntry({
@@ -759,7 +759,7 @@ unrelated inbound runtime helpers.
     });
     ```
 
-    Put channel-owned CLI descriptors in `registerCliMetadata(...)` so OpenClaw
+    Put channel-owned CLI descriptors in `registerCliMetadata(...)` so MarketingClaw
     can show them in root help without activating the full channel runtime,
     while normal full loads still pick up the same descriptors for real command
     registration. Keep `registerFull(...)` for runtime-only work.
@@ -777,26 +777,26 @@ unrelated inbound runtime helpers.
     Create `setup-entry.ts` for lightweight loading during onboarding:
 
     ```typescript setup-entry.ts
-    import { defineSetupPluginEntry } from "openclaw/plugin-sdk/channel-core";
+    import { defineSetupPluginEntry } from "marketingclaw/plugin-sdk/channel-core";
     import { acmeChatPlugin } from "./src/channel.js";
 
     export default defineSetupPluginEntry(acmeChatPlugin);
     ```
 
-    OpenClaw loads this instead of the full entry when the channel is disabled
+    MarketingClaw loads this instead of the full entry when the channel is disabled
     or unconfigured. It avoids pulling in heavy runtime code during setup flows.
     See [Setup and Config](/plugins/sdk-setup#setup-entry) for details.
 
     Bundled workspace channels that split setup-safe exports into sidecar
     modules can use `defineBundledChannelSetupEntry(...)` from
-    `openclaw/plugin-sdk/channel-entry-contract` when they also need an
+    `marketingclaw/plugin-sdk/channel-entry-contract` when they also need an
     explicit setup-time runtime setter.
 
   </Step>
 
   <Step title="Handle inbound messages">
     Your plugin needs to receive messages from the platform and forward them to
-    OpenClaw. The typical pattern is a webhook that verifies the request and
+    MarketingClaw. The typical pattern is a webhook that verifies the request and
     dispatches it through your channel's inbound handler:
 
     ```typescript
@@ -807,7 +807,7 @@ unrelated inbound runtime helpers.
         handler: async (req, res) => {
           const event = parseWebhookPayload(req);
 
-          // Your inbound handler dispatches the message to OpenClaw.
+          // Your inbound handler dispatches the message to MarketingClaw.
           // The exact wiring depends on your platform SDK -
           // see a real example in the bundled Microsoft Teams or Google Chat plugin package.
           await handleAcmeChatInbound(api, event);
@@ -877,8 +877,8 @@ Write colocated tests in `src/channel.test.ts`:
 
 ```text
 <bundled-plugin-root>/acme-chat/
-├── package.json              # openclaw.channel metadata
-├── openclaw.plugin.json      # Manifest with config schema
+├── package.json              # marketingclaw.channel metadata
+├── marketingclaw.plugin.json      # Manifest with config schema
 ├── index.ts                  # defineChannelPluginEntry
 ├── setup-entry.ts            # defineSetupPluginEntry
 ├── api.ts                    # Public exports (optional)

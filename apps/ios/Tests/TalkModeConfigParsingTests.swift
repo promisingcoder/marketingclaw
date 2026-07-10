@@ -1,8 +1,8 @@
 import AVFoundation
 import Foundation
-import OpenClawKit
+import MarketingClawKit
 import Testing
-@testable import OpenClaw
+@testable import MarketingClaw
 
 @MainActor
 struct TalkModeManagerTests {
@@ -762,7 +762,7 @@ struct TalkModeManagerTests {
             "talk": [
                 "providers": [
                     "elevenlabs": [
-                        "apiKey": "__OPENCLAW_REDACTED__",
+                        "apiKey": "__MARKETINGCLAW_REDACTED__",
                         "voiceId": "bIHbv24MWmeRgasZH58o",
                     ],
                 ],
@@ -783,7 +783,7 @@ struct TalkModeManagerTests {
                 "resolved": [
                     "provider": "elevenlabs",
                     "config": [
-                        "apiKey": "__OPENCLAW_REDACTED__",
+                        "apiKey": "__MARKETINGCLAW_REDACTED__",
                         "voiceId": "bIHbv24MWmeRgasZH58o",
                     ],
                 ],
@@ -802,7 +802,7 @@ struct TalkModeManagerTests {
         #expect(parsed.realtimeProvider == "openai")
         #expect(parsed.realtimeModelId == "gpt-realtime-2")
         #expect(parsed.realtimeVoiceId == "cedar")
-        #expect(parsed.rawConfigApiKey == "__OPENCLAW_REDACTED__")
+        #expect(parsed.rawConfigApiKey == "__MARKETINGCLAW_REDACTED__")
     }
 
     @Test func `leaves native mode for managed room realtime transport`() {

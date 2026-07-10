@@ -1,23 +1,23 @@
 // Github Copilot plugin module implements login behavior.
 import { intro, note, outro, spinner } from "@clack/prompts";
-import { stylePromptTitle } from "openclaw/plugin-sdk/cli-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { logConfigUpdated, updateConfig } from "openclaw/plugin-sdk/config-mutation";
+import { stylePromptTitle } from "marketingclaw/plugin-sdk/cli-runtime";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import { logConfigUpdated, updateConfig } from "marketingclaw/plugin-sdk/config-mutation";
 import {
   resolveExpiresAtMsFromDurationMs,
   nonNegativeSecondsToSafeMilliseconds,
   positiveSecondsToSafeMilliseconds,
   resolveTimerTimeoutMs,
-} from "openclaw/plugin-sdk/number-runtime";
+} from "marketingclaw/plugin-sdk/number-runtime";
 import {
   applyAuthProfileConfig,
   ensureAuthProfileStore,
   normalizeGithubCopilotDomain,
   upsertAuthProfileWithLock,
-} from "openclaw/plugin-sdk/provider-auth";
-import { readProviderJsonResponse } from "openclaw/plugin-sdk/provider-http";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime";
-import { fetchWithSsrFGuard, type SsrFPolicy } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "marketingclaw/plugin-sdk/provider-auth";
+import { readProviderJsonResponse } from "marketingclaw/plugin-sdk/provider-http";
+import type { RuntimeEnv } from "marketingclaw/plugin-sdk/runtime";
+import { fetchWithSsrFGuard, type SsrFPolicy } from "marketingclaw/plugin-sdk/ssrf-runtime";
 import { PUBLIC_GITHUB_COPILOT_DOMAIN, resolveGithubCopilotDomain } from "./domain.js";
 
 const CLIENT_ID = "Iv1.b507a08c87ecfe98";
@@ -330,11 +330,14 @@ export async function runGitHubCopilotDeviceFlow(
 // githubDomain would silently route to github.com (and 401) once
 // COPILOT_GITHUB_DOMAIN is unset. Mirrors the enterprise auth method's
 // persist-on-tenant / clear-on-public behavior.
-export function withGithubCopilotDomainConfig(cfg: OpenClawConfig, domain: string): OpenClawConfig {
+export function withGithubCopilotDomainConfig(
+  cfg: MarketingClawConfig,
+  domain: string,
+): MarketingClawConfig {
   // Normalize the optional layers to concrete objects before spreading:
   // spreading a possibly-undefined object widens every optional property to
   // `T | undefined`, which exactOptionalPropertyTypes rejects.
-  const models: NonNullable<OpenClawConfig["models"]> = cfg.models ?? {};
+  const models: NonNullable<MarketingClawConfig["models"]> = cfg.models ?? {};
   const providers: NonNullable<typeof models.providers> = models.providers ?? {};
   const provider: NonNullable<(typeof providers)[string]> = providers["github-copilot"] ?? {};
   const params = provider.params;

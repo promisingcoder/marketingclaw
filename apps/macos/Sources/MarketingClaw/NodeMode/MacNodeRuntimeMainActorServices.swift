@@ -1,6 +1,6 @@
 import CoreLocation
 import Foundation
-import OpenClawKit
+import MarketingClawKit
 
 @MainActor
 protocol MacNodeRuntimeMainActorServices: Sendable {
@@ -8,8 +8,8 @@ protocol MacNodeRuntimeMainActorServices: Sendable {
         screenIndex: Int?,
         maxWidth: Int?,
         quality: Double?,
-        format: OpenClawScreenSnapshotFormat?) async throws
-        -> (data: Data, format: OpenClawScreenSnapshotFormat, width: Int, height: Int)
+        format: MarketingClawScreenSnapshotFormat?) async throws
+        -> (data: Data, format: MarketingClawScreenSnapshotFormat, width: Int, height: Int)
 
     func recordScreen(
         screenIndex: Int?,
@@ -21,11 +21,11 @@ protocol MacNodeRuntimeMainActorServices: Sendable {
     func locationAuthorizationStatus() -> CLAuthorizationStatus
     func locationAccuracyAuthorization() -> CLAccuracyAuthorization
     func currentLocation(
-        desiredAccuracy: OpenClawLocationAccuracy,
+        desiredAccuracy: MarketingClawLocationAccuracy,
         maxAgeMs: Int?,
         timeoutMs: Int?) async throws -> CLLocation
 
-    func performComputerAct(_ params: OpenClawComputerActParams) async throws -> OpenClawComputerActResult
+    func performComputerAct(_ params: MarketingClawComputerActParams) async throws -> MarketingClawComputerActResult
     func releaseHeldInput()
 }
 
@@ -40,8 +40,8 @@ final class LiveMacNodeRuntimeMainActorServices: MacNodeRuntimeMainActorServices
         screenIndex: Int?,
         maxWidth: Int?,
         quality: Double?,
-        format: OpenClawScreenSnapshotFormat?) async throws
-        -> (data: Data, format: OpenClawScreenSnapshotFormat, width: Int, height: Int)
+        format: MarketingClawScreenSnapshotFormat?) async throws
+        -> (data: Data, format: MarketingClawScreenSnapshotFormat, width: Int, height: Int)
     {
         try await self.screenSnapshotter.snapshot(
             screenIndex: screenIndex,
@@ -74,7 +74,7 @@ final class LiveMacNodeRuntimeMainActorServices: MacNodeRuntimeMainActorServices
     }
 
     func currentLocation(
-        desiredAccuracy: OpenClawLocationAccuracy,
+        desiredAccuracy: MarketingClawLocationAccuracy,
         maxAgeMs: Int?,
         timeoutMs: Int?) async throws -> CLLocation
     {
@@ -84,7 +84,7 @@ final class LiveMacNodeRuntimeMainActorServices: MacNodeRuntimeMainActorServices
             timeoutMs: timeoutMs)
     }
 
-    func performComputerAct(_ params: OpenClawComputerActParams) async throws -> OpenClawComputerActResult {
+    func performComputerAct(_ params: MarketingClawComputerActParams) async throws -> MarketingClawComputerActResult {
         try await self.computerAction.perform(params)
     }
 

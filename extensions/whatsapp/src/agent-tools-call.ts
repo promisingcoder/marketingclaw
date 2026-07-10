@@ -1,18 +1,18 @@
 // WhatsApp plugin tool places requester-bound calls through the MeowCaller companion CLI.
 import fs from "node:fs/promises";
 import path from "node:path";
-import { normalizeAccountId } from "openclaw/plugin-sdk/account-id";
-import { normalizeE164 } from "openclaw/plugin-sdk/account-resolution";
-import { createActionGate, stringEnum } from "openclaw/plugin-sdk/channel-actions";
+import { normalizeAccountId } from "marketingclaw/plugin-sdk/account-id";
+import { normalizeE164 } from "marketingclaw/plugin-sdk/account-resolution";
+import { createActionGate, stringEnum } from "marketingclaw/plugin-sdk/channel-actions";
 import type {
   AnyAgentTool,
-  OpenClawPluginApi,
-  OpenClawPluginToolContext,
-} from "openclaw/plugin-sdk/core";
-import { mulawToPcm } from "openclaw/plugin-sdk/realtime-voice";
-import { detectBinary } from "openclaw/plugin-sdk/setup-tools";
-import { resolveOAuthDir } from "openclaw/plugin-sdk/state-paths";
-import { resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
+  MarketingClawPluginApi,
+  MarketingClawPluginToolContext,
+} from "marketingclaw/plugin-sdk/core";
+import { mulawToPcm } from "marketingclaw/plugin-sdk/realtime-voice";
+import { detectBinary } from "marketingclaw/plugin-sdk/setup-tools";
+import { resolveOAuthDir } from "marketingclaw/plugin-sdk/state-paths";
+import { resolvePreferredMarketingClawTmpDir } from "marketingclaw/plugin-sdk/temp-path";
 import { Type } from "typebox";
 import { resolveWhatsAppAccount } from "./accounts.js";
 import { getRegisteredWhatsAppConnectionController } from "./connection-controller-registry.js";
@@ -149,7 +149,7 @@ function resolveCallWindowMs(pcmBytes: number, sampleRate: number): number {
 
 async function resolveRequesterE164(params: {
   accountId: string;
-  cfg: NonNullable<OpenClawPluginToolContext["config"]>;
+  cfg: NonNullable<MarketingClawPluginToolContext["config"]>;
   requesterSenderId: string;
 }): Promise<string | null> {
   const senderId = params.requesterSenderId.trim();
@@ -169,7 +169,7 @@ async function resolveRequesterE164(params: {
 
 async function resolveLinkedWhatsAppSelfE164(params: {
   accountId: string;
-  cfg: NonNullable<OpenClawPluginToolContext["config"]>;
+  cfg: NonNullable<MarketingClawPluginToolContext["config"]>;
 }): Promise<string | null> {
   const controller = getRegisteredWhatsAppConnectionController(params.accountId);
   if (!controller) {
@@ -190,13 +190,16 @@ async function resolveLinkedWhatsAppSelfE164(params: {
   });
 }
 
-function resolveRuntimeConfig(api: OpenClawPluginApi, context: OpenClawPluginToolContext) {
+function resolveRuntimeConfig(
+  api: MarketingClawPluginApi,
+  context: MarketingClawPluginToolContext,
+) {
   return context.getRuntimeConfig?.() ?? context.runtimeConfig ?? context.config ?? api.config;
 }
 
 function createWhatsAppCallToolWithDependencies(
-  api: OpenClawPluginApi,
-  context: OpenClawPluginToolContext,
+  api: MarketingClawPluginApi,
+  context: MarketingClawPluginToolContext,
   dependencies: WhatsAppCallToolDependencies,
 ): AnyAgentTool | null {
   const cfg = resolveRuntimeConfig(api, context);
@@ -234,7 +237,7 @@ function createWhatsAppCallToolWithDependencies(
           setupShell: process.platform === "win32" ? "PowerShell" : "POSIX shell",
           requiredCommand:
             "meowcaller notify --store <path> --answer-timeout 45s --max-duration 65s <target> <file>",
-          note: "MeowCaller uses a separate WhatsApp linked-device session; it cannot reuse OpenClaw's Baileys credentials.",
+          note: "MeowCaller uses a separate WhatsApp linked-device session; it cannot reuse MarketingClaw's Baileys credentials.",
         });
       }
 
@@ -265,7 +268,7 @@ function createWhatsAppCallToolWithDependencies(
       const linkedSelf = await resolveLinkedWhatsAppSelfE164({ accountId, cfg });
       if (linkedSelf === target) {
         throw new Error(
-          "WhatsApp cannot call the linked account itself; use a dedicated OpenClaw WhatsApp number",
+          "WhatsApp cannot call the linked account itself; use a dedicated MarketingClaw WhatsApp number",
         );
       }
 
@@ -281,7 +284,7 @@ function createWhatsAppCallToolWithDependencies(
         const pcm = normalizeTelephonyPcm(speech.audioBuffer, speech.outputFormat);
         const callWindowMs = resolveCallWindowMs(pcm.length, speech.sampleRate);
         const tempDir = await fs.mkdtemp(
-          path.join(resolvePreferredOpenClawTmpDir(), "openclaw-whatsapp-call-"),
+          path.join(resolvePreferredMarketingClawTmpDir(), "marketingclaw-whatsapp-call-"),
         );
         const audioPath = path.join(tempDir, "message.wav");
         try {
@@ -339,13 +342,13 @@ function createWhatsAppCallToolWithDependencies(
 }
 
 export function createWhatsAppCallTool(
-  api: OpenClawPluginApi,
-  context: OpenClawPluginToolContext,
+  api: MarketingClawPluginApi,
+  context: MarketingClawPluginToolContext,
 ): AnyAgentTool | null {
   return createWhatsAppCallToolWithDependencies(api, context, defaultDependencies);
 }
 
-export function registerWhatsAppCallTool(api: OpenClawPluginApi): void {
+export function registerWhatsAppCallTool(api: MarketingClawPluginApi): void {
   api.registerTool((context) => createWhatsAppCallTool(api, context), {
     name: "whatsapp_call",
   });

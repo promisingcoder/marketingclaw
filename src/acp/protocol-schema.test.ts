@@ -48,7 +48,7 @@ const fixtures: SchemaFixture[] = [
     name: "session/new",
     schema: acpSchema("NewSessionRequest"),
     valid: {
-      cwd: "/tmp/openclaw",
+      cwd: "/tmp/marketingclaw",
       mcpServers: [],
     },
     invalid: {
@@ -89,11 +89,11 @@ const fixtures: SchemaFixture[] = [
     name: "session/list",
     schema: acpSchema("ListSessionsRequest"),
     valid: {
-      cwd: "/tmp/openclaw",
+      cwd: "/tmp/marketingclaw",
       cursor: null,
     },
     invalid: {
-      cwd: "/tmp/openclaw",
+      cwd: "/tmp/marketingclaw",
       cursor: 123,
     },
   },
@@ -102,7 +102,7 @@ const fixtures: SchemaFixture[] = [
     schema: acpSchema("LoadSessionRequest"),
     valid: {
       sessionId: "agent:main:work",
-      cwd: "/tmp/openclaw",
+      cwd: "/tmp/marketingclaw",
       mcpServers: [],
     },
     invalid: {
@@ -115,7 +115,7 @@ const fixtures: SchemaFixture[] = [
     schema: acpSchema("ResumeSessionRequest"),
     valid: {
       sessionId: "agent:main:work",
-      cwd: "/tmp/openclaw",
+      cwd: "/tmp/marketingclaw",
       mcpServers: [],
     },
     invalid: {

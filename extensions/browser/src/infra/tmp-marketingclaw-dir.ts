@@ -1,4 +1,4 @@
 /**
- * Preferred OpenClaw temp directory helper for Browser outputs.
+ * Preferred MarketingClaw temp directory helper for Browser outputs.
  */
-export { resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
+export { resolvePreferredMarketingClawTmpDir } from "marketingclaw/plugin-sdk/temp-path";

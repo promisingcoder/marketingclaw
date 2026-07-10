@@ -7,13 +7,13 @@ import {
   getNodeSqliteKysely,
 } from "../../infra/kysely-sync.js";
 import { normalizeSqliteNumber } from "../../infra/sqlite-number.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../../state/openclaw-state-db.generated.js";
+import type { DB as MarketingClawStateKyselyDatabase } from "../../state/marketingclaw-state-db.generated.js";
 import type { CronRunLogEntry } from "../run-log-types.js";
 import type { CronDeliveryStatus, CronRunStatus } from "../types.js";
 import { parseCronRunLogEntryObject } from "./entry-codec.js";
 
-type CronRunLogsTable = OpenClawStateKyselyDatabase["cron_run_logs"];
-type CronRunLogDatabase = Pick<OpenClawStateKyselyDatabase, "cron_run_logs">;
+type CronRunLogsTable = MarketingClawStateKyselyDatabase["cron_run_logs"];
+type CronRunLogDatabase = Pick<MarketingClawStateKyselyDatabase, "cron_run_logs">;
 type CronRunLogRow = Selectable<CronRunLogsTable>;
 type CronRunLogInsert = Insertable<CronRunLogsTable>;
 type CronRunLogFilterParams = {

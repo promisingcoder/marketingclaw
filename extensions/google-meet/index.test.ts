@@ -8,9 +8,9 @@ import { createContext, Script } from "node:vm";
 import {
   validateJsonSchemaValue,
   type JsonSchemaObject,
-} from "openclaw/plugin-sdk/json-schema-runtime";
-import type { RealtimeTranscriptionProviderPlugin } from "openclaw/plugin-sdk/realtime-transcription";
-import type { RealtimeVoiceProviderPlugin } from "openclaw/plugin-sdk/realtime-voice";
+} from "marketingclaw/plugin-sdk/json-schema-runtime";
+import type { RealtimeTranscriptionProviderPlugin } from "marketingclaw/plugin-sdk/realtime-transcription";
+import type { RealtimeVoiceProviderPlugin } from "marketingclaw/plugin-sdk/realtime-voice";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import plugin, { testing as googleMeetPluginTesting } from "./index.js";
 import {
@@ -94,8 +94,8 @@ const fetchGuardMocks = vi.hoisted(() => ({
   ),
 }));
 
-vi.mock("openclaw/plugin-sdk/ssrf-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/ssrf-runtime")>();
+vi.mock("marketingclaw/plugin-sdk/ssrf-runtime", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("marketingclaw/plugin-sdk/ssrf-runtime")>();
   return {
     ...actual,
     fetchWithSsrFGuard: fetchGuardMocks.fetchWithSsrFGuard,
@@ -477,7 +477,7 @@ describe("google-meet plugin", () => {
   });
 
   afterAll(() => {
-    vi.doUnmock("openclaw/plugin-sdk/ssrf-runtime");
+    vi.doUnmock("marketingclaw/plugin-sdk/ssrf-runtime");
     vi.doUnmock("./src/voice-call-gateway.js");
     vi.resetModules();
   });
@@ -493,7 +493,7 @@ describe("google-meet plugin", () => {
     expect(config.chrome).toEqual({
       audioBackend: "blackhole-2ch",
       launch: true,
-      guestName: "OpenClaw Agent",
+      guestName: "MarketingClaw Agent",
       reuseExistingTab: true,
       autoJoin: true,
       joinTimeoutMs: 30000,
@@ -560,7 +560,7 @@ describe("google-meet plugin", () => {
     expect(config.realtime.introMessage).toBe("Say exactly: I'm here and listening.");
     expect(config.realtime.toolPolicy).toBe("safe-read-only");
     expect(config.realtime.providers).toEqual({});
-    expect(config.realtime.instructions).toContain("openclaw_agent_consult");
+    expect(config.realtime.instructions).toContain("marketingclaw_agent_consult");
     expect(config.oauth).toEqual({});
     expect(config.auth).toEqual({ provider: "google-oauth" });
 
@@ -661,7 +661,7 @@ describe("google-meet plugin", () => {
 
   it("declares advanced config metadata in the plugin entry and manifest", () => {
     const manifest = JSON.parse(
-      readFileSync(new URL("./openclaw.plugin.json", import.meta.url), "utf8"),
+      readFileSync(new URL("./marketingclaw.plugin.json", import.meta.url), "utf8"),
     ) as {
       uiHints?: Record<string, unknown>;
       configSchema?: GoogleMeetManifestConfigSchema;
@@ -803,13 +803,13 @@ describe("google-meet plugin", () => {
     const config = resolveGoogleMeetConfigWithEnv(
       {},
       {
-        OPENCLAW_GOOGLE_MEET_CLIENT_ID: "client-id",
+        MARKETINGCLAW_GOOGLE_MEET_CLIENT_ID: "client-id",
         GOOGLE_MEET_CLIENT_SECRET: "client-secret",
-        OPENCLAW_GOOGLE_MEET_REFRESH_TOKEN: "refresh-token",
+        MARKETINGCLAW_GOOGLE_MEET_REFRESH_TOKEN: "refresh-token",
         GOOGLE_MEET_ACCESS_TOKEN: "access-token",
-        OPENCLAW_GOOGLE_MEET_ACCESS_TOKEN_EXPIRES_AT: "123456",
+        MARKETINGCLAW_GOOGLE_MEET_ACCESS_TOKEN_EXPIRES_AT: "123456",
         GOOGLE_MEET_DEFAULT_MEETING: "https://meet.google.com/abc-defg-hij",
-        OPENCLAW_GOOGLE_MEET_PREVIEW_ACK: "true",
+        MARKETINGCLAW_GOOGLE_MEET_PREVIEW_ACK: "true",
       },
     );
     expect(config.defaults).toEqual({ meeting: "https://meet.google.com/abc-defg-hij" });
@@ -827,8 +827,8 @@ describe("google-meet plugin", () => {
     const config = resolveGoogleMeetConfigWithEnv(
       {},
       {
-        OPENCLAW_GOOGLE_MEET_ACCESS_TOKEN: "access-token",
-        OPENCLAW_GOOGLE_MEET_ACCESS_TOKEN_EXPIRES_AT: expiresAt,
+        MARKETINGCLAW_GOOGLE_MEET_ACCESS_TOKEN: "access-token",
+        MARKETINGCLAW_GOOGLE_MEET_ACCESS_TOKEN_EXPIRES_AT: expiresAt,
       },
     );
 
@@ -983,7 +983,7 @@ describe("google-meet plugin", () => {
       type: "string",
       enum: ["agent", "bidi", "transcribe"],
       description:
-        "Join mode. agent uses realtime transcription, the configured OpenClaw agent, and regular TTS. bidi uses the realtime voice model directly. transcribe joins observe-only.",
+        "Join mode. agent uses realtime transcription, the configured MarketingClaw agent, and regular TTS. bidi uses the realtime voice model directly. transcribe joins observe-only.",
     });
   });
 
@@ -1581,7 +1581,7 @@ describe("google-meet plugin", () => {
         details: {
           manualActionRequired: true,
           reason: "not-authenticated",
-          browser: { profile: "openclaw" },
+          browser: { profile: "marketingclaw" },
         },
       });
     });
@@ -1597,7 +1597,7 @@ describe("google-meet plugin", () => {
     expect(result.details).toEqual({
       manualActionRequired: true,
       reason: "not-authenticated",
-      browser: { profile: "openclaw" },
+      browser: { profile: "marketingclaw" },
     });
   });
 
@@ -1724,8 +1724,8 @@ describe("google-meet plugin", () => {
     try {
       const { tools } = setup({
         chrome: {
-          audioInputCommand: ["openclaw-audio-bridge", "capture"],
-          audioOutputCommand: ["openclaw-audio-bridge", "play"],
+          audioInputCommand: ["marketingclaw-audio-bridge", "capture"],
+          audioOutputCommand: ["marketingclaw-audio-bridge", "play"],
         },
       });
       const tool = tools[0] as {
@@ -1828,7 +1828,7 @@ describe("google-meet plugin", () => {
 
   it("writes export bundles through the tool", async () => {
     stubMeetArtifactsApi();
-    const tempDir = mkdtempSync(path.join(tmpdir(), "openclaw-google-meet-tool-export-"));
+    const tempDir = mkdtempSync(path.join(tmpdir(), "marketingclaw-google-meet-tool-export-"));
     const { tools } = setup();
     const tool = tools[0] as {
       execute: (
@@ -1887,7 +1887,7 @@ describe("google-meet plugin", () => {
 
   it("dry-runs export bundles through the tool", async () => {
     stubMeetArtifactsApi();
-    const parentDir = mkdtempSync(path.join(tmpdir(), "openclaw-google-meet-tool-dry-run-"));
+    const parentDir = mkdtempSync(path.join(tmpdir(), "marketingclaw-google-meet-tool-dry-run-"));
     const outputDir = path.join(parentDir, "bundle");
     const { tools } = setup();
     const tool = tools[0] as {
@@ -2664,7 +2664,7 @@ describe("google-meet plugin", () => {
                 lobbyWaiting: true,
                 manualActionRequired: true,
                 manualActionReason: "meet-admission-required",
-                manualActionMessage: "Admit the OpenClaw browser participant in Google Meet.",
+                manualActionMessage: "Admit the MarketingClaw browser participant in Google Meet.",
                 title: "Meet",
                 url: "https://meet.google.com/abc-defg-hij",
               }),
@@ -2984,12 +2984,12 @@ describe("google-meet plugin", () => {
         allowMicrophone: false,
         autoJoin: false,
         captureCaptions: true,
-        guestName: "OpenClaw Agent",
+        guestName: "MarketingClaw Agent",
       })})`,
     ).runInContext(context) as () => string | Promise<string>;
 
     const first = JSON.parse(await inspect()) as { captionsEnabledAttempted?: boolean };
-    const captionsStateKey = "__openclawMeetCaptions";
+    const captionsStateKey = "__marketingclawMeetCaptions";
     const stateAfterFirst = windowState[captionsStateKey] as {
       enabledAttempted?: boolean;
     };
@@ -3048,7 +3048,7 @@ describe("google-meet plugin", () => {
         allowMicrophone: true,
         autoJoin: false,
         captureCaptions: false,
-        guestName: "OpenClaw Agent",
+        guestName: "MarketingClaw Agent",
       })})`,
     ).runInContext(context) as () => string | Promise<string>;
 
@@ -3103,7 +3103,7 @@ describe("google-meet plugin", () => {
         allowMicrophone: true,
         autoJoin: false,
         captureCaptions: false,
-        guestName: "OpenClaw Agent",
+        guestName: "MarketingClaw Agent",
       })})`,
     ).runInContext(context) as () => string | Promise<string>;
 
@@ -3508,7 +3508,8 @@ describe("google-meet plugin", () => {
                     inCall: false,
                     manualActionRequired: true,
                     manualActionReason: "meet-admission-required",
-                    manualActionMessage: "Admit the OpenClaw browser participant in Google Meet.",
+                    manualActionMessage:
+                      "Admit the MarketingClaw browser participant in Google Meet.",
                     title: "Meet",
                     url: "https://meet.google.com/abc-defg-hij?authuser=me@example.com",
                   }),
@@ -3590,7 +3591,7 @@ describe("google-meet plugin", () => {
               inCall: false,
               manualActionRequired: true,
               manualActionReason: "meet-admission-required",
-              manualActionMessage: "Admit the OpenClaw browser participant in Google Meet.",
+              manualActionMessage: "Admit the MarketingClaw browser participant in Google Meet.",
               title: "Meet",
               url: "https://meet.google.com/abc-defg-hij?authuser=me@example.com",
             }),
@@ -4290,7 +4291,7 @@ describe("google-meet plugin", () => {
           manualActionRequired: true,
           manualActionReason: "google-login-required",
           manualActionMessage:
-            "Sign in to Google in the OpenClaw browser profile, then retry the Meet join.",
+            "Sign in to Google in the MarketingClaw browser profile, then retry the Meet join.",
           title: "Sign in - Google Accounts",
           url: "https://accounts.google.com/signin",
         },
@@ -4402,7 +4403,7 @@ describe("google-meet plugin", () => {
                             manualActionRequired: true,
                             manualActionReason: "google-login-required",
                             manualActionMessage:
-                              "Sign in to Google in the OpenClaw browser profile, then retry the Meet join.",
+                              "Sign in to Google in the MarketingClaw browser profile, then retry the Meet join.",
                             title: "Sign in - Google Accounts",
                             url: "https://accounts.google.com/signin",
                           },
@@ -4488,7 +4489,7 @@ describe("google-meet plugin", () => {
     });
 
     expect(result.details.error).toContain("No connected Google Meet-capable node");
-    expect(result.details.error).toContain("openclaw node run");
+    expect(result.details.error).toContain("marketingclaw node run");
   });
 
   it("requires chromeNode.node when multiple capable nodes are connected", async () => {
@@ -4938,7 +4939,7 @@ describe("google-meet plugin", () => {
     callbacks?.onToolCall?.({
       itemId: "item-1",
       callId: "tool-call-1",
-      name: "openclaw_agent_consult",
+      name: "marketingclaw_agent_consult",
       args: { question: "What should I say about launch timing?" },
     });
     expect(bridge.submitToolResult).toHaveBeenCalled();
@@ -4947,7 +4948,7 @@ describe("google-meet plugin", () => {
     expect(firstToolResultCall[2]).toStrictEqual({ willContinue: true });
     const progressPayload = requireRecord(firstToolResultCall[1], "tool progress payload");
     expect(progressPayload.status).toBe("working");
-    expect(progressPayload.tool).toBe("openclaw_agent_consult");
+    expect(progressPayload.tool).toBe("marketingclaw_agent_consult");
 
     expect(spawnMock).toHaveBeenNthCalledWith(1, "play-meet", [], {
       stdio: ["pipe", "ignore", "pipe"],
@@ -5000,7 +5001,7 @@ describe("google-meet plugin", () => {
       channels: 1,
     });
     expect(callbacks.autoRespondToAudio).toBe(true);
-    expect(callbacks.tools?.map((tool) => tool.name)).toContain("openclaw_agent_consult");
+    expect(callbacks.tools?.map((tool) => tool.name)).toContain("marketingclaw_agent_consult");
     await vi.waitFor(() => {
       expect(bridge.submitToolResult).toHaveBeenLastCalledWith(
         "tool-call-1",
@@ -5497,7 +5498,7 @@ describe("google-meet plugin", () => {
     callbacks?.onToolCall?.({
       itemId: "item-1",
       callId: "tool-call-1",
-      name: "openclaw_agent_consult",
+      name: "marketingclaw_agent_consult",
       args: { question: "What should I say?" },
     });
     expect(bridge.submitToolResult).toHaveBeenCalled();
@@ -5506,7 +5507,7 @@ describe("google-meet plugin", () => {
     expect(firstToolResultCall[2]).toStrictEqual({ willContinue: true });
     const progressPayload = requireRecord(firstToolResultCall[1], "node tool progress payload");
     expect(progressPayload.status).toBe("working");
-    expect(progressPayload.tool).toBe("openclaw_agent_consult");
+    expect(progressPayload.tool).toBe("marketingclaw_agent_consult");
 
     await vi.waitFor(() => {
       expect(sendAudio).toHaveBeenCalledWith(Buffer.from([9, 8, 7]));
@@ -5553,7 +5554,7 @@ describe("google-meet plugin", () => {
       channels: 1,
     });
     expect(callbacks.autoRespondToAudio).toBe(true);
-    expect(callbacks.tools?.map((tool) => tool.name)).toContain("openclaw_agent_consult");
+    expect(callbacks.tools?.map((tool) => tool.name)).toContain("marketingclaw_agent_consult");
     expect(handle.type).toBe("node-command-pair");
     expect(handle.providerId).toBe("openai");
     expect(handle.nodeId).toBe("node-1");

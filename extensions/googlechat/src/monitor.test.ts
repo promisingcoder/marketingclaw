@@ -1,5 +1,5 @@
 // Googlechat tests cover monitor plugin behavior.
-import { recordChannelBotPairLoopAndCheckSuppression } from "openclaw/plugin-sdk/channel-inbound";
+import { recordChannelBotPairLoopAndCheckSuppression } from "marketingclaw/plugin-sdk/channel-inbound";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ResolvedGoogleChatAccount } from "./accounts.js";
 import type { GoogleChatCoreRuntime, GoogleChatRuntimeEnv } from "./monitor-types.js";
@@ -43,7 +43,7 @@ function createInboundClassificationHarness() {
     channel: {
       routing: { resolveAgentRoute },
       session: {
-        resolveStorePath: () => "/tmp/openclaw-googlechat-test",
+        resolveStorePath: () => "/tmp/marketingclaw-googlechat-test",
         readSessionUpdatedAt: () => undefined,
         recordInboundSession: vi.fn(),
       },
@@ -340,7 +340,7 @@ describe("googlechat monitor direct messages", () => {
           }),
         },
         session: {
-          resolveStorePath: () => "/tmp/openclaw-googlechat-test",
+          resolveStorePath: () => "/tmp/marketingclaw-googlechat-test",
           readSessionUpdatedAt: () => undefined,
           recordInboundSession: vi.fn(),
         },
@@ -389,7 +389,7 @@ describe("googlechat monitor direct messages", () => {
     expect(apiMocks.sendGoogleChatMessage).toHaveBeenCalledWith({
       account,
       space: "spaces/DM",
-      text: "_OpenClaw is typing..._",
+      text: "_MarketingClaw is typing..._",
       thread: undefined,
     });
     expect(runTurn).toHaveBeenCalledOnce();
@@ -409,7 +409,7 @@ describe("googlechat monitor direct messages", () => {
           }),
         },
         session: {
-          resolveStorePath: () => "/tmp/openclaw-googlechat-test",
+          resolveStorePath: () => "/tmp/marketingclaw-googlechat-test",
           readSessionUpdatedAt: () => undefined,
           recordInboundSession: vi.fn(),
         },
@@ -474,7 +474,7 @@ describe("googlechat monitor direct messages", () => {
     expect(apiMocks.sendGoogleChatMessage).toHaveBeenCalledWith({
       account,
       space: "spaces/DM",
-      text: "_OpenClaw is typing..._",
+      text: "_MarketingClaw is typing..._",
       thread: undefined,
     });
     expect(runTurn).toHaveBeenCalledOnce();
@@ -495,7 +495,7 @@ describe("googlechat monitor direct messages", () => {
           }),
         },
         session: {
-          resolveStorePath: () => "/tmp/openclaw-googlechat-test",
+          resolveStorePath: () => "/tmp/marketingclaw-googlechat-test",
           readSessionUpdatedAt: () => undefined,
           recordInboundSession: vi.fn(),
         },

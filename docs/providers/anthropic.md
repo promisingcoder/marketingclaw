@@ -1,27 +1,27 @@
 ---
-summary: "Use Anthropic Claude via API keys or Claude CLI in OpenClaw"
+summary: "Use Anthropic Claude via API keys or Claude CLI in MarketingClaw"
 read_when:
-  - You want to use Anthropic models in OpenClaw
+  - You want to use Anthropic models in MarketingClaw
 title: "Anthropic"
 ---
 
-Anthropic builds the **Claude** model family. OpenClaw supports two auth routes:
+Anthropic builds the **Claude** model family. MarketingClaw supports two auth routes:
 
 - **API key** - direct Anthropic API access with usage-based billing (`anthropic/*` models)
 - **Claude CLI** - reuse an existing Claude Code login on the same host
 
 ## Usage and cost tracking
 
-OpenClaw detects the available Anthropic credential and selects the matching usage surface:
+MarketingClaw detects the available Anthropic credential and selects the matching usage surface:
 
 - Claude subscription/setup credentials show quota windows and optional extra-usage budget.
 - `ANTHROPIC_ADMIN_KEY` or `ANTHROPIC_ADMIN_API_KEY` shows 30 days of provider-reported organization cost and Messages API usage in Control UI **Usage**, including daily spend, token/cache totals, top models, and cost categories.
 - An `sk-ant-admin...` credential stored in the Anthropic provider profile is detected as an Admin API key automatically.
 
-Admin API cost history comes from Anthropic's [Usage and Cost API](https://platform.claude.com/docs/en/manage-claude/usage-cost-api). It is actual provider billing, separate from OpenClaw's session-derived estimated cost.
+Admin API cost history comes from Anthropic's [Usage and Cost API](https://platform.claude.com/docs/en/manage-claude/usage-cost-api). It is actual provider billing, separate from MarketingClaw's session-derived estimated cost.
 
 <Warning>
-OpenClaw's Claude CLI backend runs the installed Claude Code CLI in
+MarketingClaw's Claude CLI backend runs the installed Claude Code CLI in
 non-interactive print mode (`claude -p`). Anthropic's current Claude Code docs
 describe that mode as Agent SDK/programmatic usage. Anthropic's June 15, 2026
 support update paused the announced separate Agent SDK billing change: Claude
@@ -35,7 +35,7 @@ For long-lived gateway hosts, shared automation, and predictable production
 spend, use an Anthropic API key.
 
 Anthropic's current support articles can change this behavior without an
-OpenClaw release:
+MarketingClaw release:
 
 - [Claude Code CLI reference](https://code.claude.com/docs/en/cli-usage)
 - [Use the Claude Agent SDK with your Claude plan](https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan)
@@ -57,19 +57,19 @@ OpenClaw release:
       </Step>
       <Step title="Run onboarding">
         ```bash
-        openclaw onboard
+        marketingclaw onboard
         # choose: Anthropic API key
         ```
 
         Or pass the key directly:
 
         ```bash
-        openclaw onboard --anthropic-api-key "$ANTHROPIC_API_KEY"
+        marketingclaw onboard --anthropic-api-key "$ANTHROPIC_API_KEY"
         ```
       </Step>
       <Step title="Verify the model is available">
         ```bash
-        openclaw models list --provider anthropic
+        marketingclaw models list --provider anthropic
         ```
       </Step>
     </Steps>
@@ -98,15 +98,15 @@ OpenClaw release:
       </Step>
       <Step title="Run onboarding">
         ```bash
-        openclaw onboard
+        marketingclaw onboard
         # choose: Claude CLI
         ```
 
-        OpenClaw detects and reuses the existing Claude CLI credentials.
+        MarketingClaw detects and reuses the existing Claude CLI credentials.
       </Step>
       <Step title="Verify the model is available">
         ```bash
-        openclaw models list --provider anthropic
+        marketingclaw models list --provider anthropic
         ```
       </Step>
     </Steps>
@@ -116,13 +116,13 @@ OpenClaw release:
     </Note>
 
     <Warning>
-    Claude CLI reuse expects the OpenClaw process to run on the same host as the
+    Claude CLI reuse expects the MarketingClaw process to run on the same host as the
     Claude CLI login. Docker installs can persist a container home and log in to
     Claude Code there; see
     [Claude CLI backend in Docker](/install/docker#claude-cli-backend-in-docker).
     Other container installs such as [Podman](/install/podman) do not mount host
     `~/.claude` into setup or runtime; use an Anthropic API key there, or choose
-    a provider with OpenClaw-managed OAuth such as
+    a provider with MarketingClaw-managed OAuth such as
     [OpenAI Codex](/providers/openai).
     </Warning>
 
@@ -151,7 +151,7 @@ OpenClaw release:
 
     ### Billing and `claude -p`
 
-    OpenClaw uses Claude Code's non-interactive `claude -p` path for Claude CLI
+    MarketingClaw uses Claude Code's non-interactive `claude -p` path for Claude CLI
     runs. Anthropic currently treats that path as Agent SDK/programmatic usage:
 
     - Anthropic's June 15, 2026 support update paused the previously announced
@@ -172,12 +172,12 @@ OpenClaw release:
     subscription behavior.
 
     Anthropic can change Claude Code billing and rate-limit behavior without an
-    OpenClaw release. Check `claude auth status`, `/status`, and
+    MarketingClaw release. Check `claude auth status`, `/status`, and
     Anthropic's linked docs when billing predictability matters.
 
     <Tip>
     For shared production automation, use an Anthropic API key instead of
-    Claude CLI. OpenClaw also supports subscription-style options from
+    Claude CLI. MarketingClaw also supports subscription-style options from
     [OpenAI Codex](/providers/openai), [Qwen Cloud](/providers/qwen),
     [MiniMax](/providers/minimax), and [Z.AI / GLM](/providers/zai).
     </Tip>
@@ -189,7 +189,7 @@ OpenClaw release:
 
 `anthropic/claude-sonnet-5` uses adaptive thinking at `high` effort by default.
 Use `/think off` to disable thinking, or `/think xhigh|max` for the model's
-higher native effort levels. OpenClaw omits manual thinking budgets, custom
+higher native effort levels. MarketingClaw omits manual thinking budgets, custom
 sampling parameters, assistant prefills, and Priority Tier for Sonnet 5 because
 Anthropic does not support those request features on this model.
 The catalog uses Anthropic's introductory `$2/$10` input/output pricing through
@@ -197,18 +197,18 @@ August 31, 2026; standard `$3/$15` pricing begins September 1, 2026.
 
 `anthropic/claude-fable-5` always uses adaptive thinking and defaults to `high`
 effort. Anthropic does not allow thinking to be disabled for this model, so
-`/think off` and `/think minimal` map to `low` effort instead. OpenClaw also
+`/think off` and `/think minimal` map to `low` effort instead. MarketingClaw also
 omits custom temperature values for Fable 5 requests, since Anthropic rejects
 a temperature override on any thinking-enabled request.
 
 `anthropic/claude-mythos-5` is a limited-access model with the same always-on
-adaptive-thinking contract. OpenClaw defaults to `high`, maps `/think off` and
+adaptive-thinking contract. MarketingClaw defaults to `high`, maps `/think off` and
 `/think minimal` to `low`, and omits caller-selected sampling parameters.
 The catalog publishes its 1,000,000-token context window, 128,000-token output
 limit, image input, and `$10/$50` input/output pricing.
 
-Claude Opus 4.8 keeps thinking off by default in OpenClaw. When you explicitly
-enable adaptive thinking with `/think high|xhigh|max`, OpenClaw sends
+Claude Opus 4.8 keeps thinking off by default in MarketingClaw. When you explicitly
+enable adaptive thinking with `/think high|xhigh|max`, MarketingClaw sends
 Anthropic's Opus 4.8 effort values; Claude 4.6 models (Opus 4.6 and Sonnet 4.6)
 default to `adaptive`.
 
@@ -240,7 +240,7 @@ Related Anthropic docs:
 <Warning>
 Using Claude Fable 5 means also using Claude Opus 4.8. Fable 5 ships with
 safety classifiers that can decline a request, and Anthropic's sanctioned
-recovery is to have `claude-opus-4-8` serve that turn. OpenClaw opts into this
+recovery is to have `claude-opus-4-8` serve that turn. MarketingClaw opts into this
 automatically for direct API-key requests, so some Fable turns are answered
 and billed as Claude Opus 4.8. If your policy or budget cannot accept
 Opus-served turns, do not select `anthropic/claude-fable-5`.
@@ -257,14 +257,14 @@ tells API integrators to configure a fallback model.
 
 ### How it works
 
-1. For every direct API-key request to `anthropic/claude-fable-5`, OpenClaw
+1. For every direct API-key request to `anthropic/claude-fable-5`, MarketingClaw
    sends Anthropic's server-side fallback opt-in: the
    `server-side-fallback-2026-06-01` beta header plus
    `fallbacks: [{"model": "claude-opus-4-8"}]`. Claude Opus 4.8 is the only
    fallback target Anthropic permits for Fable 5.
 2. Only a safety-classifier decline triggers the fallback. Rate limits,
    overloads, and server errors behave exactly as before and go through
-   OpenClaw's normal [model failover](/concepts/model-failover).
+   MarketingClaw's normal [model failover](/concepts/model-failover).
 3. The rescue happens inside the same call. A decline before any output is
    invisible apart from latency; the whole answer comes from Opus 4.8. On a
    mid-stream decline the partial text is kept as the prefix the fallback
@@ -284,11 +284,11 @@ API key can always serve Opus.
   assistant message naming `fromModel` and `toModel`, and the message's
   `responseModel` reports `claude-opus-4-8`.
 - Anthropic bills per attempt: a decline before output is free, and the rescue
-  bills at Claude Opus 4.8 rates (currently half of Fable 5 rates). OpenClaw's
+  bills at Claude Opus 4.8 rates (currently half of Fable 5 rates). MarketingClaw's
   per-turn cost estimate prices fallback-served turns at Opus rates to match.
 - A mid-stream decline additionally bills the already-streamed Fable partial
   on Anthropic's side; that portion is reported in the API's per-attempt
-  usage but not folded into OpenClaw's per-turn estimate.
+  usage but not folded into MarketingClaw's per-turn estimate.
 
 ### Scope
 
@@ -299,7 +299,7 @@ refusals as errors there.
 
 Verified live: a benign prompt asking Fable 5 to reproduce its raw chain of
 thought is declined with `category: "reasoning_extraction"` when sent without
-fallbacks, and the same prompt through OpenClaw returns a normal Opus-served
+fallbacks, and the same prompt through MarketingClaw returns a normal Opus-served
 answer with the `provider_fallback` diagnostic attached.
 
 See Anthropic's [refusals and fallback
@@ -308,7 +308,7 @@ for the underlying behavior.
 
 ## Prompt caching
 
-OpenClaw supports Anthropic's prompt caching feature for API-key auth.
+MarketingClaw supports Anthropic's prompt caching feature for API-key auth.
 
 | Value               | Cache duration | Description                            |
 | ------------------- | -------------- | -------------------------------------- |
@@ -374,7 +374,7 @@ OpenClaw supports Anthropic's prompt caching feature for API-key auth.
 
 <AccordionGroup>
   <Accordion title="Fast mode">
-    OpenClaw's shared `/fast` toggle sets Anthropic's `service_tier` field for direct API-key traffic to `api.anthropic.com`.
+    MarketingClaw's shared `/fast` toggle sets Anthropic's `service_tier` field for direct API-key traffic to `api.anthropic.com`.
 
     | Command | Maps to |
     |---------|---------|
@@ -405,7 +405,7 @@ OpenClaw supports Anthropic's prompt caching feature for API-key auth.
   </Accordion>
 
   <Accordion title="Media understanding (image and PDF)">
-    The bundled Anthropic plugin registers image and PDF understanding. OpenClaw
+    The bundled Anthropic plugin registers image and PDF understanding. MarketingClaw
     auto-resolves media capabilities from the configured Anthropic auth; no
     additional config is needed.
 
@@ -414,7 +414,7 @@ OpenClaw supports Anthropic's prompt caching feature for API-key auth.
     | Default model   | `claude-opus-4-8`     |
     | Supported input | Images, PDF documents |
 
-    When an image or PDF is attached to a conversation, OpenClaw automatically
+    When an image or PDF is attached to a conversation, MarketingClaw automatically
     routes it through the Anthropic media understanding provider.
 
   </Accordion>
@@ -423,7 +423,7 @@ OpenClaw supports Anthropic's prompt caching feature for API-key auth.
     Claude Sonnet 5, Mythos 5, and Fable 5 have an exact 1,000,000-token input
     window and support up to 128,000 output tokens. Anthropic's 1M context
     window is also GA on Claude 4.x models with adaptive thinking: Opus 4.8,
-    Opus 4.7, Opus 4.6, and Sonnet 4.6. OpenClaw sizes these models
+    Opus 4.7, Opus 4.6, and Sonnet 4.6. MarketingClaw sizes these models
     automatically, no `params.context1m` needed:
 
     ```json5
@@ -441,7 +441,7 @@ OpenClaw supports Anthropic's prompt caching feature for API-key auth.
     ```
 
     Older configs can keep `params.context1m: true`; it is a harmless no-op for
-    these models and OpenClaw no longer sends the retired
+    these models and MarketingClaw no longer sends the retired
     `context-1m-2025-08-07` beta header regardless. Older `anthropicBeta` config
     entries with that value are dropped during request header resolution, and
     unsupported older Claude models stay on their normal context window.
@@ -451,7 +451,7 @@ OpenClaw supports Anthropic's prompt caching feature for API-key auth.
     1M window automatically, so the param is optional there too.
 
     <Warning>
-    Requires long-context access on your Anthropic credential. OAuth/subscription token auth keeps its required Anthropic beta headers, but OpenClaw strips the retired 1M beta header if it remains in older config.
+    Requires long-context access on your Anthropic credential. OAuth/subscription token auth keeps its required Anthropic beta headers, but MarketingClaw strips the retired 1M beta header if it remains in older config.
     </Warning>
 
   </Accordion>
@@ -470,15 +470,15 @@ OpenClaw supports Anthropic's prompt caching feature for API-key auth.
   </Accordion>
 
   <Accordion title='No API key found for provider "anthropic"'>
-    Anthropic auth is **per agent**; new agents do not inherit the main agent's keys. Re-run onboarding for that agent (or configure an API key on the gateway host), then verify with `openclaw models status`.
+    Anthropic auth is **per agent**; new agents do not inherit the main agent's keys. Re-run onboarding for that agent (or configure an API key on the gateway host), then verify with `marketingclaw models status`.
   </Accordion>
 
   <Accordion title='No credentials found for profile "anthropic:default"'>
-    Run `openclaw models status` to see which auth profile is active. Re-run onboarding, or configure an API key for that profile path.
+    Run `marketingclaw models status` to see which auth profile is active. Re-run onboarding, or configure an API key for that profile path.
   </Accordion>
 
   <Accordion title="No available auth profile (all in cooldown)">
-    Check `openclaw models status --json` for `auth.unusableProfiles`. Anthropic rate-limit cooldowns can be model-scoped, so a sibling Anthropic model may still be usable. Add another Anthropic profile or wait for cooldown.
+    Check `marketingclaw models status --json` for `auth.unusableProfiles`. Anthropic rate-limit cooldowns can be model-scoped, so a sibling Anthropic model may still be usable. Add another Anthropic profile or wait for cooldown.
   </Accordion>
 </AccordionGroup>
 

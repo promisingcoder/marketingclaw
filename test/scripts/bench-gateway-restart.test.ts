@@ -11,14 +11,17 @@ import {
   executeSqliteQueryTakeFirstSync,
   getNodeSqliteKysely,
 } from "../../src/infra/kysely-sync.js";
-import type { DB as OpenClawStateKyselyDatabase } from "../../src/state/openclaw-state-db.generated.js";
+import type { DB as MarketingClawStateKyselyDatabase } from "../../src/state/marketingclaw-state-db.generated.js";
 import {
-  closeOpenClawStateDatabaseForTest,
-  openOpenClawStateDatabase,
-} from "../../src/state/openclaw-state-db.js";
+  closeMarketingClawStateDatabaseForTest,
+  openMarketingClawStateDatabase,
+} from "../../src/state/marketingclaw-state-db.js";
 import { registerStopChildBehaviorTests } from "./bench-gateway-child-test-support.js";
 
-type GatewayRestartIntentDatabase = Pick<OpenClawStateKyselyDatabase, "gateway_restart_intent">;
+type GatewayRestartIntentDatabase = Pick<
+  MarketingClawStateKyselyDatabase,
+  "gateway_restart_intent"
+>;
 
 type BenchCliResult = {
   status: number | null;
@@ -53,7 +56,7 @@ function runBenchCli(args: string[]): Promise<BenchCliResult> {
 }
 
 function readRestartIntentRow(env: NodeJS.ProcessEnv) {
-  const { db } = openOpenClawStateDatabase({ env });
+  const { db } = openMarketingClawStateDatabase({ env });
   const stateDb = getNodeSqliteKysely<GatewayRestartIntentDatabase>(db);
   return executeSqliteQueryTakeFirstSync(
     db,
@@ -78,7 +81,7 @@ describe("gateway restart benchmark script", () => {
 
   it("prints help without running benchmark cases", () => {
     expect(helpResult.status).toBe(0);
-    expect(helpResult.stdout).toContain("OpenClaw Gateway restart benchmark");
+    expect(helpResult.stdout).toContain("MarketingClaw Gateway restart benchmark");
     expect(helpResult.stdout).toContain("--restarts <n>");
     expect(helpResult.stdout).toContain("Timeout for initial startup and each restart");
     expect(helpResult.stdout).toContain("--post-ready-delay-ms <ms>");
@@ -245,31 +248,35 @@ node    1234 user   12u  IPv4    0t0      TCP localhost:1234
   });
 
   it("enables both startup and restart trace in the child gateway environment", () => {
-    const env = testing.sanitizedEnv("/tmp/openclaw-bench", "/tmp/openclaw-bench/config.json", {
-      config: {},
-      id: "skipChannels",
-      name: "gateway restart, skip channels",
-    });
+    const env = testing.sanitizedEnv(
+      "/tmp/marketingclaw-bench",
+      "/tmp/marketingclaw-bench/config.json",
+      {
+        config: {},
+        id: "skipChannels",
+        name: "gateway restart, skip channels",
+      },
+    );
 
-    expect(env.OPENCLAW_GATEWAY_STARTUP_TRACE).toBe("1");
-    expect(env.OPENCLAW_GATEWAY_RESTART_TRACE).toBe("1");
-    expect(env.OPENCLAW_NO_RESPAWN).toBe("1");
-    expect(env.OPENCLAW_LOCAL_CHECK).toBeUndefined();
+    expect(env.MARKETINGCLAW_GATEWAY_STARTUP_TRACE).toBe("1");
+    expect(env.MARKETINGCLAW_GATEWAY_RESTART_TRACE).toBe("1");
+    expect(env.MARKETINGCLAW_NO_RESPAWN).toBe("1");
+    expect(env.MARKETINGCLAW_LOCAL_CHECK).toBeUndefined();
   });
 
   it("can pin ACPX startup probe policy per benchmark case", () => {
     const probeOffEnv = testing.sanitizedEnv(
-      "/tmp/openclaw-bench",
-      "/tmp/openclaw-bench/config.json",
+      "/tmp/marketingclaw-bench",
+      "/tmp/marketingclaw-bench/config.json",
       {
         config: {},
-        env: { OPENCLAW_ACPX_RUNTIME_STARTUP_PROBE: "0" },
+        env: { MARKETINGCLAW_ACPX_RUNTIME_STARTUP_PROBE: "0" },
         id: "skipChannelsNoAcpxProbe",
         name: "gateway restart, skip channels, ACPX startup probe off",
       },
     );
 
-    expect(probeOffEnv.OPENCLAW_ACPX_RUNTIME_STARTUP_PROBE).toBe("0");
+    expect(probeOffEnv.MARKETINGCLAW_ACPX_RUNTIME_STARTUP_PROBE).toBe("0");
   });
 
   it("parses restart trace metrics including resource Count fields", () => {
@@ -710,9 +717,9 @@ node    1234 user   12u  IPv4    0t0      TCP localhost:1234
   });
 
   it("writes restart intent files for the target gateway pid", () => {
-    const root = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-restart-bench-test-"));
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-restart-bench-test-"));
     try {
-      const env = { OPENCLAW_STATE_DIR: path.join(root, "state") };
+      const env = { MARKETINGCLAW_STATE_DIR: path.join(root, "state") };
 
       expect(testing.writeRestartIntent(env, 12345, "gateway-restart-bench")).toBe(true);
       const row = readRestartIntentRow(env);
@@ -724,7 +731,7 @@ node    1234 user   12u  IPv4    0t0      TCP localhost:1234
         reason: "gateway-restart-bench",
       });
     } finally {
-      closeOpenClawStateDatabaseForTest();
+      closeMarketingClawStateDatabaseForTest();
       fs.rmSync(root, { force: true, recursive: true });
     }
   });
@@ -808,7 +815,7 @@ node    1234 user   12u  IPv4    0t0      TCP localhost:1234
   });
 
   it("writes plugin fixtures as a parent load path with explicit startup activation", () => {
-    const root = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-restart-bench-config-test-"));
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-restart-bench-config-test-"));
     try {
       const configPath = testing.writeConfig(root, {
         config: {},
@@ -825,7 +832,7 @@ node    1234 user   12u  IPv4    0t0      TCP localhost:1234
       expect(config.plugins?.allow).toEqual(["bench-plugin-01", "bench-plugin-02"]);
       const manifest = JSON.parse(
         fs.readFileSync(
-          path.join(root, "plugins", "bench-plugin-01", "openclaw.plugin.json"),
+          path.join(root, "plugins", "bench-plugin-01", "marketingclaw.plugin.json"),
           "utf8",
         ),
       ) as { activation?: { onStartup?: boolean } };

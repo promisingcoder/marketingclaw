@@ -3,9 +3,9 @@ import fs from "node:fs";
 import { createRequire } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@marketingclaw/normalization-core/string-coerce";
 import { resolveGitHeadPath } from "./git-root.js";
-import { resolveOpenClawPackageRootSync } from "./openclaw-root.js";
+import { resolveMarketingClawPackageRootSync } from "./marketingclaw-root.js";
 
 const formatCommit = (value?: string | null) => {
   if (!value) {
@@ -231,7 +231,7 @@ export const resolveCommitHash = (
   if (cachedGitCommitBySearchDir.has(searchDir)) {
     return cachedGitCommitBySearchDir.get(searchDir) ?? null;
   }
-  const packageRoot = resolveOpenClawPackageRootSync({
+  const packageRoot = resolveMarketingClawPackageRootSync({
     cwd: options.cwd,
     moduleUrl: options.moduleUrl,
   });

@@ -3,10 +3,10 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { inspect } from "node:util";
 import { cancel, isCancel } from "@clack/prompts";
-import { resolveTimerTimeoutMs } from "@openclaw/normalization-core/number-coercion";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { resolveTimerTimeoutMs } from "@marketingclaw/normalization-core/number-coercion";
+import { normalizeOptionalString } from "@marketingclaw/normalization-core/string-coerce";
+import { uniqueStrings } from "@marketingclaw/normalization-core/string-normalization";
+import { truncateUtf16Safe } from "@marketingclaw/normalization-core/utf16-slice";
 import { visibleWidth } from "../../packages/terminal-core/src/ansi.js";
 import {
   decorativeEmoji,
@@ -23,7 +23,7 @@ import { resolveAgentModelPrimaryValue } from "../config/model-input.js";
 import { resolveConfigPath } from "../config/paths.js";
 import { resolveSessionTranscriptsDirForAgent } from "../config/sessions/paths.js";
 import type { OptionalBootstrapFileName } from "../config/types.agent-defaults.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import {
   resolveAdvertisedControlUiLinks,
   resolveControlUiLinks,
@@ -59,7 +59,7 @@ export function guardCancel<T>(value: T | symbol, runtime: RuntimeEnv, exitCode 
 }
 
 /** Summarizes existing config values before onboarding overwrites or reuses them. */
-export function summarizeExistingConfig(config: OpenClawConfig): string {
+export function summarizeExistingConfig(config: MarketingClawConfig): string {
   const rows: string[] = [];
   const defaults = config.agents?.defaults;
   if (defaults?.workspace) {
@@ -81,7 +81,7 @@ export function summarizeExistingConfig(config: OpenClawConfig): string {
   return rows.length ? rows.join("\n") : "No key settings detected.";
 }
 
-function summarizeGatewayConfig(config: OpenClawConfig): string | null {
+function summarizeGatewayConfig(config: MarketingClawConfig): string | null {
   const gateway = config.gateway;
   if (
     !gateway?.mode &&
@@ -168,7 +168,8 @@ export function validateGatewayPasswordInput(value: unknown): string | undefined
 export function printWizardHeader(runtime: RuntimeEnv) {
   const bannerWidth = 54;
   const icon = decorativeEmoji("🦞");
-  const title = supportsDecorativeEmoji() && icon ? `${icon} OPENCLAW ${icon}` : "OPENCLAW";
+  const title =
+    supportsDecorativeEmoji() && icon ? `${icon} MARKETINGCLAW ${icon}` : "MARKETINGCLAW";
   const pad = Math.max(0, bannerWidth - visibleWidth(title));
   const titleLine = `${" ".repeat(Math.floor(pad / 2))}${title}${" ".repeat(Math.ceil(pad / 2))}`;
   const header = [
@@ -185,9 +186,9 @@ export function printWizardHeader(runtime: RuntimeEnv) {
 
 /** Records wizard provenance metadata on config writes. */
 export function applyWizardMetadata(
-  cfg: OpenClawConfig,
+  cfg: MarketingClawConfig,
   params: { command: string; mode: OnboardMode },
-): OpenClawConfig {
+): MarketingClawConfig {
   const commit =
     normalizeOptionalString(process.env.GIT_COMMIT) ?? normalizeOptionalString(process.env.GIT_SHA);
   return {
@@ -225,8 +226,8 @@ export function formatControlUiSshHint(params: {
     "BYOH note: lan, tailnet, and custom bind are currently IPv4-only.",
     "If your host is IPv6-only, use an IPv4 sidecar or proxy in front of the Gateway.",
     "Docs:",
-    "https://docs.openclaw.ai/gateway/remote",
-    "https://docs.openclaw.ai/web/control-ui",
+    "https://docs.marketingclaw.ai/gateway/remote",
+    "https://docs.marketingclaw.ai/web/control-ui",
   ]
     .filter(Boolean)
     .join("\n");

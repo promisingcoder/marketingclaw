@@ -33,7 +33,7 @@ function skillItem(params: {
     action: "copy",
     status: params.status ?? "planned",
     source: `/tmp/codex/skills/${params.name}`,
-    target: `/tmp/openclaw/workspace/skills/${params.name}`,
+    target: `/tmp/marketingclaw/workspace/skills/${params.name}`,
     reason: params.reason,
     details: {
       skillName: params.name,

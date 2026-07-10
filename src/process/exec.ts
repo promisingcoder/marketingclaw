@@ -5,9 +5,9 @@ import path from "node:path";
 import process from "node:process";
 import { StringDecoder } from "node:string_decoder";
 import { promisify } from "node:util";
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@marketingclaw/normalization-core/string-coerce";
 import { danger, shouldLogVerbose } from "../globals.js";
-import { markOpenClawExecEnv } from "../infra/openclaw-exec-env.js";
+import { markMarketingClawExecEnv } from "../infra/marketingclaw-exec-env.js";
 import {
   decodeWindowsOutputBuffer,
   resolveWindowsConsoleEncoding,
@@ -405,7 +405,7 @@ export function resolveCommandEnv(params: {
       resolvedEnv.npm_config_fund = "false";
     }
   }
-  return markOpenClawExecEnv(resolvedEnv);
+  return markMarketingClawExecEnv(resolvedEnv);
 }
 
 export async function runCommandWithTimeout(
@@ -515,12 +515,7 @@ export async function runCommandWithTimeout(
     };
 
     const killDirectChild = () => {
-      if (
-        settled ||
-        childExitState != null ||
-        child.exitCode != null ||
-        child.signalCode != null
-      ) {
+      if (settled || childExitState != null || child.exitCode != null || child.signalCode != null) {
         return;
       }
       child.kill("SIGKILL");
@@ -551,13 +546,10 @@ export async function runCommandWithTimeout(
       }
       if (killProcessTree && typeof child.pid === "number" && child.pid > 0) {
         if (process.platform === "win32") {
-          const taskkillStarted = spawnTaskkillOrFallback(
-            ["/PID", String(child.pid), "/T"],
-            () => {
-              clearProcessTreeForceKillTimer();
-              killDirectChild();
-            },
-          );
+          const taskkillStarted = spawnTaskkillOrFallback(["/PID", String(child.pid), "/T"], () => {
+            clearProcessTreeForceKillTimer();
+            killDirectChild();
+          });
           if (taskkillStarted) {
             if (!processTreeForceKillTimer) {
               processTreeForceKillTimer = setTimeout(() => {
@@ -570,10 +562,7 @@ export async function runCommandWithTimeout(
                 ) {
                   return;
                 }
-                spawnTaskkillOrFallback(
-                  ["/PID", String(child.pid), "/T", "/F"],
-                  killDirectChild,
-                );
+                spawnTaskkillOrFallback(["/PID", String(child.pid), "/T", "/F"], killDirectChild);
               }, COMMAND_PROCESS_TREE_KILL_GRACE_MS);
               processTreeForceKillTimer.unref();
             }

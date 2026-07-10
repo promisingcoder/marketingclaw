@@ -1,13 +1,13 @@
-# ClickClack OpenClaw channel
+# ClickClack MarketingClaw channel
 
-Official OpenClaw channel plugin for ClickClack.
+Official MarketingClaw channel plugin for ClickClack.
 
 ## Install
 
 ```sh
-openclaw plugins install @openclaw/clickclack
+marketingclaw plugins install @marketingclaw/clickclack
 ```
 
 ## Docs
 
-See `docs/channels/clickclack.md` in the OpenClaw repository, or the published docs at `https://docs.openclaw.ai/channels/clickclack`.
+See `docs/channels/clickclack.md` in the MarketingClaw repository, or the published docs at `https://docs.marketingclaw.ai/channels/clickclack`.

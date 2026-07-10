@@ -1,5 +1,5 @@
 // Tool Call Repair helper module supports stream normalizer behavior.
-import { sliceUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { sliceUtf16Safe } from "@marketingclaw/normalization-core/utf16-slice";
 import {
   consumeJsonToolClosingMarker,
   END_TOOL_REQUEST,

@@ -1,12 +1,12 @@
-# OpenClaw Qianfan Provider
+# MarketingClaw Qianfan Provider
 
-Official OpenClaw provider plugin for Qianfan.
+Official MarketingClaw provider plugin for Qianfan.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugins install @openclaw/qianfan-provider
-openclaw gateway restart
+marketingclaw plugins install @marketingclaw/qianfan-provider
+marketingclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/qianfan> for setup and configuration.
+See <https://docs.marketingclaw.ai/providers/qianfan> for setup and configuration.

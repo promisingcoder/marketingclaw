@@ -34,7 +34,7 @@ function makeEvent(
   params: Partial<TrajectoryEvent> & { type: string; ts: string },
 ): TrajectoryEvent {
   return {
-    traceSchema: "openclaw-trajectory",
+    traceSchema: "marketingclaw-trajectory",
     schemaVersion: 1,
     traceId: "trace-1",
     source: "runtime",
@@ -85,11 +85,11 @@ describe("sessionsTailCommand", () => {
 
   beforeEach(() => {
     setSessionsTailFollowIntervalMsForTests(10);
-    previousStateDir = process.env.OPENCLAW_STATE_DIR;
-    previousTrajectoryDir = process.env.OPENCLAW_TRAJECTORY_DIR;
-    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-sessions-tail-"));
-    process.env.OPENCLAW_STATE_DIR = path.join(tmpDir, "state");
-    delete process.env.OPENCLAW_TRAJECTORY_DIR;
+    previousStateDir = process.env.MARKETINGCLAW_STATE_DIR;
+    previousTrajectoryDir = process.env.MARKETINGCLAW_TRAJECTORY_DIR;
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-sessions-tail-"));
+    process.env.MARKETINGCLAW_STATE_DIR = path.join(tmpDir, "state");
+    delete process.env.MARKETINGCLAW_TRAJECTORY_DIR;
     mocks.getRuntimeConfig.mockReturnValue({
       agents: {
         list: [{ id: "main" }, { id: "ops" }],
@@ -113,14 +113,14 @@ describe("sessionsTailCommand", () => {
   afterEach(() => {
     setSessionsTailFollowIntervalMsForTests();
     if (previousStateDir === undefined) {
-      delete process.env.OPENCLAW_STATE_DIR;
+      delete process.env.MARKETINGCLAW_STATE_DIR;
     } else {
-      process.env.OPENCLAW_STATE_DIR = previousStateDir;
+      process.env.MARKETINGCLAW_STATE_DIR = previousStateDir;
     }
     if (previousTrajectoryDir === undefined) {
-      delete process.env.OPENCLAW_TRAJECTORY_DIR;
+      delete process.env.MARKETINGCLAW_TRAJECTORY_DIR;
     } else {
-      process.env.OPENCLAW_TRAJECTORY_DIR = previousTrajectoryDir;
+      process.env.MARKETINGCLAW_TRAJECTORY_DIR = previousTrajectoryDir;
     }
     fs.rmSync(tmpDir, { recursive: true, force: true });
   });
@@ -209,7 +209,7 @@ describe("sessionsTailCommand", () => {
     fs.writeFileSync(
       resolveTrajectoryPointerFilePath(path.join(tmpDir, "session-one.jsonl")),
       `${JSON.stringify({
-        traceSchema: "openclaw-trajectory-pointer",
+        traceSchema: "marketingclaw-trajectory-pointer",
         schemaVersion: 1,
         sessionId: "session-one",
         runtimeFile: relocatedTrajectoryPath,
@@ -310,7 +310,12 @@ describe("sessionsTailCommand", () => {
   it("resolves the target store from a fully qualified non-default agent session key", async () => {
     const runtime = makeRuntime();
     const opsSessionKey = "agent:ops:telegram:direct:owner";
-    const opsSessionsDir = path.join(process.env.OPENCLAW_STATE_DIR!, "agents", "ops", "sessions");
+    const opsSessionsDir = path.join(
+      process.env.MARKETINGCLAW_STATE_DIR!,
+      "agents",
+      "ops",
+      "sessions",
+    );
     fs.mkdirSync(opsSessionsDir, { recursive: true });
     fs.writeFileSync(
       path.join(opsSessionsDir, "sessions.json"),
@@ -451,7 +456,7 @@ describe("sessionsTailCommand", () => {
     const legacySessionFile = path.join(tmpDir, "legacy-session.jsonl");
     const pointerPath = resolveTrajectoryPointerFilePath(legacySessionFile);
     const trajectoryDir = path.join(tmpDir, "trajectories");
-    process.env.OPENCLAW_TRAJECTORY_DIR = trajectoryDir;
+    process.env.MARKETINGCLAW_TRAJECTORY_DIR = trajectoryDir;
     fs.mkdirSync(trajectoryDir, { recursive: true });
     fs.writeFileSync(legacySessionFile, "");
     fs.writeFileSync(

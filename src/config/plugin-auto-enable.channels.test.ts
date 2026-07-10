@@ -46,7 +46,7 @@ describe("applyPluginAutoEnable channels", () => {
         entries: [
           {
             name: "@openclaw/env-secondary",
-            openclaw: {
+            marketingclaw: {
               channel: {
                 id: "env-secondary",
                 label: "Env Secondary",
@@ -86,8 +86,8 @@ describe("applyPluginAutoEnable channels", () => {
       ],
       env: {
         ...makeIsolatedEnv(),
-        OPENCLAW_STATE_DIR: stateDir,
-        OPENCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
+        MARKETINGCLAW_STATE_DIR: stateDir,
+        MARKETINGCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
       },
       manifestRegistry: makeRegistry([]),
     });
@@ -106,7 +106,7 @@ describe("applyPluginAutoEnable channels", () => {
         entries: [
           {
             name: "@openclaw/env-primary",
-            openclaw: {
+            marketingclaw: {
               channel: {
                 id: "env-primary",
                 label: "Env Primary",
@@ -121,7 +121,7 @@ describe("applyPluginAutoEnable channels", () => {
           },
           {
             name: "@openclaw/env-secondary",
-            openclaw: {
+            marketingclaw: {
               channel: {
                 id: "env-secondary",
                 label: "Env Secondary",
@@ -157,8 +157,8 @@ describe("applyPluginAutoEnable channels", () => {
         })),
         env: {
           ...makeIsolatedEnv(),
-          OPENCLAW_STATE_DIR: stateDir,
-          OPENCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
+          MARKETINGCLAW_STATE_DIR: stateDir,
+          MARKETINGCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
         },
         manifestRegistry: makeRegistry([]),
       });
@@ -348,7 +348,7 @@ describe("applyPluginAutoEnable channels", () => {
             },
           },
           {
-            id: "openclaw-modern-chat",
+            id: "marketingclaw-modern-chat",
             channels: ["legacy-bundled-chat"],
             channelConfigs: {
               "legacy-bundled-chat": {
@@ -361,7 +361,7 @@ describe("applyPluginAutoEnable channels", () => {
         ]),
       });
 
-      expect(result.config.plugins?.entries?.["openclaw-modern-chat"]?.enabled).toBe(true);
+      expect(result.config.plugins?.entries?.["marketingclaw-modern-chat"]?.enabled).toBe(true);
       expect(result.config.plugins?.entries?.["legacy-bundled-chat"]?.enabled).toBe(false);
       expect(result.changes.join("\n")).toContain("Modern Chat configured, enabled automatically.");
     });
@@ -370,7 +370,7 @@ describe("applyPluginAutoEnable channels", () => {
       const result = applyPluginAutoEnable({
         config: {
           channels: { "legacy-bundled-chat": { token: "legacy" } },
-          plugins: { entries: { "openclaw-modern-chat": { enabled: false } } },
+          plugins: { entries: { "marketingclaw-modern-chat": { enabled: false } } },
         },
         env: makeIsolatedEnv(),
         manifestRegistry: makeRegistry([
@@ -386,7 +386,7 @@ describe("applyPluginAutoEnable channels", () => {
             },
           },
           {
-            id: "openclaw-modern-chat",
+            id: "marketingclaw-modern-chat",
             channels: ["legacy-bundled-chat"],
             channelConfigs: {
               "legacy-bundled-chat": {
@@ -399,7 +399,7 @@ describe("applyPluginAutoEnable channels", () => {
         ]),
       });
 
-      expect(result.config.plugins?.entries?.["openclaw-modern-chat"]?.enabled).toBe(false);
+      expect(result.config.plugins?.entries?.["marketingclaw-modern-chat"]?.enabled).toBe(false);
       expect(result.config.plugins?.entries?.["legacy-bundled-chat"]).toBeUndefined();
       expect(result.config.channels?.["legacy-bundled-chat"]?.enabled).toBe(true);
       expect(result.changes.join("\n")).toContain(
@@ -421,7 +421,7 @@ describe("applyPluginAutoEnable channels", () => {
         manifestRegistry: makeRegistry([
           { id: "qqbot", channels: ["qqbot"] },
           {
-            id: "openclaw-qqbot",
+            id: "marketingclaw-qqbot",
             channels: ["qqbot"],
             channelConfigs: {
               qqbot: {
@@ -433,7 +433,7 @@ describe("applyPluginAutoEnable channels", () => {
         ]),
       });
 
-      expect(result.config.plugins?.entries?.["openclaw-qqbot"]?.enabled).toBe(true);
+      expect(result.config.plugins?.entries?.["marketingclaw-qqbot"]?.enabled).toBe(true);
       expect(result.config.plugins?.entries?.qqbot?.enabled).toBe(true);
     });
 
@@ -466,15 +466,18 @@ describe("applyPluginAutoEnable channels", () => {
         env: makeIsolatedEnv(),
         manifestRegistry: makeRegistry([
           {
-            id: "wecom-openclaw-plugin",
+            id: "wecom-marketingclaw-plugin",
             channels: ["wecom"],
           },
         ]),
       });
 
-      expect(result.config.plugins?.entries?.["wecom-openclaw-plugin"]?.enabled).toBe(true);
+      expect(result.config.plugins?.entries?.["wecom-marketingclaw-plugin"]?.enabled).toBe(true);
       expect(result.config.plugins?.entries?.wecom).toBeUndefined();
-      expect(result.config.plugins?.allow).toEqual(["existing-plugin", "wecom-openclaw-plugin"]);
+      expect(result.config.plugins?.allow).toEqual([
+        "existing-plugin",
+        "wecom-marketingclaw-plugin",
+      ]);
       expect(result.changes.join("\n")).toContain("enabled automatically.");
     });
 

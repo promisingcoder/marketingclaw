@@ -1,5 +1,5 @@
 // Crestodian operations parse, approve, execute, and audit setup-helper commands.
-import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
+import { truncateUtf16Safe } from "@marketingclaw/normalization-core/utf16-slice";
 import type { ConfigSetOptions } from "../cli/config-set-input.js";
 import type { DoctorOptions } from "../commands/doctor.types.js";
 import {
@@ -152,7 +152,7 @@ const CONFIG_SET_REF_RE = new RegExp(
   "i",
 );
 const SETUP_RE = new RegExp(
-  String.raw`^(?:setup|set\s+me\s+up|set\s+up\s+openclaw|onboard(?:\s+me)?|bootstrap|first\s+run)(?:\s+workspace\s+(?<workspace>${TOKEN}))?(?:\s+model\s+(?<model>\S+))?$`,
+  String.raw`^(?:setup|set\s+me\s+up|set\s+up\s+marketingclaw|onboard(?:\s+me)?|bootstrap|first\s+run)(?:\s+workspace\s+(?<workspace>${TOKEN}))?(?:\s+model\s+(?<model>\S+))?$`,
   "i",
 );
 const MODEL_SETUP_RE = new RegExp(
@@ -547,7 +547,7 @@ function formatSetupPlanDescription(
 ): string {
   const workspace = shortenHomePath(resolveUserPath(operation.workspace ?? process.cwd()));
   const model = operation.model ? ` and default model ${operation.model}` : "";
-  return `bootstrap OpenClaw setup for workspace ${workspace}${model}`;
+  return `bootstrap MarketingClaw setup for workspace ${workspace}${model}`;
 }
 
 async function chooseSetupModel(params: {
@@ -643,7 +643,7 @@ async function resolveChannelSetupState(deps: CrestodianCommandDeps | undefined)
 }
 
 function formatChannelDocsUrl(docsPath: string): string {
-  return `https://docs.openclaw.ai${docsPath.startsWith("/") ? docsPath : `/${docsPath}`}`;
+  return `https://docs.marketingclaw.ai${docsPath.startsWith("/") ? docsPath : `/${docsPath}`}`;
 }
 
 function formatConfigValidationLine(snapshot: ConfigFileSnapshot): string {
@@ -1139,8 +1139,8 @@ export async function executeCrestodianOperation(
       runtime.log(
         [
           `Connecting ${operation.channel} needs an interactive session.`,
-          "Run `openclaw crestodian` and say `connect " + operation.channel + "`,",
-          "or run `openclaw channels add` for the terminal wizard.",
+          "Run `marketingclaw crestodian` and say `connect " + operation.channel + "`,",
+          "or run `marketingclaw channels add` for the terminal wizard.",
         ].join("\n"),
       );
       return { applied: false };
@@ -1148,18 +1148,18 @@ export async function executeCrestodianOperation(
       runtime.log(
         [
           "Model provider setup needs an interactive session with masked credential prompts.",
-          "Run `openclaw crestodian` and say `configure model provider`,",
-          "or run `openclaw configure --section model` directly.",
+          "Run `marketingclaw crestodian` and say `configure model provider`,",
+          "or run `marketingclaw configure --section model` directly.",
         ].join("\n"),
       );
       return { applied: false };
     case "open-setup": {
       const command =
         operation.target === "guided"
-          ? "openclaw onboard"
+          ? "marketingclaw onboard"
           : operation.target === "classic"
-            ? "openclaw onboard --classic"
-            : `openclaw channels add${operation.channel ? ` --channel ${operation.channel}` : ""}`;
+            ? "marketingclaw onboard --classic"
+            : `marketingclaw channels add${operation.channel ? ` --channel ${operation.channel}` : ""}`;
       runtime.log(
         `One-shot mode cannot open an interactive wizard. Run \`${command}\` in a terminal.`,
       );

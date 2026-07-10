@@ -111,7 +111,7 @@ const log = createSubsystemLogger("channels/turn/kernel");
 /**
  * @deprecated Compatibility assembly for legacy buffered reply dispatchers.
  * New channel plugins should expose `defineChannelMessageAdapter(...)` from
- * `openclaw/plugin-sdk/channel-outbound` and route send/receive behavior through
+ * `marketingclaw/plugin-sdk/channel-outbound` and route send/receive behavior through
  * the message lifecycle helpers.
  */
 export function createChannelTurnReplyPipeline(

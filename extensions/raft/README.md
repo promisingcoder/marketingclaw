@@ -1,5 +1,5 @@
-# Raft (OpenClaw plugin)
+# Raft (MarketingClaw plugin)
 
-Raft CLI wake bridge channel plugin for OpenClaw.
+Raft CLI wake bridge channel plugin for MarketingClaw.
 
-Docs: https://docs.openclaw.ai/channels/raft
+Docs: https://docs.marketingclaw.ai/channels/raft

@@ -1,7 +1,7 @@
-package ai.openclaw.app
+package ai.marketingclaw.app
 
-import ai.openclaw.app.ui.OpenClawTheme
-import ai.openclaw.app.ui.RootScreen
+import ai.marketingclaw.app.ui.MarketingClawTheme
+import ai.marketingclaw.app.ui.RootScreen
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
@@ -74,12 +74,12 @@ class MainActivity : AppCompatActivity() {
 
       val currentViewModel = activeViewModel
       if (currentViewModel == null) {
-        OpenClawTheme {
+        MarketingClawTheme {
           StartupSurface()
         }
       } else {
         val appearanceThemeMode by currentViewModel.appearanceThemeMode.collectAsState()
-        OpenClawTheme(themeMode = appearanceThemeMode) {
+        MarketingClawTheme(themeMode = appearanceThemeMode) {
           RootScreen(viewModel = currentViewModel)
         }
       }
@@ -274,7 +274,7 @@ private fun StartupSurface() {
       contentAlignment = Alignment.Center,
     ) {
       Text(
-        text = "OPENCLAW",
+        text = "MARKETINGCLAW",
         fontSize = 22.sp,
         fontWeight = FontWeight.Medium,
       )

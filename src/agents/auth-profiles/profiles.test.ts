@@ -8,8 +8,8 @@ import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { resolveOAuthDir } from "../../config/paths.js";
-import { closeOpenClawAgentDatabasesForTest } from "../../state/openclaw-agent-db.js";
-import { closeOpenClawStateDatabaseForTest } from "../../state/openclaw-state-db.js";
+import { closeMarketingClawAgentDatabasesForTest } from "../../state/marketingclaw-agent-db.js";
+import { closeMarketingClawStateDatabaseForTest } from "../../state/marketingclaw-state-db.js";
 import { withEnvAsync } from "../../test-utils/env.js";
 import { AUTH_STORE_VERSION } from "./constants.js";
 import { loadPersistedAuthProfileStore } from "./persisted.js";
@@ -55,8 +55,8 @@ async function withAuthProfileTestState<T>(
   try {
     return await withEnvAsync(
       {
-        OPENCLAW_STATE_DIR: stateDir,
-        ...(options.clearOAuthDir ? { OPENCLAW_OAUTH_DIR: undefined } : {}),
+        MARKETINGCLAW_STATE_DIR: stateDir,
+        ...(options.clearOAuthDir ? { MARKETINGCLAW_OAUTH_DIR: undefined } : {}),
       },
       async () =>
         await run({
@@ -66,8 +66,8 @@ async function withAuthProfileTestState<T>(
         }),
     );
   } finally {
-    closeOpenClawAgentDatabasesForTest();
-    closeOpenClawStateDatabaseForTest();
+    closeMarketingClawAgentDatabasesForTest();
+    closeMarketingClawStateDatabaseForTest();
     fs.rmSync(stateDir, { recursive: true, force: true });
   }
 }
@@ -101,7 +101,7 @@ function expectOAuthCredentialFields(
 describe("promoteAuthProfileInOrder", () => {
   it("marks newly saved runtime snapshot profiles as persisted", async () => {
     await withAuthProfileTestState(
-      "openclaw-auth-profile-runtime-persisted-",
+      "marketingclaw-auth-profile-runtime-persisted-",
       async ({ agentDir }) => {
         fs.mkdirSync(agentDir, { recursive: true });
         replaceRuntimeAuthProfileStoreSnapshots([
@@ -144,7 +144,7 @@ describe("promoteAuthProfileInOrder", () => {
 
   it("normalizes copied secrets when using the locked upsert path", async () => {
     await withAuthProfileTestState(
-      "openclaw-auth-profile-upsert-",
+      "marketingclaw-auth-profile-upsert-",
       async ({ agentDir }) => {
         fs.mkdirSync(agentDir, { recursive: true });
 
@@ -188,7 +188,7 @@ describe("promoteAuthProfileInOrder", () => {
   });
 
   it("persists openai oauth credentials inline", async () => {
-    await withAuthProfileTestState("openclaw-auth-profile-metadata-", ({ agentDir }) => {
+    await withAuthProfileTestState("marketingclaw-auth-profile-metadata-", ({ agentDir }) => {
       fs.mkdirSync(agentDir, { recursive: true });
       const profileId = "openai:default";
       const expires = Date.now() + 60 * 60 * 1000;
@@ -242,7 +242,7 @@ describe("promoteAuthProfileInOrder", () => {
   });
 
   it("preserves access-only openai oauth credentials inline", async () => {
-    await withAuthProfileTestState("openclaw-auth-profile-access-only-", ({ agentDir }) => {
+    await withAuthProfileTestState("marketingclaw-auth-profile-access-only-", ({ agentDir }) => {
       fs.mkdirSync(agentDir, { recursive: true });
       const profileId = "openai:default";
       const expires = Date.now() + 60 * 60 * 1000;
@@ -282,7 +282,7 @@ describe("promoteAuthProfileInOrder", () => {
   });
 
   it("keeps copied openai oauth profiles inline", async () => {
-    await withAuthProfileTestState("openclaw-auth-profile-copy-ref-", ({ agentDirFor }) => {
+    await withAuthProfileTestState("marketingclaw-auth-profile-copy-ref-", ({ agentDirFor }) => {
       const mainAgentDir = agentDirFor("main");
       const copiedAgentDir = agentDirFor("copied");
       fs.mkdirSync(mainAgentDir, { recursive: true });
@@ -352,7 +352,7 @@ describe("promoteAuthProfileInOrder", () => {
   });
 
   it("moves a relogin profile to the front of an existing per-agent provider order", async () => {
-    await withAuthProfileTestState("openclaw-auth-order-promote-", async ({ agentDir }) => {
+    await withAuthProfileTestState("marketingclaw-auth-order-promote-", async ({ agentDir }) => {
       fs.mkdirSync(agentDir, { recursive: true });
       const newProfileId = "openai:bunsthedev@gmail.com";
       const staleProfileId = "openai:val@viewdue.ai";
@@ -398,7 +398,7 @@ describe("promoteAuthProfileInOrder", () => {
   });
 
   it("creates a per-agent provider order when relogin has no existing order", async () => {
-    await withAuthProfileTestState("openclaw-auth-order-create-", async ({ agentDir }) => {
+    await withAuthProfileTestState("marketingclaw-auth-order-create-", async ({ agentDir }) => {
       fs.mkdirSync(agentDir, { recursive: true });
       const newProfileId = "openai:new-login";
       const primaryProfileId = "openai:primary-login";
@@ -459,58 +459,61 @@ describe("promoteAuthProfileInOrder", () => {
   });
 
   it("preserves config-only fallback ids when creating a relogin order", async () => {
-    await withAuthProfileTestState("openclaw-auth-order-config-only-", async ({ agentDir }) => {
-      fs.mkdirSync(agentDir, { recursive: true });
-      const newProfileId = "openai:new-login";
-      const existingProfileId = "openai:old-login";
-      const configOnlyProfileId = "openai:aws-sdk";
-      saveAuthProfileStore(
-        {
-          version: AUTH_STORE_VERSION,
-          profiles: {
-            [existingProfileId]: {
-              type: "oauth",
-              provider: "openai",
-              access: "old-access",
-              refresh: "old-refresh",
-              expires: Date.now() + 30 * 60 * 1000,
-            },
-            [newProfileId]: {
-              type: "oauth",
-              provider: "openai",
-              access: "new-access",
-              refresh: "new-refresh",
-              expires: Date.now() + 60 * 60 * 1000,
+    await withAuthProfileTestState(
+      "marketingclaw-auth-order-config-only-",
+      async ({ agentDir }) => {
+        fs.mkdirSync(agentDir, { recursive: true });
+        const newProfileId = "openai:new-login";
+        const existingProfileId = "openai:old-login";
+        const configOnlyProfileId = "openai:aws-sdk";
+        saveAuthProfileStore(
+          {
+            version: AUTH_STORE_VERSION,
+            profiles: {
+              [existingProfileId]: {
+                type: "oauth",
+                provider: "openai",
+                access: "old-access",
+                refresh: "old-refresh",
+                expires: Date.now() + 30 * 60 * 1000,
+              },
+              [newProfileId]: {
+                type: "oauth",
+                provider: "openai",
+                access: "new-access",
+                refresh: "new-refresh",
+                expires: Date.now() + 60 * 60 * 1000,
+              },
             },
           },
-        },
-        agentDir,
-      );
+          agentDir,
+        );
 
-      await promoteAuthProfileInOrder({
-        agentDir,
-        provider: "openai",
-        profileId: newProfileId,
-        createIfMissing: true,
-        createFromOrder: [existingProfileId, configOnlyProfileId],
-      });
+        await promoteAuthProfileInOrder({
+          agentDir,
+          provider: "openai",
+          profileId: newProfileId,
+          createIfMissing: true,
+          createFromOrder: [existingProfileId, configOnlyProfileId],
+        });
 
-      expect(loadAuthProfileStoreForRuntime(agentDir).order?.["openai"]).toEqual([
-        newProfileId,
-        existingProfileId,
-        configOnlyProfileId,
-      ]);
-      saveAuthProfileStore(loadAuthProfileStoreForRuntime(agentDir), agentDir);
-      expect(loadAuthProfileStoreForRuntime(agentDir).order?.["openai"]).toEqual([
-        newProfileId,
-        existingProfileId,
-        configOnlyProfileId,
-      ]);
-    });
+        expect(loadAuthProfileStoreForRuntime(agentDir).order?.["openai"]).toEqual([
+          newProfileId,
+          existingProfileId,
+          configOnlyProfileId,
+        ]);
+        saveAuthProfileStore(loadAuthProfileStoreForRuntime(agentDir), agentDir);
+        expect(loadAuthProfileStoreForRuntime(agentDir).order?.["openai"]).toEqual([
+          newProfileId,
+          existingProfileId,
+          configOnlyProfileId,
+        ]);
+      },
+    );
   });
 
   it("keeps implicit round-robin when relogin has no existing order by default", async () => {
-    await withAuthProfileTestState("openclaw-auth-order-implicit-", async ({ agentDir }) => {
+    await withAuthProfileTestState("marketingclaw-auth-order-implicit-", async ({ agentDir }) => {
       fs.mkdirSync(agentDir, { recursive: true });
       const newProfileId = "openai:new-login";
       saveAuthProfileStore(
@@ -541,7 +544,7 @@ describe("promoteAuthProfileInOrder", () => {
   });
 
   it("clears matching lastGood after a stale refresh_token_reused profile", async () => {
-    await withAuthProfileTestState("openclaw-auth-clear-lastgood-", async ({ agentDir }) => {
+    await withAuthProfileTestState("marketingclaw-auth-clear-lastgood-", async ({ agentDir }) => {
       fs.mkdirSync(agentDir, { recursive: true });
       const staleProfileId = "openai:default";
       saveAuthProfileStore(
@@ -572,33 +575,36 @@ describe("promoteAuthProfileInOrder", () => {
   });
 
   it("does not clear lastGood when the failed profile is not the stored profile", async () => {
-    await withAuthProfileTestState("openclaw-auth-clear-lastgood-keep-", async ({ agentDir }) => {
-      fs.mkdirSync(agentDir, { recursive: true });
-      const goodProfileId = "openai:user@example.test";
-      saveAuthProfileStore(
-        {
-          version: AUTH_STORE_VERSION,
-          profiles: {
-            [goodProfileId]: {
-              type: "oauth",
-              provider: "openai",
-              access: "good-access-token",
-              refresh: "good-refresh-token",
-              expires: Date.now() + 60_000,
+    await withAuthProfileTestState(
+      "marketingclaw-auth-clear-lastgood-keep-",
+      async ({ agentDir }) => {
+        fs.mkdirSync(agentDir, { recursive: true });
+        const goodProfileId = "openai:user@example.test";
+        saveAuthProfileStore(
+          {
+            version: AUTH_STORE_VERSION,
+            profiles: {
+              [goodProfileId]: {
+                type: "oauth",
+                provider: "openai",
+                access: "good-access-token",
+                refresh: "good-refresh-token",
+                expires: Date.now() + 60_000,
+              },
             },
+            lastGood: { openai: goodProfileId },
           },
-          lastGood: { openai: goodProfileId },
-        },
-        agentDir,
-      );
+          agentDir,
+        );
 
-      await clearLastGoodProfileWithLock({
-        agentDir,
-        provider: "openai",
-        profileId: "openai:default",
-      });
+        await clearLastGoodProfileWithLock({
+          agentDir,
+          provider: "openai",
+          profileId: "openai:default",
+        });
 
-      expect(loadAuthProfileStoreForRuntime(agentDir).lastGood?.["openai"]).toBe(goodProfileId);
-    });
+        expect(loadAuthProfileStoreForRuntime(agentDir).lastGood?.["openai"]).toBe(goodProfileId);
+      },
+    );
   });
 });

@@ -1,11 +1,11 @@
-// Verifies OpenClaw-owned tool hooks preserve adjusted params and telemetry.
-import type { AgentTool } from "openclaw/plugin-sdk/agent-core";
+// Verifies MarketingClaw-owned tool hooks preserve adjusted params and telemetry.
+import type { AgentTool } from "marketingclaw/plugin-sdk/agent-core";
 import {
-  installOpenClawOwnedToolHooks,
-  resetOpenClawOwnedToolHooks,
+  installMarketingClawOwnedToolHooks,
+  resetMarketingClawOwnedToolHooks,
   textToolResult,
-} from "openclaw/plugin-sdk/agent-runtime-test-contracts";
-import type { ExtensionContext } from "openclaw/plugin-sdk/agent-sessions";
+} from "marketingclaw/plugin-sdk/agent-runtime-test-contracts";
+import type { ExtensionContext } from "marketingclaw/plugin-sdk/agent-sessions";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { toToolDefinitions } from "./agent-tool-definition-adapter.js";
 import { createBaseToolHandlerState } from "./agent-tool-handler-state.test-helpers.js";
@@ -105,15 +105,15 @@ async function waitForAfterToolCall(hooks: {
   return call as [Record<string, unknown>, Record<string, unknown>];
 }
 
-describe("OpenClaw-owned tool runtime contract - embedded agent adapter", () => {
+describe("MarketingClaw-owned tool runtime contract - embedded agent adapter", () => {
   afterEach(() => {
-    resetOpenClawOwnedToolHooks();
+    resetMarketingClawOwnedToolHooks();
   });
 
   it("preserves partially adjusted before_tool_call params through execution and after_tool_call", async () => {
     const adjustedParams = { mode: "safe" };
     const mergedParams = { command: "pwd", mode: "safe" };
-    const hooks = installOpenClawOwnedToolHooks({ adjustedParams });
+    const hooks = installMarketingClawOwnedToolHooks({ adjustedParams });
     const execute = vi.fn(async () => textToolResult("done", { ok: true }));
     const tool = wrapToolWithBeforeToolCallHook(createContractTool("exec", execute), {
       agentId: "agent-1",
@@ -174,7 +174,7 @@ describe("OpenClaw-owned tool runtime contract - embedded agent adapter", () => 
   it("reports embedded agent dynamic tool execution errors through after_tool_call", async () => {
     const adjustedParams = { timeoutSec: 1 };
     const mergedParams = { command: "false", timeoutSec: 1 };
-    const hooks = installOpenClawOwnedToolHooks({ adjustedParams });
+    const hooks = installMarketingClawOwnedToolHooks({ adjustedParams });
     const execute = vi.fn(async () => {
       throw new Error("tool failed");
     });
@@ -233,7 +233,7 @@ describe("OpenClaw-owned tool runtime contract - embedded agent adapter", () => 
   });
 
   it("commits successful embedded agent messaging text, media, and target telemetry", async () => {
-    const hooks = installOpenClawOwnedToolHooks();
+    const hooks = installMarketingClawOwnedToolHooks();
     const execute = vi.fn(async () => textToolResult("sent", { deliveryStatus: "sent" }));
     const tool = wrapToolWithBeforeToolCallHook(createContractTool("message", execute), {
       agentId: "agent-1",
@@ -251,7 +251,7 @@ describe("OpenClaw-owned tool runtime contract - embedded agent adapter", () => 
     const originalParams = {
       action: "send",
       content: "hello from embedded agent",
-      mediaUrl: "/tmp/openclaw-reply.png",
+      mediaUrl: "/tmp/marketingclaw-reply.png",
       provider: "telegram",
       to: "chat-1",
     };
@@ -282,7 +282,7 @@ describe("OpenClaw-owned tool runtime contract - embedded agent adapter", () => 
     );
 
     expect(ctx.state.messagingToolSentTexts).toEqual(["hello from embedded agent"]);
-    expect(ctx.state.messagingToolSentMediaUrls).toEqual(["/tmp/openclaw-reply.png"]);
+    expect(ctx.state.messagingToolSentMediaUrls).toEqual(["/tmp/marketingclaw-reply.png"]);
     expect(
       ctx.state.messagingToolSentTargets.map((target) => ({
         tool: "message",
@@ -297,7 +297,7 @@ describe("OpenClaw-owned tool runtime contract - embedded agent adapter", () => 
         provider: "telegram",
         to: "chat-1",
         text: "hello from embedded agent",
-        mediaUrls: ["/tmp/openclaw-reply.png"],
+        mediaUrls: ["/tmp/marketingclaw-reply.png"],
       },
     ]);
     const [afterPayload, afterContext] = await waitForAfterToolCall(hooks);
@@ -312,7 +312,7 @@ describe("OpenClaw-owned tool runtime contract - embedded agent adapter", () => 
   });
 
   it("fails closed when before_tool_call blocks an embedded agent dynamic tool", async () => {
-    const hooks = installOpenClawOwnedToolHooks({ blockReason: "blocked by policy" });
+    const hooks = installMarketingClawOwnedToolHooks({ blockReason: "blocked by policy" });
     const execute = vi.fn(async () => textToolResult("should not run"));
     const tool = wrapToolWithBeforeToolCallHook(createContractTool("message", execute), {
       agentId: "agent-1",

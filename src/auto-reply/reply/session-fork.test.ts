@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import { forkSessionEntryFromParent } from "./session-fork.js";
 
 const runtimeMocks = vi.hoisted(() => ({
@@ -29,7 +29,7 @@ afterEach(async () => {
 
 describe("forkSessionEntryFromParent", () => {
   it("forks transcripts in the directory for the store being mutated", async () => {
-    const root = await makeRoot("openclaw-session-fork-boundary-");
+    const root = await makeRoot("marketingclaw-session-fork-boundary-");
     const activeStoreDir = path.join(root, "active-store");
     const configStoreDir = path.join(root, "config-store");
     await fs.mkdir(activeStoreDir, { recursive: true });
@@ -80,7 +80,7 @@ describe("forkSessionEntryFromParent", () => {
 
     const result = await forkSessionEntryFromParent({
       agentId: "main",
-      config: { session: { store: configStorePath } } as OpenClawConfig,
+      config: { session: { store: configStorePath } } as MarketingClawConfig,
       fallbackEntry: { sessionId: "", updatedAt: 2 },
       parentSessionKey,
       sessionKey,

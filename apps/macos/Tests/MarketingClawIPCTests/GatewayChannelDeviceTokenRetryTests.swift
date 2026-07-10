@@ -1,5 +1,5 @@
 import Foundation
-import OpenClawKit
+import MarketingClawKit
 import Testing
 
 extension NSLock {
@@ -107,7 +107,7 @@ struct GatewayChannelDeviceTokenRetryTests {
         try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: tempDir) }
 
-        try await TestIsolation.withEnvValues(["OPENCLAW_STATE_DIR": tempDir.path]) {
+        try await TestIsolation.withEnvValues(["MARKETINGCLAW_STATE_DIR": tempDir.path]) {
             let identity = DeviceIdentityStore.loadOrCreate()
             _ = DeviceAuthStore.storeToken(
                 deviceId: identity.deviceId,
@@ -124,7 +124,7 @@ struct GatewayChannelDeviceTokenRetryTests {
                 caps: [],
                 commands: [],
                 permissions: [:],
-                clientId: "openclaw-ios-test",
+                clientId: "marketingclaw-ios-test",
                 clientMode: "ui",
                 clientDisplayName: "iOS Test",
                 includeDeviceIdentity: true)

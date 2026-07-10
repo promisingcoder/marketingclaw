@@ -1,5 +1,5 @@
 // Searxng tests cover searxng client plugin behavior.
-import type { LookupFn } from "openclaw/plugin-sdk/ssrf-runtime";
+import type { LookupFn } from "marketingclaw/plugin-sdk/ssrf-runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const endpointMockState = vi.hoisted(() => ({
@@ -7,8 +7,9 @@ const endpointMockState = vi.hoisted(() => ({
   responses: [] as Response[],
 }));
 
-vi.mock("openclaw/plugin-sdk/provider-web-search", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/provider-web-search")>();
+vi.mock("marketingclaw/plugin-sdk/provider-web-search", async (importOriginal) => {
+  const actual =
+    await importOriginal<typeof import("marketingclaw/plugin-sdk/provider-web-search")>();
   const runEndpoint = async (
     params: { url: string; timeoutSeconds: number; init: RequestInit },
     run: (response: Response) => Promise<unknown>,
@@ -49,12 +50,12 @@ describe("searxng client", () => {
     expect(
       testing.buildSearxngSearchUrl({
         baseUrl: "https://search.example.com/searxng",
-        query: "openclaw",
+        query: "marketingclaw",
         categories: "general,news",
         language: "en",
       }),
     ).toBe(
-      "https://search.example.com/searxng/search?q=openclaw&format=json&categories=general%2Cnews&language=en",
+      "https://search.example.com/searxng/search?q=marketingclaw&format=json&categories=general%2Cnews&language=en",
     );
   });
 
@@ -128,7 +129,7 @@ describe("searxng client", () => {
 
     const result = await runSearxngSearch({
       baseUrl: "http://127.0.0.1:8888",
-      query: "openclaw",
+      query: "marketingclaw",
       categories: "general",
       count: 5,
     });
@@ -137,7 +138,7 @@ describe("searxng client", () => {
     const { tookMs, ...stableResult } = result;
     expect(typeof tookMs).toBe("number");
     expect(stableResult).toEqual({
-      query: "openclaw",
+      query: "marketingclaw",
       provider: "searxng",
       count: 0,
       externalContent: {
@@ -168,7 +169,7 @@ describe("searxng client", () => {
     await expect(
       runSearxngSearch({
         baseUrl: "http://127.0.0.1:8888",
-        query: "openclaw",
+        query: "marketingclaw",
         categories: "general",
       }),
     ).rejects.toThrow("SearXNG response incomplete after 7 bytes.");

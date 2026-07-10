@@ -1,18 +1,18 @@
 {
-  "name": "@openclaw/vercel-ai-gateway-provider",
+  "name": "@marketingclaw/vercel-ai-gateway-provider",
   "version": "2026.6.11",
-  "description": "OpenClaw Vercel AI Gateway provider plugin",
+  "description": "MarketingClaw Vercel AI Gateway provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@marketingclaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "marketingclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@openclaw/vercel-ai-gateway-provider",
-      "npmSpec": "@openclaw/vercel-ai-gateway-provider",
+      "clawhubSpec": "clawhub:@marketingclaw/vercel-ai-gateway-provider",
+      "npmSpec": "@marketingclaw/vercel-ai-gateway-provider",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.6.9"
     },
@@ -20,7 +20,7 @@
       "pluginApi": ">=2026.6.11"
     },
     "build": {
-      "openclawVersion": "2026.6.11",
+      "marketingclawVersion": "2026.6.11",
       "bundledDist": false
     },
     "release": {
@@ -30,6 +30,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/promisingcoder/marketingclaw"
   }
 }

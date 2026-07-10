@@ -92,7 +92,7 @@ describe("sdk-loader", () => {
       );
       writeFileSync(
         path.join(pkgDir, "index.cjs"),
-        "module.exports = { openclawDefaultImporterSentinel: true };",
+        "module.exports = { marketingclawDefaultImporterSentinel: true };",
       );
 
       const primaryImport = vi.fn(async () => {
@@ -108,9 +108,9 @@ describe("sdk-loader", () => {
         fallbackDir: tmp,
         primaryImport,
         // Intentionally NOT injecting fallbackImport; exercise the default.
-      })) as unknown as { openclawDefaultImporterSentinel?: boolean };
+      })) as unknown as { marketingclawDefaultImporterSentinel?: boolean };
 
-      expect(sdk.openclawDefaultImporterSentinel).toBe(true);
+      expect(sdk.marketingclawDefaultImporterSentinel).toBe(true);
       expect(primaryImport).toHaveBeenCalledTimes(1);
     } finally {
       rmSync(tmp, { recursive: true, force: true });
@@ -134,7 +134,7 @@ describe("sdk-loader", () => {
       }),
     ).rejects.toMatchObject({
       code: "COPILOT_SDK_MISSING",
-      message: expect.stringContaining("openclaw plugins install @openclaw/copilot"),
+      message: expect.stringContaining("marketingclaw plugins install @marketingclaw/copilot"),
     });
 
     expect(fallbackImport).not.toHaveBeenCalled();
@@ -161,7 +161,7 @@ describe("sdk-loader", () => {
     expect(message).toContain("primary boom");
     expect(message).toContain(path.join(fallbackDir, "node_modules", "@github", "copilot-sdk"));
     expect(message).toContain(COPILOT_SDK_SPEC);
-    expect(message).toContain("openclaw plugins install @openclaw/copilot");
+    expect(message).toContain("marketingclaw plugins install @marketingclaw/copilot");
   });
 
   it("caches successful loads across calls when cache is enabled", async () => {
@@ -200,13 +200,13 @@ describe("sdk-loader", () => {
     expect(primaryImport).toHaveBeenCalledTimes(2);
   });
 
-  it("resolves the fallback dir from OPENCLAW_STATE_DIR for relocated profiles", () => {
+  it("resolves the fallback dir from MARKETINGCLAW_STATE_DIR for relocated profiles", () => {
     expect(
       resolveCopilotSdkFallbackDir({
         ...process.env,
-        OPENCLAW_STATE_DIR: "/tmp/openclaw-state",
+        MARKETINGCLAW_STATE_DIR: "/tmp/marketingclaw-state",
       }),
-    ).toBe(path.join("/tmp/openclaw-state", "npm-runtime", "copilot"));
+    ).toBe(path.join("/tmp/marketingclaw-state", "npm-runtime", "copilot"));
   });
 
   afterEach(() => {

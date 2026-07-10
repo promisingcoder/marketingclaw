@@ -1,13 +1,14 @@
-// Mcp Channels Seed script supports OpenClaw repository automation.
+// Mcp Channels Seed script supports MarketingClaw repository automation.
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { applyDockerOpenAiProviderConfig, type OpenClawConfig } from "./docker-openai-seed.ts";
+import { applyDockerOpenAiProviderConfig, type MarketingClawConfig } from "./docker-openai-seed.ts";
 
 async function main() {
-  const stateDir = process.env.OPENCLAW_STATE_DIR?.trim() || path.join(os.homedir(), ".openclaw");
+  const stateDir =
+    process.env.MARKETINGCLAW_STATE_DIR?.trim() || path.join(os.homedir(), ".marketingclaw");
   const configPath =
-    process.env.OPENCLAW_CONFIG_PATH?.trim() || path.join(stateDir, "openclaw.json");
+    process.env.MARKETINGCLAW_CONFIG_PATH?.trim() || path.join(stateDir, "marketingclaw.json");
   const sessionsDir = path.join(stateDir, "agents", "main", "sessions");
   const sessionFile = path.join(sessionsDir, "sess-main.jsonl");
   const storePath = path.join(sessionsDir, "sessions.json");
@@ -34,7 +35,7 @@ async function main() {
       plugins: {
         enabled: false,
       },
-    } satisfies OpenClawConfig,
+    } satisfies MarketingClawConfig,
     "sk-docker-smoke-test",
   );
 

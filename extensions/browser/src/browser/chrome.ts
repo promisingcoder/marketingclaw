@@ -1,5 +1,5 @@
 /**
- * OpenClaw-managed Chrome lifecycle and CDP helpers.
+ * MarketingClaw-managed Chrome lifecycle and CDP helpers.
  *
  * Builds launch args, starts/stops managed Chrome, probes CDP readiness, and
  * resolves WebSocket endpoints for browser control.
@@ -13,11 +13,11 @@ import {
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { prepareOomScoreAdjustedSpawn } from "openclaw/plugin-sdk/process-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { prepareOomScoreAdjustedSpawn } from "marketingclaw/plugin-sdk/process-runtime";
+import { normalizeOptionalString } from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import type { SsrFPolicy } from "../infra/net/ssrf.js";
 import { ensurePortAvailable } from "../infra/ports.js";
-import { resolvePreferredOpenClawTmpDir } from "../infra/tmp-openclaw-dir.js";
+import { resolvePreferredMarketingClawTmpDir } from "../infra/tmp-marketingclaw-dir.js";
 import { redactToolPayloadText } from "../logging/redact.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import { CONFIG_DIR } from "../utils.js";
@@ -60,10 +60,10 @@ import {
   resolveBrowserExecutableForPlatform,
 } from "./chrome.executables.js";
 import {
-  decorateOpenClawProfile,
+  decorateMarketingClawProfile,
   ensureProfileCleanExit,
   isProfileDecorated,
-  usesOpenClawMockKeychain,
+  usesMarketingClawMockKeychain,
 } from "./chrome.profile-decoration.js";
 import {
   getManagedBrowserMissingDisplayError,
@@ -74,8 +74,8 @@ import {
   type ResolvedBrowserProfile,
 } from "./config.js";
 import {
-  DEFAULT_OPENCLAW_BROWSER_COLOR,
-  DEFAULT_OPENCLAW_BROWSER_PROFILE_NAME,
+  DEFAULT_MARKETINGCLAW_BROWSER_COLOR,
+  DEFAULT_MARKETINGCLAW_BROWSER_PROFILE_NAME,
 } from "./constants.js";
 import { BROWSER_ERROR_REASONS, BrowserProfileUnavailableError } from "./errors.js";
 import { ensureOutputDirectory } from "./output-directories.js";
@@ -114,7 +114,7 @@ export {
   resolveBrowserExecutableForPlatform,
 } from "./chrome.executables.js";
 export {
-  decorateOpenClawProfile,
+  decorateMarketingClawProfile,
   ensureProfileCleanExit,
   isProfileDecorated,
 } from "./chrome.profile-decoration.js";
@@ -692,7 +692,7 @@ async function ensureManagedChromePortAvailable(
     }
   };
 
-  // Chromium tries IPv4 loopback first, while OpenClaw polls the configured endpoint.
+  // Chromium tries IPv4 loopback first, while MarketingClaw polls the configured endpoint.
   // Probe both so neither Chrome's bind nor the later readiness check can be captured.
   try {
     await ensureProbeHostsAvailable();
@@ -730,7 +730,7 @@ function chromeLaunchHints(params: {
     CHROME_MISSING_DISPLAY_PATTERN.test(params.stderrOutput);
   if (missingDisplay && !headlessMode.headless) {
     hints.push(
-      "No DISPLAY/X server was detected. Set OPENCLAW_BROWSER_HEADLESS=1, remove the headed override, start Xvfb, or run the Gateway in a desktop session.",
+      "No DISPLAY/X server was detected. Set MARKETINGCLAW_BROWSER_HEADLESS=1, remove the headed override, start Xvfb, or run the Gateway in a desktop session.",
     );
   }
   const singletonInUse =
@@ -738,7 +738,7 @@ function chromeLaunchHints(params: {
     CHROME_SINGLETON_IN_USE_PATTERN.test(params.stderrOutput);
   if (singletonInUse) {
     hints.push(
-      `The Chromium profile "${params.profile.name}" is locked. Stop the existing browser or remove stale Singleton* lock files under ~/.openclaw/browser/${params.profile.name}/user-data.`,
+      `The Chromium profile "${params.profile.name}" is locked. Stop the existing browser or remove stale Singleton* lock files under ~/.marketingclaw/browser/${params.profile.name}/user-data.`,
     );
   }
   return hints.length > 0 ? `\nHint: ${hints.join("\nHint: ")}` : "";
@@ -757,7 +757,7 @@ export type RunningChrome = {
   /**
    * @deprecated CDP managed-proxy bypasses are scoped at exact request URLs.
    * Kept so older in-memory callers can pass stale RunningChrome objects
-   * through stopOpenClawChrome without type churn.
+   * through stopMarketingClawChrome without type churn.
    */
   releaseCdpProxyBypass?: () => void;
 };
@@ -772,8 +772,10 @@ function resolveBrowserExecutable(
   );
 }
 
-/** Resolve the user-data-dir path for a managed OpenClaw Chrome profile. */
-export function resolveOpenClawUserDataDir(profileName = DEFAULT_OPENCLAW_BROWSER_PROFILE_NAME) {
+/** Resolve the user-data-dir path for a managed MarketingClaw Chrome profile. */
+export function resolveMarketingClawUserDataDir(
+  profileName = DEFAULT_MARKETINGCLAW_BROWSER_PROFILE_NAME,
+) {
   return path.join(CONFIG_DIR, "browser", profileName, "user-data");
 }
 
@@ -781,8 +783,8 @@ function cdpUrlForPort(cdpPort: number) {
   return `http://127.0.0.1:${cdpPort}`;
 }
 
-/** Build Chrome launch arguments for the managed OpenClaw browser. */
-export function buildOpenClawChromeLaunchArgs(params: {
+/** Build Chrome launch arguments for the managed MarketingClaw browser. */
+export function buildMarketingClawChromeLaunchArgs(params: {
   resolved: ResolvedBrowserConfig;
   profile: ResolvedBrowserProfile;
   userDataDir: string;
@@ -809,7 +811,7 @@ export function buildOpenClawChromeLaunchArgs(params: {
   ];
 
   if (platform === "darwin" && params.useMockKeychain) {
-    // This is an isolated OpenClaw-owned profile, not the user's Chrome profile.
+    // This is an isolated MarketingClaw-owned profile, not the user's Chrome profile.
     // Keep its basic password store non-interactive so headless Chrome can
     // encrypt and persist cookies without login-keychain prompts.
     args.push("--use-mock-keychain");
@@ -957,8 +959,8 @@ export async function isChromeCdpReady(
   return diagnostic.ok;
 }
 
-/** Launch or attach to the managed OpenClaw Chrome profile. */
-export async function launchOpenClawChrome(
+/** Launch or attach to the managed MarketingClaw Chrome profile. */
+export async function launchMarketingClawChrome(
   resolved: ResolvedBrowserConfig,
   profile: ResolvedBrowserProfile,
   launchOptions: ManagedBrowserHeadlessOptions = {},
@@ -999,7 +1001,7 @@ export async function launchOpenClawChrome(
     );
   }
 
-  const userDataDir = resolveOpenClawUserDataDir(profile.name);
+  const userDataDir = resolveMarketingClawUserDataDir(profile.name);
   await ensureManagedChromePortAvailable(resolved, profile, userDataDir);
 
   const exe = resolveBrowserExecutable(resolved, profile);
@@ -1020,18 +1022,18 @@ export async function launchOpenClawChrome(
   // so would make its existing cookies unreadable. New headless profiles opt in.
   const useMockKeychain =
     process.platform === "darwin" &&
-    (usesOpenClawMockKeychain(userDataDir) || (profileIsNew && headlessMode.headless));
+    (usesMarketingClawMockKeychain(userDataDir) || (profileIsNew && headlessMode.headless));
 
   const needsDecorate = !isProfileDecorated(
     userDataDir,
     profile.name,
-    (profile.color ?? DEFAULT_OPENCLAW_BROWSER_COLOR).toUpperCase(),
+    (profile.color ?? DEFAULT_MARKETINGCLAW_BROWSER_COLOR).toUpperCase(),
     DEFAULT_DOWNLOAD_DIR,
   );
 
   // First launch to create preference files if missing, then decorate and relaunch.
   const spawnOnce = () => {
-    const args = buildOpenClawChromeLaunchArgs({
+    const args = buildMarketingClawChromeLaunchArgs({
       resolved,
       profile,
       userDataDir,
@@ -1044,7 +1046,7 @@ export async function launchOpenClawChrome(
       HOME: os.homedir(),
     };
     if (process.platform === "linux") {
-      const chromiumStateDir = path.join(resolvePreferredOpenClawTmpDir(), ".chromium");
+      const chromiumStateDir = path.join(resolvePreferredMarketingClawTmpDir(), ".chromium");
       env.XDG_CONFIG_HOME ??= chromiumStateDir;
       env.XDG_CACHE_HOME ??= chromiumStateDir;
     }
@@ -1094,22 +1096,22 @@ export async function launchOpenClawChrome(
 
   if (needsDecorate) {
     try {
-      decorateOpenClawProfile(userDataDir, {
+      decorateMarketingClawProfile(userDataDir, {
         name: profile.name,
         color: profile.color,
         downloadDir: DEFAULT_DOWNLOAD_DIR,
         mockKeychain: useMockKeychain,
       });
-      log.info(`🦞 openclaw browser profile decorated (${profile.color})`);
+      log.info(`🦞 marketingclaw browser profile decorated (${profile.color})`);
     } catch (err) {
-      log.warn(`openclaw browser profile decoration failed: ${String(err)}`);
+      log.warn(`marketingclaw browser profile decoration failed: ${String(err)}`);
     }
   }
 
   try {
     ensureProfileCleanExit(userDataDir);
   } catch (err) {
-    log.warn(`openclaw browser clean-exit prefs failed: ${String(err)}`);
+    log.warn(`marketingclaw browser clean-exit prefs failed: ${String(err)}`);
   }
 
   const launchOnceAndWait = async (allowSingletonRecovery: boolean): Promise<RunningChrome> => {
@@ -1200,7 +1202,7 @@ export async function launchOpenClawChrome(
 
       const pid = proc.pid ?? -1;
       log.info(
-        `🦞 openclaw browser started (${exe.kind}) profile "${profile.name}" on 127.0.0.1:${profile.cdpPort} (pid ${pid})`,
+        `🦞 marketingclaw browser started (${exe.kind}) profile "${profile.name}" on 127.0.0.1:${profile.cdpPort} (pid ${pid})`,
       );
 
       return {
@@ -1274,7 +1276,7 @@ async function waitForChromeCdpShutdown(cdpPort: number, timeoutMs: number): Pro
 }
 
 /** Stop a managed Chrome process and wait for shutdown. */
-export async function stopOpenClawChrome(
+export async function stopMarketingClawChrome(
   running: RunningChrome,
   timeoutMs = CHROME_STOP_TIMEOUT_MS,
 ) {

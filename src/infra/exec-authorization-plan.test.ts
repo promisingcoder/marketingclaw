@@ -112,8 +112,8 @@ describe("exec authorization planner", () => {
   });
 
   it("keeps eval as prompt-only", async () => {
-    await expectSingleShellCandidate('eval "$OPENCLAW_CMD"', {
-      sourceSegment: expect.objectContaining({ argv: ["eval", "$OPENCLAW_CMD"] }),
+    await expectSingleShellCandidate('eval "$MARKETINGCLAW_CMD"', {
+      sourceSegment: expect.objectContaining({ argv: ["eval", "$MARKETINGCLAW_CMD"] }),
       trustMode: "prompt-only",
       reasons: ["eval"],
     });
@@ -303,7 +303,7 @@ describe("exec authorization planner", () => {
   });
 
   it("does not promote positional shell carriers with outer shell substitutions", async () => {
-    await expectSingleShellCandidate("sh -c '$0 \"$@\"' touch \"$(id)\"", {
+    await expectSingleShellCandidate('sh -c \'$0 "$@"\' touch "$(id)"', {
       sourceSegment: expect.objectContaining({
         argv: ["sh", "-c", '$0 "$@"', "touch", "$(id)"],
       }),

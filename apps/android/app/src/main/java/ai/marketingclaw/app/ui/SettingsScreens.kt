@@ -1,56 +1,56 @@
-package ai.openclaw.app.ui
+package ai.marketingclaw.app.ui
 
-import ai.openclaw.app.AndroidLicenseNotice
-import ai.openclaw.app.AppLanguage
-import ai.openclaw.app.AppearanceThemeMode
-import ai.openclaw.app.BuildConfig
-import ai.openclaw.app.GatewayAgentSummary
-import ai.openclaw.app.GatewayConnectionDisplay
-import ai.openclaw.app.GatewayConnectionProblem
-import ai.openclaw.app.GatewayCronJobDetail
-import ai.openclaw.app.GatewayCronJobDetailState
-import ai.openclaw.app.GatewayCronJobSummary
-import ai.openclaw.app.GatewayExecApprovalSummary
-import ai.openclaw.app.GatewayTalkSetupReadiness
-import ai.openclaw.app.GatewayTalkSetupState
-import ai.openclaw.app.GatewayUsageProviderSummary
-import ai.openclaw.app.LocationMode
-import ai.openclaw.app.MainViewModel
-import ai.openclaw.app.NotificationPackageFilterMode
-import ai.openclaw.app.SensitiveFeatureConfig
-import ai.openclaw.app.appLanguageRowSubtitle
-import ai.openclaw.app.chat.ChatPendingToolCall
-import ai.openclaw.app.currentAppLanguage
-import ai.openclaw.app.currentSystemLanguageTag
-import ai.openclaw.app.gateway.GatewayRegistryEntryKind
-import ai.openclaw.app.gatewayTalkSetupDescription
-import ai.openclaw.app.gatewayTalkSetupStatusText
-import ai.openclaw.app.hasPhotoReadPermission
-import ai.openclaw.app.isReady
-import ai.openclaw.app.loadAndroidLicenseNotices
-import ai.openclaw.app.locationModeAfterBackgroundSettings
-import ai.openclaw.app.node.DeviceNotificationListenerService
-import ai.openclaw.app.photoReadPermissionsForRequest
-import ai.openclaw.app.setAppLanguage
-import ai.openclaw.app.ui.design.ClawDetailRow
-import ai.openclaw.app.ui.design.ClawIconBadge
-import ai.openclaw.app.ui.design.ClawListItem
-import ai.openclaw.app.ui.design.ClawListPanel
-import ai.openclaw.app.ui.design.ClawPanel
-import ai.openclaw.app.ui.design.ClawPlainIconButton
-import ai.openclaw.app.ui.design.ClawPrimaryButton
-import ai.openclaw.app.ui.design.ClawScaffold
-import ai.openclaw.app.ui.design.ClawSecondaryButton
-import ai.openclaw.app.ui.design.ClawSegmentedControl
-import ai.openclaw.app.ui.design.ClawSeparatedColumn
-import ai.openclaw.app.ui.design.ClawStatus
-import ai.openclaw.app.ui.design.ClawStatusPill
-import ai.openclaw.app.ui.design.ClawTextBadge
-import ai.openclaw.app.ui.design.ClawTextField
-import ai.openclaw.app.ui.design.ClawTheme
-import ai.openclaw.app.ui.design.OpenClawMascot
-import ai.openclaw.app.ui.design.TalkWaveform
-import ai.openclaw.app.ui.design.TalkWaveformPhase
+import ai.marketingclaw.app.AndroidLicenseNotice
+import ai.marketingclaw.app.AppLanguage
+import ai.marketingclaw.app.AppearanceThemeMode
+import ai.marketingclaw.app.BuildConfig
+import ai.marketingclaw.app.GatewayAgentSummary
+import ai.marketingclaw.app.GatewayConnectionDisplay
+import ai.marketingclaw.app.GatewayConnectionProblem
+import ai.marketingclaw.app.GatewayCronJobDetail
+import ai.marketingclaw.app.GatewayCronJobDetailState
+import ai.marketingclaw.app.GatewayCronJobSummary
+import ai.marketingclaw.app.GatewayExecApprovalSummary
+import ai.marketingclaw.app.GatewayTalkSetupReadiness
+import ai.marketingclaw.app.GatewayTalkSetupState
+import ai.marketingclaw.app.GatewayUsageProviderSummary
+import ai.marketingclaw.app.LocationMode
+import ai.marketingclaw.app.MainViewModel
+import ai.marketingclaw.app.NotificationPackageFilterMode
+import ai.marketingclaw.app.SensitiveFeatureConfig
+import ai.marketingclaw.app.appLanguageRowSubtitle
+import ai.marketingclaw.app.chat.ChatPendingToolCall
+import ai.marketingclaw.app.currentAppLanguage
+import ai.marketingclaw.app.currentSystemLanguageTag
+import ai.marketingclaw.app.gateway.GatewayRegistryEntryKind
+import ai.marketingclaw.app.gatewayTalkSetupDescription
+import ai.marketingclaw.app.gatewayTalkSetupStatusText
+import ai.marketingclaw.app.hasPhotoReadPermission
+import ai.marketingclaw.app.isReady
+import ai.marketingclaw.app.loadAndroidLicenseNotices
+import ai.marketingclaw.app.locationModeAfterBackgroundSettings
+import ai.marketingclaw.app.node.DeviceNotificationListenerService
+import ai.marketingclaw.app.photoReadPermissionsForRequest
+import ai.marketingclaw.app.setAppLanguage
+import ai.marketingclaw.app.ui.design.ClawDetailRow
+import ai.marketingclaw.app.ui.design.ClawIconBadge
+import ai.marketingclaw.app.ui.design.ClawListItem
+import ai.marketingclaw.app.ui.design.ClawListPanel
+import ai.marketingclaw.app.ui.design.ClawPanel
+import ai.marketingclaw.app.ui.design.ClawPlainIconButton
+import ai.marketingclaw.app.ui.design.ClawPrimaryButton
+import ai.marketingclaw.app.ui.design.ClawScaffold
+import ai.marketingclaw.app.ui.design.ClawSecondaryButton
+import ai.marketingclaw.app.ui.design.ClawSegmentedControl
+import ai.marketingclaw.app.ui.design.ClawSeparatedColumn
+import ai.marketingclaw.app.ui.design.ClawStatus
+import ai.marketingclaw.app.ui.design.ClawStatusPill
+import ai.marketingclaw.app.ui.design.ClawTextBadge
+import ai.marketingclaw.app.ui.design.ClawTextField
+import ai.marketingclaw.app.ui.design.ClawTheme
+import ai.marketingclaw.app.ui.design.MarketingClawMascot
+import ai.marketingclaw.app.ui.design.TalkWaveform
+import ai.marketingclaw.app.ui.design.TalkWaveformPhase
 import android.Manifest
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -288,7 +288,7 @@ private fun CronJobsSettingsScreen(
     }
   }
 
-  SettingsDetailFrame(title = "Cron Jobs", subtitle = "Scheduled OpenClaw work from your gateway.", icon = Icons.Default.Bolt, onBack = onBack) {
+  SettingsDetailFrame(title = "Cron Jobs", subtitle = "Scheduled MarketingClaw work from your gateway.", icon = Icons.Default.Bolt, onBack = onBack) {
     SettingsMetricPanel(
       rows =
         listOf(
@@ -315,7 +315,7 @@ private fun CronJobsSettingsScreen(
         ClawPanel {
           Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
             Text(text = "No scheduled jobs.", style = ClawTheme.type.section, color = ClawTheme.colors.text)
-            Text(text = "Create recurring OpenClaw work from the desktop app.", style = ClawTheme.type.body, color = ClawTheme.colors.textMuted)
+            Text(text = "Create recurring MarketingClaw work from the desktop app.", style = ClawTheme.type.body, color = ClawTheme.colors.textMuted)
           }
         }
       else -> CronJobsPanel(jobs = cronJobs, onJobClick = { selectedJobId = it.id })
@@ -487,9 +487,9 @@ private fun ProfileSettingsScreen(
   onBack: () -> Unit,
 ) {
   val displayName by viewModel.displayName.collectAsState()
-  var draft by remember(displayName) { mutableStateOf(displayName.ifBlank { "OpenClaw" }) }
+  var draft by remember(displayName) { mutableStateOf(displayName.ifBlank { "MarketingClaw" }) }
 
-  SettingsDetailFrame(title = "Profile", subtitle = "How this phone appears to OpenClaw.", icon = Icons.Default.Person, onBack = onBack) {
+  SettingsDetailFrame(title = "Profile", subtitle = "How this phone appears to MarketingClaw.", icon = Icons.Default.Person, onBack = onBack) {
     ClawPanel {
       Column(verticalArrangement = Arrangement.spacedBy(9.dp)) {
         ClawTextField(value = draft, onValueChange = { draft = it }, placeholder = "Device name")
@@ -516,7 +516,7 @@ private fun VoiceSettingsScreen(
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
       VoiceSetupPanel(talkSetupReadiness)
       Text(text = "Audio Test", style = ClawTheme.type.section, color = ClawTheme.colors.text)
-      Text(text = "Check that OpenClaw can speak clearly on this phone.", style = ClawTheme.type.body, color = ClawTheme.colors.textMuted)
+      Text(text = "Check that MarketingClaw can speak clearly on this phone.", style = ClawTheme.type.body, color = ClawTheme.colors.textMuted)
       SettingsWaveformPanel(active = speakerEnabled, onClick = ::playVoiceSetupTone)
       VoiceSetupActionRow(
         title = if (speakerEnabled) "Mute speaker" else "Enable speaker",
@@ -694,11 +694,11 @@ private fun NotificationSettingsScreen(
     listenerEnabled = DeviceNotificationListenerService.isAccessEnabled(context)
   }
 
-  SettingsDetailFrame(title = "Notifications", subtitle = "Choose what reaches OpenClaw.", icon = Icons.Default.Notifications, onBack = onBack) {
+  SettingsDetailFrame(title = "Notifications", subtitle = "Choose what reaches MarketingClaw.", icon = Icons.Default.Notifications, onBack = onBack) {
     SettingsTogglePanel(
       rows =
         listOf(
-          SettingsToggleRow("Forward Notifications", if (enabled) "OpenClaw can receive selected alerts." else "Alerts stay on this phone.", Icons.Default.Notifications, enabled, ::setForwarding),
+          SettingsToggleRow("Forward Notifications", if (enabled) "MarketingClaw can receive selected alerts." else "Alerts stay on this phone.", Icons.Default.Notifications, enabled, ::setForwarding),
           SettingsToggleRow("Quiet Hours", "$quietStart to $quietEnd", Icons.Default.Bolt, quietEnabled) { checked ->
             viewModel.setNotificationForwardingQuietHours(enabled = checked, start = quietStart, end = quietEnd)
           },
@@ -1066,7 +1066,7 @@ private fun PhoneCapabilitiesScreen(
           },
           SettingsToggleRow(
             "Installed Apps",
-            if (installedAppsSharingEnabled) "OpenClaw can list launcher-visible apps." else "App list stays on this phone.",
+            if (installedAppsSharingEnabled) "MarketingClaw can list launcher-visible apps." else "App list stays on this phone.",
             Icons.Default.Storage,
             installedAppsSharingEnabled,
             viewModel::setInstalledAppsSharingEnabled,
@@ -1085,7 +1085,7 @@ private fun PhoneCapabilitiesScreen(
         )
         if (backgroundLocationAvailable) {
           Text(
-            text = "Always allows requested location checks while OpenClaw is in the background; Android shows this in the persistent node notification.",
+            text = "Always allows requested location checks while MarketingClaw is in the background; Android shows this in the persistent node notification.",
             style = ClawTheme.type.caption,
             color = ClawTheme.colors.textMuted,
           )
@@ -1113,7 +1113,7 @@ private fun PhoneCapabilitiesScreen(
       title = { Text("Allow background location?") },
       text = {
         Text(
-          "OpenClaw only checks location when your paired Gateway requests it. " +
+          "MarketingClaw only checks location when your paired Gateway requests it. " +
             "On the next Android screen, choose $backgroundPermissionLabel to allow checks while the app is in the background.",
         )
       },
@@ -1228,7 +1228,7 @@ private fun GatewaySettingsScreen(
     )
   }
 
-  SettingsDetailFrame(title = "Gateway", subtitle = "Connection between this phone and OpenClaw.", icon = Icons.Default.Cloud, onBack = onBack) {
+  SettingsDetailFrame(title = "Gateway", subtitle = "Connection between this phone and MarketingClaw.", icon = Icons.Default.Cloud, onBack = onBack) {
     SettingsMetricPanel(
       rows =
         listOf(
@@ -1306,7 +1306,7 @@ private fun GatewaySettingsScreen(
         }
         if (showSetupCodeHelp) {
           Text(
-            text = "Android can scan or paste an existing setup code, but this gateway does not expose setup-code generation to the app yet. Generate the QR/code on the gateway host with openclaw qr, then scan it here or paste the setup code below.",
+            text = "Android can scan or paste an existing setup code, but this gateway does not expose setup-code generation to the app yet. Generate the QR/code on the gateway host with marketingclaw qr, then scan it here or paste the setup code below.",
             style = ClawTheme.type.caption,
             color = ClawTheme.colors.textMuted,
           )
@@ -1417,7 +1417,7 @@ private fun AppearanceSettingsScreen(
       Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Text(text = "App language", style = ClawTheme.type.section, color = ClawTheme.colors.text)
         Text(
-          text = "Changes Android text that OpenClaw has translated. Screens with English-only copy stay unchanged.",
+          text = "Changes Android text that MarketingClaw has translated. Screens with English-only copy stay unchanged.",
           style = ClawTheme.type.caption,
           color = ClawTheme.colors.textMuted,
         )
@@ -1529,7 +1529,7 @@ private fun AboutSettingsScreen(
   val latestVersion = updateAvailable?.latestVersion?.takeIf { it.isNotBlank() }
   val currentGatewayVersion = updateAvailable?.currentVersion?.takeIf { it.isNotBlank() } ?: gatewayVersion
 
-  SettingsDetailFrame(title = "About", subtitle = "OpenClaw for Android.", icon = Icons.Default.Info, onBack = onBack) {
+  SettingsDetailFrame(title = "About", subtitle = "MarketingClaw for Android.", icon = Icons.Default.Info, onBack = onBack) {
     AboutHeroPanel()
     SettingsMetricPanel(
       rows =
@@ -1558,7 +1558,7 @@ private fun AboutSettingsScreen(
     }
     AboutLinksPanel()
     Text(
-      text = "© 2026 OpenClaw Foundation — MIT License.",
+      text = "© 2026 MarketingClaw Foundation — MIT License.",
       style = ClawTheme.type.caption,
       color = ClawTheme.colors.textSubtle,
       modifier = Modifier.fillMaxWidth(),
@@ -1575,9 +1575,9 @@ private fun AboutHeroPanel() {
       horizontalAlignment = Alignment.CenterHorizontally,
       verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-      OpenClawMascot(contentDescription = "OpenClaw logo", modifier = Modifier.size(96.dp))
+      MarketingClawMascot(contentDescription = "MarketingClaw logo", modifier = Modifier.size(96.dp))
       Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(2.dp)) {
-        Text(text = "OpenClaw", style = ClawTheme.type.section, color = ClawTheme.colors.text)
+        Text(text = "MarketingClaw", style = ClawTheme.type.section, color = ClawTheme.colors.text)
         Text(text = "Personal AI on your devices", style = ClawTheme.type.caption, color = ClawTheme.colors.textMuted)
       }
     }
@@ -1593,9 +1593,9 @@ private data class AboutLink(
 
 private val aboutLinks =
   listOf(
-    AboutLink("Website", "openclaw.ai", "https://openclaw.ai"),
-    AboutLink("Docs", "docs.openclaw.ai", "https://docs.openclaw.ai"),
-    AboutLink("GitHub", "github.com/openclaw/openclaw", "https://github.com/openclaw/openclaw"),
+    AboutLink("Website", "marketingclaw.ai", "https://marketingclaw.ai"),
+    AboutLink("Docs", "docs.marketingclaw.ai", "https://docs.marketingclaw.ai"),
+    AboutLink("GitHub", "github.com/promisingcoder/marketingclaw", "https://github.com/promisingcoder/marketingclaw"),
     AboutLink("Discord", "discord.gg/clawd", "https://discord.gg/clawd"),
   )
 
@@ -1638,7 +1638,7 @@ private fun LicensesSettingsScreen(onBack: () -> Unit) {
 
   SettingsDetailFrame(
     title = "Licenses",
-    subtitle = if (selectedLicense == null) "OpenClaw appreciates its partners in the open-source community." else "",
+    subtitle = if (selectedLicense == null) "MarketingClaw appreciates its partners in the open-source community." else "",
     subtitleTextAlign = TextAlign.Center,
     icon = Icons.Default.Info,
     onBack = backToListOrSettings,
@@ -1715,7 +1715,7 @@ private fun AboutStatusRow(
 /** Chooses about-screen copy based on whether the gateway advertises an update. */
 private fun aboutUpdateText(latestVersion: String?): String =
   if (latestVersion == null) {
-    "OpenClaw turns this phone into a clean mobile command surface for sessions, voice, providers, and Gateway."
+    "MarketingClaw turns this phone into a clean mobile command surface for sessions, voice, providers, and Gateway."
   } else {
     "A Gateway update is available. Run the update from the Web UI or CLI when you are ready."
   }
@@ -2011,7 +2011,7 @@ private fun copyCronDetailValue(
   value: String,
 ) {
   val clipboard = context.getSystemService(ClipboardManager::class.java) ?: return
-  clipboard.setPrimaryClip(ClipData.newPlainText("OpenClaw cron job $title", value))
+  clipboard.setPrimaryClip(ClipData.newPlainText("MarketingClaw cron job $title", value))
   Toast.makeText(context, "$title copied", Toast.LENGTH_SHORT).show()
 }
 

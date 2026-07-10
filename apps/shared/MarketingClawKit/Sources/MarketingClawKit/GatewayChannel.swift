@@ -1,5 +1,5 @@
 import Foundation
-import OpenClawProtocol
+import MarketingClawProtocol
 import OSLog
 
 public protocol WebSocketTasking: AnyObject {
@@ -173,7 +173,7 @@ public enum GatewayAuthSource: String, Sendable {
 }
 
 /// Avoid ambiguity with the app's own AnyCodable type.
-private typealias ProtoAnyCodable = OpenClawProtocol.AnyCodable
+private typealias ProtoAnyCodable = MarketingClawProtocol.AnyCodable
 
 private func gatewayErrorDetails(_ error: ErrorShape?) -> [String: ProtoAnyCodable] {
     var details: [String: ProtoAnyCodable] = [:]
@@ -255,7 +255,7 @@ public actor GatewayChannelActor {
         timeoutMs == 0 ? nil : (timeoutMs ?? defaultMs)
     }
 
-    private let logger = Logger(subsystem: "ai.openclaw", category: "gateway")
+    private let logger = Logger(subsystem: "ai.marketingclaw", category: "gateway")
     private var task: WebSocketTaskBox?
     private var pending: [String: CheckedContinuation<GatewayFrame, Error>] = [:]
     private var connected = false
@@ -488,7 +488,7 @@ public actor GatewayChannelActor {
             caps: [],
             commands: [],
             permissions: [:],
-            clientId: "openclaw-macos",
+            clientId: "marketingclaw-macos",
             clientMode: "ui",
             clientDisplayName: InstanceIdentity.displayName)
         let clientDisplayName = options.clientDisplayName ?? InstanceIdentity.displayName

@@ -1,8 +1,8 @@
 // Phone Control API module exposes the plugin public contract.
-export { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
+export { definePluginEntry } from "marketingclaw/plugin-sdk/plugin-entry";
 export type {
-  OpenClawPluginApi,
-  OpenClawPluginCommandDefinition,
+  MarketingClawPluginApi,
+  MarketingClawPluginCommandDefinition,
   PluginCommandContext,
-  OpenClawPluginService,
-} from "openclaw/plugin-sdk/plugin-entry";
+  MarketingClawPluginService,
+} from "marketingclaw/plugin-sdk/plugin-entry";

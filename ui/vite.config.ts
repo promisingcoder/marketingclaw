@@ -79,7 +79,8 @@ function readGitShortSha(): string | null {
 
 function resolveControlUiBuildId(): string {
   const explicit =
-    process.env.OPENCLAW_CONTROL_UI_BUILD_ID?.trim() || process.env.OPENCLAW_VERSION?.trim();
+    process.env.MARKETINGCLAW_CONTROL_UI_BUILD_ID?.trim() ||
+    process.env.MARKETINGCLAW_VERSION?.trim();
   if (explicit) {
     return normalizeBuildId(explicit);
   }
@@ -137,7 +138,7 @@ function resolveTsconfigPathAlias(key: string, target: string): ControlUiViteAli
 
 function sourcePackageAlias(packageId: string, subpath?: string): ControlUiViteAlias {
   return {
-    find: `@openclaw/${packageId}${subpath ? `/${subpath}` : ""}`,
+    find: `@marketingclaw/${packageId}${subpath ? `/${subpath}` : ""}`,
     replacement: path.join(
       repoRoot,
       "packages",
@@ -168,7 +169,7 @@ export function resolveExternalPackageAliasesForVite(): ControlUiViteAlias[] {
       replacement: path.join(
         repoRoot,
         "node_modules",
-        "@openclaw",
+        "@marketingclaw",
         "libterminal",
         "dist",
         "browser.js",
@@ -176,7 +177,14 @@ export function resolveExternalPackageAliasesForVite(): ControlUiViteAlias[] {
     },
     {
       find: "@openclaw/uirouter",
-      replacement: path.join(repoRoot, "node_modules", "@openclaw", "uirouter", "dist", "index.js"),
+      replacement: path.join(
+        repoRoot,
+        "node_modules",
+        "@marketingclaw",
+        "uirouter",
+        "dist",
+        "index.js",
+      ),
     },
   ];
 }
@@ -235,7 +243,7 @@ function controlUiServiceWorkerBuildIdPlugin(buildId: string): Plugin {
       const swPath = path.join(outDir, "sw.js");
       const publicSwPath = path.join(here, "public/sw.js");
       const source = fs.readFileSync(publicSwPath, "utf8");
-      const placeholder = '"__OPENCLAW_CONTROL_UI_BUILD_ID__"';
+      const placeholder = '"__MARKETINGCLAW_CONTROL_UI_BUILD_ID__"';
       const updated = source.replace(placeholder, JSON.stringify(buildId));
       if (updated === source) {
         throw new Error(`Control UI service worker build id placeholder missing in ${swPath}`);
@@ -247,7 +255,7 @@ function controlUiServiceWorkerBuildIdPlugin(buildId: string): Plugin {
 }
 
 export default function controlUiViteConfig(): UserConfig {
-  const envBase = process.env.OPENCLAW_CONTROL_UI_BASE_PATH?.trim();
+  const envBase = process.env.MARKETINGCLAW_CONTROL_UI_BASE_PATH?.trim();
   const base = envBase ? normalizeBase(envBase) : "./";
   const bootstrapConfigPath =
     base === "./" ? "/control-ui-config.json" : `${base}control-ui-config.json`;
@@ -255,7 +263,7 @@ export default function controlUiViteConfig(): UserConfig {
   return {
     base,
     define: {
-      OPENCLAW_CONTROL_UI_BUILD_ID: JSON.stringify(controlUiBuildId),
+      MARKETINGCLAW_CONTROL_UI_BUILD_ID: JSON.stringify(controlUiBuildId),
     },
     publicDir: path.resolve(here, "public"),
     optimizeDeps: {

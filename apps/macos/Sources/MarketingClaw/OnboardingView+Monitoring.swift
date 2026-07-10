@@ -1,5 +1,5 @@
 import Foundation
-import OpenClawIPC
+import MarketingClawIPC
 
 extension OnboardingView {
     @MainActor
@@ -78,7 +78,7 @@ extension OnboardingView {
         installingCLI = true
         OnboardingController.shared.setWindowCloseEnabled(false)
         // Cmd-W bypasses the disabled close button; the delegate asks first.
-        OnboardingController.shared.busyReason = "OpenClaw is installing the Gateway service."
+        OnboardingController.shared.busyReason = "MarketingClaw is installing the Gateway service."
         Task { @MainActor in await self.runCLIInstall() }
     }
 
@@ -105,17 +105,17 @@ extension OnboardingView {
         }
         guard installed else { return }
         cliInstallLocation = CLIInstaller.managedExecutableLocation()
-        cliStatus = "Starting OpenClaw Gateway…"
+        cliStatus = "Starting MarketingClaw Gateway…"
         // The step checklist shows one spinner at a time: install first,
         // then the service start.
         self.cliInstallPhase = .startingService
         switch await CLIInstaller.activateLocalGateway() {
         case .ready:
-            cliStatus = "OpenClaw Gateway is ready."
+            cliStatus = "MarketingClaw Gateway is ready."
         case .deferred:
-            cliStatus = "OpenClaw is installed. The Gateway will start when This Mac is active and resumed."
+            cliStatus = "MarketingClaw is installed. The Gateway will start when This Mac is active and resumed."
         case .failed:
-            cliStatus = "OpenClaw was installed, but the Gateway did not start. Retry setup."
+            cliStatus = "MarketingClaw was installed, but the Gateway did not start. Retry setup."
             return
         }
         cliInstalled = true
@@ -142,7 +142,7 @@ extension OnboardingView {
                 return
             }
             let command = desc.command.trimmingCharacters(in: .whitespacesAndNewlines)
-            let expectedTokens = ["node", "openclaw", "tsx", "pnpm", "bun"]
+            let expectedTokens = ["node", "marketingclaw", "tsx", "pnpm", "bun"]
             let lower = command.lowercased()
             let expected = expectedTokens.contains { lower.contains($0) }
             self.localGatewayProbe = LocalGatewayProbe(

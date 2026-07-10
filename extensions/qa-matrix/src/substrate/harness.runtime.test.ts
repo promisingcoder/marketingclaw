@@ -2,7 +2,7 @@
 import { mkdtemp, readFile, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { withTempDir } from "openclaw/plugin-sdk/test-env";
+import { withTempDir } from "marketingclaw/plugin-sdk/test-env";
 import { describe, expect, it, vi } from "vitest";
 import { testing, startMatrixQaHarness, writeMatrixQaHarnessFiles } from "./harness.runtime.js";
 import type { MatrixQaRecordingProxy } from "./recording-proxy.js";
@@ -30,7 +30,7 @@ async function withStartedMatrixHarness(
     const result = await startMatrixQaHarness(
       {
         outputDir,
-        repoRoot: "/repo/openclaw",
+        repoRoot: "/repo/marketingclaw",
         homeserverPort: 28008,
       },
       { ...deps, startRecordingProxyImpl },
@@ -129,9 +129,9 @@ describe("matrix harness runtime", () => {
       },
       async ({ outputDir, result }) => {
         expect(calls).toEqual([
-          `docker compose -f ${outputDir}/docker-compose.matrix-qa.yml down --remove-orphans @/repo/openclaw`,
-          `docker compose -f ${outputDir}/docker-compose.matrix-qa.yml up -d @/repo/openclaw`,
-          `docker compose -f ${outputDir}/docker-compose.matrix-qa.yml ps --format json matrix-qa-homeserver @/repo/openclaw`,
+          `docker compose -f ${outputDir}/docker-compose.matrix-qa.yml down --remove-orphans @/repo/marketingclaw`,
+          `docker compose -f ${outputDir}/docker-compose.matrix-qa.yml up -d @/repo/marketingclaw`,
+          `docker compose -f ${outputDir}/docker-compose.matrix-qa.yml ps --format json matrix-qa-homeserver @/repo/marketingclaw`,
         ]);
         expect(fetchCalls).toEqual([
           "http://127.0.0.1:28008/_matrix/client/versions",
@@ -143,7 +143,7 @@ describe("matrix harness runtime", () => {
         );
         await result.restartService();
         expect(calls).toContain(
-          `docker compose -f ${outputDir}/docker-compose.matrix-qa.yml restart matrix-qa-homeserver @/repo/openclaw`,
+          `docker compose -f ${outputDir}/docker-compose.matrix-qa.yml restart matrix-qa-homeserver @/repo/marketingclaw`,
         );
       },
     );
@@ -154,7 +154,7 @@ describe("matrix harness runtime", () => {
     await withTempDir("matrix-qa-harness-", async (outputDir) => {
       await expect(
         startMatrixQaHarness(
-          { outputDir, repoRoot: "/repo/openclaw" },
+          { outputDir, repoRoot: "/repo/marketingclaw" },
           {
             async runCommand(command, args, cwd) {
               calls.push([command, ...args, `@${cwd}`].join(" "));
@@ -222,10 +222,10 @@ describe("matrix harness runtime", () => {
       ({ outputDir, result }) => {
         expect(result.baseUrl).toBe("http://172.18.0.10:8008/");
         expect(calls).toContain(
-          `docker compose -f ${outputDir}/docker-compose.matrix-qa.yml ps -q matrix-qa-homeserver @/repo/openclaw`,
+          `docker compose -f ${outputDir}/docker-compose.matrix-qa.yml ps -q matrix-qa-homeserver @/repo/marketingclaw`,
         );
         expect(calls).toContain(
-          "docker inspect --format {{range .NetworkSettings.Networks}}{{println .IPAddress}}{{end}} container-123 @/repo/openclaw",
+          "docker inspect --format {{range .NetworkSettings.Networks}}{{println .IPAddress}}{{end}} container-123 @/repo/marketingclaw",
         );
       },
     );

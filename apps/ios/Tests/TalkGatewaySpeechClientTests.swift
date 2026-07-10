@@ -1,9 +1,9 @@
 import AVFoundation
 import Foundation
-import OpenClawKit
-import OpenClawProtocol
+import MarketingClawKit
+import MarketingClawProtocol
 import Testing
-@testable import OpenClaw
+@testable import MarketingClaw
 
 @MainActor
 private final class RecordingGatewaySpeechSynthesizer: TalkGatewaySpeechSynthesizing {

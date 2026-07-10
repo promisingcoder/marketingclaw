@@ -1,6 +1,6 @@
 // Context-engine registry owns engine registration, resolution, compatibility, and quarantine.
 import { sanitizeForLog } from "../../packages/terminal-core/src/ansi.js";
-import type { OpenClawConfig } from "../config/types.js";
+import type { MarketingClawConfig } from "../config/types.js";
 import { createAbortError } from "../infra/abort-signal.js";
 import { defaultSlotIdForKey } from "../plugins/slots.js";
 import { resolveGlobalSingleton } from "../shared/global-singleton.js";
@@ -28,7 +28,7 @@ import type {
  * without fragile workarounds.
  */
 export type ContextEngineFactoryContext = {
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   agentDir?: string;
   workspaceDir?: string;
 };
@@ -58,7 +58,7 @@ type RegisterContextEngineForOwnerOptions = {
   lifecycle?: ContextEngineRegistrationLifecycle;
 };
 
-const LEGACY_SESSION_KEY_COMPAT = Symbol.for("openclaw.contextEngine.sessionKeyCompat");
+const LEGACY_SESSION_KEY_COMPAT = Symbol.for("marketingclaw.contextEngine.sessionKeyCompat");
 type ResolvedContextEngineMetadata = {
   owner: string;
 };
@@ -383,7 +383,7 @@ function wrapResolvedContextEngine(
 // Registry (module-level singleton)
 // ---------------------------------------------------------------------------
 
-const CONTEXT_ENGINE_REGISTRY_STATE = Symbol.for("openclaw.contextEngineRegistryState");
+const CONTEXT_ENGINE_REGISTRY_STATE = Symbol.for("marketingclaw.contextEngineRegistryState");
 const CORE_CONTEXT_ENGINE_OWNER = "core";
 const PUBLIC_CONTEXT_ENGINE_OWNER = "public-sdk";
 
@@ -917,7 +917,7 @@ export type ResolveContextEngineOptions = {
  * Throws only when the default engine itself cannot be resolved.
  */
 export async function resolveContextEngine(
-  config?: OpenClawConfig,
+  config?: MarketingClawConfig,
   options?: ResolveContextEngineOptions,
 ): Promise<ContextEngine> {
   const slotValue = config?.plugins?.slots?.contextEngine;

@@ -10,7 +10,7 @@ import {
 } from "../../trajectory/paths.js";
 import type { SessionEntry } from "./types.js";
 
-// Keep integration tests deterministic: never read a real openclaw.json.
+// Keep integration tests deterministic: never read a real marketingclaw.json.
 vi.mock("../config.js", async () => ({
   ...(await vi.importActual<typeof import("../config.js")>("../config.js")),
   getRuntimeConfig: vi.fn().mockReturnValue({}),
@@ -46,7 +46,7 @@ function jsonRoundTrip<T>(value: T): T {
 
 const archiveTimestamp = (ms: number) => new Date(ms).toISOString().replaceAll(":", "-");
 
-const suiteRootTracker = createSuiteTempRootTracker({ prefix: "openclaw-pruning-integ-" });
+const suiteRootTracker = createSuiteTempRootTracker({ prefix: "marketingclaw-pruning-integ-" });
 
 function makeEntry(updatedAt: number): SessionEntry {
   return { sessionId: crypto.randomUUID(), updatedAt };
@@ -119,8 +119,8 @@ describe("Integration: saveSessionStore with pruning", () => {
     mockLoadConfig.mockReset();
     testDir = await createCaseDir("pruning-integ");
     storePath = path.join(testDir, "sessions.json");
-    savedCacheTtl = process.env.OPENCLAW_SESSION_CACHE_TTL_MS;
-    process.env.OPENCLAW_SESSION_CACHE_TTL_MS = "0";
+    savedCacheTtl = process.env.MARKETINGCLAW_SESSION_CACHE_TTL_MS;
+    process.env.MARKETINGCLAW_SESSION_CACHE_TTL_MS = "0";
     clearSessionStoreCacheForTest();
   });
 
@@ -128,9 +128,9 @@ describe("Integration: saveSessionStore with pruning", () => {
     mockLoadConfig.mockReset();
     clearSessionStoreCacheForTest();
     if (savedCacheTtl === undefined) {
-      delete process.env.OPENCLAW_SESSION_CACHE_TTL_MS;
+      delete process.env.MARKETINGCLAW_SESSION_CACHE_TTL_MS;
     } else {
-      process.env.OPENCLAW_SESSION_CACHE_TTL_MS = savedCacheTtl;
+      process.env.MARKETINGCLAW_SESSION_CACHE_TTL_MS = savedCacheTtl;
     }
   });
 
@@ -323,12 +323,12 @@ describe("Integration: saveSessionStore with pruning", () => {
     const freshPointer = resolveTrajectoryPointerFilePath(freshTranscript);
     await fs.writeFile(staleTranscript, '{"type":"session"}\n', "utf-8");
     await fs.writeFile(freshTranscript, '{"type":"session"}\n', "utf-8");
-    await fs.writeFile(staleRuntime, '{"traceSchema":"openclaw-trajectory"}\n', "utf-8");
-    await fs.writeFile(freshRuntime, '{"traceSchema":"openclaw-trajectory"}\n', "utf-8");
+    await fs.writeFile(staleRuntime, '{"traceSchema":"marketingclaw-trajectory"}\n', "utf-8");
+    await fs.writeFile(freshRuntime, '{"traceSchema":"marketingclaw-trajectory"}\n', "utf-8");
     await fs.writeFile(
       stalePointer,
       JSON.stringify({
-        traceSchema: "openclaw-trajectory-pointer",
+        traceSchema: "marketingclaw-trajectory-pointer",
         schemaVersion: 1,
         sessionId: staleSessionId,
         runtimeFile: staleRuntime,
@@ -338,7 +338,7 @@ describe("Integration: saveSessionStore with pruning", () => {
     await fs.writeFile(
       freshPointer,
       JSON.stringify({
-        traceSchema: "openclaw-trajectory-pointer",
+        traceSchema: "marketingclaw-trajectory-pointer",
         schemaVersion: 1,
         sessionId: freshSessionId,
         runtimeFile: freshRuntime,

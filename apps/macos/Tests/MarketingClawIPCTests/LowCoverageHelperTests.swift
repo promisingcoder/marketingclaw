@@ -1,12 +1,12 @@
 import AppKit
 import Foundation
-import OpenClawProtocol
+import MarketingClawProtocol
 import Testing
-@testable import OpenClaw
+@testable import MarketingClaw
 
 @Suite(.serialized)
 struct LowCoverageHelperTests {
-    private typealias ProtoAnyCodable = OpenClawProtocol.AnyCodable
+    private typealias ProtoAnyCodable = MarketingClawProtocol.AnyCodable
 
     @Test func `any codable helper accessors`() throws {
         let payload: [String: ProtoAnyCodable] = [
@@ -171,7 +171,7 @@ struct LowCoverageHelperTests {
 
         #expect(PortGuardian._testIsExpected(
             command: "node",
-            fullCommand: "openclaw-gateway",
+            fullCommand: "marketingclaw-gateway",
             port: 18789, mode: .local) == true)
 
         #expect(PortGuardian._testIsExpected(
@@ -239,7 +239,7 @@ struct LowCoverageHelperTests {
         #expect(PortGuardian.classifyTunnelRecord(
             record,
             process: .init(parentPid: 1, startedAt: spawnedBeforeRecord, fullCommand: tunnel)) == .reap)
-        // Parent alive (e.g. a concurrent OpenClaw instance) → hands off.
+        // Parent alive (e.g. a concurrent MarketingClaw instance) → hands off.
         #expect(PortGuardian.classifyTunnelRecord(
             record,
             process: .init(parentPid: 987, startedAt: spawnedBeforeRecord, fullCommand: tunnel)) == .keep)

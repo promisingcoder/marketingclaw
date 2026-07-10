@@ -1,7 +1,7 @@
 // Memory Core tests cover dreaming command plugin behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { PluginCommandContext } from "openclaw/plugin-sdk/core";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import type { PluginCommandContext } from "marketingclaw/plugin-sdk/core";
+import type { MarketingClawPluginApi } from "marketingclaw/plugin-sdk/plugin-entry";
 import { describe, expect, it, vi } from "vitest";
 import { handleDreamingCommand } from "./dreaming-command.js";
 
@@ -12,46 +12,48 @@ function asRecord(value: unknown): Record<string, unknown> | null {
   return value as Record<string, unknown>;
 }
 
-function resolveStoredDreaming(config: OpenClawConfig): Record<string, unknown> {
+function resolveStoredDreaming(config: MarketingClawConfig): Record<string, unknown> {
   const entry = asRecord(config.plugins?.entries?.["memory-core"]);
   const pluginConfig = asRecord(entry?.config);
   return asRecord(pluginConfig?.dreaming) ?? {};
 }
 
-function createHarness(initialConfig: OpenClawConfig = {}) {
-  let runtimeConfig: OpenClawConfig = initialConfig;
+function createHarness(initialConfig: MarketingClawConfig = {}) {
+  let runtimeConfig: MarketingClawConfig = initialConfig;
 
   const runtime = {
     config: {
       current: vi.fn(() => runtimeConfig),
       loadConfig: vi.fn(() => runtimeConfig),
-      mutateConfigFile: vi.fn(async ({ mutate }: { mutate: (draft: OpenClawConfig) => void }) => {
-        const draft = structuredClone(runtimeConfig);
-        mutate(draft);
-        runtimeConfig = draft;
-        return {
-          path: "/tmp/openclaw.json",
-          previousHash: null,
-          persistedHash: null,
-          snapshot: {},
-          nextConfig: runtimeConfig,
-          afterWrite: { mode: "auto" },
-          followUp: { mode: "auto", requiresRestart: false },
-          result: undefined,
-        };
-      }),
-      replaceConfigFile: vi.fn(async ({ nextConfig }: { nextConfig: OpenClawConfig }) => {
+      mutateConfigFile: vi.fn(
+        async ({ mutate }: { mutate: (draft: MarketingClawConfig) => void }) => {
+          const draft = structuredClone(runtimeConfig);
+          mutate(draft);
+          runtimeConfig = draft;
+          return {
+            path: "/tmp/marketingclaw.json",
+            previousHash: null,
+            persistedHash: null,
+            snapshot: {},
+            nextConfig: runtimeConfig,
+            afterWrite: { mode: "auto" },
+            followUp: { mode: "auto", requiresRestart: false },
+            result: undefined,
+          };
+        },
+      ),
+      replaceConfigFile: vi.fn(async ({ nextConfig }: { nextConfig: MarketingClawConfig }) => {
         runtimeConfig = nextConfig;
       }),
-      writeConfigFile: vi.fn(async (nextConfig: OpenClawConfig) => {
+      writeConfigFile: vi.fn(async (nextConfig: MarketingClawConfig) => {
         runtimeConfig = nextConfig;
       }),
     },
-  } as unknown as OpenClawPluginApi["runtime"];
+  } as unknown as MarketingClawPluginApi["runtime"];
 
   const api = {
     runtime,
-  } as unknown as OpenClawPluginApi;
+  } as unknown as MarketingClawPluginApi;
 
   return {
     api,

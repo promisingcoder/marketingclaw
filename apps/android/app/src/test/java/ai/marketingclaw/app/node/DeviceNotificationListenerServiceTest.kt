@@ -1,9 +1,9 @@
-package ai.openclaw.app.node
+package ai.marketingclaw.app.node
 
-import ai.openclaw.app.NotificationBurstLimiter
-import ai.openclaw.app.NotificationForwardingPolicy
-import ai.openclaw.app.NotificationPackageFilterMode
-import ai.openclaw.app.isWithinQuietHours
+import ai.marketingclaw.app.NotificationBurstLimiter
+import ai.marketingclaw.app.NotificationForwardingPolicy
+import ai.marketingclaw.app.NotificationPackageFilterMode
+import ai.marketingclaw.app.isWithinQuietHours
 import android.content.Context
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -19,7 +19,7 @@ class DeviceNotificationListenerServiceTest {
   @Test
   fun recentPackages_migratesLegacyPreferenceKey() {
     val context = RuntimeEnvironment.getApplication()
-    val prefs = context.getSharedPreferences("openclaw.secure", Context.MODE_PRIVATE)
+    val prefs = context.getSharedPreferences("marketingclaw.secure", Context.MODE_PRIVATE)
     prefs
       .edit()
       .clear()
@@ -39,7 +39,7 @@ class DeviceNotificationListenerServiceTest {
   @Test
   fun recentPackages_cleansUpLegacyKeyWhenNewKeyAlreadyExists() {
     val context = RuntimeEnvironment.getApplication()
-    val prefs = context.getSharedPreferences("openclaw.secure", Context.MODE_PRIVATE)
+    val prefs = context.getSharedPreferences("marketingclaw.secure", Context.MODE_PRIVATE)
     prefs
       .edit()
       .clear()
@@ -56,7 +56,7 @@ class DeviceNotificationListenerServiceTest {
   @Test
   fun recentPackages_trimsDedupesAndPreservesRecencyOrder() {
     val context = RuntimeEnvironment.getApplication()
-    val prefs = context.getSharedPreferences("openclaw.secure", Context.MODE_PRIVATE)
+    val prefs = context.getSharedPreferences("marketingclaw.secure", Context.MODE_PRIVATE)
     prefs
       .edit()
       .clear()

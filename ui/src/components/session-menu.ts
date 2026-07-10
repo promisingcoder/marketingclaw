@@ -1,7 +1,7 @@
 import { html, nothing, type PropertyValues } from "lit";
 import { property, state } from "lit/decorators.js";
 import { t } from "../i18n/index.ts";
-import { OpenClawLightDomElement } from "../lit/openclaw-element.ts";
+import { MarketingClawLightDomElement } from "../lit/marketingclaw-element.ts";
 import { icons } from "./icons.ts";
 
 export type SessionMenuData = {
@@ -34,7 +34,7 @@ const EMPTY_SESSION: SessionMenuData = {
   category: null,
 };
 
-class SessionMenu extends OpenClawLightDomElement {
+class SessionMenu extends MarketingClawLightDomElement {
   @property({ attribute: false }) session: SessionMenuData = EMPTY_SESSION;
   @property({ attribute: false }) x = 0;
   @property({ attribute: false }) y = 0;
@@ -313,6 +313,6 @@ class SessionMenu extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-session-menu")) {
-  customElements.define("openclaw-session-menu", SessionMenu);
+if (!customElements.get("marketingclaw-session-menu")) {
+  customElements.define("marketingclaw-session-menu", SessionMenu);
 }

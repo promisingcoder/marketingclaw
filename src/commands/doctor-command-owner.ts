@@ -1,12 +1,12 @@
 /** Doctor warning for missing command owners on privileged channel commands. */
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
-import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
+import { normalizeOptionalString } from "@marketingclaw/normalization-core/string-coerce";
+import { normalizeStringEntries } from "@marketingclaw/normalization-core/string-normalization";
 import { note } from "../../packages/terminal-core/src/note.js";
 import { formatCliCommand } from "../cli/command-format.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import type { PairingChannel } from "../pairing/pairing-store.types.js";
 
-function resolveConfiguredCommandOwners(cfg: OpenClawConfig): string[] {
+function resolveConfiguredCommandOwners(cfg: MarketingClawConfig): string[] {
   const owners = cfg.commands?.ownerAllowFrom;
   if (!Array.isArray(owners)) {
     return [];
@@ -15,7 +15,7 @@ function resolveConfiguredCommandOwners(cfg: OpenClawConfig): string[] {
 }
 
 /** Returns true when at least one owner sender id is configured. */
-export function hasConfiguredCommandOwners(cfg: OpenClawConfig): boolean {
+export function hasConfiguredCommandOwners(cfg: MarketingClawConfig): boolean {
   return resolveConfiguredCommandOwners(cfg).length > 0;
 }
 
@@ -39,7 +39,7 @@ export function formatCommandOwnerFromChannelSender(params: {
 }
 
 /** Emits setup guidance when privileged command ownership is not configured. */
-export function noteCommandOwnerHealth(cfg: OpenClawConfig): void {
+export function noteCommandOwnerHealth(cfg: MarketingClawConfig): void {
   if (hasConfiguredCommandOwners(cfg)) {
     return;
   }
@@ -48,7 +48,7 @@ export function noteCommandOwnerHealth(cfg: OpenClawConfig): void {
       "No command owner is configured.",
       "A command owner is the human operator account allowed to run owner-only commands and approve dangerous actions, including /diagnostics, /export-trajectory, /config, and exec approvals.",
       "DM pairing only lets someone talk to the bot; it does not make that sender the owner for privileged commands.",
-      `Fix: set commands.ownerAllowFrom to your channel user id, for example ${formatCliCommand("openclaw config set commands.ownerAllowFrom '[\"telegram:123456789\"]'")}`,
+      `Fix: set commands.ownerAllowFrom to your channel user id, for example ${formatCliCommand("marketingclaw config set commands.ownerAllowFrom '[\"telegram:123456789\"]'")}`,
       "Restart the gateway after changing this if it is already running.",
     ].join("\n"),
     "Command owner",

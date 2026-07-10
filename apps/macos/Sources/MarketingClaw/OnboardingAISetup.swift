@@ -1,6 +1,6 @@
 import Foundation
 import Observation
-import OpenClawIPC
+import MarketingClawIPC
 import SwiftUI
 
 /// Structured "Connect your AI" onboarding step.
@@ -52,7 +52,7 @@ final class OnboardingAISetupModel {
         didSet {
             // Close-guard: quitting mid-test is confirmable, not silent.
             OnboardingController.shared.busyReason = self.phase == .testing
-                ? "OpenClaw is testing your AI connection."
+                ? "MarketingClaw is testing your AI connection."
                 : nil
         }
     }
@@ -194,8 +194,8 @@ final class OnboardingAISetupModel {
     /// Transport/protocol failures deserve plain language, not RPC codes.
     static func friendlyTransportError(_ raw: String) -> String {
         if raw.localizedCaseInsensitiveContains("unknown method") {
-            return "The Gateway is running an older OpenClaw version that doesn’t support " +
-                "app-guided setup. Update OpenClaw on the gateway, then try again."
+            return "The Gateway is running an older MarketingClaw version that doesn’t support " +
+                "app-guided setup. Update MarketingClaw on the gateway, then try again."
         }
         return raw
     }
@@ -382,8 +382,8 @@ private enum OnboardingAISetupError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .providerCatalogUnavailable:
-            "The Gateway is running an older OpenClaw version that doesn’t provide the " +
-                "supported provider list. Update OpenClaw on the gateway, then try again."
+            "The Gateway is running an older MarketingClaw version that doesn’t provide the " +
+                "supported provider list. Update MarketingClaw on the gateway, then try again."
         }
     }
 }
@@ -567,7 +567,7 @@ struct OnboardingAISetupView: View {
                 Spacer(minLength: 0)
                 self.trailingIndicator(status: status, selected: selected)
             }
-            .openClawSelectableRowChrome(selected: selected && status != .failed(message: ""))
+            .marketingClawSelectableRowChrome(selected: selected && status != .failed(message: ""))
         }
         .buttonStyle(.plain)
         .disabled(self.model.isBusy || self.model.connected)
@@ -711,9 +711,9 @@ struct OnboardingAISetupView: View {
     private var manualProviderHelp: String {
         let hint = self.model.selectedManualProvider?.hint?.trimmingCharacters(in: .whitespacesAndNewlines)
         guard let hint, !hint.isEmpty else {
-            return "Paste the key or token here, and OpenClaw checks it with a real test question."
+            return "Paste the key or token here, and MarketingClaw checks it with a real test question."
         }
-        return "\(hint). Paste it here, and OpenClaw checks it with a real test question."
+        return "\(hint). Paste it here, and MarketingClaw checks it with a real test question."
     }
 
     private var crestodianSheet: some View {
@@ -735,7 +735,7 @@ struct OnboardingAISetupView: View {
 }
 
 /// Friendly error presentation with a consistent docs escape hatch.
-/// Every onboarding failure points at a docs.openclaw.ai page so people are
+/// Every onboarding failure points at a docs.marketingclaw.ai page so people are
 /// never stuck staring at a raw error string.
 struct OnboardingErrorCard: View {
     let title: String
@@ -764,7 +764,7 @@ struct OnboardingErrorCard: View {
                             .controlSize(.small)
                     }
                     Button("Open help…") {
-                        if let url = URL(string: "https://docs.openclaw.ai/\(self.docsSlug)") {
+                        if let url = URL(string: "https://docs.marketingclaw.ai/\(self.docsSlug)") {
                             NSWorkspace.shared.open(url)
                         }
                     }

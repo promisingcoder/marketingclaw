@@ -221,7 +221,7 @@ struct ExecApprovalsResolvedDefaults {
 }
 
 enum ExecApprovalsStore {
-    private static let logger = Logger(subsystem: "ai.openclaw", category: "exec-approvals")
+    private static let logger = Logger(subsystem: "ai.marketingclaw", category: "exec-approvals")
     private static let defaultAgentId = "main"
     private static let defaultSecurity: ExecSecurity = .deny
     private static let defaultAsk: ExecAsk = .onMiss
@@ -243,21 +243,21 @@ enum ExecApprovalsStore {
     }
 
     static func fileURL() -> URL {
-        OpenClawPaths.stateDirURL.appendingPathComponent("exec-approvals.json")
+        MarketingClawPaths.stateDirURL.appendingPathComponent("exec-approvals.json")
     }
 
     static func socketPath() -> String {
-        OpenClawPaths.stateDirURL.appendingPathComponent("exec-approvals.sock").path
+        MarketingClawPaths.stateDirURL.appendingPathComponent("exec-approvals.sock").path
     }
 
     private static func legacyStateDirURLs() -> [URL] {
-        if let home = OpenClawEnv.path("OPENCLAW_HOME") {
+        if let home = MarketingClawEnv.path("MARKETINGCLAW_HOME") {
             var urls = [
                 URL(fileURLWithPath: home, isDirectory: true)
-                    .appendingPathComponent(".openclaw", isDirectory: true),
+                    .appendingPathComponent(".marketingclaw", isDirectory: true),
             ]
             let osHomeURL = FileManager().homeDirectoryForCurrentUser
-                .appendingPathComponent(".openclaw", isDirectory: true)
+                .appendingPathComponent(".marketingclaw", isDirectory: true)
             if !urls.contains(where: {
                 $0.standardizedFileURL.path == osHomeURL.standardizedFileURL.path
             }) {
@@ -267,12 +267,12 @@ enum ExecApprovalsStore {
         }
         return [
             FileManager().homeDirectoryForCurrentUser
-                .appendingPathComponent(".openclaw", isDirectory: true),
+                .appendingPathComponent(".marketingclaw", isDirectory: true),
         ]
     }
 
     private static func legacyFileURLIfPending() -> URL? {
-        guard OpenClawEnv.path("OPENCLAW_STATE_DIR") != nil else { return nil }
+        guard MarketingClawEnv.path("MARKETINGCLAW_STATE_DIR") != nil else { return nil }
         let targetURL = self.fileURL()
         for stateDirURL in self.legacyStateDirURLs() {
             let legacyURL = stateDirURL
@@ -778,7 +778,7 @@ enum ExecApprovalsStore {
     }
 
     private static func ensureSecureStateDirectory() {
-        let url = OpenClawPaths.stateDirURL
+        let url = MarketingClawPaths.stateDirURL
         do {
             try FileManager().createDirectory(at: url, withIntermediateDirectories: true)
             try FileManager().setAttributes(

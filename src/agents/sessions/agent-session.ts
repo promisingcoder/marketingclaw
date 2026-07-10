@@ -22,8 +22,8 @@ import {
   isContextOverflow,
   modelsAreEqual,
   defaultApiRegistry,
-} from "@openclaw/ai/internal/runtime";
-import { resetApiProviders } from "@openclaw/ai/providers";
+} from "@marketingclaw/ai/internal/runtime";
+import { resetApiProviders } from "@marketingclaw/ai/providers";
 import { CURRENT_SESSION_VERSION } from "../../config/sessions/version.js";
 import { streamSimple } from "../../llm/stream.js";
 import type {
@@ -3218,13 +3218,13 @@ export class AgentSession {
   }
 
   /**
-   * @deprecated Use the OpenClaw session export command instead.
+   * @deprecated Use the MarketingClaw session export command instead.
    * @param outputPath Optional output path (defaults to session directory)
    * @returns Path to exported file
    */
   async exportToHtml(_outputPath?: string): Promise<string> {
     throw new Error(
-      "AgentSession.exportToHtml is deprecated; use the OpenClaw session export command.",
+      "AgentSession.exportToHtml is deprecated; use the MarketingClaw session export command.",
     );
   }
 

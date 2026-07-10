@@ -7,7 +7,7 @@ import { DEFAULT_MODEL, DEFAULT_PROVIDER } from "../../agents/defaults.js";
 import {
   resetConfigRuntimeState,
   setRuntimeConfigSnapshot,
-  type OpenClawConfig,
+  type MarketingClawConfig,
 } from "../../config/config.js";
 import { onAgentEvent } from "../../infra/agent-events.js";
 import {
@@ -238,7 +238,7 @@ describe("plugin runtime command execution", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as MarketingClawConfig);
 
     const runtime = createPluginRuntime();
     const policy = runtime.agent.resolveThinkingPolicy({
@@ -350,7 +350,7 @@ describe("plugin runtime command execution", () => {
   });
 
   it("preserves requireWriteSuccess through runtime session entry updates", async () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-runtime-session-store-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-runtime-session-store-"));
     const storePath = path.join(tempDir, "sessions.json");
     const sessionKey = "agent:main:main";
     const runtime = createPluginRuntime();
@@ -402,7 +402,7 @@ describe("plugin runtime command execution", () => {
       api: "openai-responses",
       baseUrl: "https://workspace-cloud.example/v1",
     };
-    const cfg = { plugins: { allow: ["workspace-cloud"] } } as OpenClawConfig;
+    const cfg = { plugins: { allow: ["workspace-cloud"] } } as MarketingClawConfig;
     runtimeModelAuthMocks.getApiKeyForModel.mockResolvedValue({
       apiKey: "model-key",
       source: "workspace cloud credentials",

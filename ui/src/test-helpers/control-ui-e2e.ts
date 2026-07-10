@@ -144,7 +144,7 @@ export async function startControlUiE2eServer(): Promise<ControlUiE2eServer> {
     clearScreen: false,
     configFile: false,
     define: {
-      OPENCLAW_CONTROL_UI_BUILD_ID: JSON.stringify("e2e"),
+      MARKETINGCLAW_CONTROL_UI_BUILD_ID: JSON.stringify("e2e"),
     },
     logLevel: "error",
     optimizeDeps: {
@@ -215,7 +215,7 @@ function normalizeScenario(
   const sessionKey = scenario.sessionKey?.trim() || "main";
   return {
     assistantAgentId: scenario.assistantAgentId?.trim() || defaultAgentId,
-    assistantName: scenario.assistantName?.trim() || "OpenClaw",
+    assistantName: scenario.assistantName?.trim() || "MarketingClaw",
     controlUiTabs: scenario.controlUiTabs ?? [],
     defaultAgentId,
     deferredMethods: scenario.deferredMethods ?? [],
@@ -297,7 +297,7 @@ function installControlUiMockGateway(input: {
     socketUrls: () => string[];
   };
   type WindowWithGateway = Window & {
-    openclawControlUiE2eGateway?: ExposedGateway;
+    marketingclawControlUiE2eGateway?: ExposedGateway;
   };
 
   const scenario: BrowserScenario = input.scenario;
@@ -774,7 +774,7 @@ function installControlUiMockGateway(input: {
     },
   };
 
-  (window as WindowWithGateway).openclawControlUiE2eGateway = exposed;
+  (window as WindowWithGateway).marketingclawControlUiE2eGateway = exposed;
   window.WebSocket = MockWebSocket as unknown as typeof WebSocket;
 }
 
@@ -800,11 +800,11 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
       ({ eventName, eventPayload }) => {
         const gateway = (
           window as Window & {
-            openclawControlUiE2eGateway?: {
+            marketingclawControlUiE2eGateway?: {
               emit: (event: string, payload?: unknown) => void;
             };
           }
-        ).openclawControlUiE2eGateway;
+        ).marketingclawControlUiE2eGateway;
         if (!gateway) {
           throw new Error("Mock Gateway is not installed");
         }
@@ -818,11 +818,11 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
     await page.evaluate((payload) => {
       const gateway = (
         window as Window & {
-          openclawControlUiE2eGateway?: {
+          marketingclawControlUiE2eGateway?: {
             deliverLatest: (frame: unknown) => void;
           };
         }
-      ).openclawControlUiE2eGateway;
+      ).marketingclawControlUiE2eGateway;
       if (!gateway) {
         throw new Error("Mock Gateway is not installed");
       }
@@ -834,11 +834,11 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
     page.evaluate((targetMethod) => {
       const gateway = (
         window as Window & {
-          openclawControlUiE2eGateway?: {
+          marketingclawControlUiE2eGateway?: {
             findRequests: (method?: string) => MockGatewayRequest[];
           };
         }
-      ).openclawControlUiE2eGateway;
+      ).marketingclawControlUiE2eGateway;
       return gateway?.findRequests(targetMethod) ?? [];
     }, method);
 
@@ -848,11 +848,11 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
         ({ closeCode, closeReason }) => {
           const gateway = (
             window as Window & {
-              openclawControlUiE2eGateway?: {
+              marketingclawControlUiE2eGateway?: {
                 closeLatest: (code?: number, reason?: string) => void;
               };
             }
-          ).openclawControlUiE2eGateway;
+          ).marketingclawControlUiE2eGateway;
           if (!gateway) {
             throw new Error("Mock Gateway is not installed");
           }
@@ -866,11 +866,11 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
       await page.evaluate((targetMethod) => {
         const gateway = (
           window as Window & {
-            openclawControlUiE2eGateway?: {
+            marketingclawControlUiE2eGateway?: {
               deferNext: (method: string) => void;
             };
           }
-        ).openclawControlUiE2eGateway;
+        ).marketingclawControlUiE2eGateway;
         if (!gateway) {
           throw new Error("Mock Gateway is not installed");
         }
@@ -895,11 +895,11 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
       return await page.evaluate(() => {
         const gateway = (
           window as Window & {
-            openclawControlUiE2eGateway?: {
+            marketingclawControlUiE2eGateway?: {
               socketCount: () => number;
             };
           }
-        ).openclawControlUiE2eGateway;
+        ).marketingclawControlUiE2eGateway;
         return gateway?.socketCount() ?? 0;
       });
     },
@@ -907,11 +907,11 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
       return await page.evaluate(() => {
         const gateway = (
           window as Window & {
-            openclawControlUiE2eGateway?: {
+            marketingclawControlUiE2eGateway?: {
               socketUrls: () => string[];
             };
           }
-        ).openclawControlUiE2eGateway;
+        ).marketingclawControlUiE2eGateway;
         return gateway?.socketUrls() ?? [];
       });
     },
@@ -920,7 +920,7 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
         ({ targetMethod, responseError }) => {
           const gateway = (
             window as Window & {
-              openclawControlUiE2eGateway?: {
+              marketingclawControlUiE2eGateway?: {
                 rejectDeferred: (
                   method: string,
                   error?: {
@@ -932,7 +932,7 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
                 ) => void;
               };
             }
-          ).openclawControlUiE2eGateway;
+          ).marketingclawControlUiE2eGateway;
           if (!gateway) {
             throw new Error("Mock Gateway is not installed");
           }
@@ -946,11 +946,11 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
         ({ targetMethod, responsePayload }) => {
           const gateway = (
             window as Window & {
-              openclawControlUiE2eGateway?: {
+              marketingclawControlUiE2eGateway?: {
                 resolveDeferred: (method: string, payload?: unknown) => void;
               };
             }
-          ).openclawControlUiE2eGateway;
+          ).marketingclawControlUiE2eGateway;
           if (!gateway) {
             throw new Error("Mock Gateway is not installed");
           }
@@ -963,11 +963,11 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
       await page.evaluate((nextMessages) => {
         const gateway = (
           window as Window & {
-            openclawControlUiE2eGateway?: {
+            marketingclawControlUiE2eGateway?: {
               setHistoryMessages: (messages: unknown[]) => void;
             };
           }
-        ).openclawControlUiE2eGateway;
+        ).marketingclawControlUiE2eGateway;
         if (!gateway) {
           throw new Error("Mock Gateway is not installed");
         }
@@ -979,11 +979,11 @@ function createMockGatewayControls(page: Page, defaultSessionKey: string): MockG
         (targetMethod) => {
           const gateway = (
             window as Window & {
-              openclawControlUiE2eGateway?: {
+              marketingclawControlUiE2eGateway?: {
                 requests: MockGatewayRequest[];
               };
             }
-          ).openclawControlUiE2eGateway;
+          ).marketingclawControlUiE2eGateway;
           return Boolean(gateway?.requests.some((request) => request.method === targetMethod));
         },
         method,

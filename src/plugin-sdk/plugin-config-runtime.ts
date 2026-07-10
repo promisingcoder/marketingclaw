@@ -1,10 +1,13 @@
 // Plugin config runtime helpers load and normalize plugin-owned configuration at execution time.
-import type { OpenClawConfig } from "../config/types.js";
+import type { MarketingClawConfig } from "../config/types.js";
 
 export { normalizePluginsConfig, resolveEffectiveEnableState } from "../plugins/config-state.js";
 
 /** Requires an already-resolved runtime config at plugin runtime boundaries. */
-export function requireRuntimeConfig(config: OpenClawConfig, context: string): OpenClawConfig {
+export function requireRuntimeConfig(
+  config: MarketingClawConfig,
+  context: string,
+): MarketingClawConfig {
   if (config) {
     return config;
   }
@@ -15,7 +18,7 @@ export function requireRuntimeConfig(config: OpenClawConfig, context: string): O
 
 /** Reads a plugin's object-shaped `plugins.entries[id].config` block from resolved config. */
 export function resolvePluginConfigObject(
-  config: OpenClawConfig | undefined,
+  config: MarketingClawConfig | undefined,
   pluginId: string,
 ): Record<string, unknown> | undefined {
   const plugins =
@@ -38,7 +41,7 @@ export function resolvePluginConfigObject(
 
 /** Resolves live plugin config through a loader, falling back to startup config when unavailable. */
 export function resolveLivePluginConfigObject(
-  runtimeConfigLoader: (() => OpenClawConfig | undefined) | undefined,
+  runtimeConfigLoader: (() => MarketingClawConfig | undefined) | undefined,
   pluginId: string,
   startupPluginConfig?: Record<string, unknown>,
 ): Record<string, unknown> | undefined {

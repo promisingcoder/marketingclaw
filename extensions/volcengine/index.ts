@@ -1,7 +1,7 @@
-// Volcengine plugin entrypoint registers its OpenClaw integration.
-import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
-import { createProviderApiKeyAuthMethod } from "openclaw/plugin-sdk/provider-auth-api-key";
-import { ensureModelAllowlistEntry } from "openclaw/plugin-sdk/provider-onboard";
+// Volcengine plugin entrypoint registers its MarketingClaw integration.
+import { definePluginEntry } from "marketingclaw/plugin-sdk/plugin-entry";
+import { createProviderApiKeyAuthMethod } from "marketingclaw/plugin-sdk/provider-auth-api-key";
+import { ensureModelAllowlistEntry } from "marketingclaw/plugin-sdk/provider-onboard";
 import { applyVolcengineToolSchemaCompat } from "./api.js";
 import { VOLCENGINE_PROVIDER_CATALOG_ENTRIES } from "./provider-catalog.js";
 import { buildVolcengineSpeechProvider } from "./speech-provider.js";

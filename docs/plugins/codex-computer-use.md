@@ -1,42 +1,42 @@
 ---
-summary: "Set up Codex Computer Use for Codex-mode OpenClaw agents"
+summary: "Set up Codex Computer Use for Codex-mode MarketingClaw agents"
 title: "Codex Computer Use"
 read_when:
-  - You want Codex-mode OpenClaw agents to use Codex Computer Use
+  - You want Codex-mode MarketingClaw agents to use Codex Computer Use
   - You are deciding between Codex Computer Use, PeekabooBridge, and direct cua-driver MCP
   - You are deciding between Codex Computer Use and a direct cua-driver MCP setup
   - You are configuring computerUse for the bundled Codex plugin
   - You are troubleshooting /codex computer-use status or install
 ---
 
-Computer Use is a Codex-native MCP plugin for local desktop control. OpenClaw
+Computer Use is a Codex-native MCP plugin for local desktop control. MarketingClaw
 does not vendor the desktop app, execute desktop actions itself, or bypass
 Codex permissions. The bundled `codex` plugin only prepares Codex app-server:
 it enables Codex plugin support, finds or installs the configured Computer Use
 plugin, checks that the `computer-use` MCP server is available, and then lets
 Codex own the native MCP tool calls during Codex-mode turns.
 
-Use this page when OpenClaw is already using the native Codex harness. For the
+Use this page when MarketingClaw is already using the native Codex harness. For the
 runtime setup itself, see [Codex harness](/plugins/codex-harness).
 
-## OpenClaw.app and Peekaboo
+## MarketingClaw.app and Peekaboo
 
-OpenClaw.app's Peekaboo integration is separate from Codex Computer Use. The
+MarketingClaw.app's Peekaboo integration is separate from Codex Computer Use. The
 macOS app can host a PeekabooBridge socket so the `peekaboo` CLI can reuse the
 app's local Accessibility and Screen Recording grants for Peekaboo's own
 automation tools. That bridge does not install or proxy Codex Computer Use, and
 Codex Computer Use does not call through the PeekabooBridge socket.
 
-Use [Peekaboo bridge](/platforms/mac/peekaboo) when you want OpenClaw.app to be
+Use [Peekaboo bridge](/platforms/mac/peekaboo) when you want MarketingClaw.app to be
 a permission-aware host for Peekaboo CLI automation. Use this page when a
-Codex-mode OpenClaw agent should have Codex's native `computer-use` MCP plugin
+Codex-mode MarketingClaw agent should have Codex's native `computer-use` MCP plugin
 available before the turn starts.
 
 ## iOS app
 
 The iOS app is separate from Codex Computer Use. It does not install or proxy
 the Codex `computer-use` MCP server and it is not a desktop-control backend.
-Instead, the iOS app connects as an OpenClaw node and exposes mobile
+Instead, the iOS app connects as an MarketingClaw node and exposes mobile
 capabilities through node commands such as `canvas.*`, `camera.*`, `screen.*`,
 `location.*`, and `talk.*`.
 
@@ -47,30 +47,30 @@ local macOS desktop through Codex's native Computer Use plugin.
 ## Direct cua-driver MCP
 
 Codex Computer Use is not the only way to expose desktop control. If you want
-OpenClaw-managed runtimes to call TryCua's driver directly, use the upstream
-`cua-driver mcp` server through OpenClaw's MCP registry instead of the
+MarketingClaw-managed runtimes to call TryCua's driver directly, use the upstream
+`cua-driver mcp` server through MarketingClaw's MCP registry instead of the
 Codex-specific marketplace flow.
 
-After installing `cua-driver`, either ask it for the OpenClaw command:
+After installing `cua-driver`, either ask it for the MarketingClaw command:
 
 ```bash
-cua-driver mcp-config --client openclaw
+cua-driver mcp-config --client marketingclaw
 ```
 
 or register the stdio server directly:
 
 ```bash
-openclaw mcp set cua-driver '{"command":"cua-driver","args":["mcp"]}'
+marketingclaw mcp set cua-driver '{"command":"cua-driver","args":["mcp"]}'
 ```
 
 That path keeps the upstream MCP tool surface intact, including the driver
 schemas and structured MCP responses. Use it when you want the CUA driver
-available as a normal OpenClaw MCP server. Use the Codex Computer Use setup on
+available as a normal MarketingClaw MCP server. Use the Codex Computer Use setup on
 this page when Codex app-server should own plugin installation, MCP reloads,
 and native tool calls inside Codex-mode turns.
 
 CUA's driver is macOS-specific and still requires the local macOS permissions
-its app prompts for, such as Accessibility and Screen Recording. OpenClaw does
+its app prompts for, such as Accessibility and Screen Recording. MarketingClaw does
 not install `cua-driver`, grant those permissions, or bypass the upstream
 driver's safety model.
 
@@ -78,7 +78,7 @@ driver's safety model.
 
 Set `plugins.entries.codex.config.computerUse` when Codex-mode turns must have
 Computer Use available before a thread starts. `autoInstall: true` opts
-Computer Use in and lets OpenClaw install or re-enable it before the turn:
+Computer Use in and lets MarketingClaw install or re-enable it before the turn:
 
 ```json5
 {
@@ -102,11 +102,11 @@ Computer Use in and lets OpenClaw install or re-enable it before the turn:
 }
 ```
 
-With this config, OpenClaw checks Codex app-server before each Codex-mode
+With this config, MarketingClaw checks Codex app-server before each Codex-mode
 turn. If Computer Use is missing but Codex app-server has already discovered
-an installable marketplace, OpenClaw asks Codex app-server to install or
+an installable marketplace, MarketingClaw asks Codex app-server to install or
 re-enable the plugin and reload MCP servers. On macOS, when no matching
-marketplace is registered and the standard Codex app bundle exists, OpenClaw
+marketplace is registered and the standard Codex app bundle exists, MarketingClaw
 also tries to register the bundled Codex marketplace from
 `/Applications/Codex.app/Contents/Resources/plugins/openai-bundled` before it
 fails. If setup still cannot make the MCP server available, the turn fails
@@ -115,22 +115,22 @@ before the thread starts.
 After changing Computer Use config, use `/new` or `/reset` in the affected
 chat before testing if an existing Codex thread has already started.
 
-On macOS managed stdio startup, OpenClaw prefers the signed desktop Codex app
+On macOS managed stdio startup, MarketingClaw prefers the signed desktop Codex app
 bundle at `/Applications/Codex.app/Contents/Resources/codex` when it exists.
 That keeps Computer Use under the app bundle that owns the local
-desktop-control permissions. If the desktop app is not installed, OpenClaw
+desktop-control permissions. If the desktop app is not installed, MarketingClaw
 falls back to the managed Codex binary installed beside the plugin. If an
 installed desktop app initializes with an unsupported app-server version,
-OpenClaw closes that child and retries the next managed binary candidate
+MarketingClaw closes that child and retries the next managed binary candidate
 instead of letting a stale desktop app shadow the plugin-local fallback.
-Explicit `appServer.command` config or `OPENCLAW_CODEX_APP_SERVER_BIN` still
+Explicit `appServer.command` config or `MARKETINGCLAW_CODEX_APP_SERVER_BIN` still
 overrides this managed selection.
 
 ## Commands
 
 Use the `/codex computer-use` commands from any chat surface where the
-`codex` plugin command surface is available. These are OpenClaw chat/runtime
-commands, not `openclaw codex ...` CLI subcommands:
+`codex` plugin command surface is available. These are MarketingClaw chat/runtime
+commands, not `marketingclaw codex ...` CLI subcommands:
 
 ```text
 /codex computer-use status
@@ -155,7 +155,7 @@ including with overrides.
 
 ## Marketplace choices
 
-OpenClaw uses the same app-server API that Codex itself exposes. The
+MarketingClaw uses the same app-server API that Codex itself exposes. The
 marketplace fields choose where Codex should find `computer-use`.
 
 | Field                | Use when                                                        | Install support                                          |
@@ -166,10 +166,10 @@ marketplace fields choose where Codex should find `computer-use`.
 | `marketplaceName`    | You want to select one already registered marketplace by name.  | Yes only when the selected marketplace has a local path. |
 
 Fresh Codex homes may need a short moment to seed their official
-marketplaces. During install, OpenClaw polls `plugin/list` for up to
+marketplaces. During install, MarketingClaw polls `plugin/list` for up to
 `marketplaceDiscoveryTimeoutMs` milliseconds (default 60 seconds).
 
-If multiple known marketplaces contain Computer Use, OpenClaw prefers
+If multiple known marketplaces contain Computer Use, MarketingClaw prefers
 `openai-bundled`, then `openai-curated`, then `local`. Unknown ambiguous
 matches fail closed and ask you to set `marketplaceName` or
 `marketplacePath`.
@@ -183,7 +183,7 @@ Recent Codex desktop builds bundle Computer Use here:
 ```
 
 When `computerUse.autoInstall` is true and no marketplace containing
-`computer-use` is registered, OpenClaw tries to add the standard bundled
+`computer-use` is registered, MarketingClaw tries to add the standard bundled
 marketplace root automatically:
 
 ```text
@@ -240,20 +240,20 @@ is already a local path on the host.
 Each field also accepts an environment variable override, checked when the
 matching config key is unset:
 
-| Field                           | Env var                                                        |
-| ------------------------------- | -------------------------------------------------------------- |
-| `enabled`                       | `OPENCLAW_CODEX_COMPUTER_USE`                                  |
-| `autoInstall`                   | `OPENCLAW_CODEX_COMPUTER_USE_AUTO_INSTALL`                     |
-| `marketplaceDiscoveryTimeoutMs` | `OPENCLAW_CODEX_COMPUTER_USE_MARKETPLACE_DISCOVERY_TIMEOUT_MS` |
-| `marketplaceSource`             | `OPENCLAW_CODEX_COMPUTER_USE_MARKETPLACE_SOURCE`               |
-| `marketplacePath`               | `OPENCLAW_CODEX_COMPUTER_USE_MARKETPLACE_PATH`                 |
-| `marketplaceName`               | `OPENCLAW_CODEX_COMPUTER_USE_MARKETPLACE_NAME`                 |
-| `pluginName`                    | `OPENCLAW_CODEX_COMPUTER_USE_PLUGIN_NAME`                      |
-| `mcpServerName`                 | `OPENCLAW_CODEX_COMPUTER_USE_MCP_SERVER_NAME`                  |
+| Field                           | Env var                                                             |
+| ------------------------------- | ------------------------------------------------------------------- |
+| `enabled`                       | `MARKETINGCLAW_CODEX_COMPUTER_USE`                                  |
+| `autoInstall`                   | `MARKETINGCLAW_CODEX_COMPUTER_USE_AUTO_INSTALL`                     |
+| `marketplaceDiscoveryTimeoutMs` | `MARKETINGCLAW_CODEX_COMPUTER_USE_MARKETPLACE_DISCOVERY_TIMEOUT_MS` |
+| `marketplaceSource`             | `MARKETINGCLAW_CODEX_COMPUTER_USE_MARKETPLACE_SOURCE`               |
+| `marketplacePath`               | `MARKETINGCLAW_CODEX_COMPUTER_USE_MARKETPLACE_PATH`                 |
+| `marketplaceName`               | `MARKETINGCLAW_CODEX_COMPUTER_USE_MARKETPLACE_NAME`                 |
+| `pluginName`                    | `MARKETINGCLAW_CODEX_COMPUTER_USE_PLUGIN_NAME`                      |
+| `mcpServerName`                 | `MARKETINGCLAW_CODEX_COMPUTER_USE_MCP_SERVER_NAME`                  |
 
-## What OpenClaw checks
+## What MarketingClaw checks
 
-OpenClaw reports a stable setup reason internally and formats the
+MarketingClaw reports a stable setup reason internally and formats the
 user-facing status for chat:
 
 | Reason                       | Meaning                                                | Next step                                     |
@@ -274,7 +274,7 @@ tools when available, and the specific message for the failing setup step.
 ## macOS permissions
 
 Computer Use is macOS-specific. The Codex-owned MCP server may need local OS
-permissions before it can inspect or control apps. If OpenClaw says Computer
+permissions before it can inspect or control apps. If MarketingClaw says Computer
 Use is installed but the MCP server is unavailable, verify the Codex-side
 Computer Use setup first:
 
@@ -285,7 +285,7 @@ Computer Use setup first:
 - macOS has granted the required permissions for the desktop-control app.
 - The current host session can access the desktop being controlled.
 
-OpenClaw intentionally fails closed when `computerUse.enabled` is true. A
+MarketingClaw intentionally fails closed when `computerUse.enabled` is true. A
 Codex-mode turn should not silently proceed without the native desktop tools
 that the config required.
 
@@ -308,7 +308,7 @@ Codex app-server MCP status, or macOS permissions.
 **Status or a probe times out on `computer-use.list_apps`.** The plugin and
 MCP server are present, but the local Computer Use bridge did not answer.
 Quit or restart Codex Computer Use, relaunch Codex Desktop if needed, then
-retry in a fresh OpenClaw session. If the host previously ran Computer Use
+retry in a fresh MarketingClaw session. If the host previously ran Computer Use
 through an older managed Codex app-server, refresh the installed plugin from
 the desktop bundled marketplace:
 
@@ -317,11 +317,11 @@ the desktop bundled marketplace:
 ```
 
 **A Computer Use tool says `Native hook relay unavailable`.** The
-Codex-native tool hook could not reach an active OpenClaw relay through the
-local bridge or Gateway fallback. Start a fresh OpenClaw session with `/new`
+Codex-native tool hook could not reach an active MarketingClaw relay through the
+local bridge or Gateway fallback. Start a fresh MarketingClaw session with `/new`
 or `/reset`. If it works once and then fails again on a later tool call,
 `/new` is only clearing the current attempt; restart the Codex app-server or
-OpenClaw Gateway so old threads and hook registrations are dropped, then
+MarketingClaw Gateway so old threads and hook registrations are dropped, then
 retry in a fresh session.
 
 **Turn-start auto-install refuses a source.** This is intentional. Add the

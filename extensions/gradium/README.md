@@ -1,12 +1,12 @@
-# OpenClaw Gradium Plugin
+# MarketingClaw Gradium Plugin
 
-Official OpenClaw plugin for Gradium.
+Official MarketingClaw plugin for Gradium.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugins install @openclaw/gradium-speech
-openclaw gateway restart
+marketingclaw plugins install @marketingclaw/gradium-speech
+marketingclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/providers/gradium> for setup and configuration.
+See <https://docs.marketingclaw.ai/providers/gradium> for setup and configuration.

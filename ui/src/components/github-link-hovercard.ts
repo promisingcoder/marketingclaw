@@ -387,7 +387,7 @@ export class GitHubLinkHovercardProvider extends HTMLElement {
     const version = ++this.requestVersion;
     const card = document.createElement("div");
     nextHovercardId += 1;
-    card.id = `openclaw-github-hovercard-${nextHovercardId}`;
+    card.id = `marketingclaw-github-hovercard-${nextHovercardId}`;
     card.className = "github-link-hovercard";
     card.dataset.open = "true";
     card.setAttribute("role", "tooltip");
@@ -530,6 +530,9 @@ export class GitHubLinkHovercardProvider extends HTMLElement {
   }
 }
 
-if (!customElements.get("openclaw-github-link-hovercard-provider")) {
-  customElements.define("openclaw-github-link-hovercard-provider", GitHubLinkHovercardProvider);
+if (!customElements.get("marketingclaw-github-link-hovercard-provider")) {
+  customElements.define(
+    "marketingclaw-github-link-hovercard-provider",
+    GitHubLinkHovercardProvider,
+  );
 }

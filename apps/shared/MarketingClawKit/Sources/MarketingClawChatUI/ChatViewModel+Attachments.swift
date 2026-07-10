@@ -1,5 +1,5 @@
 import Foundation
-import OpenClawKit
+import MarketingClawKit
 import UniformTypeIdentifiers
 
 #if canImport(AppKit)
@@ -8,7 +8,7 @@ import AppKit
 import UIKit
 #endif
 
-extension OpenClawChatViewModel {
+extension MarketingClawChatViewModel {
     /// Stages a recorded m4a voice note and removes its temporary file.
     public func addVoiceNoteAttachment(fileURL: URL, durationSeconds: Double) async {
         self.beginAttachmentStaging()
@@ -33,10 +33,10 @@ extension OpenClawChatViewModel {
         }
 
         let normalizedDuration = durationSeconds.isFinite
-            ? min(max(0, durationSeconds), OpenClawVoiceNoteRecorder.maximumDurationSeconds)
+            ? min(max(0, durationSeconds), MarketingClawVoiceNoteRecorder.maximumDurationSeconds)
             : 0
         self.attachments.append(
-            OpenClawPendingAttachment(
+            MarketingClawPendingAttachment(
                 url: nil,
                 data: data,
                 fileName: fileURL.lastPathComponent,
@@ -100,7 +100,7 @@ extension OpenClawChatViewModel {
 
         let preview = Self.previewImage(data: processed)
         self.attachments.append(
-            OpenClawPendingAttachment(
+            MarketingClawPendingAttachment(
                 url: url,
                 data: processed,
                 fileName: outputFileName,
@@ -108,7 +108,7 @@ extension OpenClawChatViewModel {
                 preview: preview))
     }
 
-    static func previewImage(data: Data) -> OpenClawPlatformImage? {
+    static func previewImage(data: Data) -> MarketingClawPlatformImage? {
         #if canImport(AppKit)
         NSImage(data: data)
         #elseif canImport(UIKit)

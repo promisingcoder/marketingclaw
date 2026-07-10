@@ -3,7 +3,7 @@
  * for native Codex turns.
  */
 import crypto from "node:crypto";
-import { embeddedAgentLog } from "openclaw/plugin-sdk/agent-harness-runtime";
+import { embeddedAgentLog } from "marketingclaw/plugin-sdk/agent-harness-runtime";
 import {
   defaultCodexAppInventoryCache,
   serializeCodexAppInventoryError,
@@ -52,9 +52,7 @@ export type AccountAppPolicyContextEntry = {
 };
 
 /** Policy context for any app exposed to a native Codex thread. */
-export type CodexAppPolicyContextEntry =
-  | PluginAppPolicyContextEntry
-  | AccountAppPolicyContextEntry;
+export type CodexAppPolicyContextEntry = PluginAppPolicyContextEntry | AccountAppPolicyContextEntry;
 
 /** Stable app-to-plugin ownership context persisted with Codex thread bindings. */
 export type PluginAppPolicyContext = {
@@ -136,23 +134,24 @@ export async function buildCodexPluginThreadConfig(
     });
   }
 
-  let inventory = policy.pluginPolicies.length > 0
-    ? await readCodexPluginInventory({
-        pluginConfig: params.pluginConfig,
-        policy,
-        request: params.request,
-        appCache,
-        appCacheKey: params.appCacheKey,
-        nowMs: params.nowMs,
-        suppressAppInventoryRefresh: true,
-      })
-    : emptyCodexPluginInventory(policy);
+  let inventory =
+    policy.pluginPolicies.length > 0
+      ? await readCodexPluginInventory({
+          pluginConfig: params.pluginConfig,
+          policy,
+          request: params.request,
+          appCache,
+          appCacheKey: params.appCacheKey,
+          nowMs: params.nowMs,
+          suppressAppInventoryRefresh: true,
+        })
+      : emptyCodexPluginInventory(policy);
   const appInventoryRefreshDeferredForActivation =
     inventory.records.some((record) => record.activationRequired) &&
     shouldRefreshMissingAppInventory(params, policy, inventory);
   if (shouldWaitForInitialAppInventory(params, policy, inventory)) {
     await refreshAppInventoryNow(params, appCache, {
-      // OpenClaw is missing its process-local snapshot, but Codex may already
+      // MarketingClaw is missing its process-local snapshot, but Codex may already
       // have a current inventory. Avoid rebuilding the entire remote catalog
       // during thread startup; post-install and readiness repair still force.
       forceRefetch: false,
@@ -243,9 +242,7 @@ export async function buildCodexPluginThreadConfig(
   }
 
   const accountAppsResult: Awaited<ReturnType<typeof readAccessibleAccountApps>> =
-    policy.allowAllPlugins
-    ? await readAccessibleAccountApps(params, appCache)
-    : { apps: [] };
+    policy.allowAllPlugins ? await readAccessibleAccountApps(params, appCache) : { apps: [] };
 
   const diagnostics: CodexPluginThreadConfigDiagnostic[] = [
     ...inventory.diagnostics,
@@ -649,9 +646,9 @@ async function readAccessibleAccountApps(
     };
   }
   return {
-    apps: snapshot.apps.filter((app) => app.isAccessible).toSorted((left, right) =>
-      left.id.localeCompare(right.id),
-    ),
+    apps: snapshot.apps
+      .filter((app) => app.isAccessible)
+      .toSorted((left, right) => left.id.localeCompare(right.id)),
   };
 }
 
@@ -677,7 +674,7 @@ function resolveThreadConfigAppsForRecord(params: {
 
 function isPluginAppReadyForThreadStart(app: CodexPluginOwnedApp): boolean {
   // `app/list` is the source of truth for inventory and access posture, but
-  // OpenClaw owns the per-thread enablement decision. A listed app that is
+  // MarketingClaw owns the per-thread enablement decision. A listed app that is
   // accessible can be re-enabled for this thread via `config.apps[app.id]`.
   return app.accessible;
 }

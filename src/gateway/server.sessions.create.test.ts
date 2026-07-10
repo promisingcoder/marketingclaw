@@ -11,7 +11,7 @@ import {
   listRegistryWorktrees,
 } from "../agents/worktrees/registry.js";
 import { managedWorktrees } from "../agents/worktrees/service.js";
-import { closeOpenClawStateDatabaseForTest } from "../state/openclaw-state-db.js";
+import { closeMarketingClawStateDatabaseForTest } from "../state/marketingclaw-state-db.js";
 import {
   agentCommand,
   agentDiscoveryMock,
@@ -37,13 +37,13 @@ async function initializeGitWorkspace(root: string): Promise<string> {
   const workspace = path.join(root, "workspace");
   await fs.mkdir(workspace, { recursive: true });
   await execFileAsync("git", ["-C", workspace, "init", "-b", "main"]);
-  await execFileAsync("git", ["-C", workspace, "config", "user.name", "OpenClaw Test"]);
+  await execFileAsync("git", ["-C", workspace, "config", "user.name", "MarketingClaw Test"]);
   await execFileAsync("git", [
     "-C",
     workspace,
     "config",
     "user.email",
-    "openclaw-test@example.invalid",
+    "marketingclaw-test@example.invalid",
   ]);
   await fs.writeFile(path.join(workspace, "README.md"), "base\n");
   await execFileAsync("git", ["-C", workspace, "add", "README.md"]);
@@ -60,12 +60,12 @@ function requireNonEmptyString(value: string | undefined, label: string): string
 
 test("sessions.create provisions and reuses a session worktree for later runs", async () => {
   const root = await fs.mkdtemp(
-    path.join(await fs.realpath(os.tmpdir()), "openclaw-session-worktree-"),
+    path.join(await fs.realpath(os.tmpdir()), "marketingclaw-session-worktree-"),
   );
   const workspace = await initializeGitWorkspace(root);
-  const previousStateDir = process.env.OPENCLAW_STATE_DIR;
-  process.env.OPENCLAW_STATE_DIR = path.join(root, "state");
-  closeOpenClawStateDatabaseForTest();
+  const previousStateDir = process.env.MARKETINGCLAW_STATE_DIR;
+  process.env.MARKETINGCLAW_STATE_DIR = path.join(root, "state");
+  closeMarketingClawStateDatabaseForTest();
   testState.agentConfig = { workspace };
   await createSessionStoreDir();
   let worktreeId: string | undefined;
@@ -83,7 +83,7 @@ test("sessions.create provisions and reuses a session worktree for later runs", 
     expect(created.ok).toBe(true);
     const key = requireNonEmptyString(created.payload?.key, "created session key");
     const worktree = created.payload?.worktree;
-    expect(worktree?.branch).toMatch(/^openclaw\/wt-[a-f0-9]{8}$/);
+    expect(worktree?.branch).toMatch(/^marketingclaw\/wt-[a-f0-9]{8}$/);
     expect(created.payload?.entry.spawnedCwd).toBe(worktree?.path);
     worktreeId = worktree?.id;
     expect(findLiveRegistryWorktreeByOwner(process.env, "session", key)).toMatchObject({
@@ -131,11 +131,11 @@ test("sessions.create provisions and reuses a session worktree for later runs", 
     if (worktreeId) {
       await managedWorktrees.remove({ id: worktreeId, reason: "test-cleanup", force: true });
     }
-    closeOpenClawStateDatabaseForTest();
+    closeMarketingClawStateDatabaseForTest();
     if (previousStateDir === undefined) {
-      delete process.env.OPENCLAW_STATE_DIR;
+      delete process.env.MARKETINGCLAW_STATE_DIR;
     } else {
-      process.env.OPENCLAW_STATE_DIR = previousStateDir;
+      process.env.MARKETINGCLAW_STATE_DIR = previousStateDir;
     }
     testState.agentConfig = undefined;
     await fs.rm(root, { recursive: true, force: true });
@@ -144,16 +144,16 @@ test("sessions.create provisions and reuses a session worktree for later runs", 
 
 test("sessions.create provisions a worktree from an admin-selected cwd", async () => {
   const configuredRoot = await fs.mkdtemp(
-    path.join(await fs.realpath(os.tmpdir()), "openclaw-configured-workspace-"),
+    path.join(await fs.realpath(os.tmpdir()), "marketingclaw-configured-workspace-"),
   );
   const selectedRoot = await fs.mkdtemp(
-    path.join(await fs.realpath(os.tmpdir()), "openclaw-selected-workspace-"),
+    path.join(await fs.realpath(os.tmpdir()), "marketingclaw-selected-workspace-"),
   );
   const configuredWorkspace = await initializeGitWorkspace(configuredRoot);
   const selectedWorkspace = await initializeGitWorkspace(selectedRoot);
-  const previousStateDir = process.env.OPENCLAW_STATE_DIR;
-  process.env.OPENCLAW_STATE_DIR = path.join(configuredRoot, "state");
-  closeOpenClawStateDatabaseForTest();
+  const previousStateDir = process.env.MARKETINGCLAW_STATE_DIR;
+  process.env.MARKETINGCLAW_STATE_DIR = path.join(configuredRoot, "state");
+  closeMarketingClawStateDatabaseForTest();
   testState.agentConfig = { workspace: configuredWorkspace };
   await createSessionStoreDir();
   let worktreeId: string | undefined;
@@ -197,11 +197,11 @@ test("sessions.create provisions a worktree from an admin-selected cwd", async (
     if (worktreeId) {
       await managedWorktrees.remove({ id: worktreeId, reason: "test-cleanup", force: true });
     }
-    closeOpenClawStateDatabaseForTest();
+    closeMarketingClawStateDatabaseForTest();
     if (previousStateDir === undefined) {
-      delete process.env.OPENCLAW_STATE_DIR;
+      delete process.env.MARKETINGCLAW_STATE_DIR;
     } else {
-      process.env.OPENCLAW_STATE_DIR = previousStateDir;
+      process.env.MARKETINGCLAW_STATE_DIR = previousStateDir;
     }
     testState.agentConfig = undefined;
     await fs.rm(configuredRoot, { recursive: true, force: true });
@@ -221,16 +221,16 @@ test("sessions.create rejects cwd without a managed worktree", async () => {
 
 test("sessions.create skips the worktree setup script for non-admin callers", async () => {
   const root = await fs.mkdtemp(
-    path.join(await fs.realpath(os.tmpdir()), "openclaw-worktree-setup-scope-"),
+    path.join(await fs.realpath(os.tmpdir()), "marketingclaw-worktree-setup-scope-"),
   );
   const workspace = await initializeGitWorkspace(root);
-  await fs.mkdir(path.join(workspace, ".openclaw"), { recursive: true });
-  const setupScript = path.join(workspace, ".openclaw", "worktree-setup.sh");
+  await fs.mkdir(path.join(workspace, ".marketingclaw"), { recursive: true });
+  const setupScript = path.join(workspace, ".marketingclaw", "worktree-setup.sh");
   await fs.writeFile(setupScript, "#!/bin/sh\ntouch setup-marker.txt\n");
   await fs.chmod(setupScript, 0o755);
-  const previousStateDir = process.env.OPENCLAW_STATE_DIR;
-  process.env.OPENCLAW_STATE_DIR = path.join(root, "state");
-  closeOpenClawStateDatabaseForTest();
+  const previousStateDir = process.env.MARKETINGCLAW_STATE_DIR;
+  process.env.MARKETINGCLAW_STATE_DIR = path.join(root, "state");
+  closeMarketingClawStateDatabaseForTest();
   testState.agentConfig = { workspace };
   await createSessionStoreDir();
   let worktreeId: string | undefined;
@@ -252,11 +252,11 @@ test("sessions.create skips the worktree setup script for non-admin callers", as
     if (worktreeId) {
       await managedWorktrees.remove({ id: worktreeId, reason: "test-cleanup", force: true });
     }
-    closeOpenClawStateDatabaseForTest();
+    closeMarketingClawStateDatabaseForTest();
     if (previousStateDir === undefined) {
-      delete process.env.OPENCLAW_STATE_DIR;
+      delete process.env.MARKETINGCLAW_STATE_DIR;
     } else {
-      process.env.OPENCLAW_STATE_DIR = previousStateDir;
+      process.env.MARKETINGCLAW_STATE_DIR = previousStateDir;
     }
     testState.agentConfig = undefined;
     await fs.rm(root, { recursive: true, force: true });
@@ -265,16 +265,16 @@ test("sessions.create skips the worktree setup script for non-admin callers", as
 
 test("sessions.create preserves a linked-worktree subdirectory", async () => {
   const root = await fs.mkdtemp(
-    path.join(await fs.realpath(os.tmpdir()), "openclaw-subdir-session-worktree-"),
+    path.join(await fs.realpath(os.tmpdir()), "marketingclaw-subdir-session-worktree-"),
   );
   const repoRoot = await initializeGitWorkspace(root);
   const linkedRoot = path.join(root, "linked");
   await execFileAsync("git", ["-C", repoRoot, "worktree", "add", "-b", "linked", linkedRoot]);
   const workspace = path.join(linkedRoot, "packages", "app");
   await fs.mkdir(workspace, { recursive: true });
-  const previousStateDir = process.env.OPENCLAW_STATE_DIR;
-  process.env.OPENCLAW_STATE_DIR = path.join(root, "state");
-  closeOpenClawStateDatabaseForTest();
+  const previousStateDir = process.env.MARKETINGCLAW_STATE_DIR;
+  process.env.MARKETINGCLAW_STATE_DIR = path.join(root, "state");
+  closeMarketingClawStateDatabaseForTest();
   testState.agentConfig = { workspace };
   await createSessionStoreDir();
   let worktreeId: string | undefined;
@@ -293,7 +293,7 @@ test("sessions.create preserves a linked-worktree subdirectory", async () => {
     worktreeId = worktree?.id;
     // The managed worktree anchors at the repo root even when the workspace is nested;
     // the session cwd points at the equivalent subdirectory inside the worktree.
-    expect(worktree?.branch).toMatch(/^openclaw\/wt-[a-f0-9]{8}$/);
+    expect(worktree?.branch).toMatch(/^marketingclaw\/wt-[a-f0-9]{8}$/);
     expect(created.payload?.entry.spawnedCwd).toBe(
       path.join(requireNonEmptyString(worktree?.path, "worktree path"), "packages", "app"),
     );
@@ -301,11 +301,11 @@ test("sessions.create preserves a linked-worktree subdirectory", async () => {
     if (worktreeId) {
       await managedWorktrees.remove({ id: worktreeId, reason: "test-cleanup", force: true });
     }
-    closeOpenClawStateDatabaseForTest();
+    closeMarketingClawStateDatabaseForTest();
     if (previousStateDir === undefined) {
-      delete process.env.OPENCLAW_STATE_DIR;
+      delete process.env.MARKETINGCLAW_STATE_DIR;
     } else {
-      process.env.OPENCLAW_STATE_DIR = previousStateDir;
+      process.env.MARKETINGCLAW_STATE_DIR = previousStateDir;
     }
     testState.agentConfig = undefined;
     await fs.rm(root, { recursive: true, force: true });
@@ -314,7 +314,7 @@ test("sessions.create preserves a linked-worktree subdirectory", async () => {
 
 test("sessions.create reset-in-place persists the returned worktree cwd", async () => {
   const root = await fs.mkdtemp(
-    path.join(await fs.realpath(os.tmpdir()), "openclaw-reset-session-worktree-"),
+    path.join(await fs.realpath(os.tmpdir()), "marketingclaw-reset-session-worktree-"),
   );
   const workspace = await initializeGitWorkspace(root);
   // A remote makes the base commit reachable from `--remotes`, so leaving the worktree via a
@@ -323,9 +323,9 @@ test("sessions.create reset-in-place persists the returned worktree cwd", async 
   await execFileAsync("git", ["init", "--bare", origin]);
   await execFileAsync("git", ["-C", workspace, "remote", "add", "origin", origin]);
   await execFileAsync("git", ["-C", workspace, "push", "-u", "origin", "main"]);
-  const previousStateDir = process.env.OPENCLAW_STATE_DIR;
-  process.env.OPENCLAW_STATE_DIR = path.join(root, "state");
-  closeOpenClawStateDatabaseForTest();
+  const previousStateDir = process.env.MARKETINGCLAW_STATE_DIR;
+  process.env.MARKETINGCLAW_STATE_DIR = path.join(root, "state");
+  closeMarketingClawStateDatabaseForTest();
   testState.agentConfig = { workspace };
   testState.sessionConfig = { dmScope: "main" };
   const { storePath } = await createSessionStoreDir();
@@ -380,11 +380,11 @@ test("sessions.create reset-in-place persists the returned worktree cwd", async 
     if (worktreeId) {
       await managedWorktrees.remove({ id: worktreeId, reason: "test-cleanup", force: true });
     }
-    closeOpenClawStateDatabaseForTest();
+    closeMarketingClawStateDatabaseForTest();
     if (previousStateDir === undefined) {
-      delete process.env.OPENCLAW_STATE_DIR;
+      delete process.env.MARKETINGCLAW_STATE_DIR;
     } else {
-      process.env.OPENCLAW_STATE_DIR = previousStateDir;
+      process.env.MARKETINGCLAW_STATE_DIR = previousStateDir;
     }
     testState.agentConfig = undefined;
     testState.sessionConfig = undefined;
@@ -394,7 +394,7 @@ test("sessions.create reset-in-place persists the returned worktree cwd", async 
 
 test("sessions.create rejects worktrees for non-git agent workspaces", async () => {
   const workspace = await fs.mkdtemp(
-    path.join(await fs.realpath(os.tmpdir()), "openclaw-session-plain-workspace-"),
+    path.join(await fs.realpath(os.tmpdir()), "marketingclaw-session-plain-workspace-"),
   );
   testState.agentConfig = { workspace };
   await createSessionStoreDir();

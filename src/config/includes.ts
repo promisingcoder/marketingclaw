@@ -15,10 +15,10 @@ import fs from "node:fs";
 import path from "node:path";
 import { canUseRootFileOpen, openRootFileSync } from "../infra/boundary-file-read.js";
 import { resolvePathViaExistingAncestorSync } from "../infra/boundary-path.js";
+import { isBlockedObjectKey } from "../infra/prototype-keys.js";
 import { isPathInside } from "../security/scan-paths.js";
 import { isPlainObject } from "../utils.js";
 import { parseJsonWithJson5Fallback } from "../utils/parse-json-compat.js";
-import { isBlockedObjectKey } from "../infra/prototype-keys.js";
 
 export const INCLUDE_KEY = "$include";
 export const MAX_INCLUDE_DEPTH = 10;
@@ -88,7 +88,7 @@ type IncludeFileReadParams = {
 type ResolveConfigIncludesOptions = {
   /**
    * Additional directories outside the config directory that `$include` paths
-   * may resolve into. Typically populated from `OPENCLAW_INCLUDE_ROOTS`.
+   * may resolve into. Typically populated from `MARKETINGCLAW_INCLUDE_ROOTS`.
    * Each entry must be an absolute path; symlinks are resolved before the
    * containment check, consistent with the config-directory boundary check.
    */
@@ -282,7 +282,7 @@ class IncludeProcessor {
 
     // SECURITY: Reject paths outside the config directory and any caller-allowed
     // roots (CWE-22: Path Traversal). Allowed roots come from
-    // OPENCLAW_INCLUDE_ROOTS and let operators opt into shared include trees
+    // MARKETINGCLAW_INCLUDE_ROOTS and let operators opt into shared include trees
     // without weakening the default lock-down.
     const lexicalMatch = this.findContainingRoot(normalized, "rootDir");
     if (!lexicalMatch) {

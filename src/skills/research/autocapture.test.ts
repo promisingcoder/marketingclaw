@@ -8,9 +8,9 @@ import {
   recordSessionSkillCaptureSignals,
 } from "../../config/sessions/skill-suggestions.js";
 import {
-  createOpenClawTestState,
-  type OpenClawTestState,
-} from "../../test-utils/openclaw-test-state.js";
+  createMarketingClawTestState,
+  type MarketingClawTestState,
+} from "../../test-utils/marketingclaw-test-state.js";
 import { createTrackedTempDirs } from "../../test-utils/tracked-temp-dirs.js";
 import {
   applySkillProposal,
@@ -23,7 +23,7 @@ import * as workshopService from "../workshop/service.js";
 import { runSkillResearchAutoCapture } from "./autocapture.js";
 
 const tempDirs = createTrackedTempDirs();
-let testState: OpenClawTestState;
+let testState: MarketingClawTestState;
 const SESSION_KEY = "agent:main:main";
 
 async function seedSession(sessionKey = SESSION_KEY): Promise<void> {
@@ -38,9 +38,9 @@ function readSession(sessionKey = SESSION_KEY) {
 }
 
 beforeEach(async () => {
-  testState = await createOpenClawTestState({
+  testState = await createMarketingClawTestState({
     layout: "state-only",
-    prefix: "openclaw-skill-workshop-state-",
+    prefix: "marketingclaw-skill-workshop-state-",
   });
   await seedSession();
 });
@@ -51,7 +51,7 @@ afterEach(async () => {
 });
 
 async function makeWorkspace(): Promise<string> {
-  return await tempDirs.make("openclaw-skill-workshop-");
+  return await tempDirs.make("marketingclaw-skill-workshop-");
 }
 
 describe("skill research auto-capture", () => {

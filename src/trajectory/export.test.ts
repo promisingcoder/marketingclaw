@@ -2,13 +2,13 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { Message, Usage } from "openclaw/plugin-sdk/llm";
+import type { Message, Usage } from "marketingclaw/plugin-sdk/llm";
 import { afterAll, describe, expect, it } from "vitest";
 import { exportTrajectoryBundle, resolveDefaultTrajectoryExportDir } from "./export.js";
 import { TRAJECTORY_RUNTIME_FILE_MAX_BYTES, resolveTrajectoryPointerFilePath } from "./paths.js";
 import type { TrajectoryEvent } from "./types.js";
 
-const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-trajectory-"));
+const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-trajectory-"));
 let tempDirId = 0;
 
 function makeTempDir(): string {
@@ -200,9 +200,9 @@ describe("exportTrajectoryBundle", () => {
     expect(outputDir).toBe(
       path.join(
         "/tmp/workspace",
-        ".openclaw",
+        ".marketingclaw",
         "trajectory-exports",
-        "openclaw-trajectory-___evil_-2026-04-22T08-00-00",
+        "marketingclaw-trajectory-___evil_-2026-04-22T08-00-00",
       ),
     );
   });
@@ -263,7 +263,7 @@ describe("exportTrajectoryBundle", () => {
     const promptCache = { readTokens: 333_824, writeTokens: 51_130 };
     writeSimpleSessionFile(sessionFile);
     const runtimeEvent: TrajectoryEvent = {
-      traceSchema: "openclaw-trajectory",
+      traceSchema: "marketingclaw-trajectory",
       schemaVersion: 1,
       traceId: "session-1",
       source: "runtime",
@@ -398,7 +398,7 @@ describe("exportTrajectoryBundle", () => {
       runtimeFile,
       [
         {
-          traceSchema: "openclaw-trajectory",
+          traceSchema: "marketingclaw-trajectory",
           schemaVersion: 1,
           traceId: "session-1",
           source: "runtime",
@@ -414,7 +414,7 @@ describe("exportTrajectoryBundle", () => {
           },
         },
         {
-          traceSchema: "openclaw-trajectory",
+          traceSchema: "marketingclaw-trajectory",
           schemaVersion: 1,
           traceId: "session-1",
           source: "runtime",
@@ -424,7 +424,7 @@ describe("exportTrajectoryBundle", () => {
           sourceSeq: 2,
           sessionId: "session-1",
           data: {
-            harness: { type: "openclaw", token: rawSecrets[3] },
+            harness: { type: "marketingclaw", token: rawSecrets[3] },
             metadata: {
               [`https://example.test/callback?token=${rawSecrets[1]}`]:
                 "secret-looking metadata key",
@@ -436,7 +436,7 @@ describe("exportTrajectoryBundle", () => {
           },
         },
         {
-          traceSchema: "openclaw-trajectory",
+          traceSchema: "marketingclaw-trajectory",
           schemaVersion: 1,
           traceId: "session-1",
           source: "runtime",
@@ -448,7 +448,7 @@ describe("exportTrajectoryBundle", () => {
           data: { prompt: `submitted ${rawSecrets[1]}` },
         },
         {
-          traceSchema: "openclaw-trajectory",
+          traceSchema: "marketingclaw-trajectory",
           schemaVersion: 1,
           traceId: "session-1",
           source: "runtime",
@@ -540,7 +540,7 @@ describe("exportTrajectoryBundle", () => {
         JSON.stringify({}),
         "",
         JSON.stringify({
-          traceSchema: "openclaw-trajectory",
+          traceSchema: "marketingclaw-trajectory",
           schemaVersion: 1,
           traceId: "session-1",
           source: "runtime",
@@ -553,7 +553,7 @@ describe("exportTrajectoryBundle", () => {
         }),
         '{"traceSchema":',
         JSON.stringify({
-          traceSchema: "openclaw-trajectory",
+          traceSchema: "marketingclaw-trajectory",
           schemaVersion: 1,
           traceId: "session-1",
           source: "runtime",
@@ -1076,7 +1076,7 @@ describe("exportTrajectoryBundle", () => {
     fs.writeFileSync(
       resolveTrajectoryPointerFilePath(sessionFile),
       `${JSON.stringify({
-        traceSchema: "openclaw-trajectory-pointer",
+        traceSchema: "marketingclaw-trajectory-pointer",
         schemaVersion: 1,
         sessionId: "session-1",
         runtimeFile: recordedRuntimeFile,
@@ -1086,7 +1086,7 @@ describe("exportTrajectoryBundle", () => {
     fs.writeFileSync(
       recordedRuntimeFile,
       `${JSON.stringify({
-        traceSchema: "openclaw-trajectory",
+        traceSchema: "marketingclaw-trajectory",
         schemaVersion: 1,
         traceId: "session-1",
         source: "runtime",
@@ -1101,7 +1101,7 @@ describe("exportTrajectoryBundle", () => {
     fs.writeFileSync(
       path.join(envRuntimeDir, "session-1.jsonl"),
       `${JSON.stringify({
-        traceSchema: "openclaw-trajectory",
+        traceSchema: "marketingclaw-trajectory",
         schemaVersion: 1,
         traceId: "session-1",
         source: "runtime",
@@ -1113,8 +1113,8 @@ describe("exportTrajectoryBundle", () => {
       })}\n`,
       "utf8",
     );
-    const previous = process.env.OPENCLAW_TRAJECTORY_DIR;
-    process.env.OPENCLAW_TRAJECTORY_DIR = envRuntimeDir;
+    const previous = process.env.MARKETINGCLAW_TRAJECTORY_DIR;
+    process.env.MARKETINGCLAW_TRAJECTORY_DIR = envRuntimeDir;
     try {
       const bundle = await exportTrajectoryBundle({
         outputDir,
@@ -1128,9 +1128,9 @@ describe("exportTrajectoryBundle", () => {
       expect(eventTypes(bundle.events)).not.toContain("env-runtime");
     } finally {
       if (previous === undefined) {
-        delete process.env.OPENCLAW_TRAJECTORY_DIR;
+        delete process.env.MARKETINGCLAW_TRAJECTORY_DIR;
       } else {
-        process.env.OPENCLAW_TRAJECTORY_DIR = previous;
+        process.env.MARKETINGCLAW_TRAJECTORY_DIR = previous;
       }
     }
   });
@@ -1144,7 +1144,7 @@ describe("exportTrajectoryBundle", () => {
     fs.writeFileSync(
       resolveTrajectoryPointerFilePath(sessionFile),
       `${JSON.stringify({
-        traceSchema: "openclaw-trajectory-pointer",
+        traceSchema: "marketingclaw-trajectory-pointer",
         schemaVersion: 1,
         sessionId: "session-1",
         runtimeFile: outsideFile,
@@ -1154,7 +1154,7 @@ describe("exportTrajectoryBundle", () => {
     fs.writeFileSync(
       outsideFile,
       `${JSON.stringify({
-        traceSchema: "openclaw-trajectory",
+        traceSchema: "marketingclaw-trajectory",
         schemaVersion: 1,
         traceId: "session-1",
         source: "runtime",
@@ -1189,7 +1189,7 @@ describe("exportTrajectoryBundle", () => {
     fs.writeFileSync(
       resolveTrajectoryPointerFilePath(sessionFile),
       `${JSON.stringify({
-        traceSchema: "openclaw-trajectory-pointer",
+        traceSchema: "marketingclaw-trajectory-pointer",
         schemaVersion: 1,
         sessionId: "session-1",
         runtimeFile: symlinkFile,
@@ -1199,7 +1199,7 @@ describe("exportTrajectoryBundle", () => {
     fs.writeFileSync(
       targetFile,
       `${JSON.stringify({
-        traceSchema: "openclaw-trajectory",
+        traceSchema: "marketingclaw-trajectory",
         schemaVersion: 1,
         traceId: "session-1",
         source: "runtime",
@@ -1250,7 +1250,7 @@ describe("exportTrajectoryBundle", () => {
     fs.writeFileSync(
       runtimeFile,
       `${JSON.stringify({
-        traceSchema: "openclaw-trajectory",
+        traceSchema: "marketingclaw-trajectory",
         schemaVersion: 1,
         traceId: "other-session",
         source: "runtime",
@@ -1286,7 +1286,7 @@ describe("exportTrajectoryBundle", () => {
     fs.writeFileSync(
       runtimeFile,
       `${JSON.stringify({
-        traceSchema: "openclaw-trajectory",
+        traceSchema: "marketingclaw-trajectory",
         schemaVersion: 1,
         traceId: "session-1",
         source: "runtime",
@@ -1338,7 +1338,7 @@ describe("exportTrajectoryBundle", () => {
 
     const runtimeEvents: TrajectoryEvent[] = [
       {
-        traceSchema: "openclaw-trajectory",
+        traceSchema: "marketingclaw-trajectory",
         schemaVersion: 1,
         traceId: "session-1",
         source: "runtime",
@@ -1354,7 +1354,7 @@ describe("exportTrajectoryBundle", () => {
         },
       },
       {
-        traceSchema: "openclaw-trajectory",
+        traceSchema: "marketingclaw-trajectory",
         schemaVersion: 1,
         traceId: "session-1",
         source: "runtime",
@@ -1375,7 +1375,7 @@ describe("exportTrajectoryBundle", () => {
         },
       },
       {
-        traceSchema: "openclaw-trajectory",
+        traceSchema: "marketingclaw-trajectory",
         schemaVersion: 1,
         traceId: "session-1",
         source: "runtime",
@@ -1385,7 +1385,7 @@ describe("exportTrajectoryBundle", () => {
         sourceSeq: 3,
         sessionId: "session-1",
         data: {
-          harness: { type: "openclaw", version: "0.1.0" },
+          harness: { type: "marketingclaw", version: "0.1.0" },
           model: { provider: "openai", name: "gpt-5.4" },
           skills: {
             entries: [
@@ -1404,7 +1404,7 @@ describe("exportTrajectoryBundle", () => {
         },
       },
       {
-        traceSchema: "openclaw-trajectory",
+        traceSchema: "marketingclaw-trajectory",
         schemaVersion: 1,
         traceId: "session-1",
         source: "runtime",
@@ -1418,7 +1418,7 @@ describe("exportTrajectoryBundle", () => {
         },
       },
       {
-        traceSchema: "openclaw-trajectory",
+        traceSchema: "marketingclaw-trajectory",
         schemaVersion: 1,
         traceId: "session-1",
         source: "runtime",

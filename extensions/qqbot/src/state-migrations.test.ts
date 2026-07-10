@@ -4,12 +4,12 @@ import path from "node:path";
 import {
   createPluginStateKeyedStoreForTests,
   resetPluginStateStoreForTests,
-} from "openclaw/plugin-sdk/plugin-state-test-runtime";
+} from "marketingclaw/plugin-sdk/plugin-state-test-runtime";
 import type {
   OpenKeyedStoreOptions,
   PluginDoctorStateMigrationContext,
   PluginStateKeyedStore,
-} from "openclaw/plugin-sdk/runtime-doctor";
+} from "marketingclaw/plugin-sdk/runtime-doctor";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { stateMigrations } from "../doctor-contract-api.js";
 import { buildQQBotStateKey } from "./engine/utils/state-keys.js";
@@ -97,7 +97,7 @@ describe("qqbot doctor state migration", () => {
   beforeEach(async () => {
     resetPluginStateStoreForTests();
     stateDir = await createTempDir("qqbot-state-");
-    env = { ...process.env, OPENCLAW_STATE_DIR: stateDir };
+    env = { ...process.env, MARKETINGCLAW_STATE_DIR: stateDir };
   });
 
   afterEach(async () => {
@@ -201,7 +201,7 @@ describe("qqbot doctor state migration", () => {
     const homeDir = await createTempDir("qqbot-home-");
     env.HOME = homeDir;
     await writeJson(
-      path.join(homeDir, ".openclaw", "qqbot", "data", "credential-backup-default.json"),
+      path.join(homeDir, ".marketingclaw", "qqbot", "data", "credential-backup-default.json"),
       {
         accountId: "default",
         appId: "other-state-app",

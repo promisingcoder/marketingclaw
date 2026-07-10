@@ -113,7 +113,7 @@ function createDeferred<T>() {
 
 async function mountPalette(context: ApplicationContext<RouteId>) {
   const provider = document.createElement(PROVIDER_ELEMENT_NAME) as CommandPaletteContextProvider;
-  const palette = document.createElement("openclaw-command-palette") as CommandPalette;
+  const palette = document.createElement("marketingclaw-command-palette") as CommandPalette;
   palette.onNavigate = vi.fn();
   palette.onSelectSession = vi.fn();
   provider.setContext(context);

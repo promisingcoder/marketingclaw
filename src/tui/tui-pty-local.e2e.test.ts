@@ -5,8 +5,8 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { describe, expect, it } from "vitest";
-import { createOpenClawTestInstance } from "../../test/helpers/openclaw-test-instance.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { createMarketingClawTestInstance } from "../../test/helpers/marketingclaw-test-instance.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { GatewayChatClient } from "./gateway-chat.js";
 import { sleep, startPty, waitFor, type PtyRun } from "./tui-pty-test-support.js";
 
@@ -245,7 +245,7 @@ function buildTuiCliScript(args: string[]) {
     `const program = new Command();`,
     `program.exitOverride();`,
     `registerTuiCli(program);`,
-    `program.parseAsync([process.execPath, "openclaw", ...${JSON.stringify(args)}], { from: "node" }).catch((error) => {`,
+    `program.parseAsync([process.execPath, "marketingclaw", ...${JSON.stringify(args)}], { from: "node" }).catch((error) => {`,
     `  console.error(error);`,
     `  process.exit(1);`,
     `});`,
@@ -269,7 +269,7 @@ function buildLocalModeConfig(params: {
         workspace: params.workspaceDir,
         model: { primary: "tui-pty-mock/gpt-5.5" },
         models: {
-          "tui-pty-mock/gpt-5.5": { agentRuntime: { id: "openclaw" } },
+          "tui-pty-mock/gpt-5.5": { agentRuntime: { id: "marketingclaw" } },
         },
         skills: [],
         skipBootstrap: true,
@@ -314,7 +314,7 @@ function buildLocalModeConfig(params: {
       auth: { mode: "token", token: "tui-pty-local" },
     },
     discovery: { mdns: { mode: "off" } },
-  } satisfies OpenClawConfig;
+  } satisfies MarketingClawConfig;
 }
 
 async function startLocalModeTui(
@@ -322,14 +322,14 @@ async function startLocalModeTui(
   opts: { invalidEditLoop?: boolean } = {},
 ) {
   const replyText = "LOCAL_PTY_RESPONSE";
-  const tempDir = await mkdtemp(path.join(tmpdir(), "openclaw-tui-pty-local-"));
+  const tempDir = await mkdtemp(path.join(tmpdir(), "marketingclaw-tui-pty-local-"));
   const workspaceDir = path.join(tempDir, "workspace");
   const homeDir = path.join(tempDir, "home");
   const stateDir = path.join(tempDir, "state");
   const xdgConfigHome = path.join(tempDir, "xdg-config");
   const xdgDataHome = path.join(tempDir, "xdg-data");
   const xdgCacheHome = path.join(tempDir, "xdg-cache");
-  const configPath = path.join(tempDir, "openclaw.json");
+  const configPath = path.join(tempDir, "marketingclaw.json");
   const mockModel = await startMockModelServer(replyText, {
     invalidEditLoop: opts.invalidEditLoop,
   });
@@ -353,14 +353,14 @@ async function startLocalModeTui(
     cwd: process.cwd(),
     env: {
       HOME: homeDir,
-      OPENCLAW_HOME: homeDir,
-      OPENCLAW_CONFIG_PATH: configPath,
-      OPENCLAW_STATE_DIR: stateDir,
+      MARKETINGCLAW_HOME: homeDir,
+      MARKETINGCLAW_CONFIG_PATH: configPath,
+      MARKETINGCLAW_STATE_DIR: stateDir,
       XDG_CONFIG_HOME: xdgConfigHome,
       XDG_DATA_HOME: xdgDataHome,
       XDG_CACHE_HOME: xdgCacheHome,
-      OPENCLAW_THEME: "dark",
-      OPENCLAW_CODEX_DISCOVERY_LIVE: "0",
+      MARKETINGCLAW_THEME: "dark",
+      MARKETINGCLAW_CODEX_DISCOVERY_LIVE: "0",
       NO_COLOR: undefined,
     },
     exitTimeoutMs: LOCAL_EXIT_TIMEOUT_MS,
@@ -391,7 +391,7 @@ async function startGatewayModeTui(
   },
   registerCleanup: CleanupRegistrar,
 ) {
-  const tempDir = await mkdtemp(path.join(tmpdir(), "openclaw-tui-pty-gateway-"));
+  const tempDir = await mkdtemp(path.join(tmpdir(), "marketingclaw-tui-pty-gateway-"));
   const workspaceDir = path.join(tempDir, "workspace");
   const mockModel = await startMockModelServer(params.firstReplyText ?? "FIRST_RUN_ACTIVE", {
     firstResponseDelayMs: params.firstResponseDelayMs ?? 1_500,
@@ -410,14 +410,14 @@ async function startGatewayModeTui(
         debounceMs: params.queueDebounceMs ?? 25,
       },
     },
-  } satisfies OpenClawConfig;
-  const gateway = await createOpenClawTestInstance({
+  } satisfies MarketingClawConfig;
+  const gateway = await createMarketingClawTestInstance({
     name: `tui-pty-gateway-${params.queueMode}`,
     gatewayToken: "tui-pty-local",
     config,
     env: {
-      OPENCLAW_CODEX_DISCOVERY_LIVE: "0",
-      OPENCLAW_SKIP_PROVIDERS: undefined,
+      MARKETINGCLAW_CODEX_DISCOVERY_LIVE: "0",
+      MARKETINGCLAW_SKIP_PROVIDERS: undefined,
     },
   });
   try {
@@ -436,7 +436,7 @@ async function startGatewayModeTui(
       cwd: process.cwd(),
       env: {
         ...gateway.env,
-        OPENCLAW_THEME: "dark",
+        MARKETINGCLAW_THEME: "dark",
         NO_COLOR: undefined,
       },
       exitTimeoutMs: LOCAL_EXIT_TIMEOUT_MS,

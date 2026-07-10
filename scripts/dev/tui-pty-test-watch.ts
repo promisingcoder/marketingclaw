@@ -1,4 +1,4 @@
-// Tui Pty Test Watch script supports OpenClaw repository automation.
+// Tui Pty Test Watch script supports MarketingClaw repository automation.
 import { spawn, spawnSync } from "node:child_process";
 import { mkdir, open, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
@@ -313,12 +313,17 @@ async function main(): Promise<void> {
       detached: process.platform !== "win32",
       env: {
         ...process.env,
-        OPENCLAW_TUI_PTY_MIRROR_PATH: options.mirrorPath,
-        OPENCLAW_TUI_PTY_INCLUDE_LOCAL: options.mode === "fake" ? "0" : "1",
-        OPENCLAW_TUI_PTY_COLS: currentTerminalDimension(process.stdout.columns, DEFAULT_PTY_COLS),
-        OPENCLAW_TUI_PTY_ROWS: currentTerminalDimension(process.stdout.rows, DEFAULT_PTY_ROWS),
-        OPENCLAW_TUI_PTY_TYPE_CHUNK_SIZE: process.env.OPENCLAW_TUI_PTY_TYPE_CHUNK_SIZE ?? "4",
-        OPENCLAW_TUI_PTY_TYPE_DELAY_MS: process.env.OPENCLAW_TUI_PTY_TYPE_DELAY_MS ?? "25",
+        MARKETINGCLAW_TUI_PTY_MIRROR_PATH: options.mirrorPath,
+        MARKETINGCLAW_TUI_PTY_INCLUDE_LOCAL: options.mode === "fake" ? "0" : "1",
+        MARKETINGCLAW_TUI_PTY_COLS: currentTerminalDimension(
+          process.stdout.columns,
+          DEFAULT_PTY_COLS,
+        ),
+        MARKETINGCLAW_TUI_PTY_ROWS: currentTerminalDimension(process.stdout.rows, DEFAULT_PTY_ROWS),
+        MARKETINGCLAW_TUI_PTY_TYPE_CHUNK_SIZE:
+          process.env.MARKETINGCLAW_TUI_PTY_TYPE_CHUNK_SIZE ?? "4",
+        MARKETINGCLAW_TUI_PTY_TYPE_DELAY_MS:
+          process.env.MARKETINGCLAW_TUI_PTY_TYPE_DELAY_MS ?? "25",
       },
       stdio: ["ignore", "pipe", "pipe"],
     },
@@ -416,7 +421,7 @@ async function main(): Promise<void> {
     process.stdout.write(
       [
         "\x1b[2J\x1b[H",
-        "openclaw TUI PTY tests",
+        "marketingclaw TUI PTY tests",
         "",
         `Mode: ${options.mode}`,
         `Waiting for the first TUI frame... ${elapsedSeconds}s`,

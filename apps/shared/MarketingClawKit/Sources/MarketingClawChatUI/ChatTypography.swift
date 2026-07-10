@@ -4,7 +4,7 @@ import SwiftUI
 import AppKit
 #endif
 
-enum OpenClawChatTypography {
+enum MarketingClawChatTypography {
     static let bodySize: CGFloat = 17
 
     static var title3: Font {

@@ -1,6 +1,6 @@
 import Foundation
 
-public struct OpenClawChatThinkingLevelOption: Codable, Identifiable, Sendable, Hashable {
+public struct MarketingClawChatThinkingLevelOption: Codable, Identifiable, Sendable, Hashable {
     public let id: String
     public let label: String
 
@@ -10,7 +10,7 @@ public struct OpenClawChatThinkingLevelOption: Codable, Identifiable, Sendable, 
     }
 }
 
-public struct OpenClawChatModelChoice: Identifiable, Codable, Sendable, Hashable {
+public struct MarketingClawChatModelChoice: Identifiable, Codable, Sendable, Hashable {
     public var id: String {
         self.selectionID
     }
@@ -51,11 +51,11 @@ public struct OpenClawChatModelChoice: Identifiable, Codable, Sendable, Hashable
     }
 }
 
-public struct OpenClawChatSessionsDefaults: Codable, Sendable {
+public struct MarketingClawChatSessionsDefaults: Codable, Sendable {
     public let modelProvider: String?
     public let model: String?
     public let contextTokens: Int?
-    public let thinkingLevels: [OpenClawChatThinkingLevelOption]?
+    public let thinkingLevels: [MarketingClawChatThinkingLevelOption]?
     public let thinkingOptions: [String]?
     public let thinkingDefault: String?
     public let mainSessionKey: String?
@@ -64,7 +64,7 @@ public struct OpenClawChatSessionsDefaults: Codable, Sendable {
         modelProvider: String? = nil,
         model: String?,
         contextTokens: Int?,
-        thinkingLevels: [OpenClawChatThinkingLevelOption]? = nil,
+        thinkingLevels: [MarketingClawChatThinkingLevelOption]? = nil,
         thinkingOptions: [String]? = nil,
         thinkingDefault: String? = nil,
         mainSessionKey: String? = nil)
@@ -79,7 +79,7 @@ public struct OpenClawChatSessionsDefaults: Codable, Sendable {
     }
 }
 
-public struct OpenClawChatSessionEntry: Codable, Identifiable, Sendable, Hashable {
+public struct MarketingClawChatSessionEntry: Codable, Identifiable, Sendable, Hashable {
     public var id: String {
         self.key
     }
@@ -116,7 +116,7 @@ public struct OpenClawChatSessionEntry: Codable, Identifiable, Sendable, Hashabl
     public var modelProvider: String?
     public var model: String?
     public var contextTokens: Int?
-    public var thinkingLevels: [OpenClawChatThinkingLevelOption]?
+    public var thinkingLevels: [MarketingClawChatThinkingLevelOption]?
     public var thinkingOptions: [String]?
     public var thinkingDefault: String?
 
@@ -141,7 +141,7 @@ public struct OpenClawChatSessionEntry: Codable, Identifiable, Sendable, Hashabl
         modelProvider: String?,
         model: String?,
         contextTokens: Int?,
-        thinkingLevels: [OpenClawChatThinkingLevelOption]? = nil,
+        thinkingLevels: [MarketingClawChatThinkingLevelOption]? = nil,
         thinkingOptions: [String]? = nil,
         thinkingDefault: String? = nil,
         label: String? = nil,
@@ -200,8 +200,8 @@ public struct OpenClawChatSessionEntry: Codable, Identifiable, Sendable, Hashabl
 /// Client-side session list policy shared by every session list surface.
 /// Ordering mirrors the gateway (`pinnedAt` desc, `updatedAt` desc, key) so
 /// cached/offline lists render in the same order as server responses.
-public enum OpenClawChatSessionListOrganizer {
-    public static func organize(_ sessions: [OpenClawChatSessionEntry]) -> [OpenClawChatSessionEntry] {
+public enum MarketingClawChatSessionListOrganizer {
+    public static func organize(_ sessions: [MarketingClawChatSessionEntry]) -> [MarketingClawChatSessionEntry] {
         sessions.sorted { lhs, rhs in
             let lhsPinnedAt = lhs.pinnedAt ?? (lhs.isPinned ? .greatestFiniteMagnitude : 0)
             let rhsPinnedAt = rhs.pinnedAt ?? (rhs.isPinned ? .greatestFiniteMagnitude : 0)
@@ -220,8 +220,8 @@ public enum OpenClawChatSessionListOrganizer {
     /// Local fallback for the server-side `sessions.list` search when the
     /// gateway is unreachable and only cached entries are available.
     public static func filter(
-        _ sessions: [OpenClawChatSessionEntry],
-        search: String) -> [OpenClawChatSessionEntry]
+        _ sessions: [MarketingClawChatSessionEntry],
+        search: String) -> [MarketingClawChatSessionEntry]
     {
         let query = search.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         guard !query.isEmpty else { return sessions }
@@ -236,19 +236,19 @@ public enum OpenClawChatSessionListOrganizer {
     }
 }
 
-public struct OpenClawChatSessionsListResponse: Codable, Sendable {
+public struct MarketingClawChatSessionsListResponse: Codable, Sendable {
     public let ts: Double?
     public let path: String?
     public let count: Int?
-    public let defaults: OpenClawChatSessionsDefaults?
-    public let sessions: [OpenClawChatSessionEntry]
+    public let defaults: MarketingClawChatSessionsDefaults?
+    public let sessions: [MarketingClawChatSessionEntry]
 
     public init(
         ts: Double?,
         path: String?,
         count: Int?,
-        defaults: OpenClawChatSessionsDefaults?,
-        sessions: [OpenClawChatSessionEntry])
+        defaults: MarketingClawChatSessionsDefaults?,
+        sessions: [MarketingClawChatSessionEntry])
     {
         self.ts = ts
         self.path = path

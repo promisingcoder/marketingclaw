@@ -7,7 +7,7 @@ import { testing } from "./gateway-mcp-real-transports.js";
 const tempDirs = useAutoCleanupTempDirTracker(afterEach);
 
 function createRepoRoot() {
-  return tempDirs.make("openclaw-qalab-cli-entry-");
+  return tempDirs.make("marketingclaw-qalab-cli-entry-");
 }
 
 async function writeEntry(root: string, relativePath: string) {
@@ -32,11 +32,11 @@ describe("gateway MCP real transport producer", () => {
     expect(mcp.command).toBe(process.execPath);
     expect(mcp.args.slice(0, 3)).toStrictEqual(["--import", "tsx", "--eval"]);
     expect(mcp.args[3]).toContain(channelServerPath);
-    expect(mcp.args[3]).toContain("serveOpenClawChannelMcp");
+    expect(mcp.args[3]).toContain("serveMarketingClawChannelMcp");
     expect(mcp.cwd).toBe(root);
     expect(mcp.envPatch).toStrictEqual({
-      OPENCLAW_QA_GATEWAY_TOKEN: "secret-token",
-      OPENCLAW_QA_GATEWAY_URL: "ws://127.0.0.1:12345",
+      MARKETINGCLAW_QA_GATEWAY_TOKEN: "secret-token",
+      MARKETINGCLAW_QA_GATEWAY_URL: "ws://127.0.0.1:12345",
     });
   });
 

@@ -67,7 +67,7 @@ describe("generate-dependency-release-evidence", () => {
       releaseRef: "v2026.5.13-beta.1",
       releaseSha: "abc123",
       npmDistTag: "beta",
-      packageName: "openclaw",
+      packageName: "marketingclaw",
       packageVersion: "2026.5.13-beta.1",
       workflowRunId: "123",
       workflowRunAttempt: "2",
@@ -144,20 +144,50 @@ describe("generate-dependency-release-evidence", () => {
     const artifactArgs = ["--output-dir", "evidence", ...requiredArgs];
     const duplicateCases = [
       ["--root", ["--root", "repo-a", "--root", "repo-b", ...artifactArgs]],
-      ["--output-dir", ["--output-dir", "evidence-a", "--output-dir", "evidence-b", ...requiredArgs]],
+      [
+        "--output-dir",
+        ["--output-dir", "evidence-a", "--output-dir", "evidence-b", ...requiredArgs],
+      ],
       [
         "--release-ref",
-        ["--output-dir", "evidence", "--release-ref", "v2026.5.13", "--release-ref", "v2026.5.14", "--npm-dist-tag", "latest"],
+        [
+          "--output-dir",
+          "evidence",
+          "--release-ref",
+          "v2026.5.13",
+          "--release-ref",
+          "v2026.5.14",
+          "--npm-dist-tag",
+          "latest",
+        ],
       ],
       [
         "--npm-dist-tag",
-        ["--output-dir", "evidence", "--release-ref", "v2026.5.13", "--npm-dist-tag", "latest", "--npm-dist-tag", "beta"],
+        [
+          "--output-dir",
+          "evidence",
+          "--release-ref",
+          "v2026.5.13",
+          "--npm-dist-tag",
+          "latest",
+          "--npm-dist-tag",
+          "beta",
+        ],
       ],
       ["--base-ref", [...artifactArgs, "--base-ref", "origin/main", "--base-ref", "HEAD~1"]],
-      ["--github-output", [...artifactArgs, "--github-output", "first.out", "--github-output", "second.out"]],
+      [
+        "--github-output",
+        [...artifactArgs, "--github-output", "first.out", "--github-output", "second.out"],
+      ],
       [
         "--github-step-summary",
-        [...artifactArgs, "--github-step-summary", "first.md", "--github-step-summary", "second.md"],
+        [
+          ...artifactArgs,
+          "--github-step-summary",
+          "first.md",
+          "--github-step-summary",
+          "second.md",
+        ],
       ],
     ] satisfies Array<[string, string[]]>;
 
@@ -215,7 +245,9 @@ describe("generate-dependency-release-evidence", () => {
   });
 
   it("collects report counts and renders human summaries", async () => {
-    const dir = await mkdtemp(path.join(tmpdir(), "openclaw-release-dependency-evidence-test-"));
+    const dir = await mkdtemp(
+      path.join(tmpdir(), "marketingclaw-release-dependency-evidence-test-"),
+    );
     try {
       await writeJson(dir, "dependency-vulnerability-gate.json", {
         blockers: [{ id: "GHSA-blocker" }],
@@ -268,12 +300,12 @@ describe("generate-dependency-release-evidence", () => {
       expect(summary).toContain("- Resolved package changes: +5 -6 changed 7");
 
       const stepSummary = renderDependencyEvidenceStepSummary({
-        evidenceArtifactName: "openclaw-release-dependency-evidence-v2026.5.13",
+        evidenceArtifactName: "marketingclaw-release-dependency-evidence-v2026.5.13",
         baseRef: "v2026.5.1",
         counts,
       });
       expect(stepSummary).toContain(
-        "- Evidence artifact: `openclaw-release-dependency-evidence-v2026.5.13`",
+        "- Evidence artifact: `marketingclaw-release-dependency-evidence-v2026.5.13`",
       );
       expect(stepSummary).toContain("- npm advisory vulnerability hard blockers: `1`");
 

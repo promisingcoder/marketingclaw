@@ -6,7 +6,7 @@
  */
 import type { SessionEntry } from "../../config/sessions/types.js";
 import type { AgentCompactionMode } from "../../config/types.agent-defaults.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import { buildGenericCliContextEngineHostSupport } from "../../context-engine/host-compat.js";
 import { ensureContextEnginesInitialized as ensureContextEnginesInitializedImpl } from "../../context-engine/init.js";
 import { resolveContextEngine as resolveContextEngineImpl } from "../../context-engine/registry.js";
@@ -15,7 +15,7 @@ import type { ContextEngine } from "../../context-engine/types.js";
 import { createSubsystemLogger } from "../../logging/subsystem.js";
 import type { SkillSnapshot } from "../../skills/types.js";
 import { createPreparedEmbeddedAgentSettingsManager as createPreparedEmbeddedAgentSettingsManagerImpl } from "../agent-project-settings.js";
-import { OPENCLAW_AGENT_RUNTIME_ID } from "../agent-runtime-id.js";
+import { MARKETINGCLAW_AGENT_RUNTIME_ID } from "../agent-runtime-id.js";
 import { normalizeOptionalAgentRuntimeId } from "../agent-runtime-id.js";
 import {
   applyAgentAutoCompactionGuard as applyAgentAutoCompactionGuardImpl,
@@ -60,11 +60,11 @@ type SettingsManagerLike = {
 type CliCompactionDeps = {
   openSessionManager: (sessionFile: string) => SessionManagerLike;
   ensureContextEnginesInitialized: () => void;
-  resolveContextEngine: (cfg: OpenClawConfig) => Promise<ContextEngine>;
+  resolveContextEngine: (cfg: MarketingClawConfig) => Promise<ContextEngine>;
   createPreparedEmbeddedAgentSettingsManager: (params: {
     cwd: string;
     agentDir: string;
-    cfg?: OpenClawConfig;
+    cfg?: MarketingClawConfig;
     contextTokenBudget?: number;
   }) => SettingsManagerLike | Promise<SettingsManagerLike>;
   applyAgentAutoCompactionGuard: (params: {
@@ -101,7 +101,7 @@ type CliCompactionRuntimeContextParams = {
   workspaceDir: string;
   cwd?: string;
   agentDir: string;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   skillsSnapshot?: SkillSnapshot;
   senderIsOwner?: boolean;
   provider: string;
@@ -183,7 +183,7 @@ function isNativeHarnessCompactionSession(
   provider: string,
 ): sessionEntry is SessionEntry {
   const harnessId = sessionEntry?.agentHarnessId?.trim().toLowerCase();
-  if (!harnessId || normalizeOptionalAgentRuntimeId(harnessId) === OPENCLAW_AGENT_RUNTIME_ID) {
+  if (!harnessId || normalizeOptionalAgentRuntimeId(harnessId) === MARKETINGCLAW_AGENT_RUNTIME_ID) {
     return false;
   }
   const providerId = provider.trim().toLowerCase();
@@ -251,7 +251,7 @@ async function compactCliTranscript(params: {
   sessionKey: string;
   sessionFile: string;
   sessionManager: SessionManagerLike;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   workspaceDir: string;
   cwd?: string;
   agentDir: string;
@@ -373,7 +373,7 @@ async function compactCliTranscript(params: {
 }
 
 async function compactNativeHarnessCliTranscript(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   sessionId: string;
   sessionKey: string;
   sessionFile: string;
@@ -506,7 +506,7 @@ async function compactNativeHarnessCliTranscript(params: {
 
 /** Runs pre-turn compaction for a CLI session and returns the updated session entry. */
 export async function runCliTurnCompactionLifecycle(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   sessionId: string;
   sessionKey: string;
   sessionEntry: SessionEntry | undefined;

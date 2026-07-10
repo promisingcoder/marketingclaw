@@ -1,7 +1,7 @@
 // Resolves official provider plugins implied by configured auth and model selections.
-import { collectConfiguredModelRefs } from "@openclaw/model-catalog-core/configured-model-refs";
-import { normalizeNullableString as normalizeId } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import { collectConfiguredModelRefs } from "@marketingclaw/model-catalog-core/configured-model-refs";
+import { normalizeNullableString as normalizeId } from "@marketingclaw/normalization-core/string-coerce";
+import type { MarketingClawConfig } from "../../../config/types.marketingclaw.js";
 import {
   resolveOfficialExternalProviderContractPluginIds,
   resolveOfficialExternalProviderPluginIds,
@@ -10,7 +10,7 @@ import {
 import { resolveProviderInstallCatalogEntries } from "../../../plugins/provider-install-catalog.js";
 import { asObjectRecord } from "./object.js";
 
-function collectConfiguredProviderIds(cfg: OpenClawConfig): Set<string> {
+function collectConfiguredProviderIds(cfg: MarketingClawConfig): Set<string> {
   const ids = new Set<string>();
   const add = (value: unknown) => {
     const id = normalizeId(value);
@@ -48,7 +48,7 @@ function collectConfiguredProviderIds(cfg: OpenClawConfig): Set<string> {
   return ids;
 }
 
-function collectConfiguredMediaProviderIds(cfg: OpenClawConfig): Set<string> {
+function collectConfiguredMediaProviderIds(cfg: MarketingClawConfig): Set<string> {
   const ids = new Set<string>();
   const add = (value: unknown) => {
     const id = normalizeId(value);
@@ -74,7 +74,7 @@ function collectConfiguredMediaProviderIds(cfg: OpenClawConfig): Set<string> {
 
 /** Lists external provider plugins implied by configured auth profiles and model refs. */
 export function collectConfiguredProviderPluginIds(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   env?: NodeJS.ProcessEnv;
 }): string[] {
   const configuredProviderIds = collectConfiguredProviderIds(params.cfg);

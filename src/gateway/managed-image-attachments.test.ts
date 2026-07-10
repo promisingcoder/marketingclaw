@@ -194,7 +194,7 @@ async function requestManagedImage(params: {
               openUrl: params.pathName,
             },
           ],
-          __openclaw: { id: "msg-1" },
+          __marketingclaw: { id: "msg-1" },
         },
       ]
     );
@@ -324,7 +324,7 @@ describe("handleManagedOutgoingImageHttpRequest", () => {
       stateDir,
       pathName: `/api/chat/media/outgoing/${encodeURIComponent(sessionKey)}/${attachmentId}/full`,
       authResponse: { authMethod: "trusted-proxy", trustDeclaredOperatorScopes: true },
-      headers: { "x-openclaw-requester-session-key": sessionKey },
+      headers: { "x-marketingclaw-requester-session-key": sessionKey },
     });
 
     expect(result.statusCode).toBe(403);
@@ -337,7 +337,7 @@ describe("handleManagedOutgoingImageHttpRequest", () => {
       stateDir,
       pathName: `/api/chat/media/outgoing/${encodeURIComponent(sessionKey)}/${attachmentId}/full`,
       authResponse: { authMethod: "device-token" },
-      headers: { "x-openclaw-requester-session-key": sessionKey },
+      headers: { "x-marketingclaw-requester-session-key": sessionKey },
     });
 
     expect(result.statusCode).toBe(403);
@@ -364,7 +364,7 @@ describe("handleManagedOutgoingImageHttpRequest", () => {
       stateDir,
       pathName: `/api/chat/media/outgoing/${encodeURIComponent(sessionKey)}/${attachmentId}/full`,
       method: "POST",
-      headers: { "x-openclaw-requester-session-key": sessionKey },
+      headers: { "x-marketingclaw-requester-session-key": sessionKey },
     });
 
     expect(result.statusCode).toBe(405);
@@ -390,7 +390,7 @@ describe("handleManagedOutgoingImageHttpRequest", () => {
 
     const transcriptMessages = [
       {
-        __openclaw: { id: "msg-1" },
+        __marketingclaw: { id: "msg-1" },
         content: [
           {
             type: "image",
@@ -447,7 +447,7 @@ describe("handleManagedOutgoingImageHttpRequest", () => {
 
     const transcriptMessages = [
       {
-        __openclaw: { id: "msg-1" },
+        __marketingclaw: { id: "msg-1" },
         content: [
           {
             type: "image",
@@ -489,7 +489,7 @@ describe("handleManagedOutgoingImageHttpRequest", () => {
 
     const transcriptMessages = [
       {
-        __openclaw: { id: "msg-1" },
+        __marketingclaw: { id: "msg-1" },
         content: [
           {
             type: "image",
@@ -644,7 +644,7 @@ describe("createManagedOutgoingImageBlocks", () => {
     await fs.mkdir(path.dirname(sourcePath), { recursive: true });
     await fs.writeFile(sourcePath, Buffer.from(TINY_PNG_BASE64, "base64"));
 
-    await withEnvAsync({ OPENCLAW_STATE_DIR: stateDir }, async () => {
+    await withEnvAsync({ MARKETINGCLAW_STATE_DIR: stateDir }, async () => {
       const blocks = await createManagedOutgoingImageBlocks({
         stateDir,
         sessionKey: "agent:main:main",
@@ -695,7 +695,7 @@ describe("createManagedOutgoingImageBlocks", () => {
     });
 
     try {
-      await withEnvAsync({ OPENCLAW_STATE_DIR: stateDir }, async () => {
+      await withEnvAsync({ MARKETINGCLAW_STATE_DIR: stateDir }, async () => {
         const sourceUrl = `http://127.0.0.1:${address.port}/remote-cat.png?sig=secret`;
         const blocks = await createManagedOutgoingImageBlocks({
           stateDir,
@@ -744,8 +744,8 @@ describe("createManagedOutgoingImageBlocks", () => {
     try {
       await withEnvAsync(
         {
-          OPENCLAW_CONFIG_PATH: path.join(externalConfigDir, "config.json"),
-          OPENCLAW_STATE_DIR: stateDir,
+          MARKETINGCLAW_CONFIG_PATH: path.join(externalConfigDir, "config.json"),
+          MARKETINGCLAW_STATE_DIR: stateDir,
         },
         async () => {
           const blocks = await createManagedOutgoingImageBlocks({
@@ -858,7 +858,7 @@ describe("createManagedOutgoingImageBlocks", () => {
     });
 
     try {
-      await withEnvAsync({ OPENCLAW_STATE_DIR: stateDir }, async () => {
+      await withEnvAsync({ MARKETINGCLAW_STATE_DIR: stateDir }, async () => {
         const blocks = await createManagedOutgoingImageBlocks({
           sessionKey: "agent:main:main",
           mediaUrls: [`http://127.0.0.1:${address.port}/large-image.png`],
@@ -917,7 +917,7 @@ describe("createManagedOutgoingImageBlocks", () => {
     await fs.mkdir(path.dirname(inboundPath), { recursive: true });
     await fs.writeFile(inboundPath, Buffer.from(TINY_PNG_BASE64, "base64"));
 
-    await withEnvAsync({ OPENCLAW_STATE_DIR: stateDir }, async () => {
+    await withEnvAsync({ MARKETINGCLAW_STATE_DIR: stateDir }, async () => {
       const blocks = await createManagedOutgoingImageBlocks({
         sessionKey: "agent:main:main",
         mediaUrls: [inboundPath],
@@ -1119,7 +1119,7 @@ describe("cleanupManagedOutgoingImageRecords", () => {
     });
     readSessionMessagesMock.mockReturnValue([
       {
-        __openclaw: { id: "msg-1" },
+        __marketingclaw: { id: "msg-1" },
         content: [
           {
             type: "image",
@@ -1166,7 +1166,7 @@ describe("cleanupManagedOutgoingImageRecords", () => {
     });
     readSessionMessagesMock.mockReturnValue([
       {
-        __openclaw: { id: "msg-1" },
+        __marketingclaw: { id: "msg-1" },
         content: [
           {
             type: "image",

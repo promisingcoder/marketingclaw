@@ -1,11 +1,14 @@
 // Discord plugin module implements send.components behavior.
 import { ChannelType } from "discord-api-types/v10";
-import { recordChannelActivity } from "openclaw/plugin-sdk/channel-activity-runtime";
-import type { MarkdownTableMode, OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { OutboundMediaAccess } from "openclaw/plugin-sdk/media-runtime";
-import { requireRuntimeConfig } from "openclaw/plugin-sdk/plugin-config-runtime";
-import type { ChunkMode } from "openclaw/plugin-sdk/reply-chunking";
-import { uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { recordChannelActivity } from "marketingclaw/plugin-sdk/channel-activity-runtime";
+import type {
+  MarkdownTableMode,
+  MarketingClawConfig,
+} from "marketingclaw/plugin-sdk/config-contracts";
+import type { OutboundMediaAccess } from "marketingclaw/plugin-sdk/media-runtime";
+import { requireRuntimeConfig } from "marketingclaw/plugin-sdk/plugin-config-runtime";
+import type { ChunkMode } from "marketingclaw/plugin-sdk/reply-chunking";
+import { uniqueStrings } from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import { resolveDiscordAccount } from "./accounts.js";
 import { registerDiscordComponentEntries } from "./components-registry.js";
 import {
@@ -150,7 +153,7 @@ function collapseClassicComponentText(spec: DiscordComponentMessageSpec): string
 }
 
 type DiscordComponentSendOpts = {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   accountId?: string;
   token?: string;
   rest?: RequestClient;

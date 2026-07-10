@@ -108,12 +108,12 @@ describe("doctor session state provider routes", () => {
         agents: {
           defaults: {
             model: { primary: "openai/gpt-5.5" },
-            agentRuntime: { id: "openclaw" },
+            agentRuntime: { id: "marketingclaw" },
           },
         },
       },
       sessionKey: "agent:main:telegram:direct:1",
-      env: { OPENCLAW_AGENT_RUNTIME: "codex-cli" },
+      env: { MARKETINGCLAW_AGENT_RUNTIME: "codex-cli" },
     });
     expect(route.runtime).toBe("codex");
   });
@@ -154,7 +154,7 @@ describe("doctor session state provider routes", () => {
         [sessionKey]: {
           defaultProvider: "github-copilot",
           configuredModelRefs: ["github-copilot/gpt-5-mini"],
-          runtime: "openclaw",
+          runtime: "marketingclaw",
         },
       },
     });
@@ -223,7 +223,7 @@ describe("doctor session state provider routes", () => {
         [sessionKey]: {
           defaultProvider: "github-copilot",
           configuredModelRefs: ["github-copilot/gpt-5-mini"],
-          runtime: "openclaw",
+          runtime: "marketingclaw",
         },
       },
     });
@@ -261,7 +261,7 @@ describe("doctor session state provider routes", () => {
         [sessionKey]: {
           defaultProvider: "github-copilot",
           configuredModelRefs: ["github-copilot/gpt-5-mini", "openai-codex/gpt-5.4"],
-          runtime: "openclaw",
+          runtime: "marketingclaw",
         },
       },
     });
@@ -341,7 +341,7 @@ describe("doctor session state provider routes", () => {
         [sessionKey]: {
           defaultProvider: "openai",
           configuredModelRefs: ["openai/gpt-5.5"],
-          runtime: "openclaw",
+          runtime: "marketingclaw",
         },
       },
     });
@@ -420,7 +420,7 @@ describe("doctor session state provider routes", () => {
         [sessionKey]: {
           defaultProvider: "anthropic",
           configuredModelRefs: ["anthropic/claude-opus-4.7"],
-          runtime: "openclaw",
+          runtime: "marketingclaw",
         },
       },
     });
@@ -458,7 +458,7 @@ describe("doctor session state provider routes", () => {
         [sessionKey]: {
           defaultProvider: "openai",
           configuredModelRefs: ["openai/gpt-5.5"],
-          runtime: "openclaw",
+          runtime: "marketingclaw",
         },
       },
     });

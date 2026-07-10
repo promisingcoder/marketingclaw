@@ -1,7 +1,7 @@
 /**
  * Browser server lifecycle helpers for profile shutdown.
  */
-import { stopOpenClawChrome } from "./chrome.js";
+import { stopMarketingClawChrome } from "./chrome.js";
 import {
   type BrowserServerState,
   createBrowserRouteContext,
@@ -26,7 +26,7 @@ export async function stopKnownBrowserProfiles(params: {
       try {
         const runtime = current.profiles.get(name);
         if (runtime?.running) {
-          await stopOpenClawChrome(runtime.running);
+          await stopMarketingClawChrome(runtime.running);
           runtime.running = null;
           continue;
         }
@@ -36,6 +36,6 @@ export async function stopKnownBrowserProfiles(params: {
       }
     }
   } catch (err) {
-    params.onWarn(`openclaw browser stop failed: ${String(err)}`);
+    params.onWarn(`marketingclaw browser stop failed: ${String(err)}`);
   }
 }

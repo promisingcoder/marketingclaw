@@ -6,7 +6,7 @@ import {
 // Inference backend detection shared by onboarding bootstrap and Crestodian setup.
 import { DEFAULT_MODEL, DEFAULT_PROVIDER } from "../agents/defaults.js";
 import { resolveAgentModelPrimaryValue } from "../config/model-input.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { probeLocalCommand, type LocalCommandProbe } from "../crestodian/probes.js";
 
 /**
@@ -51,7 +51,7 @@ export type DetectInferenceBackendsDeps = {
 };
 
 export type DetectInferenceBackendsOptions = {
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   env?: NodeJS.ProcessEnv;
   platform?: NodeJS.Platform;
   deps?: DetectInferenceBackendsDeps;

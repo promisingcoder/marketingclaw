@@ -1,6 +1,6 @@
-// Shared registration assertions for optional media-generation OpenClaw tools.
+// Shared registration assertions for optional media-generation MarketingClaw tools.
 import { describe, expect, it } from "vitest";
-import { collectPresentOpenClawTools } from "./openclaw-tools.registration.js";
+import { collectPresentMarketingClawTools } from "./marketingclaw-tools.registration.js";
 import { textResult, type AnyAgentTool } from "./tools/common.js";
 
 function stubAgentTool(name: string): AnyAgentTool {
@@ -16,7 +16,7 @@ function stubAgentTool(name: string): AnyAgentTool {
   };
 }
 
-export function describeOpenClawGenerationToolRegistration(params: {
+export function describeMarketingClawGenerationToolRegistration(params: {
   suiteName: string;
   toolName: string;
   toolLabel: string;
@@ -25,11 +25,11 @@ export function describeOpenClawGenerationToolRegistration(params: {
     it(`registers ${params.toolName} when ${params.toolLabel} is present`, () => {
       const tool = stubAgentTool(params.toolName);
 
-      expect(collectPresentOpenClawTools([tool])).toEqual([tool]);
+      expect(collectPresentMarketingClawTools([tool])).toEqual([tool]);
     });
 
     it(`omits ${params.toolName} when ${params.toolLabel} is absent`, () => {
-      expect(collectPresentOpenClawTools([null]).map((tool) => tool.name)).not.toContain(
+      expect(collectPresentMarketingClawTools([null]).map((tool) => tool.name)).not.toContain(
         params.toolName,
       );
     });

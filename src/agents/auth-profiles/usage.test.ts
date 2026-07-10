@@ -4,7 +4,7 @@
  * persistence hooks without contacting real providers.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import { MAX_DATE_TIMESTAMP_MS } from "../../shared/number-coercion.js";
 import type { AuthProfileStore, ProfileUsageStats } from "./types.js";
 import {
@@ -724,7 +724,7 @@ describe("clearAuthProfileCooldown", () => {
 });
 
 describe("markAuthProfileFailure — active windows do not extend on retry", () => {
-  // Regression for https://github.com/openclaw/openclaw/issues/23516
+  // Regression for https://github.com/promisingcoder/marketingclaw/issues/23516
   // When all providers are at saturation backoff (60 min) and retries fire every 30 min,
   // each retry was resetting cooldownUntil to now+60m, preventing recovery.
   type WindowStats = ProfileUsageStats;
@@ -733,7 +733,7 @@ describe("markAuthProfileFailure — active windows do not extend on retry", () 
     store: ReturnType<typeof makeStore>;
     now: number;
     reason: "rate_limit" | "billing" | "auth_permanent";
-    cfg?: OpenClawConfig;
+    cfg?: MarketingClawConfig;
   }): Promise<void> {
     const dateNowSpy = vi.spyOn(Date, "now").mockReturnValue(params.now);
     mockLockedUpdateForStore(params.store);
@@ -909,7 +909,7 @@ describe("markAuthProfileFailure — active windows do not extend on retry", () 
             billingBackoffHours: 0.0166667,
           },
         },
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
     });
 
     expect(store.usageStats?.["anthropic:default"]?.disabledUntil).toBe(now + 60_000);
@@ -1003,11 +1003,11 @@ describe("markAuthProfileFailure — locked update failure", () => {
   it("drops bookkeeping without an unlocked full-store save", async () => {
     const store = makeStore(undefined);
     const consoleWarn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    const previousTestConsole = process.env.OPENCLAW_TEST_CONSOLE;
-    const previousLogLevel = process.env.OPENCLAW_LOG_LEVEL;
+    const previousTestConsole = process.env.MARKETINGCLAW_TEST_CONSOLE;
+    const previousLogLevel = process.env.MARKETINGCLAW_LOG_LEVEL;
     storeMocks.updateAuthProfileStoreWithLock.mockResolvedValueOnce(null);
-    process.env.OPENCLAW_TEST_CONSOLE = "1";
-    process.env.OPENCLAW_LOG_LEVEL = "warn";
+    process.env.MARKETINGCLAW_TEST_CONSOLE = "1";
+    process.env.MARKETINGCLAW_LOG_LEVEL = "warn";
     try {
       await markAuthProfileFailure({
         store,
@@ -1025,14 +1025,14 @@ describe("markAuthProfileFailure — locked update failure", () => {
       ).toBe(true);
     } finally {
       if (previousTestConsole === undefined) {
-        delete process.env.OPENCLAW_TEST_CONSOLE;
+        delete process.env.MARKETINGCLAW_TEST_CONSOLE;
       } else {
-        process.env.OPENCLAW_TEST_CONSOLE = previousTestConsole;
+        process.env.MARKETINGCLAW_TEST_CONSOLE = previousTestConsole;
       }
       if (previousLogLevel === undefined) {
-        delete process.env.OPENCLAW_LOG_LEVEL;
+        delete process.env.MARKETINGCLAW_LOG_LEVEL;
       } else {
-        process.env.OPENCLAW_LOG_LEVEL = previousLogLevel;
+        process.env.MARKETINGCLAW_LOG_LEVEL = previousLogLevel;
       }
       consoleWarn.mockRestore();
     }
@@ -1130,8 +1130,8 @@ describe("markAuthProfileFailure — WHAM-aware Codex cooldowns", () => {
     const headers = init.headers as Record<string, string>;
     expect(headers.Authorization).toBe("Bearer codex-access-token");
     expect(headers["ChatGPT-Account-Id"]).toBe("acct_test_123");
-    expect(headers.originator).toBe("openclaw");
-    expect(headers["User-Agent"]).toMatch(/^openclaw\//);
+    expect(headers.originator).toBe("marketingclaw");
+    expect(headers["User-Agent"]).toMatch(/^marketingclaw\//);
     const stats = store.usageStats?.["openai:default"];
     if (exactBlocked) {
       expect(stats?.blockedUntil).toBe(now + expectedMs);

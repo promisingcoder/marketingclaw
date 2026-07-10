@@ -5,12 +5,12 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
-import { detectMime, extensionForMime, normalizeMimeType } from "@openclaw/media-core/mime";
+import { detectMime, extensionForMime, normalizeMimeType } from "@marketingclaw/media-core/mime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
   normalizeStringifiedOptionalString,
-} from "@openclaw/normalization-core/string-coerce";
+} from "@marketingclaw/normalization-core/string-coerce";
 import type { Command } from "commander";
 import {
   GATEWAY_CLIENT_MODES,
@@ -43,7 +43,7 @@ import {
   setRuntimeConfigSnapshot,
 } from "../config/config.js";
 import { resolveAgentModelPrimaryValue } from "../config/model-input.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { callGateway, randomIdempotencyKey } from "../gateway/call.js";
 import { buildGatewayConnectionDetailsWithResolvers } from "../gateway/connection-details.js";
 import { isLoopbackHost } from "../gateway/net.js";
@@ -119,7 +119,7 @@ import { collectOption } from "./program/helpers.js";
 type CapabilityTransport = "local" | "gateway";
 const IMAGE_OUTPUT_FORMATS = ["png", "jpeg", "webp"] as const;
 const IMAGE_BACKGROUNDS = ["transparent", "opaque", "auto"] as const;
-const LOCAL_MODEL_RUN_SYSTEM_PROMPT = "You are a personal assistant running inside OpenClaw.";
+const LOCAL_MODEL_RUN_SYSTEM_PROMPT = "You are a personal assistant running inside MarketingClaw.";
 const HEIC_MODEL_RUN_MIMES = new Set(["image/heic", "image/heif"]);
 
 type CapabilityMetadata = {
@@ -499,14 +499,14 @@ function resolveSelectedProviderFromModelRef(modelRef: string | undefined): stri
   return resolveModelRefOverride(modelRef).provider;
 }
 
-function getAuthProfileIdsForProvider(cfg: OpenClawConfig, providerId: string): string[] {
+function getAuthProfileIdsForProvider(cfg: MarketingClawConfig, providerId: string): string[] {
   const agentDir = resolveAgentDir(cfg, resolveDefaultAgentId(cfg));
   const store = loadAuthProfileStoreForRuntime(agentDir);
   return listProfilesForProvider(store, providerId);
 }
 
 function providerHasGenericConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   providerId: string;
   envVars?: string[];
 }): boolean {
@@ -599,7 +599,7 @@ function resolveModelRefOverride(raw: string | undefined): { provider?: string; 
 
 async function canonicalizeModelRunRef(params: {
   raw: string | undefined;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   preserveAuthProfile: boolean;
 }): Promise<string | undefined> {
   return await canonicalizeCaseOnlyCatalogModelRef({
@@ -1562,7 +1562,7 @@ async function runTtsConvert(params: {
 }
 
 function resolveTtsProviderForAuthHydration(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   provider?: string;
   modelId?: string;
   channelId?: string;
@@ -1577,10 +1577,10 @@ function resolveTtsProviderForAuthHydration(params: {
 }
 
 async function injectTtsAuthProfileApiKey(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   provider?: string;
   channelId?: string;
-}): Promise<OpenClawConfig> {
+}): Promise<MarketingClawConfig> {
   if (!params.provider) {
     return params.cfg;
   }
@@ -1666,7 +1666,7 @@ type ExistingTtsProviderConfig =
     });
 
 function resolveExistingTtsProviderConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   providerId: string;
   channelId?: string;
 }): ExistingTtsProviderConfig | undefined {
@@ -1694,7 +1694,7 @@ function resolveExistingTtsProviderConfig(params: {
 }
 
 function resolveExistingTtsProviderConfigInTts(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   tts: unknown;
   providerId: string;
 }): TtsProviderConfigLocation | undefined {
@@ -1736,7 +1736,7 @@ const TTS_CONFIG_RESERVED_KEYS = new Set([
 ]);
 
 function resolveDirectTtsProviderConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   tts: unknown;
   providerId: string;
 }): TtsProviderConfigLocation | undefined {
@@ -1758,7 +1758,7 @@ function resolveDirectTtsProviderConfig(params: {
 }
 
 function resolveChannelTtsConfigForAuthHydration(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   channelId?: string;
 }): { channelKey: string; tts: unknown } | undefined {
   const channels = params.cfg.channels;
@@ -1979,8 +1979,8 @@ async function resolveLocalCapabilityRuntimeConfig(params: {
   allowedPaths?: Set<string>;
   forcedActivePaths?: Set<string>;
   optionalActivePaths?: Set<string>;
-  config?: OpenClawConfig;
-}): Promise<OpenClawConfig> {
+  config?: MarketingClawConfig;
+}): Promise<MarketingClawConfig> {
   const cfg = params.config ?? getRuntimeConfig();
   const { effectiveConfig } = await resolveCommandConfigWithSecrets({
     config: cfg,
@@ -1996,7 +1996,7 @@ async function resolveLocalCapabilityRuntimeConfig(params: {
   return effectiveConfig;
 }
 
-function pinRuntimeConfigSnapshot(config: OpenClawConfig): void {
+function pinRuntimeConfigSnapshot(config: MarketingClawConfig): void {
   const sourceConfig = getRuntimeConfigSourceSnapshot();
   if (sourceConfig) {
     setRuntimeConfigSnapshot(config, sourceConfig);
@@ -2163,7 +2163,7 @@ export function registerCapabilityCli(program: Command) {
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/infer", "docs.openclaw.ai/cli/infer")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/infer", "docs.marketingclaw.ai/cli/infer")}\n`,
     );
 
   registerCapabilityListAndInspect(capability);

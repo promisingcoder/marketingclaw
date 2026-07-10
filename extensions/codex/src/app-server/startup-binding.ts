@@ -8,7 +8,7 @@ import path from "node:path";
 import {
   embeddedAgentLog,
   type EmbeddedRunAttemptParams,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "marketingclaw/plugin-sdk/agent-harness-runtime";
 import { resolveCodexAppServerHomeDir } from "./auth-bridge.js";
 import { isJsonObject, type JsonValue } from "./protocol.js";
 import type {
@@ -17,7 +17,7 @@ import type {
   CodexAppServerThreadBinding,
 } from "./session-binding.js";
 
-// Codex owns proactive auto-compaction, but OpenClaw must not resume a native
+// Codex owns proactive auto-compaction, but MarketingClaw must not resume a native
 // thread that is already too close to the server-side window for the next turn.
 const CODEX_APP_SERVER_NATIVE_THREAD_FALLBACK_MAX_TOKENS = 300_000;
 const CODEX_APP_SERVER_NATIVE_THREAD_DEFAULT_RESERVE_TOKENS = 20_000;

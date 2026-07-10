@@ -18,7 +18,7 @@ import {
   type EmbedSandboxMode,
 } from "../../../lib/chat/tool-display.ts";
 import { copyToClipboard } from "../../../lib/clipboard.ts";
-import { OpenClawLightDomElement } from "../../../lit/openclaw-element.ts";
+import { MarketingClawLightDomElement } from "../../../lit/marketingclaw-element.ts";
 
 export const CHAT_DETAIL_FULL_MESSAGE_MAX_CHARS = 500_000;
 
@@ -293,7 +293,7 @@ function renderFileSidebarContent(
       <div class="sidebar-file-view__path-bar">
         <div class="sidebar-file-view__path-field">
           <span class="sidebar-file-view__path" title=${content.path}>${content.path}</span>
-          <openclaw-tooltip content="Copy path">
+          <marketingclaw-tooltip content="Copy path">
             <button
               class="btn btn--sm sidebar-file-view__action"
               type="button"
@@ -302,12 +302,12 @@ function renderFileSidebarContent(
             >
               ${icons.copy}
             </button>
-          </openclaw-tooltip>
+          </marketingclaw-tooltip>
         </div>
         ${controls
           ? html`
               <div class="sidebar-file-view__actions">
-                <openclaw-tooltip content="Search in file">
+                <marketingclaw-tooltip content="Search in file">
                   <button
                     class="btn btn--sm sidebar-file-view__action"
                     type="button"
@@ -317,10 +317,10 @@ function renderFileSidebarContent(
                   >
                     ${icons.search}
                   </button>
-                </openclaw-tooltip>
+                </marketingclaw-tooltip>
                 ${controls.onReveal
                   ? html`
-                      <openclaw-tooltip content="Show in Files">
+                      <marketingclaw-tooltip content="Show in Files">
                         <button
                           class="btn btn--sm sidebar-file-view__action"
                           type="button"
@@ -329,11 +329,11 @@ function renderFileSidebarContent(
                         >
                           ${icons.folder}
                         </button>
-                      </openclaw-tooltip>
+                      </marketingclaw-tooltip>
                     `
                   : nothing}
                 <div class="sidebar-file-view__editor">
-                  <openclaw-tooltip
+                  <marketingclaw-tooltip
                     .content=${absolutePath ? "Open in editor" : "Workspace root unknown"}
                   >
                     <button
@@ -347,7 +347,7 @@ function renderFileSidebarContent(
                     >
                       ${icons.externalLink}
                     </button>
-                  </openclaw-tooltip>
+                  </marketingclaw-tooltip>
                   ${controls.editorMenuOpen && absolutePath
                     ? html`
                         <div class="sidebar-file-view__editor-menu" role="menu">
@@ -372,7 +372,7 @@ function renderFileSidebarContent(
                       `
                     : nothing}
                 </div>
-                <openclaw-tooltip content="Copy file contents">
+                <marketingclaw-tooltip content="Copy file contents">
                   <button
                     class="btn btn--sm sidebar-file-view__action ${controls.copied ? "copied" : ""}"
                     type="button"
@@ -381,7 +381,7 @@ function renderFileSidebarContent(
                   >
                     ${controls.copied ? icons.check : icons.copy}
                   </button>
-                </openclaw-tooltip>
+                </marketingclaw-tooltip>
               </div>
             `
           : nothing}
@@ -484,11 +484,11 @@ export function renderMarkdownSidebar(props: MarkdownSidebarProps) {
     <div class="sidebar-panel">
       <div class="sidebar-header">
         <div class="sidebar-title">${title}</div>
-        <openclaw-tooltip content="Close sidebar">
+        <marketingclaw-tooltip content="Close sidebar">
           <button @click=${props.onClose} class="btn" type="button" aria-label="Close sidebar">
             ${icons.x}
           </button>
-        </openclaw-tooltip>
+        </marketingclaw-tooltip>
       </div>
       <div class="sidebar-content">
         ${props.error
@@ -597,7 +597,7 @@ export function renderMarkdownSidebar(props: MarkdownSidebarProps) {
   `;
 }
 
-class ChatDetailPanel extends OpenClawLightDomElement {
+class ChatDetailPanel extends MarketingClawLightDomElement {
   @property({ attribute: false }) content: SidebarContent | null = null;
   @property({ attribute: false }) loadFullMessage?:
     | ((request: SidebarFullMessageRequest) => Promise<DetailFullMessageResult | null | undefined>)
@@ -894,6 +894,6 @@ class ChatDetailPanel extends OpenClawLightDomElement {
   }
 }
 
-if (!customElements.get("openclaw-chat-detail-panel")) {
-  customElements.define("openclaw-chat-detail-panel", ChatDetailPanel);
+if (!customElements.get("marketingclaw-chat-detail-panel")) {
+  customElements.define("marketingclaw-chat-detail-panel", ChatDetailPanel);
 }

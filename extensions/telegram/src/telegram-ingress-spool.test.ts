@@ -3,9 +3,9 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import {
-  closeOpenClawStateDatabaseForTest,
+  closeMarketingClawStateDatabaseForTest,
   createChannelIngressQueueForTests as createChannelIngressQueue,
-} from "openclaw/plugin-sdk/plugin-state-test-runtime";
+} from "marketingclaw/plugin-sdk/plugin-state-test-runtime";
 import { afterEach, describe, expect, it } from "vitest";
 import { clearTelegramRuntime, setTelegramRuntime } from "./runtime.js";
 import type { TelegramRuntime } from "./runtime.types.js";
@@ -36,7 +36,7 @@ function installTelegramIngressQueueRuntime(resolveStateDir: () => string): void
 }
 
 async function withTempSpool<T>(fn: (spoolDir: string) => Promise<T>): Promise<T> {
-  const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-telegram-spool-"));
+  const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-telegram-spool-"));
   const spoolDir = path.join(stateDir, "telegram", "ingress-spool-test");
   await fs.mkdir(spoolDir, { recursive: true });
   installTelegramIngressQueueRuntime(() => stateDir);
@@ -44,7 +44,7 @@ async function withTempSpool<T>(fn: (spoolDir: string) => Promise<T>): Promise<T
     return await fn(spoolDir);
   } finally {
     clearTelegramRuntime();
-    closeOpenClawStateDatabaseForTest();
+    closeMarketingClawStateDatabaseForTest();
     await fs.rm(stateDir, { recursive: true, force: true });
   }
 }
@@ -52,7 +52,7 @@ async function withTempSpool<T>(fn: (spoolDir: string) => Promise<T>): Promise<T
 describe("Telegram ingress spool", () => {
   afterEach(() => {
     clearTelegramRuntime();
-    closeOpenClawStateDatabaseForTest();
+    closeMarketingClawStateDatabaseForTest();
   });
 
   it("persists updates durably in update_id order and tombstones handled entries", async () => {

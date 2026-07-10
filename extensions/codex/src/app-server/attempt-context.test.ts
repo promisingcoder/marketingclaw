@@ -5,7 +5,7 @@ import path from "node:path";
 import {
   embeddedAgentLog,
   type EmbeddedRunAttemptParams,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "marketingclaw/plugin-sdk/agent-harness-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   buildCodexWorkspaceBootstrapContext,
@@ -56,7 +56,7 @@ describe("Codex app-server attempt context", () => {
       },
       {
         type: "namespace",
-        name: "openclaw",
+        name: "marketingclaw",
         description: "",
         tools: [
           {

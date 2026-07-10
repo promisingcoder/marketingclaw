@@ -197,7 +197,7 @@ function renderSensitiveToggleButton(params: {
       : "Reveal value"
     : "Disable stream mode to reveal value";
   return html`
-    <openclaw-tooltip .content=${label}>
+    <marketingclaw-tooltip .content=${label}>
       <button
         type="button"
         class="btn btn--icon ${state.isRevealed ? "active" : ""}"
@@ -209,7 +209,7 @@ function renderSensitiveToggleButton(params: {
       >
         ${state.isRevealed ? sharedIcons.eye : sharedIcons.eyeOff}
       </button>
-    </openclaw-tooltip>
+    </marketingclaw-tooltip>
   `;
 }
 
@@ -750,7 +750,7 @@ function renderTextInput(params: {
             })}
         ${schema.default !== undefined
           ? html`
-              <openclaw-tooltip content="Reset to default">
+              <marketingclaw-tooltip content="Reset to default">
                 <button
                   type="button"
                   class="cfg-input__reset"
@@ -760,7 +760,7 @@ function renderTextInput(params: {
                 >
                   ↺
                 </button>
-              </openclaw-tooltip>
+              </marketingclaw-tooltip>
             `
           : nothing}
       </div>
@@ -1136,7 +1136,7 @@ function renderArray(params: {
                   <div class="cfg-array__item">
                     <div class="cfg-array__item-header">
                       <span class="cfg-array__item-index">#${idx + 1}</span>
-                      <openclaw-tooltip content="Remove item">
+                      <marketingclaw-tooltip content="Remove item">
                         <button
                           type="button"
                           class="cfg-array__item-remove"
@@ -1150,7 +1150,7 @@ function renderArray(params: {
                         >
                           ${icons.trash}
                         </button>
-                      </openclaw-tooltip>
+                      </marketingclaw-tooltip>
                     </div>
                     <div class="cfg-array__item-content">
                       ${renderNode({
@@ -1287,7 +1287,7 @@ function renderMapField(params: {
                           }}
                         />
                       </div>
-                      <openclaw-tooltip content="Remove entry">
+                      <marketingclaw-tooltip content="Remove entry">
                         <button
                           type="button"
                           class="cfg-map__item-remove"
@@ -1301,7 +1301,7 @@ function renderMapField(params: {
                         >
                           ${icons.trash}
                         </button>
-                      </openclaw-tooltip>
+                      </marketingclaw-tooltip>
                     </div>
                     <div class="cfg-map__item-value">
                       ${anySchema

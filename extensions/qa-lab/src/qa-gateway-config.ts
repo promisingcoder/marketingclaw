@@ -1,7 +1,7 @@
 // Qa Lab helper module supports qa gateway config behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { ModelProviderConfig } from "openclaw/plugin-sdk/provider-model-shared";
-import { uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import type { ModelProviderConfig } from "marketingclaw/plugin-sdk/provider-model-shared";
+import { uniqueStrings } from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import {
   defaultQaModelForMode,
   normalizeQaProviderMode,
@@ -62,7 +62,7 @@ export function buildQaGatewayConfig(params: {
   liveProviderConfigs?: Record<string, ModelProviderConfig>;
   fastMode?: boolean;
   thinkingDefault?: QaThinkingLevel;
-}): OpenClawConfig {
+}): MarketingClawConfig {
   const providerBaseUrl = params.providerBaseUrl ?? "http://127.0.0.1:44080/v1";
   const providerMode = normalizeQaProviderMode(params.providerMode ?? DEFAULT_QA_PROVIDER_MODE);
   const provider = getQaProvider(providerMode);
@@ -143,7 +143,7 @@ export function buildQaGatewayConfig(params: {
           enabled: true,
           config: {
             pluginToolsMcpBridge: true,
-            openClawToolsMcpBridge: true,
+            marketingClawToolsMcpBridge: true,
           },
         },
         "memory-core": {
@@ -259,5 +259,5 @@ export function buildQaGatewayConfig(params: {
     },
     ...(params.transportConfig?.channels ? { channels: params.transportConfig.channels } : {}),
     ...(params.transportConfig?.messages ? { messages: params.transportConfig.messages } : {}),
-  } satisfies OpenClawConfig;
+  } satisfies MarketingClawConfig;
 }

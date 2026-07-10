@@ -1,30 +1,30 @@
 /**
- * OpenClaw-owned tool registration filters.
+ * MarketingClaw-owned tool registration filters.
  *
  * Keeps optional tool gating separate from tool construction so config and execution contracts decide exposure.
  */
-import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { uniqueStrings } from "@marketingclaw/normalization-core/string-normalization";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { isStrictAgenticExecutionContractActive } from "./execution-contract.js";
 import { isToolAllowedByPolicyName } from "./tool-policy-match.js";
 import type { AnyAgentTool } from "./tools/common.js";
 
 /**
- * Registration helpers for optional OpenClaw-owned tools.
+ * Registration helpers for optional MarketingClaw-owned tools.
  *
  * This keeps model/runtime gating separate from tool construction so callers can
  * assemble candidate tools first, then filter by config and execution contract.
  */
 /** Drops disabled optional tools while preserving candidate order. */
-export function collectPresentOpenClawTools(
+export function collectPresentMarketingClawTools(
   candidates: readonly (AnyAgentTool | null | undefined)[],
 ): AnyAgentTool[] {
   return candidates.filter((tool): tool is AnyAgentTool => tool !== null && tool !== undefined);
 }
 
 /** Resolves the default update_plan switch from explicit config or strict execution contract. */
-function isUpdatePlanToolEnabledForOpenClawTools(params: {
-  config?: OpenClawConfig;
+function isUpdatePlanToolEnabledForMarketingClawTools(params: {
+  config?: MarketingClawConfig;
   agentSessionKey?: string;
   agentId?: string | null;
   modelProvider?: string;
@@ -43,12 +43,14 @@ function isUpdatePlanToolEnabledForOpenClawTools(params: {
   });
 }
 
-function mergeOpenClawToolPolicyList(...lists: Array<string[] | undefined>): string[] | undefined {
+function mergeMarketingClawToolPolicyList(
+  ...lists: Array<string[] | undefined>
+): string[] | undefined {
   const merged = lists.flatMap((list) => (Array.isArray(list) ? list : []));
   return merged.length > 0 ? uniqueStrings(merged) : undefined;
 }
 
-function isToolExplicitlyAllowedByOpenClawToolPolicy(params: {
+function isToolExplicitlyAllowedByMarketingClawToolPolicy(params: {
   toolName: string;
   allowlist?: string[];
   denylist?: string[];
@@ -62,9 +64,9 @@ function isToolExplicitlyAllowedByOpenClawToolPolicy(params: {
   });
 }
 
-/** Decides whether update_plan should be included in the assembled OpenClaw tool set. */
-export function shouldIncludeUpdatePlanToolForOpenClawTools(params: {
-  config?: OpenClawConfig;
+/** Decides whether update_plan should be included in the assembled MarketingClaw tool set. */
+export function shouldIncludeUpdatePlanToolForMarketingClawTools(params: {
+  config?: MarketingClawConfig;
   agentSessionKey?: string;
   agentId?: string | null;
   modelProvider?: string;
@@ -72,22 +74,22 @@ export function shouldIncludeUpdatePlanToolForOpenClawTools(params: {
   pluginToolAllowlist?: string[];
   pluginToolDenylist?: string[];
 }): boolean {
-  const allowlist = mergeOpenClawToolPolicyList(
+  const allowlist = mergeMarketingClawToolPolicyList(
     params.config?.tools?.allow,
     params.config?.tools?.alsoAllow,
     params.pluginToolAllowlist,
   );
-  const denylist = mergeOpenClawToolPolicyList(
+  const denylist = mergeMarketingClawToolPolicyList(
     params.config?.tools?.deny,
     params.pluginToolDenylist,
   );
   return (
-    isToolExplicitlyAllowedByOpenClawToolPolicy({
+    isToolExplicitlyAllowedByMarketingClawToolPolicy({
       toolName: "update_plan",
       allowlist,
       denylist,
     }) ||
-    isUpdatePlanToolEnabledForOpenClawTools({
+    isUpdatePlanToolEnabledForMarketingClawTools({
       config: params.config,
       agentSessionKey: params.agentSessionKey,
       agentId: params.agentId,

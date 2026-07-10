@@ -9,7 +9,9 @@ import { CURRENT_SESSION_VERSION } from "./version.js";
 const tempDirs: string[] = [];
 
 function makeSessionsDir(): string {
-  const dir = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-fork-transcript-")));
+  const dir = fs.realpathSync(
+    fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-fork-transcript-")),
+  );
   tempDirs.push(dir);
   return dir;
 }

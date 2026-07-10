@@ -10,7 +10,7 @@ import {
 
 const chromiumExecutablePath = resolvePlaywrightChromiumExecutablePath(chromium.executablePath());
 const chromiumAvailable = canRunPlaywrightChromium(chromiumExecutablePath);
-const allowMissingChromium = process.env.OPENCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM === "1";
+const allowMissingChromium = process.env.MARKETINGCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM === "1";
 const describeControlUiE2e = chromiumAvailable || !allowMissingChromium ? describe : describe.skip;
 
 let browser: Browser;
@@ -20,7 +20,7 @@ describeControlUiE2e("embedded terminal document", () => {
   beforeAll(async () => {
     if (!chromiumAvailable) {
       throw new Error(
-        `Playwright Chromium is not installed or cannot start at ${chromiumExecutablePath}. Run \`pnpm --dir ui exec playwright install --with-deps chromium\`, or set OPENCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM=1 only when intentionally skipping this lane.`,
+        `Playwright Chromium is not installed or cannot start at ${chromiumExecutablePath}. Run \`pnpm --dir ui exec playwright install --with-deps chromium\`, or set MARKETINGCLAW_UI_E2E_ALLOW_MISSING_CHROMIUM=1 only when intentionally skipping this lane.`,
       );
     }
     server = await startControlUiE2eServer();
@@ -38,12 +38,12 @@ describeControlUiE2e("embedded terminal document", () => {
     await page.addInitScript(() => {
       (
         window as Window & {
-          ["__OPENCLAW_NATIVE_CONTROL_AUTH__"]?: {
+          ["__MARKETINGCLAW_NATIVE_CONTROL_AUTH__"]?: {
             gatewayUrl: string;
             token: string;
           };
         }
-      )["__OPENCLAW_NATIVE_CONTROL_AUTH__"] = {
+      )["__MARKETINGCLAW_NATIVE_CONTROL_AUTH__"] = {
         gatewayUrl: "ws://gateway.example.test",
         token: "native-terminal-token",
       };
@@ -70,8 +70,8 @@ describeControlUiE2e("embedded terminal document", () => {
       const connect = await gateway.waitForRequest("connect");
 
       expect(connect.params).toMatchObject({ auth: { token: "native-terminal-token" } });
-      expect(await page.locator("openclaw-login-gate").count()).toBe(0);
-      expect(await page.locator("openclaw-terminal-panel").count()).toBe(1);
+      expect(await page.locator("marketingclaw-login-gate").count()).toBe(0);
+      expect(await page.locator("marketingclaw-terminal-panel").count()).toBe(1);
 
       await gateway.resolveDeferred("connect");
       const terminalOpen = await gateway.waitForRequest("terminal.open");
@@ -79,8 +79,8 @@ describeControlUiE2e("embedded terminal document", () => {
         cols: expect.any(Number),
         rows: expect.any(Number),
       });
-      expect(await page.locator("openclaw-login-gate").count()).toBe(0);
-      expect(await page.locator("openclaw-terminal-panel").count()).toBe(1);
+      expect(await page.locator("marketingclaw-login-gate").count()).toBe(0);
+      expect(await page.locator("marketingclaw-terminal-panel").count()).toBe(1);
     } finally {
       await context.close();
     }

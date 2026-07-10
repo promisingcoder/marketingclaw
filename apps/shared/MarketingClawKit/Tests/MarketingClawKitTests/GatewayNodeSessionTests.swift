@@ -1,7 +1,7 @@
 import Foundation
-import OpenClawProtocol
+import MarketingClawProtocol
 import Testing
-@testable import OpenClawKit
+@testable import MarketingClawKit
 
 extension NSLock {
     fileprivate func withLock<T>(_ body: () -> T) -> T {
@@ -450,7 +450,7 @@ struct GatewayNodeSessionTests {
             caps: [],
             commands: [],
             permissions: [:],
-            clientId: "openclaw-ios-test",
+            clientId: "marketingclaw-ios-test",
             clientMode: "node",
             clientDisplayName: "iOS Test",
             includeDeviceIdentity: false)
@@ -501,7 +501,7 @@ struct GatewayNodeSessionTests {
             caps: [],
             commands: [],
             permissions: [:],
-            clientId: "openclaw-ios-test",
+            clientId: "marketingclaw-ios-test",
             clientMode: "node",
             clientDisplayName: "iOS Test",
             includeDeviceIdentity: false)
@@ -557,7 +557,7 @@ struct GatewayNodeSessionTests {
             caps: [],
             commands: [],
             permissions: [:],
-            clientId: "openclaw-ios-test",
+            clientId: "marketingclaw-ios-test",
             clientMode: "node",
             clientDisplayName: "iOS Test",
             includeDeviceIdentity: false)
@@ -592,7 +592,7 @@ struct GatewayNodeSessionTests {
             caps: [],
             commands: [],
             permissions: [:],
-            clientId: "openclaw-ios-test",
+            clientId: "marketingclaw-ios-test",
             clientMode: "node",
             clientDisplayName: "iOS Test",
             includeDeviceIdentity: false,
@@ -662,7 +662,7 @@ struct GatewayNodeSessionTests {
             caps: [],
             commands: [],
             permissions: [:],
-            clientId: "openclaw-ios-test",
+            clientId: "marketingclaw-ios-test",
             clientMode: "node",
             clientDisplayName: "iOS Test",
             includeDeviceIdentity: false)
@@ -728,7 +728,7 @@ struct GatewayNodeSessionTests {
             caps: [],
             commands: ["camera.snap"],
             permissions: [:],
-            clientId: "openclaw-ios-test",
+            clientId: "marketingclaw-ios-test",
             clientMode: "node",
             clientDisplayName: "iOS Test",
             includeDeviceIdentity: false)
@@ -793,7 +793,7 @@ struct GatewayNodeSessionTests {
             caps: [],
             commands: ["system.run"],
             permissions: [:],
-            clientId: "openclaw-macos",
+            clientId: "marketingclaw-macos",
             clientMode: "node",
             clientDisplayName: "macOS Test",
             includeDeviceIdentity: false)
@@ -814,7 +814,7 @@ struct GatewayNodeSessionTests {
                         return BridgeInvokeResponse(
                             id: request.id,
                             ok: false,
-                            error: OpenClawNodeError(
+                            error: MarketingClawNodeError(
                                 code: .unavailable,
                                 message: "UNSUPPORTED: system.run unavailable"))
                     }
@@ -855,7 +855,7 @@ struct GatewayNodeSessionTests {
         let blockedParams = try #require(blockedResult["params"] as? [String: Any])
         #expect(blockedParams["ok"] as? Bool == false)
         let error = try #require(blockedParams["error"] as? [String: Any])
-        #expect(error["code"] as? String == OpenClawNodeErrorCode.unavailable.rawValue)
+        #expect(error["code"] as? String == MarketingClawNodeErrorCode.unavailable.rawValue)
 
         await gateway.disconnect()
     }
@@ -876,7 +876,7 @@ struct GatewayNodeSessionTests {
             caps: [],
             commands: [],
             permissions: [:],
-            clientId: "openclaw-ios-test",
+            clientId: "marketingclaw-ios-test",
             clientMode: "ui",
             clientDisplayName: "iOS Test",
             includeDeviceIdentity: true)
@@ -918,7 +918,7 @@ struct GatewayNodeSessionTests {
             caps: [],
             commands: [],
             permissions: [:],
-            clientId: "openclaw-ios-test",
+            clientId: "marketingclaw-ios-test",
             clientMode: "node",
             clientDisplayName: "iOS Test",
             includeDeviceIdentity: true,
@@ -965,7 +965,7 @@ struct GatewayNodeSessionTests {
             caps: [],
             commands: [],
             permissions: [:],
-            clientId: "openclaw-ios-test",
+            clientId: "marketingclaw-ios-test",
             clientMode: "node",
             clientDisplayName: "iOS Test",
             includeDeviceIdentity: true,
@@ -1016,9 +1016,9 @@ struct GatewayNodeSessionTests {
             caps: [],
             commands: [],
             permissions: [:],
-            clientId: "openclaw-ios",
+            clientId: "marketingclaw-ios",
             clientMode: "node",
-            clientDisplayName: "OpenClaw Share",
+            clientDisplayName: "MarketingClaw Share",
             deviceIdentityProfile: .shareExtension,
             includeDeviceIdentity: true)
 
@@ -1059,7 +1059,7 @@ struct GatewayNodeSessionTests {
             caps: [],
             commands: [],
             permissions: [:],
-            clientId: "openclaw-ios-test",
+            clientId: "marketingclaw-ios-test",
             clientMode: "ui",
             clientDisplayName: "iOS Test",
             includeDeviceIdentity: false)
@@ -1105,7 +1105,7 @@ struct GatewayNodeSessionTests {
             caps: [],
             commands: [],
             permissions: [:],
-            clientId: "openclaw-ios-test",
+            clientId: "marketingclaw-ios-test",
             clientMode: "ui",
             clientDisplayName: "iOS Test",
             includeDeviceIdentity: false)
@@ -1135,7 +1135,7 @@ struct GatewayNodeSessionTests {
             #expect(problem?.kind == .protocolMismatch)
             #expect(problem?.owner == .iphone)
             #expect(problem?
-                .message == "This app is older than the gateway. Update OpenClaw on this device, then retry.")
+                .message == "This app is older than the gateway. Update MarketingClaw on this device, then retry.")
             #expect(problem?.pauseReconnect == true)
             #expect(problem?.retryable == false)
         } catch {
@@ -1156,7 +1156,7 @@ struct GatewayNodeSessionTests {
             caps: [],
             commands: [],
             permissions: [:],
-            clientId: "openclaw-ios-test",
+            clientId: "marketingclaw-ios-test",
             clientMode: "node",
             clientDisplayName: "iOS Test",
             includeDeviceIdentity: false)
@@ -1225,7 +1225,7 @@ struct GatewayNodeSessionTests {
             caps: [],
             commands: [],
             permissions: [:],
-            clientId: "openclaw-ios-test",
+            clientId: "marketingclaw-ios-test",
             clientMode: "node",
             clientDisplayName: "iOS Test",
             includeDeviceIdentity: true)
@@ -1268,7 +1268,7 @@ struct GatewayNodeSessionTests {
         try Data().write(to: blocker)
         // Repoint the pinned state dir at a plain file to force write failures;
         // the isolation trait restores the env var after the test.
-        setenv("OPENCLAW_STATE_DIR", blocker.path, 1)
+        setenv("MARKETINGCLAW_STATE_DIR", blocker.path, 1)
         defer { try? FileManager.default.removeItem(at: tempDir) }
 
         let session = FakeGatewayWebSocketSession(helloAuth: [
@@ -1283,7 +1283,7 @@ struct GatewayNodeSessionTests {
             caps: [],
             commands: [],
             permissions: [:],
-            clientId: "openclaw-ios-test",
+            clientId: "marketingclaw-ios-test",
             clientMode: "node",
             clientDisplayName: "iOS Test",
             includeDeviceIdentity: true)
@@ -1327,7 +1327,7 @@ struct GatewayNodeSessionTests {
             caps: [],
             commands: [],
             permissions: [:],
-            clientId: "openclaw-ios-test",
+            clientId: "marketingclaw-ios-test",
             clientMode: "node",
             clientDisplayName: "iOS Test",
             includeDeviceIdentity: true)
@@ -1378,7 +1378,7 @@ struct GatewayNodeSessionTests {
             caps: [],
             commands: [],
             permissions: [:],
-            clientId: "openclaw-ios-test",
+            clientId: "marketingclaw-ios-test",
             clientMode: "node",
             clientDisplayName: "iOS Test",
             includeDeviceIdentity: true)
@@ -1428,7 +1428,7 @@ struct GatewayNodeSessionTests {
             caps: [],
             commands: [],
             permissions: [:],
-            clientId: "openclaw-ios-test",
+            clientId: "marketingclaw-ios-test",
             clientMode: "node",
             clientDisplayName: "iOS Test",
             includeDeviceIdentity: true)
@@ -1493,7 +1493,7 @@ struct GatewayNodeSessionTests {
             caps: [],
             commands: [],
             permissions: [:],
-            clientId: "openclaw-ios-test",
+            clientId: "marketingclaw-ios-test",
             clientMode: "ui",
             clientDisplayName: "iOS Test",
             includeDeviceIdentity: true)
@@ -1560,19 +1560,19 @@ struct GatewayNodeSessionTests {
     @Test
     func `normalize canvas host url preserves explicit secure canvas port`() throws {
         let normalized = try canonicalizeCanvasHostUrl(
-            raw: "https://canvas.example.com:9443/__openclaw__/cap/token",
+            raw: "https://canvas.example.com:9443/__marketingclaw__/cap/token",
             activeURL: #require(URL(string: "wss://gateway.example.com")))
 
-        #expect(normalized == "https://canvas.example.com:9443/__openclaw__/cap/token")
+        #expect(normalized == "https://canvas.example.com:9443/__marketingclaw__/cap/token")
     }
 
     @Test
     func `normalize canvas host url backfills gateway host for loopback canvas`() throws {
         let normalized = try canonicalizeCanvasHostUrl(
-            raw: "http://127.0.0.1:18789/__openclaw__/cap/token",
+            raw: "http://127.0.0.1:18789/__marketingclaw__/cap/token",
             activeURL: #require(URL(string: "wss://gateway.example.com:7443")))
 
-        #expect(normalized == "https://gateway.example.com:7443/__openclaw__/cap/token")
+        #expect(normalized == "https://gateway.example.com:7443/__marketingclaw__/cap/token")
     }
 
     @Test
@@ -1653,7 +1653,7 @@ struct GatewayNodeSessionTests {
             caps: [],
             commands: [],
             permissions: [:],
-            clientId: "openclaw-ios-test",
+            clientId: "marketingclaw-ios-test",
             clientMode: "ui",
             clientDisplayName: "iOS Test",
             includeDeviceIdentity: false)

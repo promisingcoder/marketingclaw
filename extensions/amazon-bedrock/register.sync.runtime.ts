@@ -2,14 +2,14 @@
  * Synchronous Amazon Bedrock provider registration. It wires Bedrock streaming,
  * model discovery, thinking policy, guardrails, and embedding integration.
  */
-import type { StreamFn } from "openclaw/plugin-sdk/agent-core";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { registerApiProvider, streamSimple } from "openclaw/plugin-sdk/llm";
-import { resolvePluginConfigObject } from "openclaw/plugin-sdk/plugin-config-runtime";
+import type { StreamFn } from "marketingclaw/plugin-sdk/agent-core";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import { registerApiProvider, streamSimple } from "marketingclaw/plugin-sdk/llm";
+import { resolvePluginConfigObject } from "marketingclaw/plugin-sdk/plugin-config-runtime";
 import type {
-  OpenClawPluginApi,
+  MarketingClawPluginApi,
   ProviderNormalizeResolvedModelContext,
-} from "openclaw/plugin-sdk/plugin-entry";
+} from "marketingclaw/plugin-sdk/plugin-entry";
 import {
   ANTHROPIC_BY_MODEL_REPLAY_HOOKS,
   normalizeProviderId,
@@ -17,8 +17,8 @@ import {
   resolveClaudeModelIdentity,
   resolveClaudeMythos5ModelIdentity,
   resolveClaudeSonnet5ModelIdentity,
-} from "openclaw/plugin-sdk/provider-model-shared";
-import { streamWithPayloadPatch } from "openclaw/plugin-sdk/provider-stream-shared";
+} from "marketingclaw/plugin-sdk/provider-model-shared";
+import { streamWithPayloadPatch } from "marketingclaw/plugin-sdk/provider-stream-shared";
 import { refreshAwsSharedConfigCacheForBedrock } from "./aws-credential-refresh.js";
 import { supportsBedrockPromptCaching } from "./bedrock-options.js";
 import { mergeImplicitBedrockProvider, resolveBedrockConfigApiKey } from "./discovery-shared.js";
@@ -191,7 +191,7 @@ function isBedrockAppInferenceProfile(modelId: string): boolean {
 /**
  * The shared runtime's `supportsPromptCaching` checks `model.id` for specific Claude
  * model name patterns, which fails for application inference profile ARNs (opaque
- * IDs that may not contain the model name). When OpenClaw's `isAnthropicBedrockModel`
+ * IDs that may not contain the model name). When MarketingClaw's `isAnthropicBedrockModel`
  * identifies the model but the shared runtime won't inject cache points, we do it via onPayload.
  *
  * Gated to application inference profile ARNs only — regular Claude model IDs and
@@ -206,7 +206,7 @@ function needsCachePointInjection(modelId: string): boolean {
   if (sharedRuntimeWouldInjectCachePoints(modelId)) {
     return false;
   }
-  // Check if OpenClaw identifies this as an Anthropic model via the ARN heuristic.
+  // Check if MarketingClaw identifies this as an Anthropic model via the ARN heuristic.
   if (isAnthropicBedrockModel(modelId)) {
     return true;
   }
@@ -225,7 +225,7 @@ function extractRegionFromArn(arn: string): string | undefined {
 
 /**
  * Check if a resolved foundation model ARN supports prompt caching using the
- * same matcher OpenClaw uses for direct model IDs.
+ * same matcher MarketingClaw uses for direct model IDs.
  */
 function resolvedModelSupportsCaching(modelArn: string): boolean {
   return supportsBedrockPromptCaching(modelArn);
@@ -238,7 +238,7 @@ function resolvedModelSupportsCaching(modelArn: string): boolean {
  * otherwise opaque.
  *
  * Region is extracted from the profile ARN itself to avoid mismatches when
- * the OpenClaw config region differs from the profile's home region.
+ * the MarketingClaw config region differs from the profile's home region.
  */
 type BedrockAppProfileTraits = {
   cacheEligible: boolean;
@@ -366,7 +366,7 @@ function patchMaxThinkingEffort(payload: Record<string, unknown>): void {
 }
 
 /** Register Amazon Bedrock provider, discovery catalog, stream wrappers, and embeddings. */
-export function registerAmazonBedrockPlugin(api: OpenClawPluginApi): void {
+export function registerAmazonBedrockPlugin(api: MarketingClawPluginApi): void {
   // Keep registration-local constants inside the function so partial module
   // initialization during test bootstrap cannot trip TDZ reads.
   const providerId = "amazon-bedrock";
@@ -393,7 +393,7 @@ export function registerAmazonBedrockPlugin(api: OpenClawPluginApi): void {
   );
 
   function resolveCurrentPluginConfig(
-    config: OpenClawConfig | undefined,
+    config: MarketingClawConfig | undefined,
   ): AmazonBedrockPluginConfig | undefined {
     const runtimePluginConfig = resolvePluginConfigObject(config, providerId);
     return (

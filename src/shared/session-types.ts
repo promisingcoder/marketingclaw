@@ -16,7 +16,7 @@ export type GatewayAgentModel = {
 /** Runtime selection metadata for an agent row. */
 export type GatewayAgentRuntime = {
   id: string;
-  fallback?: "openclaw" | "none";
+  fallback?: "marketingclaw" | "none";
   source: "env" | "agent" | "defaults" | "model" | "provider" | "implicit" | "session-key";
 };
 

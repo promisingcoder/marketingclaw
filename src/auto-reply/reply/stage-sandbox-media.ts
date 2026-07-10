@@ -4,17 +4,17 @@ import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { isInboundPathAllowed } from "@openclaw/media-core/inbound-path-policy";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { isInboundPathAllowed } from "@marketingclaw/media-core/inbound-path-policy";
+import { normalizeOptionalString } from "@marketingclaw/normalization-core/string-coerce";
 import { assertSandboxPath } from "../../agents/sandbox-paths.js";
 import { ensureSandboxWorkspaceForSession } from "../../agents/sandbox.js";
 import { slugifySessionKey } from "../../agents/sandbox/shared.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import { logVerbose } from "../../globals.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import { root as fsRoot, FsSafeError } from "../../infra/fs-safe.js";
 import { normalizeScpRemoteHost, normalizeScpRemotePath } from "../../infra/scp-host.js";
-import { resolvePreferredOpenClawTmpDir } from "../../infra/tmp-openclaw-dir.js";
+import { resolvePreferredMarketingClawTmpDir } from "../../infra/tmp-marketingclaw-dir.js";
 import { resolveChannelRemoteInboundAttachmentRoots } from "../../media/channel-inbound-roots.js";
 import { resolveInboundMediaReference } from "../../media/media-reference.js";
 import { getMediaDir, MEDIA_MAX_BYTES } from "../../media/store.js";
@@ -46,7 +46,7 @@ type StageableMediaSource = {
 export async function stageSandboxMedia(params: {
   ctx: MsgContext;
   sessionCtx: TemplateContext;
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   sessionKey?: string;
   workspaceDir: string;
   remoteMediaMode?: "sandbox-or-cache" | "cache";
@@ -67,8 +67,8 @@ export async function stageSandboxMedia(params: {
         workspaceDir,
       });
 
-  // For remote attachments without sandbox, use ~/.openclaw/media (not agent workspace for privacy).
-  // Managed local inbound refs are already in OpenClaw's media store; when no sandbox is
+  // For remote attachments without sandbox, use ~/.marketingclaw/media (not agent workspace for privacy).
+  // Managed local inbound refs are already in MarketingClaw's media store; when no sandbox is
   // active, copy them into the runner workspace so host-mode shell/doc readers get a path.
   const remoteMediaCacheDir = ctx.MediaRemoteHost
     ? path.join(CONFIG_DIR, "media", "remote-cache", slugifySessionKey(sessionKey))
@@ -87,7 +87,7 @@ export async function stageSandboxMedia(params: {
   const staged = new Map<string, string>(); // original/resolved source -> runner-visible path
   const hostWorkspaceStagingDir =
     !sandbox && !ctx.MediaRemoteHost
-      ? path.join("media", "inbound", `openclaw-staged-${crypto.randomUUID()}`)
+      ? path.join("media", "inbound", `marketingclaw-staged-${crypto.randomUUID()}`)
       : undefined;
 
   for (const raw of rawPaths) {
@@ -208,7 +208,7 @@ async function stageRemoteFileIntoRoot(params: {
   relativeDestPath: string;
   maxBytes?: number;
 }): Promise<void> {
-  const tmpRoot = resolvePreferredOpenClawTmpDir();
+  const tmpRoot = resolvePreferredMarketingClawTmpDir();
   await fs.mkdir(tmpRoot, { recursive: true });
   const tmpDir = await fs.mkdtemp(path.join(tmpRoot, "stage-sandbox-media-"));
   const tmpPath = path.join(tmpDir, "download");

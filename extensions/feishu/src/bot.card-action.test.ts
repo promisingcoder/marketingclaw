@@ -1,5 +1,5 @@
 // Feishu tests cover bot.card action plugin behavior.
-import { createRuntimeEnv } from "openclaw/plugin-sdk/plugin-test-runtime";
+import { createRuntimeEnv } from "marketingclaw/plugin-sdk/plugin-test-runtime";
 import { afterAll, afterEach, describe, it, expect, vi, beforeEach } from "vitest";
 import type { ClawdbotConfig, RuntimeEnv } from "../runtime-api.js";
 import {
@@ -516,9 +516,7 @@ describe("Feishu Card Action Handler", () => {
     createFeishuClientMock.mockReturnValueOnce({
       im: {
         chat: {
-          get: vi
-            .fn()
-            .mockResolvedValue({ code: 99, msg: `${"x".repeat(499)}😀tail` }),
+          get: vi.fn().mockResolvedValue({ code: 99, msg: `${"x".repeat(499)}😀tail` }),
         },
       },
     });

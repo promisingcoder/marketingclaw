@@ -20,7 +20,7 @@ import { createMemoryWikiTestHarness } from "./test-helpers.js";
 
 const callGatewayFromCliMock = vi.hoisted(() => vi.fn());
 
-vi.mock("openclaw/plugin-sdk/gateway-runtime", () => ({
+vi.mock("marketingclaw/plugin-sdk/gateway-runtime", () => ({
   callGatewayFromCli: callGatewayFromCliMock,
 }));
 
@@ -30,7 +30,7 @@ let caseIndex = 0;
 let stdoutWriteMock: ReturnType<typeof vi.fn>;
 
 function resolveLegacyImportRunRecordPath(vaultRoot: string, runId: string): string {
-  return path.join(vaultRoot, ".openclaw-wiki", "import-runs", `${runId}.json`);
+  return path.join(vaultRoot, ".marketingclaw-wiki", "import-runs", `${runId}.json`);
 }
 
 describe("memory-wiki cli", () => {
@@ -339,9 +339,9 @@ Orders join to [customers](/tables/customers.md).
         body: `# Alpha
 
 ## Notes
-<!-- openclaw:human:start -->
+<!-- marketingclaw:human:start -->
 cli note
-<!-- openclaw:human:end -->
+<!-- marketingclaw:human:end -->
 `,
       }),
       "utf8",

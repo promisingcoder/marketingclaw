@@ -1,16 +1,16 @@
-// Featherless plugin entrypoint registers its OpenClaw integration.
+// Featherless plugin entrypoint registers its MarketingClaw integration.
 import type {
   ProviderResolveDynamicModelContext,
   ProviderRuntimeModel,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { readConfiguredProviderCatalogEntries } from "openclaw/plugin-sdk/provider-catalog-shared";
-import { defineSingleProviderPluginEntry } from "openclaw/plugin-sdk/provider-entry";
+} from "marketingclaw/plugin-sdk/plugin-entry";
+import { readConfiguredProviderCatalogEntries } from "marketingclaw/plugin-sdk/provider-catalog-shared";
+import { defineSingleProviderPluginEntry } from "marketingclaw/plugin-sdk/provider-entry";
 import {
   buildProviderReplayFamilyHooks,
   cloneFirstTemplateModel,
   normalizeModelCompat,
-} from "openclaw/plugin-sdk/provider-model-shared";
-import { buildProviderToolCompatFamilyHooks } from "openclaw/plugin-sdk/provider-tools";
+} from "marketingclaw/plugin-sdk/provider-model-shared";
+import { buildProviderToolCompatFamilyHooks } from "marketingclaw/plugin-sdk/provider-tools";
 import { applyFeatherlessConfig, FEATHERLESS_DEFAULT_MODEL_REF } from "./onboard.js";
 import {
   buildFeatherlessProvider,

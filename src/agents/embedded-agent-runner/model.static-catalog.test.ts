@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const manifestMocks = vi.hoisted(() => ({
-  listOpenClawPluginManifestMetadata: vi.fn(),
+  listMarketingClawPluginManifestMetadata: vi.fn(),
   loadPluginManifest: vi.fn(),
   loadPluginManifestRegistry: vi.fn(),
 }));
@@ -16,7 +16,7 @@ const providerMocks = vi.hoisted(() => ({
 }));
 
 vi.mock("../../plugins/manifest-metadata-scan.js", () => ({
-  listOpenClawPluginManifestMetadata: manifestMocks.listOpenClawPluginManifestMetadata,
+  listMarketingClawPluginManifestMetadata: manifestMocks.listMarketingClawPluginManifestMetadata,
 }));
 
 vi.mock("../../plugins/manifest.js", async (importOriginal) => ({
@@ -63,7 +63,7 @@ function setManifestPlugins(plugins: unknown[]) {
       return [`/fixtures/${id}`, plugin];
     }),
   );
-  manifestMocks.listOpenClawPluginManifestMetadata.mockReturnValue(
+  manifestMocks.listMarketingClawPluginManifestMetadata.mockReturnValue(
     [...byPluginDir].map(([pluginDir, plugin]) => ({
       pluginDir,
       manifest: plugin,
@@ -74,7 +74,11 @@ function setManifestPlugins(plugins: unknown[]) {
     const plugin = byPluginDir.get(pluginDir);
     return plugin
       ? { ok: true, manifest: plugin }
-      : { ok: false, error: "missing manifest", manifestPath: `${pluginDir}/openclaw.plugin.json` };
+      : {
+          ok: false,
+          error: "missing manifest",
+          manifestPath: `${pluginDir}/marketingclaw.plugin.json`,
+        };
   });
 }
 
@@ -117,7 +121,7 @@ function createMistralManifestPlugin(overrides?: {
 }
 
 beforeEach(() => {
-  manifestMocks.listOpenClawPluginManifestMetadata.mockReset();
+  manifestMocks.listMarketingClawPluginManifestMetadata.mockReset();
   manifestMocks.loadPluginManifest.mockReset();
   manifestMocks.loadPluginManifestRegistry.mockReset();
   providerMocks.normalizePluginDiscoveryResult.mockReset();
@@ -169,7 +173,7 @@ describe("resolveBundledStaticCatalogModel", () => {
       "mistral-medium-3-5",
     );
     expect(resolveModel({ provider: "mistral", modelId: "missing" })).toBeUndefined();
-    expect(manifestMocks.listOpenClawPluginManifestMetadata).toHaveBeenCalledTimes(1);
+    expect(manifestMocks.listMarketingClawPluginManifestMetadata).toHaveBeenCalledTimes(1);
   });
 
   it("synthesizes a runtime model from an exact bundled static manifest catalog row", () => {

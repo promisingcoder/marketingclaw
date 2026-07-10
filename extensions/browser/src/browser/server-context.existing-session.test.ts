@@ -146,7 +146,7 @@ describe("browser server-context existing-session profile", () => {
     const state = makeState();
     state.resolved.profiles["chrome-live"] = {
       ...state.resolved.profiles["chrome-live"],
-      cdpUrl: "http://openclaw:relay-token@127.0.0.1:9222",
+      cdpUrl: "http://marketingclaw:relay-token@127.0.0.1:9222",
     };
     const ctx = createBrowserRouteContext({ getState: () => state });
 
@@ -162,7 +162,7 @@ describe("browser server-context existing-session profile", () => {
           [string, ChromeLiveProfile, { ephemeral?: boolean; timeoutMs?: number }]
         >
       )[0] ?? [];
-    expect(ensuredProfile?.cdpUrl).toBe("http://openclaw:relay-token@127.0.0.1:9222");
+    expect(ensuredProfile?.cdpUrl).toBe("http://marketingclaw:relay-token@127.0.0.1:9222");
   });
 
   it("keeps the next real attach on the normal sticky session path after an idle status probe", async () => {
@@ -287,7 +287,7 @@ describe("browser server-context existing-session profile", () => {
 
     const pending = live.ensureBrowserAvailable();
     const assertion = expect(pending).rejects.toThrow(
-      /could not connect to Chrome.*managed "openclaw" profile.*DevToolsActivePort/s,
+      /could not connect to Chrome.*managed "marketingclaw" profile.*DevToolsActivePort/s,
     );
     await vi.advanceTimersByTimeAsync(8_000);
     await assertion;

@@ -1,8 +1,8 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { OpenClawPluginToolContext } from "openclaw/plugin-sdk/plugin-entry";
-import { createPluginRuntimeMock } from "openclaw/plugin-sdk/plugin-test-runtime";
-import { withTempDir } from "openclaw/plugin-sdk/test-env";
+import type { MarketingClawPluginToolContext } from "marketingclaw/plugin-sdk/plugin-entry";
+import { createPluginRuntimeMock } from "marketingclaw/plugin-sdk/plugin-test-runtime";
+import { withTempDir } from "marketingclaw/plugin-sdk/test-env";
 import { describe, expect, it, vi } from "vitest";
 import { CODEX_CONTROL_METHODS } from "./app-server/capabilities.js";
 import { CODEX_INTERACTIVE_THREAD_SOURCE_KINDS } from "./app-server/protocol.js";
@@ -20,7 +20,7 @@ describe("native Codex thread tool", () => {
   let sessionFile: string;
 
   async function withFixture(run: () => void | Promise<void>): Promise<void> {
-    await withTempDir("openclaw-codex-threads-", async (tempRoot) => {
+    await withTempDir("marketingclaw-codex-threads-", async (tempRoot) => {
       root = tempRoot;
       sessionFile = path.join(root, "sessions", "session-id.jsonl");
       await fs.mkdir(path.dirname(sessionFile), { recursive: true });
@@ -41,7 +41,7 @@ describe("native Codex thread tool", () => {
     request?: ReturnType<typeof vi.fn>;
     sessionId?: string | null;
   }) {
-    const context: OpenClawPluginToolContext = {
+    const context: MarketingClawPluginToolContext = {
       config: {},
       agentId: "main",
       agentDir: path.join(root, "agent"),
@@ -110,7 +110,7 @@ describe("native Codex thread tool", () => {
       expect(result?.details).toEqual(response);
     }));
 
-  it("forks a native thread and attaches the fork to the OpenClaw session", () =>
+  it("forks a native thread and attaches the fork to the MarketingClaw session", () =>
     withFixture(async () => {
       const request = vi.fn(async () => ({
         thread: { id: "forked-thread", cwd: "/tmp/project", status: { type: "idle" } },
@@ -166,7 +166,7 @@ describe("native Codex thread tool", () => {
       }
     }));
 
-  it("refuses to archive the active thread bound to this OpenClaw session", () =>
+  it("refuses to archive the active thread bound to this MarketingClaw session", () =>
     withFixture(async () => {
       await writeCodexAppServerBinding("session-id", {
         threadId: "active-thread",
@@ -186,7 +186,7 @@ describe("native Codex thread tool", () => {
           thread_id: "active-thread",
           confirm: true,
         }),
-      ).rejects.toThrow("cannot archive the Codex thread active in this OpenClaw session");
+      ).rejects.toThrow("cannot archive the Codex thread active in this MarketingClaw session");
       expect(request).not.toHaveBeenCalledWith(
         expect.anything(),
         CODEX_CONTROL_METHODS.archiveThread,

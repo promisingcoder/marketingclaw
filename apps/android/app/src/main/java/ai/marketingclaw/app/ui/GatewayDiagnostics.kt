@@ -1,10 +1,10 @@
-package ai.openclaw.app.ui
+package ai.marketingclaw.app.ui
 
-import ai.openclaw.app.BuildConfig
-import ai.openclaw.app.GatewayConnectionProblem
-import ai.openclaw.app.GatewayNodeApprovalState
-import ai.openclaw.app.GatewayNodeCapabilityApproval
-import ai.openclaw.app.gateway.normalizeGatewayApprovalRequestId
+import ai.marketingclaw.app.BuildConfig
+import ai.marketingclaw.app.GatewayConnectionProblem
+import ai.marketingclaw.app.GatewayNodeApprovalState
+import ai.marketingclaw.app.GatewayNodeCapabilityApproval
+import ai.marketingclaw.app.gateway.normalizeGatewayApprovalRequestId
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -12,7 +12,7 @@ import android.os.Build
 import android.widget.Toast
 
 /** App version label shared by diagnostics and gateway-facing Android metadata. */
-internal fun openClawAndroidVersionLabel(): String {
+internal fun marketingClawAndroidVersionLabel(): String {
   val versionName = BuildConfig.VERSION_NAME.trim().ifEmpty { "dev" }
   return if (BuildConfig.DEBUG && !versionName.contains("dev", ignoreCase = true)) {
     "$versionName-dev"
@@ -96,8 +96,8 @@ internal fun gatewayNodeApprovalCommand(
   when (state) {
     GatewayNodeApprovalState.PendingApproval,
     GatewayNodeApprovalState.PendingReapproval,
-    -> normalizeGatewayApprovalRequestId(requestId)?.let { "openclaw nodes approve $it" } ?: "openclaw nodes status"
-    GatewayNodeApprovalState.Unapproved -> "openclaw nodes status"
+    -> normalizeGatewayApprovalRequestId(requestId)?.let { "marketingclaw nodes approve $it" } ?: "marketingclaw nodes status"
+    GatewayNodeApprovalState.Unapproved -> "marketingclaw nodes status"
     GatewayNodeApprovalState.Loading,
     GatewayNodeApprovalState.Unsupported,
     GatewayNodeApprovalState.Approved,
@@ -137,20 +137,20 @@ internal fun buildGatewayDiagnosticsReport(
   val endpoint = gatewayAddress.trim().ifEmpty { "unknown" }
   val status = gatewayStatusForDisplay(statusText)
   return """
-    Help diagnose this OpenClaw Android gateway connection failure.
+    Help diagnose this MarketingClaw Android gateway connection failure.
 
     Please:
     - pick one route only: same machine, same LAN, Tailscale, or public URL
     - classify this as pairing/auth, TLS trust, wrong advertised route, wrong address/port, or gateway down
     - remember: public routes require wss:// or Tailscale Serve; ws:// is allowed for localhost, .local hosts, the Android emulator, and private LAN IPs
     - quote the exact app status/error below
-    - tell me whether `openclaw devices list` should show a pending pairing request
-    - if more signal is needed, ask for `openclaw qr --json`, `openclaw devices list`, and `openclaw nodes status`
+    - tell me whether `marketingclaw devices list` should show a pending pairing request
+    - if more signal is needed, ask for `marketingclaw qr --json`, `marketingclaw devices list`, and `marketingclaw nodes status`
     - give the next exact command or tap
 
     Debug info:
     - screen: $screen
-    - app version: ${openClawAndroidVersionLabel()}
+    - app version: ${marketingClawAndroidVersionLabel()}
     - device: $device
     - android: $androidVersion (SDK ${Build.VERSION.SDK_INT})
     - gateway address: $endpoint
@@ -167,6 +167,6 @@ internal fun copyGatewayDiagnosticsReport(
 ) {
   val clipboard = context.getSystemService(ClipboardManager::class.java) ?: return
   val report = buildGatewayDiagnosticsReport(screen = screen, gatewayAddress = gatewayAddress, statusText = statusText)
-  clipboard.setPrimaryClip(ClipData.newPlainText("OpenClaw gateway diagnostics", report))
+  clipboard.setPrimaryClip(ClipData.newPlainText("MarketingClaw gateway diagnostics", report))
   Toast.makeText(context, "Copied gateway diagnostics", Toast.LENGTH_SHORT).show()
 }

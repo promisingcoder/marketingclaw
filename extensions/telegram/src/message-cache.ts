@@ -2,11 +2,11 @@
 import { createHash } from "node:crypto";
 import fs from "node:fs";
 import type { Message } from "grammy/types";
-import { formatLocationText } from "openclaw/plugin-sdk/channel-inbound";
-import { parseStrictPositiveInteger } from "openclaw/plugin-sdk/number-runtime";
-import type { MsgContext } from "openclaw/plugin-sdk/reply-runtime";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { formatLocationText } from "marketingclaw/plugin-sdk/channel-inbound";
+import { parseStrictPositiveInteger } from "marketingclaw/plugin-sdk/number-runtime";
+import type { MsgContext } from "marketingclaw/plugin-sdk/reply-runtime";
+import { logVerbose } from "marketingclaw/plugin-sdk/runtime-env";
+import { isRecord } from "marketingclaw/plugin-sdk/string-coerce-runtime";
 import { resolveTelegramPrimaryMedia, resolveTelegramRichMessageBody } from "./bot/body-helpers.js";
 import {
   buildSenderName,
@@ -67,7 +67,7 @@ type TelegramMessageCache = {
 
 type MessageWithExternalReply = Message & { external_reply?: Message };
 type MessageWithPromptContextTimestamp = Message & {
-  openclaw_prompt_context_timestamp_ms?: unknown;
+  marketingclaw_prompt_context_timestamp_ms?: unknown;
 };
 
 type TelegramMessageCacheBucket = {
@@ -164,7 +164,7 @@ function resolveMediaType(placeholder?: string): string | undefined {
 
 function resolveMessageTimestamp(msg: Message): number | undefined {
   const promptContextTimestamp = (msg as MessageWithPromptContextTimestamp)
-    .openclaw_prompt_context_timestamp_ms;
+    .marketingclaw_prompt_context_timestamp_ms;
   if (typeof promptContextTimestamp === "number" && Number.isFinite(promptContextTimestamp)) {
     return promptContextTimestamp;
   }

@@ -2,7 +2,7 @@
  * Tests shared gateway auth behavior across config method updates.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import type { RestartSentinelPayload } from "../../infra/restart-sentinel.js";
 import { resetPluginRuntimeStateForTest, setActivePluginRegistry } from "../../plugins/runtime.js";
 import { createTestRegistry } from "../../test-utils/channel-plugins.js";
@@ -14,7 +14,7 @@ import {
 
 const readConfigFileSnapshotForWriteMock = vi.fn();
 const writeConfigFileMock = vi.fn();
-const persistedConfigResultMock = vi.fn((config: OpenClawConfig) => config);
+const persistedConfigResultMock = vi.fn((config: MarketingClawConfig) => config);
 const validateConfigObjectWithPluginsMock = vi.fn();
 const prepareSecretsRuntimeSnapshotMock = vi.fn();
 const scheduleGatewaySigusr1RestartMock = vi.fn(() => ({
@@ -31,13 +31,16 @@ vi.mock("../../config/config.js", async () => {
     await vi.importActual<typeof import("../../config/config.js")>("../../config/config.js");
   return {
     ...actual,
-    createConfigIO: () => ({ configPath: "/tmp/openclaw.json" }),
+    createConfigIO: () => ({ configPath: "/tmp/marketingclaw.json" }),
     writeConfigFile: writeConfigFileMock,
-    replaceConfigFile: async (params: { nextConfig: OpenClawConfig; writeOptions?: unknown }) => {
+    replaceConfigFile: async (params: {
+      nextConfig: MarketingClawConfig;
+      writeOptions?: unknown;
+    }) => {
       await writeConfigFileMock(params.nextConfig, params.writeOptions);
       const persistedConfig = persistedConfigResultMock(params.nextConfig);
       return {
-        path: "/tmp/openclaw.json",
+        path: "/tmp/marketingclaw.json",
         previousHash: "base-hash",
         snapshot: createConfigWriteSnapshot(params.nextConfig),
         nextConfig: persistedConfig,
@@ -53,7 +56,7 @@ vi.mock("../../config/io.js", async () => {
   const actual = await vi.importActual<typeof import("../../config/io.js")>("../../config/io.js");
   return {
     ...actual,
-    createConfigIO: () => ({ configPath: "/tmp/openclaw.json" }),
+    createConfigIO: () => ({ configPath: "/tmp/marketingclaw.json" }),
     readConfigFileSnapshotForWrite: readConfigFileSnapshotForWriteMock,
   };
 });
@@ -102,7 +105,7 @@ const GATEWAY_CONFIG_WRITE_OPTIONS = {
   },
 };
 
-function tokenAuthConfig(token: string): OpenClawConfig {
+function tokenAuthConfig(token: string): MarketingClawConfig {
   return {
     gateway: {
       auth: {
@@ -117,7 +120,7 @@ function trustedProxyConfig(params: {
   trustedProxies?: string[];
   requiredHeaders?: string[];
   allowUsers?: string[];
-}): OpenClawConfig {
+}): MarketingClawConfig {
   return {
     gateway: {
       auth: {
@@ -133,7 +136,7 @@ function trustedProxyConfig(params: {
   };
 }
 
-function hotReloadConfig(): OpenClawConfig {
+function hotReloadConfig(): MarketingClawConfig {
   return {
     gateway: {
       reload: {
@@ -156,7 +159,7 @@ function installBrowserReloadRegistry(): void {
   setActivePluginRegistry(registry);
 }
 
-function mockPreviousConfig(config: OpenClawConfig): void {
+function mockPreviousConfig(config: MarketingClawConfig): void {
   readConfigFileSnapshotForWriteMock.mockResolvedValue(createConfigWriteSnapshot(config));
 }
 
@@ -190,32 +193,32 @@ afterEach(() => {
 });
 
 beforeEach(() => {
-  validateConfigObjectWithPluginsMock.mockImplementation((config: OpenClawConfig) => ({
+  validateConfigObjectWithPluginsMock.mockImplementation((config: MarketingClawConfig) => ({
     ok: true,
     config,
   }));
   prepareSecretsRuntimeSnapshotMock.mockImplementation(
-    async ({ config }: { config: OpenClawConfig }) => ({
+    async ({ config }: { config: MarketingClawConfig }) => ({
       config,
     }),
   );
   restartSentinelMocks.writeRestartSentinel.mockClear();
-  persistedConfigResultMock.mockImplementation((config: OpenClawConfig) => config);
+  persistedConfigResultMock.mockImplementation((config: MarketingClawConfig) => config);
 });
 
 describe("config shared auth disconnects", () => {
   it("returns the persisted config from config.set write results", async () => {
-    const prevConfig: OpenClawConfig = {
+    const prevConfig: MarketingClawConfig = {
       gateway: {
         port: 19000,
       },
     };
-    const submittedConfig: OpenClawConfig = {
+    const submittedConfig: MarketingClawConfig = {
       gateway: {
         port: 19001,
       },
     };
-    const persistedConfig: OpenClawConfig = {
+    const persistedConfig: MarketingClawConfig = {
       gateway: {
         port: 19001,
       },
@@ -242,7 +245,7 @@ describe("config shared auth disconnects", () => {
       true,
       {
         ok: true,
-        path: "/tmp/openclaw.json",
+        path: "/tmp/marketingclaw.json",
         config: persistedConfig,
       },
       undefined,
@@ -374,7 +377,7 @@ describe("config shared auth disconnects", () => {
   });
 
   it("marks hot-reloaded config.patch writes as not restart required", async () => {
-    const prevConfig: OpenClawConfig = {
+    const prevConfig: MarketingClawConfig = {
       gateway: {
         channelHealthCheckMinutes: 10,
       },

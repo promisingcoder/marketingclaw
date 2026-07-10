@@ -1312,7 +1312,7 @@
   box-shadow: 0 18px 40px color-mix(in srgb, black 26%, transparent);
 }
 
-openclaw-native-link-menu[popover] {
+marketingclaw-native-link-menu[popover] {
   width: 0;
   height: 0;
   margin: 0;
@@ -1820,7 +1820,7 @@ openclaw-native-link-menu[popover] {
   margin-top: 0;
 }
 
-.content--chat > openclaw-router-outlet {
+.content--chat > marketingclaw-router-outlet {
   display: flex;
   flex: 1 1 0;
   min-width: 0;
@@ -1838,15 +1838,15 @@ openclaw-native-link-menu[popover] {
   margin-top: 14px;
 }
 
-.content--workboard > openclaw-router-outlet,
-.content--workboard openclaw-workboard-page {
+.content--workboard > marketingclaw-router-outlet,
+.content--workboard marketingclaw-workboard-page {
   display: flex;
   flex: 1 1 0;
   flex-direction: column;
   min-height: 0;
 }
 
-.content--workboard openclaw-workboard-page {
+.content--workboard marketingclaw-workboard-page {
   gap: 14px;
 }
 

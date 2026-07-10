@@ -150,7 +150,7 @@ enum MacNodeCodexThreadCatalog {
         defaultMacOSAppExecutable: String = MacNodeCodexThreadCatalog.defaultMacOSAppExecutable) throws
         -> ResolvedInvocation
     {
-        let root = root ?? OpenClawConfigFile.loadDict()
+        let root = root ?? MarketingClawConfigFile.loadDict()
         let endpoint = self.configuredStdioEndpoint(root: root)
         let cwd = endpoint?.cwd.map {
             self.resolvePath($0, relativeTo: currentDirectoryURL, isDirectory: true)
@@ -179,7 +179,7 @@ enum MacNodeCodexThreadCatalog {
     }
 
     private static func configuredStdioEndpoint(root: [String: Any]) -> ConfiguredStdioEndpoint? {
-        guard let entry = OpenClawConfigFile.pluginEntry(
+        guard let entry = MarketingClawConfigFile.pluginEntry(
             MacNodeCodexThreadCatalogContract.pluginId,
             root: root),
             let config = entry["config"] as? [String: Any],
@@ -455,7 +455,7 @@ private final class CodexAppServerThreadListSession: @unchecked Sendable {
     private let stdinPipe = Pipe()
     private let stdoutPipe = Pipe()
     private let stderrPipe = Pipe()
-    private let queue = DispatchQueue(label: "ai.openclaw.codex-thread-catalog")
+    private let queue = DispatchQueue(label: "ai.marketingclaw.codex-thread-catalog")
     private let listRequestData: Data
     private let timeoutSeconds: Double
     private let maxLineBytes: Int
@@ -646,8 +646,8 @@ private final class CodexAppServerThreadListSession: @unchecked Sendable {
             "method": "initialize",
             "params": [
                 "clientInfo": [
-                    "name": "openclaw_macos",
-                    "title": "OpenClaw macOS Node",
+                    "name": "marketingclaw_macos",
+                    "title": "MarketingClaw macOS Node",
                     "version": GatewayEnvironment.expectedGatewayVersionString() ?? "unknown",
                 ],
             ],

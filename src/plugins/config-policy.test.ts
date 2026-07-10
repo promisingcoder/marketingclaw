@@ -1,6 +1,6 @@
 // Covers plugin config policy validation and ownership decisions.
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { MarketingClawConfig } from "../config/config.js";
 import {
   hasExplicitPluginConfig,
   isBundledChannelEnabledByChannelConfig,
@@ -43,7 +43,7 @@ describe("isBundledChannelEnabledByChannelConfig", () => {
         telegram: { enabled: true },
         slack: { enabled: false },
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
 
     expect(isBundledChannelEnabledByChannelConfig(cfg, "telegram")).toBe(true);
     expect(isBundledChannelEnabledByChannelConfig(cfg, "slack")).toBe(false);

@@ -2,9 +2,9 @@
 set -euo pipefail
 
 SCRIPT_ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-ROOT_DIR="${OPENCLAW_LIVE_DOCKER_REPO_ROOT:-$SCRIPT_ROOT_DIR}"
+ROOT_DIR="${MARKETINGCLAW_LIVE_DOCKER_REPO_ROOT:-$SCRIPT_ROOT_DIR}"
 ROOT_DIR="$(cd "$ROOT_DIR" && pwd)"
-TRUSTED_HARNESS_DIR="${OPENCLAW_LIVE_DOCKER_TRUSTED_HARNESS_DIR:-$SCRIPT_ROOT_DIR}"
+TRUSTED_HARNESS_DIR="${MARKETINGCLAW_LIVE_DOCKER_TRUSTED_HARNESS_DIR:-$SCRIPT_ROOT_DIR}"
 if [[ -z "$TRUSTED_HARNESS_DIR" || ! -d "$TRUSTED_HARNESS_DIR" ]]; then
   echo "ERROR: trusted live Docker harness directory not found: ${TRUSTED_HARNESS_DIR:-<empty>}." >&2
   exit 1
@@ -12,12 +12,12 @@ fi
 TRUSTED_HARNESS_DIR="$(cd "$TRUSTED_HARNESS_DIR" && pwd)"
 source "$TRUSTED_HARNESS_DIR/scripts/lib/live-docker-auth.sh"
 
-IMAGE_NAME="${OPENCLAW_IMAGE:-openclaw:local}"
-LIVE_IMAGE_NAME="${OPENCLAW_LIVE_IMAGE:-${IMAGE_NAME}-live}"
-CONFIG_DIR="${OPENCLAW_CONFIG_DIR:-$HOME/.openclaw}"
-WORKSPACE_DIR="${OPENCLAW_WORKSPACE_DIR:-$HOME/.openclaw/workspace}"
-PROFILE_FILE="$(openclaw_live_default_profile_file)"
-DOCKER_USER="${OPENCLAW_DOCKER_USER:-node}"
+IMAGE_NAME="${MARKETINGCLAW_IMAGE:-marketingclaw:local}"
+LIVE_IMAGE_NAME="${MARKETINGCLAW_LIVE_IMAGE:-${IMAGE_NAME}-live}"
+CONFIG_DIR="${MARKETINGCLAW_CONFIG_DIR:-$HOME/.marketingclaw}"
+WORKSPACE_DIR="${MARKETINGCLAW_WORKSPACE_DIR:-$HOME/.marketingclaw/workspace}"
+PROFILE_FILE="$(marketingclaw_live_default_profile_file)"
+DOCKER_USER="${MARKETINGCLAW_DOCKER_USER:-node}"
 DOCKER_HOME_MOUNT=()
 DOCKER_EXTRA_ENV_FILES=()
 DOCKER_TRUSTED_HARNESS_CONTAINER_DIR="/trusted-harness"
@@ -31,21 +31,21 @@ cleanup_temp_dirs() {
 }
 trap cleanup_temp_dirs EXIT
 
-if [[ -n "${OPENCLAW_DOCKER_CACHE_HOME_DIR:-}" ]]; then
-  CACHE_HOME_DIR="${OPENCLAW_DOCKER_CACHE_HOME_DIR}"
-elif openclaw_live_is_ci; then
-  CACHE_HOME_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/openclaw-docker-cache.XXXXXX")"
+if [[ -n "${MARKETINGCLAW_DOCKER_CACHE_HOME_DIR:-}" ]]; then
+  CACHE_HOME_DIR="${MARKETINGCLAW_DOCKER_CACHE_HOME_DIR}"
+elif marketingclaw_live_is_ci; then
+  CACHE_HOME_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/marketingclaw-docker-cache.XXXXXX")"
   TEMP_DIRS+=("$CACHE_HOME_DIR")
 else
-  CACHE_HOME_DIR="$HOME/.cache/openclaw/docker-cache"
+  CACHE_HOME_DIR="$HOME/.cache/marketingclaw/docker-cache"
 fi
-openclaw_live_prepare_bind_dir_for_container_user "$CACHE_HOME_DIR"
+marketingclaw_live_prepare_bind_dir_for_container_user "$CACHE_HOME_DIR"
 
-if openclaw_live_uses_managed_bind_dirs; then
+if marketingclaw_live_uses_managed_bind_dirs; then
   DOCKER_USER="$(id -u):$(id -g)"
-  DOCKER_HOME_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/openclaw-docker-home.XXXXXX")"
+  DOCKER_HOME_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/marketingclaw-docker-home.XXXXXX")"
   TEMP_DIRS+=("$DOCKER_HOME_DIR")
-  openclaw_live_prepare_bind_dir_for_container_user "$DOCKER_HOME_DIR"
+  marketingclaw_live_prepare_bind_dir_for_container_user "$DOCKER_HOME_DIR"
   DOCKER_HOME_MOUNT=(-v "$DOCKER_HOME_DIR":/home/node)
 fi
 
@@ -53,7 +53,7 @@ PROFILE_MOUNT=()
 PROFILE_STATUS="none"
 if [[ -f "$PROFILE_FILE" && -r "$PROFILE_FILE" ]]; then
   if [[ -n "${DOCKER_HOME_DIR:-}" ]]; then
-    openclaw_live_stage_profile_into_home "$DOCKER_HOME_DIR" "$PROFILE_FILE"
+    marketingclaw_live_stage_profile_into_home "$DOCKER_HOME_DIR" "$PROFILE_FILE"
   else
     PROFILE_MOUNT=(-v "$PROFILE_FILE":/home/node/.profile:ro)
   fi
@@ -61,46 +61,46 @@ if [[ -f "$PROFILE_FILE" && -r "$PROFILE_FILE" ]]; then
 fi
 
 if [[ -n "${OPENAI_API_KEY:-}" || -n "${OPENAI_BASE_URL:-}" || -n "${GEMINI_API_KEY:-}" || -n "${GOOGLE_API_KEY:-}" ]]; then
-  docker_env_dir="$(mktemp -d "${RUNNER_TEMP:-/tmp}/openclaw-subagent-live-env.XXXXXX")"
+  docker_env_dir="$(mktemp -d "${RUNNER_TEMP:-/tmp}/marketingclaw-subagent-live-env.XXXXXX")"
   TEMP_DIRS+=("$docker_env_dir")
   docker_env_file="$docker_env_dir/provider.env"
   {
     if [[ -n "${OPENAI_API_KEY:-}" ]]; then
-      printf 'OPENCLAW_DOCKER_LIVE_OPENAI_API_KEY=%s\n' "${OPENAI_API_KEY}"
+      printf 'MARKETINGCLAW_DOCKER_LIVE_OPENAI_API_KEY=%s\n' "${OPENAI_API_KEY}"
     fi
     if [[ -n "${OPENAI_BASE_URL:-}" ]]; then
-      printf 'OPENCLAW_DOCKER_LIVE_OPENAI_BASE_URL=%s\n' "${OPENAI_BASE_URL}"
+      printf 'MARKETINGCLAW_DOCKER_LIVE_OPENAI_BASE_URL=%s\n' "${OPENAI_BASE_URL}"
     fi
     if [[ -n "${GEMINI_API_KEY:-}" ]]; then
-      printf 'OPENCLAW_DOCKER_LIVE_GEMINI_API_KEY=%s\n' "${GEMINI_API_KEY}"
+      printf 'MARKETINGCLAW_DOCKER_LIVE_GEMINI_API_KEY=%s\n' "${GEMINI_API_KEY}"
     fi
     if [[ -n "${GOOGLE_API_KEY:-}" ]]; then
-      printf 'OPENCLAW_DOCKER_LIVE_GOOGLE_API_KEY=%s\n' "${GOOGLE_API_KEY}"
+      printf 'MARKETINGCLAW_DOCKER_LIVE_GOOGLE_API_KEY=%s\n' "${GOOGLE_API_KEY}"
     fi
   } >"$docker_env_file"
   DOCKER_EXTRA_ENV_FILES+=(--env-file "$docker_env_file")
 fi
 
-CONTAINER_NODE_OPTIONS="$(openclaw_live_container_node_options)"
+CONTAINER_NODE_OPTIONS="$(marketingclaw_live_container_node_options)"
 
 read -r -d '' LIVE_TEST_CMD <<'EOF' || true
 set -euo pipefail
 [ -f "$HOME/.profile" ] && [ -r "$HOME/.profile" ] && source "$HOME/.profile" || true
-if [ -n "${OPENCLAW_DOCKER_LIVE_OPENAI_API_KEY:-}" ]; then
-  export OPENAI_API_KEY="$OPENCLAW_DOCKER_LIVE_OPENAI_API_KEY"
-  unset OPENCLAW_DOCKER_LIVE_OPENAI_API_KEY
+if [ -n "${MARKETINGCLAW_DOCKER_LIVE_OPENAI_API_KEY:-}" ]; then
+  export OPENAI_API_KEY="$MARKETINGCLAW_DOCKER_LIVE_OPENAI_API_KEY"
+  unset MARKETINGCLAW_DOCKER_LIVE_OPENAI_API_KEY
 fi
-if [ -n "${OPENCLAW_DOCKER_LIVE_OPENAI_BASE_URL:-}" ]; then
-  export OPENAI_BASE_URL="$OPENCLAW_DOCKER_LIVE_OPENAI_BASE_URL"
-  unset OPENCLAW_DOCKER_LIVE_OPENAI_BASE_URL
+if [ -n "${MARKETINGCLAW_DOCKER_LIVE_OPENAI_BASE_URL:-}" ]; then
+  export OPENAI_BASE_URL="$MARKETINGCLAW_DOCKER_LIVE_OPENAI_BASE_URL"
+  unset MARKETINGCLAW_DOCKER_LIVE_OPENAI_BASE_URL
 fi
-if [ -n "${OPENCLAW_DOCKER_LIVE_GEMINI_API_KEY:-}" ]; then
-  export GEMINI_API_KEY="$OPENCLAW_DOCKER_LIVE_GEMINI_API_KEY"
-  unset OPENCLAW_DOCKER_LIVE_GEMINI_API_KEY
+if [ -n "${MARKETINGCLAW_DOCKER_LIVE_GEMINI_API_KEY:-}" ]; then
+  export GEMINI_API_KEY="$MARKETINGCLAW_DOCKER_LIVE_GEMINI_API_KEY"
+  unset MARKETINGCLAW_DOCKER_LIVE_GEMINI_API_KEY
 fi
-if [ -n "${OPENCLAW_DOCKER_LIVE_GOOGLE_API_KEY:-}" ]; then
-  export GOOGLE_API_KEY="$OPENCLAW_DOCKER_LIVE_GOOGLE_API_KEY"
-  unset OPENCLAW_DOCKER_LIVE_GOOGLE_API_KEY
+if [ -n "${MARKETINGCLAW_DOCKER_LIVE_GOOGLE_API_KEY:-}" ]; then
+  export GOOGLE_API_KEY="$MARKETINGCLAW_DOCKER_LIVE_GOOGLE_API_KEY"
+  unset MARKETINGCLAW_DOCKER_LIVE_GOOGLE_API_KEY
 fi
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 export COREPACK_HOME="${COREPACK_HOME:-$XDG_CACHE_HOME/node/corepack}"
@@ -109,23 +109,23 @@ export npm_config_cache="$NPM_CONFIG_CACHE"
 mkdir -p "$XDG_CACHE_HOME" "$COREPACK_HOME" "$NPM_CONFIG_CACHE"
 chmod 700 "$XDG_CACHE_HOME" "$COREPACK_HOME" "$NPM_CONFIG_CACHE" || true
 tmp_dir="$(mktemp -d)"
-trusted_scripts_dir="${OPENCLAW_LIVE_DOCKER_SCRIPTS_DIR:-/src/scripts}"
+trusted_scripts_dir="${MARKETINGCLAW_LIVE_DOCKER_SCRIPTS_DIR:-/src/scripts}"
 source "$trusted_scripts_dir/lib/live-docker-stage.sh"
-openclaw_live_stage_source_tree "$tmp_dir"
-openclaw_live_stage_node_modules "$tmp_dir"
-openclaw_live_link_runtime_tree "$tmp_dir"
-openclaw_live_stage_state_dir "$tmp_dir/.openclaw-state"
-openclaw_live_prepare_staged_config
+marketingclaw_live_stage_source_tree "$tmp_dir"
+marketingclaw_live_stage_node_modules "$tmp_dir"
+marketingclaw_live_link_runtime_tree "$tmp_dir"
+marketingclaw_live_stage_state_dir "$tmp_dir/.marketingclaw-state"
+marketingclaw_live_prepare_staged_config
 cd "$tmp_dir"
-OPENCLAW_LIVE_TEST=1 \
-OPENCLAW_LIVE_SUBAGENT_E2E=1 \
-OPENCLAW_VITEST_MAX_WORKERS="${OPENCLAW_VITEST_MAX_WORKERS:-1}" \
+MARKETINGCLAW_LIVE_TEST=1 \
+MARKETINGCLAW_LIVE_SUBAGENT_E2E=1 \
+MARKETINGCLAW_VITEST_MAX_WORKERS="${MARKETINGCLAW_VITEST_MAX_WORKERS:-1}" \
 node scripts/test-live.mjs -- src/agents/subagent-announce.live.test.ts -- --reporter=verbose
 EOF
 
-OPENCLAW_LIVE_DOCKER_REPO_ROOT="$ROOT_DIR" "$TRUSTED_HARNESS_DIR/scripts/test-live-build-docker.sh"
-if openclaw_live_uses_managed_bind_dirs; then
-  openclaw_live_chown_bind_dirs_for_container_user \
+MARKETINGCLAW_LIVE_DOCKER_REPO_ROOT="$ROOT_DIR" "$TRUSTED_HARNESS_DIR/scripts/test-live-build-docker.sh"
+if marketingclaw_live_uses_managed_bind_dirs; then
+  marketingclaw_live_chown_bind_dirs_for_container_user \
     "$LIVE_IMAGE_NAME" \
     "$DOCKER_USER" \
     "$CACHE_HOME_DIR" \
@@ -134,36 +134,36 @@ fi
 
 echo "==> Run subagent announce live test in Docker"
 echo "==> Target: src/agents/subagent-announce.live.test.ts"
-echo "==> Model: ${OPENCLAW_LIVE_SUBAGENT_E2E_MODEL:-openai/gpt-5.5}"
+echo "==> Model: ${MARKETINGCLAW_LIVE_SUBAGENT_E2E_MODEL:-openai/gpt-5.5}"
 echo "==> Profile file: $PROFILE_STATUS"
 DOCKER_RUN_ARGS=()
-openclaw_live_init_docker_run_args DOCKER_RUN_ARGS "${OPENCLAW_LIVE_SUBAGENT_DOCKER_RUN_TIMEOUT:-1200s}"
+marketingclaw_live_init_docker_run_args DOCKER_RUN_ARGS "${MARKETINGCLAW_LIVE_SUBAGENT_DOCKER_RUN_TIMEOUT:-1200s}"
 DOCKER_RUN_ARGS+=(--rm -t \
   -u "$DOCKER_USER" \
   --entrypoint bash \
   -e COREPACK_ENABLE_DOWNLOAD_PROMPT=0 \
   -e HOME=/home/node \
   -e NODE_OPTIONS="$CONTAINER_NODE_OPTIONS" \
-  -e OPENCLAW_SKIP_CHANNELS=1 \
-  -e OPENCLAW_SUPPRESS_NOTES=1 \
-  -e OPENCLAW_LIVE_DOCKER_SCRIPTS_DIR="${DOCKER_TRUSTED_HARNESS_CONTAINER_DIR}/scripts" \
-  -e OPENCLAW_LIVE_DOCKER_SOURCE_STAGE_MODE="${OPENCLAW_LIVE_DOCKER_SOURCE_STAGE_MODE:-copy}" \
-  -e OPENCLAW_LIVE_TEST=1 \
-  -e OPENCLAW_LIVE_TEST_QUIET="${OPENCLAW_LIVE_TEST_QUIET:-}" \
-  -e OPENCLAW_LIVE_WRAPPER_HEARTBEAT_MS="${OPENCLAW_LIVE_WRAPPER_HEARTBEAT_MS:-}" \
-  -e OPENCLAW_LIVE_SUBAGENT_E2E=1 \
-  -e OPENCLAW_LIVE_SUBAGENT_E2E_MODEL="${OPENCLAW_LIVE_SUBAGENT_E2E_MODEL:-}" \
-  -e OPENCLAW_VITEST_FS_MODULE_CACHE=0 \
-  -e OPENCLAW_VITEST_MAX_WORKERS="${OPENCLAW_VITEST_MAX_WORKERS:-1}")
-openclaw_live_append_array DOCKER_RUN_ARGS DOCKER_EXTRA_ENV_FILES
-openclaw_live_append_array DOCKER_RUN_ARGS DOCKER_HOME_MOUNT
-openclaw_live_append_array DOCKER_RUN_ARGS DOCKER_TRUSTED_HARNESS_MOUNT
+  -e MARKETINGCLAW_SKIP_CHANNELS=1 \
+  -e MARKETINGCLAW_SUPPRESS_NOTES=1 \
+  -e MARKETINGCLAW_LIVE_DOCKER_SCRIPTS_DIR="${DOCKER_TRUSTED_HARNESS_CONTAINER_DIR}/scripts" \
+  -e MARKETINGCLAW_LIVE_DOCKER_SOURCE_STAGE_MODE="${MARKETINGCLAW_LIVE_DOCKER_SOURCE_STAGE_MODE:-copy}" \
+  -e MARKETINGCLAW_LIVE_TEST=1 \
+  -e MARKETINGCLAW_LIVE_TEST_QUIET="${MARKETINGCLAW_LIVE_TEST_QUIET:-}" \
+  -e MARKETINGCLAW_LIVE_WRAPPER_HEARTBEAT_MS="${MARKETINGCLAW_LIVE_WRAPPER_HEARTBEAT_MS:-}" \
+  -e MARKETINGCLAW_LIVE_SUBAGENT_E2E=1 \
+  -e MARKETINGCLAW_LIVE_SUBAGENT_E2E_MODEL="${MARKETINGCLAW_LIVE_SUBAGENT_E2E_MODEL:-}" \
+  -e MARKETINGCLAW_VITEST_FS_MODULE_CACHE=0 \
+  -e MARKETINGCLAW_VITEST_MAX_WORKERS="${MARKETINGCLAW_VITEST_MAX_WORKERS:-1}")
+marketingclaw_live_append_array DOCKER_RUN_ARGS DOCKER_EXTRA_ENV_FILES
+marketingclaw_live_append_array DOCKER_RUN_ARGS DOCKER_HOME_MOUNT
+marketingclaw_live_append_array DOCKER_RUN_ARGS DOCKER_TRUSTED_HARNESS_MOUNT
 DOCKER_RUN_ARGS+=(\
   -v "$CACHE_HOME_DIR":/home/node/.cache \
   -v "$ROOT_DIR":/src:ro \
-  -v "$CONFIG_DIR":/home/node/.openclaw \
-  -v "$WORKSPACE_DIR":/home/node/.openclaw/workspace)
-openclaw_live_append_array DOCKER_RUN_ARGS PROFILE_MOUNT
+  -v "$CONFIG_DIR":/home/node/.marketingclaw \
+  -v "$WORKSPACE_DIR":/home/node/.marketingclaw/workspace)
+marketingclaw_live_append_array DOCKER_RUN_ARGS PROFILE_MOUNT
 DOCKER_RUN_ARGS+=(\
   "$LIVE_IMAGE_NAME" \
   -lc "$LIVE_TEST_CMD")

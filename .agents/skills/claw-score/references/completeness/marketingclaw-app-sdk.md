@@ -1,7 +1,7 @@
-# OpenClaw App SDK Completeness
+# MarketingClaw App SDK Completeness
 
 Use this rubric when assigning category Completeness scores for the
-`openclaw-app-sdk` surface.
+`marketingclaw-app-sdk` surface.
 
 ## Surface-Specific Scoring Questions
 

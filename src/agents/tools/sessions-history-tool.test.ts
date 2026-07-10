@@ -11,7 +11,7 @@ type CallGatewayRequest = Parameters<typeof gatewayCall>[0];
 type HistoryMessage = {
   role: string;
   content: string;
-  __openclaw: { seq: number };
+  __marketingclaw: { seq: number };
 };
 
 let createSessionsHistoryTool: typeof import("./sessions-history-tool.js").createSessionsHistoryTool;
@@ -24,7 +24,7 @@ function useLoggingConfig(name: string, logging: Record<string, unknown>): void 
   }
   const configPath = path.join(tempDir, name);
   fs.writeFileSync(configPath, `${JSON.stringify({ logging })}\n`, "utf8");
-  setTestEnvValue("OPENCLAW_CONFIG_PATH", configPath);
+  setTestEnvValue("MARKETINGCLAW_CONFIG_PATH", configPath);
 }
 
 function createHistoryToolWithMessage(content: string) {
@@ -54,7 +54,7 @@ function readMessageSeq(message: unknown): number | undefined {
   if (!message || typeof message !== "object" || Array.isArray(message)) {
     return undefined;
   }
-  const meta = (message as Record<string, unknown>)["__openclaw"];
+  const meta = (message as Record<string, unknown>)["__marketingclaw"];
   if (!meta || typeof meta !== "object" || Array.isArray(meta)) {
     return undefined;
   }
@@ -64,17 +64,17 @@ function readMessageSeq(message: unknown): number | undefined {
 
 describe("sessions_history redaction", () => {
   beforeAll(async () => {
-    previousConfigPath = process.env.OPENCLAW_CONFIG_PATH;
-    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-sessions-history-redact-"));
+    previousConfigPath = process.env.MARKETINGCLAW_CONFIG_PATH;
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "marketingclaw-sessions-history-redact-"));
     useLoggingConfig("redaction-off.json", { redactSensitive: "off" });
     ({ createSessionsHistoryTool } = await import("./sessions-history-tool.js"));
   });
 
   afterAll(() => {
     if (previousConfigPath === undefined) {
-      deleteTestEnvValue("OPENCLAW_CONFIG_PATH");
+      deleteTestEnvValue("MARKETINGCLAW_CONFIG_PATH");
     } else {
-      setTestEnvValue("OPENCLAW_CONFIG_PATH", previousConfigPath);
+      setTestEnvValue("MARKETINGCLAW_CONFIG_PATH", previousConfigPath);
     }
     if (tempDir) {
       fs.rmSync(tempDir, { recursive: true, force: true });
@@ -183,7 +183,7 @@ describe("sessions_history redaction", () => {
     const messages: HistoryMessage[] = Array.from({ length: 30 }, (_, index) => ({
       role: "assistant",
       content: `message-${index + 1} ${"x".repeat(10_000)}`,
-      __openclaw: { seq: index + 1 },
+      __marketingclaw: { seq: index + 1 },
     }));
     const tool = createSessionsHistoryTool({
       config: {},
@@ -224,9 +224,9 @@ describe("sessions_history redaction", () => {
       callGateway: async <T = Record<string, unknown>>(): Promise<T> =>
         ({
           messages: [
-            { role: "tool", content: "hidden", __openclaw: { seq: 6 } },
-            { role: "assistant", content: "visible", __openclaw: { seq: 7 } },
-            { role: "assistant", content: "latest", __openclaw: { seq: 8 } },
+            { role: "tool", content: "hidden", __marketingclaw: { seq: 6 } },
+            { role: "assistant", content: "visible", __marketingclaw: { seq: 7 } },
+            { role: "assistant", content: "latest", __marketingclaw: { seq: 8 } },
           ],
           offset: 0,
           nextOffset: 5,
@@ -239,8 +239,8 @@ describe("sessions_history redaction", () => {
     const details = readHistoryDetails(result);
 
     expect(details.messages).toEqual([
-      { role: "assistant", content: "visible", __openclaw: { seq: 7 } },
-      { role: "assistant", content: "latest", __openclaw: { seq: 8 } },
+      { role: "assistant", content: "visible", __marketingclaw: { seq: 7 } },
+      { role: "assistant", content: "latest", __marketingclaw: { seq: 8 } },
     ]);
     expect(details).toMatchObject({
       offset: 0,

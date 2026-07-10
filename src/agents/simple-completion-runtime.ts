@@ -1,12 +1,12 @@
-import { supportsOpenAIReasoningEffort } from "@openclaw/ai/internal/openai";
-import { resolveClaudeSonnet5ModelIdentity } from "@openclaw/llm-core";
+import { supportsOpenAIReasoningEffort } from "@marketingclaw/ai/internal/openai";
+import { resolveClaudeSonnet5ModelIdentity } from "@marketingclaw/llm-core";
 /**
  * Simple completion runtime preparation.
  *
  * Resolves agent model selection, auth, runtime policy, and missing-auth errors before simple completions run.
  */
 import type { ThinkLevel } from "../auto-reply/thinking.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { completeSimple } from "../llm/stream.js";
 import type {
@@ -95,7 +95,7 @@ export type PreparedSimpleCompletionModelForAgent =
     };
 
 export function resolveSimpleCompletionSelectionForAgent(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   agentId: string;
   agentDir?: string;
   modelRef?: string;
@@ -144,7 +144,7 @@ export function resolveSimpleCompletionSelectionForAgent(params: {
 }
 
 function resolveSimpleCompletionRuntimeProvider(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   agentId: string;
   provider: string;
   modelId: string;
@@ -166,7 +166,7 @@ async function setRuntimeApiKeyForCompletion(params: {
   model: Model;
   apiKey: string;
   authMode: ResolvedProviderAuth["mode"];
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
   workspaceDir?: string;
   profileId?: string;
 }): Promise<CompletionRuntimeCredential> {
@@ -234,7 +234,7 @@ function hasMissingApiKeyAllowance(params: {
 }
 
 export async function prepareSimpleCompletionModel(params: {
-  cfg: OpenClawConfig | undefined;
+  cfg: MarketingClawConfig | undefined;
   provider: string;
   modelId: string;
   agentDir?: string;
@@ -332,7 +332,7 @@ export async function prepareSimpleCompletionModel(params: {
 }
 
 export async function prepareSimpleCompletionModelForAgent(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   agentId: string;
   agentDir?: string;
   modelRef?: string;
@@ -388,7 +388,7 @@ export async function completeWithPreparedSimpleCompletionModel(params: {
   model: Model;
   auth: ResolvedProviderAuth;
   context: Parameters<typeof completeSimple>[1];
-  cfg?: OpenClawConfig;
+  cfg?: MarketingClawConfig;
   options?: SimpleCompletionModelOptions;
 }): Promise<AssistantMessage> {
   const completionModel = prepareModelForSimpleCompletion({ model: params.model, cfg: params.cfg });

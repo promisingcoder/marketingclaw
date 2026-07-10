@@ -3,9 +3,9 @@ import Foundation
 import SwiftUI
 
 enum DebugActions {
-    private static let verboseDefaultsKey = "openclaw.debug.verboseMain"
+    private static let verboseDefaultsKey = "marketingclaw.debug.verboseMain"
     private static let sessionMenuLimit = 12
-    private static let onboardingSeenKey = "openclaw.onboardingSeen"
+    private static let onboardingSeenKey = "marketingclaw.onboardingSeen"
 
     @MainActor
     static func openAgentEventsWindow() {
@@ -38,7 +38,7 @@ enum DebugActions {
 
     @MainActor
     static func openConfigFolder() {
-        let url = OpenClawPaths.stateDirURL
+        let url = MarketingClawPaths.stateDirURL
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
 
@@ -61,7 +61,7 @@ enum DebugActions {
     }
 
     static func sendTestNotification() async {
-        _ = await NotificationManager().send(title: "OpenClaw", body: "Test notification", sound: nil)
+        _ = await NotificationManager().send(title: "MarketingClaw", body: "Test notification", sound: nil)
     }
 
     static func sendDebugVoice() async -> Result<String, DebugActionError> {
@@ -193,7 +193,7 @@ enum DebugActions {
     @MainActor
     private static func resolveSessionStorePath() -> String {
         let defaultPath = SessionLoader.defaultStorePath
-        let configURL = OpenClawPaths.configURL
+        let configURL = MarketingClawPaths.configURL
         guard
             let data = try? Data(contentsOf: configURL),
             let parsed = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
@@ -279,7 +279,7 @@ enum DebugActions {
                 kind: .device,
                 requestId: "demo-device-1",
                 subjectId: "4a865684dbfa7b7937bd333813476ca88b672c2d02ad08fc52b80d88af4e82bd",
-                displayName: "OpenClaw iPhone",
+                displayName: "MarketingClaw iPhone",
                 platform: "ios 26.4",
                 deviceFamily: nil,
                 modelIdentifier: nil,

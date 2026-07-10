@@ -2,16 +2,16 @@
 import { randomUUID } from "node:crypto";
 import type { Agent } from "node:https";
 import type { GroupMetadata, WAMessageKey, proto } from "baileys";
-import { formatCliCommand } from "openclaw/plugin-sdk/cli-runtime";
-import { VERSION } from "openclaw/plugin-sdk/cli-runtime";
+import { formatCliCommand } from "marketingclaw/plugin-sdk/cli-runtime";
+import { VERSION } from "marketingclaw/plugin-sdk/cli-runtime";
 import {
   createHttp1EnvHttpProxyAgent,
   createHttp1ProxyAgent,
   createNodeProxyAgent,
-} from "openclaw/plugin-sdk/fetch-runtime";
-import { danger, success } from "openclaw/plugin-sdk/runtime-env";
-import { getChildLogger, toPinoLikeLogger } from "openclaw/plugin-sdk/runtime-env";
-import { ensureDir, resolveUserPath } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "marketingclaw/plugin-sdk/fetch-runtime";
+import { danger, success } from "marketingclaw/plugin-sdk/runtime-env";
+import { getChildLogger, toPinoLikeLogger } from "marketingclaw/plugin-sdk/runtime-env";
+import { ensureDir, resolveUserPath } from "marketingclaw/plugin-sdk/text-utility-runtime";
 import {
   readCredsJsonRaw,
   restoreCredsFromBackupIfNeeded,
@@ -68,7 +68,7 @@ const LOGGED_OUT_STATUS = 401;
 const WHATSAPP_WEBSOCKET_PROXY_TARGET = "https://mmg.whatsapp.net/";
 const CREDS_FLUSH_TIMEOUT_MESSAGE =
   "Queued WhatsApp creds save did not finish before auth bootstrap; skipping repair and continuing with primary creds.";
-export const OPENCLAW_WHATSAPP_WEB_SOCKET_URL_ENV = "OPENCLAW_WHATSAPP_WEB_SOCKET_URL";
+export const MARKETINGCLAW_WHATSAPP_WEB_SOCKET_URL_ENV = "MARKETINGCLAW_WHATSAPP_WEB_SOCKET_URL";
 
 async function rejectUnsafeWebCredsPath(authDir: string): Promise<void> {
   await assertWebCredsPathRegularFileOrMissing(resolveWebCredsPath(authDir));
@@ -134,7 +134,7 @@ function resolveWaWebSocketUrl(value: string | URL | undefined): string | URL | 
 }
 
 function resolveEnvWaWebSocketUrl(): string | undefined {
-  const value = resolveWaWebSocketUrl(process.env[OPENCLAW_WHATSAPP_WEB_SOCKET_URL_ENV]);
+  const value = resolveWaWebSocketUrl(process.env[MARKETINGCLAW_WHATSAPP_WEB_SOCKET_URL_ENV]);
   if (!value) {
     return undefined;
   }
@@ -142,10 +142,10 @@ function resolveEnvWaWebSocketUrl(): string | undefined {
   try {
     url = new URL(value);
   } catch {
-    throw new Error(`${OPENCLAW_WHATSAPP_WEB_SOCKET_URL_ENV} must be a valid URL.`);
+    throw new Error(`${MARKETINGCLAW_WHATSAPP_WEB_SOCKET_URL_ENV} must be a valid URL.`);
   }
   if (url.protocol !== "ws:" && url.protocol !== "wss:") {
-    throw new Error(`${OPENCLAW_WHATSAPP_WEB_SOCKET_URL_ENV} must use ws:// or wss://.`);
+    throw new Error(`${MARKETINGCLAW_WHATSAPP_WEB_SOCKET_URL_ENV} must use ws:// or wss://.`);
   }
   return url.toString();
 }
@@ -207,7 +207,7 @@ export async function createWaSocket(
     version,
     logger,
     printQRInTerminal: false,
-    browser: ["openclaw", "cli", VERSION],
+    browser: ["marketingclaw", "cli", VERSION],
     syncFullHistory: false,
     markOnlineOnConnect: false,
     ...socketTiming,
@@ -239,7 +239,7 @@ export async function createWaSocket(
           if (status === LOGGED_OUT_STATUS) {
             console.error(
               danger(
-                `WhatsApp session logged out. Run: ${formatCliCommand("openclaw channels login")}`,
+                `WhatsApp session logged out. Run: ${formatCliCommand("marketingclaw channels login")}`,
               ),
             );
           }

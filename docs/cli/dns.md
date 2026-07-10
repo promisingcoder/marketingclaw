@@ -1,12 +1,12 @@
 ---
-summary: "CLI reference for `openclaw dns` (wide-area discovery helpers)"
+summary: "CLI reference for `marketingclaw dns` (wide-area discovery helpers)"
 read_when:
   - You want wide-area discovery (DNS-SD) via Tailscale + CoreDNS
-  - You're setting up split DNS for a custom discovery domain (example: openclaw.internal)
+  - You're setting up split DNS for a custom discovery domain (example: marketingclaw.internal)
 title: "DNS"
 ---
 
-# `openclaw dns`
+# `marketingclaw dns`
 
 DNS helpers for wide-area discovery (Tailscale + CoreDNS). Currently macOS + Homebrew CoreDNS only.
 
@@ -20,23 +20,23 @@ Related:
 Plan or apply CoreDNS setup for unicast DNS-SD discovery.
 
 ```bash
-openclaw dns setup
-openclaw dns setup --domain openclaw.internal
-openclaw dns setup --apply
+marketingclaw dns setup
+marketingclaw dns setup --domain marketingclaw.internal
+marketingclaw dns setup --apply
 ```
 
 | Option              | Effect                                                                              |
 | ------------------- | ----------------------------------------------------------------------------------- |
-| `--domain <domain>` | Wide-area discovery domain (for example `openclaw.internal`).                       |
+| `--domain <domain>` | Wide-area discovery domain (for example `marketingclaw.internal`).                  |
 | `--apply`           | Install/update CoreDNS config and (re)start the service. Requires sudo, macOS only. |
 
-Without `--domain`, OpenClaw uses `discovery.wideArea.domain` from config.
+Without `--domain`, MarketingClaw uses `discovery.wideArea.domain` from config.
 
 Without `--apply`, the command only prints:
 
 - Resolved discovery domain and zone file path
 - Current tailnet IPs
-- Recommended `openclaw.json` discovery config
+- Recommended `marketingclaw.json` discovery config
 - Tailscale Split DNS nameserver/domain values to set in the Tailscale admin console
 
 With `--apply` (macOS only, requires Homebrew CoreDNS):

@@ -68,20 +68,22 @@ describe("completion-runtime", () => {
   });
 
   it("installs PowerShell completion into the concrete profile path", async () => {
-    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-completion-home-"));
-    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-completion-state-bob's-"));
+    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-completion-home-"));
+    const stateDir = await fs.mkdtemp(
+      path.join(os.tmpdir(), "marketingclaw-completion-state-bob's-"),
+    );
 
     try {
-      await withEnvAsync({ HOME: homeDir, OPENCLAW_STATE_DIR: stateDir }, async () => {
-        const cachePath = resolveCompletionCachePath("powershell", "openclaw");
+      await withEnvAsync({ HOME: homeDir, MARKETINGCLAW_STATE_DIR: stateDir }, async () => {
+        const cachePath = resolveCompletionCachePath("powershell", "marketingclaw");
         await fs.mkdir(path.dirname(cachePath), { recursive: true });
         await fs.writeFile(cachePath, "# powershell completion\n", "utf-8");
 
-        await installCompletion("powershell", true, "openclaw");
+        await installCompletion("powershell", true, "marketingclaw");
 
         const profilePath = resolveCompletionProfilePath("powershell");
         const profile = await fs.readFile(profilePath, "utf-8");
-        expect(profile).toBe(`# OpenClaw Completion\n. '${cachePath.replace(/'/g, "''")}'\n`);
+        expect(profile).toBe(`# MarketingClaw Completion\n. '${cachePath.replace(/'/g, "''")}'\n`);
       });
     } finally {
       await fs.rm(homeDir, { recursive: true, force: true });
@@ -90,12 +92,12 @@ describe("completion-runtime", () => {
   });
 
   it("rejects install when the completion cache is missing", async () => {
-    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-completion-home-"));
-    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-completion-state-"));
+    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-completion-home-"));
+    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-completion-state-"));
 
     try {
-      await withEnvAsync({ HOME: homeDir, OPENCLAW_STATE_DIR: stateDir }, async () => {
-        await expect(installCompletion("zsh", true, "openclaw")).rejects.toThrow(
+      await withEnvAsync({ HOME: homeDir, MARKETINGCLAW_STATE_DIR: stateDir }, async () => {
+        await expect(installCompletion("zsh", true, "marketingclaw")).rejects.toThrow(
           "Completion cache not found",
         );
       });

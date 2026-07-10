@@ -6,7 +6,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join } from "node:path";
-import { resolveIntegerOption } from "@openclaw/normalization-core/number-coercion";
+import { resolveIntegerOption } from "@marketingclaw/normalization-core/number-coercion";
 import lockfile from "proper-lockfile";
 import type { Transport } from "../../llm/types.js";
 import { CONFIG_DIR_NAME, getAgentDir } from "../config.js";
@@ -1005,7 +1005,7 @@ export class SettingsManager {
     if (this.settings.terminal?.clearOnShrink !== undefined) {
       return this.settings.terminal.clearOnShrink;
     }
-    return process.env.OPENCLAW_CLEAR_ON_SHRINK === "1";
+    return process.env.MARKETINGCLAW_CLEAR_ON_SHRINK === "1";
   }
 
   setClearOnShrink(enabled: boolean): void {
@@ -1089,7 +1089,7 @@ export class SettingsManager {
   }
 
   getShowHardwareCursor(): boolean {
-    return this.settings.showHardwareCursor ?? process.env.OPENCLAW_HARDWARE_CURSOR === "1";
+    return this.settings.showHardwareCursor ?? process.env.MARKETINGCLAW_HARDWARE_CURSOR === "1";
   }
 
   setShowHardwareCursor(enabled: boolean): void {

@@ -9,13 +9,13 @@ let monolithicSdk = null;
 let diagnosticEventsModule = null;
 const moduleLoaders = new Map();
 const pluginSdkSubpathsCache = new Map();
-const pluginSdkPackageNames = ["openclaw/plugin-sdk", "@openclaw/plugin-sdk"];
+const pluginSdkPackageNames = ["marketingclaw/plugin-sdk", "@marketingclaw/plugin-sdk"];
 const pluginSdkSourceExtensions = [".ts", ".mts", ".js", ".mjs", ".cts", ".cjs"];
 const privateQaExcludedPluginSdkSubpaths = new Set(["ssrf-runtime-internal"]);
 // Subpath -> source entry for private/bundled workspace packages that internal
 // source imports by package name. Dist paths mirror each package's export map.
 const workspacePackageAliasEntries = {
-  "@openclaw/llm-core": {
+  "@marketingclaw/llm-core": {
     dir: "llm-core",
     subpaths: {
       "": { srcFile: "src/index.ts", distFile: "dist/index.mjs" },
@@ -28,7 +28,7 @@ const workspacePackageAliasEntries = {
       validation: { srcFile: "src/validation.ts", distFile: "dist/validation.mjs" },
     },
   },
-  "@openclaw/ai": {
+  "@marketingclaw/ai": {
     dir: "ai",
     subpaths: {
       "": { srcFile: "src/index.ts", distFile: "dist/index.mjs" },
@@ -55,7 +55,7 @@ const workspacePackageAliasEntries = {
       },
     },
   },
-  "@openclaw/markdown-core": {
+  "@marketingclaw/markdown-core": {
     dir: "markdown-core",
     subpaths: {
       "": { srcFile: "src/index.ts", distFile: "dist/index.mjs" },
@@ -72,7 +72,7 @@ const workspacePackageAliasEntries = {
       types: { srcFile: "src/types.ts", distFile: "dist/types.mjs" },
     },
   },
-  "@openclaw/normalization-core": {
+  "@marketingclaw/normalization-core": {
     dir: "normalization-core",
     subpaths: {
       "": { srcFile: "src/index.ts", distFile: "dist/index.mjs" },
@@ -117,7 +117,7 @@ const workspacePackageAliases = Object.entries(workspacePackageAliasEntries).fla
       distFile: files.distFile,
     })),
 );
-const DIAGNOSTIC_EVENTS_STATE_KEY = Symbol.for("openclaw.diagnosticEvents.state.v1");
+const DIAGNOSTIC_EVENTS_STATE_KEY = Symbol.for("marketingclaw.diagnosticEvents.state.v1");
 const isDistRootAlias = __filename.includes(
   `${path.sep}dist${path.sep}plugin-sdk${path.sep}root-alias.cjs`,
 );
@@ -128,7 +128,7 @@ const shouldPreferSourceGraph =
   !isDistRootAlias &&
   (process.env.NODE_ENV !== "production" ||
     Boolean(process.env.VITEST) ||
-    process.env.OPENCLAW_PLUGIN_SDK_SOURCE_IN_TESTS === "1");
+    process.env.MARKETINGCLAW_PLUGIN_SDK_SOURCE_IN_TESTS === "1");
 
 function emptyPluginConfigSchema() {
   function error(message) {
@@ -341,7 +341,7 @@ function findDistChunkByPrefix(prefix) {
 
 function listPluginSdkExportedSubpaths() {
   const packageRoot = getPackageRoot();
-  const cacheKey = `${packageRoot}::privateQa=${process.env.OPENCLAW_ENABLE_PRIVATE_QA_CLI === "1" ? "1" : "0"}`;
+  const cacheKey = `${packageRoot}::privateQa=${process.env.MARKETINGCLAW_ENABLE_PRIVATE_QA_CLI === "1" ? "1" : "0"}`;
   if (pluginSdkSubpathsCache.has(cacheKey)) {
     return pluginSdkSubpathsCache.get(cacheKey);
   }
@@ -364,7 +364,7 @@ function listPluginSdkExportedSubpaths() {
 }
 
 function listPrivateLocalOnlyPluginSdkSubpaths() {
-  if (process.env.OPENCLAW_ENABLE_PRIVATE_QA_CLI !== "1") {
+  if (process.env.MARKETINGCLAW_ENABLE_PRIVATE_QA_CLI !== "1") {
     return [];
   }
   try {
@@ -513,7 +513,7 @@ function resolvePluginSdkJitiFsCacheDir() {
   return path.join(
     resolveJitiFsCacheTmpDir(),
     "jiti",
-    "openclaw",
+    "marketingclaw",
     sanitizeJitiCachePathSegment(version),
     sanitizeJitiCachePathSegment(installMarker),
   );
@@ -534,7 +534,7 @@ function getModuleLoader(tryNative) {
     interopDefault: true,
     fsCache: resolvePluginSdkJitiFsCacheOption(),
     // Prefer Node's native sync ESM loader for built dist/plugin-sdk/*.js files
-    // so local plugins do not create a second transpiled OpenClaw core graph.
+    // so local plugins do not create a second transpiled MarketingClaw core graph.
     tryNative,
     extensions: [".ts", ".tsx", ".mts", ".cts", ".mtsx", ".ctsx", ".js", ".mjs", ".cjs", ".json"],
   });

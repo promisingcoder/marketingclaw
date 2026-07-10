@@ -1,10 +1,10 @@
 import Foundation
-import OpenClawChatUI
-import OpenClawKit
-import OpenClawProtocol
+import MarketingClawChatUI
+import MarketingClawKit
+import MarketingClawProtocol
 import OSLog
 
-private let gatewayConnectionLogger = Logger(subsystem: "ai.openclaw", category: "gateway.connection")
+private let gatewayConnectionLogger = Logger(subsystem: "ai.marketingclaw", category: "gateway.connection")
 
 enum GatewayAgentChannel: String, Codable, CaseIterable {
     case last
@@ -289,7 +289,7 @@ actor GatewayConnection {
               let client
         else {
             if distinguishPreDispatchRouteChange {
-                throw OpenClawChatTransportSendError.notDispatched
+                throw MarketingClawChatTransportSendError.notDispatched
             }
             throw CancellationError()
         }
@@ -380,7 +380,7 @@ actor GatewayConnection {
 
     static func decodeSessionRoutingIdentity(_ data: Data) throws -> SessionRoutingIdentity {
         let result = try JSONDecoder().decode(AgentsListResult.self, from: data)
-        guard let contract = OpenClawChatSessionRoutingContract.make(
+        guard let contract = MarketingClawChatSessionRoutingContract.make(
             scope: result.scope.value as? String,
             mainKey: result.mainkey,
             defaultAgentID: result.defaultid)
@@ -433,7 +433,7 @@ actor GatewayConnection {
         return nil
     }
 
-    private func sessionDefaultString(_ defaults: [String: OpenClawProtocol.AnyCodable]?, key: String) -> String {
+    private func sessionDefaultString(_ defaults: [String: MarketingClawProtocol.AnyCodable]?, key: String) -> String {
         let raw = defaults?[key]?.value as? String
         return (raw ?? "").trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
     }
@@ -675,7 +675,7 @@ extension GatewayConnection {
 
     func healthOK(timeoutMs: Int = 8000) async throws -> Bool {
         let data = try await requestRaw(method: .health, timeoutMs: Double(timeoutMs))
-        return (try? self.decoder.decode(OpenClawGatewayHealthOK.self, from: data))?.ok ?? true
+        return (try? self.decoder.decode(MarketingClawGatewayHealthOK.self, from: data))?.ok ?? true
     }
 
     // MARK: - Skills
@@ -724,13 +724,13 @@ extension GatewayConnection {
         keys: [String],
         limit: Int? = nil,
         maxChars: Int? = nil,
-        timeoutMs: Int? = nil) async throws -> OpenClawSessionsPreviewPayload
+        timeoutMs: Int? = nil) async throws -> MarketingClawSessionsPreviewPayload
     {
         let resolvedKeys = keys
             .map { self.canonicalizeSessionKey($0) }
             .filter { !$0.isEmpty }
         if resolvedKeys.isEmpty {
-            return OpenClawSessionsPreviewPayload(ts: 0, previews: [])
+            return MarketingClawSessionsPreviewPayload(ts: 0, previews: [])
         }
         var params: [String: AnyCodable] = ["keys": AnyCodable(resolvedKeys)]
         if let limit { params["limit"] = AnyCodable(limit) }
@@ -750,7 +750,7 @@ extension GatewayConnection {
         limit: Int? = nil,
         maxChars: Int? = nil,
         timeoutMs: Int? = nil,
-        ifCurrentRoute route: Route? = nil) async throws -> OpenClawChatHistoryPayload
+        ifCurrentRoute route: Route? = nil) async throws -> MarketingClawChatHistoryPayload
     {
         let resolvedKey = self.canonicalizeSessionKey(sessionKey)
         var params: [String: AnyCodable] = ["sessionKey": AnyCodable(resolvedKey)]
@@ -766,7 +766,7 @@ extension GatewayConnection {
                 params: params,
                 timeoutMs: timeout,
                 ifCurrentRoute: route)
-            return try self.decoder.decode(OpenClawChatHistoryPayload.self, from: data)
+            return try self.decoder.decode(MarketingClawChatHistoryPayload.self, from: data)
         }
         return try await self.requestDecoded(method: .chatHistory, params: params, timeoutMs: timeout)
     }
@@ -778,10 +778,10 @@ extension GatewayConnection {
         message: String,
         thinking: String?,
         idempotencyKey: String,
-        attachments: [OpenClawChatAttachmentPayload],
+        attachments: [MarketingClawChatAttachmentPayload],
         timeoutMs: Int = 30000,
         ifCurrentRoute route: Route? = nil,
-        distinguishPreDispatchRouteChange: Bool = false) async throws -> OpenClawChatSendResponse
+        distinguishPreDispatchRouteChange: Bool = false) async throws -> MarketingClawChatSendResponse
     {
         let resolvedKey = self.canonicalizeSessionKey(sessionKey)
         var params: [String: AnyCodable] = [
@@ -824,7 +824,7 @@ extension GatewayConnection {
                 timeoutMs: Double(timeoutMs),
                 ifCurrentRoute: route,
                 distinguishPreDispatchRouteChange: distinguishPreDispatchRouteChange)
-            return try self.decoder.decode(OpenClawChatSendResponse.self, from: data)
+            return try self.decoder.decode(MarketingClawChatSendResponse.self, from: data)
         }
         return try await self.requestDecoded(method: .chatSend, params: params, timeoutMs: Double(timeoutMs))
     }

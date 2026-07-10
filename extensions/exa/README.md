@@ -1,12 +1,12 @@
-# OpenClaw Exa Plugin
+# MarketingClaw Exa Plugin
 
-Official OpenClaw plugin for Exa.
+Official MarketingClaw plugin for Exa.
 
-Install from OpenClaw:
+Install from MarketingClaw:
 
 ```bash
-openclaw plugins install @openclaw/exa-plugin
-openclaw gateway restart
+marketingclaw plugins install @marketingclaw/exa-plugin
+marketingclaw gateway restart
 ```
 
-See <https://docs.openclaw.ai/tools/exa-search> for setup and configuration.
+See <https://docs.marketingclaw.ai/tools/exa-search> for setup and configuration.

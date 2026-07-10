@@ -8,7 +8,7 @@ import {
 const validSnapshot = {
   exists: true,
   valid: true,
-  path: "/tmp/openclaw.json",
+  path: "/tmp/marketingclaw.json",
   hash: "h",
   config: {},
   sourceConfig: {},

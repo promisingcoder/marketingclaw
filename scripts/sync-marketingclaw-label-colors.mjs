@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-// Synchronizes GitHub label colors to the OpenClaw taxonomy policy.
+// Synchronizes GitHub label colors to the MarketingClaw taxonomy policy.
 import { execFileSync } from "node:child_process";
 
-const REPO = "openclaw/openclaw";
+const REPO = "marketingclaw/marketingclaw";
 const APPLY = process.argv.includes("--apply");
 
 const COLORS = {
@@ -244,7 +244,7 @@ function fetchLabels() {
   let cursor = null;
   for (;;) {
     const query = `query($cursor:String) {
-      repository(owner:"openclaw", name:"openclaw") {
+      repository(owner:"marketingclaw", name:"marketingclaw") {
         labels(first:100, after:$cursor, orderBy:{field:NAME,direction:ASC}) {
           nodes { name color description }
           pageInfo { hasNextPage endCursor }

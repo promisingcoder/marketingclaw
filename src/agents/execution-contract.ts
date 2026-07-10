@@ -1,8 +1,8 @@
 /**
  * Resolves strict agentic execution contracts for provider/model pairs.
  */
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import { normalizeLowercaseStringOrEmpty } from "@marketingclaw/normalization-core/string-coerce";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 import { resolveAgentExecutionContract, resolveSessionAgentIds } from "./agent-scope.js";
 
 /**
@@ -60,7 +60,7 @@ export function isStrictAgenticSupportedProviderModel(params: {
 }
 
 /**
- * Returns the effective execution contract for an embedded OpenClaw run.
+ * Returns the effective execution contract for an embedded MarketingClaw run.
  *
  * strict-agentic is a GPT-5-family OpenAI-only runtime contract,
  * so an unsupported provider/model pair always collapses to `"default"`
@@ -84,7 +84,7 @@ export function isStrictAgenticSupportedProviderModel(params: {
  * whether a turn represents planning, progress, or completion.
  */
 function resolveEffectiveExecutionContract(params: {
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   sessionKey?: string;
   agentId?: string | null;
   provider?: string | null;
@@ -115,7 +115,7 @@ function resolveEffectiveExecutionContract(params: {
 }
 
 export function isStrictAgenticExecutionContractActive(params: {
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   sessionKey?: string;
   agentId?: string | null;
   provider?: string | null;

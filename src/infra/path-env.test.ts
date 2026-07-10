@@ -1,8 +1,8 @@
-// Covers OpenClaw CLI PATH construction.
+// Covers MarketingClaw CLI PATH construction.
 import fs from "node:fs";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { ensureOpenClawCliOnPath } from "./path-env.js";
+import { ensureMarketingClawCliOnPath } from "./path-env.js";
 
 const state = vi.hoisted(() => ({
   dirs: new Set<string>(),
@@ -46,11 +46,11 @@ vi.mock("./env.js", () => ({
   isTruthyEnvValue: (value?: string) => value === "1" || value === "true",
 }));
 
-describe("ensureOpenClawCliOnPath", () => {
+describe("ensureMarketingClawCliOnPath", () => {
   const envKeys = [
     "PATH",
-    "OPENCLAW_PATH_BOOTSTRAPPED",
-    "OPENCLAW_ALLOW_PROJECT_LOCAL_BIN",
+    "MARKETINGCLAW_PATH_BOOTSTRAPPED",
+    "MARKETINGCLAW_ALLOW_PROJECT_LOCAL_BIN",
     "MISE_DATA_DIR",
     "PNPM_HOME",
     "NPM_CONFIG_PREFIX",
@@ -82,9 +82,9 @@ describe("ensureOpenClawCliOnPath", () => {
   });
 
   function setupAppCliRoot(name: string) {
-    const tmp = abs(`/tmp/openclaw-path/${name}`);
+    const tmp = abs(`/tmp/marketingclaw-path/${name}`);
     const appBinDir = path.join(tmp, "AppBin");
-    const appCli = path.join(appBinDir, "openclaw");
+    const appCli = path.join(appBinDir, "marketingclaw");
     setDir(tmp);
     setDir(appBinDir);
     setExe(appCli);
@@ -98,14 +98,14 @@ describe("ensureOpenClawCliOnPath", () => {
     platform: NodeJS.Platform;
     allowProjectLocalBin?: boolean;
   }) {
-    ensureOpenClawCliOnPath(params);
+    ensureMarketingClawCliOnPath(params);
     return (process.env.PATH ?? "").split(path.delimiter);
   }
 
   function resetBootstrapEnv(pathValue = "/usr/bin") {
     process.env.PATH = pathValue;
-    delete process.env.OPENCLAW_PATH_BOOTSTRAPPED;
-    delete process.env.OPENCLAW_ALLOW_PROJECT_LOCAL_BIN;
+    delete process.env.MARKETINGCLAW_PATH_BOOTSTRAPPED;
+    delete process.env.MARKETINGCLAW_ALLOW_PROJECT_LOCAL_BIN;
     delete process.env.HOMEBREW_PREFIX;
     delete process.env.HOMEBREW_BREW_FILE;
     delete process.env.XDG_BIN_HOME;
@@ -124,7 +124,7 @@ describe("ensureOpenClawCliOnPath", () => {
     }
   }
 
-  it("prepends the bundled app bin dir when a sibling openclaw exists", () => {
+  it("prepends the bundled app bin dir when a sibling marketingclaw exists", () => {
     const { tmp, appBinDir, appCli } = setupAppCliRoot("case-bundled");
     resetBootstrapEnv();
 
@@ -138,7 +138,7 @@ describe("ensureOpenClawCliOnPath", () => {
   });
 
   it("keeps the current runtime directory ahead of system PATH hardening", () => {
-    const tmp = abs("/tmp/openclaw-path/case-runtime-dir");
+    const tmp = abs("/tmp/marketingclaw-path/case-runtime-dir");
     const nodeBinDir = path.join(tmp, "node-bin");
     const nodeExec = path.join(nodeBinDir, "node");
     setDir(tmp);
@@ -159,8 +159,8 @@ describe("ensureOpenClawCliOnPath", () => {
 
   it("is idempotent", () => {
     process.env.PATH = "/bin";
-    process.env.OPENCLAW_PATH_BOOTSTRAPPED = "1";
-    ensureOpenClawCliOnPath({
+    process.env.MARKETINGCLAW_PATH_BOOTSTRAPPED = "1";
+    ensureMarketingClawCliOnPath({
       execPath: "/tmp/does-not-matter",
       cwd: "/tmp",
       homeDir: "/tmp",
@@ -204,7 +204,7 @@ describe("ensureOpenClawCliOnPath", () => {
     ({ envValue, allowProjectLocalBin }) => {
       const { tmp, appCli } = setupAppCliRoot("case-project-local");
       const localBinDir = path.join(tmp, "node_modules", ".bin");
-      const localCli = path.join(localBinDir, "openclaw");
+      const localCli = path.join(localBinDir, "marketingclaw");
       setDir(path.join(tmp, "node_modules"));
       setDir(localBinDir);
       setExe(localCli);
@@ -221,9 +221,9 @@ describe("ensureOpenClawCliOnPath", () => {
 
       resetBootstrapEnv();
       if (envValue === undefined) {
-        delete process.env.OPENCLAW_ALLOW_PROJECT_LOCAL_BIN;
+        delete process.env.MARKETINGCLAW_ALLOW_PROJECT_LOCAL_BIN;
       } else {
-        process.env.OPENCLAW_ALLOW_PROJECT_LOCAL_BIN = envValue;
+        process.env.MARKETINGCLAW_ALLOW_PROJECT_LOCAL_BIN = envValue;
       }
 
       const withOptIn = bootstrapPath({
@@ -241,15 +241,15 @@ describe("ensureOpenClawCliOnPath", () => {
     const { tmp, appCli } = setupAppCliRoot("case-deleted-cwd");
     const localBinDir = path.join(tmp, "node_modules", ".bin");
     setDir(localBinDir);
-    setExe(path.join(localBinDir, "openclaw"));
+    setExe(path.join(localBinDir, "marketingclaw"));
     resetBootstrapEnv();
-    process.env.OPENCLAW_ALLOW_PROJECT_LOCAL_BIN = "1";
+    process.env.MARKETINGCLAW_ALLOW_PROJECT_LOCAL_BIN = "1";
     const cwdSpy = vi.spyOn(process, "cwd").mockImplementation(() => {
       throw new Error("ENOENT: uv_cwd");
     });
 
     try {
-      ensureOpenClawCliOnPath({ execPath: appCli, homeDir: tmp, platform: "darwin" });
+      ensureMarketingClawCliOnPath({ execPath: appCli, homeDir: tmp, platform: "darwin" });
     } finally {
       cwdSpy.mockRestore();
     }
@@ -399,10 +399,10 @@ describe("ensureOpenClawCliOnPath", () => {
   });
 
   it("ignores package-manager env roots derived from the active workspace", () => {
-    const homeDir = abs("/tmp/openclaw-path/home");
+    const homeDir = abs("/tmp/marketingclaw-path/home");
     const cwd = path.join(homeDir, "workspace");
     const appBinDir = path.join(homeDir, "app-bin");
-    const appCli = path.join(appBinDir, "openclaw");
+    const appCli = path.join(appBinDir, "marketingclaw");
     const pnpmHome = path.join(cwd, ".pnpm");
     const npmPrefix = path.join(cwd, ".npm-prefix");
     for (const dir of [homeDir, cwd, appBinDir, pnpmHome, path.join(pnpmHome, "bin"), npmPrefix]) {
@@ -427,10 +427,10 @@ describe("ensureOpenClawCliOnPath", () => {
   });
 
   it("ignores package-manager env roots whose existing parent resolves into the workspace", () => {
-    const homeDir = abs("/tmp/openclaw-path/home");
+    const homeDir = abs("/tmp/marketingclaw-path/home");
     const cwd = path.join(homeDir, "workspace");
     const appBinDir = path.join(homeDir, "app-bin");
-    const appCli = path.join(appBinDir, "openclaw");
+    const appCli = path.join(appBinDir, "marketingclaw");
     for (const dir of [homeDir, cwd, appBinDir]) {
       setDir(dir);
     }
@@ -487,7 +487,7 @@ describe("ensureOpenClawCliOnPath", () => {
     {
       name: "appends Linuxbrew dirs after system dirs",
       setup: () => {
-        const tmp = abs("/tmp/openclaw-path/case-linuxbrew");
+        const tmp = abs("/tmp/marketingclaw-path/case-linuxbrew");
         const execDir = path.join(tmp, "exec");
         setDir(tmp);
         setDir(execDir);

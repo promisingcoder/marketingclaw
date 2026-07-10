@@ -1,4 +1,4 @@
-// Commander wiring for `openclaw update`, its status/finalize subcommands, and help text.
+// Commander wiring for `marketingclaw update`, its status/finalize subcommands, and help text.
 import type { Command } from "commander";
 import { formatDocsLink } from "../../packages/terminal-core/src/links.js";
 import { theme } from "../../packages/terminal-core/src/theme.js";
@@ -66,10 +66,7 @@ function registerUpdateFinalizationCommand(update: Command, name: string, hidden
   command
     .description("Repair post-update doctor and plugin convergence")
     .option("--json", "Output result as JSON", false)
-    .option(
-      "--channel <stable|extended-stable|beta|dev>",
-      "Persist update channel before repair",
-    )
+    .option("--channel <stable|extended-stable|beta|dev>", "Persist update channel before repair")
     .option("--timeout <seconds>", "Timeout for update repair steps in seconds (default: 1800)")
     .option("--yes", "Skip confirmation prompts (non-interactive)", false)
     .option(
@@ -82,14 +79,14 @@ function registerUpdateFinalizationCommand(update: Command, name: string, hidden
       "after",
       () =>
         `\n${theme.heading("Examples:")}\n${formatHelpExamples([
-          ["openclaw update repair", "Rerun post-update doctor and plugin convergence."],
-          ["openclaw update repair --channel beta", "Repair against the beta update channel."],
-          ["openclaw update repair --json", "JSON output for automation."],
+          ["marketingclaw update repair", "Rerun post-update doctor and plugin convergence."],
+          ["marketingclaw update repair --channel beta", "Repair against the beta update channel."],
+          ["marketingclaw update repair --json", "JSON output for automation."],
         ])}\n\n${theme.heading("Notes:")}\n${theme.muted(
           "- Repairs post-update plugin state after the core package already changed",
         )}\n${theme.muted("- Runs doctor repair and plugin convergence, but never restarts the Gateway")}\n\n${theme.muted(
           "Docs:",
-        )} ${formatDocsLink("/cli/update", "docs.openclaw.ai/cli/update")}`,
+        )} ${formatDocsLink("/cli/update", "docs.marketingclaw.ai/cli/update")}`,
     )
     .action(async (opts, actionCommand) => {
       try {
@@ -114,14 +111,11 @@ export function registerUpdateCli(program: Command) {
   program.enablePositionalOptions();
   const update = program
     .command("update")
-    .description("Update OpenClaw and inspect update channel status")
+    .description("Update MarketingClaw and inspect update channel status")
     .option("--json", "Output result as JSON", false)
     .option("--no-restart", "Skip restarting the gateway service after a successful update")
     .option("--dry-run", "Preview update actions without making changes", false)
-    .option(
-      "--channel <stable|extended-stable|beta|dev>",
-      "Persist update channel (git + npm)",
-    )
+    .option("--channel <stable|extended-stable|beta|dev>", "Persist update channel (git + npm)")
     .option(
       "--tag <dist-tag|version|spec>",
       "Override the package target for this update (dist-tag, version, or package spec)",
@@ -135,23 +129,26 @@ export function registerUpdateCli(program: Command) {
     )
     .addHelpText("after", () => {
       const examples = [
-        ["openclaw update", "Update a source checkout (git)"],
+        ["marketingclaw update", "Update a source checkout (git)"],
         [
-          "openclaw update --channel extended-stable",
+          "marketingclaw update --channel extended-stable",
           "Switch to the monthly supported npm channel",
         ],
-        ["openclaw update --channel beta", "Switch to beta channel (git + npm)"],
-        ["openclaw update --channel dev", "Switch to dev channel (git + npm)"],
-        ["openclaw update --tag beta", "One-off update to a dist-tag or version"],
-        ["openclaw update --tag main", "One-off package update from GitHub main"],
-        ["openclaw update --dry-run", "Preview actions without changing anything"],
-        ["openclaw update --no-restart", "Update without restarting the service"],
-        ["openclaw update --json", "Output result as JSON"],
-        ["openclaw update --yes", "Non-interactive (accept downgrade prompts)"],
-        ["openclaw update repair", "Repair stranded post-update plugin state"],
-        ["openclaw update --acknowledge-clawhub-risk", "Acknowledge ClawHub plugin trust warnings"],
-        ["openclaw update wizard", "Interactive update wizard"],
-        ["openclaw --update", "Shorthand for openclaw update"],
+        ["marketingclaw update --channel beta", "Switch to beta channel (git + npm)"],
+        ["marketingclaw update --channel dev", "Switch to dev channel (git + npm)"],
+        ["marketingclaw update --tag beta", "One-off update to a dist-tag or version"],
+        ["marketingclaw update --tag main", "One-off package update from GitHub main"],
+        ["marketingclaw update --dry-run", "Preview actions without changing anything"],
+        ["marketingclaw update --no-restart", "Update without restarting the service"],
+        ["marketingclaw update --json", "Output result as JSON"],
+        ["marketingclaw update --yes", "Non-interactive (accept downgrade prompts)"],
+        ["marketingclaw update repair", "Repair stranded post-update plugin state"],
+        [
+          "marketingclaw update --acknowledge-clawhub-risk",
+          "Acknowledge ClawHub plugin trust warnings",
+        ],
+        ["marketingclaw update wizard", "Interactive update wizard"],
+        ["marketingclaw --update", "Shorthand for marketingclaw update"],
       ] as const;
       const fmtExamples = examples
         .map(([cmd, desc]) => `  ${theme.command(cmd)} ${theme.muted(`# ${desc}`)}`)
@@ -163,7 +160,7 @@ ${theme.heading("What this does:")}
 
 ${theme.heading("Switch channels:")}
   - Use --channel stable|extended-stable|beta|dev to persist the update channel in config
-  - Run openclaw update status to see the active channel and source
+  - Run marketingclaw update status to see the active channel and source
   - Use --tag <dist-tag|version|spec> for a one-off package update without persisting
   - Use --tag main for a one-off package update from GitHub main
 
@@ -182,7 +179,7 @@ ${theme.heading("Notes:")}
   - Downgrades require confirmation (can break configuration)
   - Skips update if the working directory has uncommitted changes
 
-${theme.muted("Docs:")} ${formatDocsLink("/cli/update", "docs.openclaw.ai/cli/update")}`;
+${theme.muted("Docs:")} ${formatDocsLink("/cli/update", "docs.marketingclaw.ai/cli/update")}`;
     })
     .action(async (opts: CommanderUpdateOptions) => {
       try {
@@ -211,7 +208,7 @@ ${theme.muted("Docs:")} ${formatDocsLink("/cli/update", "docs.openclaw.ai/cli/up
     .option("--timeout <seconds>", "Timeout for each update step in seconds (default: 1800)")
     .addHelpText(
       "after",
-      `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/update", "docs.openclaw.ai/cli/update")}\n`,
+      `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/update", "docs.marketingclaw.ai/cli/update")}\n`,
     )
     .action(async (opts, command) => {
       try {
@@ -233,14 +230,14 @@ ${theme.muted("Docs:")} ${formatDocsLink("/cli/update", "docs.openclaw.ai/cli/up
       "after",
       () =>
         `\n${theme.heading("Examples:")}\n${formatHelpExamples([
-          ["openclaw update status", "Show channel + version status."],
-          ["openclaw update status --json", "JSON output."],
-          ["openclaw update status --timeout 10", "Custom timeout."],
+          ["marketingclaw update status", "Show channel + version status."],
+          ["marketingclaw update status --json", "JSON output."],
+          ["marketingclaw update status --timeout 10", "Custom timeout."],
         ])}\n\n${theme.heading("Notes:")}\n${theme.muted(
           "- Shows current update channel (stable/extended-stable/beta/dev) and source",
         )}\n${theme.muted("- Includes git tag/branch/SHA for source checkouts")}\n\n${theme.muted(
           "Docs:",
-        )} ${formatDocsLink("/cli/update", "docs.openclaw.ai/cli/update")}`,
+        )} ${formatDocsLink("/cli/update", "docs.marketingclaw.ai/cli/update")}`,
     )
     .action(async (opts, command) => {
       try {

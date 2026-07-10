@@ -3,7 +3,7 @@ import fsSync from "node:fs";
 import path from "node:path";
 import type { GroupMetadata, WAMessageKey } from "baileys";
 import "./monitor-inbox.test-harness.js";
-import { defaultRuntime } from "openclaw/plugin-sdk/runtime-env";
+import { defaultRuntime } from "marketingclaw/plugin-sdk/runtime-env";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   registerWhatsAppConnectionController,
@@ -43,9 +43,9 @@ const { imageOps, sleepWithAbortMock } = vi.hoisted(() => ({
   sleepWithAbortMock: vi.fn(async (_ms: number, _signal?: AbortSignal) => undefined),
 }));
 
-vi.mock("openclaw/plugin-sdk/media-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/media-runtime")>(
-    "openclaw/plugin-sdk/media-runtime",
+vi.mock("marketingclaw/plugin-sdk/media-runtime", async () => {
+  const actual = await vi.importActual<typeof import("marketingclaw/plugin-sdk/media-runtime")>(
+    "marketingclaw/plugin-sdk/media-runtime",
   );
   return {
     ...actual,

@@ -6,7 +6,7 @@ import {
   type SessionParentForkDecision,
 } from "../../config/sessions/session-accessor.js";
 import type { SessionEntry } from "../../config/sessions/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../../config/types.marketingclaw.js";
 import { createLazyImportLoader } from "../../shared/lazy-promise.js";
 
 /**
@@ -22,7 +22,7 @@ export type ParentForkDecision = SessionParentForkDecision;
 type ParentForkDecisionParams = {
   parentEntry: SessionEntry;
   agentId?: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   storePath?: string;
 };
 
@@ -30,7 +30,7 @@ type ForkSessionFromParentParams = {
   parentSessionKey: string;
   parentEntry: SessionEntry;
   agentId: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   sessionKey: string;
   storePath?: string;
   /** Cross-agent forks land the child transcript beside the child's store. */
@@ -96,7 +96,7 @@ function formatParentForkTooLargeMessage(params: {
 
 function resolveParentForkStorePath(params: {
   agentId?: string;
-  config?: OpenClawConfig;
+  config?: MarketingClawConfig;
   storePath?: string;
 }): string {
   return (

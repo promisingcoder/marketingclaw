@@ -1,9 +1,11 @@
 /** Onboarding defaults for workspace hooks. */
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { MarketingClawConfig } from "../config/types.marketingclaw.js";
 
 const DEFAULT_ONBOARDING_INTERNAL_HOOKS = ["session-memory"] as const;
 
-export function enableDefaultOnboardingInternalHooks(cfg: OpenClawConfig): OpenClawConfig {
+export function enableDefaultOnboardingInternalHooks(
+  cfg: MarketingClawConfig,
+): MarketingClawConfig {
   const existingInternal = cfg.hooks?.internal;
   if (existingInternal?.enabled === false) {
     return cfg;

@@ -1,24 +1,24 @@
-package ai.openclaw.app.ui
+package ai.marketingclaw.app.ui
 
-import ai.openclaw.app.GatewayTalkSetupReadiness
-import ai.openclaw.app.MainViewModel
-import ai.openclaw.app.VoiceCaptureMode
-import ai.openclaw.app.gatewayTalkSetupDescription
-import ai.openclaw.app.isReady
-import ai.openclaw.app.requiresSetup
-import ai.openclaw.app.ui.design.ClawPanel
-import ai.openclaw.app.ui.design.ClawPlainIconButton
-import ai.openclaw.app.ui.design.ClawPrimaryButton
-import ai.openclaw.app.ui.design.ClawSecondaryButton
-import ai.openclaw.app.ui.design.ClawStatus
-import ai.openclaw.app.ui.design.ClawStatusPill
-import ai.openclaw.app.ui.design.ClawTheme
-import ai.openclaw.app.ui.design.OpenClawMascot
-import ai.openclaw.app.ui.design.TalkWaveform
-import ai.openclaw.app.ui.design.TalkWaveformPalette
-import ai.openclaw.app.ui.design.TalkWaveformPhase
-import ai.openclaw.app.voice.VoiceConversationEntry
-import ai.openclaw.app.voice.VoiceConversationRole
+import ai.marketingclaw.app.GatewayTalkSetupReadiness
+import ai.marketingclaw.app.MainViewModel
+import ai.marketingclaw.app.VoiceCaptureMode
+import ai.marketingclaw.app.gatewayTalkSetupDescription
+import ai.marketingclaw.app.isReady
+import ai.marketingclaw.app.requiresSetup
+import ai.marketingclaw.app.ui.design.ClawPanel
+import ai.marketingclaw.app.ui.design.ClawPlainIconButton
+import ai.marketingclaw.app.ui.design.ClawPrimaryButton
+import ai.marketingclaw.app.ui.design.ClawSecondaryButton
+import ai.marketingclaw.app.ui.design.ClawStatus
+import ai.marketingclaw.app.ui.design.ClawStatusPill
+import ai.marketingclaw.app.ui.design.ClawTheme
+import ai.marketingclaw.app.ui.design.MarketingClawMascot
+import ai.marketingclaw.app.ui.design.TalkWaveform
+import ai.marketingclaw.app.ui.design.TalkWaveformPalette
+import ai.marketingclaw.app.ui.design.TalkWaveformPhase
+import ai.marketingclaw.app.voice.VoiceConversationEntry
+import ai.marketingclaw.app.voice.VoiceConversationRole
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
@@ -461,7 +461,7 @@ private fun TalkSessionScreen(
           Text(
             text =
               if (speaking) {
-                "OpenClaw speaking"
+                "MarketingClaw speaking"
               } else if (listening) {
                 "Realtime voice"
               } else {
@@ -536,12 +536,12 @@ private fun TalkTranscript(
   LazyColumn(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
     if (entries.isEmpty()) {
       item {
-        TalkTranscriptCard(label = "OpenClaw", text = "Listening for your next turn.", muted = true)
+        TalkTranscriptCard(label = "MarketingClaw", text = "Listening for your next turn.", muted = true)
       }
     } else {
       items(entries.takeLast(6), key = { it.id }) { entry ->
         TalkTranscriptCard(
-          label = if (entry.role == VoiceConversationRole.User) "You" else "OpenClaw",
+          label = if (entry.role == VoiceConversationRole.User) "You" else "MarketingClaw",
           text = if (entry.isStreaming && entry.text.isBlank()) "Listening response..." else entry.text,
           muted = entry.isStreaming,
         )
@@ -619,9 +619,9 @@ private fun VoiceHeader(
       verticalAlignment = Alignment.CenterVertically,
       horizontalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-      OpenClawMascot(modifier = Modifier.size(25.dp), tint = ClawTheme.colors.text)
+      MarketingClawMascot(modifier = Modifier.size(25.dp), tint = ClawTheme.colors.text)
       Text(
-        text = "OpenClaw",
+        text = "MarketingClaw",
         style = ClawTheme.type.title.copy(fontSize = 17.sp, lineHeight = 21.sp),
         color = ClawTheme.colors.text,
         modifier = Modifier.weight(1f),
@@ -690,7 +690,7 @@ private fun VoiceHero(
         text =
           when {
             voiceAttentionStatus != null -> voiceAttentionStatus
-            talkModeSpeaking -> "OpenClaw is replying"
+            talkModeSpeaking -> "MarketingClaw is replying"
             talkModeListening -> "Listening"
             talkModeEnabled -> "Talk is live"
             micEnabled -> "Dictation is listening"
@@ -1034,7 +1034,7 @@ private fun VoiceTurnCard(entry: VoiceConversationEntry) {
     ) {
       Column(modifier = Modifier.padding(horizontal = 14.dp, vertical = 9.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
         Text(
-          text = if (isUser) "You" else "OpenClaw",
+          text = if (isUser) "You" else "MarketingClaw",
           style = ClawTheme.type.caption.copy(fontSize = 12.5.sp, lineHeight = 16.sp, fontWeight = FontWeight.SemiBold),
           color = ClawTheme.colors.textSubtle,
         )
@@ -1054,7 +1054,7 @@ private fun VoiceThinkingCard() {
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
       ClawStatusPill(text = "Sending", status = ClawStatus.Warning)
       Text(
-        text = "OpenClaw is preparing a response.",
+        text = "MarketingClaw is preparing a response.",
         modifier = Modifier.weight(1f),
         style = ClawTheme.type.body,
         color = ClawTheme.colors.textMuted,
@@ -1072,7 +1072,7 @@ private fun VoicePermissionPanel(onRequestPermission: () -> Unit) {
       ClawStatusPill(text = "Permission needed", status = ClawStatus.Warning)
       Text(text = "Microphone access is needed.", style = ClawTheme.type.section, color = ClawTheme.colors.text)
       Text(
-        text = "OpenClaw only listens when you start Talk or Dictation.",
+        text = "MarketingClaw only listens when you start Talk or Dictation.",
         style = ClawTheme.type.body,
         color = ClawTheme.colors.textMuted,
       )
@@ -1148,7 +1148,7 @@ internal fun voiceStatusLabel(
 ): String =
   when {
     voiceAttentionStatus != null -> voiceAttentionStatus
-    voiceCaptureMode == VoiceCaptureMode.TalkMode && talkModeSpeaking -> "OpenClaw is speaking"
+    voiceCaptureMode == VoiceCaptureMode.TalkMode && talkModeSpeaking -> "MarketingClaw is speaking"
     voiceCaptureMode == VoiceCaptureMode.TalkMode && talkModeListening -> "Listening"
     voiceCaptureMode == VoiceCaptureMode.TalkMode -> "Talk is live"
     micIsSending -> "Sending dictation"

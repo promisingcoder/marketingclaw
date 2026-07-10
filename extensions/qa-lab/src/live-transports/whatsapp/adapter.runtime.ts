@@ -1,11 +1,11 @@
 // Qa Lab plugin module implements WhatsApp live transport adapter behavior.
 import fs from "node:fs/promises";
 import path from "node:path";
-import { startWhatsAppQaDriverSession } from "@openclaw/whatsapp/api.js";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { buildQaTarget } from "openclaw/plugin-sdk/qa-channel";
-import type { QaRunnerCliRegistration } from "openclaw/plugin-sdk/qa-runner-runtime";
-import { resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
+import { startWhatsAppQaDriverSession } from "@marketingclaw/whatsapp/api.js";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import { buildQaTarget } from "marketingclaw/plugin-sdk/qa-channel";
+import type { QaRunnerCliRegistration } from "marketingclaw/plugin-sdk/qa-runner-runtime";
+import { resolvePreferredMarketingClawTmpDir } from "marketingclaw/plugin-sdk/temp-path";
 import {
   acquireQaCredentialLease,
   startQaCredentialLeaseHeartbeat,
@@ -35,7 +35,7 @@ export async function createWhatsAppQaTransportAdapter(
   let sutAuthDir: string;
   try {
     authRoot = await fs.mkdtemp(
-      path.join(resolvePreferredOpenClawTmpDir(), "openclaw-whatsapp-qa-adapter-"),
+      path.join(resolvePreferredMarketingClawTmpDir(), "marketingclaw-whatsapp-qa-adapter-"),
     );
     const [driverAuthDir, unpackedSutAuthDir] = await Promise.all([
       whatsappLive.unpackWhatsAppAuthArchive({
@@ -164,7 +164,7 @@ export async function createWhatsAppQaTransportAdapter(
       busMessageIds.clear();
     },
     createGatewayConfig: () =>
-      whatsappLive.buildWhatsAppQaConfig({} as OpenClawConfig, {
+      whatsappLive.buildWhatsAppQaConfig({} as MarketingClawConfig, {
         allowFrom: [runtimeEnv.driverPhoneE164],
         authDir: sutAuthDir,
         dmPolicy: "allowlist",

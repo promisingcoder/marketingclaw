@@ -1,8 +1,8 @@
 import Foundation
-import OpenClawKit
-import OpenClawProtocol
+import MarketingClawKit
+import MarketingClawProtocol
 import Testing
-@testable import OpenClaw
+@testable import MarketingClaw
 
 @Suite(.serialized)
 struct GatewayChannelConnectTests {
@@ -120,7 +120,7 @@ struct GatewayChannelConnectTests {
             .appendingPathComponent(UUID().uuidString, isDirectory: true)
         try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: tempDir) }
-        return try await TestIsolation.withEnvValues(["OPENCLAW_STATE_DIR": tempDir.path]) {
+        return try await TestIsolation.withEnvValues(["MARKETINGCLAW_STATE_DIR": tempDir.path]) {
             try await operation()
         }
     }
@@ -295,9 +295,9 @@ struct GatewayChannelConnectTests {
                     caps: [],
                     commands: [],
                     permissions: [:],
-                    clientId: "openclaw-macos",
+                    clientId: "marketingclaw-macos",
                     clientMode: "ui",
-                    clientDisplayName: "OpenClaw macOS Debug CLI"))
+                    clientDisplayName: "MarketingClaw macOS Debug CLI"))
 
             try await channel.connect()
 

@@ -3,9 +3,9 @@
  *
  * Manages scheduled jobs, wake/run actions, delivery context, and reminder-style payload normalization.
  */
-import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@marketingclaw/normalization-core/string-coerce";
 import { Type, type TSchema } from "typebox";
-import { getRuntimeConfig, type OpenClawConfig } from "../../config/config.js";
+import { getRuntimeConfig, type MarketingClawConfig } from "../../config/config.js";
 import { resolveCronCreationDelivery } from "../../cron/delivery-context.js";
 import { assertCronDeliveryInputNonBlankFields } from "../../cron/delivery-target-validation.js";
 import { normalizeCronJobCreate, normalizeCronJobPatch } from "../../cron/normalize.js";
@@ -637,7 +637,7 @@ function readCronJobIdParam(params: Record<string, unknown>) {
 
 function resolveCronToolCallerScope(
   opts: CronToolOptions | undefined,
-  cfg: OpenClawConfig,
+  cfg: MarketingClawConfig,
 ): CronToolCallerScope | undefined {
   const sessionKey = opts?.agentSessionKey?.trim();
   if (!sessionKey) {
@@ -897,7 +897,7 @@ export function createCronTool(opts?: CronToolOptions, deps?: CronToolDeps): Any
     displaySummary: CRON_TOOL_DISPLAY_SUMMARY,
     description: `Manage Gateway cron jobs and wake events: reminders, check-back-later, delayed follow-ups, recurring work. Do not emulate scheduling with exec sleep/process polling.
 
-Main cron => system events for heartbeat. Isolated cron => background task in \`openclaw tasks\`.
+Main cron => system events for heartbeat. Isolated cron => background task in \`marketingclaw tasks\`.
 
 ACTIONS:
 - status: scheduler status
@@ -1064,7 +1064,7 @@ Use jobId canonical; id accepted compat. contextMessages (0-10) adds previous me
             // job properties to the top level alongside `action` instead of nesting
             // them inside `job`. When `params.job` is missing or empty, reconstruct
             // a synthetic job object from any recognised top-level job fields.
-            // See: https://github.com/openclaw/openclaw/issues/11310
+            // See: https://github.com/promisingcoder/marketingclaw/issues/11310
             if (isMissingOrEmptyObject(params.job)) {
               const synthetic = recoverCronObjectFromFlatParams(params);
               // Only use the synthetic job if at least one meaningful field is present
@@ -1302,7 +1302,7 @@ Use jobId canonical; id accepted compat. contextMessages (0-10) adds previous me
             // Without this, the wake gateway call goes through with no session
             // key and the system event lands on the heartbeat / main default
             // rather than the originating conversation lane. Closes the
-            // upstream half of openclaw/openclaw#46886 (#64556 — agentId/
+            // upstream half of marketingclaw/marketingclaw#46886 (#64556 — agentId/
             // sessionKey silently ignored for `action: "wake"`). Explicit
             // params on the tool call still take precedence over the inferred
             // value, so call sites can wake a different session owned by the

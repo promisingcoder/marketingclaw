@@ -29,7 +29,7 @@ function commandOutput(error: unknown): string {
 }
 
 function createRepoWithPrChangelogDiff(entry: string): string {
-  const repo = mkdtempSync(path.join(os.tmpdir(), "openclaw-changelog-credit-"));
+  const repo = mkdtempSync(path.join(os.tmpdir(), "marketingclaw-changelog-credit-"));
   run(repo, "git", ["init", "-q", "--initial-branch=main"]);
   run(repo, "git", ["config", "user.email", "test@example.com"]);
   run(repo, "git", ["config", "user.name", "Test User"]);
@@ -52,7 +52,7 @@ function createRepoWithPrChangelogDiff(entry: string): string {
 }
 
 function createRepoWithChangelog(content: string): string {
-  const repo = mkdtempSync(path.join(os.tmpdir(), "openclaw-changelog-policy-"));
+  const repo = mkdtempSync(path.join(os.tmpdir(), "marketingclaw-changelog-policy-"));
   writeFileSync(repo + "/CHANGELOG.md", content, "utf8");
   return repo;
 }
@@ -63,11 +63,11 @@ function validateChangelogEntry(repo: string, contrib: string): string {
     "bash",
     [
       "-c",
-      'source "$OPENCLAW_PR_CHANGELOG_SH"; validate_changelog_entry_for_pr 123 "$OPENCLAW_TEST_CONTRIB"',
+      'source "$MARKETINGCLAW_PR_CHANGELOG_SH"; validate_changelog_entry_for_pr 123 "$MARKETINGCLAW_TEST_CONTRIB"',
     ],
     {
-      OPENCLAW_PR_CHANGELOG_SH: changelogScriptPath,
-      OPENCLAW_TEST_CONTRIB: contrib,
+      MARKETINGCLAW_PR_CHANGELOG_SH: changelogScriptPath,
+      MARKETINGCLAW_TEST_CONTRIB: contrib,
     },
   );
 }
@@ -76,9 +76,9 @@ function validateChangelogAttributionPolicy(repo: string): string {
   return run(
     repo,
     "bash",
-    ["-c", 'source "$OPENCLAW_PR_CHANGELOG_SH"; validate_changelog_attribution_policy'],
+    ["-c", 'source "$MARKETINGCLAW_PR_CHANGELOG_SH"; validate_changelog_attribution_policy'],
     {
-      OPENCLAW_PR_CHANGELOG_SH: changelogScriptPath,
+      MARKETINGCLAW_PR_CHANGELOG_SH: changelogScriptPath,
     },
   );
 }
@@ -87,9 +87,9 @@ describe("check-changelog-attributions", () => {
   it("flags forbidden bot, org, and maintainer thanks attributions", () => {
     const content = [
       "- Internal cleanup. Thanks @codex.",
-      "- Org-owned fix. Thanks @openclaw.",
+      "- Org-owned fix. Thanks @marketingclaw.",
       "- Maintainer-owned fix. Thanks @steipete.",
-      "- Mixed credit. Thanks @contributor and @OpenClaw.",
+      "- Mixed credit. Thanks @contributor and @MarketingClaw.",
       "- Bot repair. Thanks @clawsweeper[bot].",
       "- Dependency bump. Thanks @dependabot[bot].",
       "- App repair. Thanks @app/clawsweeper.",
@@ -97,9 +97,13 @@ describe("check-changelog-attributions", () => {
 
     expect(findForbiddenChangelogThanks(content)).toEqual([
       { line: 1, handle: "codex", text: "- Internal cleanup. Thanks @codex." },
-      { line: 2, handle: "openclaw", text: "- Org-owned fix. Thanks @openclaw." },
+      { line: 2, handle: "marketingclaw", text: "- Org-owned fix. Thanks @marketingclaw." },
       { line: 3, handle: "steipete", text: "- Maintainer-owned fix. Thanks @steipete." },
-      { line: 4, handle: "openclaw", text: "- Mixed credit. Thanks @contributor and @OpenClaw." },
+      {
+        line: 4,
+        handle: "marketingclaw",
+        text: "- Mixed credit. Thanks @contributor and @MarketingClaw.",
+      },
       { line: 5, handle: "clawsweeper[bot]", text: "- Bot repair. Thanks @clawsweeper[bot]." },
       { line: 6, handle: "dependabot[bot]", text: "- Dependency bump. Thanks @dependabot[bot]." },
       { line: 7, handle: "app/clawsweeper", text: "- App repair. Thanks @app/clawsweeper." },
@@ -116,12 +120,12 @@ describe("check-changelog-attributions", () => {
 
   it("checks every thanked handle on a changelog line", () => {
     expect(
-      findForbiddenChangelogThanks("- Mixed credit (#123). Thanks @openclaw and @alice."),
+      findForbiddenChangelogThanks("- Mixed credit (#123). Thanks @marketingclaw and @alice."),
     ).toEqual([
       {
         line: 1,
-        handle: "openclaw",
-        text: "- Mixed credit (#123). Thanks @openclaw and @alice.",
+        handle: "marketingclaw",
+        text: "- Mixed credit (#123). Thanks @marketingclaw and @alice.",
       },
     ]);
   });
@@ -131,13 +135,13 @@ describe("check-changelog-attributions", () => {
     expect(isForbiddenChangelogThanksHandle("null")).toBe(true);
     expect(isForbiddenChangelogThanksHandle("app/any-bot")).toBe(true);
     expect(isForbiddenChangelogThanksHandle("codex")).toBe(true);
-    expect(isForbiddenChangelogThanksHandle("openclaw")).toBe(true);
+    expect(isForbiddenChangelogThanksHandle("marketingclaw")).toBe(true);
     expect(isForbiddenChangelogThanksHandle("steipete")).toBe(true);
     expect(isForbiddenChangelogThanksHandle("app/clawsweeper")).toBe(true);
     expect(isForbiddenChangelogThanksHandle("clawsweeper")).toBe(true);
     expect(isForbiddenChangelogThanksHandle("clawsweeper[bot]")).toBe(true);
-    expect(isForbiddenChangelogThanksHandle("openclaw-clawsweeper")).toBe(true);
-    expect(isForbiddenChangelogThanksHandle("openclaw-clawsweeper[bot]")).toBe(true);
+    expect(isForbiddenChangelogThanksHandle("marketingclaw-clawsweeper")).toBe(true);
+    expect(isForbiddenChangelogThanksHandle("marketingclaw-clawsweeper[bot]")).toBe(true);
     expect(isForbiddenChangelogThanksHandle("dependabot[bot]")).toBe(true);
     expect(isForbiddenChangelogThanksHandle("dependabot[bot]", { strictBotHandle: true })).toBe(
       true,
@@ -232,29 +236,29 @@ describe("check-changelog-attributions", () => {
             "-c",
             `
 set -euo pipefail
-source "$OPENCLAW_PR_COMMON_SH"
-source "$OPENCLAW_PR_CHANGELOG_SH"
-source "$OPENCLAW_PR_GATES_SH"
+source "$MARKETINGCLAW_PR_COMMON_SH"
+source "$MARKETINGCLAW_PR_CHANGELOG_SH"
+source "$MARKETINGCLAW_PR_GATES_SH"
 
 enter_worktree() { :; }
 checkout_prep_branch() { :; }
 bootstrap_deps_if_needed() { :; }
 require_artifact() { [ -s "$1" ]; }
-normalize_pr_changelog_entries() { printf 'normalize\\n' >>"$OPENCLAW_TEST_CALLS"; }
-validate_changelog_attribution_policy() { printf 'policy\\n' >>"$OPENCLAW_TEST_CALLS"; }
-validate_changelog_merge_hygiene() { printf 'merge-hygiene\\n' >>"$OPENCLAW_TEST_CALLS"; }
-validate_changelog_entry_for_pr() { printf 'entry:%s:%s\\n' "$1" "$2" >>"$OPENCLAW_TEST_CALLS"; }
-run_quiet_logged() { printf 'gate:%s\\n' "$1" >>"$OPENCLAW_TEST_CALLS"; }
+normalize_pr_changelog_entries() { printf 'normalize\\n' >>"$MARKETINGCLAW_TEST_CALLS"; }
+validate_changelog_attribution_policy() { printf 'policy\\n' >>"$MARKETINGCLAW_TEST_CALLS"; }
+validate_changelog_merge_hygiene() { printf 'merge-hygiene\\n' >>"$MARKETINGCLAW_TEST_CALLS"; }
+validate_changelog_entry_for_pr() { printf 'entry:%s:%s\\n' "$1" "$2" >>"$MARKETINGCLAW_TEST_CALLS"; }
+run_quiet_logged() { printf 'gate:%s\\n' "$1" >>"$MARKETINGCLAW_TEST_CALLS"; }
 
 prepare_gates 123
 `,
           ],
           {
-            OPENCLAW_PR_COMMON_SH: commonScriptPath,
-            OPENCLAW_PR_CHANGELOG_SH: changelogScriptPath,
-            OPENCLAW_PR_GATES_SH: gatesScriptPath,
-            OPENCLAW_TEST_CALLS: callsPath,
-            OPENCLAW_TESTBOX: "0",
+            MARKETINGCLAW_PR_COMMON_SH: commonScriptPath,
+            MARKETINGCLAW_PR_CHANGELOG_SH: changelogScriptPath,
+            MARKETINGCLAW_PR_GATES_SH: gatesScriptPath,
+            MARKETINGCLAW_TEST_CALLS: callsPath,
+            MARKETINGCLAW_TESTBOX: "0",
           },
         );
       } catch (error) {
@@ -283,30 +287,30 @@ prepare_gates 123
           "-c",
           `
 set -euo pipefail
-source "$OPENCLAW_PR_COMMON_SH"
-source "$OPENCLAW_PR_CHANGELOG_SH"
-source "$OPENCLAW_PR_GATES_SH"
+source "$MARKETINGCLAW_PR_COMMON_SH"
+source "$MARKETINGCLAW_PR_CHANGELOG_SH"
+source "$MARKETINGCLAW_PR_GATES_SH"
 
 enter_worktree() { :; }
 checkout_prep_branch() { :; }
 bootstrap_deps_if_needed() { :; }
 require_artifact() { [ -s "$1" ]; }
-normalize_pr_changelog_entries() { printf 'normalize\\n' >>"$OPENCLAW_TEST_CALLS"; }
-validate_changelog_attribution_policy() { printf 'policy\\n' >>"$OPENCLAW_TEST_CALLS"; }
-validate_changelog_merge_hygiene() { printf 'merge-hygiene\\n' >>"$OPENCLAW_TEST_CALLS"; }
-validate_changelog_entry_for_pr() { printf 'entry:%s:%s\\n' "$1" "$2" >>"$OPENCLAW_TEST_CALLS"; }
-run_quiet_logged() { printf 'gate:%s\\n' "$1" >>"$OPENCLAW_TEST_CALLS"; }
+normalize_pr_changelog_entries() { printf 'normalize\\n' >>"$MARKETINGCLAW_TEST_CALLS"; }
+validate_changelog_attribution_policy() { printf 'policy\\n' >>"$MARKETINGCLAW_TEST_CALLS"; }
+validate_changelog_merge_hygiene() { printf 'merge-hygiene\\n' >>"$MARKETINGCLAW_TEST_CALLS"; }
+validate_changelog_entry_for_pr() { printf 'entry:%s:%s\\n' "$1" "$2" >>"$MARKETINGCLAW_TEST_CALLS"; }
+run_quiet_logged() { printf 'gate:%s\\n' "$1" >>"$MARKETINGCLAW_TEST_CALLS"; }
 
 prepare_gates 123
 `,
         ],
         {
-          OPENCLAW_ALLOW_ROOT_CHANGELOG_PR: "1",
-          OPENCLAW_PR_COMMON_SH: commonScriptPath,
-          OPENCLAW_PR_CHANGELOG_SH: changelogScriptPath,
-          OPENCLAW_PR_GATES_SH: gatesScriptPath,
-          OPENCLAW_TEST_CALLS: callsPath,
-          OPENCLAW_TESTBOX: "0",
+          MARKETINGCLAW_ALLOW_ROOT_CHANGELOG_PR: "1",
+          MARKETINGCLAW_PR_COMMON_SH: commonScriptPath,
+          MARKETINGCLAW_PR_CHANGELOG_SH: changelogScriptPath,
+          MARKETINGCLAW_PR_GATES_SH: gatesScriptPath,
+          MARKETINGCLAW_TEST_CALLS: callsPath,
+          MARKETINGCLAW_TESTBOX: "0",
         },
       );
       const calls = readFileSync(callsPath, "utf8");

@@ -1,11 +1,11 @@
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { isRecord } from "marketingclaw/plugin-sdk/string-coerce-runtime";
 /**
  * Config parsing for Codex Supervisor endpoints and safety gates.
  */
 import { Type, type Static } from "typebox";
 import type { CodexSupervisorEndpoint } from "./types.js";
 
-const ENDPOINTS_ENV = "OPENCLAW_CODEX_SUPERVISOR_ENDPOINTS";
+const ENDPOINTS_ENV = "MARKETINGCLAW_CODEX_SUPERVISOR_ENDPOINTS";
 
 const StdioEndpointSchema = Type.Object(
   {
@@ -44,7 +44,7 @@ export const CodexSupervisorPluginConfigSchema = Type.Object(
   { additionalProperties: false },
 );
 
-/** Raw plugin config shape accepted from OpenClaw config. */
+/** Raw plugin config shape accepted from MarketingClaw config. */
 export type CodexSupervisorPluginConfig = Static<typeof CodexSupervisorPluginConfigSchema>;
 
 /** Normalized config consumed by plugin registration and MCP serving. */

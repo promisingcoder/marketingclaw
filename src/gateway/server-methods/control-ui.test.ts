@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 import type { ControlUiGitHubPreview } from "../control-ui-contract.js";
 import { ControlUiGitHubPreviewError } from "../control-ui-github-preview.js";
-import type { RespondFn } from "./types.js";
 import { createControlUiHandlers } from "./control-ui.js";
+import type { RespondFn } from "./types.js";
 
 function requestOptions(params: Record<string, unknown>, respond: RespondFn) {
   return {
@@ -23,8 +23,8 @@ describe("controlUi.githubPreview", () => {
       kind: "issue",
       login: "octocat",
       number: 99815,
-      owner: "openclaw",
-      repo: "openclaw",
+      owner: "marketingclaw",
+      repo: "marketingclaw",
       state: "open",
       title: "Keep hover previews compact",
       updatedAt: "2026-07-05T09:55:00Z",
@@ -35,7 +35,7 @@ describe("controlUi.githubPreview", () => {
 
     await handlers["controlUi.githubPreview"](
       requestOptions(
-        { kind: "issue", number: 99815, owner: "openclaw", repo: "openclaw" },
+        { kind: "issue", number: 99815, owner: "marketingclaw", repo: "marketingclaw" },
         respond,
       ),
     );
@@ -43,8 +43,8 @@ describe("controlUi.githubPreview", () => {
     expect(loadPreview).toHaveBeenCalledWith({
       kind: "issue",
       number: 99815,
-      owner: "openclaw",
-      repo: "openclaw",
+      owner: "marketingclaw",
+      repo: "marketingclaw",
     });
     expect(respond).toHaveBeenCalledWith(true, preview, undefined);
   });
@@ -56,7 +56,7 @@ describe("controlUi.githubPreview", () => {
 
     await handlers["controlUi.githubPreview"](
       requestOptions(
-        { kind: "issue", number: 1, owner: "openclaw/evil", repo: "openclaw" },
+        { kind: "issue", number: 1, owner: "marketingclaw/evil", repo: "marketingclaw" },
         respond,
       ),
     );
@@ -75,7 +75,10 @@ describe("controlUi.githubPreview", () => {
     const respond = vi.fn<RespondFn>();
 
     await handlers["controlUi.githubPreview"](
-      requestOptions({ kind: "pull", number: 99816, owner: "openclaw", repo: "openclaw" }, respond),
+      requestOptions(
+        { kind: "pull", number: 99816, owner: "marketingclaw", repo: "marketingclaw" },
+        respond,
+      ),
     );
 
     expect(respond).toHaveBeenCalledWith(false, undefined, {

@@ -2,7 +2,7 @@
 // delivery metadata, pairing state, and outbound payload lifecycle events.
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { PROTOCOL_VERSION } from "../../packages/gateway-protocol/src/index.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { MarketingClawConfig } from "../config/config.js";
 import { NodeRegistry } from "./node-registry.js";
 import type { GatewayWsClient } from "./server/ws-types.js";
 import type { loadSessionEntry as loadSessionEntryType } from "./session-utils.js";
@@ -23,7 +23,7 @@ const buildSessionLookup = (
     parentSessionKey?: string;
   } = {},
 ): ReturnType<typeof loadSessionEntryType> => ({
-  cfg: { session: { mainKey: "agent:main:main" } } as OpenClawConfig,
+  cfg: { session: { mainKey: "agent:main:main" } } as MarketingClawConfig,
   storePath: "/tmp/sessions.json",
   store: {} as ReturnType<typeof loadSessionEntryType>["store"],
   entry: {
@@ -119,7 +119,7 @@ const runtimeMocks = vi.hoisted(() => ({
   resolveOutboundTarget: vi.fn(({ to }: { to: string }) => ({ ok: true, to })),
   resolveSessionAgentId: vi.fn(() => "main"),
   resolveSessionModelRef: vi.fn(
-    (_cfg: OpenClawConfig, entry?: { model?: string; modelProvider?: string }) => ({
+    (_cfg: MarketingClawConfig, entry?: { model?: string; modelProvider?: string }) => ({
       provider: entry?.modelProvider ?? "test-provider",
       model: entry?.model ?? "default-model",
     }),
@@ -696,7 +696,7 @@ describe("node exec events", () => {
       event: "push.apns.register",
       payloadJSON: JSON.stringify({
         token: "abcd1234abcd1234abcd1234abcd1234",
-        topic: "ai.openclaw.ios",
+        topic: "ai.marketingclaw.ios",
         environment: "sandbox",
       }),
     });
@@ -705,7 +705,7 @@ describe("node exec events", () => {
       nodeId: "node-direct",
       transport: "direct",
       token: "abcd1234abcd1234abcd1234abcd1234",
-      topic: "ai.openclaw.ios",
+      topic: "ai.marketingclaw.ios",
       environment: "sandbox",
     });
   });
@@ -720,7 +720,7 @@ describe("node exec events", () => {
         sendGrant: "send-grant-123",
         gatewayDeviceId: "gateway-device-1",
         installationId: "install-123",
-        topic: "ai.openclaw.ios",
+        topic: "ai.marketingclaw.ios",
         environment: "production",
         distribution: "official",
         tokenDebugSuffix: "abcd1234",
@@ -733,7 +733,7 @@ describe("node exec events", () => {
       relayHandle: "relay-handle-123",
       sendGrant: "send-grant-123",
       installationId: "install-123",
-      topic: "ai.openclaw.ios",
+      topic: "ai.marketingclaw.ios",
       environment: "production",
       distribution: "official",
       tokenDebugSuffix: "abcd1234",
@@ -750,7 +750,7 @@ describe("node exec events", () => {
         sendGrant: "send-grant-123",
         gatewayDeviceId: "gateway-device-1",
         installationId: "install-123",
-        topic: "ai.openclaw.ios",
+        topic: "ai.marketingclaw.ios",
         environment: "sandbox",
         distribution: "official",
         tokenDebugSuffix: "abcd1234",
@@ -763,7 +763,7 @@ describe("node exec events", () => {
       relayHandle: "relay-handle-123",
       sendGrant: "send-grant-123",
       installationId: "install-123",
-      topic: "ai.openclaw.ios",
+      topic: "ai.marketingclaw.ios",
       environment: "sandbox",
       distribution: "official",
       tokenDebugSuffix: "abcd1234",
@@ -780,7 +780,7 @@ describe("node exec events", () => {
         sendGrant: "send-grant-123",
         gatewayDeviceId: "gateway-device-other",
         installationId: "install-123",
-        topic: "ai.openclaw.ios",
+        topic: "ai.marketingclaw.ios",
         environment: "production",
         distribution: "official",
       }),

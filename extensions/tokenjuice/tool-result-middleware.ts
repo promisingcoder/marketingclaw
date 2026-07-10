@@ -3,21 +3,24 @@ import process from "node:process";
 import type {
   AgentToolResultMiddleware,
   AgentToolResultMiddlewareEvent,
-  OpenClawAgentToolResult,
-} from "openclaw/plugin-sdk/agent-harness";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { createTokenjuiceOpenClawEmbeddedExtension } from "./runtime-api.js";
+  MarketingClawAgentToolResult,
+} from "marketingclaw/plugin-sdk/agent-harness";
+import { isRecord } from "marketingclaw/plugin-sdk/string-coerce-runtime";
+import { createTokenjuiceMarketingClawEmbeddedExtension } from "./runtime-api.js";
 
 type TokenjuiceToolResultHandler = (
   event: {
     toolName: string;
     input: Record<string, unknown>;
-    content: OpenClawAgentToolResult["content"];
+    content: MarketingClawAgentToolResult["content"];
     details: unknown;
     isError?: boolean;
   },
   ctx: { cwd: string },
-) => Promise<Partial<OpenClawAgentToolResult> | void> | Partial<OpenClawAgentToolResult> | void;
+) =>
+  | Promise<Partial<MarketingClawAgentToolResult> | void>
+  | Partial<MarketingClawAgentToolResult>
+  | void;
 
 function readCwd(event: AgentToolResultMiddlewareEvent): string {
   if (event.cwd?.trim()) {
@@ -30,7 +33,7 @@ function readCwd(event: AgentToolResultMiddlewareEvent): string {
   return process.cwd();
 }
 
-function readTextContent(content: OpenClawAgentToolResult["content"]): string {
+function readTextContent(content: MarketingClawAgentToolResult["content"]): string {
   if (typeof content === "string") {
     return content;
   }
@@ -78,7 +81,7 @@ function hasFailureState(
 
 function normalizeDetails(
   event: AgentToolResultMiddlewareEvent,
-  current: OpenClawAgentToolResult,
+  current: MarketingClawAgentToolResult,
 ): unknown {
   const isExecLike = event.toolName === "exec" || event.toolName === "bash";
   const details = isRecord(current.details) ? current.details : undefined;
@@ -121,7 +124,7 @@ function normalizeDetails(
 
 export function createTokenjuiceAgentToolResultMiddleware(): AgentToolResultMiddleware {
   const handlers: TokenjuiceToolResultHandler[] = [];
-  createTokenjuiceOpenClawEmbeddedExtension()({
+  createTokenjuiceMarketingClawEmbeddedExtension()({
     on(event, handler) {
       if (event === "tool_result") {
         handlers.push(handler as TokenjuiceToolResultHandler);

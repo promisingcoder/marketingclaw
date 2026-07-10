@@ -1,5 +1,5 @@
 // Xai tests cover x search plugin behavior.
-import { withFetchPreconnect } from "openclaw/plugin-sdk/test-env";
+import { withFetchPreconnect } from "marketingclaw/plugin-sdk/test-env";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createXSearchTool } from "./x-search.js";
 
@@ -23,12 +23,14 @@ function installXSearchFetch(payload?: Record<string, unknown>) {
                 {
                   type: "output_text",
                   text: "Found X posts",
-                  annotations: [{ type: "url_citation", url: "https://x.com/openclaw/status/1" }],
+                  annotations: [
+                    { type: "url_citation", url: "https://x.com/marketingclaw/status/1" },
+                  ],
                 },
               ],
             },
           ],
-          citations: ["https://x.com/openclaw/status/1"],
+          citations: ["https://x.com/marketingclaw/status/1"],
         },
       ),
     ),
@@ -191,7 +193,7 @@ describe("xai x_search tool", () => {
 
     const result = await tool?.execute?.("x-search:1", {
       query: "dinner recipes",
-      allowed_x_handles: ["openclaw"],
+      allowed_x_handles: ["marketingclaw"],
       excluded_x_handles: ["spam"],
       from_date: "2026-03-01",
       to_date: "2026-03-20",
@@ -206,7 +208,7 @@ describe("xai x_search tool", () => {
     expect(body.tools).toEqual([
       {
         type: "x_search",
-        allowed_x_handles: ["openclaw"],
+        allowed_x_handles: ["marketingclaw"],
         excluded_x_handles: ["spam"],
         from_date: "2026-03-01",
         to_date: "2026-03-20",
@@ -214,7 +216,7 @@ describe("xai x_search tool", () => {
       },
     ]);
     expect((result?.details as { citations?: string[] } | undefined)?.citations).toEqual([
-      "https://x.com/openclaw/status/1",
+      "https://x.com/marketingclaw/status/1",
     ]);
   });
 

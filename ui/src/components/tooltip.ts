@@ -1,6 +1,6 @@
 import { html } from "lit";
 import { property } from "lit/decorators.js";
-import { OpenClawLitElement } from "../lit/openclaw-element.ts";
+import { MarketingClawLitElement } from "../lit/marketingclaw-element.ts";
 
 const HOVER_DELAY = 150;
 const TOUCH_DELAY = 450;
@@ -14,10 +14,10 @@ let nextTooltipId = 0;
 
 function createTooltipId() {
   nextTooltipId += 1;
-  return `openclaw-tooltip-${nextTooltipId}`;
+  return `marketingclaw-tooltip-${nextTooltipId}`;
 }
 
-class TooltipProvider extends OpenClawLitElement {
+class TooltipProvider extends MarketingClawLitElement {
   @property({ type: Number }) delay = HOVER_DELAY;
   @property({ type: Number }) skipDelay = SKIP_DELAY;
   @property({ type: Number }) touchDelay = TOUCH_DELAY;
@@ -105,7 +105,7 @@ class TooltipProvider extends OpenClawLitElement {
   }
 }
 
-class Tooltip extends OpenClawLitElement {
+class Tooltip extends MarketingClawLitElement {
   @property() content = "";
 
   private trigger: HTMLElement | null = null;
@@ -195,7 +195,7 @@ class Tooltip extends OpenClawLitElement {
   }
 
   private get provider() {
-    return this.closest<TooltipProvider>("openclaw-tooltip-provider");
+    return this.closest<TooltipProvider>("marketingclaw-tooltip-provider");
   }
 
   private get delay() {
@@ -324,7 +324,7 @@ class Tooltip extends OpenClawLitElement {
     this.open = true;
     this.describedBy ??= trigger.getAttribute("aria-describedby");
     this.portal = document.createElement("div");
-    this.portal.className = "openclaw-tooltip";
+    this.portal.className = "marketingclaw-tooltip";
     this.portal.id = this.tooltipId;
     this.portal.setAttribute("role", "tooltip");
     this.portal.textContent = this.content;
@@ -468,10 +468,10 @@ class Tooltip extends OpenClawLitElement {
   }
 }
 
-if (!customElements.get("openclaw-tooltip-provider")) {
-  customElements.define("openclaw-tooltip-provider", TooltipProvider);
+if (!customElements.get("marketingclaw-tooltip-provider")) {
+  customElements.define("marketingclaw-tooltip-provider", TooltipProvider);
 }
 
-if (!customElements.get("openclaw-tooltip")) {
-  customElements.define("openclaw-tooltip", Tooltip);
+if (!customElements.get("marketingclaw-tooltip")) {
+  customElements.define("marketingclaw-tooltip", Tooltip);
 }

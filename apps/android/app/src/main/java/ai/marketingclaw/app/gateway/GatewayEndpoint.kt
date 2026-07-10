@@ -1,4 +1,4 @@
-package ai.openclaw.app.gateway
+package ai.marketingclaw.app.gateway
 
 /** Resolved gateway address and optional metadata discovered from Bonjour/manual entry. */
 data class GatewayEndpoint(

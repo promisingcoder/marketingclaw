@@ -1,4 +1,4 @@
-package ai.openclaw.app.ui.chat
+package ai.marketingclaw.app.ui.chat
 
 import android.graphics.Bitmap
 import android.graphics.Color

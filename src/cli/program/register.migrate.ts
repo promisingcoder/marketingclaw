@@ -112,7 +112,7 @@ export function registerMigrateCommand(program: Command) {
         collectMigrationPlugin,
       )
       .option("--backup-output <path>", "Pre-migration backup archive path or directory")
-      .option("--no-backup", "Skip the pre-migration OpenClaw backup")
+      .option("--no-backup", "Skip the pre-migration MarketingClaw backup")
       .option("--force", "Allow dangerous options such as --no-backup", false)
       .option("--json", "Output JSON", false),
   )
@@ -120,15 +120,18 @@ export function registerMigrateCommand(program: Command) {
       "after",
       () =>
         `\n${theme.heading("Examples:")}\n${formatHelpExamples([
-          ["openclaw migrate list", "Show available migration providers."],
-          ["openclaw migrate hermes", "Preview Hermes migration, then prompt before applying."],
-          ["openclaw migrate hermes --dry-run", "Preview Hermes migration only."],
+          ["marketingclaw migrate list", "Show available migration providers."],
           [
-            "openclaw migrate apply hermes --yes",
+            "marketingclaw migrate hermes",
+            "Preview Hermes migration, then prompt before applying.",
+          ],
+          ["marketingclaw migrate hermes --dry-run", "Preview Hermes migration only."],
+          [
+            "marketingclaw migrate apply hermes --yes",
             "Apply Hermes migration non-interactively after writing a verified backup.",
           ],
           [
-            "openclaw migrate hermes --no-auth-credentials",
+            "marketingclaw migrate hermes --no-auth-credentials",
             "Preview and apply Hermes migration while skipping auth credential import.",
           ],
         ])}`,
@@ -167,7 +170,7 @@ export function registerMigrateCommand(program: Command) {
   addMigrationOptions(
     migrate
       .command("plan <provider>")
-      .description("Preview a migration without changing OpenClaw state"),
+      .description("Preview a migration without changing MarketingClaw state"),
   ).action(async (provider, opts) => {
     await runCommandWithRuntime(defaultRuntime, async () => {
       await migratePlanCommand(defaultRuntime, {
@@ -189,7 +192,7 @@ export function registerMigrateCommand(program: Command) {
   )
     .option("--yes", "Apply without prompting", false)
     .option("--backup-output <path>", "Pre-migration backup archive path or directory")
-    .option("--no-backup", "Skip the pre-migration OpenClaw backup")
+    .option("--no-backup", "Skip the pre-migration MarketingClaw backup")
     .option("--force", "Allow dangerous options such as --no-backup", false)
     .action(async (provider, opts) => {
       await runCommandWithRuntime(defaultRuntime, async () => {

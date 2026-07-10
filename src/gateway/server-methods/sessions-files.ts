@@ -1,7 +1,7 @@
 // Gateway methods expose session files and workspace browsing.
 import path from "node:path";
-import { asOptionalObjectRecord } from "@openclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { asOptionalObjectRecord } from "@marketingclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@marketingclaw/normalization-core/string-coerce";
 import {
   ErrorCodes,
   errorShape,

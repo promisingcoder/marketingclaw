@@ -1,9 +1,9 @@
 // Verifies OpenAI-compatible streaming payloads, failures, and transport wrapping.
 import { createServer } from "node:http";
-import { SYSTEM_PROMPT_CACHE_BOUNDARY } from "@openclaw/ai/internal/shared";
+import { SYSTEM_PROMPT_CACHE_BOUNDARY } from "@marketingclaw/ai/internal/shared";
+import type { Api, Model } from "marketingclaw/plugin-sdk/llm";
 import OpenAI from "openai";
 import type { ChatCompletionChunk } from "openai/resources/chat/completions.js";
-import type { Api, Model } from "openclaw/plugin-sdk/llm";
 import { describe, expect, it, vi } from "vitest";
 import {
   classifyAssistantFailoverReason,
@@ -22,7 +22,7 @@ import { attachModelProviderRequestTransport } from "./provider-request-config.j
 import {
   buildTransportAwareSimpleStreamFn,
   createBoundaryAwareStreamFnForModel,
-  createOpenClawTransportStreamFnForModel,
+  createMarketingClawTransportStreamFnForModel,
   isTransportAwareApiSupported,
   prepareTransportAwareSimpleModel,
   resolveTransportAwareSimpleApi,
@@ -399,7 +399,7 @@ describe("openai transport stream", () => {
     });
     const thinkingBlock = output.content[0] as {
       thinkingSignature?: string;
-      openclawReasoningReplay?: unknown;
+      marketingclawReasoningReplay?: unknown;
     };
     const replayItem = JSON.parse(thinkingBlock.thinkingSignature ?? "{}") as Record<
       string,
@@ -410,8 +410,8 @@ describe("openai transport stream", () => {
       id: "rs_123",
       encrypted_content: "ciphertext",
     });
-    expect(replayItem).not.toHaveProperty("__openclaw_replay");
-    expect(thinkingBlock.openclawReasoningReplay).toEqual(expectedReplayMetadata);
+    expect(replayItem).not.toHaveProperty("__marketingclaw_replay");
+    expect(thinkingBlock.marketingclawReasoningReplay).toEqual(expectedReplayMetadata);
   });
 
   it("clamps Responses cached prompt usage at zero", async () => {
@@ -784,8 +784,8 @@ describe("openai transport stream", () => {
   });
 
   it("summarizes model payload tools with full names when requested", () => {
-    const previous = process.env.OPENCLAW_DEBUG_MODEL_PAYLOAD;
-    process.env.OPENCLAW_DEBUG_MODEL_PAYLOAD = "tools";
+    const previous = process.env.MARKETINGCLAW_DEBUG_MODEL_PAYLOAD;
+    process.env.MARKETINGCLAW_DEBUG_MODEL_PAYLOAD = "tools";
     try {
       expect(
         testing.summarizeResponsesTools([
@@ -795,16 +795,16 @@ describe("openai transport stream", () => {
       ).toBe("count=2 names=exec,wait");
     } finally {
       if (previous === undefined) {
-        delete process.env.OPENCLAW_DEBUG_MODEL_PAYLOAD;
+        delete process.env.MARKETINGCLAW_DEBUG_MODEL_PAYLOAD;
       } else {
-        process.env.OPENCLAW_DEBUG_MODEL_PAYLOAD = previous;
+        process.env.MARKETINGCLAW_DEBUG_MODEL_PAYLOAD = previous;
       }
     }
   });
 
   it("skips unreadable model payload tool names in debug summaries", () => {
-    const previous = process.env.OPENCLAW_DEBUG_MODEL_PAYLOAD;
-    process.env.OPENCLAW_DEBUG_MODEL_PAYLOAD = "tools";
+    const previous = process.env.MARKETINGCLAW_DEBUG_MODEL_PAYLOAD;
+    process.env.MARKETINGCLAW_DEBUG_MODEL_PAYLOAD = "tools";
     try {
       expect(
         testing.summarizeResponsesTools([
@@ -827,16 +827,16 @@ describe("openai transport stream", () => {
       ).toBe("count=3 names=wait");
     } finally {
       if (previous === undefined) {
-        delete process.env.OPENCLAW_DEBUG_MODEL_PAYLOAD;
+        delete process.env.MARKETINGCLAW_DEBUG_MODEL_PAYLOAD;
       } else {
-        process.env.OPENCLAW_DEBUG_MODEL_PAYLOAD = previous;
+        process.env.MARKETINGCLAW_DEBUG_MODEL_PAYLOAD = previous;
       }
     }
   });
 
   it("redacts full model payload debug summaries", () => {
-    const previous = process.env.OPENCLAW_DEBUG_MODEL_PAYLOAD;
-    process.env.OPENCLAW_DEBUG_MODEL_PAYLOAD = "full-redacted";
+    const previous = process.env.MARKETINGCLAW_DEBUG_MODEL_PAYLOAD;
+    process.env.MARKETINGCLAW_DEBUG_MODEL_PAYLOAD = "full-redacted";
     try {
       const summary = testing.summarizeResponsesPayload({
         model: "gpt-5.5",
@@ -850,14 +850,14 @@ describe("openai transport stream", () => {
       expect(summary).not.toContain("sk-abcdefghijklmnopqrstuvwxyz");
     } finally {
       if (previous === undefined) {
-        delete process.env.OPENCLAW_DEBUG_MODEL_PAYLOAD;
+        delete process.env.MARKETINGCLAW_DEBUG_MODEL_PAYLOAD;
       } else {
-        process.env.OPENCLAW_DEBUG_MODEL_PAYLOAD = previous;
+        process.env.MARKETINGCLAW_DEBUG_MODEL_PAYLOAD = previous;
       }
     }
   });
 
-  it("enforces the code mode responses tool surface before requests leave OpenClaw", () => {
+  it("enforces the code mode responses tool surface before requests leave MarketingClaw", () => {
     const payload = {
       tools: [
         { type: "function", name: "exec" },
@@ -909,8 +909,8 @@ describe("openai transport stream", () => {
     ).toThrow(/Code mode payload tool surface violation/);
   });
 
-  it("adds OpenClaw attribution to native OpenAI transport headers and protects it from provider overrides", () => {
-    vi.stubEnv("OPENCLAW_VERSION", "2026.3.22");
+  it("adds MarketingClaw attribution to native OpenAI transport headers and protects it from provider overrides", () => {
+    vi.stubEnv("MARKETINGCLAW_VERSION", "2026.3.22");
     const headers = testing.buildOpenAIClientHeaders(
       {
         id: "gpt-5.4",
@@ -919,8 +919,8 @@ describe("openai transport stream", () => {
         provider: "openai",
         baseUrl: "https://api.openai.com/v1",
         headers: {
-          originator: "openclaw",
-          "User-Agent": "openclaw",
+          originator: "marketingclaw",
+          "User-Agent": "marketingclaw",
           "X-Provider": "model",
         },
         reasoning: true,
@@ -931,23 +931,23 @@ describe("openai transport stream", () => {
       } satisfies Model<"openai-responses">,
       { systemPrompt: "", messages: [] } as never,
       {
-        originator: "openclaw",
-        "User-Agent": "openclaw",
+        originator: "marketingclaw",
+        "User-Agent": "marketingclaw",
         "X-Caller": "request",
       },
     );
 
     expectRecordFields(headers, {
-      originator: "openclaw",
+      originator: "marketingclaw",
       version: "2026.3.22",
-      "User-Agent": "openclaw/2026.3.22",
+      "User-Agent": "marketingclaw/2026.3.22",
       "X-Provider": "model",
       "X-Caller": "request",
     });
   });
 
-  it("adds OpenClaw attribution to native OpenAI Codex transport headers", () => {
-    vi.stubEnv("OPENCLAW_VERSION", "2026.3.22");
+  it("adds MarketingClaw attribution to native OpenAI Codex transport headers", () => {
+    vi.stubEnv("MARKETINGCLAW_VERSION", "2026.3.22");
     const headers = testing.buildOpenAIClientHeaders(
       {
         id: "gpt-5.4-codex",
@@ -956,8 +956,8 @@ describe("openai transport stream", () => {
         provider: "openai",
         baseUrl: "https://chatgpt.com/backend-api",
         headers: {
-          originator: "openclaw",
-          "User-Agent": "openclaw",
+          originator: "marketingclaw",
+          "User-Agent": "marketingclaw",
         },
         reasoning: true,
         input: ["text"],
@@ -969,9 +969,9 @@ describe("openai transport stream", () => {
     );
 
     expectRecordFields(headers, {
-      originator: "openclaw",
+      originator: "marketingclaw",
       version: "2026.3.22",
-      "User-Agent": "openclaw/2026.3.22",
+      "User-Agent": "marketingclaw/2026.3.22",
     });
     expect(headers.Accept).toBeUndefined();
     expect(headers.accept).toBeUndefined();
@@ -1110,7 +1110,7 @@ describe("openai transport stream", () => {
     } satisfies Model<"openai-chatgpt-responses">;
     const transportAliasModel = {
       ...codexModel,
-      api: "openclaw-openai-responses-transport" as Api,
+      api: "marketingclaw-openai-responses-transport" as Api,
     } satisfies Model;
     const nonNativeChatGPTModel = {
       ...codexModel,
@@ -1230,7 +1230,7 @@ describe("openai transport stream", () => {
       } satisfies Model<"openai-responses">),
     ).toBeTypeOf("function");
     expect(
-      createOpenClawTransportStreamFnForModel({
+      createMarketingClawTransportStreamFnForModel({
         id: "gpt-5.4",
         name: "GPT-5.4",
         api: "openai-responses",
@@ -1297,9 +1297,11 @@ describe("openai transport stream", () => {
 
     const prepared = prepareTransportAwareSimpleModel(model);
 
-    expect(resolveTransportAwareSimpleApi(model.api)).toBe("openclaw-openai-responses-transport");
+    expect(resolveTransportAwareSimpleApi(model.api)).toBe(
+      "marketingclaw-openai-responses-transport",
+    );
     expectRecordFields(prepared, {
-      api: "openclaw-openai-responses-transport",
+      api: "marketingclaw-openai-responses-transport",
       provider: "openai",
       id: "gpt-5.4",
     });
@@ -1330,9 +1332,11 @@ describe("openai transport stream", () => {
 
     const prepared = prepareTransportAwareSimpleModel(model);
 
-    expect(resolveTransportAwareSimpleApi(model.api)).toBe("openclaw-openai-responses-transport");
+    expect(resolveTransportAwareSimpleApi(model.api)).toBe(
+      "marketingclaw-openai-responses-transport",
+    );
     expectRecordFields(prepared, {
-      api: "openclaw-openai-responses-transport",
+      api: "marketingclaw-openai-responses-transport",
       provider: "openai",
       id: "codex-mini-latest",
     });
@@ -1363,9 +1367,11 @@ describe("openai transport stream", () => {
 
     const prepared = prepareTransportAwareSimpleModel(model);
 
-    expect(resolveTransportAwareSimpleApi(model.api)).toBe("openclaw-anthropic-messages-transport");
+    expect(resolveTransportAwareSimpleApi(model.api)).toBe(
+      "marketingclaw-anthropic-messages-transport",
+    );
     expectRecordFields(prepared, {
-      api: "openclaw-anthropic-messages-transport",
+      api: "marketingclaw-anthropic-messages-transport",
       provider: "anthropic",
       id: "claude-sonnet-4-6",
     });
@@ -1395,7 +1401,7 @@ describe("openai transport stream", () => {
     );
 
     expect(resolveTransportAwareSimpleApi(model.api)).toBe(
-      "openclaw-google-generative-ai-transport",
+      "marketingclaw-google-generative-ai-transport",
     );
   });
 
@@ -1421,9 +1427,11 @@ describe("openai transport stream", () => {
       },
     );
 
-    expect(resolveTransportAwareSimpleApi(model.api)).toBe("openclaw-openai-responses-transport");
+    expect(resolveTransportAwareSimpleApi(model.api)).toBe(
+      "marketingclaw-openai-responses-transport",
+    );
     expectRecordFields(prepareTransportAwareSimpleModel(model), {
-      api: "openclaw-openai-responses-transport",
+      api: "marketingclaw-openai-responses-transport",
       provider: "github-copilot",
       id: "gpt-5.4",
     });
@@ -1452,9 +1460,11 @@ describe("openai transport stream", () => {
       },
     );
 
-    expect(resolveTransportAwareSimpleApi(model.api)).toBe("openclaw-anthropic-messages-transport");
+    expect(resolveTransportAwareSimpleApi(model.api)).toBe(
+      "marketingclaw-anthropic-messages-transport",
+    );
     expectRecordFields(prepareTransportAwareSimpleModel(model), {
-      api: "openclaw-anthropic-messages-transport",
+      api: "marketingclaw-anthropic-messages-transport",
       provider: "github-copilot",
       id: "claude-sonnet-4.6",
     });
@@ -4126,8 +4136,8 @@ describe("openai transport stream", () => {
         topP: 0.85,
       },
       {
-        openclaw_session_id: "session-123",
-        openclaw_turn_id: "turn-123",
+        marketingclaw_session_id: "session-123",
+        marketingclaw_turn_id: "turn-123",
       },
     ) as Record<string, unknown> & {
       input?: Array<{ role?: string }>;
@@ -4150,12 +4160,12 @@ describe("openai transport stream", () => {
     expect(params).not.toHaveProperty("top_p");
   });
 
-  it("keeps Codex response shaping when simple completions use the OpenClaw transport alias", () => {
+  it("keeps Codex response shaping when simple completions use the MarketingClaw transport alias", () => {
     const params = buildOpenAIResponsesParams(
       {
         id: "gpt-5.5",
         name: "GPT-5.5",
-        api: "openclaw-openai-responses-transport" as Api,
+        api: "marketingclaw-openai-responses-transport" as Api,
         provider: "openai",
         baseUrl: "https://chatgpt.com/backend-api/codex",
         reasoning: true,
@@ -4178,8 +4188,8 @@ describe("openai transport stream", () => {
         topP: 0.85,
       },
       {
-        openclaw_session_id: "session-123",
-        openclaw_turn_id: "turn-123",
+        marketingclaw_session_id: "session-123",
+        marketingclaw_turn_id: "turn-123",
       },
     ) as Record<string, unknown> & {
       input?: Array<{ role?: string }>;
@@ -4204,7 +4214,7 @@ describe("openai transport stream", () => {
       input: [],
       stream: true,
       max_output_tokens: 1024,
-      metadata: { openclaw_session_id: "session-123" },
+      metadata: { marketingclaw_session_id: "session-123" },
       prompt_cache_key: "session-123",
       prompt_cache_retention: "24h",
       service_tier: "auto",
@@ -4266,16 +4276,16 @@ describe("openai transport stream", () => {
         topP: 0.85,
       },
       {
-        openclaw_session_id: "session-123",
-        openclaw_turn_id: "turn-123",
+        marketingclaw_session_id: "session-123",
+        marketingclaw_turn_id: "turn-123",
       },
     ) as Record<string, unknown>;
 
     expect(params.instructions).toBe("Stable prefix\nDynamic suffix");
     expect(params.prompt_cache_key).toBe("session-123");
     expect(params.metadata).toEqual({
-      openclaw_session_id: "session-123",
-      openclaw_turn_id: "turn-123",
+      marketingclaw_session_id: "session-123",
+      marketingclaw_turn_id: "turn-123",
     });
     expect(params.max_output_tokens).toBe(1024);
     expect(params.temperature).toBe(0.2);
@@ -4333,7 +4343,7 @@ describe("openai transport stream", () => {
       input: [],
       stream: true,
       max_output_tokens: 1024,
-      metadata: { openclaw_session_id: "session-123" },
+      metadata: { marketingclaw_session_id: "session-123" },
       prompt_cache_key: "session-123",
       prompt_cache_retention: "24h",
       service_tier: "auto",
@@ -4827,7 +4837,7 @@ describe("openai transport stream", () => {
                   id: "rs_prior",
                   encrypted_content: "ciphertext",
                 }),
-                openclawReasoningReplay: testing.buildOpenAIResponsesReasoningReplayMetadata(
+                marketingclawReasoningReplay: testing.buildOpenAIResponsesReasoningReplayMetadata(
                   model,
                   {
                     authProfileId: "openai:oauth",
@@ -4875,7 +4885,7 @@ describe("openai transport stream", () => {
       summary: [],
     });
     expect(reasoningItem?.id).toBeUndefined();
-    expect(reasoningItem).not.toHaveProperty("__openclaw_replay");
+    expect(reasoningItem).not.toHaveProperty("__marketingclaw_replay");
     const assistantMessage = params.input?.find(
       (item) => item.type === "message" && item.role === "assistant",
     );
@@ -5064,7 +5074,7 @@ describe("openai transport stream", () => {
                   id: "rs_prior",
                   encrypted_content: "ciphertext",
                 }),
-                openclawReasoningReplay: testing.buildOpenAIResponsesReasoningReplayMetadata(
+                marketingclawReasoningReplay: testing.buildOpenAIResponsesReasoningReplayMetadata(
                   model,
                   {
                     authProfileId: "openai:oauth",
@@ -5139,7 +5149,7 @@ describe("openai transport stream", () => {
                   id: "rs_prior",
                   encrypted_content: "ciphertext",
                 }),
-                openclawReasoningReplay: testing.buildOpenAIResponsesReasoningReplayMetadata(
+                marketingclawReasoningReplay: testing.buildOpenAIResponsesReasoningReplayMetadata(
                   model,
                   {
                     authProfileId: "openai:old-oauth",
@@ -5246,7 +5256,7 @@ describe("openai transport stream", () => {
       summary: [],
     });
     expect(reasoningItem?.id).toBeUndefined();
-    expect(reasoningItem).not.toHaveProperty("__openclaw_replay");
+    expect(reasoningItem).not.toHaveProperty("__marketingclaw_replay");
   });
 
   it("strips nested encrypted reasoning content from retry payloads without changing ids", () => {
@@ -6762,18 +6772,18 @@ describe("openai transport stream", () => {
       } as never,
       { sessionId: "session-123" } as never,
       {
-        openclaw_session_id: "session-123",
-        openclaw_turn_id: "turn-123",
-        openclaw_turn_attempt: "1",
-        openclaw_transport: "stream",
+        marketingclaw_session_id: "session-123",
+        marketingclaw_turn_id: "turn-123",
+        marketingclaw_turn_attempt: "1",
+        marketingclaw_transport: "stream",
       },
     ) as { metadata?: Record<string, string> };
 
     expectRecordFields(params.metadata, {
-      openclaw_session_id: "session-123",
-      openclaw_turn_id: "turn-123",
-      openclaw_turn_attempt: "1",
-      openclaw_transport: "stream",
+      marketingclaw_session_id: "session-123",
+      marketingclaw_turn_id: "turn-123",
+      marketingclaw_turn_attempt: "1",
+      marketingclaw_transport: "stream",
     });
   });
 

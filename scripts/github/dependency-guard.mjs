@@ -18,8 +18,8 @@ import {
 } from "./guard-shared.mjs";
 
 /** Marker used to identify dependency guard comments. */
-const dependencyChangeMarker = "<!-- openclaw:dependency-guard -->";
-const dependencyGraphGuardMarker = "<!-- openclaw:dependency-graph-guard -->";
+const dependencyChangeMarker = "<!-- marketingclaw:dependency-guard -->";
+const dependencyGraphGuardMarker = "<!-- marketingclaw:dependency-graph-guard -->";
 export const dependencyChangedLabel = "dependencies-changed";
 const allowDependenciesCommand = "/allow-dependencies-change";
 export {
@@ -32,7 +32,7 @@ export {
 
 const maxListedFiles = 25;
 const autoscrubCommitMessage = "chore: remove dependency lockfile change";
-const securityTeamSlug = process.env.OPENCLAW_SECURITY_TEAM_SLUG ?? "openclaw-secops";
+const securityTeamSlug = process.env.MARKETINGCLAW_SECURITY_TEAM_SLUG ?? "marketingclaw-secops";
 const dependencyManifestFields = [
   "dependencies",
   "devDependencies",
@@ -320,7 +320,7 @@ export function renderAutoscrubbedDependencyComment({ baseBranch, lockfileChange
 
 ### Dependency lockfile changes were removed
 
-OpenClaw does not accept package lockfile changes through PRs. This PR did not change dependency graph fields in package manifests, so the workflow restored the lockfile residue from the target branch automatically.
+MarketingClaw does not accept package lockfile changes through PRs. This PR did not change dependency graph fields in package manifests, so the workflow restored the lockfile residue from the target branch automatically.
 
 Restored lockfiles:
 ${fileLines.join("\n")}
@@ -385,7 +385,7 @@ export function renderBlockedDependencyComment({
     "",
     "### Dependency graph changes are blocked",
     "",
-    "OpenClaw does not accept dependency graph changes through PRs unless a repository admin or security explicitly authorizes the current head SHA. Dependency updates are generated internally by maintainers so external PRs cannot change the resolved graph.",
+    "MarketingClaw does not accept dependency graph changes through PRs unless a repository admin or security explicitly authorizes the current head SHA. Dependency updates are generated internally by maintainers so external PRs cannot change the resolved graph.",
     "",
     "Detected dependency graph changes:",
     ...reasons,
@@ -461,7 +461,7 @@ function renderManifestChangeLine(change) {
 }
 
 export function githubApi(token, options = {}) {
-  const api = createGitHubApi(token, { ...options, userAgent: "openclaw-dependency-guard" });
+  const api = createGitHubApi(token, { ...options, userAgent: "marketingclaw-dependency-guard" });
   return {
     ...api,
     graphql: async (query, variables) => {
@@ -646,16 +646,18 @@ async function main() {
   }
 
   const api = githubApi(token);
-  const autoscrubToken = process.env.OPENCLAW_DEPENDENCY_GUARD_AUTOSCRUB_TOKEN;
+  const autoscrubToken = process.env.MARKETINGCLAW_DEPENDENCY_GUARD_AUTOSCRUB_TOKEN;
   const autoscrubApi = autoscrubToken ? githubApi(autoscrubToken) : null;
-  const explicitSecurityApprovers = securityApproverSet(process.env.OPENCLAW_SECURITY_APPROVERS);
+  const explicitSecurityApprovers = securityApproverSet(
+    process.env.MARKETINGCLAW_SECURITY_APPROVERS,
+  );
   const trustedCommentAuthors = dependencyGuardCommentAuthors(
-    process.env.OPENCLAW_DEPENDENCY_GUARD_COMMENT_BOTS,
+    process.env.MARKETINGCLAW_DEPENDENCY_GUARD_COMMENT_BOTS,
   );
   const issuePath = `/repos/${owner}/${repo}/issues/${eventPullRequest.number}`;
   const pullPath = `/repos/${owner}/${repo}/pulls/${eventPullRequest.number}`;
   const pullRequest = await api.request(pullPath);
-  const mode = process.env.OPENCLAW_DEPENDENCY_GUARD_MODE ?? "enforce";
+  const mode = process.env.MARKETINGCLAW_DEPENDENCY_GUARD_MODE ?? "enforce";
   const files = await api.paginate(`${pullPath}/files`);
   const dependencyFiles = files
     .map((file) => file.filename)

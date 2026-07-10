@@ -19,12 +19,12 @@ function normalizeUpstreamRegistry(raw) {
     url.search ||
     url.hash
   ) {
-    throw new Error("OPENCLAW_NPM_REGISTRY_UPSTREAM must be an HTTP(S) origin");
+    throw new Error("MARKETINGCLAW_NPM_REGISTRY_UPSTREAM must be an HTTP(S) origin");
   }
   return url.origin;
 }
 
-const upstreamRegistry = normalizeUpstreamRegistry(process.env.OPENCLAW_NPM_REGISTRY_UPSTREAM);
+const upstreamRegistry = normalizeUpstreamRegistry(process.env.MARKETINGCLAW_NPM_REGISTRY_UPSTREAM);
 
 if (!portFile || packageArgs.length === 0 || packageArgs.length % 3 !== 0) {
   console.error(
@@ -206,8 +206,8 @@ const server = http.createServer((request, response) => {
   });
 });
 
-const bindHost = process.env.OPENCLAW_NPM_REGISTRY_BIND_HOST || "127.0.0.1";
-const requestedPort = Number(process.env.OPENCLAW_NPM_REGISTRY_PORT || 0);
+const bindHost = process.env.MARKETINGCLAW_NPM_REGISTRY_BIND_HOST || "127.0.0.1";
+const requestedPort = Number(process.env.MARKETINGCLAW_NPM_REGISTRY_PORT || 0);
 server.listen(requestedPort, bindHost, () => {
   fs.writeFileSync(portFile, String(server.address().port));
 });

@@ -1,17 +1,17 @@
 // Whatsapp plugin module implements group activation behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "openclaw/plugin-sdk/routing";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "marketingclaw/plugin-sdk/routing";
 import {
   getSessionEntry,
   patchSessionEntry,
   resolveStorePath,
   type SessionEntry,
-} from "openclaw/plugin-sdk/session-store-runtime";
+} from "marketingclaw/plugin-sdk/session-store-runtime";
 import { resolveWhatsAppLegacyGroupSessionKey } from "../../group-session-key.js";
 import { resolveWhatsAppInboundPolicy } from "../../inbound-policy.js";
 import { normalizeGroupActivation } from "./group-activation.runtime.js";
 
-function hasNamedWhatsAppAccounts(cfg: OpenClawConfig) {
+function hasNamedWhatsAppAccounts(cfg: MarketingClawConfig) {
   const accountIds = Object.keys(cfg.channels?.whatsapp?.accounts ?? {});
   return accountIds.some((accountId) => normalizeAccountId(accountId) !== DEFAULT_ACCOUNT_ID);
 }
@@ -34,7 +34,7 @@ function isActivationOnlyEntry(
 
 /** Resolves group activation for a WhatsApp conversation and backfills scoped session metadata. */
 export async function resolveGroupActivationFor(params: {
-  cfg: OpenClawConfig;
+  cfg: MarketingClawConfig;
   accountId?: string | null;
   agentId: string;
   sessionKey: string;

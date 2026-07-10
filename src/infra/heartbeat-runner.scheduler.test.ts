@@ -4,7 +4,7 @@ import {
   getRuntimeConfig,
   resetConfigRuntimeState,
   setRuntimeConfigSnapshot,
-  type OpenClawConfig,
+  type MarketingClawConfig,
 } from "../config/config.js";
 import { startHeartbeatRunner } from "./heartbeat-runner.js";
 import { computeNextHeartbeatPhaseDueMs, resolveHeartbeatPhaseMs } from "./heartbeat-schedule.js";
@@ -35,14 +35,14 @@ describe("startHeartbeatRunner", () => {
   }
 
   function heartbeatConfig(
-    list?: NonNullable<NonNullable<OpenClawConfig["agents"]>["list"]>,
-  ): OpenClawConfig {
+    list?: NonNullable<NonNullable<MarketingClawConfig["agents"]>["list"]>,
+  ): MarketingClawConfig {
     return {
       agents: {
         defaults: { heartbeat: { every: "30m" } },
         ...(list ? { list } : {}),
       },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
   }
 
   function resolveDueFromNow(nowMs: number, intervalMs: number, agentId: string) {
@@ -148,7 +148,7 @@ describe("startHeartbeatRunner", () => {
   }
 
   async function expectWakeDispatch(params: {
-    cfg: OpenClawConfig;
+    cfg: MarketingClawConfig;
     runSpy: MockRunOnce;
     wake: Parameters<typeof requestHeartbeat>[0];
     expectedCall: Record<string, unknown>;
@@ -196,7 +196,7 @@ describe("startHeartbeatRunner", () => {
           { id: "ops", heartbeat: { every: "15m" } },
         ],
       },
-    } as OpenClawConfig);
+    } as MarketingClawConfig);
 
     const nowAfterReload = Date.now();
     const nextMainDueMs = resolveDueFromNow(nowAfterReload, 10 * 60_000, "main");
@@ -227,11 +227,11 @@ describe("startHeartbeatRunner", () => {
   it("reads the latest runtime config for heartbeat wakes after no-op reload commits", async () => {
     useFakeHeartbeatTime();
 
-    const initialConfig: OpenClawConfig = {
+    const initialConfig: MarketingClawConfig = {
       ...heartbeatConfig(),
       messages: { visibleReplies: "automatic" },
     };
-    const nextConfig: OpenClawConfig = {
+    const nextConfig: MarketingClawConfig = {
       ...heartbeatConfig(),
       messages: { visibleReplies: "message_tool" },
     };
@@ -250,7 +250,7 @@ describe("startHeartbeatRunner", () => {
 
     expect(runSpy).toHaveBeenCalledTimes(1);
     const options = getRunCall(runSpy, 0);
-    expect((options.cfg as OpenClawConfig).messages?.visibleReplies).toBe("message_tool");
+    expect((options.cfg as MarketingClawConfig).messages?.visibleReplies).toBe("message_tool");
     expect((options.heartbeat as { every?: string }).every).toBe("30m");
     runner.stop();
   });
@@ -311,7 +311,7 @@ describe("startHeartbeatRunner", () => {
 
     const cfg = {
       agents: { defaults: { heartbeat: { every: "30m" } } },
-    } as OpenClawConfig;
+    } as MarketingClawConfig;
     const firstDueMs = resolveDueFromNow(0, 30 * 60_000, "main");
 
     // Start runner A
@@ -518,7 +518,7 @@ describe("startHeartbeatRunner", () => {
           { id: "main", heartbeat: { every: "30m" } },
           { id: "ops", heartbeat: { every: "15m" } },
         ]),
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       runSpy,
       wake: {
         source: "cron",
@@ -580,7 +580,7 @@ describe("startHeartbeatRunner", () => {
             },
           },
         ]),
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       runSpy,
       wake: {
         source: "cron",
@@ -623,7 +623,7 @@ describe("startHeartbeatRunner", () => {
             },
           },
         ]),
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       runSpy,
       wake: {
         source: "hook",
@@ -677,7 +677,7 @@ describe("startHeartbeatRunner", () => {
           { id: "main", heartbeat: { every: "30m" } },
           { id: "finance", heartbeat: { every: "30m" } },
         ]),
-      } as OpenClawConfig,
+      } as MarketingClawConfig,
       runSpy,
       wake: {
         source: "exec-event",
@@ -752,7 +752,7 @@ describe("startHeartbeatRunner", () => {
   });
 
   it("preserves immediate delivery for repeated bare wake reasons", async () => {
-    // 'wake' is the immediate-path reason from `openclaw system event --mode now`
+    // 'wake' is the immediate-path reason from `marketingclaw system event --mode now`
     // and must NOT be deferred. Verify the runner allows multiple back-to-back
     // wake requests through (subject only to the flood guard backstop).
     useFakeHeartbeatTime();

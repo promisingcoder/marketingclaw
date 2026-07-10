@@ -138,7 +138,7 @@ function buildOversizedIndexedRawEntry(params: {
     message: {
       role,
       content: [{ type: "text", text: TRANSCRIPT_OVERSIZED_MESSAGE_PLACEHOLDER }],
-      __openclaw: { truncated: true, reason: "oversized" },
+      __marketingclaw: { truncated: true, reason: "oversized" },
     },
   };
   const treeEntry = parseSessionTranscriptTreeEntry(record);

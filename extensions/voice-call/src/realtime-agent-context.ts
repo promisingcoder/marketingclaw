@@ -1,9 +1,9 @@
 // Voice Call plugin module implements realtime agent context behavior.
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { buildRealtimeVoiceAgentConsultPolicyInstructions } from "openclaw/plugin-sdk/realtime-voice";
-import { root } from "openclaw/plugin-sdk/security-runtime";
-import { normalizeOptionalString as normalizeString } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+import type { MarketingClawConfig } from "marketingclaw/plugin-sdk/config-contracts";
+import { buildRealtimeVoiceAgentConsultPolicyInstructions } from "marketingclaw/plugin-sdk/realtime-voice";
+import { root } from "marketingclaw/plugin-sdk/security-runtime";
+import { normalizeOptionalString as normalizeString } from "marketingclaw/plugin-sdk/string-coerce-runtime";
+import { truncateUtf16Safe } from "marketingclaw/plugin-sdk/text-utility-runtime";
 import type { VoiceCallConfig } from "./config.js";
 import type { CoreAgentDeps } from "./core-bridge.js";
 
@@ -59,7 +59,7 @@ async function readWorkspaceVoiceContextFiles(params: {
 export async function buildRealtimeVoiceInstructions(params: {
   baseInstructions: string;
   config: VoiceCallConfig;
-  coreConfig: OpenClawConfig;
+  coreConfig: MarketingClawConfig;
   agentRuntime: CoreAgentDeps;
 }): Promise<string> {
   const { config } = params;
@@ -76,10 +76,10 @@ export async function buildRealtimeVoiceInstructions(params: {
 
   const agentId = config.agentId ?? "main";
   const capsule: string[] = [
-    "OpenClaw agent voice context:",
+    "MarketingClaw agent voice context:",
     `- Agent id: ${agentId}`,
-    "- Use this context to match the OpenClaw agent's personality and standing preferences on fast voice turns.",
-    "- Treat this as compact context only; call openclaw_agent_consult when the caller needs the full agent brain, tools, memory, or workspace state.",
+    "- Use this context to match the MarketingClaw agent's personality and standing preferences on fast voice turns.",
+    "- Treat this as compact context only; call marketingclaw_agent_consult when the caller needs the full agent brain, tools, memory, or workspace state.",
   ];
 
   if (contextConfig.includeIdentity) {

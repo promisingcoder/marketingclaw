@@ -1,13 +1,13 @@
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
+import { createLazyRuntimeModule } from "marketingclaw/plugin-sdk/lazy-runtime";
 // Google provider module implements model/runtime integration.
 import type {
-  OpenClawPluginApi,
+  MarketingClawPluginApi,
   ProviderAuthContext,
   ProviderFetchUsageSnapshotContext,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { buildOauthProviderAuthResult } from "openclaw/plugin-sdk/provider-auth-result";
-import type { ProviderPlugin } from "openclaw/plugin-sdk/provider-model-shared";
-import { fetchGeminiUsage } from "openclaw/plugin-sdk/provider-usage";
+} from "marketingclaw/plugin-sdk/plugin-entry";
+import { buildOauthProviderAuthResult } from "marketingclaw/plugin-sdk/provider-auth-result";
+import type { ProviderPlugin } from "marketingclaw/plugin-sdk/provider-model-shared";
+import { fetchGeminiUsage } from "marketingclaw/plugin-sdk/provider-usage";
 import { GOOGLE_GEMINI_CLI_PROVIDER_ID } from "./gemini-cli-auth-home.js";
 import { formatGoogleOauthApiKey, parseGoogleUsageToken } from "./oauth-token-shared.js";
 import { GOOGLE_GEMINI_PROVIDER_HOOKS } from "./provider-hooks.js";
@@ -17,8 +17,8 @@ const PROVIDER_ID = GOOGLE_GEMINI_CLI_PROVIDER_ID;
 const PROVIDER_LABEL = "Gemini CLI OAuth";
 const DEFAULT_MODEL = "google/gemini-3.1-pro-preview";
 const ENV_VARS = [
-  "OPENCLAW_GEMINI_OAUTH_CLIENT_ID",
-  "OPENCLAW_GEMINI_OAUTH_CLIENT_SECRET",
+  "MARKETINGCLAW_GEMINI_OAUTH_CLIENT_ID",
+  "MARKETINGCLAW_GEMINI_OAUTH_CLIENT_SECRET",
   "GEMINI_CLI_OAUTH_CLIENT_ID",
   "GEMINI_CLI_OAUTH_CLIENT_SECRET",
 ] as const;
@@ -144,6 +144,6 @@ export function buildGoogleGeminiCliProvider(): ProviderPlugin {
   };
 }
 
-export function registerGoogleGeminiCliProvider(api: OpenClawPluginApi) {
+export function registerGoogleGeminiCliProvider(api: MarketingClawPluginApi) {
   api.registerProvider(buildGoogleGeminiCliProvider());
 }

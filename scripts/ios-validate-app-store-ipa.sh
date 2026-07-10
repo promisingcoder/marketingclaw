@@ -4,7 +4,7 @@ set -euo pipefail
 usage() {
   cat <<'EOF'
 Usage:
-  scripts/ios-validate-app-store-ipa.sh --ipa apps/ios/build/app-store/OpenClaw-<version>.ipa
+  scripts/ios-validate-app-store-ipa.sh --ipa apps/ios/build/app-store/MarketingClaw-<version>.ipa
 
 Validates the exported iOS App Store IPA before App Store Connect upload.
 EOF
@@ -12,9 +12,9 @@ EOF
 
 IPA_PATH=""
 EXPECTED_TEAM_ID="FWJYW4S8P8"
-EXPECTED_BUNDLE_ID="ai.openclawfoundation.app"
-EXPECTED_PROFILE_NAME="OpenClaw App Store ai.openclawfoundation.app"
-EXPECTED_APP_GROUP="group.ai.openclawfoundation.app.shared"
+EXPECTED_BUNDLE_ID="ai.marketingclaw.app"
+EXPECTED_PROFILE_NAME="MarketingClaw App Store ai.marketingclaw.app"
+EXPECTED_APP_GROUP="group.ai.marketingclaw.app.shared"
 EXPECTED_PUSH_MODE="appStore"
 
 PLIST_BUDDY_BIN="${IOS_VALIDATE_PLIST_BUDDY_BIN:-/usr/libexec/PlistBuddy}"
@@ -63,7 +63,7 @@ if [[ ! -f "${IPA_PATH}" ]]; then
   exit 1
 fi
 
-tmp_dir="$(mktemp -d -t openclaw-ios-ipa.XXXXXX)"
+tmp_dir="$(mktemp -d -t marketingclaw-ios-ipa.XXXXXX)"
 trap 'rm -rf "${tmp_dir}"' EXIT
 
 "${UNZIP_BIN}" -q "${IPA_PATH}" -d "${tmp_dir}"
@@ -159,13 +159,13 @@ assert_plist_empty_or_absent() {
 }
 
 assert_plist_string "${info_plist}" "CFBundleIdentifier" "${EXPECTED_BUNDLE_ID}" "bundle identifier mismatch"
-assert_plist_string "${info_plist}" "OpenClawPushMode" "${EXPECTED_PUSH_MODE}" "push mode mismatch"
-assert_plist_empty_or_absent "${info_plist}" "OpenClawPushRelayBaseURL" "push relay URL override"
-assert_plist_key_absent "${info_plist}" "OpenClawPushTransport" "legacy push transport"
-assert_plist_key_absent "${info_plist}" "OpenClawPushDistribution" "legacy push distribution"
-assert_plist_key_absent "${info_plist}" "OpenClawPushAPNsEnvironment" "legacy APNs environment"
-assert_plist_key_absent "${info_plist}" "OpenClawPushRelayProfile" "legacy relay profile"
-assert_plist_key_absent "${info_plist}" "OpenClawPushProofPolicy" "legacy proof policy"
+assert_plist_string "${info_plist}" "MarketingClawPushMode" "${EXPECTED_PUSH_MODE}" "push mode mismatch"
+assert_plist_empty_or_absent "${info_plist}" "MarketingClawPushRelayBaseURL" "push relay URL override"
+assert_plist_key_absent "${info_plist}" "MarketingClawPushTransport" "legacy push transport"
+assert_plist_key_absent "${info_plist}" "MarketingClawPushDistribution" "legacy push distribution"
+assert_plist_key_absent "${info_plist}" "MarketingClawPushAPNsEnvironment" "legacy APNs environment"
+assert_plist_key_absent "${info_plist}" "MarketingClawPushRelayProfile" "legacy relay profile"
+assert_plist_key_absent "${info_plist}" "MarketingClawPushProofPolicy" "legacy proof policy"
 
 if ! "${CODESIGN_BIN}" -d --entitlements :- "${app_path}" >"${entitlements_plist}" 2>"${tmp_dir}/codesign.err"; then
   detail="$(<"${tmp_dir}/codesign.err")"

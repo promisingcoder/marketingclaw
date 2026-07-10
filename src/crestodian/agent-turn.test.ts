@@ -23,7 +23,7 @@ vi.mock("../config/config.js", async (importOriginal) => ({
   readConfigFileSnapshot: vi.fn(async () => ({
     exists: true,
     valid: true,
-    path: "/tmp/openclaw.json",
+    path: "/tmp/marketingclaw.json",
     hash: "hash",
     config: {},
     runtimeConfig: {},
@@ -46,7 +46,7 @@ describe("runCrestodianAgentTurn", () => {
   it("uses a distinct transcript for each chat session", async () => {
     const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "crestodian-turn-"));
     tempDirs.push(stateDir);
-    vi.stubEnv("OPENCLAW_STATE_DIR", stateDir);
+    vi.stubEnv("MARKETINGCLAW_STATE_DIR", stateDir);
     const overview = { defaultModel: "openai/gpt-5.5" } as never;
     const first = createCrestodianAgentSession();
     const second = createCrestodianAgentSession();

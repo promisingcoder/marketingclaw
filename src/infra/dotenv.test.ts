@@ -38,21 +38,21 @@ const CREDENTIAL_AND_GATEWAY_ENV_KEYS = [
   "OPENAI_API_KEY",
   "OPENAI_API_KEYS",
   "OPENAI_API_KEY_SECONDARY",
-  "OPENCLAW_LIVE_ANTHROPIC_KEY",
-  "OPENCLAW_LIVE_ANTHROPIC_KEYS",
-  "OPENCLAW_LIVE_GEMINI_KEY",
-  "OPENCLAW_LIVE_OPENAI_KEY",
-  "OPENCLAW_GATEWAY_TOKEN",
-  "OPENCLAW_GATEWAY_PASSWORD",
-  "OPENCLAW_GATEWAY_SECRET",
+  "MARKETINGCLAW_LIVE_ANTHROPIC_KEY",
+  "MARKETINGCLAW_LIVE_ANTHROPIC_KEYS",
+  "MARKETINGCLAW_LIVE_GEMINI_KEY",
+  "MARKETINGCLAW_LIVE_OPENAI_KEY",
+  "MARKETINGCLAW_GATEWAY_TOKEN",
+  "MARKETINGCLAW_GATEWAY_PASSWORD",
+  "MARKETINGCLAW_GATEWAY_SECRET",
 ] as const;
 
 const BUNDLED_TRUST_ROOT_ENV_LINES = [
-  "OPENCLAW_BROWSER_CONTROL_MODULE=data:text/javascript,boom",
-  "OPENCLAW_BUNDLED_HOOKS_DIR=./attacker-hooks",
-  "OPENCLAW_BUNDLED_PLUGINS_DIR=./attacker-plugins",
-  "OPENCLAW_BUNDLED_SKILLS_DIR=./attacker-skills",
-  "OPENCLAW_SKIP_BROWSER_CONTROL_SERVER=1",
+  "MARKETINGCLAW_BROWSER_CONTROL_MODULE=data:text/javascript,boom",
+  "MARKETINGCLAW_BUNDLED_HOOKS_DIR=./attacker-hooks",
+  "MARKETINGCLAW_BUNDLED_PLUGINS_DIR=./attacker-plugins",
+  "MARKETINGCLAW_BUNDLED_SKILLS_DIR=./attacker-skills",
+  "MARKETINGCLAW_SKIP_BROWSER_CONTROL_SERVER=1",
 ] as const;
 
 const BUNDLED_TRUST_ROOT_ENV_KEYS = BUNDLED_TRUST_ROOT_ENV_LINES.map(
@@ -156,17 +156,17 @@ function createManifestBackedProviderSnapshot(
 }
 
 async function withDotEnvFixture(run: (fixture: DotEnvFixture) => Promise<void>) {
-  const base = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-dotenv-test-"));
+  const base = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-dotenv-test-"));
   const cwdDir = path.join(base, "cwd");
   const stateDir = path.join(base, "state");
-  setTestEnvValue("OPENCLAW_STATE_DIR", stateDir);
+  setTestEnvValue("MARKETINGCLAW_STATE_DIR", stateDir);
   await fs.mkdir(cwdDir, { recursive: true });
   await fs.mkdir(stateDir, { recursive: true });
   await run({ base, cwdDir, stateDir });
 }
 
 describe("loadDotEnv", () => {
-  it("loads ~/.openclaw/.env as fallback without overriding CWD .env", async () => {
+  it("loads ~/.marketingclaw/.env as fallback without overriding CWD .env", async () => {
     await withIsolatedEnvAndCwd(async () => {
       await withDotEnvFixture(async ({ cwdDir, stateDir }) => {
         await writeEnvFile(path.join(stateDir, ".env"), "FOO=from-global\nBAR=1\n");
@@ -231,15 +231,15 @@ describe("loadDotEnv", () => {
     });
   });
 
-  it("loads the Ubuntu gateway.env compatibility fallback after ~/.openclaw/.env", async () => {
+  it("loads the Ubuntu gateway.env compatibility fallback after ~/.marketingclaw/.env", async () => {
     await withIsolatedEnvAndCwd(async () => {
       await withDotEnvFixture(async ({ base, cwdDir }) => {
         setTestEnvValue("HOME", base);
-        const defaultStateDir = path.join(base, ".openclaw");
-        setTestEnvValue("OPENCLAW_STATE_DIR", defaultStateDir);
+        const defaultStateDir = path.join(base, ".marketingclaw");
+        setTestEnvValue("MARKETINGCLAW_STATE_DIR", defaultStateDir);
         await writeEnvFile(path.join(defaultStateDir, ".env"), "FOO=from-global\n");
         await writeEnvFile(
-          path.join(base, ".config", "openclaw", "gateway.env"),
+          path.join(base, ".config", "marketingclaw", "gateway.env"),
           ["FOO=from-gateway", "BAR=from-gateway"].join("\n"),
         );
 
@@ -269,7 +269,7 @@ describe("loadDotEnv", () => {
         process.env.FOO = "from-shell";
         await writeEnvFile(path.join(stateDir, ".env"), "FOO=from-global\n");
         await writeEnvFile(
-          path.join(base, ".config", "openclaw", "gateway.env"),
+          path.join(base, ".config", "marketingclaw", "gateway.env"),
           "FOO=from-gateway\n",
         );
 
@@ -296,8 +296,8 @@ describe("loadDotEnv", () => {
             "NODE_REPL_EXTERNAL_MODULE=./evil-repl.js",
             "NODE_REPL_HISTORY=./repl-history",
             "NODE_V8_COVERAGE=./coverage",
-            "OPENCLAW_STATE_DIR=./evil-state",
-            "OPENCLAW_CONFIG_PATH=./evil-config.json",
+            "MARKETINGCLAW_STATE_DIR=./evil-state",
+            "MARKETINGCLAW_CONFIG_PATH=./evil-config.json",
             "ANTHROPIC_BASE_URL=https://evil.example.com/v1",
             "CLOUDSDK_PYTHON=./attacker-python",
             "EXAMPLE_API_HOST=https://evil-api.example.com",
@@ -322,7 +322,7 @@ describe("loadDotEnv", () => {
         delete process.env.NODE_REPL_EXTERNAL_MODULE;
         delete process.env.NODE_REPL_HISTORY;
         delete process.env.NODE_V8_COVERAGE;
-        deleteTestEnvValue("OPENCLAW_CONFIG_PATH");
+        deleteTestEnvValue("MARKETINGCLAW_CONFIG_PATH");
         delete process.env.ANTHROPIC_BASE_URL;
         delete process.env.CLOUDSDK_PYTHON;
         delete process.env.EXAMPLE_API_HOST;
@@ -346,8 +346,8 @@ describe("loadDotEnv", () => {
         expect(process.env.NODE_REPL_EXTERNAL_MODULE).toBeUndefined();
         expect(process.env.NODE_REPL_HISTORY).toBeUndefined();
         expect(process.env.NODE_V8_COVERAGE).toBeUndefined();
-        expect(process.env.OPENCLAW_STATE_DIR).toBe(stateDir);
-        expect(process.env.OPENCLAW_CONFIG_PATH).toBeUndefined();
+        expect(process.env.MARKETINGCLAW_STATE_DIR).toBe(stateDir);
+        expect(process.env.MARKETINGCLAW_CONFIG_PATH).toBeUndefined();
         expect(process.env.ANTHROPIC_BASE_URL).toBeUndefined();
         expect(process.env.CLOUDSDK_PYTHON).toBeUndefined();
         expect(process.env.EXAMPLE_API_HOST).toBeUndefined();
@@ -377,13 +377,13 @@ describe("loadDotEnv", () => {
             "OPENAI_API_KEY=sk-openai-attacker-key",
             "OPENAI_API_KEYS=sk-openai-a,sk-openai-b",
             "OPENAI_API_KEY_SECONDARY=sk-openai-secondary",
-            "OPENCLAW_LIVE_ANTHROPIC_KEY=sk-ant-live",
-            "OPENCLAW_LIVE_ANTHROPIC_KEYS=sk-ant-live-a,sk-ant-live-b",
-            "OPENCLAW_LIVE_GEMINI_KEY=sk-gemini-live",
-            "OPENCLAW_LIVE_OPENAI_KEY=sk-openai-live",
-            "OPENCLAW_GATEWAY_TOKEN=attacker-token",
-            "OPENCLAW_GATEWAY_PASSWORD=attacker-password",
-            "OPENCLAW_GATEWAY_SECRET=attacker-secret",
+            "MARKETINGCLAW_LIVE_ANTHROPIC_KEY=sk-ant-live",
+            "MARKETINGCLAW_LIVE_ANTHROPIC_KEYS=sk-ant-live-a,sk-ant-live-b",
+            "MARKETINGCLAW_LIVE_GEMINI_KEY=sk-gemini-live",
+            "MARKETINGCLAW_LIVE_OPENAI_KEY=sk-openai-live",
+            "MARKETINGCLAW_GATEWAY_TOKEN=attacker-token",
+            "MARKETINGCLAW_GATEWAY_PASSWORD=attacker-password",
+            "MARKETINGCLAW_GATEWAY_SECRET=attacker-secret",
           ].join("\n"),
         );
 
@@ -402,21 +402,21 @@ describe("loadDotEnv", () => {
         await writeEnvFile(
           path.join(cwdDir, ".env"),
           [
-            "OPENCLAW_STATE_DIR=./evil-state",
+            "MARKETINGCLAW_STATE_DIR=./evil-state",
             "STATE_DIRECTORY=./evil-systemd-state",
-            "OPENCLAW_CONFIG_PATH=./evil-config.json",
+            "MARKETINGCLAW_CONFIG_PATH=./evil-config.json",
           ].join("\n"),
         );
 
-        deleteTestEnvValue("OPENCLAW_STATE_DIR");
+        deleteTestEnvValue("MARKETINGCLAW_STATE_DIR");
         delete process.env.STATE_DIRECTORY;
-        deleteTestEnvValue("OPENCLAW_CONFIG_PATH");
+        deleteTestEnvValue("MARKETINGCLAW_CONFIG_PATH");
 
         loadWorkspaceDotEnvFile(path.join(cwdDir, ".env"), { quiet: true });
 
-        expect(process.env.OPENCLAW_STATE_DIR).toBeUndefined();
+        expect(process.env.MARKETINGCLAW_STATE_DIR).toBeUndefined();
         expect(process.env.STATE_DIRECTORY).toBeUndefined();
-        expect(process.env.OPENCLAW_CONFIG_PATH).toBeUndefined();
+        expect(process.env.MARKETINGCLAW_CONFIG_PATH).toBeUndefined();
       });
     });
   });
@@ -457,9 +457,9 @@ describe("loadDotEnv", () => {
         const bundledPluginsDir = path.join(base, "attacker-bundled");
         const pathOverrideEnvKeys = [
           "NPM_CONFIG_PREFIX",
-          "OPENCLAW_AGENT_DIR",
-          "OPENCLAW_BUNDLED_PLUGINS_DIR",
-          "OPENCLAW_OAUTH_DIR",
+          "MARKETINGCLAW_AGENT_DIR",
+          "MARKETINGCLAW_BUNDLED_PLUGINS_DIR",
+          "MARKETINGCLAW_OAUTH_DIR",
           "PI_CODING_AGENT_DIR",
           "PNPM_HOME",
         ] as const;
@@ -467,9 +467,9 @@ describe("loadDotEnv", () => {
           path.join(cwdDir, ".env"),
           [
             `NPM_CONFIG_PREFIX=${path.join(cwdDir, ".npm-prefix")}`,
-            "OPENCLAW_AGENT_DIR=./evil-agent",
-            `OPENCLAW_BUNDLED_PLUGINS_DIR=${bundledPluginsDir}`,
-            "OPENCLAW_OAUTH_DIR=./evil-oauth",
+            "MARKETINGCLAW_AGENT_DIR=./evil-agent",
+            `MARKETINGCLAW_BUNDLED_PLUGINS_DIR=${bundledPluginsDir}`,
+            "MARKETINGCLAW_OAUTH_DIR=./evil-oauth",
             "PI_CODING_AGENT_DIR=./evil-pi-agent",
             `PNPM_HOME=${path.join(cwdDir, ".pnpm")}`,
           ].join("\n"),
@@ -484,19 +484,19 @@ describe("loadDotEnv", () => {
     });
   });
 
-  it("blocks OPENCLAW_TEST_TAILSCALE_BINARY from workspace .env", async () => {
+  it("blocks MARKETINGCLAW_TEST_TAILSCALE_BINARY from workspace .env", async () => {
     await withIsolatedEnvAndCwd(async () => {
       await withDotEnvFixture(async ({ cwdDir }) => {
         await writeEnvFile(
           path.join(cwdDir, ".env"),
-          "OPENCLAW_TEST_TAILSCALE_BINARY=/tmp/attacker-tailscale\n",
+          "MARKETINGCLAW_TEST_TAILSCALE_BINARY=/tmp/attacker-tailscale\n",
         );
 
-        delete process.env.OPENCLAW_TEST_TAILSCALE_BINARY;
+        delete process.env.MARKETINGCLAW_TEST_TAILSCALE_BINARY;
 
         loadWorkspaceDotEnvFile(path.join(cwdDir, ".env"), { quiet: true });
 
-        expect(process.env.OPENCLAW_TEST_TAILSCALE_BINARY).toBeUndefined();
+        expect(process.env.MARKETINGCLAW_TEST_TAILSCALE_BINARY).toBeUndefined();
       });
     });
   });
@@ -507,18 +507,18 @@ describe("loadDotEnv", () => {
         await writeEnvFile(
           path.join(cwdDir, ".env"),
           [
-            "OPENCLAW_ALLOW_PLUGIN_INSTALL_OVERRIDES=1",
-            'OPENCLAW_PLUGIN_INSTALL_OVERRIDES={"codex":"npm-pack:/tmp/codex.tgz"}',
+            "MARKETINGCLAW_ALLOW_PLUGIN_INSTALL_OVERRIDES=1",
+            'MARKETINGCLAW_PLUGIN_INSTALL_OVERRIDES={"codex":"npm-pack:/tmp/codex.tgz"}',
           ].join("\n"),
         );
 
-        delete process.env.OPENCLAW_ALLOW_PLUGIN_INSTALL_OVERRIDES;
-        delete process.env.OPENCLAW_PLUGIN_INSTALL_OVERRIDES;
+        delete process.env.MARKETINGCLAW_ALLOW_PLUGIN_INSTALL_OVERRIDES;
+        delete process.env.MARKETINGCLAW_PLUGIN_INSTALL_OVERRIDES;
 
         loadWorkspaceDotEnvFile(path.join(cwdDir, ".env"), { quiet: true });
 
-        expect(process.env.OPENCLAW_ALLOW_PLUGIN_INSTALL_OVERRIDES).toBeUndefined();
-        expect(process.env.OPENCLAW_PLUGIN_INSTALL_OVERRIDES).toBeUndefined();
+        expect(process.env.MARKETINGCLAW_ALLOW_PLUGIN_INSTALL_OVERRIDES).toBeUndefined();
+        expect(process.env.MARKETINGCLAW_PLUGIN_INSTALL_OVERRIDES).toBeUndefined();
       });
     });
   });
@@ -529,18 +529,18 @@ describe("loadDotEnv", () => {
         await writeEnvFile(
           path.join(cwdDir, ".env"),
           [
-            "OPENCLAW_PINNED_PYTHON=./attacker-python",
-            "OPENCLAW_PINNED_WRITE_PYTHON=./attacker-write-python",
+            "MARKETINGCLAW_PINNED_PYTHON=./attacker-python",
+            "MARKETINGCLAW_PINNED_WRITE_PYTHON=./attacker-write-python",
           ].join("\n"),
         );
 
-        delete process.env.OPENCLAW_PINNED_PYTHON;
-        delete process.env.OPENCLAW_PINNED_WRITE_PYTHON;
+        delete process.env.MARKETINGCLAW_PINNED_PYTHON;
+        delete process.env.MARKETINGCLAW_PINNED_WRITE_PYTHON;
 
         loadWorkspaceDotEnvFile(path.join(cwdDir, ".env"), { quiet: true });
 
-        expect(process.env.OPENCLAW_PINNED_PYTHON).toBeUndefined();
-        expect(process.env.OPENCLAW_PINNED_WRITE_PYTHON).toBeUndefined();
+        expect(process.env.MARKETINGCLAW_PINNED_PYTHON).toBeUndefined();
+        expect(process.env.MARKETINGCLAW_PINNED_WRITE_PYTHON).toBeUndefined();
       });
     });
   });
@@ -581,8 +581,8 @@ describe("loadDotEnv", () => {
           [
             "ANTHROPIC_BASE_URL=https://trusted.example.com/v1",
             "HTTP_PROXY=http://proxy.test:8080",
-            "OPENCLAW_PINNED_PYTHON=/trusted/python",
-            "OPENCLAW_PINNED_WRITE_PYTHON=/trusted/write-python",
+            "MARKETINGCLAW_PINNED_PYTHON=/trusted/python",
+            "MARKETINGCLAW_PINNED_WRITE_PYTHON=/trusted/write-python",
             "SLACK_API_URL=http://trusted-slack.example.com/api/",
             "ZALO_API_URL=http://trusted-zalo.example.com/",
           ].join("\n"),
@@ -590,8 +590,8 @@ describe("loadDotEnv", () => {
         vi.spyOn(process, "cwd").mockReturnValue(cwdDir);
         delete process.env.ANTHROPIC_BASE_URL;
         delete process.env.HTTP_PROXY;
-        delete process.env.OPENCLAW_PINNED_PYTHON;
-        delete process.env.OPENCLAW_PINNED_WRITE_PYTHON;
+        delete process.env.MARKETINGCLAW_PINNED_PYTHON;
+        delete process.env.MARKETINGCLAW_PINNED_WRITE_PYTHON;
         delete process.env.SLACK_API_URL;
         delete process.env.ZALO_API_URL;
 
@@ -599,8 +599,8 @@ describe("loadDotEnv", () => {
 
         expect(process.env.ANTHROPIC_BASE_URL).toBe("https://trusted.example.com/v1");
         expect(process.env.HTTP_PROXY).toBe("http://proxy.test:8080");
-        expect(process.env.OPENCLAW_PINNED_PYTHON).toBe("/trusted/python");
-        expect(process.env.OPENCLAW_PINNED_WRITE_PYTHON).toBe("/trusted/write-python");
+        expect(process.env.MARKETINGCLAW_PINNED_PYTHON).toBe("/trusted/python");
+        expect(process.env.MARKETINGCLAW_PINNED_WRITE_PYTHON).toBe("/trusted/write-python");
         expect(process.env.SLACK_API_URL).toBe("http://trusted-slack.example.com/api/");
         expect(process.env.ZALO_API_URL).toBe("http://trusted-zalo.example.com/");
       });
@@ -619,13 +619,13 @@ describe("loadDotEnv", () => {
             "OPENAI_API_KEY=sk-openai-trusted-key",
             "OPENAI_API_KEYS=sk-openai-a,sk-openai-b",
             "OPENAI_API_KEY_SECONDARY=sk-openai-secondary",
-            "OPENCLAW_LIVE_ANTHROPIC_KEY=sk-ant-live",
-            "OPENCLAW_LIVE_ANTHROPIC_KEYS=sk-ant-live-a,sk-ant-live-b",
-            "OPENCLAW_LIVE_GEMINI_KEY=sk-gemini-live",
-            "OPENCLAW_LIVE_OPENAI_KEY=sk-openai-live",
-            "OPENCLAW_GATEWAY_TOKEN=trusted-token",
-            "OPENCLAW_GATEWAY_PASSWORD=trusted-password",
-            "OPENCLAW_GATEWAY_SECRET=trusted-secret",
+            "MARKETINGCLAW_LIVE_ANTHROPIC_KEY=sk-ant-live",
+            "MARKETINGCLAW_LIVE_ANTHROPIC_KEYS=sk-ant-live-a,sk-ant-live-b",
+            "MARKETINGCLAW_LIVE_GEMINI_KEY=sk-gemini-live",
+            "MARKETINGCLAW_LIVE_OPENAI_KEY=sk-openai-live",
+            "MARKETINGCLAW_GATEWAY_TOKEN=trusted-token",
+            "MARKETINGCLAW_GATEWAY_PASSWORD=trusted-password",
+            "MARKETINGCLAW_GATEWAY_SECRET=trusted-secret",
           ].join("\n"),
         );
         vi.spyOn(process, "cwd").mockReturnValue(cwdDir);
@@ -639,13 +639,13 @@ describe("loadDotEnv", () => {
         expect(process.env.OPENAI_API_KEY).toBe("sk-openai-trusted-key");
         expect(process.env.OPENAI_API_KEYS).toBe("sk-openai-a,sk-openai-b");
         expect(process.env.OPENAI_API_KEY_SECONDARY).toBe("sk-openai-secondary");
-        expect(process.env.OPENCLAW_LIVE_ANTHROPIC_KEY).toBe("sk-ant-live");
-        expect(process.env.OPENCLAW_LIVE_ANTHROPIC_KEYS).toBe("sk-ant-live-a,sk-ant-live-b");
-        expect(process.env.OPENCLAW_LIVE_GEMINI_KEY).toBe("sk-gemini-live");
-        expect(process.env.OPENCLAW_LIVE_OPENAI_KEY).toBe("sk-openai-live");
-        expect(process.env.OPENCLAW_GATEWAY_TOKEN).toBe("trusted-token");
-        expect(process.env.OPENCLAW_GATEWAY_PASSWORD).toBe("trusted-password");
-        expect(process.env.OPENCLAW_GATEWAY_SECRET).toBe("trusted-secret");
+        expect(process.env.MARKETINGCLAW_LIVE_ANTHROPIC_KEY).toBe("sk-ant-live");
+        expect(process.env.MARKETINGCLAW_LIVE_ANTHROPIC_KEYS).toBe("sk-ant-live-a,sk-ant-live-b");
+        expect(process.env.MARKETINGCLAW_LIVE_GEMINI_KEY).toBe("sk-gemini-live");
+        expect(process.env.MARKETINGCLAW_LIVE_OPENAI_KEY).toBe("sk-openai-live");
+        expect(process.env.MARKETINGCLAW_GATEWAY_TOKEN).toBe("trusted-token");
+        expect(process.env.MARKETINGCLAW_GATEWAY_PASSWORD).toBe("trusted-password");
+        expect(process.env.MARKETINGCLAW_GATEWAY_SECRET).toBe("trusted-secret");
       });
     });
   });
@@ -654,7 +654,7 @@ describe("loadDotEnv", () => {
     await withIsolatedEnvAndCwd(async () => {
       await withDotEnvFixture(async ({ base, cwdDir, stateDir }) => {
         const evilStateDir = path.join(base, "evil-state");
-        await writeEnvFile(path.join(cwdDir, ".env"), "OPENCLAW_STATE_DIR=./evil-state\n");
+        await writeEnvFile(path.join(cwdDir, ".env"), "MARKETINGCLAW_STATE_DIR=./evil-state\n");
         await writeEnvFile(path.join(stateDir, ".env"), "SAFE_KEY=trusted-global\n");
         await writeEnvFile(path.join(evilStateDir, ".env"), "SAFE_KEY=evil-global\n");
 
@@ -663,7 +663,7 @@ describe("loadDotEnv", () => {
 
         loadDotEnv({ quiet: true });
 
-        expect(process.env.OPENCLAW_STATE_DIR).toBe(stateDir);
+        expect(process.env.MARKETINGCLAW_STATE_DIR).toBe(stateDir);
         expect(process.env.SAFE_KEY).toBe("trusted-global");
       });
     });
@@ -671,19 +671,19 @@ describe("loadDotEnv", () => {
 });
 
 describe("loadCliDotEnv", () => {
-  it("blocks OPENCLAW_STATE_DIR from workspace .env even when unset in process env", async () => {
+  it("blocks MARKETINGCLAW_STATE_DIR from workspace .env even when unset in process env", async () => {
     await withIsolatedEnvAndCwd(async () => {
       await withDotEnvFixture(async ({ cwdDir }) => {
-        await writeEnvFile(path.join(cwdDir, ".env"), "OPENCLAW_STATE_DIR=./evil-state\n");
+        await writeEnvFile(path.join(cwdDir, ".env"), "MARKETINGCLAW_STATE_DIR=./evil-state\n");
 
         // Delete the fixture-provided value so the blocking must come from
         // the workspace blocklist, not the "already set" skip.
-        deleteTestEnvValue("OPENCLAW_STATE_DIR");
+        deleteTestEnvValue("MARKETINGCLAW_STATE_DIR");
         vi.spyOn(process, "cwd").mockReturnValue(cwdDir);
 
         loadCliDotEnv({ quiet: true });
 
-        expect(process.env.OPENCLAW_STATE_DIR).toBeUndefined();
+        expect(process.env.MARKETINGCLAW_STATE_DIR).toBeUndefined();
       });
     });
   });
@@ -692,11 +692,11 @@ describe("loadCliDotEnv", () => {
     await withIsolatedEnvAndCwd(async () => {
       await withDotEnvFixture(async ({ base, cwdDir }) => {
         setTestEnvValue("HOME", base);
-        const defaultStateDir = path.join(base, ".openclaw");
-        setTestEnvValue("OPENCLAW_STATE_DIR", defaultStateDir);
+        const defaultStateDir = path.join(base, ".marketingclaw");
+        setTestEnvValue("MARKETINGCLAW_STATE_DIR", defaultStateDir);
         await writeEnvFile(path.join(defaultStateDir, ".env"), "FOO=from-global\n");
         await writeEnvFile(
-          path.join(base, ".config", "openclaw", "gateway.env"),
+          path.join(base, ".config", "marketingclaw", "gateway.env"),
           "BAR=from-gateway\n",
         );
 
@@ -716,12 +716,12 @@ describe("loadCliDotEnv", () => {
     await withIsolatedEnvAndCwd(async () => {
       await withDotEnvFixture(async ({ base, cwdDir }) => {
         setTestEnvValue("HOME", base);
-        const defaultStateDir = path.join(base, ".openclaw");
-        setTestEnvValue("OPENCLAW_STATE_DIR", defaultStateDir);
+        const defaultStateDir = path.join(base, ".marketingclaw");
+        setTestEnvValue("MARKETINGCLAW_STATE_DIR", defaultStateDir);
         await writeEnvFile(path.join(cwdDir, ".env"), "BAZ=from-workspace\n");
         await writeEnvFile(path.join(defaultStateDir, ".env"), "FOO=from-global\n");
         await writeEnvFile(
-          path.join(base, ".config", "openclaw", "gateway.env"),
+          path.join(base, ".config", "marketingclaw", "gateway.env"),
           "BAR=from-gateway\n",
         );
 
@@ -755,14 +755,14 @@ describe("loadCliDotEnv", () => {
     });
   });
 
-  it("does not load gateway.env when OPENCLAW_STATE_DIR is explicitly set", async () => {
+  it("does not load gateway.env when MARKETINGCLAW_STATE_DIR is explicitly set", async () => {
     await withIsolatedEnvAndCwd(async () => {
       await withDotEnvFixture(async ({ base, cwdDir }) => {
         const customStateDir = path.join(base, "custom-state");
         setTestEnvValue("HOME", base);
-        setTestEnvValue("OPENCLAW_STATE_DIR", customStateDir);
+        setTestEnvValue("MARKETINGCLAW_STATE_DIR", customStateDir);
         await writeEnvFile(
-          path.join(base, ".config", "openclaw", "gateway.env"),
+          path.join(base, ".config", "marketingclaw", "gateway.env"),
           "FOO=from-gateway\n",
         );
 
@@ -772,7 +772,7 @@ describe("loadCliDotEnv", () => {
         loadCliDotEnv({ quiet: true });
 
         expect(process.env.FOO).toBeUndefined();
-        expect(process.env.OPENCLAW_STATE_DIR).toBe(customStateDir);
+        expect(process.env.MARKETINGCLAW_STATE_DIR).toBe(customStateDir);
         expect(process.env.BAR).toBeUndefined();
       });
     });
@@ -780,12 +780,12 @@ describe("loadCliDotEnv", () => {
 
   it("keeps the legacy state-dir fallback for CLI dotenv loading", async () => {
     await withIsolatedEnvAndCwd(async () => {
-      const base = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-dotenv-legacy-"));
+      const base = await fs.mkdtemp(path.join(os.tmpdir(), "marketingclaw-dotenv-legacy-"));
       const cwdDir = path.join(base, "cwd");
       const legacyStateDir = path.join(base, ".clawdbot");
       setTestEnvValue("HOME", base);
-      deleteTestEnvValue("OPENCLAW_STATE_DIR");
-      delete process.env.OPENCLAW_TEST_FAST;
+      deleteTestEnvValue("MARKETINGCLAW_STATE_DIR");
+      delete process.env.MARKETINGCLAW_TEST_FAST;
       await fs.mkdir(cwdDir, { recursive: true });
       await writeEnvFile(path.join(legacyStateDir, ".env"), "LEGACY_ONLY=from-legacy\n");
 
@@ -821,9 +821,9 @@ describe("loadCliDotEnv", () => {
           path.join(cwdDir, ".env"),
           [
             "SAFE_KEY=from-cwd",
-            "OPENCLAW_STATE_DIR=./evil-state",
-            "OPENCLAW_CONFIG_PATH=./evil-config.json",
-            `OPENCLAW_BUNDLED_PLUGINS_DIR=${bundledPluginsDir}`,
+            "MARKETINGCLAW_STATE_DIR=./evil-state",
+            "MARKETINGCLAW_CONFIG_PATH=./evil-config.json",
+            `MARKETINGCLAW_BUNDLED_PLUGINS_DIR=${bundledPluginsDir}`,
             "NODE_OPTIONS=--require ./evil.js",
             "NODE_REDIRECT_WARNINGS=./warnings.log",
             "NODE_REPL_EXTERNAL_MODULE=./evil-repl.js",
@@ -838,8 +838,8 @@ describe("loadCliDotEnv", () => {
 
         vi.spyOn(process, "cwd").mockReturnValue(cwdDir);
         delete process.env.SAFE_KEY;
-        deleteTestEnvValue("OPENCLAW_CONFIG_PATH");
-        delete process.env.OPENCLAW_BUNDLED_PLUGINS_DIR;
+        deleteTestEnvValue("MARKETINGCLAW_CONFIG_PATH");
+        delete process.env.MARKETINGCLAW_BUNDLED_PLUGINS_DIR;
         delete process.env.NODE_OPTIONS;
         delete process.env.NODE_REDIRECT_WARNINGS;
         delete process.env.NODE_REPL_EXTERNAL_MODULE;
@@ -854,9 +854,9 @@ describe("loadCliDotEnv", () => {
 
         expect(process.env.SAFE_KEY).toBe("from-cwd");
         expect(process.env.BAR).toBe("from-global");
-        expect(process.env.OPENCLAW_STATE_DIR).toBe(stateDir);
-        expect(process.env.OPENCLAW_CONFIG_PATH).toBeUndefined();
-        expect(process.env.OPENCLAW_BUNDLED_PLUGINS_DIR).toBeUndefined();
+        expect(process.env.MARKETINGCLAW_STATE_DIR).toBe(stateDir);
+        expect(process.env.MARKETINGCLAW_CONFIG_PATH).toBeUndefined();
+        expect(process.env.MARKETINGCLAW_BUNDLED_PLUGINS_DIR).toBeUndefined();
         expect(process.env.NODE_OPTIONS).toBeUndefined();
         expect(process.env.NODE_REDIRECT_WARNINGS).toBeUndefined();
         expect(process.env.NODE_REPL_EXTERNAL_MODULE).toBeUndefined();
@@ -884,7 +884,7 @@ describe("workspace .env blocklist completeness", () => {
           origin: "global",
           rootDir: "/plugins/runtime-cloud",
           source: "/plugins/runtime-cloud/index.js",
-          manifestPath: "/plugins/runtime-cloud/openclaw.plugin.json",
+          manifestPath: "/plugins/runtime-cloud/marketingclaw.plugin.json",
           providerAuthEnvVars: {
             "runtime-cloud": ["RUNTIME_CLOUD_API_KEY"],
           },
@@ -947,23 +947,23 @@ describe("workspace .env blocklist completeness", () => {
     await withIsolatedEnvAndCwd(async () => {
       await withDotEnvFixture(async ({ cwdDir }) => {
         const runtimeControlKeys = [
-          "OPENCLAW_GIT_DIR",
-          "OPENCLAW_WORKSPACE_DIR",
-          "OPENCLAW_MDNS_HOSTNAME",
-          "OPENCLAW_SESSION_CACHE_TTL_MS",
-          "OPENCLAW_UPDATE_PACKAGE_SPEC",
-          "OPENCLAW_GATEWAY_PORT",
-          "OPENCLAW_GATEWAY_URL",
-          "OPENCLAW_CLAWHUB_URL",
+          "MARKETINGCLAW_GIT_DIR",
+          "MARKETINGCLAW_WORKSPACE_DIR",
+          "MARKETINGCLAW_MDNS_HOSTNAME",
+          "MARKETINGCLAW_SESSION_CACHE_TTL_MS",
+          "MARKETINGCLAW_UPDATE_PACKAGE_SPEC",
+          "MARKETINGCLAW_GATEWAY_PORT",
+          "MARKETINGCLAW_GATEWAY_URL",
+          "MARKETINGCLAW_CLAWHUB_URL",
           "CLAWHUB_URL",
-          "OPENCLAW_CLAWHUB_TOKEN",
+          "MARKETINGCLAW_CLAWHUB_TOKEN",
           "CLAWHUB_TOKEN",
           "CLAWHUB_AUTH_TOKEN",
           "CLAWHUB_CONFIG_PATH",
-          "OPENCLAW_DISABLE_BUNDLED_PLUGINS",
-          "OPENCLAW_ALLOW_INSECURE_PRIVATE_WS",
-          "OPENCLAW_BROWSER_EXECUTABLE_PATH",
-          "OPENCLAW_WHATSAPP_WEB_SOCKET_URL",
+          "MARKETINGCLAW_DISABLE_BUNDLED_PLUGINS",
+          "MARKETINGCLAW_ALLOW_INSECURE_PRIVATE_WS",
+          "MARKETINGCLAW_BROWSER_EXECUTABLE_PATH",
+          "MARKETINGCLAW_WHATSAPP_WEB_SOCKET_URL",
           "EXAMPLE_API_HOST",
           "HOMEBREW_BREW_FILE",
           "HOMEBREW_PREFIX",
@@ -974,22 +974,22 @@ describe("workspace .env blocklist completeness", () => {
           "MINIMAX_API_HOST",
           "BROWSER_EXECUTABLE_PATH",
           "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH",
-          "OPENCLAW_SKIP_CHANNELS",
-          "OPENCLAW_SKIP_PROVIDERS",
-          "OPENCLAW_SKIP_CRON",
-          "OPENCLAW_RAW_STREAM",
-          "OPENCLAW_RAW_STREAM_PATH",
-          "OPENCLAW_CACHE_TRACE",
-          "OPENCLAW_CACHE_TRACE_FILE",
-          "OPENCLAW_CACHE_TRACE_MESSAGES",
-          "OPENCLAW_CACHE_TRACE_PROMPT",
-          "OPENCLAW_CACHE_TRACE_SYSTEM",
-          "OPENCLAW_SHOW_SECRETS",
-          "OPENCLAW_PLUGIN_CATALOG_PATHS",
-          "OPENCLAW_MPM_CATALOG_PATHS",
-          "OPENCLAW_NODE_EXEC_HOST",
-          "OPENCLAW_NODE_EXEC_FALLBACK",
-          "OPENCLAW_ALLOW_PROJECT_LOCAL_BIN",
+          "MARKETINGCLAW_SKIP_CHANNELS",
+          "MARKETINGCLAW_SKIP_PROVIDERS",
+          "MARKETINGCLAW_SKIP_CRON",
+          "MARKETINGCLAW_RAW_STREAM",
+          "MARKETINGCLAW_RAW_STREAM_PATH",
+          "MARKETINGCLAW_CACHE_TRACE",
+          "MARKETINGCLAW_CACHE_TRACE_FILE",
+          "MARKETINGCLAW_CACHE_TRACE_MESSAGES",
+          "MARKETINGCLAW_CACHE_TRACE_PROMPT",
+          "MARKETINGCLAW_CACHE_TRACE_SYSTEM",
+          "MARKETINGCLAW_SHOW_SECRETS",
+          "MARKETINGCLAW_PLUGIN_CATALOG_PATHS",
+          "MARKETINGCLAW_MPM_CATALOG_PATHS",
+          "MARKETINGCLAW_NODE_EXEC_HOST",
+          "MARKETINGCLAW_NODE_EXEC_FALLBACK",
+          "MARKETINGCLAW_ALLOW_PROJECT_LOCAL_BIN",
           "PATH",
           "HOMEBREW_BREW_FILE",
           "HOMEBREW_PREFIX",
@@ -1026,7 +1026,7 @@ describe("workspace .env blocklist completeness", () => {
       await withDotEnvFixture(async ({ cwdDir }) => {
         await writeEnvFile(
           path.join(cwdDir, ".env"),
-          "MY_APP_KEY=user-value\nAPP_GITHUB_REPO=openclaw/openclaw\nDATABASE_URL_CUSTOM=pg://localhost\n",
+          "MY_APP_KEY=user-value\nAPP_GITHUB_REPO=marketingclaw/marketingclaw\nDATABASE_URL_CUSTOM=pg://localhost\n",
         );
 
         delete process.env.MY_APP_KEY;
@@ -1036,7 +1036,7 @@ describe("workspace .env blocklist completeness", () => {
         loadWorkspaceDotEnvFile(path.join(cwdDir, ".env"), { quiet: true });
 
         expect(process.env.MY_APP_KEY).toBe("user-value");
-        expect(process.env.APP_GITHUB_REPO).toBe("openclaw/openclaw");
+        expect(process.env.APP_GITHUB_REPO).toBe("marketingclaw/marketingclaw");
         expect(process.env.DATABASE_URL_CUSTOM).toBe("pg://localhost");
       });
     });
