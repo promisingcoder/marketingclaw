@@ -125,7 +125,9 @@ function readPackageVersion(packageDir: string): string | undefined {
 }
 
 function readPluginManifestId(packageDir: string): string | undefined {
-  const manifest = readJsonObject(path.join(packageDir, "marketingclaw.plugin.json"));
+  const manifest =
+    readJsonObject(path.join(packageDir, "marketingclaw.plugin.json")) ??
+    readJsonObject(path.join(packageDir, "openclaw.plugin.json"));
   const id = manifest?.id;
   return typeof id === "string" && id.trim() ? id.trim() : undefined;
 }

@@ -111,7 +111,13 @@ export function collectLegacyPluginManifestContractMigrations(params?: {
       if (!entry.isDirectory()) {
         continue;
       }
-      const manifestPath = path.join(root, entry.name, "marketingclaw.plugin.json");
+      let manifestPath = path.join(root, entry.name, "marketingclaw.plugin.json");
+      if (!fs.existsSync(manifestPath)) {
+        const legacyManifestPath = path.join(root, entry.name, "openclaw.plugin.json");
+        if (fs.existsSync(legacyManifestPath)) {
+          manifestPath = legacyManifestPath;
+        }
+      }
       const seenKey = manifestSeenKey(manifestPath);
       if (seen.has(seenKey)) {
         continue;

@@ -7,7 +7,7 @@ import type { ModelCatalog } from "@marketingclaw/model-catalog-core/model-catal
 import { normalizeOptionalString } from "../../packages/normalization-core/src/string-coerce.js";
 import { normalizeTrimmedStringList } from "../../packages/normalization-core/src/string-normalization.js";
 import type { ChannelConfigRuntimeSchema } from "../channels/plugins/types.config.js";
-import { MANIFEST_KEY } from "../compat/legacy-names.js";
+import { LEGACY_MANIFEST_KEYS, MANIFEST_KEY } from "../compat/legacy-names.js";
 import { ENV_SECRET_REF_ID_RE } from "../config/types.secrets.js";
 import { matchRootFileOpenFailure, openRootFileSync } from "../infra/boundary-file-read.js";
 import { isBlockedObjectKey } from "../infra/prototype-keys.js";
@@ -24,7 +24,9 @@ import type { PluginKind } from "./plugin-kind.types.js";
 
 /** Canonical plugin manifest filename inside plugin roots. */
 export const PLUGIN_MANIFEST_FILENAME = "marketingclaw.plugin.json";
-const PLUGIN_MANIFEST_FILENAMES = [PLUGIN_MANIFEST_FILENAME] as const;
+// The legacy `openclaw.plugin.json` filename is accepted as a fallback so external
+// plugins published before the fork still resolve.
+const PLUGIN_MANIFEST_FILENAMES = [PLUGIN_MANIFEST_FILENAME, "openclaw.plugin.json"] as const;
 export const MAX_PLUGIN_MANIFEST_BYTES = 256 * 1024;
 const MAX_PLUGIN_MANIFEST_LOAD_CACHE_ENTRIES = 512;
 const MAX_SECRET_PROVIDER_EXEC_ARGS = 128;
@@ -2012,19 +2014,38 @@ export type PackageManifest = {
   optionalDependencies?: Record<string, string>;
 } & Partial<Record<ManifestKey, MarketingClawPackageManifest>>;
 
+// Reads the package.json manifest metadata under the current key, falling back to
+// legacy keys (e.g. "openclaw") so plugins published before the fork still load.
+function readPackageManifestKey(
+  manifest: PackageManifest,
+): MarketingClawPackageManifest | undefined {
+  const current = manifest[MANIFEST_KEY];
+  if (current !== undefined) {
+    return current;
+  }
+  const record = manifest as unknown as Record<string, unknown>;
+  for (const legacyKey of LEGACY_MANIFEST_KEYS) {
+    const value = record[legacyKey];
+    if (value !== undefined) {
+      return value as MarketingClawPackageManifest;
+    }
+  }
+  return undefined;
+}
+
 export function getPackageManifestMetadata(
   manifest: PackageManifest | undefined,
 ): MarketingClawPackageManifest | undefined {
   if (!manifest) {
     return undefined;
   }
-  return manifest[MANIFEST_KEY];
+  return readPackageManifestKey(manifest);
 }
 
 export function resolvePackageExtensionEntries(
   manifest: PackageManifest | undefined,
 ): PackageExtensionResolution {
-  const rawMarketingClaw = manifest?.[MANIFEST_KEY] as unknown;
+  const rawMarketingClaw = (manifest ? readPackageManifestKey(manifest) : undefined) as unknown;
   if (rawMarketingClaw === undefined || rawMarketingClaw === null) {
     return { status: "missing", entries: [] };
   }
