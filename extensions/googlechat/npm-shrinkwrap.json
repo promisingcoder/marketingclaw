@@ -1,11 +1,11 @@
 {
-  "name": "@openclaw/googlechat",
+  "name": "@marketingclaw/googlechat",
   "version": "2026.6.11",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
-      "name": "@openclaw/googlechat",
+      "name": "@marketingclaw/googlechat",
       "version": "2026.6.11",
       "dependencies": {
         "gaxios": "7.1.5",
@@ -13,10 +13,10 @@
         "zod": "4.4.3"
       },
       "peerDependencies": {
-        "openclaw": ">=2026.6.11"
+        "marketingclaw": ">=2026.6.11"
       },
       "peerDependenciesMeta": {
-        "openclaw": {
+        "marketingclaw": {
           "optional": true
         }
       }

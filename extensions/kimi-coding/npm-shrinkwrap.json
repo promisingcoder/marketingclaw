@@ -1,11 +1,11 @@
 {
-  "name": "@openclaw/kimi-provider",
+  "name": "@marketingclaw/kimi-provider",
   "version": "2026.6.11",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
-      "name": "@openclaw/kimi-provider",
+      "name": "@marketingclaw/kimi-provider",
       "version": "2026.6.11"
     }
   }

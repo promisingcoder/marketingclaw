@@ -1,11 +1,11 @@
 {
-  "name": "@openclaw/copilot",
+  "name": "@marketingclaw/copilot",
   "version": "2026.6.11",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
-      "name": "@openclaw/copilot",
+      "name": "@marketingclaw/copilot",
       "version": "2026.6.11",
       "dependencies": {
         "@github/copilot-sdk": "1.0.5"

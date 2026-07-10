@@ -1,11 +1,11 @@
 {
-  "name": "@openclaw/inworld-speech",
+  "name": "@marketingclaw/inworld-speech",
   "version": "2026.6.11",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
-      "name": "@openclaw/inworld-speech",
+      "name": "@marketingclaw/inworld-speech",
       "version": "2026.6.11"
     }
   }

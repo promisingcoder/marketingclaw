@@ -240,13 +240,13 @@ export function createShrinkwrapGuardCommand(paths) {
   };
 }
 
-async function runChangedCheckViaCrabbox(argv = [], env = process.env) {
-  console.error("[check:changed] delegating to Blacksmith Testbox via `pnpm crabbox:run`.");
-  return await runManagedCommand({
-    bin: "pnpm",
-    args: buildChangedCheckCrabboxArgs(argv),
-    env,
-  });
+async function runChangedCheckViaCrabbox() {
+  // The Blacksmith Testbox delegation targeted .github/workflows/ci-check-testbox.yml,
+  // which was removed when this fork pruned upstream-only CI. The lane is unavailable
+  // here, so fail clearly rather than dispatch a workflow that no longer exists.
+  throw new Error(
+    "[check:changed] Blacksmith Testbox delegation is not available in this fork (ci-check-testbox.yml was removed).",
+  );
 }
 
 export function createChangedCheckPlan(result, options = {}) {

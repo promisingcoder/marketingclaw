@@ -1,11 +1,11 @@
 {
-  "name": "@openclaw/venice-provider",
+  "name": "@marketingclaw/venice-provider",
   "version": "2026.6.11",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
-      "name": "@openclaw/venice-provider",
+      "name": "@marketingclaw/venice-provider",
       "version": "2026.6.11"
     }
   }

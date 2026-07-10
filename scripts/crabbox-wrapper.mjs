@@ -3216,7 +3216,7 @@ if (canonicalProvider === "blacksmith-testbox") {
     console.error(
       [
         "[crabbox] provider=blacksmith-testbox supports Linux Testbox proof only; it cannot run Windows or WSL2 targets.",
-        "[crabbox] use provider=azure or provider=aws for brokered Crabbox Windows/WSL2 proof, provider=parallels for local Windows, or dispatch .github/workflows/windows-testbox-probe.yml for Blacksmith Windows runner probes.",
+        "[crabbox] use provider=azure or provider=aws for brokered Crabbox Windows/WSL2 proof, provider=parallels for local Windows.",
       ].join("\n"),
     );
     process.exit(2);

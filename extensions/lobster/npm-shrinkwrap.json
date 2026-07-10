@@ -1,11 +1,11 @@
 {
-  "name": "@openclaw/lobster",
+  "name": "@marketingclaw/lobster",
   "version": "2026.6.11",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
-      "name": "@openclaw/lobster",
+      "name": "@marketingclaw/lobster",
       "version": "2026.6.11",
       "dependencies": {
         "@clawdbot/lobster": "2026.6.11",
@@ -24,7 +24,7 @@
       "bin": {
         "clawd.invoke": "bin/clawd.invoke.js",
         "lobster": "bin/lobster.js",
-        "openclaw.invoke": "bin/openclaw.invoke.js"
+        "marketingclaw.invoke": "bin/marketingclaw.invoke.js"
       },
       "engines": {
         "node": ">=22"

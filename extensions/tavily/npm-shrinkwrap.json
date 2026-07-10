@@ -1,11 +1,11 @@
 {
-  "name": "@openclaw/tavily-plugin",
+  "name": "@marketingclaw/tavily-plugin",
   "version": "2026.6.11",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
-      "name": "@openclaw/tavily-plugin",
+      "name": "@marketingclaw/tavily-plugin",
       "version": "2026.6.11",
       "dependencies": {
         "typebox": "1.3.3"

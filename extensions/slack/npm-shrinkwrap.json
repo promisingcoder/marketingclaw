@@ -1,11 +1,11 @@
 {
-  "name": "@openclaw/slack",
+  "name": "@marketingclaw/slack",
   "version": "2026.6.11",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
-      "name": "@openclaw/slack",
+      "name": "@marketingclaw/slack",
       "version": "2026.6.11",
       "dependencies": {
         "@slack/bolt": "4.7.3",
@@ -16,10 +16,10 @@
         "zod": "4.4.3"
       },
       "peerDependencies": {
-        "openclaw": ">=2026.6.11"
+        "marketingclaw": ">=2026.6.11"
       },
       "peerDependenciesMeta": {
-        "openclaw": {
+        "marketingclaw": {
           "optional": true
         }
       }
