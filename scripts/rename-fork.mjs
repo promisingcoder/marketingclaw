@@ -381,6 +381,7 @@ function runAudit(rows, workspaceSuffixes) {
     const base = f.split("/").pop();
     if (f === "scripts/rename-fork.mjs") return true; // the rename tool itself contains openclaw
     if (f === "src/compat/legacy-names.ts") return true; // dedicated legacy-name compat table
+    if (f === "ui/vite.config.ts") return true; // vite aliases for external @openclaw packages (uirouter)
     if (base === "LICENSE") return true;
     if (base === "THIRD_PARTY_NOTICES.md") return true;
     if (f === "UPSTREAM-CHANGELOG.md") return true;
