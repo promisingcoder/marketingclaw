@@ -208,7 +208,7 @@ function usageText() {
     "  --pr <number>                 Pull request number for publish.",
     "  --record-fps <fps>             Desktop recording frames per second. Default: 24.",
     "  --record-seconds <seconds>    Desktop video duration. Default: 35.",
-    "  --repo <owner/name>           GitHub repo for publish. Default: marketingclaw/marketingclaw.",
+    "  --repo <owner/name>           GitHub repo for publish. Default: promisingcoder/marketingclaw.",
     "  --session <path>              Session file from start. Default: <output-dir>/session.json.",
     "  --summary <text>              Artifact publish summary.",
     "  --full-artifacts              Publish all session artifacts. Default publishes only the motion GIF.",
