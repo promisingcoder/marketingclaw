@@ -13,9 +13,10 @@ import type { MarketingClawConfig } from "../config/types.js";
 import type { CronJobCreate } from "../cron/types.js";
 import { runCommandWithTimeout } from "../process/exec.js";
 import { normalizeAgentId } from "../routing/session-key.js";
-import { defaultRuntime, type RuntimeEnv } from "../runtime.js";
+import { defaultRuntime, type RuntimeEnv, writeRuntimeJson } from "../runtime.js";
 import { shortenHomePath } from "../utils.js";
 import { safeParseWithSchema } from "../utils/zod-parse.js";
+import { createQuietRuntime } from "./agents.command-shared.js";
 
 const JsonRecordSchema = z.record(z.string(), z.unknown());
 
@@ -639,30 +640,41 @@ export async function setupMarketingCommand(
       }
     : await promptBrandInputs(opts);
 
+  // In --json mode step logs are suppressed so stdout stays a single JSON object.
+  const json = opts.json === true;
+  const stepRuntime = json ? createQuietRuntime(runtime) : runtime;
+
   // 1) Shared, git-tracked marketing state directory.
   const sharedDir = resolveSharedMarketingDir(stateDir);
-  const { brandCreated } = await scaffoldSharedDir({ sharedDir, brand, gitInit, runtime });
-  runtime.log(brandCreated ? "BRAND.md written." : "BRAND.md already present (kept).");
+  const { brandCreated } = await scaffoldSharedDir({
+    sharedDir,
+    brand,
+    gitInit,
+    runtime: stepRuntime,
+  });
+  stepRuntime.log(brandCreated ? "BRAND.md written." : "BRAND.md already present (kept).");
 
   // 2) Roster: add any missing agents to config.
   const existing = await readConfig(configPath);
   const rosterResult = applyMarketingRoster(existing.config, { stateDir });
   if (rosterResult.created.length > 0) {
     await replaceConfigFile({ nextConfig: rosterResult.config, afterWrite: { mode: "auto" } });
-    runtime.log(`Agents created: ${rosterResult.created.join(", ")}`);
+    stepRuntime.log(`Agents created: ${rosterResult.created.join(", ")}`);
   }
   if (rosterResult.skipped.length > 0) {
-    runtime.log(`Agents kept (already configured): ${rosterResult.skipped.join(", ")}`);
+    stepRuntime.log(`Agents kept (already configured): ${rosterResult.skipped.join(", ")}`);
   }
 
   // 3) Per-agent workspaces with role personas overlaid before generic seeding.
   const templatesDir = await resolveTemplatesDir();
+  const workspaces: Array<{ id: string; workspace: string; roleFilesAdded: number }> = [];
   for (const role of MARKETING_ROLES) {
     const workspaceDir = resolveRoleWorkspaceDir(stateDir, role.id);
     await fs.mkdir(workspaceDir, { recursive: true });
     const overlaid = await overlayRoleTemplates({ role, workspaceDir, templatesDir });
     await ensureAgentWorkspace({ dir: workspaceDir, ensureBootstrapFiles: true });
-    runtime.log(
+    workspaces.push({ id: role.id, workspace: workspaceDir, roleFilesAdded: overlaid.length });
+    stepRuntime.log(
       `Workspace ${role.id}: ${shortenHomePath(workspaceDir)}${
         overlaid.length > 0 ? ` (+${overlaid.length} role files)` : ""
       }`,
@@ -670,15 +682,29 @@ export async function setupMarketingCommand(
   }
 
   // 4) Default cron schedule (idempotent via declarationKey).
-  const cronResult = await installCronJobs(buildDefaultCronJobCreates(), runtime);
+  const cronResult = await installCronJobs(buildDefaultCronJobCreates(), stepRuntime);
   const cronTotal = cronResult.created.length + cronResult.converged.length;
-  runtime.log(
+  stepRuntime.log(
     `Cron jobs: ${cronTotal} installed${
       cronResult.created.length < cronTotal
         ? ` (${cronResult.created.length} new, ${cronResult.converged.length} already present)`
         : ""
     }`,
   );
+
+  if (json) {
+    writeRuntimeJson(runtime, {
+      company: brand.company,
+      site: brand.site,
+      audience: brand.audience,
+      sharedDir,
+      brandCreated,
+      agents: { created: rosterResult.created, skipped: rosterResult.skipped },
+      workspaces,
+      cron: { created: cronResult.created, converged: cronResult.converged },
+    });
+    return;
+  }
 
   printNextSteps(runtime, { brand, sharedDir });
 }
