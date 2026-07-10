@@ -380,6 +380,7 @@ function runAudit(rows, workspaceSuffixes) {
   const fileAllowed = (f) => {
     const base = f.split("/").pop();
     if (f === "scripts/rename-fork.mjs") return true; // the rename tool itself contains openclaw
+    if (f === "src/compat/legacy-names.ts") return true; // dedicated legacy-name compat table
     if (base === "LICENSE") return true;
     if (base === "THIRD_PARTY_NOTICES.md") return true;
     if (f === "UPSTREAM-CHANGELOG.md") return true;
@@ -394,6 +395,8 @@ function runAudit(rows, workspaceSuffixes) {
       workspaceSuffixes.has(name) ? m : "",
     );
     s = s.replace(/@openclaw__fs-safe/gi, "");
+    // legacy plugin-manifest filename, accepted as a fallback by the loaders on purpose
+    s = s.replace(/openclaw\.plugin\.json/gi, "");
     // any surviving openclaw@<spec> is a kept upstream package ref (emails were renamed)
     s = s.replace(/openclaw@[A-Za-z0-9*][A-Za-z0-9._*+^~-]*/gi, "");
     // any surviving upstream repo URL (main repo openclaw/openclaw was mapped away)

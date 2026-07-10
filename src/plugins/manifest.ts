@@ -2015,7 +2015,7 @@ export type PackageManifest = {
 } & Partial<Record<ManifestKey, MarketingClawPackageManifest>>;
 
 // Reads the package.json manifest metadata under the current key, falling back to
-// legacy keys (e.g. "openclaw") so plugins published before the fork still load.
+// legacy manifest keys so plugins published before the fork still load.
 function readPackageManifestKey(
   manifest: PackageManifest,
 ): MarketingClawPackageManifest | undefined {
