@@ -280,7 +280,7 @@ const TELEGRAM_QA_SCENARIOS: TelegramQaScenarioDefinition[] = [
     defaultEnabled: false,
     defaultProviderModes: ["mock-openai"],
     rationale: "Opt-in regression guard for duplicate final replies from Telegram streaming paths.",
-    regressionRefs: ["marketingclaw/marketingclaw#39905"],
+    regressionRefs: ["promisingcoder/marketingclaw#39905"],
     timeoutMs: 75_000,
     buildRun: (sutUsername) =>
       telegramQaStepRun({
@@ -298,7 +298,7 @@ const TELEGRAM_QA_SCENARIOS: TelegramQaScenarioDefinition[] = [
     title: "Telegram long final reuses the preview message",
     defaultProviderModes: ["mock-openai"],
     rationale: "Regression guard for long streamed finals leaving stale preview messages behind.",
-    regressionRefs: ["marketingclaw/marketingclaw#39905"],
+    regressionRefs: ["promisingcoder/marketingclaw#39905"],
     timeoutMs: 60_000,
     buildRun: (sutUsername) =>
       telegramQaStepRun({
@@ -317,7 +317,7 @@ const TELEGRAM_QA_SCENARIOS: TelegramQaScenarioDefinition[] = [
     title: "Telegram three-chunk final keeps only final chunks",
     defaultEnabled: false,
     rationale: "Opt-in stress probe for Telegram long final chunk accounting.",
-    regressionRefs: ["marketingclaw/marketingclaw#39905"],
+    regressionRefs: ["promisingcoder/marketingclaw#39905"],
     timeoutMs: 60_000,
     buildRun: (sutUsername) =>
       telegramQaStepRun({

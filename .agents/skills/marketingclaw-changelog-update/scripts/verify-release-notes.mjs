@@ -3,7 +3,7 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 
-const repo = "marketingclaw/marketingclaw";
+const repo = "promisingcoder/marketingclaw";
 const commitAssociationQueryBatchSize = 20;
 const excludedHandles = new Set(["marketingclaw", "clawsweeper", "claude", "codex", "steipete"]);
 const nonEditorialTypes = new Set([

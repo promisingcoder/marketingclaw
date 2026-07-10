@@ -3153,15 +3153,15 @@ describe("update-cli", () => {
         mockPackageInstallStatus(createCaseDir("marketingclaw-update"));
         await updateCommand({ yes: true, tag: "main" });
       },
-      expectedSpec: "github:marketingclaw/marketingclaw#main",
+      expectedSpec: "github:promisingcoder/marketingclaw#main",
     },
     {
       name: "explicit git package spec",
       run: async () => {
         mockPackageInstallStatus(createCaseDir("marketingclaw-update"));
-        await updateCommand({ yes: true, tag: "github:marketingclaw/marketingclaw#main" });
+        await updateCommand({ yes: true, tag: "github:promisingcoder/marketingclaw#main" });
       },
-      expectedSpec: "github:marketingclaw/marketingclaw#main",
+      expectedSpec: "github:promisingcoder/marketingclaw#main",
     },
     {
       name: "aliased git package spec",
@@ -3169,10 +3169,10 @@ describe("update-cli", () => {
         mockPackageInstallStatus(createCaseDir("marketingclaw-update"));
         await updateCommand({
           yes: true,
-          tag: "MarketingClaw@github:marketingclaw/marketingclaw#main",
+          tag: "MarketingClaw@github:promisingcoder/marketingclaw#main",
         });
       },
-      expectedSpec: "MarketingClaw@github:marketingclaw/marketingclaw#main",
+      expectedSpec: "MarketingClaw@github:promisingcoder/marketingclaw#main",
     },
     {
       name: "full git URL package spec",
@@ -3211,9 +3211,9 @@ describe("update-cli", () => {
       name: "GitHub shorthand package spec",
       run: async () => {
         mockPackageInstallStatus(createCaseDir("marketingclaw-update"));
-        await updateCommand({ yes: true, tag: "marketingclaw/marketingclaw#main" });
+        await updateCommand({ yes: true, tag: "promisingcoder/marketingclaw#main" });
       },
-      expectedSpec: "marketingclaw/marketingclaw#main",
+      expectedSpec: "promisingcoder/marketingclaw#main",
     },
     {
       name: "SCP-style SSH package spec",
@@ -3221,10 +3221,10 @@ describe("update-cli", () => {
         mockPackageInstallStatus(createCaseDir("marketingclaw-update"));
         await updateCommand({
           yes: true,
-          tag: "git@github.com:marketingclaw/marketingclaw.git#main",
+          tag: "git@github.com:promisingcoder/marketingclaw.git#main",
         });
       },
-      expectedSpec: "git@github.com:marketingclaw/marketingclaw.git#main",
+      expectedSpec: "git@github.com:promisingcoder/marketingclaw.git#main",
     },
     {
       name: "MARKETINGCLAW_UPDATE_PACKAGE_SPEC override",

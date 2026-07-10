@@ -55,7 +55,7 @@ const PRIMARY_PACKAGE_NAME = "marketingclaw";
 const ALL_PACKAGE_NAMES = [PRIMARY_PACKAGE_NAME] as const;
 const GLOBAL_RENAME_PREFIX = ".";
 /** npm-compatible spec used when the user asks to install the moving main branch. */
-export const MARKETINGCLAW_MAIN_PACKAGE_SPEC = "github:marketingclaw/marketingclaw#main";
+export const MARKETINGCLAW_MAIN_PACKAGE_SPEC = "github:promisingcoder/marketingclaw#main";
 const COREPACK_ENABLE_DOWNLOAD_PROMPT_DEFAULT = "0";
 const NPM_GLOBAL_INSTALL_QUIET_FLAGS = ["--no-fund", "--no-audit", "--loglevel=error"] as const;
 const PNPM_MARKETINGCLAW_BUILD_ALLOWLIST_FLAG = `--allow-build=${PRIMARY_PACKAGE_NAME}`;

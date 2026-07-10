@@ -193,7 +193,7 @@ This is idempotent and safe to run multiple times.
     sudo docker images | grep marketingclaw-sandbox
 
     # Build the sandbox image if missing (requires a source checkout)
-    cd /opt/marketingclaw/marketingclaw
+    cd /opt/promisingcoder/marketingclaw
     sudo -u marketingclaw ./scripts/sandbox-setup.sh
     # For npm installs without a source checkout, see
     # https://docs.marketingclaw.ai/gateway/sandboxing#images-and-setup

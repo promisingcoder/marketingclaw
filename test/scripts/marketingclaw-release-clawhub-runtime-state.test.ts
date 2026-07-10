@@ -15,7 +15,7 @@ describe("scripts/marketingclaw-release-clawhub-runtime-state.ts", () => {
   it("emits verifier args and proof lines for awaited ClawHub runs", () => {
     const result = runRuntimeStateScript([
       "--repository",
-      "marketingclaw/marketingclaw",
+      "promisingcoder/marketingclaw",
       "--wait-for-clawhub",
       "true",
       "--force-skip-clawhub",
@@ -44,7 +44,7 @@ describe("scripts/marketingclaw-release-clawhub-runtime-state.ts", () => {
   it("rejects invalid boolean flag values before emitting runtime state", () => {
     const result = runRuntimeStateScript([
       "--repository",
-      "marketingclaw/marketingclaw",
+      "promisingcoder/marketingclaw",
       "--wait-for-clawhub",
       "yes",
       "--force-skip-clawhub",

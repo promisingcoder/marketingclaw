@@ -35,14 +35,14 @@ Do not update these from mixed sources. All three ASC fields must come from the 
 
 ## Workflow Shape
 
-- `marketingclaw/marketingclaw` is the public product repo. Its GitHub Releases page is
+- `promisingcoder/marketingclaw` is the public product repo. Its GitHub Releases page is
   where macOS assets are ultimately attached.
-- `marketingclaw/marketingclaw` `macos-release.yml` is public handoff validation only.
+- `promisingcoder/marketingclaw` `macos-release.yml` is public handoff validation only.
   It never signs, notarizes, or uploads macOS assets, regardless of
   `preflight_only`.
 - `marketingclaw/releases` is the restricted release-ops repo. Its macOS workflows
   sign, notarize, validate, and promote assets onto the
-  `marketingclaw/marketingclaw` GitHub release.
+  `promisingcoder/marketingclaw` GitHub release.
 - Public release branch may carry mac-only packaging fixes after the stable tag/npm are already live.
 - Use `source_ref=release/YYYY.M.PATCH` for release-ops mac preflight/validation when building that branch variation.
 - Keep `tag=vYYYY.M.PATCH` pointing at the original stable release commit.
@@ -67,7 +67,7 @@ Do not update these from mixed sources. All three ASC fields must come from the 
 Public handoff validation:
 
 ```bash
-gh workflow run macos-release.yml --repo marketingclaw/marketingclaw \
+gh workflow run macos-release.yml --repo promisingcoder/marketingclaw \
   --ref release/YYYY.M.PATCH \
   -f tag=vYYYY.M.PATCH \
   -f preflight_only=true \
@@ -128,6 +128,6 @@ publish run before it promotes assets.
 
 ## Verify
 
-- `gh release view vYYYY.M.PATCH --repo marketingclaw/marketingclaw` shows zip, dmg, dSYM zip, not draft, not prerelease.
+- `gh release view vYYYY.M.PATCH --repo promisingcoder/marketingclaw` shows zip, dmg, dSYM zip, not draft, not prerelease.
 - Public `main` `appcast.xml` points at `MarketingClaw-YYYY.M.PATCH.zip`.
 - Appcast entry has `sparkle:version`, `sparkle:shortVersionString`, length, and `sparkle:edSignature`.

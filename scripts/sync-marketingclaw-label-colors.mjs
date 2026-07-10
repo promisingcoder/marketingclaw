@@ -2,7 +2,7 @@
 // Synchronizes GitHub label colors to the MarketingClaw taxonomy policy.
 import { execFileSync } from "node:child_process";
 
-const REPO = "marketingclaw/marketingclaw";
+const REPO = "promisingcoder/marketingclaw";
 const APPLY = process.argv.includes("--apply");
 
 const COLORS = {

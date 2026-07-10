@@ -898,8 +898,8 @@ describe("sanitizeAssistantVisibleText", () => {
     const input = [
       "Visible intro.",
       "⚠️ 🛠️ `run marketingclaw definitely-not-a-real-subcommand (agent)` failed",
-      "⚠️ 🛠️ gh search issues --repo marketingclaw/marketingclaw --state open --no-search-pages.jsonl /tmp/marketingclaw_open_unlabeled_current.json (agent) failed",
-      "⚠️ 🛠️ gh search issues --repo marketingclaw/marketingclaw --state open (agent) failed: command timed out",
+      "⚠️ 🛠️ gh search issues --repo promisingcoder/marketingclaw --state open --no-search-pages.jsonl /tmp/marketingclaw_open_unlabeled_current.json (agent) failed",
+      "⚠️ 🛠️ gh search issues --repo promisingcoder/marketingclaw --state open (agent) failed: command timed out",
       "🛠️ run git status",
       "Visible outro.",
     ].join("\n");

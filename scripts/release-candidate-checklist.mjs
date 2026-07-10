@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 import { stripLeadingPackageManagerSeparator } from "./lib/arg-utils.mjs";
 import { readBoundedResponseText } from "./lib/bounded-response.mjs";
 
-const DEFAULT_REPO = "marketingclaw/marketingclaw";
+const DEFAULT_REPO = "promisingcoder/marketingclaw";
 const DEFAULT_PROVIDER = "openai";
 const DEFAULT_MODE = "both";
 const DEFAULT_NPM_DIST_TAG = "beta";

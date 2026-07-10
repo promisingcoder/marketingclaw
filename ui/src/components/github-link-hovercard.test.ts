@@ -66,7 +66,9 @@ describe("parseGitHubIssueOrPullRequestLink", () => {
       ),
     ).toBeNull();
     expect(
-      parseGitHubIssueOrPullRequestLink("https://example.com/marketingclaw/marketingclaw/issues/1"),
+      parseGitHubIssueOrPullRequestLink(
+        "https://example.com/promisingcoder/marketingclaw/issues/1",
+      ),
     ).toBeNull();
   });
 });
@@ -111,7 +113,7 @@ describe("marketingclaw-github-link-hovercard-provider", () => {
 
     const card = document.querySelector<HTMLElement>(".github-link-hovercard");
     expect(card?.textContent).toContain("Merged");
-    expect(card?.textContent).toContain("marketingclaw/marketingclaw #99816");
+    expect(card?.textContent).toContain("promisingcoder/marketingclaw #99816");
     expect(card?.textContent).toContain(
       "fix(agents): derive conversation scope from trusted group facts",
     );

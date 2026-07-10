@@ -311,7 +311,7 @@ export function parseArgs(argvInput: string[]): Options {
     previewWidth: 1920,
     provider: process.env.MARKETINGCLAW_TELEGRAM_USER_CRABBOX_PROVIDER?.trim() || "aws",
     publishFullArtifacts: false,
-    publishRepo: "marketingclaw/marketingclaw",
+    publishRepo: "promisingcoder/marketingclaw",
     recordFps: 24,
     recordSeconds: 35,
     remoteCommand: [],

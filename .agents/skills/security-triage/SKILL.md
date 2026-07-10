@@ -25,7 +25,7 @@ Do not close only because `main` is fixed. If latest shipped tag or npm release 
 Before answering:
 
 1. Read `SECURITY.md`.
-2. Read the GHSA body with `gh api /repos/marketingclaw/marketingclaw/security-advisories/<GHSA>`.
+2. Read the GHSA body with `gh api /repos/promisingcoder/marketingclaw/security-advisories/<GHSA>`.
 3. Inspect the exact implicated code paths.
 4. Verify shipped state:
    - `git tag --sort=-creatordate | head`
@@ -128,14 +128,14 @@ Tell the user that the clipboard now contains the proposed response for that adv
 ## Useful Commands
 
 ```bash
-gh api /repos/marketingclaw/marketingclaw/security-advisories/<GHSA>
-gh api /repos/marketingclaw/marketingclaw/security-advisories --paginate
+gh api /repos/promisingcoder/marketingclaw/security-advisories/<GHSA>
+gh api /repos/promisingcoder/marketingclaw/security-advisories --paginate
 git tag --sort=-creatordate | head -n 20
 npm view marketingclaw version --userconfig "$(mktemp)"
 git tag --contains <commit>
 git show <tag>:<path>
-gh search issues --repo marketingclaw/marketingclaw --match title,body,comments -- "<terms>"
-gh search prs --repo marketingclaw/marketingclaw --match title,body,comments -- "<terms>"
+gh search issues --repo promisingcoder/marketingclaw --match title,body,comments -- "<terms>"
+gh search prs --repo promisingcoder/marketingclaw --match title,body,comments -- "<terms>"
 ```
 
 ## Decision Notes

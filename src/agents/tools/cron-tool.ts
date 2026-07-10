@@ -1302,7 +1302,7 @@ Use jobId canonical; id accepted compat. contextMessages (0-10) adds previous me
             // Without this, the wake gateway call goes through with no session
             // key and the system event lands on the heartbeat / main default
             // rather than the originating conversation lane. Closes the
-            // upstream half of marketingclaw/marketingclaw#46886 (#64556 — agentId/
+            // upstream half of promisingcoder/marketingclaw#46886 (#64556 — agentId/
             // sessionKey silently ignored for `action: "wake"`). Explicit
             // params on the tool call still take precedence over the inferred
             // value, so call sites can wake a different session owned by the

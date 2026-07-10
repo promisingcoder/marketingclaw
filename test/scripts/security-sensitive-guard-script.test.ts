@@ -257,7 +257,7 @@ describe("security-sensitive guard script", () => {
             headers: { "content-length": "65" },
           }),
         )) as typeof fetch,
-    }).request("/repos/marketingclaw/marketingclaw");
+    }).request("/repos/promisingcoder/marketingclaw");
 
     await expect(request).rejects.toThrow("GitHub response body exceeded 64 bytes");
     expect(GITHUB_RESPONSE_BODY_MAX_BYTES).toBeGreaterThan(64);

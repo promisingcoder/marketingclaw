@@ -151,7 +151,7 @@ describe("release candidate checklist", () => {
     const duplicateCases = [
       duplicateOption("--tag", "v2026.5.14-beta.3", "v2026.5.14-beta.4", []),
       duplicateOption("--workflow-ref", "release/a", "release/b"),
-      duplicateOption("--repo", "marketingclaw/marketingclaw", "fork/marketingclaw"),
+      duplicateOption("--repo", "promisingcoder/marketingclaw", "fork/marketingclaw"),
       duplicateOption("--full-release-run", "111", "222"),
       duplicateOption("--npm-preflight-run", "111", "222"),
       duplicateOption("--windows-node-tag", "v0.6.3", "v0.6.4"),
@@ -484,14 +484,14 @@ describe("release candidate checklist", () => {
     });
 
     await expect(
-      githubApi("repos/marketingclaw/marketingclaw/actions/runs", {
+      githubApi("repos/promisingcoder/marketingclaw/actions/runs", {
         fetchImpl,
         timeoutMs: 1234,
         token: "test-token",
       }),
     ).resolves.toEqual({ workflow_runs: [] });
     expect(fetchImpl).toHaveBeenCalledWith(
-      "https://api.github.com/repos/marketingclaw/marketingclaw/actions/runs",
+      "https://api.github.com/repos/promisingcoder/marketingclaw/actions/runs",
       expect.objectContaining({
         signal: expect.any(AbortSignal),
       }),
@@ -506,7 +506,7 @@ describe("release candidate checklist", () => {
 
     await withGithubApiTimeoutEnv("2500", async () => {
       await expect(
-        githubApi("repos/marketingclaw/marketingclaw/actions/runs", {
+        githubApi("repos/promisingcoder/marketingclaw/actions/runs", {
           fetchImpl,
           token: "test-token",
         }),
@@ -522,7 +522,7 @@ describe("release candidate checklist", () => {
 
       await withGithubApiTimeoutEnv(raw, async () => {
         await expect(
-          githubApi("repos/marketingclaw/marketingclaw/actions/runs", {
+          githubApi("repos/promisingcoder/marketingclaw/actions/runs", {
             fetchImpl,
             token: "test-token",
           }),
@@ -543,14 +543,14 @@ describe("release candidate checklist", () => {
     });
 
     await expect(
-      githubApi("repos/marketingclaw/marketingclaw/actions/runs", {
+      githubApi("repos/promisingcoder/marketingclaw/actions/runs", {
         fetchImpl,
         maxBodyBytes: 64,
         timeoutMs: 1234,
         token: "test-token",
       }),
     ).rejects.toThrow(
-      "GitHub API repos/marketingclaw/marketingclaw/actions/runs response body exceeded 64 bytes",
+      "GitHub API repos/promisingcoder/marketingclaw/actions/runs response body exceeded 64 bytes",
     );
   });
 
@@ -562,13 +562,13 @@ describe("release candidate checklist", () => {
     });
 
     await expect(
-      githubApi("repos/marketingclaw/marketingclaw/actions/runs", {
+      githubApi("repos/promisingcoder/marketingclaw/actions/runs", {
         fetchImpl,
         timeoutMs: 25,
         token: "test-token",
       }),
     ).rejects.toThrow(
-      "GitHub API repos/marketingclaw/marketingclaw/actions/runs timed out after 25ms",
+      "GitHub API repos/promisingcoder/marketingclaw/actions/runs timed out after 25ms",
     );
   });
 
@@ -578,13 +578,13 @@ describe("release candidate checklist", () => {
     });
 
     await expect(
-      githubApi("repos/marketingclaw/marketingclaw/actions/runs/123/jobs", {
+      githubApi("repos/promisingcoder/marketingclaw/actions/runs/123/jobs", {
         fetchImpl,
         timeoutMs: 5,
         token: "test-token",
       }),
     ).rejects.toThrow(
-      "GitHub API repos/marketingclaw/marketingclaw/actions/runs/123/jobs timed out after 5ms",
+      "GitHub API repos/promisingcoder/marketingclaw/actions/runs/123/jobs timed out after 5ms",
     );
   });
 });

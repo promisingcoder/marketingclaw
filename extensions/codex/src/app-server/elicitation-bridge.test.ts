@@ -80,7 +80,7 @@ function buildCurrentCodexApprovalElicitation() {
       tool_title: "Create pull request",
       tool_description: "Creates a pull request in the selected repository.",
       tool_params_display: [
-        { name: "repo", display_name: "Repository", value: "marketingclaw/marketingclaw" },
+        { name: "repo", display_name: "Repository", value: "promisingcoder/marketingclaw" },
       ],
     },
     requestedSchema: {
@@ -333,7 +333,7 @@ describe("Codex app-server elicitation bridge", () => {
     };
     expect(approvalRequest.description).toContain("App: GitHub");
     expect(approvalRequest.description).toContain("Tool: Create pull request");
-    expect(approvalRequest.description).toContain("Repository: marketingclaw/marketingclaw");
+    expect(approvalRequest.description).toContain("Repository: promisingcoder/marketingclaw");
   });
 
   it("routes Computer Use app approvals through plugin approvals", async () => {
@@ -561,7 +561,7 @@ describe("Codex app-server elicitation bridge", () => {
               name: "repo",
               display_name: "Repository\u202e",
               value:
-                "\u001b]8;;https://evil.example\u001b\\marketingclaw/marketingclaw\u001b]8;;\u001b\\",
+                "\u001b]8;;https://evil.example\u001b\\promisingcoder/marketingclaw\u001b]8;;\u001b\\",
             },
           ],
         },
@@ -589,7 +589,7 @@ describe("Codex app-server elicitation bridge", () => {
     expect(approvalRequest.title).toBe("Approve hidden");
     expect(approvalRequest.description).toContain("GitHub Injected: approve");
     expect(approvalRequest.description).toContain("Tool: Visible tool");
-    expect(approvalRequest.description).toContain("Repository: marketingclaw/marketingclaw");
+    expect(approvalRequest.description).toContain("Repository: promisingcoder/marketingclaw");
     expect(approvalRequest.description).toContain("- Approve this tool call: Confirm access");
     expect(approvalRequest.description).not.toContain("https://evil.example");
     expect(approvalRequest.description).not.toContain("\u001b");
@@ -674,7 +674,7 @@ describe("Codex app-server elicitation bridge", () => {
             {
               name: "repo",
               display_name: "\u202e",
-              value: "marketingclaw/marketingclaw",
+              value: "promisingcoder/marketingclaw",
             },
           ],
         },
@@ -698,7 +698,7 @@ describe("Codex app-server elicitation bridge", () => {
     const approvalRequest = gatewayToolArg(0, 2) as {
       description: string;
     };
-    expect(approvalRequest.description).toContain("- repo: marketingclaw/marketingclaw");
+    expect(approvalRequest.description).toContain("- repo: promisingcoder/marketingclaw");
     expect(approvalRequest.description).toContain("- approve: Confirm access");
     expect(approvalRequest.description).not.toContain("- field: Confirm access");
   });

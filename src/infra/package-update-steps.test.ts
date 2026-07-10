@@ -406,7 +406,7 @@ describe("runGlobalPackageUpdateSteps", () => {
       const prefix = path.join(base, "prefix");
       const globalRoot = path.join(prefix, "lib", "node_modules");
       const packageRoot = path.join(globalRoot, "marketingclaw");
-      const sourceSpec = "MarketingClaw@github:marketingclaw/marketingclaw#release/2026.5.12";
+      const sourceSpec = "MarketingClaw@github:promisingcoder/marketingclaw#release/2026.5.12";
       await writePackageRoot(packageRoot, "1.0.0");
 
       let packDir: string | undefined;
@@ -512,11 +512,11 @@ describe("runGlobalPackageUpdateSteps", () => {
     },
     {
       name: "GitHub shorthand",
-      sourceSpec: "marketingclaw/marketingclaw#main",
+      sourceSpec: "promisingcoder/marketingclaw#main",
     },
     {
       name: "SCP-style SSH",
-      sourceSpec: "git@github.com:marketingclaw/marketingclaw.git#main",
+      sourceSpec: "git@github.com:promisingcoder/marketingclaw.git#main",
     },
   ] as const)(
     "packs additional npm git source spec forms before install: $name",

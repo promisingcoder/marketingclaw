@@ -57,7 +57,7 @@ MarketingClaw cannot safely distinguish an old automatic pin from a user pin; ru
 to opt that plugin back into exact-core tracking.
 
 `--channel dev` gives a persistent moving GitHub `main` checkout. For a one-off
-package update, `--tag main` maps to the `github:marketingclaw/marketingclaw#main` package
+package update, `--tag main` maps to the `github:promisingcoder/marketingclaw#main` package
 spec and installs it directly through the target package manager (npm/pnpm/bun).
 
 For managed plugins, a missing beta release is a warning, not a failure: the

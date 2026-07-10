@@ -34,23 +34,23 @@ describe("gh-read helpers", () => {
   });
 
   it("finds repo from gh args", () => {
-    expect(parseRepoArg(["pr", "view", "42", "-R", "marketingclaw/marketingclaw"])).toBe(
-      "marketingclaw/marketingclaw",
+    expect(parseRepoArg(["pr", "view", "42", "-R", "promisingcoder/marketingclaw"])).toBe(
+      "promisingcoder/marketingclaw",
     );
     expect(parseRepoArg(["run", "list", "--repo=marketingclaw/docs"])).toBe("marketingclaw/docs");
     expect(parseRepoArg(["pr", "view", "42"])).toBeNull();
   });
 
   it("normalizes repo strings from common git formats", () => {
-    expect(normalizeRepo("marketingclaw/marketingclaw")).toBe("marketingclaw/marketingclaw");
+    expect(normalizeRepo("promisingcoder/marketingclaw")).toBe("promisingcoder/marketingclaw");
     expect(normalizeRepo("github.com/promisingcoder/marketingclaw")).toBe(
-      "marketingclaw/marketingclaw",
+      "promisingcoder/marketingclaw",
     );
     expect(normalizeRepo("https://github.com/promisingcoder/marketingclaw.git")).toBe(
-      "marketingclaw/marketingclaw",
+      "promisingcoder/marketingclaw",
     );
-    expect(normalizeRepo("git@github.com:marketingclaw/marketingclaw.git")).toBe(
-      "marketingclaw/marketingclaw",
+    expect(normalizeRepo("git@github.com:promisingcoder/marketingclaw.git")).toBe(
+      "promisingcoder/marketingclaw",
     );
     expect(normalizeRepo("invalid")).toBeNull();
   });

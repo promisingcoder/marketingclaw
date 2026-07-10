@@ -79,7 +79,7 @@ Notes:
 - `--tag` applies to **package (npm) installs only**; git installs ignore it.
 - The tag is not persisted; the next `marketingclaw update` uses the configured
   channel.
-- `--tag main` maps to the npm-compatible spec `github:marketingclaw/marketingclaw#main`
+- `--tag main` maps to the npm-compatible spec `github:promisingcoder/marketingclaw#main`
   for that one run. For a persistent moving `main` install, use
   `marketingclaw update --channel dev` (package installs switch to a git checkout)
   or reinstall with the installer's git method:

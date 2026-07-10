@@ -28,7 +28,7 @@ function runApprovalScript(
       DIRECT_RELEASE_RECOVERY: env.DIRECT_RELEASE_RECOVERY ?? "false",
       EXPECTED_WORKFLOW_BRANCH: env.EXPECTED_WORKFLOW_BRANCH ?? "release/2026.6.21",
       APPROVAL_PATH: env.APPROVAL_PATH ?? "",
-      GITHUB_REPOSITORY: env.GITHUB_REPOSITORY ?? "marketingclaw/marketingclaw",
+      GITHUB_REPOSITORY: env.GITHUB_REPOSITORY ?? "promisingcoder/marketingclaw",
       RELEASE_TAG: env.RELEASE_TAG ?? "v2026.6.21",
       RELEASE_PUBLISH_RUN_ID: env.RELEASE_PUBLISH_RUN_ID ?? "123",
       RELEASE_TARGET_SHA: env.RELEASE_TARGET_SHA ?? "a".repeat(40),
@@ -44,7 +44,7 @@ function writeApproval(overrides: Record<string, unknown> = {}) {
     approvalPath,
     `${JSON.stringify({
       version: 1,
-      repository: "marketingclaw/marketingclaw",
+      repository: "promisingcoder/marketingclaw",
       workflow: "MarketingClaw Release Publish",
       parentRunId: "123",
       workflowBranch: "release/2026.6.21",

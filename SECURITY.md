@@ -336,7 +336,7 @@ Example secure Docker run:
 ```bash
 docker run --read-only --cap-drop=ALL \
   -v marketingclaw-data:/app/data \
-  marketingclaw/marketingclaw:latest
+  promisingcoder/marketingclaw:latest
 ```
 
 ## Security Scanning

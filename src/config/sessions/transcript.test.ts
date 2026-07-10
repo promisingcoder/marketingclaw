@@ -1002,7 +1002,7 @@ describe("appendAssistantMessageToSessionTranscript", () => {
   });
 
   it("scans past trailing non-assistant entries (e.g. marketingclaw.cache-ttl) to find the latest assistant text", async () => {
-    // Regression for marketingclaw/marketingclaw#83427: the cache-ttl custom entry was
+    // Regression for promisingcoder/marketingclaw#83427: the cache-ttl custom entry was
     // emitted after the canonical assistant turn, and the tail reader returned
     // undefined on the first non-assistant line, so the gap-fill check in
     // persistTextTurnTranscript wrote a duplicate `api: "cli"` assistant

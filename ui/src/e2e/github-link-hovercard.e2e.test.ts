@@ -136,7 +136,7 @@ describeControlUiE2e("GitHub link hover cards", () => {
     await pullLink.hover();
     const card = page.locator(".github-link-hovercard");
     await expectText(card, "Merged");
-    await expectText(card, "marketingclaw/marketingclaw #99816");
+    await expectText(card, "promisingcoder/marketingclaw #99816");
     await expectText(card, "+101");
     await expectText(card, "−12");
     await expectText(card, "3 files");

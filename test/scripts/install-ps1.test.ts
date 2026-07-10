@@ -436,7 +436,7 @@ describe("install.ps1 failure handling", () => {
       "Test-MarketingClawSourcePackageInstallSpec",
     );
     expect(sourceTargetBody).toContain('$normalizedTag -eq "main"');
-    expect(sourceTargetBody).toContain("^github:marketingclaw/marketingclaw");
+    expect(sourceTargetBody).toContain("^github:promisingcoder/marketingclaw");
     expect(npmInstallBody).toContain(
       "Test-MarketingClawSourcePackageInstallSpec -RequestedTag $Tag",
     );

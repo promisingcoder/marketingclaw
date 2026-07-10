@@ -432,7 +432,7 @@ describe("dependency guard script", () => {
     const sameRepoPullRequest = {
       head: {
         ref: "contributor/change",
-        repo: { full_name: "marketingclaw/marketingclaw" },
+        repo: { full_name: "promisingcoder/marketingclaw" },
         sha: headSha,
       },
     };
@@ -577,7 +577,7 @@ describe("dependency guard script", () => {
 
     expect(commit).toEqual({ sha: staleSha });
     expect(calls.map((call) => `${call.api}:${call.path}`)).toEqual([
-      "base:/repos/marketingclaw/marketingclaw/contents/pnpm-lock.yaml?ref=base-sha",
+      "base:/repos/promisingcoder/marketingclaw/contents/pnpm-lock.yaml?ref=base-sha",
       "write:graphql",
     ]);
     expect(calls[1].variables).toMatchObject({
@@ -662,7 +662,7 @@ describe("dependency guard script", () => {
 
     try {
       await expect(
-        githubApi("token").request("/repos/marketingclaw/marketingclaw"),
+        githubApi("token").request("/repos/promisingcoder/marketingclaw"),
       ).rejects.toMatchObject({
         message: `403 Forbidden: GitHub error response body exceeded ${GITHUB_ERROR_BODY_MAX_BYTES} bytes`,
         status: 403,
@@ -681,7 +681,7 @@ describe("dependency guard script", () => {
             headers: { "content-length": "65" },
           }),
         )) as typeof fetch,
-    }).request("/repos/marketingclaw/marketingclaw");
+    }).request("/repos/promisingcoder/marketingclaw");
 
     await expect(request).rejects.toThrow("GitHub response body exceeded 64 bytes");
     expect(GITHUB_RESPONSE_BODY_MAX_BYTES).toBeGreaterThan(64);
@@ -702,7 +702,7 @@ describe("dependency guard script", () => {
         markFetchStarted();
         return new Promise(() => {});
       }) as typeof fetch,
-    }).request("/repos/marketingclaw/marketingclaw");
+    }).request("/repos/promisingcoder/marketingclaw");
     const rejection = expect(request).rejects.toThrow(
       /GitHub API GET \/repos\/marketingclaw\/marketingclaw exceeded timeout 5ms/u,
     );
@@ -736,7 +736,7 @@ describe("dependency guard script", () => {
           ),
         );
       }) as typeof fetch,
-    }).request("/repos/marketingclaw/marketingclaw");
+    }).request("/repos/promisingcoder/marketingclaw");
     const rejection = expect(request).rejects.toThrow(
       /GitHub API GET \/repos\/marketingclaw\/marketingclaw exceeded timeout 5ms/u,
     );

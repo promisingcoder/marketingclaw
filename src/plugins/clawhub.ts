@@ -189,7 +189,7 @@ function isTrustedSourceLinkedOfficialPackage(pkg: NonNullable<ClawHubPackageDet
     pkg.channel === "official" &&
     pkg.isOfficial &&
     pkg.verification?.tier === "source-linked" &&
-    (sourceRepo === "marketingclaw/marketingclaw" ||
+    (sourceRepo === "promisingcoder/marketingclaw" ||
       sourceRepo === "github.com/promisingcoder/marketingclaw" ||
       sourceRepo === "https://github.com/promisingcoder/marketingclaw")
   );

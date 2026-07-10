@@ -168,7 +168,7 @@ every human `Thanks @...` attribution.
   co-author is missing from that PR's `Thanks @...` credit
 - when grouped prose names a PR, that same bullet must retain every
   contributor and linked-reporter credit from its generated PR record
-- unqualified `#NNN` references resolve against `marketingclaw/marketingclaw`;
+- unqualified `#NNN` references resolve against `promisingcoder/marketingclaw`;
   cross-repository references such as `marketingclaw/imsg#141` remain literal
   text and must not be rewritten as local issue links
 - after the GitHub release or prerelease is published, verify every matching

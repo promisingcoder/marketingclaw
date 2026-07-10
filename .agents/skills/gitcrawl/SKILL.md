@@ -25,19 +25,19 @@ gitcrawl doctor --json
 Find candidates:
 
 ```bash
-gitcrawl threads marketingclaw/marketingclaw --numbers <issue-or-pr-number> --include-closed --json
-gitcrawl neighbors marketingclaw/marketingclaw --number <issue-or-pr-number> --limit 12 --json
-gitcrawl search issues "query" -R marketingclaw/marketingclaw --state open --json number,title,url
-gitcrawl clusters marketingclaw/marketingclaw --sort size --min-size 5
-gitcrawl cluster-detail marketingclaw/marketingclaw --id <cluster-id>
+gitcrawl threads promisingcoder/marketingclaw --numbers <issue-or-pr-number> --include-closed --json
+gitcrawl neighbors promisingcoder/marketingclaw --number <issue-or-pr-number> --limit 12 --json
+gitcrawl search issues "query" -R promisingcoder/marketingclaw --state open --json number,title,url
+gitcrawl clusters promisingcoder/marketingclaw --sort size --min-size 5
+gitcrawl cluster-detail promisingcoder/marketingclaw --id <cluster-id>
 ```
 
 For PR triage, start cached and go live only before mutation/merge decisions:
 
 ```bash
-gitcrawl gh pr status <number-or-url> -R marketingclaw/marketingclaw --compact
-gitcrawl gh pr view <number-or-url> -R marketingclaw/marketingclaw --json number,title,state,url,isDraft,headRef,headSha
-gitcrawl gh --live pr status <number-or-url> -R marketingclaw/marketingclaw --compact
+gitcrawl gh pr status <number-or-url> -R promisingcoder/marketingclaw --compact
+gitcrawl gh pr view <number-or-url> -R promisingcoder/marketingclaw --json number,title,state,url,isDraft,headRef,headSha
+gitcrawl gh --live pr status <number-or-url> -R promisingcoder/marketingclaw --compact
 ```
 
 Use live `gh` plus checkout proof before commenting, labeling, closing, reopening, merging, or filing a PR review:

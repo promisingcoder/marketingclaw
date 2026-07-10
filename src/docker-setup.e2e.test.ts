@@ -592,7 +592,7 @@ describe("scripts/docker/setup.sh", () => {
     const result = runDockerSetup(
       activeSandbox,
       {
-        MARKETINGCLAW_IMAGE: "ghcr.io/marketingclaw/marketingclaw:latest",
+        MARKETINGCLAW_IMAGE: "ghcr.io/promisingcoder/marketingclaw:latest",
         MARKETINGCLAW_SKIP_ONBOARDING: "1",
       },
       ["--offline"],
@@ -600,12 +600,12 @@ describe("scripts/docker/setup.sh", () => {
 
     expect(result.status).toBe(0);
     expect(result.stdout).toContain(
-      "Using preloaded Docker image: ghcr.io/marketingclaw/marketingclaw:latest",
+      "Using preloaded Docker image: ghcr.io/promisingcoder/marketingclaw:latest",
     );
 
     const lines = await readDockerLogLines(activeSandbox);
     const log = lines.join("\n");
-    expect(log).toContain("image inspect ghcr.io/marketingclaw/marketingclaw:latest");
+    expect(log).toContain("image inspect ghcr.io/promisingcoder/marketingclaw:latest");
     expect(log).not.toMatch(/^build /m);
     expect(log).not.toMatch(/^pull /m);
     expect(log).toContain("config set --batch-json");
@@ -619,19 +619,19 @@ describe("scripts/docker/setup.sh", () => {
     const result = runDockerSetup(
       activeSandbox,
       {
-        MARKETINGCLAW_IMAGE: "ghcr.io/marketingclaw/marketingclaw:offline",
-        DOCKER_STUB_MISSING_IMAGES: "ghcr.io/marketingclaw/marketingclaw:offline",
+        MARKETINGCLAW_IMAGE: "ghcr.io/promisingcoder/marketingclaw:offline",
+        DOCKER_STUB_MISSING_IMAGES: "ghcr.io/promisingcoder/marketingclaw:offline",
       },
       ["--offline"],
     );
 
     expect(result.status).not.toBe(0);
     expect(result.stderr).toContain(
-      "Offline Docker setup requires preloaded image ghcr.io/marketingclaw/marketingclaw:offline",
+      "Offline Docker setup requires preloaded image ghcr.io/promisingcoder/marketingclaw:offline",
     );
 
     const log = await readDockerLog(activeSandbox);
-    expect(log).toContain("image inspect ghcr.io/marketingclaw/marketingclaw:offline");
+    expect(log).toContain("image inspect ghcr.io/promisingcoder/marketingclaw:offline");
     expect(log).not.toMatch(/^build /m);
     expect(log).not.toMatch(/^pull /m);
     expect(log).not.toContain("up -d marketingclaw-gateway");

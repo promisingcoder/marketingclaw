@@ -2631,7 +2631,7 @@ describe("runGatewayUpdate", () => {
   });
 
   it("updates global npm installs from the GitHub main package spec", async () => {
-    const sourceSpec = "github:marketingclaw/marketingclaw#main";
+    const sourceSpec = "github:promisingcoder/marketingclaw#main";
     const { calls, result } = await runNpmGlobalUpdateCase({
       expectedInstallCommand: (argv) =>
         argv[0] === "npm" &&

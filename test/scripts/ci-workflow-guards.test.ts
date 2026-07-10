@@ -216,7 +216,7 @@ describe("ci workflow guards", () => {
     expect(workflow.jobs.preflight.needs).toContain("runner-admission");
     expect(workflow.jobs["security-fast"].needs).toContain("runner-admission");
     expect(source).toContain(
-      "cancel-in-progress: ${{ github.event_name == 'pull_request' || (github.event_name == 'push' && github.repository == 'marketingclaw/marketingclaw' && github.ref == 'refs/heads/main') }}",
+      "cancel-in-progress: ${{ github.event_name == 'pull_request' || (github.event_name == 'push' && github.repository == 'promisingcoder/marketingclaw' && github.ref == 'refs/heads/main') }}",
     );
   });
 

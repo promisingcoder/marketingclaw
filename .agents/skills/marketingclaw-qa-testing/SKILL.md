@@ -142,7 +142,7 @@ pnpm test:docker:npm-telegram-live
 - If direct Telegram env is missing locally and `op signin` blocks, prefer dispatching the manual GitHub lane because the `qa-live-shared` environment already has Convex CI credentials:
 
 ```bash
-gh workflow run "NPM Telegram Beta E2E" --repo marketingclaw/marketingclaw --ref main \
+gh workflow run "NPM Telegram Beta E2E" --repo promisingcoder/marketingclaw --ref main \
   -f package_spec=openclaw@YYYY.M.D-beta.N \
   -f package_label=openclaw@YYYY.M.D-beta.N \
   -f provider_mode=mock-openai
@@ -151,7 +151,7 @@ gh workflow run "NPM Telegram Beta E2E" --repo marketingclaw/marketingclaw --ref
 - Poll the exact run id from the dispatch URL. `gh run view --json artifacts` is not supported; list artifacts with:
 
 ```bash
-gh api repos/marketingclaw/marketingclaw/actions/runs/<run-id>/artifacts
+gh api repos/promisingcoder/marketingclaw/actions/runs/<run-id>/artifacts
 ```
 
 ## WhatsApp live credentials

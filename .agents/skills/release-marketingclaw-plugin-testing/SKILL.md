@@ -103,7 +103,7 @@ Use this when validating a release branch, beta, or candidate package:
 
 ```bash
 gh workflow run package-acceptance.yml \
-  --repo marketingclaw/marketingclaw \
+  --repo promisingcoder/marketingclaw \
   --ref main \
   -f workflow_ref=main \
   -f source=ref \

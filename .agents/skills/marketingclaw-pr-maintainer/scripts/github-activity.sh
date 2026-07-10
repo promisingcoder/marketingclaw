@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-repo="marketingclaw/marketingclaw"
+repo="promisingcoder/marketingclaw"
 months="12"
 include_global="0"
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

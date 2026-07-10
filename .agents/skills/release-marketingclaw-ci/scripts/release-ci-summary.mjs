@@ -8,7 +8,7 @@ import process from "node:process";
 import { plainGhEnv, resolvePlainGhBin } from "../../../../scripts/lib/plain-gh.mjs";
 
 const runId = process.argv[2];
-const repo = process.env.MARKETINGCLAW_RELEASE_REPO || "marketingclaw/marketingclaw";
+const repo = process.env.MARKETINGCLAW_RELEASE_REPO || "promisingcoder/marketingclaw";
 
 if (!runId) {
   console.error("usage: release-ci-summary.mjs <full-release-run-id>");

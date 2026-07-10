@@ -46,7 +46,7 @@ describe("canonical live-transport scenarios", () => {
     );
     expect(whatsappDefaultCanonicalScenarioIds("live-frontier")).toEqual(["whatsapp-help-command"]);
     expect(telegram.find(({ id }) => id === "telegram-status-command")?.regressionRefs).toEqual([
-      "marketingclaw/marketingclaw#74698",
+      "promisingcoder/marketingclaw#74698",
     ]);
   });
 

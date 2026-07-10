@@ -47,9 +47,9 @@ describe("tool mutation helpers", () => {
     ["exec", "rg -n tool-mutation src/agents"],
     [
       "exec",
-      "gh search prs --repo marketingclaw/marketingclaw tool-mutation --json number,title,state",
+      "gh search prs --repo promisingcoder/marketingclaw tool-mutation --json number,title,state",
     ],
-    ["bash", "gh pr view 123 --repo marketingclaw/marketingclaw --json title,state"],
+    ["bash", "gh pr view 123 --repo promisingcoder/marketingclaw --json title,state"],
   ])("treats read-only shell command as non-mutating: %s %s", (toolName, command) => {
     expect(isMutatingToolCall(toolName, { command })).toBe(false);
     expect(buildToolMutationState(toolName, { command }).mutatingAction).toBe(false);
@@ -103,7 +103,7 @@ describe("tool mutation helpers", () => {
     ["exec", "gh search prs bug --web=true"],
     ["exec", "gh search prs bug -w"],
     ["exec", "gh search prs bug -w=true"],
-    ["exec", "gh api --method POST repos/marketingclaw/marketingclaw/issues"],
+    ["exec", "gh api --method POST repos/promisingcoder/marketingclaw/issues"],
   ])("keeps ambiguous or mutating shell command mutating: %s %s", (toolName, command) => {
     expect(isMutatingToolCall(toolName, { command })).toBe(true);
     expect(buildToolMutationState(toolName, { command }, command).mutatingAction).toBe(true);

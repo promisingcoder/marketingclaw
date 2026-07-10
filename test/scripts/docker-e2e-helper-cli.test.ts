@@ -451,14 +451,14 @@ describe("Docker E2E helper CLIs", () => {
         "scripts/docker-e2e-rerun.mjs",
         "12345",
         "--repo",
-        "marketingclaw/marketingclaw",
+        "promisingcoder/marketingclaw",
         env,
       );
       const second = runHelper(
         "scripts/docker-e2e-rerun.mjs",
         "12345",
         "--repo",
-        "marketingclaw/marketingclaw",
+        "promisingcoder/marketingclaw",
         env,
       );
 

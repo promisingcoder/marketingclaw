@@ -52,7 +52,7 @@ function mockClawtributorsFixture() {
   const execSync = vi.fn((cmd: string) => {
     if (
       cmd ===
-      'gh api "repos/marketingclaw/marketingclaw/contributors?per_page=100&anon=1" --paginate'
+      'gh api "repos/promisingcoder/marketingclaw/contributors?per_page=100&anon=1" --paginate'
     ) {
       return `${JSON.stringify([contributor])}\n`;
     }
@@ -61,7 +61,7 @@ function mockClawtributorsFixture() {
     }
     if (
       cmd ===
-      "gh pr list -R marketingclaw/marketingclaw --state merged --limit 5000 --json author --jq '.[].author.login'"
+      "gh pr list -R promisingcoder/marketingclaw --state merged --limit 5000 --json author --jq '.[].author.login'"
     ) {
       return "";
     }

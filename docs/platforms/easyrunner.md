@@ -14,7 +14,7 @@ Compose apps and terminates HTTPS through Caddy.
 ## Before you begin
 
 - An EasyRunner server with a domain routed to it.
-- The official MarketingClaw image (`ghcr.io/marketingclaw/marketingclaw`) or your own build.
+- The official MarketingClaw image (`ghcr.io/promisingcoder/marketingclaw`) or your own build.
 - A persistent config volume for `/home/node/.marketingclaw`.
 - A persistent workspace volume for `/home/node/.marketingclaw/workspace`.
 - A strong Gateway token or password.
@@ -31,7 +31,7 @@ Create an EasyRunner app with a Compose file shaped like this:
 ```yaml
 services:
   marketingclaw:
-    image: ghcr.io/marketingclaw/marketingclaw:latest
+    image: ghcr.io/promisingcoder/marketingclaw:latest
     restart: unless-stopped
     environment:
       MARKETINGCLAW_GATEWAY_TOKEN: ${MARKETINGCLAW_GATEWAY_TOKEN}

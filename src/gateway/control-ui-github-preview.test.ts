@@ -34,8 +34,8 @@ function previewPayload(overrides: Record<string, unknown> = {}): Record<string,
     state: "closed",
     title: "fix(agents): derive conversation scope from trusted group facts",
     updated_at: "2026-07-04T09:53:55Z",
-    base: { repo: { url: "https://api.github.com/repos/marketingclaw/marketingclaw" } },
-    repository_url: "https://api.github.com/repos/marketingclaw/marketingclaw",
+    base: { repo: { url: "https://api.github.com/repos/promisingcoder/marketingclaw" } },
+    repository_url: "https://api.github.com/repos/promisingcoder/marketingclaw",
     user: {
       avatar_url: "https://avatars.githubusercontent.com/u/58493?v=4",
       login: "steipete",
@@ -124,7 +124,7 @@ describe("loadControlUiGitHubPreview", () => {
     expect(second).toEqual(first);
     expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(fetchMock.mock.calls[0]?.[0]).toBe(
-      "https://api.github.com/repos/marketingclaw/marketingclaw/pulls/99816",
+      "https://api.github.com/repos/promisingcoder/marketingclaw/pulls/99816",
     );
     const avatarRequest = fetchMock.mock.calls[1]?.[0];
     expect(avatarRequest).toBeInstanceOf(URL);

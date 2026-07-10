@@ -15,7 +15,7 @@ const nowMs = Date.parse("2026-06-17T10:55:00Z");
 const BUILD_ARTIFACTS_WORKFLOW = "Blacksmith Build Artifacts Testbox";
 const requiredCliArgs = [
   "--repo",
-  "marketingclaw/marketingclaw",
+  "promisingcoder/marketingclaw",
   "--sha",
   sha,
   "--pr",
@@ -33,7 +33,7 @@ function successfulRun(name: string, id: number, updatedAt: string) {
     conclusion: "success",
     head_sha: sha,
     head_branch: "codex/clean-expanded-tool-calls",
-    head_repository: { full_name: "marketingclaw/marketingclaw" },
+    head_repository: { full_name: "promisingcoder/marketingclaw" },
     pull_requests: [{ number: pr }],
     path: ".github/workflows/ci.yml",
     created_at: "2026-06-17T10:46:24Z",
@@ -597,14 +597,14 @@ describe("verify-pr-hosted-gates", () => {
 
   it("parses required CLI arguments", () => {
     expect(parseArgs(requiredCliArgs)).toEqual({
-      repo: "marketingclaw/marketingclaw",
+      repo: "promisingcoder/marketingclaw",
       sha,
       pr,
       recentSha: "",
       output: ".local/gates-hosted-checks.json",
       changelogOnly: false,
     });
-    expect(() => parseArgs(["--repo", "marketingclaw/marketingclaw"])).toThrow("Usage:");
+    expect(() => parseArgs(["--repo", "promisingcoder/marketingclaw"])).toThrow("Usage:");
     expect(() => parseArgs(requiredCliArgs.with(1, "-h"))).toThrow("Expected --repo <value>.");
     expect(() => parseArgs(requiredCliArgs.with(3, "-h"))).toThrow("Expected --sha <value>.");
     expect(() => parseArgs(requiredCliArgs.with(5, "zero"))).toThrow(
@@ -641,13 +641,13 @@ describe("verify-pr-hosted-gates", () => {
   it("queries the target and recorded pre-rebase SHAs", () => {
     const previousSha = "8d86c44c6144f8f726a460914cddb8c9c201f119";
     expect(
-      workflowRunQueryPaths("marketingclaw/marketingclaw", {
+      workflowRunQueryPaths("promisingcoder/marketingclaw", {
         sha,
         recentSha: previousSha,
       }),
     ).toEqual([
-      `repos/marketingclaw/marketingclaw/actions/runs?head_sha=${sha}&per_page=100&page=1`,
-      `repos/marketingclaw/marketingclaw/actions/runs?head_sha=${previousSha}&per_page=100&page=1`,
+      `repos/promisingcoder/marketingclaw/actions/runs?head_sha=${sha}&per_page=100&page=1`,
+      `repos/promisingcoder/marketingclaw/actions/runs?head_sha=${previousSha}&per_page=100&page=1`,
     ]);
     expect(HOSTED_GATE_MAX_AGE_HOURS).toBe(24);
   });

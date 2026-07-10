@@ -18,10 +18,10 @@ Use this skill for maintainer-facing GitHub workflow, not for ordinary code chan
 Common read-only path:
 
 ```bash
-gitcrawl threads marketingclaw/marketingclaw --numbers <issue-or-pr-number> --include-closed --json
-gitcrawl neighbors marketingclaw/marketingclaw --number <issue-or-pr-number> --limit 12 --json
-gitcrawl search marketingclaw/marketingclaw --query "<scope or title keywords>" --mode hybrid --json
-gitcrawl cluster-detail marketingclaw/marketingclaw --id <cluster-id> --member-limit 20 --body-chars 280 --json
+gitcrawl threads promisingcoder/marketingclaw --numbers <issue-or-pr-number> --include-closed --json
+gitcrawl neighbors promisingcoder/marketingclaw --number <issue-or-pr-number> --limit 12 --json
+gitcrawl search promisingcoder/marketingclaw --query "<scope or title keywords>" --mode hybrid --json
+gitcrawl cluster-detail promisingcoder/marketingclaw --id <cluster-id> --member-limit 20 --body-chars 280 --json
 ```
 
 ## Claim specific review targets
@@ -41,7 +41,7 @@ When a maintainer asks Codex to review, triage, fix, or land a specific Marketin
 Assignment time proof:
 
 ```bash
-gh api "repos/marketingclaw/marketingclaw/issues/<number>/timeline" --paginate \
+gh api "repos/promisingcoder/marketingclaw/issues/<number>/timeline" --paginate \
   -H "Accept: application/vnd.github+json" \
   --jq '[.[] | select(.event=="assigned") | {assignee:.assignee.login, assigner:.assigner.login, actor:.actor.login, created_at}]'
 ```
@@ -51,7 +51,7 @@ Use the newest `assigned` event for each current assignee. Issue timeline events
 Claim command for issues or PRs:
 
 ```bash
-gh api -X POST "repos/marketingclaw/marketingclaw/issues/<number>/assignees" -f 'assignees[]=<login>' >/dev/null
+gh api -X POST "repos/promisingcoder/marketingclaw/issues/<number>/assignees" -f 'assignees[]=<login>' >/dev/null
 ```
 
 ## Surface opener identity
@@ -264,16 +264,16 @@ If the best-fix answer is only "maybe", keep reading or state the missing eviden
 ## Search broadly before deciding
 
 - Prefer `gitcrawl` first. Then use targeted GitHub keyword search to verify gaps, live status, comments, and candidates not present in the local store.
-- Use `--repo marketingclaw/marketingclaw` with `--match title,body` first when using `gh search`.
+- Use `--repo promisingcoder/marketingclaw` with `--match title,body` first when using `gh search`.
 - Add `--match comments` when triaging follow-up discussion or closed-as-duplicate chains.
 - Do not stop at the first 500 results when the task requires a full search.
 
 Examples:
 
 ```bash
-gh search prs --repo marketingclaw/marketingclaw --match title,body --limit 50 -- "auto-update"
-gh search issues --repo marketingclaw/marketingclaw --match title,body --limit 50 -- "auto-update"
-gh search issues --repo marketingclaw/marketingclaw --match title,body --limit 50 \
+gh search prs --repo promisingcoder/marketingclaw --match title,body --limit 50 -- "auto-update"
+gh search issues --repo promisingcoder/marketingclaw --match title,body --limit 50 -- "auto-update"
+gh search issues --repo promisingcoder/marketingclaw --match title,body --limit 50 \
   --json number,title,state,url,updatedAt -- "auto update" \
   --jq '.[] | "\(.number) | \(.state) | \(.title) | \(.url)"'
 ```

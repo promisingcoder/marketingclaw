@@ -1049,7 +1049,7 @@ describe("installPluginFromClawHub", () => {
         updatedAt: 0,
         verification: {
           tier: "source-linked",
-          sourceRepo: "marketingclaw/marketingclaw",
+          sourceRepo: "promisingcoder/marketingclaw",
         },
       },
     });

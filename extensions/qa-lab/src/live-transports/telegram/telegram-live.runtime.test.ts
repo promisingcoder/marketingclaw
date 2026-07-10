@@ -729,7 +729,7 @@ describe("telegram live qa runtime", () => {
     const catalog = testing.listTelegramQaScenarioCatalog("mock-openai");
     const streamSingle = requireScenario(catalog, "telegram-stream-final-single-message");
     expect(streamSingle.defaultEnabled).toBe(false);
-    expect(streamSingle.regressionRefs).toEqual(["marketingclaw/marketingclaw#39905"]);
+    expect(streamSingle.regressionRefs).toEqual(["promisingcoder/marketingclaw#39905"]);
   });
 
   it("tracks Telegram live coverage against the shared transport contract", () => {

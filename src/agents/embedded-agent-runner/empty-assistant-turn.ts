@@ -20,7 +20,7 @@ type UsageFieldMap = {
 };
 
 // Upstream agent runtimes should normalize Anthropic zero-token empty `stop`
-// turns before MarketingClaw sees them. Downstream: marketingclaw/marketingclaw#71880.
+// turns before MarketingClaw sees them. Downstream: promisingcoder/marketingclaw#71880.
 function readFiniteTokenCount(value: unknown): number | undefined {
   return asFiniteNumber(value);
 }

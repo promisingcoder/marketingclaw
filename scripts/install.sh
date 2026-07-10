@@ -2775,13 +2775,13 @@ is_marketingclaw_source_package_install_spec() {
     normalized_value="${normalized_value#marketingclaw@}"
 
     [[ "$normalized_value" == "main" ]] && return 0
-    [[ "$normalized_value" =~ ^github:marketingclaw/marketingclaw($|[#/]) ]] && return 0
+    [[ "$normalized_value" =~ ^github:promisingcoder/marketingclaw($|[#/]) ]] && return 0
 
     normalized_value="${normalized_value#git+}"
-    [[ "$normalized_value" =~ ^https?://github\.com/marketingclaw/marketingclaw(\.git)?($|[?#]) ]] && return 0
-    [[ "$normalized_value" =~ ^ssh://git@github\.com[:/]marketingclaw/marketingclaw(\.git)?($|[?#]) ]] && return 0
-    [[ "$normalized_value" =~ ^git://github\.com/marketingclaw/marketingclaw(\.git)?($|[?#]) ]] && return 0
-    [[ "$normalized_value" =~ ^git@github\.com:marketingclaw/marketingclaw(\.git)?($|[?#]) ]] && return 0
+    [[ "$normalized_value" =~ ^https?://github\.com/promisingcoder/marketingclaw(\.git)?($|[?#]) ]] && return 0
+    [[ "$normalized_value" =~ ^ssh://git@github\.com[:/]promisingcoder/marketingclaw(\.git)?($|[?#]) ]] && return 0
+    [[ "$normalized_value" =~ ^git://github\.com/promisingcoder/marketingclaw(\.git)?($|[?#]) ]] && return 0
+    [[ "$normalized_value" =~ ^git@github\.com:promisingcoder/marketingclaw(\.git)?($|[?#]) ]] && return 0
     return 1
 }
 
@@ -2807,7 +2807,7 @@ resolve_package_install_spec() {
     local normalized_value=""
     normalized_value="$(to_lowercase_ascii "$value")"
     if [[ "$normalized_value" == "main" ]]; then
-        echo "github:marketingclaw/marketingclaw#main"
+        echo "github:promisingcoder/marketingclaw#main"
         return 0
     fi
     if is_explicit_package_install_spec "$value"; then

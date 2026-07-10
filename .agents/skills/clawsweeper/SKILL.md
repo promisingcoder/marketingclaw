@@ -61,7 +61,7 @@ Use the lister:
 pnpm commit-reports -- --since 6h
 pnpm commit-reports -- --since "24 hours ago" --findings
 pnpm commit-reports -- --since 7d --non-clean
-pnpm commit-reports -- --repo marketingclaw/marketingclaw --author steipete --since 7d
+pnpm commit-reports -- --repo promisingcoder/marketingclaw --author steipete --since 7d
 pnpm commit-reports -- --since 24h --json
 ```
 
@@ -72,7 +72,7 @@ Manual rerun/backfill:
 
 ```bash
 gh workflow run commit-review.yml --repo marketingclaw/clawsweeper \
-  -f target_repo=marketingclaw/marketingclaw \
+  -f target_repo=promisingcoder/marketingclaw \
   -f commit_sha=<end-sha> \
   -f before_sha=<start-or-parent-sha> \
   -f create_checks=false \
@@ -116,7 +116,7 @@ Create a job from issue/PR refs and a maintainer prompt:
 
 ```bash
 pnpm run repair:create-job -- \
-  --repo marketingclaw/marketingclaw \
+  --repo promisingcoder/marketingclaw \
   --refs 123,456 \
   --prompt-file /tmp/clawsweeper-prompt.md
 ```
@@ -234,8 +234,8 @@ comments are ignored without a reply.
 Run router manually:
 
 ```bash
-pnpm run repair:comment-router -- --repo marketingclaw/marketingclaw --lookback-minutes 180
-pnpm run repair:comment-router -- --repo marketingclaw/marketingclaw --execute --wait-for-capacity
+pnpm run repair:comment-router -- --repo promisingcoder/marketingclaw --lookback-minutes 180
+pnpm run repair:comment-router -- --repo promisingcoder/marketingclaw --execute --wait-for-capacity
 ```
 
 Scheduled routing stays dry unless
@@ -314,14 +314,14 @@ gh run list --repo marketingclaw/clawsweeper --workflow "repair comment router" 
 Target dispatcher:
 
 ```bash
-gh run list --repo marketingclaw/marketingclaw --workflow "ClawSweeper Dispatch" \
+gh run list --repo promisingcoder/marketingclaw --workflow "ClawSweeper Dispatch" \
   --event push --limit 8 --json databaseId,displayTitle,event,status,conclusion,headSha,url
 ```
 
 Target commit check:
 
 ```bash
-gh api "repos/marketingclaw/marketingclaw/commits/<sha>/check-runs?per_page=100" \
+gh api "repos/promisingcoder/marketingclaw/commits/<sha>/check-runs?per_page=100" \
   --jq '.check_runs[] | select(.name=="ClawSweeper Commit Review") | [.status,.conclusion,.details_url] | @tsv'
 ```
 

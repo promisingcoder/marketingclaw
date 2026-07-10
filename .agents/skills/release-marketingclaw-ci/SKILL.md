@@ -69,7 +69,7 @@ parallel with other release work:
 
 ```bash
 gh workflow run marketingclaw-performance.yml \
-  --repo marketingclaw/marketingclaw \
+  --repo promisingcoder/marketingclaw \
   --ref main \
   -f target_ref=<release-sha> \
   -f profile=release \
@@ -100,7 +100,7 @@ Prefer the trusted workflow on `main`, target the exact release SHA:
 
 ```bash
 gh workflow run full-release-validation.yml \
-  --repo marketingclaw/marketingclaw \
+  --repo promisingcoder/marketingclaw \
   --ref main \
   -f ref=<release-sha> \
   -f provider=openai \
@@ -125,7 +125,7 @@ node .agents/skills/release-marketingclaw-ci/scripts/release-ci-summary.mjs <ful
 Then watch only when useful:
 
 ```bash
-gh run watch <full-release-run-id> --repo marketingclaw/marketingclaw --exit-status
+gh run watch <full-release-run-id> --repo promisingcoder/marketingclaw --exit-status
 ```
 
 Stop watchers before ending the turn or switching strategy.
@@ -135,7 +135,7 @@ Stop watchers before ending the turn or switching strategy.
 1. Confirm parent SHA and child run IDs.
 2. List failed jobs only:
    ```bash
-   gh run view <child-run-id> --repo marketingclaw/marketingclaw --json jobs \
+   gh run view <child-run-id> --repo promisingcoder/marketingclaw --json jobs \
      --jq '.jobs[] | select(.conclusion=="failure" or .conclusion=="timed_out" or .conclusion=="cancelled") | [.databaseId,.name,.conclusion,.url] | @tsv'
    ```
 3. Fetch one failed job log. If rate-limited, note reset time and avoid more REST calls.
@@ -148,7 +148,7 @@ Stop watchers before ending the turn or switching strategy.
 7. If a required PR CI run is capacity-stalled with queued jobs and no active
    jobs, do not cancel unrelated work or accept a generic manual dispatch.
    From the PR head branch, dispatch the explicit exact-SHA fallback:
-   `gh workflow run ci.yml --repo marketingclaw/marketingclaw --ref <pr-head-branch> -f
+   `gh workflow run ci.yml --repo promisingcoder/marketingclaw --ref <pr-head-branch> -f
 target_ref=<full-pr-sha> -f include_android=true -f release_gate=true`.
    It runs on GitHub-hosted runners and is accepted only when its run title is
    `CI release gate <full-pr-sha>`. Record the stalled Blacksmith run and the

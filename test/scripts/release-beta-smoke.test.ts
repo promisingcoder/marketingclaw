@@ -134,7 +134,7 @@ describe("release-beta-smoke", () => {
     const sleeps: number[] = [];
 
     await expect(
-      pollRun("marketingclaw/marketingclaw", "123", {
+      pollRun("promisingcoder/marketingclaw", "123", {
         now: () => now,
         pollIntervalMs: 400,
         readRun: () => ({
@@ -155,7 +155,7 @@ describe("release-beta-smoke", () => {
 
   it("returns when the Telegram workflow succeeds", async () => {
     await expect(
-      pollRun("marketingclaw/marketingclaw", "123", {
+      pollRun("promisingcoder/marketingclaw", "123", {
         readRun: () => ({
           conclusion: "success",
           html_url: "https://github.com/promisingcoder/marketingclaw/actions/runs/123",

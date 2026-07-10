@@ -811,7 +811,7 @@ describe("marketingclaw launcher", () => {
     expect(result.stderr).toContain("missing dist/entry.(m)js");
     expect(result.stderr).toContain("unbuilt source tree or GitHub source archive");
     expect(result.stderr).toContain("pnpm install && pnpm build");
-    expect(result.stderr).toContain("github:marketingclaw/marketingclaw#<ref>");
+    expect(result.stderr).toContain("github:promisingcoder/marketingclaw#<ref>");
   });
 
   it("keeps compile cache off for source-checkout launchers", async () => {

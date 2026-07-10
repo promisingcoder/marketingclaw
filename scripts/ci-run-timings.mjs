@@ -5,7 +5,7 @@ import { execFileSync } from "node:child_process";
 import { parsePositiveInt } from "./lib/numeric-options.mjs";
 import { execPlainGh } from "./lib/plain-gh.mjs";
 
-const DEFAULT_GITHUB_REPOSITORY = "marketingclaw/marketingclaw";
+const DEFAULT_GITHUB_REPOSITORY = "promisingcoder/marketingclaw";
 const RUN_JOBS_PAGE_SIZE = 20;
 const RUN_JOBS_MAX_PAGES = 25;
 const GH_JSON_RETRY_DELAYS_MS = [1_000, 3_000, 6_000];

@@ -1086,7 +1086,7 @@ describe("failover-error", () => {
   });
 
   it("403 OpenRouter 'Key limit exceeded' returns billing (model fallback trigger)", () => {
-    // GitHub: marketingclaw/marketingclaw#53849 — OpenRouter returns 403 with "Key limit exceeded"
+    // GitHub: promisingcoder/marketingclaw#53849 — OpenRouter returns 403 with "Key limit exceeded"
     // when the monthly key spending limit is reached. This must trigger billing failover
     // (model fallback), not generic auth.
     expect(

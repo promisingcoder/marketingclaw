@@ -152,7 +152,7 @@ read_remote_testbox_gate_run_url() {
   local expected_repo="${pr_url#https://github.com/}"
   expected_repo="${expected_repo%%/pull/*}"
   if [ -z "$expected_repo" ] || [ "$expected_repo" = "$pr_url" ]; then
-    expected_repo="marketingclaw/marketingclaw"
+    expected_repo="promisingcoder/marketingclaw"
   fi
   local url_prefix="https://github.com/$expected_repo/actions/runs/"
   local marker="GitHub Actions run: $url_prefix"

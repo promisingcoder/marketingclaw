@@ -11,7 +11,7 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { spawnPlainGh } from "../../../../scripts/lib/plain-gh.mjs";
 
-const REPO = "marketingclaw/marketingclaw";
+const REPO = "promisingcoder/marketingclaw";
 const REPO_URL = `https://github.com/${REPO}`;
 
 // ─── Helpers ────────────────────────────────────────────────────────────────

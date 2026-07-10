@@ -81,8 +81,8 @@ describe("verify-docker-attestations", () => {
   });
 
   it("resolves digest refs from tagged image refs", () => {
-    expect(imageRefForDigest("ghcr.io/marketingclaw/marketingclaw:2026.4.26", imageDigest)).toBe(
-      `ghcr.io/marketingclaw/marketingclaw@${imageDigest}`,
+    expect(imageRefForDigest("ghcr.io/promisingcoder/marketingclaw:2026.4.26", imageDigest)).toBe(
+      `ghcr.io/promisingcoder/marketingclaw@${imageDigest}`,
     );
     expect(imageRefForDigest("localhost:5000/marketingclaw:main", imageDigest)).toBe(
       `localhost:5000/marketingclaw@${imageDigest}`,
@@ -91,7 +91,7 @@ describe("verify-docker-attestations", () => {
 
   it("accepts an image index with SBOM and provenance predicates", () => {
     const errors = collectDockerAttestationErrors({
-      imageRef: "ghcr.io/marketingclaw/marketingclaw:test",
+      imageRef: "ghcr.io/promisingcoder/marketingclaw:test",
       index: createIndex(),
       requiredPlatforms: [parsePlatform("linux/amd64")],
       inspectAttestation: () => createAttestation(),
@@ -102,7 +102,7 @@ describe("verify-docker-attestations", () => {
 
   it("accepts attestation manifests with omitted artifactType", () => {
     const errors = collectDockerAttestationErrors({
-      imageRef: "ghcr.io/marketingclaw/marketingclaw:test",
+      imageRef: "ghcr.io/promisingcoder/marketingclaw:test",
       index: createIndex(),
       requiredPlatforms: [parsePlatform("linux/amd64")],
       inspectAttestation: () => {
@@ -117,7 +117,7 @@ describe("verify-docker-attestations", () => {
 
   it("reports unexpected attestation artifact types", () => {
     const errors = collectDockerAttestationErrors({
-      imageRef: "ghcr.io/marketingclaw/marketingclaw:test",
+      imageRef: "ghcr.io/promisingcoder/marketingclaw:test",
       index: createIndex(),
       requiredPlatforms: [parsePlatform("linux/amd64")],
       inspectAttestation: () => ({
@@ -127,7 +127,7 @@ describe("verify-docker-attestations", () => {
     });
 
     expect(errors).toEqual([
-      `ghcr.io/marketingclaw/marketingclaw:test: linux/amd64 attestation ${attestationDigest} has unexpected artifactType "application/vnd.unknown"`,
+      `ghcr.io/promisingcoder/marketingclaw:test: linux/amd64 attestation ${attestationDigest} has unexpected artifactType "application/vnd.unknown"`,
     ]);
   });
 
@@ -136,27 +136,27 @@ describe("verify-docker-attestations", () => {
     index.manifests = index.manifests.slice(0, 1);
 
     const errors = collectDockerAttestationErrors({
-      imageRef: "ghcr.io/marketingclaw/marketingclaw:test",
+      imageRef: "ghcr.io/promisingcoder/marketingclaw:test",
       index,
       requiredPlatforms: [parsePlatform("linux/amd64")],
       inspectAttestation: () => createAttestation(),
     });
 
     expect(errors).toEqual([
-      "ghcr.io/marketingclaw/marketingclaw:test: missing attestation manifest for linux/amd64",
+      "ghcr.io/promisingcoder/marketingclaw:test: missing attestation manifest for linux/amd64",
     ]);
   });
 
   it("reports missing SBOM or provenance predicates", () => {
     const errors = collectDockerAttestationErrors({
-      imageRef: "ghcr.io/marketingclaw/marketingclaw:test",
+      imageRef: "ghcr.io/promisingcoder/marketingclaw:test",
       index: createIndex(),
       requiredPlatforms: [parsePlatform("linux/amd64")],
       inspectAttestation: () => createAttestation(["https://spdx.dev/Document"]),
     });
 
     expect(errors).toEqual([
-      "ghcr.io/marketingclaw/marketingclaw:test: linux/amd64 missing predicate https://slsa.dev/provenance/v1",
+      "ghcr.io/promisingcoder/marketingclaw:test: linux/amd64 missing predicate https://slsa.dev/provenance/v1",
     ]);
   });
 });

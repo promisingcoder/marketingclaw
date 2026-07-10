@@ -9,15 +9,15 @@ Generated locale trees and live translation memory now live in the publish repo:
 
 ## Source of truth
 
-- English docs are authored in `marketingclaw/marketingclaw`.
+- English docs are authored in `promisingcoder/marketingclaw`.
 - The source docs tree lives under `docs/`.
 - The source repo no longer keeps committed generated locale trees such as `docs/zh-CN/**`, `docs/zh-TW/**`, `docs/ja-JP/**`, `docs/es/**`, `docs/pt-BR/**`, `docs/ko/**`, `docs/de/**`, `docs/fr/**`, `docs/hi/**`, `docs/ar/**`, `docs/it/**`, `docs/vi/**`, `docs/nl/**`, `docs/fa/**`, `docs/ru/**`, `docs/tr/**`, `docs/uk/**`, `docs/id/**`, `docs/pl/**`, or `docs/th/**`.
 
 ## End-to-end flow
 
-1. Edit English docs in `marketingclaw/marketingclaw`.
+1. Edit English docs in `promisingcoder/marketingclaw`.
 2. Push to `main`.
-3. `marketingclaw/marketingclaw/.github/workflows/docs-sync-publish.yml` mirrors the docs tree into `marketingclaw/docs`.
+3. `promisingcoder/marketingclaw/.github/workflows/docs-sync-publish.yml` mirrors the docs tree into `marketingclaw/docs`.
 4. The sync script rewrites the publish `docs/docs.json` so the generated locale picker blocks exist there even though they are no longer committed in the source repo.
 5. `marketingclaw/docs/.github/workflows/translate-all.yml` waits for `main` to settle, translates only stale or missing locale pages, and uploads per-locale artifacts.
 6. The publish repo finalizer applies successful locale artifacts and pushes one aggregate `chore(i18n): refresh translations` commit.

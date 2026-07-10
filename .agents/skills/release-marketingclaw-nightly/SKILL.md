@@ -177,12 +177,12 @@ SHA="$(git rev-parse HEAD)"
 TAG="v$(node -p "require('./package.json').version")"
 BRANCH="$(git branch --show-current)"
 
-"$GH" workflow run full-release-validation.yml --repo marketingclaw/marketingclaw --ref "$BRANCH" \
+"$GH" workflow run full-release-validation.yml --repo promisingcoder/marketingclaw --ref "$BRANCH" \
   -f ref="$BRANCH" \
   -f release_profile=beta \
   -f rerun_group=all
 
-"$GH" workflow run marketingclaw-npm-release.yml --repo marketingclaw/marketingclaw --ref "$BRANCH" \
+"$GH" workflow run marketingclaw-npm-release.yml --repo promisingcoder/marketingclaw --ref "$BRANCH" \
   -f tag="$SHA" \
   -f preflight_only=true \
   -f npm_dist_tag=alpha
@@ -202,7 +202,7 @@ git push origin "$TAG"
 8. Dispatch the publish wrapper from the same alpha branch. Use the successful npm preflight run ID and full release validation run ID from the same head SHA:
 
 ```bash
-"$GH" workflow run marketingclaw-release-publish.yml --repo marketingclaw/marketingclaw --ref "$BRANCH" \
+"$GH" workflow run marketingclaw-release-publish.yml --repo promisingcoder/marketingclaw --ref "$BRANCH" \
   -f tag="$TAG" \
   -f preflight_run_id="$NPM_PREFLIGHT_RUN_ID" \
   -f full_release_validation_run_id="$FULL_RELEASE_VALIDATION_RUN_ID" \

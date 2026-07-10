@@ -1022,7 +1022,7 @@ describe("imessage message actions", () => {
     it("rejects reply + attachment when imsg does not advertise send-rich --file", async () => {
       // Older imsg builds reject `--file` on send-rich, so refuse loudly
       // here rather than letting send-rich ship the text alone and silently
-      // drop the attachment (the original marketingclaw/marketingclaw#79822 symptom).
+      // drop the attachment (the original promisingcoder/marketingclaw#79822 symptom).
       probeMock.getCachedIMessagePrivateApiStatus.mockReturnValue({
         available: true,
         v2Ready: true,

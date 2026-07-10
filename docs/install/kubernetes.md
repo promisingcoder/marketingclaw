@@ -136,7 +136,7 @@ MARKETINGCLAW_NAMESPACE=my-namespace ./scripts/k8s/deploy.sh
 Edit the `image` field in `scripts/k8s/manifests/deployment.yaml`:
 
 ```yaml
-image: ghcr.io/marketingclaw/marketingclaw:slim # primary; official Docker Hub mirror: marketingclaw/marketingclaw
+image: ghcr.io/promisingcoder/marketingclaw:slim # primary; official Docker Hub mirror: promisingcoder/marketingclaw
 ```
 
 ### Expose beyond port-forward

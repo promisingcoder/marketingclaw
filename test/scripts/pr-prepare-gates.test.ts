@@ -419,7 +419,7 @@ describe("prepare gate stamp transitions", () => {
   it("forwards only the recorded pre-rebase SHA as recent evidence", () => {
     const result = runGatesBash(
       [
-        "gh() { if [ \"$1\" = pr ]; then printf 'deadbeef\\n'; else printf 'marketingclaw/marketingclaw\\n'; fi; }",
+        "gh() { if [ \"$1\" = pr ]; then printf 'deadbeef\\n'; else printf 'promisingcoder/marketingclaw\\n'; fi; }",
         "run_quiet_logged() { printf 'ARG:%s\\n' \"$@\"; }",
         "run_hosted_prepare_gates 100606 deadbeef false cafebabe",
       ].join("\n"),

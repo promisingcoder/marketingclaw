@@ -1020,7 +1020,7 @@ function Test-MarketingClawSourcePackageInstallSpec {
     if ($normalizedTag -eq "main") {
         return $true
     }
-    if ($normalizedTag -match '^github:marketingclaw/marketingclaw($|[#/])') {
+    if ($normalizedTag -match '^github:promisingcoder/marketingclaw($|[#/])') {
         return $true
     }
 
@@ -1028,10 +1028,10 @@ function Test-MarketingClawSourcePackageInstallSpec {
         $normalizedTag = $normalizedTag.Substring("git+".Length)
     }
     return (
-        $normalizedTag -match '^https?://github\.com/marketingclaw/marketingclaw(\.git)?($|[?#])' -or
-        $normalizedTag -match '^ssh://git@github\.com[:/]marketingclaw/marketingclaw(\.git)?($|[?#])' -or
-        $normalizedTag -match '^git://github\.com/marketingclaw/marketingclaw(\.git)?($|[?#])' -or
-        $normalizedTag -match '^git@github\.com:marketingclaw/marketingclaw(\.git)?($|[?#])'
+        $normalizedTag -match '^https?://github\.com/promisingcoder/marketingclaw(\.git)?($|[?#])' -or
+        $normalizedTag -match '^ssh://git@github\.com[:/]promisingcoder/marketingclaw(\.git)?($|[?#])' -or
+        $normalizedTag -match '^git://github\.com/promisingcoder/marketingclaw(\.git)?($|[?#])' -or
+        $normalizedTag -match '^git@github\.com:promisingcoder/marketingclaw(\.git)?($|[?#])'
     )
 }
 

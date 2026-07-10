@@ -34,7 +34,7 @@ Before changing CI, collect current pressure:
 
 ```bash
 ghx api rate_limit --jq '{core:.resources.core,graphql:.resources.graphql,search:.resources.search,actions_runner_registration:.resources.actions_runner_registration}'
-ghx run list -R marketingclaw/marketingclaw --limit 20 --json databaseId,status,conclusion,workflowName,event,headBranch,createdAt,updatedAt,url
+ghx run list -R promisingcoder/marketingclaw --limit 20 --json databaseId,status,conclusion,workflowName,event,headBranch,createdAt,updatedAt,url
 ghx run list -R marketingclaw/clawsweeper --limit 20 --json databaseId,status,conclusion,workflowName,event,headBranch,createdAt,updatedAt,url
 curl -fsS https://clawsweeper.marketingclaw.ai/api/status | jq '{generated_at,fleet,diagnostics:{errors:.diagnostics.errors}}'
 curl -fsS https://clawsweeper.marketingclaw.ai/api/exact-review-queue | jq '.'
@@ -160,7 +160,7 @@ For a PR before requesting maintainer approval:
 
 ```bash
 .agents/skills/autoreview/scripts/autoreview --mode branch --base origin/main
-ghx pr checks <pr> -R marketingclaw/marketingclaw --watch --interval 15
+ghx pr checks <pr> -R promisingcoder/marketingclaw --watch --interval 15
 ```
 
 Use hosted exact-head gates for CI workflow tuning. Do not burn local
@@ -185,7 +185,7 @@ land the PR. Both commands mutate GitHub state.
 After merge, watch at least one fresh main cycle and the adjacent repos:
 
 ```bash
-ghx run list -R marketingclaw/marketingclaw --limit 20 --json databaseId,status,conclusion,workflowName,event,headBranch,createdAt,updatedAt,url
+ghx run list -R promisingcoder/marketingclaw --limit 20 --json databaseId,status,conclusion,workflowName,event,headBranch,createdAt,updatedAt,url
 for repo in marketingclaw/clawsweeper marketingclaw/clawhub marketingclaw/clownfish marketingclaw/marketingclaw-rtt marketingclaw/clawbench; do
   ghx run list -R "$repo" --limit 12 --json databaseId,status,conclusion,workflowName,event,headBranch,createdAt,updatedAt,url
 done

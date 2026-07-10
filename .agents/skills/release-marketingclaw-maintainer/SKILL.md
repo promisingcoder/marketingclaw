@@ -110,7 +110,7 @@ Use this skill for release and publish-time workflow. Load `$release-private` if
 - If an exact PR-head CI run has no active jobs because Blacksmith capacity is
   stalled, a maintainer may dispatch the explicit GitHub-hosted fallback from
   the PR head branch:
-  `gh workflow run ci.yml --repo marketingclaw/marketingclaw --ref <pr-head-branch> -f
+  `gh workflow run ci.yml --repo promisingcoder/marketingclaw --ref <pr-head-branch> -f
 target_ref=<full-pr-sha> -f include_android=true -f release_gate=true`.
   Use it only for an observed provider queue stall, never for failed CI or as a
   routine shortcut. The run must be named `CI release gate <full-pr-sha>` and
@@ -225,7 +225,7 @@ Stable publication is not complete until `main` carries the actual shipped relea
 - Stable Windows Hub release closeout requires the signed
   `MarketingClawCompanion-Setup-x64.exe`, `MarketingClawCompanion-Setup-arm64.exe`, and
   `MarketingClawCompanion-SHA256SUMS.txt` assets on the canonical
-  `marketingclaw/marketingclaw` GitHub Release. Pass the exact signed
+  `promisingcoder/marketingclaw` GitHub Release. Pass the exact signed
   `marketingclaw/marketingclaw-windows-node` release tag as `windows_node_tag` to
   `MarketingClaw Release Publish`, together with the candidate-approved
   `windows_node_installer_digests` map; it prevalidates the published source
@@ -241,7 +241,7 @@ Stable publication is not complete until `main` carries the actual shipped relea
   `MarketingClawCompanion-*` target asset names, then replaces the expected contract
   assets with the pinned source bytes.
 - Website Windows Hub download links should target exact canonical
-  `marketingclaw/marketingclaw/releases/download/vYYYY.M.PATCH/...` assets for the current
+  `promisingcoder/marketingclaw/releases/download/vYYYY.M.PATCH/...` assets for the current
   stable release, or `releases/latest/download/...` only after verifying the
   redirect resolves to that same tag, so the installable signed Windows artifact
   is visible from both the GitHub release page and marketingclaw.ai.
@@ -315,10 +315,10 @@ Stable publication is not complete until `main` carries the actual shipped relea
   complete matching changelog body.
 - To update an existing GitHub Release body, resolve the numeric release id and
   patch that resource with the notes file as the `body` field:
-  `gh api repos/marketingclaw/marketingclaw/releases/tags/vYYYY.M.PATCH --jq .id`, then
-  `gh api -X PATCH repos/marketingclaw/marketingclaw/releases/<id> -F body=@/tmp/notes.md`.
+  `gh api repos/promisingcoder/marketingclaw/releases/tags/vYYYY.M.PATCH --jq .id`, then
+  `gh api -X PATCH repos/promisingcoder/marketingclaw/releases/<id> -F body=@/tmp/notes.md`.
   Do not trust `gh release edit --notes-file` or `--input` JSON if verification
-  disagrees; verify with `gh api repos/marketingclaw/marketingclaw/releases/<id>` because
+  disagrees; verify with `gh api repos/promisingcoder/marketingclaw/releases/<id>` because
   the tag lookup and `gh release view` can lag or show stale body text.
 - When preparing release notes, scan `src/plugins/compat/registry.ts` and
   `src/commands/doctor/shared/deprecation-compat.ts` for compatibility records
@@ -584,7 +584,7 @@ node --import tsx scripts/marketingclaw-npm-postpublish-verify.ts <published-ver
 - Actual npm install/update phases are capped at 5 minutes. If `npm install -g`, installer package install, or `marketingclaw update` takes longer than 300s in release e2e, stop treating the run as healthy progress and debug the installer/updater or harness.
 - Serialize host build/package mutations ahead of VM lanes. Finish `pnpm build`, `pnpm ui:build`, `pnpm release:check`, install smoke, and any Docker/package-prep lanes before starting Parallels `npm pack` lanes; otherwise `dist` can disappear during VM pack prep and produce false failures.
 - Include mac release readiness in preflight by running the public validation
-  workflow in `marketingclaw/marketingclaw` and the release-ops mac preflight in
+  workflow in `promisingcoder/marketingclaw` and the release-ops mac preflight in
   `marketingclaw/releases` for every release.
 - Treat the `appcast.xml` update on `main` as part of mac release readiness, not an optional follow-up.
 - The workflows remain tag-based. The agent is responsible for making sure
@@ -673,7 +673,7 @@ node --import tsx scripts/marketingclaw-npm-postpublish-verify.ts <published-ver
 - npm validation-only preflight may still be dispatched from ordinary branches
   when testing workflow changes before merge. Release checks and real publish
   use only `main` or `release/YYYY.M.PATCH`.
-- `.github/workflows/macos-release.yml` in `marketingclaw/marketingclaw` is now a
+- `.github/workflows/macos-release.yml` in `promisingcoder/marketingclaw` is now a
   public validation-only handoff. It validates the tag/release state and points
   operators to the release-ops repo. It still rebuilds the JS outputs needed for
   release validation, but it does not sign, notarize, or publish macOS
@@ -708,7 +708,7 @@ node --import tsx scripts/marketingclaw-npm-postpublish-verify.ts <published-ver
   release-ops mac preflight artifact preparation and real publish artifact
   promotion.
 - Real release-ops mac publish uploads the packaged `.zip`, `.dmg`, and
-  `.dSYM.zip` assets to the existing GitHub release in `marketingclaw/marketingclaw`
+  `.dSYM.zip` assets to the existing GitHub release in `promisingcoder/marketingclaw`
   automatically when `MARKETINGCLAW_PUBLIC_REPO_RELEASE_TOKEN` is present in the
   release-ops repo `mac-release` environment.
 - For stable releases, the agent must also download the signed
@@ -806,7 +806,7 @@ node --import tsx scripts/marketingclaw-npm-postpublish-verify.ts <published-ver
     available. Call out minor regressions in the release proof; block on major
     regressions unless waived or proven noisy.
 18. For stable releases, start `.github/workflows/macos-release.yml` in
-    `marketingclaw/marketingclaw` and wait for the public validation-only run to pass.
+    `promisingcoder/marketingclaw` and wait for the public validation-only run to pass.
 19. For stable releases, start
     `marketingclaw/releases/.github/workflows/marketingclaw-macos-validate.yml` with the
     same tag and wait for the release-ops mac validation lane to pass.
@@ -883,7 +883,7 @@ node --import tsx scripts/marketingclaw-npm-postpublish-verify.ts <published-ver
     for success.
 31. Verify the successful real release-ops mac run uploaded the `.zip`, `.dmg`,
     and `.dSYM.zip` artifacts to the existing GitHub release in
-    `marketingclaw/marketingclaw`.
+    `promisingcoder/marketingclaw`.
 32. For stable releases, download `macos-appcast-<tag>` from the successful
     release-ops mac run, update `appcast.xml` on `main`, verify the feed, then
     complete the **Close stable releases on main** gate.

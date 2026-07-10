@@ -8,7 +8,7 @@ describe("docs-sync-publish", () => {
         "--target",
         "generated-docs",
         "--source-repo",
-        "marketingclaw/marketingclaw",
+        "promisingcoder/marketingclaw",
         "--source-sha",
         "abc123",
         "--clawhub-repo",
@@ -22,7 +22,7 @@ describe("docs-sync-publish", () => {
       clawhubRepo: "../clawhub",
       clawhubSourceRepo: "marketingclaw/clawhub",
       clawhubSourceSha: "def456",
-      sourceRepo: "marketingclaw/marketingclaw",
+      sourceRepo: "promisingcoder/marketingclaw",
       sourceSha: "abc123",
       target: "generated-docs",
     });

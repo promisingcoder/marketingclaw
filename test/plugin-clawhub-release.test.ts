@@ -407,7 +407,7 @@ describe("collectPluginClawHubReleasePlan", () => {
           status: 200,
           body: {
             trustedPublisher: {
-              repository: "marketingclaw/marketingclaw",
+              repository: "promisingcoder/marketingclaw",
               workflowFilename: "plugin-clawhub-release.yml",
             },
           },
@@ -467,7 +467,7 @@ describe("collectPluginClawHubReleasePlan", () => {
           status: 200,
           body: {
             trustedPublisher: {
-              repository: "marketingclaw/marketingclaw",
+              repository: "promisingcoder/marketingclaw",
               workflowFilename: "plugin-clawhub-release.yml",
             },
           },
@@ -517,7 +517,7 @@ describe("collectPluginClawHubReleasePlan", () => {
         return new Response(
           JSON.stringify({
             trustedPublisher: {
-              repository: "marketingclaw/marketingclaw",
+              repository: "promisingcoder/marketingclaw",
               workflowFilename: "plugin-clawhub-release.yml",
             },
           }),
@@ -575,7 +575,7 @@ describe("collectPluginClawHubReleasePlan", () => {
         return new Response(
           JSON.stringify({
             trustedPublisher: {
-              repository: "marketingclaw/marketingclaw",
+              repository: "promisingcoder/marketingclaw",
               workflowFilename: "plugin-clawhub-release.yml",
             },
           }),
@@ -625,7 +625,7 @@ describe("collectPluginClawHubReleasePlan", () => {
         return new Response(
           JSON.stringify({
             trustedPublisher: {
-              repository: "marketingclaw/marketingclaw",
+              repository: "promisingcoder/marketingclaw",
               workflowFilename: "plugin-clawhub-release.yml",
             },
           }),
@@ -675,7 +675,7 @@ describe("collectPluginClawHubReleasePlan", () => {
         return new Response(
           JSON.stringify({
             trustedPublisher: {
-              repository: "marketingclaw/marketingclaw",
+              repository: "promisingcoder/marketingclaw",
               workflowFilename: "plugin-clawhub-release.yml",
             },
           }),
@@ -820,7 +820,7 @@ describe("collectPluginClawHubReleasePlan", () => {
           status: 200,
           body: {
             trustedPublisher: {
-              repository: "marketingclaw/marketingclaw",
+              repository: "promisingcoder/marketingclaw",
               workflowFilename: "plugin-clawhub-release.yml",
               environment: "clawhub-plugin-release",
             },
@@ -942,7 +942,7 @@ describe("collectPluginClawHubReleasePlan", () => {
             status: 200,
             body: {
               trustedPublisher: {
-                repository: "marketingclaw/marketingclaw",
+                repository: "promisingcoder/marketingclaw",
                 workflowFilename: "plugin-clawhub-release.yml",
               },
             },
@@ -992,7 +992,7 @@ describe("buildMarketingClawReleaseClawHubPlan", () => {
           status: 200,
           body: {
             trustedPublisher: {
-              repository: "marketingclaw/marketingclaw",
+              repository: "promisingcoder/marketingclaw",
               workflowFilename: "plugin-clawhub-release.yml",
             },
           },
@@ -1198,7 +1198,7 @@ describe("runPluginClawHubReleaseCheck", () => {
 describe("buildMarketingClawReleaseClawHubRuntimeState", () => {
   it("includes the normal ClawHub run in verifier args when the release waits for it", () => {
     const state = buildMarketingClawReleaseClawHubRuntimeState({
-      repository: "marketingclaw/marketingclaw",
+      repository: "promisingcoder/marketingclaw",
       waitForClawHub: true,
       forceSkipClawHub: false,
       normalRunId: "111",
@@ -1215,7 +1215,7 @@ describe("buildMarketingClawReleaseClawHubRuntimeState", () => {
 
   it("includes a completed bootstrap run even when there is no normal ClawHub run", () => {
     const state = buildMarketingClawReleaseClawHubRuntimeState({
-      repository: "marketingclaw/marketingclaw",
+      repository: "promisingcoder/marketingclaw",
       waitForClawHub: false,
       forceSkipClawHub: false,
       normalRunId: "",
@@ -1232,7 +1232,7 @@ describe("buildMarketingClawReleaseClawHubRuntimeState", () => {
 
   it("skips ClawHub verification for non-awaited incomplete runs while keeping proof links", () => {
     const state = buildMarketingClawReleaseClawHubRuntimeState({
-      repository: "marketingclaw/marketingclaw",
+      repository: "promisingcoder/marketingclaw",
       waitForClawHub: false,
       forceSkipClawHub: false,
       normalRunId: "111",
@@ -1251,7 +1251,7 @@ describe("buildMarketingClawReleaseClawHubRuntimeState", () => {
 
   it("keeps completed bootstrap run evidence when the normal ClawHub run is not awaited", () => {
     const state = buildMarketingClawReleaseClawHubRuntimeState({
-      repository: "marketingclaw/marketingclaw",
+      repository: "promisingcoder/marketingclaw",
       waitForClawHub: false,
       forceSkipClawHub: false,
       normalRunId: "111",
@@ -1270,7 +1270,7 @@ describe("buildMarketingClawReleaseClawHubRuntimeState", () => {
 
   it("forces skip-clawhub after a failed child run even if ClawHub runs completed", () => {
     const state = buildMarketingClawReleaseClawHubRuntimeState({
-      repository: "marketingclaw/marketingclaw",
+      repository: "promisingcoder/marketingclaw",
       waitForClawHub: true,
       forceSkipClawHub: true,
       normalRunId: "111",

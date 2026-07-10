@@ -78,7 +78,7 @@ describe("marketingclaw-pr-maintainer github activity helper", () => {
     expect(result.stderr).toBe("");
     expect(result.stdout).toContain("Kevin Lin (@kevinslin, User, account created 2010-09-21");
     expect(result.stdout).toContain(
-      "marketingclaw/marketingclaw last 1mo: 2 PRs, 1 issues, 2 commits",
+      "promisingcoder/marketingclaw last 1mo: 2 PRs, 1 issues, 2 commits",
     );
     expect(log.match(/repos\/marketingclaw\/marketingclaw\/issues/g)).toHaveLength(1);
     expect(log.match(/repos\/marketingclaw\/marketingclaw\/commits/g)).toHaveLength(1);

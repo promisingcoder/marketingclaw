@@ -31,13 +31,13 @@ Choose a [release](https://github.com/promisingcoder/marketingclaw/releases) tha
 ```bash
 release_tag=vYYYY.M.PATCH
 gh release download "$release_tag" \
-  --repo marketingclaw/marketingclaw \
+  --repo promisingcoder/marketingclaw \
   --pattern MarketingClaw-Android.apk \
   --pattern MarketingClaw-Android-SHA256SUMS.txt
 sha256sum --check MarketingClaw-Android-SHA256SUMS.txt
 gh attestation verify MarketingClaw-Android.apk \
-  --repo marketingclaw/marketingclaw \
-  --signer-workflow marketingclaw/marketingclaw/.github/workflows/android-release.yml \
+  --repo promisingcoder/marketingclaw \
+  --signer-workflow promisingcoder/marketingclaw/.github/workflows/android-release.yml \
   --source-ref "refs/tags/${release_tag}" \
   --deny-self-hosted-runners
 ```

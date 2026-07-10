@@ -41,7 +41,7 @@ export type RawSessionConversationRef = {
  * Session keys are canonicalized to lowercase for stable comparison/routing, but
  * some channels own opaque, case-SENSITIVE peer IDs that must survive verbatim.
  * Channels enroll here individually; un-enrolled channels keep the default
- * lowercase behavior. See marketingclaw/marketingclaw#75670 (Matrix) and #82853 (Signal).
+ * lowercase behavior. See promisingcoder/marketingclaw#75670 (Matrix) and #82853 (Signal).
  *
  *   span "segment" — preserve a single colon-free id segment, matched anywhere
  *                    (incl. unscoped keys without an `agent:<id>:` head).

@@ -162,9 +162,9 @@ describe("update global helpers", () => {
     expect(
       resolveGlobalInstallSpec({
         packageName: "marketingclaw",
-        tag: "github:marketingclaw/marketingclaw#feature/my-branch",
+        tag: "github:promisingcoder/marketingclaw#feature/my-branch",
       }),
-    ).toBe("github:marketingclaw/marketingclaw#feature/my-branch");
+    ).toBe("github:promisingcoder/marketingclaw#feature/my-branch");
     expect(
       resolveGlobalInstallSpec({
         packageName: "marketingclaw",
@@ -265,7 +265,7 @@ describe("update global helpers", () => {
     expect(isMainPackageTarget(" MAIN ")).toBe(true);
     expect(isMainPackageTarget("beta")).toBe(false);
 
-    expect(isExplicitPackageInstallSpec("github:marketingclaw/marketingclaw#main")).toBe(true);
+    expect(isExplicitPackageInstallSpec("github:promisingcoder/marketingclaw#main")).toBe(true);
     expect(isExplicitPackageInstallSpec("https://example.com/marketingclaw-main.tgz")).toBe(true);
     expect(isExplicitPackageInstallSpec("file:/tmp/marketingclaw-main.tgz")).toBe(true);
     expect(isExplicitPackageInstallSpec("/tmp/marketingclaw-main.tgz")).toBe(true);
@@ -276,7 +276,7 @@ describe("update global helpers", () => {
     expect(canResolveRegistryVersionForPackageTarget("2026.3.22")).toBe(true);
     expect(canResolveRegistryVersionForPackageTarget("main")).toBe(false);
     expect(
-      canResolveRegistryVersionForPackageTarget("github:marketingclaw/marketingclaw#main"),
+      canResolveRegistryVersionForPackageTarget("github:promisingcoder/marketingclaw#main"),
     ).toBe(false);
     expect(canResolveRegistryVersionForPackageTarget("/tmp/marketingclaw-main.tgz")).toBe(false);
   });
@@ -937,13 +937,13 @@ describe("update global helpers", () => {
       "openclaw@latest",
     ]);
     expect(
-      globalInstallArgs("pnpm", "github:marketingclaw/marketingclaw#release/2026.5.12"),
+      globalInstallArgs("pnpm", "github:promisingcoder/marketingclaw#release/2026.5.12"),
     ).toEqual([
       "pnpm",
       "add",
       "-g",
       "--allow-build=marketingclaw",
-      "github:marketingclaw/marketingclaw#release/2026.5.12",
+      "github:promisingcoder/marketingclaw#release/2026.5.12",
     ]);
     expect(
       globalInstallArgs("pnpm", "openclaw@git+https://github.com/promisingcoder/marketingclaw.git"),
@@ -987,7 +987,7 @@ describe("update global helpers", () => {
     expect(
       globalInstallArgs(
         "pnpm",
-        "github:marketingclaw/marketingclaw#release/2026.5.12",
+        "github:promisingcoder/marketingclaw#release/2026.5.12",
         null,
         "/opt/pnpm-global",
       ),
@@ -998,7 +998,7 @@ describe("update global helpers", () => {
       "--global-dir",
       "/opt/pnpm-global",
       "--allow-build=marketingclaw",
-      "github:marketingclaw/marketingclaw#release/2026.5.12",
+      "github:promisingcoder/marketingclaw#release/2026.5.12",
     ]);
   });
 

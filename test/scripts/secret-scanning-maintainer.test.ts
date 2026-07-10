@@ -72,7 +72,7 @@ describe("secret scanning maintainer script", () => {
       redacted: true,
     });
     expect(fs.readFileSync(ghLog, "utf8")).toContain(
-      `api repos/marketingclaw/marketingclaw/issues/123 -X PATCH -F body=@${redactedBody}`,
+      `api repos/promisingcoder/marketingclaw/issues/123 -X PATCH -F body=@${redactedBody}`,
     );
   });
 

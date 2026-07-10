@@ -30,18 +30,18 @@ The default sandbox backend uses Docker when `agents.defaults.sandbox` is enable
     This builds the gateway image locally as `marketingclaw:local`. To use a pre-built image instead:
 
     ```bash
-    export MARKETINGCLAW_IMAGE="ghcr.io/marketingclaw/marketingclaw:latest"
+    export MARKETINGCLAW_IMAGE="ghcr.io/promisingcoder/marketingclaw:latest"
     ./scripts/docker/setup.sh
     ```
 
-    Pre-built images are published first to the [GitHub Container Registry](https://github.com/promisingcoder/marketingclaw/pkgs/container/marketingclaw). GHCR is the primary registry for release automation, pinned deployments, and provenance checks. The same release publishes a Docker Hub mirror at `marketingclaw/marketingclaw`:
+    Pre-built images are published first to the [GitHub Container Registry](https://github.com/promisingcoder/marketingclaw/pkgs/container/marketingclaw). GHCR is the primary registry for release automation, pinned deployments, and provenance checks. The same release publishes a Docker Hub mirror at `promisingcoder/marketingclaw`:
 
     ```bash
-    export MARKETINGCLAW_IMAGE="marketingclaw/marketingclaw:latest"
+    export MARKETINGCLAW_IMAGE="promisingcoder/marketingclaw:latest"
     ./scripts/docker/setup.sh
     ```
 
-    Use `ghcr.io/marketingclaw/marketingclaw` or `marketingclaw/marketingclaw` and avoid unofficial mirrors, which don't share MarketingClaw's release timing or retention policy. Official tags: `main`, `latest`, `<version>` (e.g. `2026.2.26`), and beta tags such as `2026.2.26-beta.1` (betas never move `latest`/`main`). The default `main`/`latest`/`<version>` image bundles the `codex` and `diagnostics-otel` plugins. A `-browser` variant (e.g. `latest-browser`) also ships with Chromium baked in, useful for the [sandboxed browser](/gateway/sandboxing#sandboxed-browser) tool without a first-run Playwright install.
+    Use `ghcr.io/promisingcoder/marketingclaw` or `promisingcoder/marketingclaw` and avoid unofficial mirrors, which don't share MarketingClaw's release timing or retention policy. Official tags: `main`, `latest`, `<version>` (e.g. `2026.2.26`), and beta tags such as `2026.2.26-beta.1` (betas never move `latest`/`main`). The default `main`/`latest`/`<version>` image bundles the `codex` and `diagnostics-otel` plugins. A `-browser` variant (e.g. `latest-browser`) also ships with Chromium baked in, useful for the [sandboxed browser](/gateway/sandboxing#sandboxed-browser) tool without a first-run Playwright install.
 
   </Step>
 
@@ -50,7 +50,7 @@ The default sandbox backend uses Docker when `agents.defaults.sandbox` is enable
 
     ```bash
     docker load -i marketingclaw-image.tar
-    export MARKETINGCLAW_IMAGE="ghcr.io/marketingclaw/marketingclaw:latest"
+    export MARKETINGCLAW_IMAGE="ghcr.io/promisingcoder/marketingclaw:latest"
     ./scripts/docker/setup.sh --offline
     ```
 
@@ -249,7 +249,7 @@ The official image does not pre-install Claude Code. Install and log in inside t
 For a new install, enable a persistent `/home/node` volume before running setup:
 
 ```bash
-export MARKETINGCLAW_IMAGE="ghcr.io/marketingclaw/marketingclaw:latest"
+export MARKETINGCLAW_IMAGE="ghcr.io/promisingcoder/marketingclaw:latest"
 export MARKETINGCLAW_HOME_VOLUME="marketingclaw_home"
 ./scripts/docker/setup.sh
 ```

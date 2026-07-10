@@ -305,7 +305,7 @@ or release orchestration changes, or when explicitly asked:
 
 ```bash
 gh workflow run full-release-validation.yml \
-  --repo marketingclaw/marketingclaw \
+  --repo promisingcoder/marketingclaw \
   --ref main \
   -f ref=<branch-or-sha> \
   -f provider=openai \
@@ -368,9 +368,9 @@ under `evidence/<release-id>/` and commits:
 Use one run per line:
 
 ```text
-full-release-validation marketingclaw/marketingclaw <run-id> blocking
-package-acceptance marketingclaw/marketingclaw <run-id> blocking
-release-checks marketingclaw/marketingclaw <run-id> blocking
+full-release-validation promisingcoder/marketingclaw <run-id> blocking
+package-acceptance promisingcoder/marketingclaw <run-id> blocking
+release-checks promisingcoder/marketingclaw <run-id> blocking
 ```
 
 Store summaries, run URLs, artifact metadata, timings, pass/fail state, and
@@ -399,7 +399,7 @@ without rerunning the entire umbrella.
 
 ```bash
 gh workflow run marketingclaw-release-checks.yml \
-  --repo marketingclaw/marketingclaw \
+  --repo promisingcoder/marketingclaw \
   --ref main \
   -f ref=<branch-or-sha> \
   -f provider=openai \
@@ -470,7 +470,7 @@ lanes:
 
 ```bash
 gh workflow run marketingclaw-live-and-e2e-checks-reusable.yml \
-  --repo marketingclaw/marketingclaw \
+  --repo promisingcoder/marketingclaw \
   --ref main \
   -f ref=<sha> \
   -f include_repo_e2e=false \

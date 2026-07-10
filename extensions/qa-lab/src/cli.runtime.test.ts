@@ -1008,7 +1008,7 @@ describe("qa cli runtime", () => {
     expect(runTelegramQaLive).not.toHaveBeenCalled();
     expectWriteContains(
       stdoutWrite,
-      "telegram-status-command\tdefault\tTelegram status command reply\tVerify Telegram status returns model, session, and activation details. refs=marketingclaw/marketingclaw#74698",
+      "telegram-status-command\tdefault\tTelegram status command reply\tVerify Telegram status returns model, session, and activation details. refs=promisingcoder/marketingclaw#74698",
     );
   });
 

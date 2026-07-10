@@ -2140,7 +2140,7 @@ export async function runCodexAppServerAttempt(
     }
     // Determine terminal-turn status before invoking the projector so a throw
     // inside projector.handleNotification still releases the session lane.
-    // See marketingclaw/marketingclaw#67996.
+    // See promisingcoder/marketingclaw#67996.
     if (notificationState.isTurnTerminal) {
       terminalTurnNotificationQueued = true;
     }

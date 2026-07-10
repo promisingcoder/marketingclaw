@@ -24,7 +24,7 @@ publish skill; use `$release-marketingclaw-maintainer` before changing release s
 ## Core Checks
 
 1. GitHub release:
-   - `gh release view v<VERSION> --repo marketingclaw/marketingclaw --json tagName,name,publishedAt,isDraft,isPrerelease,targetCommitish,url,body,assets`
+   - `gh release view v<VERSION> --repo promisingcoder/marketingclaw --json tagName,name,publishedAt,isDraft,isPrerelease,targetCommitish,url,body,assets`
    - Confirm stable releases are not draft/prerelease.
    - Confirm release body has npm, CI, plugin npm, ClawHub, mac/appcast evidence
      links when expected.
@@ -42,13 +42,13 @@ publish skill; use `$release-marketingclaw-maintainer` before changing release s
      `npmProvenanceAttestationMatched: true`.
 3. Plugin publish set:
    - Get exact tag metadata from GitHub, not the local checkout when dirty:
-     download `https://api.github.com/repos/marketingclaw/marketingclaw/tarball/v<VERSION>`
+     download `https://api.github.com/repos/promisingcoder/marketingclaw/tarball/v<VERSION>`
      into `/tmp/marketingclaw-v<VERSION>-src`.
    - Count `extensions/*/package.json` with
      `marketingclaw.release.publishToNpm === true` and
      `marketingclaw.release.publishToClawHub === true`.
    - Compare expected counts to workflow job counts:
-     `gh api repos/marketingclaw/marketingclaw/actions/runs/<RUN>/jobs --paginate`.
+     `gh api repos/promisingcoder/marketingclaw/actions/runs/<RUN>/jobs --paginate`.
    - Each expected npm plugin must have version `<VERSION>` and
      `dist-tags.latest === <VERSION>`.
 4. ClawHub:
