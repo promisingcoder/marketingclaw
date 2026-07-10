@@ -8,6 +8,42 @@
     "target": "营销快速开始"
   },
   {
+    "source": "marketingclaw status",
+    "target": "marketingclaw status"
+  },
+  {
+    "source": "Browser (MarketingClaw-managed)",
+    "target": "浏览器（MarketingClaw 托管）"
+  },
+  {
+    "source": "MarketingClaw lore",
+    "target": "MarketingClaw 传说"
+  },
+  {
+    "source": "Updating MarketingClaw",
+    "target": "更新 MarketingClaw"
+  },
+  {
+    "source": "@marketingclaw/ai package",
+    "target": "@marketingclaw/ai 包"
+  },
+  {
+    "source": "MarketingClaw assistant setup",
+    "target": "MarketingClaw 助手设置"
+  },
+  {
+    "source": "MarketingClaw assistant",
+    "target": "MarketingClaw 助手"
+  },
+  {
+    "source": "Personal assistant setup",
+    "target": "个人助手设置"
+  },
+  {
+    "source": "Channels overview",
+    "target": "频道概览"
+  },
+  {
     "source": "macOS platform notes",
     "target": "macOS 平台说明"
   },
