@@ -1,0 +1,103 @@
+// examples/marketing-team/marketingclaw.json
+//
+// The end-state config that `marketingclaw setup-marketing` produces, annotated.
+// This is JSON5: comments and trailing commas are allowed. It is an ILLUSTRATION,
+// not a drop-in file — paths, tokens, and Slack ids are placeholders. Run
+// `marketingclaw setup-marketing` to generate the real thing, then add channel
+// bindings like the ones shown here.
+{
+  agents: {
+    // The six-agent marketing team. `cmo` is the default agent: all DMs and
+    // WebChat route to Morgan unless a binding sends a channel somewhere else.
+    list: [
+      {
+        id: "cmo",
+        name: "Morgan",
+        default: true, // receives all unbound traffic (DMs, WebChat)
+        description: "Marketing orchestrator; owns CAMPAIGNS/CALENDAR and delegates to specialists.",
+        workspace: "~/.marketingclaw/workspace-cmo",
+        agentDir: "~/.marketingclaw/agents/cmo/agent",
+        identity: { name: "Morgan", emoji: "🧭" },
+        // Skills this agent may use (an explicit list REPLACES agents.defaults.skills).
+        skills: ["postiz", "wordpress", "listmonk", "gsc", "ga4", "marketing-report", "summarize"],
+        // The orchestrator may spawn these specialists via sessions_spawn.
+        subagents: { allowAgents: ["content", "social", "email", "seo", "analyst"] },
+      },
+      {
+        id: "content",
+        name: "Sasha",
+        description: "Writer. Drafts long-form + copy to files; never publishes.",
+        workspace: "~/.marketingclaw/workspace-content",
+        agentDir: "~/.marketingclaw/agents/content/agent",
+        identity: { name: "Sasha", emoji: "✍️" },
+        skills: ["wordpress", "blog-git", "meme-maker", "summarize"],
+      },
+      {
+        id: "social",
+        name: "Riley",
+        description: "Social publishing/scheduling (Postiz + xurl) and mention triage.",
+        workspace: "~/.marketingclaw/workspace-social",
+        agentDir: "~/.marketingclaw/agents/social/agent",
+        identity: { name: "Riley", emoji: "📣" },
+        skills: ["postiz", "xurl", "meme-maker", "gifgrep"],
+      },
+      {
+        id: "email",
+        name: "Jordan",
+        description: "Listmonk newsletters + deliverability; approval-gated sends.",
+        workspace: "~/.marketingclaw/workspace-email",
+        agentDir: "~/.marketingclaw/agents/email/agent",
+        identity: { name: "Jordan", emoji: "📧" },
+        skills: ["listmonk"],
+      },
+      {
+        id: "seo",
+        name: "Quinn",
+        description: "SEO + blog pipeline (GSC, keyword research, audits, WordPress/git).",
+        workspace: "~/.marketingclaw/workspace-seo",
+        agentDir: "~/.marketingclaw/agents/seo/agent",
+        identity: { name: "Quinn", emoji: "🔍" },
+        skills: ["gsc", "keyword-research", "seo-audit", "wordpress", "blog-git", "summarize"],
+      },
+      {
+        id: "analyst",
+        name: "Alex",
+        description: "Analytics (GA4 + GSC + platform metrics) into REPORTS/.",
+        workspace: "~/.marketingclaw/workspace-analyst",
+        agentDir: "~/.marketingclaw/agents/analyst/agent",
+        identity: { name: "Alex", emoji: "📊" },
+        skills: ["ga4", "gsc", "postiz", "listmonk", "marketing-report", "summarize"],
+      },
+    ],
+  },
+
+  // Route a specific Slack channel to a specific agent. setup-marketing does NOT
+  // add bindings (no channel is configured yet); add them once your channel is
+  // connected. Here, the team's #marketing channel is routed to the CMO.
+  bindings: [
+    {
+      type: "route",
+      agentId: "cmo",
+      // Replace the id with your real Slack channel id (e.g. "C0123456789").
+      match: { channel: "slack", peer: { kind: "channel", id: "C0123456789" } },
+    },
+  ],
+
+  // Channel stub. Slack DMs default to pairing mode, so a teammate DMs the bot,
+  // pairs once, and then talks to the default agent (the CMO). Tokens are read
+  // from environment variables via SecretRefs — never inline secrets here.
+  channels: {
+    slack: {
+      enabled: true,
+      mode: "socket",
+      appToken: { source: "env", provider: "default", id: "SLACK_APP_TOKEN" },
+      botToken: { source: "env", provider: "default", id: "SLACK_BOT_TOKEN" },
+      dmPolicy: "pairing", // DMs require a one-time pairing before the agent responds
+      groupPolicy: "allowlist",
+      channels: {
+        // The #marketing channel; requireMention keeps the bot quiet unless @-mentioned.
+        C0123456789: { requireMention: true },
+      },
+    },
+  },
+}
