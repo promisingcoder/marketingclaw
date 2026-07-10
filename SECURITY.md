@@ -6,26 +6,22 @@ This policy does two things: it gives researchers a clear disclosure path, and i
 
 The fastest useful reports show a current, reproducible boundary bypass with demonstrated impact. Scanner output, prompt-injection-only chains, or reports that rely on hostile users sharing one trusted gateway are usually not security vulnerabilities under this model.
 
-Security work is shared across a number of MarketingClaw maintainers, including engineers and security researchers from organizations such as NVIDIA and Tencent. See the [maintainer list](CONTRIBUTING.md#maintainers).
+Security triage is handled by the MarketingClaw maintainers. See the [contributing guide](CONTRIBUTING.md) for how the project is maintained and how to get involved.
 
 ## Report a Security Issue
 
-Report vulnerabilities directly to the repository where the issue lives:
+Report MarketingClaw vulnerabilities privately through a GitHub Security Advisory on the fork:
 
-- **Core CLI and gateway** — [marketingclaw/marketingclaw](https://github.com/promisingcoder/marketingclaw)
-- **macOS desktop app** — [marketingclaw/marketingclaw](https://github.com/promisingcoder/marketingclaw) (apps/macos)
-- **iOS app** — [marketingclaw/marketingclaw](https://github.com/promisingcoder/marketingclaw) (apps/ios)
-- **Android app** — [marketingclaw/marketingclaw](https://github.com/promisingcoder/marketingclaw) (apps/android)
-- **ClawHub** — [marketingclaw/clawhub](https://github.com/openclaw/clawhub)
-- **Trust and threat model** — [marketingclaw/trust](https://github.com/openclaw/trust)
+- **Core CLI, gateway, and companion apps** — submit a private advisory at [promisingcoder/marketingclaw](https://github.com/promisingcoder/marketingclaw/security/advisories/new)
 
-For issues that don't fit a specific repo, or if you're unsure, email **[nagyyousef323@gmail.com](mailto:nagyyousef323@gmail.com)** and we'll route it.
+If a report doesn't fit cleanly, or you're unsure, email **[nagyyousef323@gmail.com](mailto:nagyyousef323@gmail.com)** and we'll route it.
 
-For MarketingClaw core issues, submit through a private [GitHub Security Advisory](https://github.com/promisingcoder/marketingclaw/security/advisories/new). Do not open a public issue or PR that discloses an unpatched vulnerability, exploit path, secret, or security-sensitive proof of concept.
+If the issue lives in the underlying engine rather than the marketing layer — the gateway, messaging channels, agent runtime, or companion apps — please also report it upstream at [github.com/openclaw/openclaw/security](https://github.com/openclaw/openclaw/security) so the fix lands where that code is maintained.
+
+Do not open a public issue or PR that discloses an unpatched vulnerability, exploit path, secret, or security-sensitive proof of concept.
 
 Maintainers may close, hide, delete, or otherwise take down public issues and PRs that disclose vulnerabilities or active security issues. We will redirect those reports through the private disclosure process so the issue can be triaged and fixed without giving attackers a public playbook.
 
-For full reporting instructions see our [Trust page](https://trust.marketingclaw.ai).
 For maintainer response workflow, see the [incident response plan](docs/security/incident-response.md).
 
 MarketingClaw does not currently run a paid bug bounty program. Please still disclose responsibly so we can fix real issues quickly. The best way to help the project right now is to send high-signal reports and, when practical, focused PRs.

@@ -1,101 +1,54 @@
 # Contributing to MarketingClaw
 
-Welcome to the lobster tank! 🦞
+Thanks for helping build MarketingClaw — an open-source, self-hosted AI marketing
+team. This guide covers how to propose changes and the local checks we expect
+before review.
 
-## Quick Links
+## Quick links
 
 - **GitHub:** https://github.com/promisingcoder/marketingclaw
 - **Vision:** [`VISION.md`](VISION.md)
-- **Discord:** https://discord.gg/clawd
-- **X/Twitter:** [@marketingclaw](https://x.com/marketingclaw)
+- **Security:** [`SECURITY.md`](SECURITY.md)
 
-## Maintainers
+## How to contribute
 
-The current MarketingClaw Foundation team and Core Maintainers are listed on the
-MarketingClaw people page: https://www.marketingclaw.org/people
+1. **Bugs and small fixes** — open a PR. Link the issue when one exists.
+2. **New features or architecture changes** — open a [GitHub issue](https://github.com/promisingcoder/marketingclaw/issues/new/choose)
+   first so we can agree on the approach. Many capabilities are a better fit as a
+   third-party plugin or a skill than as core changes.
+3. **Refactor-only PRs** — please don't, unless a maintainer asked for the refactor
+   as part of a concrete fix.
+4. **Test/CI-only PRs chasing known `main` failures** — please don't; those are
+   already tracked. New regressions not yet visible in CI should be filed as issues.
 
-## How to Contribute
+For agent-authored or otherwise non-trivial work, create or reuse the issue first,
+then open the PR against it. Let issue forms, labels, and `.github/CODEOWNERS` route
+the work rather than tagging maintainers by hand.
 
-1. **Bugs & small fixes** → Open a PR!
-2. **New features / architecture** → Start a [GitHub Issue](https://github.com/promisingcoder/marketingclaw/issues/new/choose) or ask in Discord first. Most features are not accepted and should be third party plugins instead using our plugin SDK.
-3. **Refactor-only PRs** → Don't open a PR. We are not accepting refactor-only changes unless a maintainer explicitly asks for them as part of a concrete fix.
-4. **Test/CI-only PRs for known `main` failures** → Don't open a PR. The Maintainer team is already tracking those failures, and PRs that only tweak tests or CI to chase them will be closed unless they are required to validate a new fix.
-5. **Questions** → Discord [#help](https://discord.com/channels/1456350064065904867/1459642797895319552) / [#users-helping-users](https://discord.com/channels/1456350064065904867/1459007081603403828)
+## Before you PR
 
-## Issue, PR, and Contact Routing
+- Use **Node 24** for source checkouts when possible. MarketingClaw also supports
+  **Node 22.19+**, but older Node 22 minors (for example 22.17) are below the engine
+  floor and can fail before `pnpm` runs. See [Node install guidance](docs/install/node.md)
+  if your local version is too old.
+- Run the full local loop: `pnpm build && pnpm check && pnpm test`.
+- For extension or plugin changes, run the fast lane first:
+  - `pnpm test:extension <extension-name>` (`pnpm test:extension --list` shows valid ids)
+  - `pnpm test:contracts` if you changed shared plugin or channel surfaces
+- Keep PRs focused: one topic per PR, no unrelated cleanup.
+- Describe **what** changed and **why**. Include before/after screenshots for any UI
+  or visual change.
+- Use American English spelling and grammar in code, comments, docs, and UI strings.
+- Do not edit files covered by `CODEOWNERS` security ownership unless a listed owner
+  asked for the change or is already reviewing it with you.
+- You do not need to edit `CHANGELOG.md`. Maintainers add the changelog entry for
+  user-facing changes when a release is cut.
 
-Start from this routing map before creating GitHub items:
+## Control UI decorators
 
-| Situation                                                | Use                                                                                                                                                                                  | Required evidence                                                                                                   |
-| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
-| Product bug, regression, crash, or behavior defect       | [Bug report](https://github.com/promisingcoder/marketingclaw/issues/new?template=bug_report.yml)                                                                                     | Repro steps, expected vs actual behavior, version, OS, model/provider route when relevant, logs/screenshots, impact |
-| Documentation bug or missing/contradictory docs          | [Docs bug report](https://github.com/promisingcoder/marketingclaw/issues/new?template=docs_bug_report.yml)                                                                           | Affected docs path or URL, verification steps, expected docs content, actual docs content, impact, evidence         |
-| New feature, architecture change, or product improvement | [Feature request](https://github.com/promisingcoder/marketingclaw/issues/new?template=feature_request.yml) or Discord first                                                          | Problem, proposed solution, alternatives, impact, examples or prior art                                             |
-| Onboarding, setup help, or general support question      | Discord [#help](https://discord.com/channels/1456350064065904867/1459642797895319552) / [#users-helping-users](https://discord.com/channels/1456350064065904867/1459007081603403828) | Do not open a GitHub issue unless there is a concrete product defect or docs gap                                    |
-| Security vulnerability                                   | See [Report a Vulnerability](#report-a-vulnerability) below                                                                                                                          | Do not file public issues for private security reports                                                              |
-| PR for an existing or newly filed issue                  | Use the [PR template](.github/pull_request_template.md)                                                                                                                              | Visible `Closes #<issue>` or `Related: #<issue>`, problem, shipped solution, user impact, validation evidence       |
-
-For agent-authored or otherwise non-trivial work, create or reuse the issue first, then open the PR against it. Bugs and very small fixes may go straight to PR, but still link existing context when it exists and fill out the PR template.
-
-Do not guess who to tag. Let issue forms, labels/automation, and `.github/CODEOWNERS` route the work. Mention a maintainer only when an owned path or documented responsibility is directly relevant and you need a decision; otherwise rely on normal review. For coordinated change sets, ask in **#clawtributors** before opening more than the PR limit.
-
-## PR Limits
-
-We cap at **20 open PRs per author**. If you exceed this, the `r: too-many-prs` label is added and your PR is auto-closed. This is a hard limit.
-
-For coordinated change sets that genuinely need more than 20 PRs, join the **#clawtributors** channel in Discord and talk to maintainers first.
-
-## Before You PR
-
-- Use **Node 24** for source checkouts when possible. MarketingClaw also supports Node 22.19+, but older Node 22 minors such as 22.17 are below the repository engine floor and can fail before `pnpm` commands run. See [Node install guidance](docs/install/node.md) if your local version is too old.
-- Test locally with your MarketingClaw instance
-- External PRs must describe the user, product, or operational problem in **What Problem This Solves** and include useful validation in **Evidence**. Focused tests, CI results, screenshots, recordings, terminal output, live observations, redacted logs, and artifact links all count. Reviewers will inspect the code, tests, and CI; use the PR body to explain intent and make validation easy to understand.
-- When ClawSweeper, Codex, Barnacle, or a maintainer asks for more context or evidence, edit the PR description instead of only replying in a new comment. Keep **What Problem This Solves**, **Why This Change Was Made**, **User Impact**, and **Evidence** current; a short comment can point reviewers to the update, but the PR body should remain the durable explanation for maintainers and bots.
-- Keep PRs takeover-ready: open them from a branch maintainers can push to. For fork PRs, leave GitHub's **Allow edits by maintainers** option enabled so maintainers can finish urgent fixes, changelog entries, or merge prep when needed. If GitHub shows **Allow edits and access to secrets by maintainers**, enable it only when that workflow/secrets access is acceptable and say so in the PR.
-- Do not edit `CHANGELOG.md` in contributor PRs. Maintainers or ClawSweeper add the changelog entry when landing user-facing changes.
-- Run tests: `pnpm build && pnpm check && pnpm test`
-- For iterative local commits, `scripts/committer --fast "message" <files...>` skips commit hooks. Only use it when you've already run equivalent targeted validation for the touched surface.
-- For extension/plugin changes, run the fast local lane first:
-  - `pnpm test:extension <extension-name>`
-  - `pnpm test:extension --list` to see valid extension ids
-  - If you changed shared plugin or channel surfaces, run `pnpm test:contracts`
-  - For targeted shared-surface work, use `pnpm test:contracts:channels` or `pnpm test:contracts:plugins`
-  - These commands also cover the shared seam/smoke files that the default unit lane skips
-  - If you changed broader runtime behavior, still run the relevant wider lanes (`pnpm test:extensions`, `pnpm test:channels`, or `pnpm test`) before asking for review
-- If you touched bundled-plugin boundaries in shared code, run the matching inventories:
-  - `node scripts/check-src-extension-import-boundary.mjs --json` for `src/**`
-  - `node scripts/check-sdk-package-extension-import-boundary.mjs --json` for `src/plugin-sdk/**` and `packages/**`
-  - `node scripts/check-test-helper-extension-import-boundary.mjs --json` for `test/helpers/**`
-- Shared test helpers must use `src/test-utils/bundled-plugin-public-surface.ts` instead of repo-relative `extensions/**` imports. Keep plugin-local deep mocks inside the owning bundled plugin package.
-- If you have access to Codex, run `codex review --base origin/main` locally before opening or updating your PR. Treat this as the current highest standard of AI review, even if GitHub Codex review also runs.
-- Do not submit refactor-only PRs unless a maintainer explicitly requested that refactor for an active fix or deliverable.
-- Do not submit test or CI-config fixes for failures already red on `main` CI. If a failure is already visible in the [main branch CI runs](https://github.com/promisingcoder/marketingclaw/actions), it's a known issue the Maintainer team is tracking, and a PR that only addresses those failures will be closed automatically. If you spot a _new_ regression not yet shown in main CI, report it as an issue first.
-- Do not submit test-only PRs that just try to make known `main` CI failures pass. Test changes are acceptable when they are required to validate a new fix or cover new behavior in the same PR.
-- Ensure CI checks pass
-- Keep PRs focused (one thing per PR; do not mix unrelated concerns)
-- Describe what & why
-- Reply to or resolve bot review conversations you addressed before asking for review again
-- **Include screenshots** — one showing the problem/before, one showing the fix/after (for UI or visual changes)
-- Use American English spelling and grammar in code, comments, docs, and UI strings
-- Do not edit files covered by `CODEOWNERS` security ownership unless a listed owner explicitly asked for the change or is already reviewing it with you. Treat those paths as restricted review surfaces, not opportunistic cleanup targets.
-
-## Review Conversations Are Author-Owned
-
-If a review bot leaves review conversations on your PR, you are expected to handle the follow-through:
-
-- Resolve the conversation yourself once the code or explanation fully addresses the bot's concern
-- Reply and leave it open only when you need maintainer or reviewer judgment
-- Do not leave "fixed" bot review conversations for maintainers to clean up for you
-- If Codex leaves comments, address every relevant one or resolve it with a short explanation when it is not applicable to your change
-- If GitHub Codex review does not trigger for some reason, run `codex review --base origin/main` locally anyway and treat that output as required review work
-
-This applies to both human-authored and AI-assisted PRs.
-
-## Control UI Decorators
-
-The Control UI uses Lit with **legacy** decorators (current Rollup parsing does not support
-`accessor` fields required for standard decorators). When adding reactive fields, keep the
-legacy style:
+The Control UI uses Lit with **legacy** decorators (current Rollup parsing does not
+support the `accessor` fields required for standard decorators). When adding reactive
+fields, keep the legacy style:
 
 ```ts
 @state() foo = "bar";
@@ -103,80 +56,30 @@ legacy style:
 ```
 
 The root `tsconfig.json` is configured for legacy decorators (`experimentalDecorators: true`)
-with `useDefineForClassFields: false`. Avoid flipping these unless you are also updating the UI
-build tooling to support standard decorators.
+with `useDefineForClassFields: false`. Avoid flipping these unless you are also
+updating the UI build tooling.
 
-## AI/Vibe-Coded PRs Welcome! 🤖
+## AI-assisted PRs welcome
 
-Built with Codex, Claude, or other AI tools? **Awesome - just mark it!**
+Built with an AI coding tool? Great — just mark it. In your PR:
 
-Please include in your PR:
+- Note that it is AI-assisted in the title or description.
+- Include an **Evidence** section with the most useful validation (focused tests, CI
+  results, screenshots, terminal output, or logs).
+- Confirm you understand what the code does.
 
-- [ ] Mark as AI-assisted in the PR title or description
-- [ ] Include a concise **Evidence** section with the most useful validation. Reviewers will inspect the code, tests, and CI rather than relying on the PR body alone.
-- [ ] Include prompts or session logs if possible (super helpful!)
-- [ ] Confirm you understand what the code does
-- [ ] If you have access to Codex, run `codex review --base origin/main` locally and address the findings before asking for review
-- [ ] Resolve or reply to bot review conversations after you address them
-
-AI PRs are first-class citizens here. We just want transparency so reviewers know what to look for. If you are using an LLM coding agent, instruct it to resolve bot review conversations it has addressed instead of leaving them for maintainers.
-
-## Current Focus & Roadmap 🗺
-
-We are currently prioritizing:
-
-- **Stability**: Fixing edge cases in channel connections (WhatsApp/Telegram).
-- **UX**: Improving the onboarding wizard and error messages.
-- **Skills**: For skill contributions, head to [ClawHub](https://clawhub.ai/) — the community hub for MarketingClaw skills.
-- **Performance**: Optimizing token usage and compaction logic.
-
-Check the [GitHub Issues](https://github.com/promisingcoder/marketingclaw/issues) for
-["good first issue"](https://github.com/promisingcoder/marketingclaw/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
-labels. If none are open, pick a small docs or bug issue and leave a quick comment saying
-you'd like to work on it.
+Transparency lets reviewers know what to look for. Reviewers still inspect the code,
+tests, and CI rather than relying on the PR body alone.
 
 ## Maintainers
 
-We're selectively expanding the maintainer team.
-If you're an experienced contributor who wants to help shape MarketingClaw's direction — whether through code, docs, or community — we'd like to hear from you.
+MarketingClaw is maintained by a small team. If you are an experienced contributor
+who wants to help shape its direction through code, docs, or triage, open a few PRs
+first, then reach out at nagyyousef323@gmail.com with links to your work and a short
+introduction. We add maintainers slowly and deliberately.
 
-Being a maintainer is a responsibility, not an honorary title. We expect active, consistent involvement — triaging issues, reviewing PRs, and helping move the project forward.
+## Report a vulnerability
 
-Still interested? Email contributing@marketingclaw.ai with:
-
-- Links to your PRs on MarketingClaw (if you don't have any, start there first)
-- Links to open source projects you maintain or actively contribute to
-- Your GitHub, Discord, and X/Twitter handles
-- A brief intro: background, experience, and areas of interest
-- Languages you speak and where you're based
-- How much time you can realistically commit
-
-We welcome people across all skill sets — engineering, documentation, community management, and more.
-We review every human-only-written application carefully and add maintainers slowly and deliberately.
-Please allow a few weeks for a response.
-
-## Report a Vulnerability
-
-We take security reports seriously. Report vulnerabilities directly to the repository where the issue lives:
-
-- **Core CLI and gateway** — [marketingclaw/marketingclaw](https://github.com/promisingcoder/marketingclaw)
-- **macOS desktop app** — [marketingclaw/marketingclaw](https://github.com/promisingcoder/marketingclaw) (apps/macos)
-- **iOS app** — [marketingclaw/marketingclaw](https://github.com/promisingcoder/marketingclaw) (apps/ios)
-- **Android app** — [marketingclaw/marketingclaw](https://github.com/promisingcoder/marketingclaw) (apps/android)
-- **ClawHub** — [marketingclaw/clawhub](https://github.com/openclaw/clawhub)
-- **Trust and threat model** — [marketingclaw/trust](https://github.com/openclaw/trust)
-
-For issues that don't fit a specific repo, or if you're unsure, email **nagyyousef323@gmail.com** and we'll route it.
-
-### Required in Reports
-
-1. **Title**
-2. **Severity Assessment**
-3. **Impact**
-4. **Affected Component**
-5. **Technical Reproduction**
-6. **Demonstrated Impact**
-7. **Environment**
-8. **Remediation Advice**
-
-Reports without reproduction steps, demonstrated impact, and remediation advice will be deprioritized. Given the volume of AI-generated scanner findings, we must ensure we're receiving vetted reports from researchers who understand the issues.
+Do not file public issues for security problems. Follow the private disclosure
+process in [`SECURITY.md`](SECURITY.md): submit a GitHub Security Advisory on the
+fork, or email nagyyousef323@gmail.com if you are unsure where a report belongs.
