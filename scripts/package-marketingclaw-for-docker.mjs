@@ -653,18 +653,13 @@ export async function packOpenClawPackageForDocker(sourceDir, outputDir, options
       "--pack-destination",
       outputDir,
     ];
-    packOutput = await runCaptureImpl(
-      "npm",
-      packArgs,
-      sourceDir,
-      {
-        deferForwardedSignalExit: true,
-        timeoutMs: resolveTimeoutMs(
-          "OPENCLAW_DOCKER_PACKAGE_PACK_TIMEOUT_MS",
-          DEFAULT_PACKAGE_PACK_TIMEOUT_MS,
-        ),
-      },
-    );
+    packOutput = await runCaptureImpl("npm", packArgs, sourceDir, {
+      deferForwardedSignalExit: true,
+      timeoutMs: resolveTimeoutMs(
+        "OPENCLAW_DOCKER_PACKAGE_PACK_TIMEOUT_MS",
+        DEFAULT_PACKAGE_PACK_TIMEOUT_MS,
+      ),
+    });
   } finally {
     try {
       await cleanupBundledAiRuntime();
