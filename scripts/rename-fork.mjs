@@ -86,6 +86,7 @@ function isPathExcluded(p) {
 // Content exclusions (skip file entirely)
 function isContentExcluded(p) {
   if (isNodeModules(p)) return true;
+  if (p === "scripts/rename-fork.mjs") return true; // never rewrite this tool's own rules
   const base = p.split("/").pop();
   if (base === "LICENSE") return true;
   if (base === "THIRD_PARTY_NOTICES.md") return true;
@@ -378,6 +379,7 @@ function runAudit(rows, workspaceSuffixes) {
 
   const fileAllowed = (f) => {
     const base = f.split("/").pop();
+    if (f === "scripts/rename-fork.mjs") return true; // the rename tool itself contains openclaw
     if (base === "LICENSE") return true;
     if (base === "THIRD_PARTY_NOTICES.md") return true;
     if (f === "UPSTREAM-CHANGELOG.md") return true;
