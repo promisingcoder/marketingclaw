@@ -2,8 +2,8 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import {
-  MARKETINGCLAW_CRABLINE_MANIFEST_PATH,
-  type MarketingClawCrablineChannelDriverSelection,
+  OPENCLAW_CRABLINE_MANIFEST_PATH,
+  type OpenClawCrablineChannelDriverSelection,
 } from "@openclaw/crabline";
 import { fetchWithSsrFGuard } from "marketingclaw/plugin-sdk/ssrf-runtime";
 import { withTempDir } from "marketingclaw/plugin-sdk/test-env";
@@ -11,9 +11,7 @@ import { describe, expect, it } from "vitest";
 import { createQaBusState } from "./bus-state.js";
 import { createQaCrablineTransportAdapter } from "./crabline-transport.js";
 
-function createSelection(
-  channel: MarketingClawCrablineChannelDriverSelection["channel"] = "telegram",
-) {
+function createSelection(channel: OpenClawCrablineChannelDriverSelection["channel"] = "telegram") {
   return {
     capabilityMatrixPath: "crabline-fake-provider-capabilities.json",
     channel,
@@ -53,7 +51,7 @@ describe("crabline transport", () => {
         });
 
         const manifest = JSON.parse(
-          await fs.readFile(path.join(outputDir, MARKETINGCLAW_CRABLINE_MANIFEST_PATH), "utf8"),
+          await fs.readFile(path.join(outputDir, OPENCLAW_CRABLINE_MANIFEST_PATH), "utf8"),
         ) as {
           provider?: string;
         };
@@ -109,7 +107,7 @@ describe("crabline transport", () => {
         });
 
         const manifest = JSON.parse(
-          await fs.readFile(path.join(outputDir, MARKETINGCLAW_CRABLINE_MANIFEST_PATH), "utf8"),
+          await fs.readFile(path.join(outputDir, OPENCLAW_CRABLINE_MANIFEST_PATH), "utf8"),
         ) as {
           botToken: string;
           endpoints: { apiRoot: string };
@@ -158,7 +156,7 @@ describe("crabline transport", () => {
         });
 
         const manifest = JSON.parse(
-          await fs.readFile(path.join(outputDir, MARKETINGCLAW_CRABLINE_MANIFEST_PATH), "utf8"),
+          await fs.readFile(path.join(outputDir, OPENCLAW_CRABLINE_MANIFEST_PATH), "utf8"),
         ) as {
           botToken: string;
           endpoints: { apiRoot: string };
@@ -192,7 +190,7 @@ describe("crabline transport", () => {
 
       try {
         const manifest = JSON.parse(
-          await fs.readFile(path.join(outputDir, MARKETINGCLAW_CRABLINE_MANIFEST_PATH), "utf8"),
+          await fs.readFile(path.join(outputDir, OPENCLAW_CRABLINE_MANIFEST_PATH), "utf8"),
         ) as {
           botToken: string;
           endpoints: { apiRoot: string };
@@ -273,7 +271,7 @@ describe("crabline transport", () => {
         });
 
         const manifest = JSON.parse(
-          await fs.readFile(path.join(outputDir, MARKETINGCLAW_CRABLINE_MANIFEST_PATH), "utf8"),
+          await fs.readFile(path.join(outputDir, OPENCLAW_CRABLINE_MANIFEST_PATH), "utf8"),
         ) as {
           provider?: string;
         };
@@ -399,7 +397,7 @@ describe("crabline transport", () => {
         expect(env.CRABLINE_WHATSAPP_API_ROOT).toBeUndefined();
 
         const manifest = JSON.parse(
-          await fs.readFile(path.join(outputDir, MARKETINGCLAW_CRABLINE_MANIFEST_PATH), "utf8"),
+          await fs.readFile(path.join(outputDir, OPENCLAW_CRABLINE_MANIFEST_PATH), "utf8"),
         ) as {
           provider?: string;
         };
@@ -502,7 +500,7 @@ describe("crabline transport", () => {
       try {
         const delivery = transport.buildAgentDelivery({ target: "dm:alice" });
         const manifest = JSON.parse(
-          await fs.readFile(path.join(outputDir, MARKETINGCLAW_CRABLINE_MANIFEST_PATH), "utf8"),
+          await fs.readFile(path.join(outputDir, OPENCLAW_CRABLINE_MANIFEST_PATH), "utf8"),
         ) as {
           endpoints: { rpcUrl: string };
         };
@@ -610,7 +608,7 @@ describe("crabline transport", () => {
         });
         const delivery = transport.buildAgentDelivery({ target: "group:qa-channel" });
         const manifest = JSON.parse(
-          await fs.readFile(path.join(outputDir, MARKETINGCLAW_CRABLINE_MANIFEST_PATH), "utf8"),
+          await fs.readFile(path.join(outputDir, OPENCLAW_CRABLINE_MANIFEST_PATH), "utf8"),
         ) as {
           botToken: string;
           endpoints: { apiRoot: string };
@@ -724,7 +722,7 @@ describe("crabline transport", () => {
         const delivery = transport.buildAgentDelivery({ target: `group:${roomId}` });
         const providerRoomId = delivery.to.replace(/^room:/u, "");
         const manifest = JSON.parse(
-          await fs.readFile(path.join(outputDir, MARKETINGCLAW_CRABLINE_MANIFEST_PATH), "utf8"),
+          await fs.readFile(path.join(outputDir, OPENCLAW_CRABLINE_MANIFEST_PATH), "utf8"),
         ) as {
           accessToken: string;
           endpoints: { clientApiRoot: string };
@@ -803,7 +801,7 @@ describe("crabline transport", () => {
         });
 
         const manifest = JSON.parse(
-          await fs.readFile(path.join(outputDir, MARKETINGCLAW_CRABLINE_MANIFEST_PATH), "utf8"),
+          await fs.readFile(path.join(outputDir, OPENCLAW_CRABLINE_MANIFEST_PATH), "utf8"),
         ) as {
           botToken: string;
           endpoints: { apiRoot: string };

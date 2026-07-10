@@ -220,6 +220,44 @@ function makeContentTransformer(workspaceSuffixes, counters) {
       return protect(m);
     });
 
+    // ---- KEEP external-package IDENTIFIERS/SUBPATHS that consuming code imports
+    // FROM upstream deps. These live in our source in upstream OpenClaw casing on
+    // purpose (they must match the external export names byte-for-byte); the generic
+    // rules below would otherwise re-break them on a rerun.
+    //
+    // @openclaw/crabline re-exports (consumed in extensions/qa-lab): value+type
+    // identifiers (OpenClawCrabline*), SCREAMING consts (OPENCLAW_CRABLINE_*), and
+    // the adapter param key `openclawConfig`.
+    text = text.replace(/OpenClawCrabline[A-Za-z0-9]*/g, (m) => {
+      bump("KEEP OpenClawCrabline<identifier> (external @openclaw/crabline export)");
+      return protect(m);
+    });
+    text = text.replace(/OPENCLAW_CRABLINE[A-Z0-9_]*/g, (m) => {
+      bump("KEEP OPENCLAW_CRABLINE<identifier> (external @openclaw/crabline export)");
+      return protect(m);
+    });
+    text = text.replace(/openclawConfig\b/g, (m) => {
+      bump("KEEP openclawConfig (external crabline adapter param)");
+      return protect(m);
+    });
+    // tokenjuice "openclaw" host: the exports-map subpath + the factory it exports
+    // (aliased locally in extensions/tokenjuice/runtime-api.ts).
+    text = text.replace(/tokenjuice\/openclaw/g, (m) => {
+      bump("KEEP tokenjuice/openclaw (external subpath)");
+      return protect(m);
+    });
+    text = text.replace(/TokenjuiceOpenClaw[A-Za-z0-9]*/g, (m) => {
+      bump("KEEP TokenjuiceOpenClaw<identifier> (external tokenjuice export)");
+      return protect(m);
+    });
+    // DSSE payloadType for hosted plugin-catalog feed envelopes: a wire-protocol
+    // string signed by upstream ClawHub and embedded in the signature PAE. Renaming
+    // it would reject every real upstream-signed feed (protocol constant, not brand).
+    text = text.replace(/openclaw\.official-external-plugin-catalog-feed\.v1/g, (m) => {
+      bump("KEEP openclaw.official-external-plugin-catalog-feed.v1 (DSSE payload type)");
+      return protect(m);
+    });
+
     // ---- TARGETED URL map: ONLY the exact main repo openclaw/openclaw maps to
     // the fork. A trailing [A-Za-z0-9-] means a different repo (openclaw-ansible,
     // openclaw-windows-node, ...) which is kept below. Runs BEFORE the URL-KEEP.
@@ -403,6 +441,16 @@ function runAudit(rows, workspaceSuffixes) {
     // any surviving upstream repo URL (main repo openclaw/openclaw was mapped away)
     s = s.replace(/(?:github\.com|raw\.githubusercontent\.com)\/openclaw\/[A-Za-z0-9._-]+/gi, "");
     s = s.replace(/deepwiki\.com\/openclaw(?:\/openclaw)?/gi, "");
+    // external @openclaw/crabline re-exported identifiers/types + adapter param key
+    // (see the matching KEEP protect rules in makeContentTransformer)
+    s = s.replace(/OpenClawCrabline[A-Za-z0-9]*/g, "");
+    s = s.replace(/OPENCLAW_CRABLINE[A-Z0-9_]*/g, "");
+    s = s.replace(/openclawConfig\b/g, "");
+    // external tokenjuice "openclaw" host subpath + its exported factory
+    s = s.replace(/tokenjuice\/openclaw/g, "");
+    s = s.replace(/TokenjuiceOpenClaw[A-Za-z0-9]*/g, "");
+    // DSSE payload type signed by upstream ClawHub (wire-protocol constant)
+    s = s.replace(/openclaw\.official-external-plugin-catalog-feed\.v1/g, "");
     return s;
   };
 

@@ -2,8 +2,8 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import {
-  MARKETINGCLAW_CRABLINE_DEFAULT_CHANNEL,
-  resolveMarketingClawCrablineChannelDriverSelection,
+  OPENCLAW_CRABLINE_DEFAULT_CHANNEL,
+  resolveOpenClawCrablineChannelDriverSelection,
 } from "@openclaw/crabline";
 import { formatErrorMessage } from "marketingclaw/plugin-sdk/error-runtime";
 import { parseStrictPositiveInteger } from "marketingclaw/plugin-sdk/number-runtime";
@@ -926,9 +926,9 @@ export async function runQaSuiteCommand(opts: QaSuiteCommandOptions) {
   }
   const channelDriverSelection =
     channelDriver === "crabline"
-      ? resolveMarketingClawCrablineChannelDriverSelection({
+      ? resolveOpenClawCrablineChannelDriverSelection({
           channel: resolveQaSuiteScenarioChannel({
-            defaultChannel: MARKETINGCLAW_CRABLINE_DEFAULT_CHANNEL,
+            defaultChannel: OPENCLAW_CRABLINE_DEFAULT_CHANNEL,
             explicitChannel: opts.channel,
             scenarios: selectQaScenarioDefinitionsForChannelResolution({
               scenarioIds,

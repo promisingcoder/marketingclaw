@@ -4,7 +4,7 @@ import { randomUUID } from "node:crypto";
 import fs from "node:fs";
 import { access, mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
-import type { MarketingClawCrablineChannelDriverSelection } from "@openclaw/crabline";
+import type { OpenClawCrablineChannelDriverSelection } from "@openclaw/crabline";
 import { sleep } from "marketingclaw/plugin-sdk/runtime-env";
 import { appendRegularFile } from "marketingclaw/plugin-sdk/security-runtime";
 import { uniqueStrings } from "marketingclaw/plugin-sdk/string-coerce-runtime";
@@ -80,7 +80,7 @@ type QaMultipassPlan = {
   fastMode?: boolean;
   thinkingDefault?: string;
   runtimePair?: [RuntimeId, RuntimeId];
-  channelDriverSelection?: MarketingClawCrablineChannelDriverSelection;
+  channelDriverSelection?: OpenClawCrablineChannelDriverSelection;
   enabledPluginIds?: string[];
   scenarioIds: string[];
   forwardedEnv: Record<string, string>;
@@ -245,7 +245,7 @@ export function createQaMultipassPlan(params: {
   scenarioIds?: string[];
   concurrency?: number;
   runtimePair?: [RuntimeId, RuntimeId];
-  channelDriverSelection?: MarketingClawCrablineChannelDriverSelection;
+  channelDriverSelection?: OpenClawCrablineChannelDriverSelection;
   enabledPluginIds?: string[];
   image?: string;
   cpus?: number;
@@ -575,7 +575,7 @@ export async function runQaMultipass(params: {
   scenarioIds?: string[];
   concurrency?: number;
   runtimePair?: [RuntimeId, RuntimeId];
-  channelDriverSelection?: MarketingClawCrablineChannelDriverSelection;
+  channelDriverSelection?: OpenClawCrablineChannelDriverSelection;
   enabledPluginIds?: string[];
   image?: string;
   cpus?: number;

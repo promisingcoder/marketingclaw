@@ -121,7 +121,10 @@ export function resolvePluginNpmProjectDir(params: {
   );
 }
 
-const PLUGIN_NPM_GENERATION_PROJECT_SEPARATOR = "__marketingclaw-generation__";
+// Kept short deliberately: this token is embedded in on-disk generation project
+// directory names, and every extra character erodes Windows MAX_PATH headroom for
+// deeply nested vendored runtime binaries (invariant guarded by install-paths.test.ts).
+const PLUGIN_NPM_GENERATION_PROJECT_SEPARATOR = "__generation__";
 const PLUGIN_NPM_GENERATION_KEY_HASH_CHARS = 16;
 
 /** Resolves the managed npm artifact-generation project directory prefix for a package. */

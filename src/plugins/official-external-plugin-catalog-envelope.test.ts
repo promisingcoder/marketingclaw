@@ -88,7 +88,7 @@ describe("official external plugin catalog signed envelopes", () => {
         payloadType: OFFICIAL_EXTERNAL_PLUGIN_CATALOG_FEED_PAYLOAD_TYPE,
         payloadBytes: Buffer.from("abc", "utf8"),
       }).toString("utf8"),
-    ).toBe("DSSEv1 49 marketingclaw.official-external-plugin-catalog-feed.v1 3 abc");
+    ).toBe("DSSEv1 49 openclaw.official-external-plugin-catalog-feed.v1 3 abc");
   });
 
   it("verifies a signed ClawHub feed envelope with a trusted PEM key", () => {

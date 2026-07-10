@@ -1,2 +1,2 @@
 // Tokenjuice API module exposes the plugin public contract.
-export { createTokenjuiceMarketingClawEmbeddedExtension } from "tokenjuice/marketingclaw";
+export { createTokenjuiceOpenClawEmbeddedExtension as createTokenjuiceMarketingClawEmbeddedExtension } from "tokenjuice/openclaw";
