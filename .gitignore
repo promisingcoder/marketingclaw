@@ -113,6 +113,8 @@ USER.md
 # though the bare names match the local-untracked rule above.
 !extensions/oc-path/src/oc-path/tests/fixtures/real/IDENTITY.md
 !extensions/oc-path/src/oc-path/tests/fixtures/real/USER.md
+# Exception: marketing role persona templates ship with the package.
+!src/agents/templates/marketing/**/IDENTITY.md
 *.tgz
 *.tar.gz
 *.zip
