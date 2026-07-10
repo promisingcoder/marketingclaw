@@ -17,6 +17,11 @@ const coreCliCommandCatalog = defineCommandDescriptorCatalog([
     hasSubcommands: false,
   },
   {
+    name: "setup-marketing",
+    description: "Provision the marketing team: shared brand state, agents, workspaces, and cron",
+    hasSubcommands: false,
+  },
+  {
     name: "onboard",
     description: "Guided setup for auth, models, Gateway, workspace, channels, and skills",
     hasSubcommands: false,

@@ -63,6 +63,11 @@ const coreEntrySpecs: readonly CommandGroupDescriptorSpec<
         exportName: "registerSetupCommand",
       },
       {
+        commandNames: ["setup-marketing"],
+        loadModule: () => import("./register.setup-marketing.js"),
+        exportName: "registerSetupMarketingCommand",
+      },
+      {
         commandNames: ["onboard"],
         loadModule: () => import("./register.onboard.js"),
         exportName: "registerOnboardCommand",
