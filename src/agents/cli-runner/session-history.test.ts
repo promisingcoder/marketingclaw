@@ -996,7 +996,10 @@ describe("buildCliSessionHistoryPrompt", () => {
     const prompt = buildCliSessionHistoryPrompt({
       messages: [{ role: "compactionSummary", summary: `aa😀${"z".repeat(100)}` }],
       prompt: "next",
-      maxHistoryChars: 80,
+      // 85 keeps the summary budget at 23 (cap minus the reseed marker + separator),
+      // landing the truncation on the emoji boundary. The "MarketingClaw" marker is 5
+      // chars longer than upstream's, so the cap is bumped by 5 to hold that boundary.
+      maxHistoryChars: 85,
     });
 
     expect(prompt).toContain(
