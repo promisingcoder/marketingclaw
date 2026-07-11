@@ -1,5 +1,4 @@
 // Write Plugin Sdk Entry Dts script supports MarketingClaw repository automation.
-import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -90,29 +89,19 @@ const flatDeclarationEntrypoints = shouldBuildPrivateQaEntries
   : publicPluginSdkEntrypoints;
 const flatDeclarationEntrypointSet = new Set(flatDeclarationEntrypoints);
 
-if (USE_CANONICAL_DECLARATIONS) {
-  const canonicalMissing = flatDeclarationEntrypoints.some(
-    (entry) => !fs.existsSync(path.join(distPluginSdkDir, `${entry}.d.ts`)),
+// Prefer the canonical flat declarations emitted by the full tsdown .d.ts build.
+// Memory-constrained CI runners skip that build (MARKETINGCLAW_RUN_NODE_SKIP_DTS_BUILD=1)
+// because it OOMs; when the canonical declarations are absent, fall back to emitting the
+// targeted plugin-sdk declarations here (tsconfig.plugin-sdk.dts.json only), which is far
+// lighter than the full-project dts.
+const canonicalDeclarationsPresent =
+  USE_CANONICAL_DECLARATIONS &&
+  flatDeclarationEntrypoints.every((entry) =>
+    fs.existsSync(path.join(distPluginSdkDir, `${entry}.d.ts`)),
   );
-  if (canonicalMissing) {
-    // Memory-constrained CI runners skip the full tsdown .d.ts build
-    // (MARKETINGCLAW_RUN_NODE_SKIP_DTS_BUILD=1) because it OOMs. Produce the canonical
-    // plugin-sdk declarations with the lighter tsgo build instead — the same
-    // dist/plugin-sdk/*.d.ts the extension package-boundary check already relies on.
-    execFileSync(
-      process.execPath,
-      ["scripts/run-tsgo.mjs", "-p", "tsconfig.plugin-sdk.dts.json", "--declaration", "true"],
-      { stdio: "inherit" },
-    );
-  }
-  for (const entry of flatDeclarationEntrypoints) {
-    const declarationPath = path.join(distPluginSdkDir, `${entry}.d.ts`);
-    if (!fs.existsSync(declarationPath)) {
-      throw new Error(
-        `Missing canonical plugin SDK declaration: ${path.relative(process.cwd(), declarationPath)}`,
-      );
-    }
-  }
+
+if (canonicalDeclarationsPresent) {
+  // Canonical declarations already present; nothing to emit.
 } else {
   const flatDeclarationTempDir = fs.mkdtempSync(
     path.join(os.tmpdir(), "marketingclaw-plugin-sdk-dts-"),
