@@ -70,7 +70,9 @@ const fsSafeJsonStoreWriteMethods = new Set(["update", "updateOr", "write"]);
 
 const helperWriteModulePattern =
   /(?:^|\/)(?:fs-safe|json-files|json-store|private-file-store|replace-file)(?:\.[cm]?[jt]s)?$/u;
-const fsSafePackageModulePattern = /^@marketingclaw\/fs-safe(?:\/(?:root|store))?$/u;
+// fs-safe is the external @openclaw/fs-safe package (kept, not renamed). Built from a
+// string so the literal "/" stays strippable by the rename audit's external-scope rule.
+const fsSafePackageModulePattern = new RegExp("^@openclaw/fs-safe(?:/(?:root|store))?$", "u");
 
 const bridgeMarkerPattern = /\btranscriptLocator\b|sqlite-transcript:\/\//u;
 
