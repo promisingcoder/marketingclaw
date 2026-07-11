@@ -71,46 +71,9 @@ Already installed? Switch between package and git installs with
 
 ### npm, pnpm, or bun
 
-If you already manage Node yourself:
-
-<Tabs>
-  <Tab title="npm">
-    ```bash
-    npm install -g openclaw@latest
-    marketingclaw onboard --install-daemon
-    ```
-
-    <Note>
-    The hosted installer clears npm freshness filters such as `min-release-age`
-    for the MarketingClaw package install. If you install manually with npm, your own
-    npm policy still applies.
-    </Note>
-
-  </Tab>
-  <Tab title="pnpm">
-    ```bash
-    pnpm add -g openclaw@latest
-    pnpm approve-builds -g
-    marketingclaw onboard --install-daemon
-    ```
-
-    <Note>
-    pnpm requires explicit approval for packages with build scripts. Run `pnpm approve-builds -g` after the first install.
-    </Note>
-
-  </Tab>
-  <Tab title="bun">
-    ```bash
-    bun add -g openclaw@latest
-    marketingclaw onboard --install-daemon
-    ```
-
-    <Note>
-    Bun is supported for the global CLI install path. For the Gateway runtime, Node remains the recommended daemon runtime.
-    </Note>
-
-  </Tab>
-</Tabs>
+MarketingClaw v1 doesn't publish npm, pnpm, or bun packages yet — this fork is
+from-source only. Use the [From source](#from-source) steps below: `git clone`,
+`pnpm install`, then `pnpm build && pnpm ui:build`.
 
 ### From source
 
@@ -145,7 +108,7 @@ curl -fsSL --proto '=https' --tlsv1.2 https://marketingclaw.ai/install.sh | bash
     Declarative install via Nix flake.
   </Card>
   <Card title="Ansible" href="/install/ansible" icon="server">
-    Automated fleet provisioning.
+    Not yet available for this fork; see why and what to use instead.
   </Card>
   <Card title="Bun" href="/install/bun" icon="zap">
     CLI-only usage via the Bun runtime.

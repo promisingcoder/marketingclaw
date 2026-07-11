@@ -57,9 +57,10 @@ pnpm marketingclaw gateway
 pnpm marketingclaw dashboard
 ```
 
-> `setup-marketing` is the one new command MarketingClaw adds on top of the engine;
-> it ships in a later release. Until then, `onboard` seeds a marketing-flavored
-> workspace so a fresh install still boots the team. The full walkthrough lives in
+> `setup-marketing` is the one new command MarketingClaw adds on top of the engine.
+> If you skip it, `onboard` alone still seeds a marketing-flavored workspace with the
+> CMO — run `setup-marketing` at any time to provision the full team; it's idempotent.
+> The full walkthrough lives in
 > [docs/start/marketing-quickstart.md](docs/start/marketing-quickstart.md).
 
 Bring your own model API key (Anthropic, OpenAI, Google, and others); onboarding

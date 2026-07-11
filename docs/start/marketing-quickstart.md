@@ -65,7 +65,7 @@ the team its first tasks.
     messaging app, connect a channel and bind it to the CMO:
 
     ```bash
-    pnpm marketingclaw agents bind
+    pnpm marketingclaw agents bind --agent cmo --bind <channel[:accountId]>
     ```
 
     Slack and Telegram are the fastest to set up. See [Channels](/channels) for

@@ -4110,19 +4110,7 @@ Do not edit it by hand; run `pnpm docs:map:gen`.
 ## install/ansible.md
 
 - Route: /install/ansible
-- Headings:
-  - H2: Prerequisites
-  - H2: What you get
-  - H2: Quick start
-  - H2: What gets installed
-  - H2: Post-install setup
-  - H3: Quick commands
-  - H2: Security architecture
-  - H2: Manual installation
-  - H2: Updating
-  - H2: Troubleshooting
-  - H2: Advanced configuration
-  - H2: Related
+- Headings: none
 
 ## install/azure.md
 
@@ -8482,9 +8470,10 @@ Do not edit it by hand; run `pnpm docs:map:gen`.
 
 - Route: /reference/templates/BOOTSTRAP
 - Headings:
-  - H1: BOOTSTRAP.md - Hello, World
+  - H1: BOOTSTRAP.md - Learn the Brand
   - H2: The Conversation
-  - H2: After You Know Who You Are
+  - H2: Write It Down
+  - H2: The Rule You Carry Forever
   - H2: Connect (Optional)
   - H2: When You Are Done
   - H2: Related
@@ -8535,6 +8524,7 @@ Do not edit it by hand; run `pnpm docs:map:gen`.
 - Headings:
   - H1: SOUL.md - Who You Are
   - H2: Core Truths
+  - H2: The Red Line
   - H2: Boundaries
   - H2: Vibe
   - H2: Continuity

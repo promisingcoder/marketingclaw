@@ -93,6 +93,8 @@ function isContentExcluded(p) {
   if (p === "UPSTREAM-CHANGELOG.md") return true;
   // Fork-origin attribution must name the real upstream project; don't rewrite it.
   if (p === "CHANGELOG.md") return true;
+  // Explains that Ansible deployment installs the real upstream engine; must name it.
+  if (p === "docs/install/ansible.md") return true;
   if (base === "pnpm-lock.yaml") return true;
   if (base === "npm-shrinkwrap.json") return true;
   if (p.startsWith("patches/")) return true;
@@ -427,6 +429,10 @@ function runAudit(rows, workspaceSuffixes) {
     if (f === "UPSTREAM-CHANGELOG.md") return true;
     // Fork-origin attribution must name the real upstream project; don't flag it.
     if (f === "CHANGELOG.md") return true;
+    // Explains that Ansible deployment installs the real upstream engine; must name it.
+    if (f === "docs/install/ansible.md") return true;
+    // Mirror isContentExcluded: real external packages' bin names must not be flagged.
+    if (base === "npm-shrinkwrap.json") return true;
     if (f.startsWith("patches/")) return true;
     if (f.startsWith("apps/android/THIRD_PARTY_LICENSES/")) return true;
     return false;
