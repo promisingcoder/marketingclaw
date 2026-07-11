@@ -25,7 +25,11 @@ const OPTIONAL_UNDECLARED_RUNTIME_IMPORTS = new Map<string, Set<string>>([
     // @discordjs/voice still probes the native addon in its dependency report path.
     new Set(["@discordjs/opus"]),
   ],
-  ["extensions/qa-lab", new Set(["crabline"])],
+  // @openclaw/crabline is an external published package pinned in qa-lab's
+  // devDependencies and imported by its runtime transport. The workspace-scope skip
+  // below covers @marketingclaw/* only, so this kept-upstream external dependency is
+  // allowed here rather than moved into the runtime dependency sections.
+  ["extensions/qa-lab", new Set(["crabline", "@openclaw/crabline"])],
 ]);
 const INDIRECT_RUNTIME_DEPENDENCIES = new Map<string, Set<string>>([
   [
