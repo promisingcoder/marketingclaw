@@ -43,14 +43,19 @@ describe("parseGitHubIssueOrPullRequestLink", () => {
     ).toMatchObject({
       kind: "issue",
       number: 99815,
-      owner: "marketingclaw",
+      owner: "promisingcoder",
       repo: "marketingclaw",
     });
     expect(
       parseGitHubIssueOrPullRequestLink(
         "https://github.com/promisingcoder/marketingclaw/pull/99816/files",
       ),
-    ).toMatchObject({ kind: "pull", number: 99816, owner: "marketingclaw", repo: "marketingclaw" });
+    ).toMatchObject({
+      kind: "pull",
+      number: 99816,
+      owner: "promisingcoder",
+      repo: "marketingclaw",
+    });
   });
 
   it("rejects non-item, non-HTTPS, credentialed, and non-GitHub links", () => {
@@ -99,8 +104,8 @@ describe("marketingclaw-github-link-hovercard-provider", () => {
       login: "steipete",
       mergedAt: "2026-07-04T09:53:52Z",
       number: 99816,
-      owner: "MarketingClaw",
-      repo: "MarketingClaw",
+      owner: "promisingcoder",
+      repo: "marketingclaw",
       state: "closed",
       title: "fix(agents): derive conversation scope from trusted group facts",
       updatedAt: "2026-07-05T09:55:00Z",
@@ -127,7 +132,7 @@ describe("marketingclaw-github-link-hovercard-provider", () => {
     expect(request).toHaveBeenCalledWith("controlUi.githubPreview", {
       kind: "pull",
       number: 99816,
-      owner: "marketingclaw",
+      owner: "promisingcoder",
       repo: "marketingclaw",
     });
 
@@ -145,7 +150,7 @@ describe("marketingclaw-github-link-hovercard-provider", () => {
       kind: "issue",
       login: "octocat",
       number: 99815,
-      owner: "marketingclaw",
+      owner: "promisingcoder",
       repo: "marketingclaw",
       state: "open",
       stateReason: null,
