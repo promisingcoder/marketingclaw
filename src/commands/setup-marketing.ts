@@ -32,12 +32,26 @@ export type MarketingRole = {
   subagentAllow?: string[];
   /** Marks the default agent that receives all DMs and WebChat. */
   isDefault?: boolean;
+  /**
+   * Periodic heartbeat cadence for this role. Setting it on any role makes the
+   * whole roster "explicit heartbeat" (see the note on MARKETING_ROLES): only
+   * roles that carry this field are heartbeat-scheduled and wake-eligible.
+   */
+  heartbeat?: { every: string };
 };
 
 /**
  * Flat marketing roster: a CMO orchestrator plus five specialists. Order
  * matters — the CMO is listed first so it resolves as the default agent even
  * when other tooling picks the first entry.
+ *
+ * Heartbeat note: the runner's `resolveHeartbeatAgents` is all-or-nothing —
+ * once any agent carries an explicit `heartbeat`, ONLY agents with one are
+ * heartbeat-scheduled (the implicit "just the default agent" fallback no longer
+ * applies). That map also gates targeted wakes, so an unscheduled default agent
+ * would silently drop Slack-approval and background-exec wakes. Social needs a
+ * heartbeat to run its 12h mention triage, so the CMO carries an explicit
+ * heartbeat too — at its prior implicit 30m cadence — to stay wake-eligible.
  */
 export const MARKETING_ROLES: readonly MarketingRole[] = [
   {
@@ -49,6 +63,9 @@ export const MARKETING_ROLES: readonly MarketingRole[] = [
     skills: ["postiz", "wordpress", "listmonk", "gsc", "ga4", "marketing-report", "summarize"],
     subagentAllow: ["content", "social", "email", "seo", "analyst"],
     isDefault: true,
+    // Keeps the default agent wake-eligible under explicit-heartbeat mode; its
+    // HEARTBEAT.md is comments-only, so this run is inert but harmless.
+    heartbeat: { every: "30m" },
   },
   {
     id: "content",
@@ -64,6 +81,8 @@ export const MARKETING_ROLES: readonly MarketingRole[] = [
     description:
       "Social publisher and scheduler via Postiz + xurl. Runs mention triage on a heartbeat.",
     skills: ["postiz", "xurl", "meme-maker", "gifgrep"],
+    // Drives the 12h mentions-check task in social's HEARTBEAT.md.
+    heartbeat: { every: "12h" },
   },
   {
     id: "email",
@@ -91,8 +110,22 @@ export const MARKETING_ROLES: readonly MarketingRole[] = [
   },
 ] as const;
 
-/** Role-specific workspace files copied over the generic bootstrap templates. */
+/**
+ * Persona files copied over the generic bootstrap templates. These must land
+ * BEFORE ensureAgentWorkspace so the role versions win over the generic
+ * templates (both use write-if-missing).
+ */
 const ROLE_OVERLAY_FILES = ["SOUL.md", "IDENTITY.md", "AGENTS.md", "HEARTBEAT.md"] as const;
+
+/**
+ * BOOTSTRAP.md is overlaid AFTER ensureAgentWorkspace. ensureAgentWorkspace runs
+ * a bootstrap-completion reconcile that deletes BOOTSTRAP.md once the persona
+ * diverges from the starter template — which the ROLE_OVERLAY_FILES persona
+ * overlay guarantees — so seeding it earlier gets it removed within the same
+ * run. Only the CMO template ships a BOOTSTRAP.md; the overlay skips roles
+ * without one.
+ */
+const ROLE_BOOTSTRAP_OVERLAY_FILES = ["BOOTSTRAP.md"] as const;
 
 /** A default cron job to install, described in terms cron.add understands. */
 export type DefaultCronJobSpec = {
@@ -229,6 +262,9 @@ export function buildRoleAgentEntry(role: MarketingRole, stateDir: string): Agen
   }
   if (role.subagentAllow && role.subagentAllow.length > 0) {
     entry.subagents = { allowAgents: [...role.subagentAllow] };
+  }
+  if (role.heartbeat) {
+    entry.heartbeat = { ...role.heartbeat };
   }
   return entry;
 }
@@ -549,15 +585,16 @@ async function defaultPromptBrandInputs(opts: SetupMarketingOptions): Promise<Br
   };
 }
 
-/** Copies role-specific persona files into a workspace, before generic seeding. */
+/** Copies the named role template files into a workspace, skipping missing sources. */
 async function overlayRoleTemplates(params: {
   role: MarketingRole;
   workspaceDir: string;
   templatesDir: string;
+  files: readonly string[];
 }): Promise<string[]> {
   const roleDir = path.join(params.templatesDir, "marketing", params.role.id);
   const written: string[] = [];
-  for (const fileName of ROLE_OVERLAY_FILES) {
+  for (const fileName of params.files) {
     let content: string;
     try {
       content = await fs.readFile(path.join(roleDir, fileName), "utf-8");
@@ -671,12 +708,27 @@ export async function setupMarketingCommand(
   for (const role of MARKETING_ROLES) {
     const workspaceDir = resolveRoleWorkspaceDir(stateDir, role.id);
     await fs.mkdir(workspaceDir, { recursive: true });
-    const overlaid = await overlayRoleTemplates({ role, workspaceDir, templatesDir });
+    const personaOverlaid = await overlayRoleTemplates({
+      role,
+      workspaceDir,
+      templatesDir,
+      files: ROLE_OVERLAY_FILES,
+    });
     await ensureAgentWorkspace({ dir: workspaceDir, ensureBootstrapFiles: true });
-    workspaces.push({ id: role.id, workspace: workspaceDir, roleFilesAdded: overlaid.length });
+    // BOOTSTRAP.md lands after ensureAgentWorkspace so its completion reconcile
+    // cannot delete the CMO's freshly-seeded brand interview (see the note on
+    // ROLE_BOOTSTRAP_OVERLAY_FILES).
+    const bootstrapOverlaid = await overlayRoleTemplates({
+      role,
+      workspaceDir,
+      templatesDir,
+      files: ROLE_BOOTSTRAP_OVERLAY_FILES,
+    });
+    const roleFilesAdded = personaOverlaid.length + bootstrapOverlaid.length;
+    workspaces.push({ id: role.id, workspace: workspaceDir, roleFilesAdded });
     stepRuntime.log(
       `Workspace ${role.id}: ${shortenHomePath(workspaceDir)}${
-        overlaid.length > 0 ? ` (+${overlaid.length} role files)` : ""
+        roleFilesAdded > 0 ? ` (+${roleFilesAdded} role files)` : ""
       }`,
     );
   }

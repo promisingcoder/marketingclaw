@@ -46,9 +46,22 @@ describe("buildRoleAgentEntry", () => {
     expect(entry.skills).toContain("postiz");
     expect(entry.workspace).toBe(path.join("/state", "workspace-cmo"));
     expect(entry.agentDir).toBe(path.join("/state", "agents", "cmo", "agent"));
+    // Explicit-heartbeat mode is all-or-nothing: the CMO keeps a heartbeat (at
+    // its prior implicit 30m cadence) so it stays scheduled and wake-eligible.
+    expect(entry.heartbeat).toEqual({ every: "30m" });
   });
 
-  it("gives specialists no default flag and no delegation allowlist", () => {
+  it("gives the social agent an explicit 12h heartbeat for its mentions-check", () => {
+    const social = MARKETING_ROLES.find((role) => role.id === "social");
+    if (!social) {
+      throw new Error("social role missing");
+    }
+    const entry = buildRoleAgentEntry(social, "/state");
+    expect(entry.heartbeat).toEqual({ every: "12h" });
+    expect(entry.default).toBeUndefined();
+  });
+
+  it("gives specialists no default flag, no delegation allowlist, and no heartbeat", () => {
     const content = MARKETING_ROLES.find((role) => role.id === "content");
     if (!content) {
       throw new Error("content role missing");
@@ -56,6 +69,7 @@ describe("buildRoleAgentEntry", () => {
     const entry = buildRoleAgentEntry(content, "/state");
     expect(entry.default).toBeUndefined();
     expect(entry.subagents).toBeUndefined();
+    expect(entry.heartbeat).toBeUndefined();
     expect(entry.skills).toEqual(["wordpress", "blog-git", "meme-maker", "summarize"]);
   });
 });
@@ -217,6 +231,13 @@ describe("setupMarketingCommand", () => {
     expect(store.writes).toHaveLength(1);
     expect(store.config.agents?.list).toHaveLength(6);
 
+    // Social carries its 12h heartbeat; the CMO keeps a heartbeat too so it
+    // stays scheduled (and wake-eligible) under explicit-heartbeat mode.
+    const socialEntry = store.config.agents?.list?.find((entry) => entry?.id === "social");
+    expect(socialEntry?.heartbeat).toEqual({ every: "12h" });
+    const cmoEntry = store.config.agents?.list?.find((entry) => entry?.id === "cmo");
+    expect(cmoEntry?.heartbeat).toEqual({ every: "30m" });
+
     // Shared brand dir + BRAND.md created.
     const sharedDir = resolveSharedMarketingDir(stateDir);
     const brand = await fs.readFile(path.join(sharedDir, "BRAND.md"), "utf-8");
@@ -284,5 +305,44 @@ describe("setupMarketingCommand", () => {
       "utf-8",
     );
     expect(overlaid).toBe("# CMO soul\n");
+  });
+
+  it("overlays the CMO's BOOTSTRAP.md after ensureAgentWorkspace so it survives completion cleanup", async () => {
+    const runtime = createRuntime();
+    const store = {
+      config: {} as MarketingClawConfig,
+      writes: [] as MarketingClawConfig[],
+      cronCalls: [] as CronJobCreate[][],
+    };
+    const deps = createDeps(store);
+    // Stand in for the real ensureAgentWorkspace, whose bootstrap-completion
+    // reconcile deletes a BOOTSTRAP.md once the persona diverges. If the overlay
+    // ran before this, the CMO's bootstrap would be gone; overlaying after keeps
+    // it.
+    deps.ensureAgentWorkspace = vi.fn(async ({ dir }) => {
+      await fs.rm(path.join(dir, "BOOTSTRAP.md"), { force: true });
+      return { dir };
+    });
+    // Only the CMO template ships a BOOTSTRAP.md; the overlay must copy it.
+    const cmoTemplateDir = path.join(stateDir, "templates", "marketing", "cmo");
+    await fs.mkdir(cmoTemplateDir, { recursive: true });
+    await fs.writeFile(path.join(cmoTemplateDir, "BOOTSTRAP.md"), "# CMO bootstrap\n", "utf-8");
+
+    await setupMarketingCommand(
+      { nonInteractive: true, company: "Acme", site: "acme.com", audience: "devs" },
+      runtime,
+      deps,
+    );
+
+    const overlaid = await fs.readFile(
+      path.join(resolveRoleWorkspaceDir(stateDir, "cmo"), "BOOTSTRAP.md"),
+      "utf-8",
+    );
+    expect(overlaid).toBe("# CMO bootstrap\n");
+
+    // A specialist without a BOOTSTRAP.md source is left untouched by the overlay.
+    await expect(
+      fs.access(path.join(resolveRoleWorkspaceDir(stateDir, "content"), "BOOTSTRAP.md")),
+    ).rejects.toThrow();
   });
 });

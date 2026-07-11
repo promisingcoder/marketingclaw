@@ -22,6 +22,10 @@
         skills: ["postiz", "wordpress", "listmonk", "gsc", "ga4", "marketing-report", "summarize"],
         // The orchestrator may spawn these specialists via sessions_spawn.
         subagents: { allowAgents: ["content", "social", "email", "seo", "analyst"] },
+        // Once any agent sets heartbeat, ONLY agents with one are scheduled (and
+        // stay wake-eligible). The CMO's HEARTBEAT.md is comments-only, so this
+        // run is inert; it exists to keep the default agent receiving wakes.
+        heartbeat: { every: "30m" },
       },
       {
         id: "content",
@@ -40,6 +44,8 @@
         agentDir: "~/.marketingclaw/agents/social/agent",
         identity: { name: "Riley", emoji: "📣" },
         skills: ["postiz", "xurl", "meme-maker", "gifgrep"],
+        // Runs the 12h mentions-check task declared in social's HEARTBEAT.md.
+        heartbeat: { every: "12h" },
       },
       {
         id: "email",
