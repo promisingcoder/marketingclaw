@@ -1,6 +1,6 @@
 <!-- Riley (Social) mention-triage task. This runs on a heartbeat so mentions and -->
 <!-- DMs get a timely, human reply without a live posting decision. Keep the -->
-<!-- indentation exactly as-is: two spaces before "- name", four before fields. -->
+<!-- indentation exactly as-is: no spaces before "- name", two before fields. -->
 
 tasks:
 
