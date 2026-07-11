@@ -117,6 +117,16 @@ function isContentExcluded(p) {
   if (p === "docs/install/ansible.md") {
     return true;
   }
+  // Upgrade-survivor KEEP rule: this file's whole purpose is querying/returning
+  // versions of the still-published upstream "openclaw" npm package (no marketingclaw
+  // npm release exists yet).
+  if (p === "scripts/lib/release-upgrade-baseline.mjs") {
+    return true;
+  }
+  // Compat contract: asserts the legacy "openclaw" fallback manifest key stays literal.
+  if (p === "src/compat/legacy-names.test.ts") {
+    return true;
+  }
   if (base === "pnpm-lock.yaml") {
     return true;
   }
@@ -268,6 +278,12 @@ function makeContentTransformer(workspaceSuffixes, counters) {
         return m; // rename via generic rule
       }
       bump("KEEP openclaw@<dist-tag/placeholder>");
+      return protect(m);
+    });
+    // Upgrade-survivor KEEP rule: the literal regex source that strips an "openclaw@"
+    // version prefix off a still-published upstream package spec.
+    result = result.replace(/\/\^openclaw@\//g, (m) => {
+      bump("KEEP /^openclaw@/ (upgrade-survivor prefix-strip regex)");
       return protect(m);
     });
 
@@ -537,6 +553,15 @@ function runAudit(rows, workspaceSuffixes) {
     if (f === "docs/install/ansible.md") {
       return true;
     }
+    // Upgrade-survivor KEEP rule: mirrors isContentExcluded (still-published upstream
+    // "openclaw" npm package name/versions).
+    if (f === "scripts/lib/release-upgrade-baseline.mjs") {
+      return true;
+    }
+    // Compat contract: mirrors isContentExcluded (legacy "openclaw" fallback key test).
+    if (f === "src/compat/legacy-names.test.ts") {
+      return true;
+    }
     // Mirror isContentExcluded: real external packages' bin names must not be flagged.
     if (base === "npm-shrinkwrap.json") {
       return true;
@@ -560,6 +585,8 @@ function runAudit(rows, workspaceSuffixes) {
     result = result.replace(/openclaw\.plugin\.json/gi, "");
     // any surviving openclaw@<spec> is a kept upstream package ref (emails were renamed)
     result = result.replace(/openclaw@[A-Za-z0-9*][A-Za-z0-9._*+^~-]*/gi, "");
+    // literal regex source stripping the "openclaw@" version prefix (upgrade-survivor)
+    result = result.replace(/\/\^openclaw@\//gi, "");
     // any surviving upstream repo URL (main repo openclaw/openclaw was mapped away)
     result = result.replace(
       /(?:github\.com|raw\.githubusercontent\.com)\/openclaw\/[A-Za-z0-9._-]+/gi,
