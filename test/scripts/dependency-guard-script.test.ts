@@ -704,7 +704,7 @@ describe("dependency guard script", () => {
       }) as typeof fetch,
     }).request("/repos/promisingcoder/marketingclaw");
     const rejection = expect(request).rejects.toThrow(
-      /GitHub API GET \/repos\/marketingclaw\/marketingclaw exceeded timeout 5ms/u,
+      /GitHub API GET \/repos\/promisingcoder\/marketingclaw exceeded timeout 5ms/u,
     );
 
     await fetchStarted;
@@ -738,7 +738,7 @@ describe("dependency guard script", () => {
       }) as typeof fetch,
     }).request("/repos/promisingcoder/marketingclaw");
     const rejection = expect(request).rejects.toThrow(
-      /GitHub API GET \/repos\/marketingclaw\/marketingclaw exceeded timeout 5ms/u,
+      /GitHub API GET \/repos\/promisingcoder\/marketingclaw exceeded timeout 5ms/u,
     );
 
     await fetchStarted;
