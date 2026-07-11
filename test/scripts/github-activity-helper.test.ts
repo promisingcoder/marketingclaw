@@ -80,8 +80,8 @@ describe("marketingclaw-pr-maintainer github activity helper", () => {
     expect(result.stdout).toContain(
       "promisingcoder/marketingclaw last 1mo: 2 PRs, 1 issues, 2 commits",
     );
-    expect(log.match(/repos\/marketingclaw\/marketingclaw\/issues/g)).toHaveLength(1);
-    expect(log.match(/repos\/marketingclaw\/marketingclaw\/commits/g)).toHaveLength(1);
+    expect(log.match(/repos\/promisingcoder\/marketingclaw\/issues/g)).toHaveLength(1);
+    expect(log.match(/repos\/promisingcoder\/marketingclaw\/commits/g)).toHaveLength(1);
     expect(log).toMatch(/since=\d{4}-\d{2}-\d{2}T00:00:00Z/);
   });
 
