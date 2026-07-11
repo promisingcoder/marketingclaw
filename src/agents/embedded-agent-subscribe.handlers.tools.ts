@@ -15,6 +15,7 @@ import {
   HEARTBEAT_RESPONSE_TOOL_NAME,
   normalizeHeartbeatToolResponse,
 } from "../auto-reply/heartbeat-tool-response.js";
+import { LEGACY_MANIFEST_KEYS, PROJECT_NAME } from "../compat/legacy-names.js";
 import { parseSessionThreadInfoFast } from "../config/sessions/thread-info.js";
 import type {
   AgentApprovalEventData,
@@ -462,10 +463,19 @@ function isMarketingClawExecutable(token: string | undefined): boolean {
 
 function isMarketingClawPackageSpec(token: string | undefined): boolean {
   const packageSpec = normalizeOptionalLowercaseString(token);
-  return (
-    packageSpec?.startsWith("marketingclaw@") === true &&
-    packageSpec.length > "marketingclaw@".length
-  );
+  if (!packageSpec) {
+    return false;
+  }
+  // Accept the canonical marketingclaw package spec and the legacy upgrade-survivor
+  // package spec the fork still runs from until a marketingclaw release exists
+  // (mirrors the legacy-name fallback in src/compat/legacy-names).
+  for (const name of [PROJECT_NAME, ...LEGACY_MANIFEST_KEYS]) {
+    const prefix = `${name}@`;
+    if (packageSpec.startsWith(prefix) && packageSpec.length > prefix.length) {
+      return true;
+    }
+  }
+  return false;
 }
 
 function skipMarketingClawPackageRunner(

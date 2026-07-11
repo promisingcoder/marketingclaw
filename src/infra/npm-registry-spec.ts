@@ -1,5 +1,6 @@
 // Parses npm registry specs into package, version, and tag references.
 import { normalizeLowercaseStringOrEmpty } from "@marketingclaw/normalization-core/string-coerce";
+import { LEGACY_MANIFEST_KEYS, PROJECT_NAME } from "../compat/legacy-names.js";
 
 const EXACT_SEMVER_VERSION_RE =
   /^v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-([0-9A-Za-z.-]+))?(?:\+([0-9A-Za-z.-]+))?$/;
@@ -132,7 +133,15 @@ export function parseRegistryNpmSpec(rawSpec: string): ParsedRegistryNpmSpec | n
 /** Returns whether a user-provided npm spec resolves to the official MarketingClaw npm scope. */
 export function isMarketingClawOrgNpmSpec(rawSpec: string | undefined): boolean {
   const parsed = rawSpec ? parseRegistryNpmSpec(rawSpec) : null;
-  return parsed?.name.startsWith("@marketingclaw/") === true;
+  if (!parsed) {
+    return false;
+  }
+  // Official scope is the marketingclaw org, plus the legacy upgrade-survivor org the
+  // fork still installs from until a marketingclaw npm release exists (mirrors the
+  // legacy-name fallback in src/compat/legacy-names).
+  return [PROJECT_NAME, ...LEGACY_MANIFEST_KEYS].some((name) =>
+    parsed.name.startsWith(`@${name}/`),
+  );
 }
 
 /** Validates a registry-only npm spec and returns a user-facing error when rejected. */
