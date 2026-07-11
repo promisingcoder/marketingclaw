@@ -113,8 +113,23 @@ function isContentExcluded(p) {
   if (p === "CHANGELOG.md") {
     return true;
   }
+  // Fork-origin attribution ("... is a fork of github.com/openclaw/openclaw ...") must
+  // name the real upstream project; same rationale as CHANGELOG.md above.
+  if (p === "README.md" || p === "SECURITY.md" || p === "VISION.md") {
+    return true;
+  }
   // Explains that Ansible deployment installs the real upstream engine; must name it.
   if (p === "docs/install/ansible.md") {
+    return true;
+  }
+  // Dedicated legacy-name compat table: LEGACY_PROJECT_NAMES must keep the literal
+  // "openclaw" fallback value. Mirrors the fileAllowed entry for this same file.
+  if (p === "src/compat/legacy-names.ts") {
+    return true;
+  }
+  // Vite aliases resolving to the REAL external @openclaw/libterminal and
+  // @openclaw/uirouter npm packages. Mirrors the fileAllowed entry for this same file.
+  if (p === "ui/vite.config.ts") {
     return true;
   }
   // Upgrade-survivor KEEP rule: this file's whole purpose is querying/returning
@@ -240,6 +255,12 @@ function makeContentTransformer(workspaceSuffixes, counters) {
     };
 
     // ---- PROTECT (KEEP as-is) ----
+    // legacy plugin-manifest filename, accepted as a fallback by the loaders on purpose
+    // (mirrors the matching strip rule in runAudit's stripAllowed).
+    result = result.replace(/openclaw\.plugin\.json/g, (m) => {
+      bump("KEEP openclaw.plugin.json (legacy plugin-manifest filename)");
+      return protect(m);
+    });
     // @openclaw/<name> where <name> is NOT a workspace package
     result = result.replace(/@openclaw\/([A-Za-z0-9._-]+)/g, (m, name) => {
       if (workspaceSuffixes.has(name)) {
@@ -547,6 +568,10 @@ function runAudit(rows, workspaceSuffixes) {
     }
     // Fork-origin attribution must name the real upstream project; don't flag it.
     if (f === "CHANGELOG.md") {
+      return true;
+    }
+    // Fork-origin attribution; mirrors isContentExcluded for these same files.
+    if (f === "README.md" || f === "SECURITY.md" || f === "VISION.md") {
       return true;
     }
     // Explains that Ansible deployment installs the real upstream engine; must name it.
