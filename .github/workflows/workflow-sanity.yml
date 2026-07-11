@@ -30,11 +30,13 @@ jobs:
         env:
           CHECKOUT_REPO: ${{ github.repository }}
           CHECKOUT_SHA: ${{ github.sha }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           git init "$GITHUB_WORKSPACE"
           git -C "$GITHUB_WORKSPACE" config gc.auto 0
           git -C "$GITHUB_WORKSPACE" remote add origin "https://github.com/${CHECKOUT_REPO}.git"
+          git -C "$GITHUB_WORKSPACE" config http.https://github.com/.extraheader "AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 | tr -d '\n')"
           fetch_checkout_ref() {
             local fetch_status
             for attempt in 1 2 3; do

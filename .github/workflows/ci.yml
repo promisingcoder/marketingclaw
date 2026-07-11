@@ -134,11 +134,13 @@ jobs:
           CHECKOUT_EVENT_REF: ${{ github.ref }}
           CHECKOUT_FALLBACK_REF: ${{ github.sha }}
           GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           git init "$GITHUB_WORKSPACE"
           git -C "$GITHUB_WORKSPACE" config gc.auto 0
           git -C "$GITHUB_WORKSPACE" remote add origin "https://github.com/${CHECKOUT_REPO}.git"
+          git -C "$GITHUB_WORKSPACE" config http.https://github.com/.extraheader "AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 | tr -d '\n')"
           fetch_checkout_ref() {
             local ref="$1"
             local fetch_status
@@ -449,11 +451,13 @@ jobs:
           CHECKOUT_REF: ${{ inputs.target_ref || github.sha }}
           CHECKOUT_FALLBACK_REF: ${{ github.sha }}
           GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           git init "$GITHUB_WORKSPACE"
           git -C "$GITHUB_WORKSPACE" config gc.auto 0
           git -C "$GITHUB_WORKSPACE" remote add origin "https://github.com/${CHECKOUT_REPO}.git"
+          git -C "$GITHUB_WORKSPACE" config http.https://github.com/.extraheader "AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 | tr -d '\n')"
           fetch_checkout_ref() {
             local ref="$1"
             local fetch_status
@@ -589,6 +593,7 @@ jobs:
         env:
           CHECKOUT_REPO: ${{ github.repository }}
           CHECKOUT_SHA: ${{ needs.preflight.outputs.checkout_revision }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
 
@@ -605,6 +610,7 @@ jobs:
             git init "$workdir" >/dev/null
             git config --global --add safe.directory "$workdir"
             git -C "$workdir" remote add origin "https://github.com/${CHECKOUT_REPO}.git"
+            git -C "$workdir" config http.https://github.com/.extraheader "AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 | tr -d '\n')"
             git -C "$workdir" config gc.auto 0
 
             timeout --signal=TERM --kill-after=10s 120s git -C "$workdir" \
@@ -1547,11 +1553,13 @@ jobs:
         env:
           CHECKOUT_REPO: ${{ github.repository }}
           CHECKOUT_SHA: ${{ needs.preflight.outputs.checkout_revision }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           git init "$GITHUB_WORKSPACE"
           git -C "$GITHUB_WORKSPACE" config gc.auto 0
           git -C "$GITHUB_WORKSPACE" remote add origin "https://github.com/${CHECKOUT_REPO}.git"
+          git -C "$GITHUB_WORKSPACE" config http.https://github.com/.extraheader "AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 | tr -d '\n')"
           fetch_checkout_ref() {
             local fetch_status
             for attempt in 1 2 3; do
@@ -1615,11 +1623,13 @@ jobs:
         env:
           CHECKOUT_REPO: ${{ github.repository }}
           CHECKOUT_SHA: ${{ needs.preflight.outputs.checkout_revision }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           git init "$GITHUB_WORKSPACE"
           git -C "$GITHUB_WORKSPACE" config gc.auto 0
           git -C "$GITHUB_WORKSPACE" remote add origin "https://github.com/${CHECKOUT_REPO}.git"
+          git -C "$GITHUB_WORKSPACE" config http.https://github.com/.extraheader "AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 | tr -d '\n')"
           fetch_timeout_seconds=90
           fetch_checkout_ref_once() {
             git -C "$GITHUB_WORKSPACE" \
@@ -1957,6 +1967,7 @@ jobs:
         env:
           CHECKOUT_REPO: ${{ github.repository }}
           CHECKOUT_SHA: ${{ needs.preflight.outputs.checkout_revision }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
 
@@ -1973,6 +1984,7 @@ jobs:
             git init "$workdir" >/dev/null
             git config --global --add safe.directory "$workdir"
             git -C "$workdir" remote add origin "https://github.com/${CHECKOUT_REPO}.git"
+            git -C "$workdir" config http.https://github.com/.extraheader "AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 | tr -d '\n')"
             git -C "$workdir" config gc.auto 0
 
             timeout --signal=TERM --kill-after=10s 120s git -C "$workdir" \
