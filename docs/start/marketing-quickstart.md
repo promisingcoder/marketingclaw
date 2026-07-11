@@ -85,6 +85,25 @@ the team its first tasks.
   </Step>
 </Steps>
 
+## Run the team on Codex (no API key)
+
+Prefer not to manage a model API key? Point an agent at the Codex CLI instead by
+adding a `runtime` block to its entry in `agents.list`:
+
+```json
+"runtime": { "type": "acp", "acp": { "agent": "codex" } }
+```
+
+This works for the CMO and any specialist, and `sessions_spawn` delegation between
+them is fully bridged, so a Codex-backed CMO can still hand off to the rest of the
+team. Requires the Codex CLI installed and logged in.
+
+<Note>
+  Windows: if the gateway reports `codex app-server exited: Missing optional
+  dependency`, point MarketingClaw at your globally-installed Codex binary with the
+  `MARKETINGCLAW_CODEX_APP_SERVER_BIN` environment variable.
+</Note>
+
 ## First tasks to try
 
 Ask Morgan in chat, and she delegates to the right specialist:

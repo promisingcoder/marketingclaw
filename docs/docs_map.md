@@ -8867,6 +8867,7 @@ Do not edit it by hand; run `pnpm docs:map:gen`.
 - Headings:
   - H2: Prerequisites
   - H2: Set up the team
+  - H2: Run the team on Codex (no API key)
   - H2: First tasks to try
   - H2: Where files live
   - H2: Next steps
