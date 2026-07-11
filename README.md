@@ -1,8 +1,5 @@
 # MarketingClaw — your self-hosted AI marketing department
 
-[![CI](https://img.shields.io/github/actions/workflow/status/promisingcoder/marketingclaw/ci.yml?style=for-the-badge)](https://github.com/promisingcoder/marketingclaw/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
-
 **MarketingClaw** is an open-source, self-hosted AI marketing team you run on your
 own hardware. Instead of a single chatbot, you get a small org: a CMO agent that
 owns strategy and delegates, plus specialists for content, social, email, SEO, and

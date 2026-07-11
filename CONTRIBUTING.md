@@ -33,7 +33,8 @@ the work rather than tagging maintainers by hand.
   if your local version is too old.
 - Run the full local loop: `pnpm build && pnpm check && pnpm test`.
 - For extension or plugin changes, run the fast lane first:
-  - `pnpm test:extension <extension-name>` (`pnpm test:extension --list` shows valid ids)
+  - `pnpm test:extension <extension-name>` (extension ids match their directory
+    name under `extensions/`)
   - `pnpm test:contracts` if you changed shared plugin or channel surfaces
 - Keep PRs focused: one topic per PR, no unrelated cleanup.
 - Describe **what** changed and **why**. Include before/after screenshots for any UI

@@ -13,8 +13,9 @@ the team its first tasks.
 ## Prerequisites
 
 - **Node.js 22.19+ or 24** (24 is the recommended default). Check with `node --version`.
-- **A model API key** from your chosen provider (Anthropic, OpenAI, Google, and
-  others). Prefer a current flagship model for the CMO and copywriting work.
+- **A model API key** (Anthropic, OpenAI, Google, and others) **or** a logged-in
+  [Codex CLI](#run-the-team-on-codex-no-api-key) if you'd rather skip managing a
+  key. Prefer a current flagship model for the CMO and copywriting work.
 - **pnpm** (via `corepack`). MarketingClaw is a pnpm workspace; install from source
   with `pnpm`, not `npm`.
 
@@ -74,8 +75,16 @@ the team its first tasks.
 
   </Step>
   <Step title="Open the dashboard">
+    Start the Gateway — it stays running in the foreground, so keep this terminal
+    open (or background the process):
+
     ```bash
     pnpm marketingclaw gateway
+    ```
+
+    In a second terminal, open the dashboard:
+
+    ```bash
     pnpm marketingclaw dashboard
     ```
 
