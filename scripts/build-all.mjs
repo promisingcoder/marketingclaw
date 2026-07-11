@@ -15,6 +15,10 @@ const BUILD_CACHE_VERSION = 3;
 const PLUGIN_SDK_ENTRY_DTS_CACHE_ENV = [
   "MARKETINGCLAW_BUILD_PRIVATE_QA",
   "MARKETINGCLAW_PLUGIN_SDK_CANONICAL_DTS",
+  // Skipping the full tsdown dts makes this step emit the declarations itself, a
+  // different output than the canonical-declarations path — key the cache on it so the
+  // two modes never restore each other's output.
+  "MARKETINGCLAW_RUN_NODE_SKIP_DTS_BUILD",
 ];
 const PLUGIN_SDK_ENTRY_DTS_CACHE_INPUTS = [
   "scripts/write-plugin-sdk-entry-dts.ts",
