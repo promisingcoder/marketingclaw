@@ -91,6 +91,8 @@ function isContentExcluded(p) {
   if (base === "LICENSE") return true;
   if (base === "THIRD_PARTY_NOTICES.md") return true;
   if (p === "UPSTREAM-CHANGELOG.md") return true;
+  // Fork-origin attribution must name the real upstream project; don't rewrite it.
+  if (p === "CHANGELOG.md") return true;
   if (base === "pnpm-lock.yaml") return true;
   if (base === "npm-shrinkwrap.json") return true;
   if (p.startsWith("patches/")) return true;
@@ -423,6 +425,8 @@ function runAudit(rows, workspaceSuffixes) {
     if (base === "LICENSE") return true;
     if (base === "THIRD_PARTY_NOTICES.md") return true;
     if (f === "UPSTREAM-CHANGELOG.md") return true;
+    // Fork-origin attribution must name the real upstream project; don't flag it.
+    if (f === "CHANGELOG.md") return true;
     if (f.startsWith("patches/")) return true;
     if (f.startsWith("apps/android/THIRD_PARTY_LICENSES/")) return true;
     return false;

@@ -53,10 +53,10 @@ the team its first tasks.
     what's missing and leaves your edits alone.
 
     <Note>
-      `setup-marketing` is the one new command MarketingClaw adds and ships in a
-      later release. Until then, `onboard` seeds the marketing workspace so you can
-      still work with the CMO; you can also create specialists by hand with
-      `marketingclaw agents add`.
+      If you skip `setup-marketing`, `onboard` alone still seeds a marketing-flavored
+      workspace with the CMO. You can provision the full team later by running
+      `marketingclaw setup-marketing` at any time — it's idempotent — or add
+      specialists by hand with `marketingclaw agents add`.
     </Note>
 
   </Step>
