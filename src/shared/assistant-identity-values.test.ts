@@ -11,15 +11,15 @@ describe("shared/assistant-identity-values", () => {
 
   it("trims values and preserves strings within the limit", () => {
     expect(coerceIdentityValue("  MarketingClaw  ", 20)).toBe("MarketingClaw");
-    expect(coerceIdentityValue("  MarketingClaw  ", 8)).toBe("MarketingClaw");
+    expect(coerceIdentityValue("  MarketingClaw  ", 13)).toBe("MarketingClaw");
   });
 
   it("truncates overlong trimmed values at the exact limit", () => {
-    expect(coerceIdentityValue("  MarketingClaw Assistant  ", 8)).toBe("MarketingClaw");
+    expect(coerceIdentityValue("  MarketingClaw Assistant  ", 13)).toBe("MarketingClaw");
   });
 
   it("returns an empty string when truncating to a zero-length limit", () => {
     expect(coerceIdentityValue("  MarketingClaw  ", 0)).toBe("");
-    expect(coerceIdentityValue("  MarketingClaw  ", -1)).toBe("OpenCla");
+    expect(coerceIdentityValue("  MarketingClaw  ", -1)).toBe("MarketingCla");
   });
 });

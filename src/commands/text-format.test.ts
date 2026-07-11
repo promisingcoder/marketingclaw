@@ -8,7 +8,7 @@ describe("shortenText", () => {
   });
 
   it("truncates and appends ellipsis when over limit", () => {
-    expect(shortenText("marketingclaw-status-output", 10)).toBe("marketingclaw-…");
+    expect(shortenText("marketingclaw-status-output", 15)).toBe("marketingclaw-…");
   });
 
   it("returns an empty string for non-positive limits", () => {

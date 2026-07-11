@@ -8,7 +8,7 @@ describe("normalizePackageTagInput", () => {
   it.each([
     { input: undefined, expected: null },
     { input: "   ", expected: null },
-    { input: "openclaw@beta", expected: "beta" },
+    { input: "marketingclaw@beta", expected: "beta" },
     { input: "@openclaw/plugin@2026.2.24", expected: "2026.2.24" },
     { input: "marketingclaw@   ", expected: null },
     { input: "marketingclaw", expected: null },

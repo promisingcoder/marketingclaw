@@ -18,7 +18,7 @@ function splitTokens(raw) {
 function sanitizeLabel(value) {
   return (
     String(value)
-      .replace(/^marketingclaw@/u, "")
+      .replace(/^openclaw@/u, "")
       .replace(/[^A-Za-z0-9._-]+/g, "-")
       .replace(/^-+|-+$/g, "") || "targeted"
   );

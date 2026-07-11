@@ -50,14 +50,14 @@ export function resolveDefaultReleaseUpgradeBaseline(candidateVersion, published
     (version) => compareMarketingClawVersions(version, candidate.version) < 0,
   );
   if (older) {
-    return `marketingclaw@${older}`;
+    return `openclaw@${older}`;
   }
 
   const same = versions.find(
     (version) => compareMarketingClawVersions(version, candidate.version) === 0,
   );
   if (same) {
-    return `marketingclaw@${same}`;
+    return `openclaw@${same}`;
   }
 
   throw new Error(`no published MarketingClaw baseline is <= candidate ${candidate.version}`);
@@ -90,13 +90,13 @@ function readPublishedVersions(args) {
     }
     return parsed;
   }
-  const raw = execFileSync("npm", ["view", "marketingclaw", "versions", "--json", "--silent"], {
+  const raw = execFileSync("npm", ["view", "openclaw", "versions", "--json", "--silent"], {
     encoding: "utf8",
     stdio: ["ignore", "pipe", "inherit"],
   });
   const parsed = JSON.parse(raw);
   if (!Array.isArray(parsed)) {
-    throw new Error("npm returned a non-array marketingclaw versions payload");
+    throw new Error("npm returned a non-array openclaw versions payload");
   }
   return parsed;
 }
