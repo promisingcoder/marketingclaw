@@ -2,7 +2,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { normalizeTrimmedStringList } from "@marketingclaw/normalization-core/string-normalization";
-import { MANIFEST_KEY } from "../compat/legacy-names.js";
+import { LEGACY_MANIFEST_KEYS, MANIFEST_KEY } from "../compat/legacy-names.js";
 import { resolveSafeInstallDir, unscopedPackageName } from "../infra/install-safe-path.js";
 import type { NpmIntegrityDrift, NpmSpecResolution } from "../infra/install-source-utils.js";
 import { detectBundleManifestFormat } from "../plugins/bundle-manifest.js";
@@ -226,10 +226,29 @@ export function resolveHookInstallDir(hookId: string, hooksDir?: string): string
   return targetDirResult.path;
 }
 
+// Reads the plugin/hook manifest section under the canonical marketingclaw key, or a
+// legacy manifest key for hook packs published against upstream (mirrors the
+// legacy-name fallback in src/compat/legacy-names).
+function readHookManifestSection(
+  manifest: HookPackageManifest,
+): { extensions?: string[]; hooks?: string[] } | undefined {
+  const record = manifest as Record<
+    string,
+    { extensions?: string[]; hooks?: string[] } | undefined
+  >;
+  for (const key of [MANIFEST_KEY, ...LEGACY_MANIFEST_KEYS]) {
+    const section = record[key];
+    if (section !== undefined) {
+      return section;
+    }
+  }
+  return undefined;
+}
+
 function resolveMarketingClawHooks(
   manifest: HookPackageManifest,
 ): { ok: true; entries: string[] } | { ok: false; error: string; code: HookInstallErrorCode } {
-  const hooks = manifest[MANIFEST_KEY]?.hooks;
+  const hooks = readHookManifestSection(manifest)?.hooks;
   if (!Array.isArray(hooks)) {
     return {
       ok: false,
@@ -255,7 +274,7 @@ function resolveHookPackageKind(
   if (packageKind) {
     return packageKind;
   }
-  const extensions = manifest[MANIFEST_KEY]?.extensions;
+  const extensions = readHookManifestSection(manifest)?.extensions;
   if (extensions === undefined) {
     return "hook-only";
   }

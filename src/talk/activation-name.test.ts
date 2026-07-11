@@ -89,8 +89,8 @@ describe("realtime voice activation names", () => {
 
   it("prefers longer activation names first", () => {
     expect(sortRealtimeVoiceActivationNames(["claw", "claw bot", "marketingclaw"])).toEqual([
-      "claw bot",
       "marketingclaw",
+      "claw bot",
       "claw",
     ]);
     expect(matchRealtimeVoiceActivationName("Claw Bot, status", ["claw", "claw bot"])).toEqual({

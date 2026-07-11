@@ -4268,7 +4268,10 @@ heartbeat_elapsed="\${BASH_REMATCH[1]}"
     expect(runner).not.toContain('cat "$RUN_LOG"');
     expect(probe).toContain('"marketingclaw.plugin.json"');
     expect(runtimeSmoke).toContain(
-      'readPositiveIntEnv("MARKETINGCLAW_BUNDLED_PLUGIN_RUNTIME_READY_MS", 900000)',
+      `readPositiveIntEnv(
+  "MARKETINGCLAW_BUNDLED_PLUGIN_RUNTIME_READY_MS",
+  900000,
+)`,
     );
     expect(sweep).toContain("read -r plugin_id plugin_dir requires_config");
     expect(sweep).toContain('node "$MARKETINGCLAW_ENTRY" plugins install "$plugin_id"');

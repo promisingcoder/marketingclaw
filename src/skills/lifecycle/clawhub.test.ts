@@ -1145,7 +1145,7 @@ describe("skills-clawhub", () => {
         source: "server-resolved-github-import",
         kind: "github",
         url: sourceUrl,
-        repo: "marketingclaw/skills",
+        repo: "openclaw/skills",
         ref: "main",
         commit: "0123456789abcdef0123456789abcdef01234567",
         path: "agentreceipt",
@@ -1182,7 +1182,7 @@ describe("skills-clawhub", () => {
             source: "server-resolved-github-import",
             kind: "github",
             url: sourceUrl,
-            repo: "marketingclaw/skills",
+            repo: "openclaw/skills",
             ref: "main",
             commit: "0123456789abcdef0123456789abcdef01234567",
             path: "agentreceipt",
@@ -1205,7 +1205,7 @@ describe("skills-clawhub", () => {
   it("requires a full commit SHA before promoting verified source provenance", () => {
     const baseProvenance = {
       source: "server-resolved-github-import",
-      repo: "marketingclaw/skills",
+      repo: "openclaw/skills",
       path: "agentreceipt",
     };
 

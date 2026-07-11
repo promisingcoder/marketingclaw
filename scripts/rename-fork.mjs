@@ -373,6 +373,21 @@ function makeContentTransformer(workspaceSuffixes, counters) {
       bump("P5 github.com/openclaw/openclaw");
       return "github.com/promisingcoder/marketingclaw";
     });
+    // The REST-API repo path form (api.github.com/repos/<owner>/<repo>) for the main
+    // repo also maps to the fork. The P5 rule above only covers github.com/openclaw/...,
+    // not the /repos/ path, so handle it explicitly.
+    result = result.replace(/api\.github\.com\/repos\/openclaw\/openclaw(?![A-Za-z0-9-])/g, () => {
+      bump("P6 api.github.com/repos/openclaw/openclaw");
+      return "api.github.com/repos/promisingcoder/marketingclaw";
+    });
+    // Bare owner/repo slug of the main repo (e.g. a `repo: "openclaw/openclaw"` field),
+    // mapped to the fork slug. Scoped so it never touches filesystem paths
+    // (openclaw/openclaw.mjs), scoped names (@openclaw/openclaw-release-managers), or the
+    // github.com/openclaw/openclaw URLs already handled above.
+    result = result.replace(/(?<![A-Za-z0-9._/@-])openclaw\/openclaw(?![A-Za-z0-9._-])/g, () => {
+      bump("P7 bare openclaw/openclaw slug");
+      return "promisingcoder/marketingclaw";
+    });
     // KEEP every other upstream repo URL (real attribution: fs-safe, proxyline,
     // skills, nix-openclaw, openclaw-ansible, crawl tools, example-plugin, ...).
     result = result.replace(
@@ -385,6 +400,14 @@ function makeContentTransformer(workspaceSuffixes, counters) {
     // KEEP the deepwiki page for the upstream repo (full path).
     result = result.replace(/deepwiki\.com\/openclaw(?:\/openclaw)?/g, (m) => {
       bump("KEEP deepwiki.com/openclaw");
+      return protect(m);
+    });
+    // KEEP bare owner/repo slugs of real upstream repos the fork consumes as external
+    // sources (e.g. the published skills catalog cited in install provenance). These
+    // name the upstream repo, not the fork's own, so the openclaw owner stays. Scoped
+    // to avoid the github.com/openclaw/skills URL already kept above and any -suffix.
+    result = result.replace(/(?<![A-Za-z0-9._/@-])openclaw\/skills(?![A-Za-z0-9._-])/g, (m) => {
+      bump("KEEP openclaw/skills (external upstream repo slug)");
       return protect(m);
     });
 
@@ -630,6 +653,8 @@ function runAudit(rows, workspaceSuffixes) {
       "",
     );
     result = result.replace(/deepwiki\.com\/openclaw(?:\/openclaw)?/gi, "");
+    // bare upstream repo slug KEEP (mirrors the write-pass protect for openclaw/skills)
+    result = result.replace(/(?<![A-Za-z0-9._/@-])openclaw\/skills(?![A-Za-z0-9._-])/gi, "");
     // external @openclaw/crabline re-exported identifiers/types + adapter param key
     // (see the matching KEEP protect rules in makeContentTransformer)
     result = result.replace(/OpenClawCrabline[A-Za-z0-9]*/g, "");
