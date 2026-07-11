@@ -619,9 +619,9 @@ async function defaultPromptBrandInputs(opts: SetupMarketingOptions): Promise<Br
     }));
   await prompter.outro("Brand captured.");
   return {
-    company: String(companyAnswer).trim(),
-    site: String(siteAnswer ?? "").trim(),
-    audience: String(audienceAnswer).trim(),
+    company: companyAnswer.trim(),
+    site: (siteAnswer ?? "").trim(),
+    audience: audienceAnswer.trim(),
   };
 }
 
