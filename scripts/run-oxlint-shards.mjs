@@ -53,8 +53,13 @@ export function createOxlintShards({
   splitCore = false,
 } = {}) {
   const coreShards = splitCore ? createCoreOxlintShards({ cwd, readDir }) : [CORE_SHARD];
+  // Chunk the extensions target on Windows (command-line limits) and whenever core is
+  // split (memory-constrained hosts, e.g. 7GB CI runners) — otherwise the single
+  // extensions shard OOMs the runner even after the core shard is split.
   const extensionShards =
-    platform === "win32" ? createWindowsExtensionShards({ cwd, env, readDir }) : [EXTENSIONS_SHARD];
+    platform === "win32" || splitCore
+      ? createWindowsExtensionShards({ cwd, env, readDir })
+      : [EXTENSIONS_SHARD];
 
   return [...coreShards, ...extensionShards, SCRIPTS_SHARD];
 }
