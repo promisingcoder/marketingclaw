@@ -24,7 +24,7 @@
       "bin": {
         "clawd.invoke": "bin/clawd.invoke.js",
         "lobster": "bin/lobster.js",
-        "marketingclaw.invoke": "bin/marketingclaw.invoke.js"
+        "openclaw.invoke": "bin/openclaw.invoke.js"
       },
       "engines": {
         "node": ">=22"
