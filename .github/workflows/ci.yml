@@ -1327,7 +1327,11 @@ jobs:
               pnpm tsgo:prod
               ;;
             lint)
-              pnpm lint --threads=8
+              # Split the core oxlint shard: private-repo runners (~7GB, <12 CPUs) run
+              # shards serially, so the single src+ui+packages shard thrashes/OOMs and
+              # the runner is reclaimed. --split-core lints the same targets in smaller
+              # serial shards that each fit in memory.
+              pnpm lint --threads=8 --split-core
               ;;
             dependencies)
               if pnpm run --silent 2>/dev/null | grep -q '^  deadcode:dependencies$'; then
