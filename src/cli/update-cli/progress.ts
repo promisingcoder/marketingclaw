@@ -108,7 +108,7 @@ export function inferUpdateFailureHints(result: UpdateRunResult): string[] {
     hints.push(
       "Detected native optional dependency build failure. The updater retries with --omit=optional automatically.",
     );
-    hints.push("If it still fails: npm i -g openclaw@latest --omit=optional");
+    hints.push("If it still fails: npm i -g marketingclaw@latest --omit=optional");
   }
 
   return hints;

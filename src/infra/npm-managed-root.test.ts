@@ -1054,7 +1054,7 @@ describe("managed npm root", () => {
         return {
           code: 1,
           stdout: "",
-          stderr: "npm ERR! notarget No matching version found for openclaw@2026.5.99-beta.1",
+          stderr: "npm ERR! notarget No matching version found for marketingclaw@2026.5.99-beta.1",
           signal: null,
           killed: false,
           termination: "exit" as const,

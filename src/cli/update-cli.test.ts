@@ -885,7 +885,7 @@ describe("update-cli", () => {
       status: "resolved",
       selector: "extended-stable",
       version: "2026.6.33",
-      packageSpec: "openclaw@2026.6.33",
+      packageSpec: "marketingclaw@2026.6.33",
     });
     vi.mocked(resolveNpmChannelTag).mockResolvedValue({
       tag: "latest",
@@ -2617,7 +2617,7 @@ describe("update-cli", () => {
           expect(call?.tag).toBe(expectedTag);
         }
       } else {
-        expectPackageInstallSpec("openclaw@latest");
+        expectPackageInstallSpec("marketingclaw@latest");
       }
 
       if (expectedPersistedChannel !== undefined) {
@@ -2644,7 +2644,7 @@ describe("update-cli", () => {
     });
     await updateCommand({});
 
-    expectPackageInstallSpec("openclaw@latest");
+    expectPackageInstallSpec("marketingclaw@latest");
   });
 
   it("installs the verified exact package and persists an explicit extended-stable channel", async () => {
@@ -2659,7 +2659,7 @@ describe("update-cli", () => {
       timeoutMs: undefined,
       packageName: "marketingclaw",
     });
-    expectPackageInstallSpec("openclaw@2026.6.33");
+    expectPackageInstallSpec("marketingclaw@2026.6.33");
     expect(lastReplaceConfigCall()?.nextConfig?.update?.channel).toBe("extended-stable");
     expect(syncPluginCall()?.channel).toBe("extended-stable");
     expect(syncPluginCall()?.coreVersion).toBe("2026.6.33");
@@ -2688,7 +2688,7 @@ describe("update-cli", () => {
       timeoutMs: undefined,
       packageName: "marketingclaw",
     });
-    expectPackageInstallSpec("openclaw@2026.6.33");
+    expectPackageInstallSpec("marketingclaw@2026.6.33");
     expect(syncPluginCall()?.channel).toBe("extended-stable");
     expect(syncPluginCall()?.coreVersion).toBe("2026.6.33");
   });
@@ -2797,7 +2797,7 @@ describe("update-cli", () => {
       status: "resolved",
       selector: "extended-stable",
       version: "2026.6.33",
-      packageSpec: "openclaw@2026.6.33",
+      packageSpec: "marketingclaw@2026.6.33",
     });
 
     await updateCommand({ channel: "extended-stable", yes, restart: false });
@@ -2876,7 +2876,7 @@ describe("update-cli", () => {
     const errors = vi.mocked(defaultRuntime.error).mock.calls.map((call) => String(call[0]));
     expect(errors.join("\n")).not.toContain("Downgrade confirmation required.");
     expect(defaultRuntime.exit).not.toHaveBeenCalled();
-    expectPackageInstallSpec("openclaw@latest");
+    expectPackageInstallSpec("marketingclaw@latest");
   });
 
   it("blocks the package update when a non-latest dist-tag lookup is unresolved", async () => {
@@ -2910,12 +2910,12 @@ describe("update-cli", () => {
 
     await updateCommand({ yes: true });
 
-    expectPackageInstallSpec("openclaw@latest");
+    expectPackageInstallSpec("marketingclaw@latest");
     const preflightParams = vi.mocked(fetchNpmPackageTargetStatus).mock.calls[0]?.[0];
     expect(preflightParams).toEqual(
       expect.objectContaining({
         target: "latest",
-        spec: "openclaw@latest",
+        spec: "marketingclaw@latest",
         cwd: process.cwd(),
       }),
     );
@@ -2953,7 +2953,7 @@ describe("update-cli", () => {
         "Run `marketingclaw update` from a shell outside the gateway service, or stop the gateway service first and then update.",
       ].join("\n"),
     );
-    expectPackageInstallSpec("openclaw@latest");
+    expectPackageInstallSpec("marketingclaw@latest");
   });
 
   it("refuses package updates from inherited gateway service env when --no-restart leaves the gateway running", async () => {
@@ -3145,7 +3145,7 @@ describe("update-cli", () => {
         mockPackageInstallStatus(createCaseDir("marketingclaw-update"));
         await updateCommand({ tag: "next" });
       },
-      expectedSpec: "openclaw@next",
+      expectedSpec: "marketingclaw@next",
     },
     {
       name: "main shorthand",
@@ -3202,7 +3202,7 @@ describe("update-cli", () => {
         mockPackageInstallStatus(createCaseDir("marketingclaw-update"));
         await updateCommand({
           yes: true,
-          tag: "openclaw@https://github.com/promisingcoder/marketingclaw#main",
+          tag: "marketingclaw@https://github.com/promisingcoder/marketingclaw#main",
         });
       },
       expectedSpec: "https://github.com/promisingcoder/marketingclaw#main",
@@ -4541,7 +4541,7 @@ describe("update-cli", () => {
 
     await updateCommand({ yes: true, restart: false });
 
-    expectPackageInstallSpec("openclaw@latest");
+    expectPackageInstallSpec("marketingclaw@latest");
     const doctorCall = doctorCommandCall();
     expect(doctorCall?.[0][0]).toContain("node");
     expect(doctorCall?.[0].slice(1)).toEqual([entryPath, "doctor", "--non-interactive"]);
@@ -4618,7 +4618,7 @@ describe("update-cli", () => {
         "npm",
         "i",
         "-g",
-        "openclaw@latest",
+        "marketingclaw@latest",
         "--no-fund",
         "--no-audit",
         "--loglevel=error",
@@ -4628,7 +4628,7 @@ describe("update-cli", () => {
         "npm",
         "i",
         "-g",
-        "openclaw@latest",
+        "marketingclaw@latest",
         "--omit=optional",
         "--no-fund",
         "--no-audit",
@@ -4707,7 +4707,7 @@ describe("update-cli", () => {
           isOwningNpmCommand(argv[0], brewPrefix) &&
           argv[1] === "i" &&
           argv[2] === "-g" &&
-          argv.includes("openclaw@latest"),
+          argv.includes("marketingclaw@latest"),
       );
 
     const requiredInstallCall = requireValue(installCall, "brew npm install call");

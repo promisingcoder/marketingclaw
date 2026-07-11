@@ -569,7 +569,7 @@ test -d "$MARKETINGCLAW_PLUGINS_TMP_DIR"
       [
         "scripts/e2e/lib/plugins/npm-registry-server.mjs",
         portFile,
-        "@openclaw/demo-plugin-npm",
+        "@marketingclaw/demo-plugin-npm",
         "1.0.0",
         tarballPath,
       ],
@@ -596,7 +596,7 @@ test -d "$MARKETINGCLAW_PLUGINS_TMP_DIR"
 
       expect(valid.statusCode, stderr.text()).toBe(200);
       expect(JSON.parse(valid.body)).toMatchObject({
-        name: "@openclaw/demo-plugin-npm",
+        name: "@marketingclaw/demo-plugin-npm",
         "dist-tags": { latest: "1.0.0" },
       });
     } finally {
@@ -707,7 +707,7 @@ test -d "$MARKETINGCLAW_PLUGINS_TMP_DIR"
       [
         "scripts/e2e/lib/plugins/npm-registry-server.mjs",
         portFile,
-        "@openclaw/demo-plugin-npm",
+        "@marketingclaw/demo-plugin-npm",
         "1.0.0",
         tarballPath,
       ],
@@ -787,7 +787,7 @@ test -d "$MARKETINGCLAW_PLUGINS_TMP_DIR"
       [
         "scripts/e2e/lib/plugins/npm-registry-server.mjs",
         portFile,
-        "@openclaw/demo-plugin-npm",
+        "@marketingclaw/demo-plugin-npm",
         "1.0.0",
         tarballPath,
       ],

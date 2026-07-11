@@ -398,8 +398,10 @@ describe("runGatewayUpdate", () => {
     onBaseInstall?: () => Promise<CommandResult>;
     onOmitOptionalInstall?: () => Promise<CommandResult>;
   }) {
-    const baseInstallKey = npmGlobalInstallCommand("openclaw@latest");
-    const omitOptionalInstallKey = npmGlobalInstallCommand("openclaw@latest", ["--omit=optional"]);
+    const baseInstallKey = npmGlobalInstallCommand("marketingclaw@latest");
+    const omitOptionalInstallKey = npmGlobalInstallCommand("marketingclaw@latest", [
+      "--omit=optional",
+    ]);
 
     return async (argv: string[]): Promise<CommandResult> => {
       const key = normalizeNpmFreshnessArgs(argv).join(" ");
@@ -2604,16 +2606,16 @@ describe("runGatewayUpdate", () => {
   it.each([
     {
       title: "updates global npm installs when detected",
-      expectedInstallCommand: npmGlobalInstallCommand("openclaw@latest"),
+      expectedInstallCommand: npmGlobalInstallCommand("marketingclaw@latest"),
     },
     {
       title: "uses update channel for global npm installs when tag is omitted",
-      expectedInstallCommand: npmGlobalInstallCommand("openclaw@beta"),
+      expectedInstallCommand: npmGlobalInstallCommand("marketingclaw@beta"),
       channel: "beta" as const,
     },
     {
       title: "updates global npm installs with tag override",
-      expectedInstallCommand: npmGlobalInstallCommand("openclaw@beta"),
+      expectedInstallCommand: npmGlobalInstallCommand("marketingclaw@beta"),
       tag: "beta",
     },
   ])("$title", async ({ expectedInstallCommand, channel, tag }) => {
@@ -2662,7 +2664,7 @@ describe("runGatewayUpdate", () => {
     const { calls, runCommand } = createGlobalInstallHarness({
       pkgRoot,
       npmRootOutput: nodeModules,
-      installCommand: npmGlobalInstallCommand("openclaw@latest"),
+      installCommand: npmGlobalInstallCommand("marketingclaw@latest"),
       onInstall: async () => {
         await writeGlobalPackageVersion(pkgRoot);
         await writeGatewayEntrypoint(pkgRoot);
@@ -2705,7 +2707,7 @@ describe("runGatewayUpdate", () => {
     const { calls, runCommand } = createGlobalInstallHarness({
       pkgRoot,
       npmRootOutput: nodeModules,
-      installCommand: npmGlobalInstallCommand("openclaw@latest"),
+      installCommand: npmGlobalInstallCommand("marketingclaw@latest"),
       onInstall: async () => {
         await writeGlobalPackageVersion(pkgRoot);
         await writeGatewayEntrypoint(pkgRoot);
@@ -2742,7 +2744,7 @@ describe("runGatewayUpdate", () => {
     const { calls, runCommand } = createGlobalInstallHarness({
       pkgRoot,
       npmRootOutput: nodeModules,
-      installCommand: npmGlobalInstallCommand("openclaw@latest"),
+      installCommand: npmGlobalInstallCommand("marketingclaw@latest"),
       gitRootMode: "missing",
       onInstall: async () => writeGlobalPackageVersion(pkgRoot),
     });
@@ -2751,7 +2753,7 @@ describe("runGatewayUpdate", () => {
 
     expect(result.status).toBe("ok");
     expect(result.mode).toBe("npm");
-    expect(calls).toContain(npmGlobalInstallCommand("openclaw@latest"));
+    expect(calls).toContain(npmGlobalInstallCommand("marketingclaw@latest"));
   });
 
   it("rejects a tag override for the extended-stable global package channel", async () => {
@@ -2759,7 +2761,7 @@ describe("runGatewayUpdate", () => {
     const { calls, runCommand } = createGlobalInstallHarness({
       pkgRoot,
       npmRootOutput: nodeModules,
-      installCommand: npmGlobalInstallCommand("openclaw@latest"),
+      installCommand: npmGlobalInstallCommand("marketingclaw@latest"),
     });
 
     const result = await runWithCommand(runCommand, {
@@ -2775,7 +2777,7 @@ describe("runGatewayUpdate", () => {
       reason: "extended-stable-tag-unsupported",
       steps: [],
     });
-    expect(calls).not.toContain(npmGlobalInstallCommand("openclaw@latest"));
+    expect(calls).not.toContain(npmGlobalInstallCommand("marketingclaw@latest"));
   });
 
   it("cleans stale npm rename dirs before global update", async () => {
@@ -2834,7 +2836,7 @@ describe("runGatewayUpdate", () => {
 
   it("fails global npm update when the installed version misses the requested correction", async () => {
     const { calls, result } = await runNpmGlobalUpdateCase({
-      expectedInstallCommand: npmGlobalInstallCommand("openclaw@2026.3.23-2"),
+      expectedInstallCommand: npmGlobalInstallCommand("marketingclaw@2026.3.23-2"),
       tag: "2026.3.23-2",
     });
 
@@ -2844,12 +2846,12 @@ describe("runGatewayUpdate", () => {
     expect(result.steps.at(-1)?.stderrTail).toContain(
       "expected installed version 2026.3.23-2, found 2.0.0",
     );
-    expect(calls).toContain(npmGlobalInstallCommand("openclaw@2026.3.23-2"));
+    expect(calls).toContain(npmGlobalInstallCommand("marketingclaw@2026.3.23-2"));
   });
 
   it("fails global npm update when bundled runtime sidecars are missing after install", async () => {
     const { nodeModules, pkgRoot } = await createGlobalPackageFixture(tempDir);
-    const expectedInstallCommand = npmGlobalInstallCommand("openclaw@latest");
+    const expectedInstallCommand = npmGlobalInstallCommand("marketingclaw@latest");
     const { runCommand } = createGlobalInstallHarness({
       pkgRoot,
       npmRootOutput: nodeModules,
@@ -2904,7 +2906,7 @@ describe("runGatewayUpdate", () => {
     const { runCommand } = createGlobalInstallHarness({
       pkgRoot,
       npmRootOutput: nodeModules,
-      installCommand: npmGlobalInstallCommand("openclaw@latest"),
+      installCommand: npmGlobalInstallCommand("marketingclaw@latest"),
       onInstall: async (options) => {
         installEnv = options?.env;
         await writeGlobalPackageVersion(options?.packageRoot ?? pkgRoot);
@@ -2937,7 +2939,7 @@ describe("runGatewayUpdate", () => {
     const { runCommand } = createGlobalInstallHarness({
       pkgRoot,
       npmRootOutput: nodeModules,
-      installCommand: npmGlobalInstallCommand("openclaw@latest"),
+      installCommand: npmGlobalInstallCommand("marketingclaw@latest"),
       onInstall: async (options) => {
         await writeGlobalPackageVersion(options?.packageRoot ?? pkgRoot);
         if (options?.installPrefix) {
@@ -2975,7 +2977,7 @@ describe("runGatewayUpdate", () => {
     const { calls, runCommand } = createGlobalInstallHarness({
       pkgRoot,
       pnpmRootOutput: nodeModules,
-      installCommand: npmGlobalInstallCommand("openclaw@latest"),
+      installCommand: npmGlobalInstallCommand("marketingclaw@latest"),
       onInstall: async (options) => {
         await writeGlobalPackageVersion(options?.packageRoot ?? pkgRoot);
       },
@@ -3028,7 +3030,7 @@ describe("runGatewayUpdate", () => {
 
       const { calls, runCommand } = createGlobalInstallHarness({
         pkgRoot,
-        installCommand: "bun add -g openclaw@latest",
+        installCommand: "bun add -g marketingclaw@latest",
         onInstall: async () => {
           await writeGlobalPackageVersion(pkgRoot);
         },
@@ -3040,7 +3042,7 @@ describe("runGatewayUpdate", () => {
       expect(result.mode).toBe("bun");
       expect(result.before?.version).toBe("1.0.0");
       expect(result.after?.version).toBe("2.0.0");
-      expect(calls).toContain("bun add -g openclaw@latest");
+      expect(calls).toContain("bun add -g marketingclaw@latest");
     });
   });
 

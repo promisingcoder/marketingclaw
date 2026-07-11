@@ -496,7 +496,7 @@ describe("collectPublishablePluginPackages", () => {
     mkdirSync(join(repoDir, "extensions", "demo-plugin"), { recursive: true });
     writePluginReadme(repoDir, "demo-plugin");
     writeJsonFile(join(repoDir, "extensions", "demo-plugin", "package.json"), {
-      name: "@openclaw/demo-plugin",
+      name: "@marketingclaw/demo-plugin",
       version: "2026.4.10",
       type: "module",
       repository: {
@@ -507,7 +507,7 @@ describe("collectPublishablePluginPackages", () => {
         extensions: ["./index.ts"],
         ...externalPluginContract("2026.4.10"),
         install: {
-          npmSpec: "@openclaw/demo-plugin",
+          npmSpec: "@marketingclaw/demo-plugin",
         },
         release: {
           publishToNpm: true,
@@ -519,11 +519,11 @@ describe("collectPublishablePluginPackages", () => {
       {
         extensionId: "demo-plugin",
         packageDir: "extensions/demo-plugin",
-        packageName: "@openclaw/demo-plugin",
+        packageName: "@marketingclaw/demo-plugin",
         version: "2026.4.10",
         channel: "stable",
         publishTag: "latest",
-        installNpmSpec: "@openclaw/demo-plugin",
+        installNpmSpec: "@marketingclaw/demo-plugin",
       },
     ]);
   });
@@ -533,14 +533,14 @@ describe("collectPublishablePluginPackages", () => {
     writeJsonFile(join(repoDir, "package.json"), { version: "2026.7.33" });
     writePluginReadme(repoDir, "demo-plugin");
     writeJsonFile(join(repoDir, "extensions", "demo-plugin", "package.json"), {
-      name: "@openclaw/demo-plugin",
+      name: "@marketingclaw/demo-plugin",
       version: "2026.7.33",
       type: "module",
       repository: { type: "git", url: MARKETINGCLAW_PLUGIN_NPM_REPOSITORY_URL },
       marketingclaw: {
         extensions: ["./index.ts"],
         ...externalPluginContract("2026.7.33"),
-        install: { npmSpec: "@openclaw/demo-plugin" },
+        install: { npmSpec: "@marketingclaw/demo-plugin" },
         release: { publishToNpm: true },
       },
     });
@@ -555,14 +555,14 @@ describe("collectPublishablePluginPackages", () => {
     writeJsonFile(join(repoDir, "package.json"), { version: "2026.7.34" });
     writePluginReadme(repoDir, "demo-plugin");
     writeJsonFile(join(repoDir, "extensions", "demo-plugin", "package.json"), {
-      name: "@openclaw/demo-plugin",
+      name: "@marketingclaw/demo-plugin",
       version: "2026.7.33",
       type: "module",
       repository: { type: "git", url: MARKETINGCLAW_PLUGIN_NPM_REPOSITORY_URL },
       marketingclaw: {
         extensions: ["./index.ts"],
         ...externalPluginContract("2026.7.33"),
-        install: { npmSpec: "@openclaw/demo-plugin" },
+        install: { npmSpec: "@marketingclaw/demo-plugin" },
         release: { publishToNpm: true },
       },
     });
@@ -577,7 +577,7 @@ describe("collectPublishablePluginPackages", () => {
     mkdirSync(join(repoDir, "extensions", "demo-plugin"), { recursive: true });
     writePluginReadme(repoDir, "demo-plugin");
     writeJsonFile(join(repoDir, "extensions", "demo-plugin", "package.json"), {
-      name: "@openclaw/demo-plugin",
+      name: "@marketingclaw/demo-plugin",
       version: "2026.4.10",
       type: "module",
       repository: {
@@ -591,7 +591,7 @@ describe("collectPublishablePluginPackages", () => {
         extensions: ["./index.ts"],
         ...externalPluginContract("2026.4.10"),
         install: {
-          npmSpec: "@openclaw/demo-plugin",
+          npmSpec: "@marketingclaw/demo-plugin",
         },
         release: {
           publishToNpm: true,
@@ -604,11 +604,11 @@ describe("collectPublishablePluginPackages", () => {
       {
         extensionId: "demo-plugin",
         packageDir: "extensions/demo-plugin",
-        packageName: "@openclaw/demo-plugin",
+        packageName: "@marketingclaw/demo-plugin",
         version: "2026.4.10",
         channel: "stable",
         publishTag: "latest",
-        installNpmSpec: "@openclaw/demo-plugin",
+        installNpmSpec: "@marketingclaw/demo-plugin",
         requiredLatestDependencies: [
           {
             packageName: "demo-runtime",
@@ -624,7 +624,7 @@ describe("collectPublishablePluginPackages", () => {
     mkdirSync(join(repoDir, "extensions", "demo-plugin"), { recursive: true });
     writePluginReadme(repoDir, "demo-plugin");
     writeJsonFile(join(repoDir, "extensions", "demo-plugin", "package.json"), {
-      name: "@openclaw/demo-plugin",
+      name: "@marketingclaw/demo-plugin",
       version: "2026.4.10-beta.1",
       type: "module",
       repository: {
@@ -635,7 +635,7 @@ describe("collectPublishablePluginPackages", () => {
         extensions: ["./index.ts"],
         ...externalPluginContract("2026.4.10-beta.1"),
         install: {
-          npmSpec: "@openclaw/demo-plugin",
+          npmSpec: "@marketingclaw/demo-plugin",
         },
         release: {
           publishToNpm: true,
@@ -661,15 +661,15 @@ describe("collectPublishablePluginPackages", () => {
 
     expect(
       collectPublishablePluginPackages(repoDir, {
-        packageNames: ["@openclaw/demo-plugin"],
+        packageNames: ["@marketingclaw/demo-plugin"],
       }),
     ).toEqual([
       {
         extensionId: "demo-plugin",
         packageDir: "extensions/demo-plugin",
-        installNpmSpec: "@openclaw/demo-plugin",
+        installNpmSpec: "@marketingclaw/demo-plugin",
         channel: "beta",
-        packageName: "@openclaw/demo-plugin",
+        packageName: "@marketingclaw/demo-plugin",
         publishTag: "beta",
         version: "2026.4.10-beta.1",
       },
@@ -704,7 +704,7 @@ describe("collectPublishablePluginPackages", () => {
     mkdirSync(join(repoDir, "extensions", "demo-plugin"), { recursive: true });
     writePluginReadme(repoDir, "demo-plugin");
     writeJsonFile(join(repoDir, "extensions", "demo-plugin", "package.json"), {
-      name: "@openclaw/demo-plugin",
+      name: "@marketingclaw/demo-plugin",
       version: "2026.4.10-alpha.1",
       type: "module",
       repository: {
@@ -715,7 +715,7 @@ describe("collectPublishablePluginPackages", () => {
         extensions: ["./index.ts"],
         ...externalPluginContract("2026.4.10-alpha.1"),
         install: {
-          npmSpec: "@openclaw/demo-plugin",
+          npmSpec: "@marketingclaw/demo-plugin",
         },
         release: {
           publishToNpm: true,
@@ -727,8 +727,8 @@ describe("collectPublishablePluginPackages", () => {
       {
         extensionId: "demo-plugin",
         packageDir: "extensions/demo-plugin",
-        installNpmSpec: "@openclaw/demo-plugin",
-        packageName: "@openclaw/demo-plugin",
+        installNpmSpec: "@marketingclaw/demo-plugin",
+        packageName: "@marketingclaw/demo-plugin",
         channel: "alpha",
         publishTag: "alpha",
         version: "2026.4.10-alpha.1",

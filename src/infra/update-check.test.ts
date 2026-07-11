@@ -86,7 +86,7 @@ describe("resolveNpmChannelTag", () => {
     await expect(
       fetchNpmPackageTargetStatus({
         target: "latest",
-        spec: "openclaw@latest",
+        spec: "marketingclaw@latest",
         command: "/opt/marketingclaw/node/bin/npm",
         timeoutMs: 1000,
         cwd: "/tmp/marketingclaw-project",
@@ -103,7 +103,7 @@ describe("resolveNpmChannelTag", () => {
       [
         "/opt/marketingclaw/node/bin/npm",
         "view",
-        "openclaw@latest",
+        "marketingclaw@latest",
         "version",
         "engines.node",
         "--json",
@@ -443,7 +443,7 @@ describe("resolveExtendedStablePackage", () => {
       status: "resolved",
       selector: "extended-stable",
       version: "2026.6.33",
-      packageSpec: "openclaw@2026.6.33",
+      packageSpec: "marketingclaw@2026.6.33",
     });
     expect(fetch.mock.calls.map((call) => call[0])).toEqual([
       "https://registry.npmjs.org/marketingclaw/extended-stable",
@@ -482,7 +482,7 @@ describe("resolveExtendedStablePackage", () => {
       status: "resolved",
       selector: "extended-stable",
       version: "2000.4.34",
-      packageSpec: "@kevins8/openclaw@2000.4.34",
+      packageSpec: "@kevins8/marketingclaw@2000.4.34",
     });
     expect(fetch.mock.calls.map((call) => call[0])).toEqual([
       "http://127.0.0.1:4873/%40kevins8%2Fmarketingclaw/extended-stable",
@@ -519,7 +519,7 @@ describe("resolveExtendedStablePackage", () => {
       }),
     ).resolves.toMatchObject({
       status: "resolved",
-      packageSpec: "openclaw@2026.6.33",
+      packageSpec: "marketingclaw@2026.6.33",
     });
     expect(fetch.mock.calls.map((call) => call[0])).toEqual([
       "https://registry.npmjs.org/marketingclaw/extended-stable",
