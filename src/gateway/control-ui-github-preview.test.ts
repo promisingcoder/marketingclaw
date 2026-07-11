@@ -102,7 +102,7 @@ describe("loadControlUiGitHubPreview", () => {
     const target = {
       kind: "pull" as const,
       number: 99816,
-      owner: "marketingclaw",
+      owner: "promisingcoder",
       repo: "marketingclaw",
     };
 
@@ -118,7 +118,7 @@ describe("loadControlUiGitHubPreview", () => {
       login: "steipete",
       mergedAt: "2026-07-04T09:53:52Z",
       number: 99816,
-      owner: "marketingclaw",
+      owner: "promisingcoder",
       repo: "marketingclaw",
     });
     expect(second).toEqual(first);

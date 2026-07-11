@@ -1053,7 +1053,7 @@ describe("mention helpers", () => {
   });
 
   it("normalizes zero-width characters", () => {
-    expect(normalizeMentionText("open\u200bclaw")).toBe("marketingclaw");
+    expect(normalizeMentionText("marketing\u200bclaw")).toBe("marketingclaw");
   });
 
   it("matches patterns case-insensitively", () => {
