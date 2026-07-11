@@ -1259,7 +1259,9 @@ jobs:
     needs: [preflight]
     if: ${{ !cancelled() && always() && needs.preflight.outputs.run_check == 'true' }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    # 40 (not 20): on private-repo 7GB runners the lint task runs oxlint shards serially
+    # (--split-core), which fits memory but takes longer than the default budget.
+    timeout-minutes: 40
     strategy:
       fail-fast: false
       max-parallel: 12
