@@ -435,7 +435,7 @@ describe("extended-stable registry readback", () => {
     const result = await verifyExtendedStableRegistryReadback({
       expectedVersion: "2026.6.33",
       query: async (target: string) => {
-        if (target === "openclaw@2026.6.33") {
+        if (target === "marketingclaw@2026.6.33") {
           attempt += 1;
         }
         return { status: 0, stdout: attempt >= 2 ? "2026.6.33\n" : "2026.6.32\n" };
@@ -466,7 +466,7 @@ describe("extended-stable registry readback", () => {
 describe("extended-stable selector repair", () => {
   it("points the selector at the expected published version", () => {
     expect(extendedStableSelectorRepairCommand("v2026.6.33")).toBe(
-      "npm dist-tag add openclaw@2026.6.33 extended-stable",
+      "npm dist-tag add marketingclaw@2026.6.33 extended-stable",
     );
   });
 
