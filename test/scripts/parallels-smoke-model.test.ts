@@ -2021,7 +2021,10 @@ setInterval(() => {}, 1000);
       windows: 1800,
     });
     expect(readFileSync(TS_PATHS.macos, "utf8")).toContain(
-      'this.agentTimeoutSeconds = readPositiveIntEnv("MARKETINGCLAW_PARALLELS_MACOS_AGENT_TIMEOUT_S", 2700)',
+      `this.agentTimeoutSeconds = readPositiveIntEnv(
+      "MARKETINGCLAW_PARALLELS_MACOS_AGENT_TIMEOUT_S",
+      2700,
+    )`,
     );
     expect(readFileSync(TS_PATHS.macos, "utf8")).toContain("--timeout ${this.modelTimeoutSeconds}");
     expect(readFileSync(TS_PATHS.linux, "utf8")).toContain(
@@ -2096,7 +2099,10 @@ setInterval(() => {}, 1000);
       'readPositiveIntEnv(\n    "MARKETINGCLAW_PARALLELS_WINDOWS_UPDATE_TIMEOUT_S"',
     );
     expect(readFileSync(TS_PATHS.packageArtifact, "utf8")).toContain(
-      'readPositiveIntEnv("MARKETINGCLAW_PARALLELS_PACKAGE_LOCK_TIMEOUT_MS", 30 * 60_000)',
+      `readPositiveIntEnv(
+    "MARKETINGCLAW_PARALLELS_PACKAGE_LOCK_TIMEOUT_MS",
+    30 * 60_000,
+  )`,
     );
     expect(readFileSync(TS_PATHS.npmUpdate, "utf8")).toContain(
       'readPositiveIntEnv("MARKETINGCLAW_PARALLELS_NPM_UPDATE_TIMEOUT_S", 1200)',
