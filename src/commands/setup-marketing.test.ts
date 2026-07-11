@@ -141,6 +141,17 @@ describe("buildDefaultCronJobCreates", () => {
       expect(job?.schedule).toEqual({ kind: "cron", expr: spec.cron });
     }
   });
+
+  it("keeps POSTLOG.md tied to confirmed publish, not scheduling, in the reconcile job", () => {
+    const reconcile = DEFAULT_CRON_JOBS.find((job) => job.name === "daily-queue-reconcile");
+    const message = reconcile?.message ?? "";
+    // Scheduling only flips CALENDAR status; POSTLOG records what actually went out.
+    expect(message).toMatch(/flip the row to 'scheduled'/);
+    expect(message).toMatch(/do not write to POSTLOG\.md when scheduling/i);
+    expect(message).toMatch(/append that entry to POSTLOG\.md/i);
+    // The old wording appended the scheduling action itself to POSTLOG — gone now.
+    expect(message).not.toMatch(/flip the row to 'scheduled', and append/i);
+  });
 });
 
 describe("renderBrandMarkdown", () => {
@@ -210,6 +221,60 @@ describe("setupMarketingCommand", () => {
     );
     expect(runtime.exit).toHaveBeenCalledWith(1);
     expect(store.writes).toHaveLength(0);
+  });
+
+  it("aborts without overwriting when an existing config is unreadable", async () => {
+    const runtime = createRuntime();
+    const store = {
+      config: {} as MarketingClawConfig,
+      writes: [] as MarketingClawConfig[],
+      cronCalls: [] as CronJobCreate[][],
+    };
+    // Exercise the real readExistingConfig (no readConfig override) against a
+    // malformed file at the resolved config path.
+    const deps = { ...createDeps(store), readConfig: undefined };
+    const configPath = path.join(stateDir, "marketingclaw.json");
+    const malformed = '{"agents": {"list": [';
+    await fs.writeFile(configPath, malformed, "utf-8");
+
+    await setupMarketingCommand(
+      { nonInteractive: true, company: "Acme", site: "acme.com", audience: "b2b saas" },
+      runtime,
+      deps,
+    );
+
+    // Aborted: exit(1), nothing written, malformed file left byte-for-byte intact.
+    expect(runtime.exit).toHaveBeenCalledWith(1);
+    expect(store.writes).toHaveLength(0);
+    expect(await fs.readFile(configPath, "utf-8")).toBe(malformed);
+    // The error names the config file so the operator knows what to fix.
+    const errText = runtime.error.mock.calls.map((call) => String(call[0])).join("\n");
+    expect(errText).toMatch(/config/i);
+    // Fail-fast: no shared-dir scaffolding ran before the abort.
+    await expect(
+      fs.access(path.join(resolveSharedMarketingDir(stateDir), "BRAND.md")),
+    ).rejects.toThrow();
+  });
+
+  it("treats a missing config as a fresh install rather than aborting", async () => {
+    const runtime = createRuntime();
+    const store = {
+      config: {} as MarketingClawConfig,
+      writes: [] as MarketingClawConfig[],
+      cronCalls: [] as CronJobCreate[][],
+    };
+    // Real readExistingConfig against a path with no file present (ENOENT).
+    const deps = { ...createDeps(store), readConfig: undefined };
+
+    await setupMarketingCommand(
+      { nonInteractive: true, company: "Acme", site: "acme.com", audience: "b2b saas" },
+      runtime,
+      deps,
+    );
+
+    expect(runtime.exit).not.toHaveBeenCalled();
+    expect(store.writes).toHaveLength(1);
+    expect(store.config.agents?.list).toHaveLength(6);
   });
 
   it("scaffolds the shared dir, roster, workspaces, and cron on a fresh install", async () => {

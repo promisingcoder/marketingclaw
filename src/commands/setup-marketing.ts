@@ -157,7 +157,7 @@ export const DEFAULT_CRON_JOBS: readonly DefaultCronJobSpec[] = [
     cron: "0 8 * * *",
     summary: "Daily 08:00 — Social reconciles approved items into the Postiz queue",
     message:
-      "It's the daily queue-reconcile turn. Read ~/.marketingclaw/marketing/CALENDAR.md. For every row with status 'approved' that is not yet scheduled, schedule it in Postiz at its planned time, flip the row to 'scheduled', and append the action to POSTLOG.md. Only touch 'approved' rows — never publish an unapproved item. Message me a one-line summary of what changed.",
+      "It's the daily queue-reconcile turn. Read ~/.marketingclaw/marketing/CALENDAR.md. For every row with status 'approved' that is not yet scheduled, schedule it in Postiz at its planned time and flip the row to 'scheduled'. Do not write to POSTLOG.md when scheduling — POSTLOG.md records only what has actually gone out. Then verify items scheduled for earlier dates actually published: for each confirmed publish, flip its row to 'posted' and append that entry to POSTLOG.md (timestamp, channel, title, link). Only touch 'approved' rows when scheduling — never publish an unapproved item. Message me a one-line summary of what changed.",
   },
   {
     name: "weekly-analytics-report",
@@ -451,17 +451,57 @@ async function writeFileIfMissing(filePath: string, content: string): Promise<bo
   }
 }
 
-/** Reads the existing config file, tolerating a missing or malformed file. */
+/**
+ * Signals that an existing config file is present but could not be read or
+ * parsed. setupMarketingCommand catches this and aborts instead of silently
+ * overwriting a config it does not understand.
+ */
+class ExistingConfigUnreadableError extends Error {
+  constructor(
+    readonly configPath: string,
+    readonly reason: string,
+  ) {
+    super(`Existing config at ${configPath} could not be read: ${reason}`);
+    this.name = "ExistingConfigUnreadableError";
+  }
+}
+
+/**
+ * Reads the existing config file. A missing file (ENOENT) means a fresh install
+ * and yields an empty config. Any other failure — an unreadable file (EACCES, a
+ * directory, …) or unparseable/non-object contents — throws
+ * ExistingConfigUnreadableError so the caller aborts rather than overwriting a
+ * config it could not parse.
+ */
 async function readExistingConfig(
   configPath: string,
 ): Promise<{ exists: boolean; config: MarketingClawConfig }> {
+  let raw: string;
   try {
-    const raw = await fs.readFile(configPath, "utf-8");
-    const parsed = safeParseWithSchema(JsonRecordSchema, JSON5.parse(raw));
-    return { exists: true, config: (parsed ?? {}) as MarketingClawConfig };
-  } catch {
-    return { exists: false, config: {} };
+    raw = await fs.readFile(configPath, "utf-8");
+  } catch (err) {
+    if ((err as { code?: string }).code === "ENOENT") {
+      return { exists: false, config: {} };
+    }
+    throw new ExistingConfigUnreadableError(
+      configPath,
+      err instanceof Error ? err.message : String(err),
+    );
   }
+  let parsed: unknown;
+  try {
+    parsed = JSON5.parse(raw);
+  } catch (err) {
+    throw new ExistingConfigUnreadableError(
+      configPath,
+      `contents are not valid JSON5 (${err instanceof Error ? err.message : String(err)})`,
+    );
+  }
+  const validated = safeParseWithSchema(JsonRecordSchema, parsed);
+  if (!validated) {
+    throw new ExistingConfigUnreadableError(configPath, "top-level value is not a JSON object");
+  }
+  return { exists: true, config: validated as MarketingClawConfig };
 }
 
 async function defaultResolveTemplatesDir(): Promise<string> {
@@ -669,6 +709,24 @@ export async function setupMarketingCommand(
     return;
   }
 
+  // Read any existing config up front. A missing file is a fresh install; an
+  // unreadable or unparseable one aborts here — before scaffolding, prompting,
+  // or (critically) the roster write — so a malformed config is never clobbered.
+  let existing: { exists: boolean; config: MarketingClawConfig };
+  try {
+    existing = await readConfig(configPath);
+  } catch (err) {
+    if (err instanceof ExistingConfigUnreadableError) {
+      runtime.error(
+        `Refusing to overwrite the existing config at ${shortenHomePath(err.configPath)}: ${err.reason}. ` +
+          `Fix or back up that file, then re-run ${formatCliCommand("marketingclaw setup-marketing")}.`,
+      );
+      runtime.exit(1);
+      return;
+    }
+    throw err;
+  }
+
   const brand = opts.nonInteractive
     ? {
         company: opts.company?.trim() ?? "",
@@ -691,8 +749,7 @@ export async function setupMarketingCommand(
   });
   stepRuntime.log(brandCreated ? "BRAND.md written." : "BRAND.md already present (kept).");
 
-  // 2) Roster: add any missing agents to config.
-  const existing = await readConfig(configPath);
+  // 2) Roster: add any missing agents to the config read above.
   const rosterResult = applyMarketingRoster(existing.config, { stateDir });
   if (rosterResult.created.length > 0) {
     await replaceConfigFile({ nextConfig: rosterResult.config, afterWrite: { mode: "auto" } });
