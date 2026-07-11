@@ -27,8 +27,8 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 const REPO = process.cwd();
-const argv = process.argv.slice(2);
-const flag = (f) => argv.includes(f);
+const argv = new Set(process.argv.slice(2));
+const flag = (f) => argv.has(f);
 
 const MODE_WRITE = flag("--write");
 const MODE_AUDIT = flag("--audit");
@@ -58,10 +58,14 @@ function gitLsFilesWithMode() {
   });
   const rows = [];
   for (const rec of out.split(NUL)) {
-    if (!rec) continue;
+    if (!rec) {
+      continue;
+    }
     // format: <mode> <sha> <stage>\t<path>
     const tab = rec.indexOf("\t");
-    if (tab < 0) continue;
+    if (tab < 0) {
+      continue;
+    }
     const meta = rec.slice(0, tab).split(" ");
     const p = rec.slice(tab + 1);
     rows.push({ mode: meta[0], path: p });
@@ -79,26 +83,52 @@ function isNodeModules(p) {
 }
 // Path-rename exclusions
 function isPathExcluded(p) {
-  if (isNodeModules(p)) return true;
-  if (p === PATCH_FS_SAFE) return true;
+  if (isNodeModules(p)) {
+    return true;
+  }
+  if (p === PATCH_FS_SAFE) {
+    return true;
+  }
   return false;
 }
 // Content exclusions (skip file entirely)
 function isContentExcluded(p) {
-  if (isNodeModules(p)) return true;
-  if (p === "scripts/rename-fork.mjs") return true; // never rewrite this tool's own rules
+  if (isNodeModules(p)) {
+    return true;
+  }
+  if (p === "scripts/rename-fork.mjs") {
+    return true; // never rewrite this tool's own rules
+  }
   const base = p.split("/").pop();
-  if (base === "LICENSE") return true;
-  if (base === "THIRD_PARTY_NOTICES.md") return true;
-  if (p === "UPSTREAM-CHANGELOG.md") return true;
+  if (base === "LICENSE") {
+    return true;
+  }
+  if (base === "THIRD_PARTY_NOTICES.md") {
+    return true;
+  }
+  if (p === "UPSTREAM-CHANGELOG.md") {
+    return true;
+  }
   // Fork-origin attribution must name the real upstream project; don't rewrite it.
-  if (p === "CHANGELOG.md") return true;
+  if (p === "CHANGELOG.md") {
+    return true;
+  }
   // Explains that Ansible deployment installs the real upstream engine; must name it.
-  if (p === "docs/install/ansible.md") return true;
-  if (base === "pnpm-lock.yaml") return true;
-  if (base === "npm-shrinkwrap.json") return true;
-  if (p.startsWith("patches/")) return true;
-  if (p.startsWith("apps/android/THIRD_PARTY_LICENSES/")) return true;
+  if (p === "docs/install/ansible.md") {
+    return true;
+  }
+  if (base === "pnpm-lock.yaml") {
+    return true;
+  }
+  if (base === "npm-shrinkwrap.json") {
+    return true;
+  }
+  if (p.startsWith("patches/")) {
+    return true;
+  }
+  if (p.startsWith("apps/android/THIRD_PARTY_LICENSES/")) {
+    return true;
+  }
   return false;
 }
 
@@ -125,10 +155,16 @@ const BINARY_EXT = new Set([
 ]);
 function looksBinary(p, buf) {
   const ext = (p.split(".").pop() || "").toLowerCase();
-  if (BINARY_EXT.has(ext)) return true;
+  if (BINARY_EXT.has(ext)) {
+    return true;
+  }
   // NUL sniff of first 8KB
   const n = Math.min(buf.length, 8192);
-  for (let i = 0; i < n; i++) if (buf[i] === 0) return true;
+  for (let i = 0; i < n; i++) {
+    if (buf[i] === 0) {
+      return true;
+    }
+  }
   return false;
 }
 
@@ -145,12 +181,16 @@ function computeWorkspaceSuffixes(rows) {
     /^extensions\/[^/]+\/package\.json$/.test(p) ||
     /^examples\/[^/]+\/package\.json$/.test(p);
   for (const { path: p } of rows) {
-    if (!isWorkspacePkgJson(p)) continue;
+    if (!isWorkspacePkgJson(p)) {
+      continue;
+    }
     try {
       const j = JSON.parse(readFileSync(path.join(REPO, p), "utf8"));
       const name = typeof j.name === "string" ? j.name : "";
       const m = /^@(?:openclaw|marketingclaw)\/(.+)$/.exec(name);
-      if (m) suffixes.add(m[1]);
+      if (m) {
+        suffixes.add(m[1]);
+      }
     } catch {
       /* ignore unparseable */
     }
@@ -176,9 +216,12 @@ function transformString(s) {
 // ----------------------------------------------------------------------------
 function makeContentTransformer(workspaceSuffixes, counters) {
   const bump = (k, n = 1) => {
-    if (counters) counters[k] = (counters[k] || 0) + n;
+    if (counters) {
+      counters[k] = (counters[k] || 0) + n;
+    }
   };
   return function transformContent(text) {
+    let result = text;
     const store = [];
     const protect = (s) => {
       const id = store.length;
@@ -188,27 +231,29 @@ function makeContentTransformer(workspaceSuffixes, counters) {
 
     // ---- PROTECT (KEEP as-is) ----
     // @openclaw/<name> where <name> is NOT a workspace package
-    text = text.replace(/@openclaw\/([A-Za-z0-9._-]+)/g, (m, name) => {
-      if (workspaceSuffixes.has(name)) return m; // workspace scope -> let generic rename
+    result = result.replace(/@openclaw\/([A-Za-z0-9._-]+)/g, (m, name) => {
+      if (workspaceSuffixes.has(name)) {
+        return m; // workspace scope -> let generic rename
+      }
       bump("KEEP @openclaw/<external>");
       return protect(m);
     });
     // pnpm patch key form (double underscore, no slash)
-    text = text.replace(/@openclaw__fs-safe/g, (m) => {
+    result = result.replace(/@openclaw__fs-safe/g, (m) => {
       bump("KEEP @openclaw__fs-safe (patch key)");
       return protect(m);
     });
     // published npm version specs of the real upstream package (KEEP).
-    text = text.replace(/openclaw@latest/g, (m) => {
+    result = result.replace(/openclaw@latest/g, (m) => {
       bump("KEEP openclaw@latest");
       return protect(m);
     });
-    text = text.replace(/openclaw@\d[A-Za-z0-9._-]*/g, (m) => {
+    result = result.replace(/openclaw@\d[A-Za-z0-9._-]*/g, (m) => {
       bump("KEEP openclaw@<digit-version>");
       return protect(m);
     });
     // git SHA specs (7+ hex) pin the real upstream package to a commit.
-    text = text.replace(/openclaw@[0-9a-f]{7,}\b/g, (m) => {
+    result = result.replace(/openclaw@[0-9a-f]{7,}\b/g, (m) => {
       bump("KEEP openclaw@<sha>");
       return protect(m);
     });
@@ -216,10 +261,12 @@ function makeContentTransformer(workspaceSuffixes, counters) {
     // extended-stable, *, X.Y.Z, ...) all reference the real upstream package.
     // Fixture emails/hosts (openclaw@gmail.com, @example.com, @localhost) are NOT
     // package refs -> let the generic rule rename them.
-    text = text.replace(/openclaw@([A-Za-z*][A-Za-z0-9._*+^~-]*)/g, (m, spec) => {
+    result = result.replace(/openclaw@([A-Za-z*][A-Za-z0-9._*+^~-]*)/g, (m, spec) => {
       const isEmailOrHost =
         /\.(?:com|org|net|io|ai|dev|edu|gov|co|eg)\b/i.test(spec) || /^localhost$/i.test(spec);
-      if (isEmailOrHost) return m; // rename via generic rule
+      if (isEmailOrHost) {
+        return m; // rename via generic rule
+      }
       bump("KEEP openclaw@<dist-tag/placeholder>");
       return protect(m);
     });
@@ -232,32 +279,32 @@ function makeContentTransformer(workspaceSuffixes, counters) {
     // @openclaw/crabline re-exports (consumed in extensions/qa-lab): value+type
     // identifiers (OpenClawCrabline*), SCREAMING consts (OPENCLAW_CRABLINE_*), and
     // the adapter param key `openclawConfig`.
-    text = text.replace(/OpenClawCrabline[A-Za-z0-9]*/g, (m) => {
+    result = result.replace(/OpenClawCrabline[A-Za-z0-9]*/g, (m) => {
       bump("KEEP OpenClawCrabline<identifier> (external @openclaw/crabline export)");
       return protect(m);
     });
-    text = text.replace(/OPENCLAW_CRABLINE[A-Z0-9_]*/g, (m) => {
+    result = result.replace(/OPENCLAW_CRABLINE[A-Z0-9_]*/g, (m) => {
       bump("KEEP OPENCLAW_CRABLINE<identifier> (external @openclaw/crabline export)");
       return protect(m);
     });
-    text = text.replace(/openclawConfig\b/g, (m) => {
+    result = result.replace(/openclawConfig\b/g, (m) => {
       bump("KEEP openclawConfig (external crabline adapter param)");
       return protect(m);
     });
     // tokenjuice "openclaw" host: the exports-map subpath + the factory it exports
     // (aliased locally in extensions/tokenjuice/runtime-api.ts).
-    text = text.replace(/tokenjuice\/openclaw/g, (m) => {
+    result = result.replace(/tokenjuice\/openclaw/g, (m) => {
       bump("KEEP tokenjuice/openclaw (external subpath)");
       return protect(m);
     });
-    text = text.replace(/TokenjuiceOpenClaw[A-Za-z0-9]*/g, (m) => {
+    result = result.replace(/TokenjuiceOpenClaw[A-Za-z0-9]*/g, (m) => {
       bump("KEEP TokenjuiceOpenClaw<identifier> (external tokenjuice export)");
       return protect(m);
     });
     // DSSE payloadType for hosted plugin-catalog feed envelopes: a wire-protocol
     // string signed by upstream ClawHub and embedded in the signature PAE. Renaming
     // it would reject every real upstream-signed feed (protocol constant, not brand).
-    text = text.replace(/openclaw\.official-external-plugin-catalog-feed\.v1/g, (m) => {
+    result = result.replace(/openclaw\.official-external-plugin-catalog-feed\.v1/g, (m) => {
       bump("KEEP openclaw.official-external-plugin-catalog-feed.v1 (DSSE payload type)");
       return protect(m);
     });
@@ -265,17 +312,20 @@ function makeContentTransformer(workspaceSuffixes, counters) {
     // ---- TARGETED URL map: ONLY the exact main repo openclaw/openclaw maps to
     // the fork. A trailing [A-Za-z0-9-] means a different repo (openclaw-ansible,
     // openclaw-windows-node, ...) which is kept below. Runs BEFORE the URL-KEEP.
-    text = text.replace(/raw\.githubusercontent\.com\/openclaw\/openclaw(?![A-Za-z0-9-])/g, () => {
-      bump("P4 raw.githubusercontent.com/openclaw/openclaw");
-      return "raw.githubusercontent.com/promisingcoder/marketingclaw";
-    });
-    text = text.replace(/github\.com\/openclaw\/openclaw(?![A-Za-z0-9-])/g, () => {
+    result = result.replace(
+      /raw\.githubusercontent\.com\/openclaw\/openclaw(?![A-Za-z0-9-])/g,
+      () => {
+        bump("P4 raw.githubusercontent.com/openclaw/openclaw");
+        return "raw.githubusercontent.com/promisingcoder/marketingclaw";
+      },
+    );
+    result = result.replace(/github\.com\/openclaw\/openclaw(?![A-Za-z0-9-])/g, () => {
       bump("P5 github.com/openclaw/openclaw");
       return "github.com/promisingcoder/marketingclaw";
     });
     // KEEP every other upstream repo URL (real attribution: fs-safe, proxyline,
     // skills, nix-openclaw, openclaw-ansible, crawl tools, example-plugin, ...).
-    text = text.replace(
+    result = result.replace(
       /(?:github\.com|raw\.githubusercontent\.com)\/openclaw\/[A-Za-z0-9._-]+/g,
       (m) => {
         bump("KEEP <gh>/openclaw/<upstream-repo>");
@@ -283,7 +333,7 @@ function makeContentTransformer(workspaceSuffixes, counters) {
       },
     );
     // KEEP the deepwiki page for the upstream repo (full path).
-    text = text.replace(/deepwiki\.com\/openclaw(?:\/openclaw)?/g, (m) => {
+    result = result.replace(/deepwiki\.com\/openclaw(?:\/openclaw)?/g, (m) => {
       bump("KEEP deepwiki.com/openclaw");
       return protect(m);
     });
@@ -293,29 +343,44 @@ function makeContentTransformer(workspaceSuffixes, counters) {
     // unprefixed form `type: "openclaw-gw"`, which the bonjour lib wraps into
     // `_openclaw-gw._tcp`). `marketingclaw-gw` would be 16 chars and break the
     // 15-char DNS-SD service-type limit, so collapse to `marketclaw-gw` (13).
-    text = text.replace(/openclaw-gw/g, () => {
+    result = result.replace(/openclaw-gw/g, () => {
       bump("P8 openclaw-gw -> marketclaw-gw (mDNS 15-char limit)");
       return "marketclaw-gw";
     });
-    text = text.replace(/ai\.openclawfoundation/g, () => {
+    result = result.replace(/ai\.openclawfoundation/g, () => {
       bump("P9 ai.openclawfoundation -> ai.marketingclaw");
       return "ai.marketingclaw";
     });
-    text = text.replace(/security@openclaw\.ai/g, () => {
+    result = result.replace(/security@openclaw\.ai/g, () => {
       bump("P10 security@openclaw.ai -> fork contact");
       return "nagyyousef323@gmail.com";
     });
 
     // ---- GENERIC (ordered, disjoint casings) ----
-    text = text.replace(/OpenClaw/g, () => (bump("G OpenClaw"), "MarketingClaw"));
-    text = text.replace(/OPENCLAW/g, () => (bump("G OPENCLAW"), "MARKETINGCLAW"));
-    text = text.replace(/openClaw/g, () => (bump("G openClaw"), "marketingClaw"));
-    text = text.replace(/Openclaw/g, () => (bump("G Openclaw"), "Marketingclaw"));
-    text = text.replace(/openclaw/g, () => (bump("G openclaw"), "marketingclaw"));
+    result = result.replace(/OpenClaw/g, () => {
+      bump("G OpenClaw");
+      return "MarketingClaw";
+    });
+    result = result.replace(/OPENCLAW/g, () => {
+      bump("G OPENCLAW");
+      return "MARKETINGCLAW";
+    });
+    result = result.replace(/openClaw/g, () => {
+      bump("G openClaw");
+      return "marketingClaw";
+    });
+    result = result.replace(/Openclaw/g, () => {
+      bump("G Openclaw");
+      return "Marketingclaw";
+    });
+    result = result.replace(/openclaw/g, () => {
+      bump("G openclaw");
+      return "marketingclaw";
+    });
 
     // ---- RESTORE ----
-    text = text.replace(RESTORE_RE, (m, id) => store[Number(id)]);
-    return text;
+    result = result.replace(RESTORE_RE, (m, id) => store[Number(id)]);
+    return result;
   };
 }
 
@@ -325,11 +390,19 @@ function makeContentTransformer(workspaceSuffixes, counters) {
 function computePathRenames(rows) {
   const renames = [];
   for (const { mode, path: p } of rows) {
-    if (mode === "120000") continue; // never move symlinks
-    if (isPathExcluded(p)) continue;
-    if (!/openclaw/i.test(p)) continue;
+    if (mode === "120000") {
+      continue; // never move symlinks
+    }
+    if (isPathExcluded(p)) {
+      continue;
+    }
+    if (!/openclaw/i.test(p)) {
+      continue;
+    }
     const np = transformString(p);
-    if (np !== p) renames.push([p, np]);
+    if (np !== p) {
+      renames.push([p, np]);
+    }
   }
   // deepest-first (longest path first)
   renames.sort(
@@ -344,8 +417,11 @@ function checkCollisions(renames) {
   const collisions = [];
   for (const [src, dst] of renames) {
     const key = dst.toLowerCase();
-    if (seen.has(key)) collisions.push([seen.get(key), src, dst]);
-    else seen.set(key, src);
+    if (seen.has(key)) {
+      collisions.push([seen.get(key), src, dst]);
+    } else {
+      seen.set(key, src);
+    }
   }
   return collisions;
 }
@@ -355,7 +431,9 @@ function runPathPass(rows) {
   const collisions = checkCollisions(renames);
   if (collisions.length) {
     console.error("PATH COLLISIONS DETECTED (case-insensitive):");
-    for (const c of collisions) console.error("  ", c);
+    for (const c of collisions) {
+      console.error("", c);
+    }
     throw new Error(`Aborting: ${collisions.length} path collision(s).`);
   }
   if (MODE_WRITE) {
@@ -364,7 +442,9 @@ function runPathPass(rows) {
       // git mv on Windows won't create multi-level new destination dirs; do it first.
       mkdirSync(path.join(REPO, path.dirname(dst)), { recursive: true });
       git(["mv", src, dst]);
-      if (++done % 200 === 0) console.log(`  ...moved ${done}/${renames.length}`);
+      if (++done % 200 === 0) {
+        console.log(`  ...moved ${done}/${renames.length}`);
+      }
     }
     console.log(`Pass A: moved ${renames.length} file(s).`);
   }
@@ -381,8 +461,12 @@ function runContentPass(rows, workspaceSuffixes) {
   let skippedBinary = 0;
   let scanned = 0;
   for (const { mode, path: p } of rows) {
-    if (mode === "120000") continue; // skip symlinks
-    if (isContentExcluded(p)) continue;
+    if (mode === "120000") {
+      continue; // skip symlinks
+    }
+    if (isContentExcluded(p)) {
+      continue;
+    }
     const abs = path.join(REPO, p);
     let buf;
     try {
@@ -391,16 +475,22 @@ function runContentPass(rows, workspaceSuffixes) {
       continue;
     }
     if (looksBinary(p, buf)) {
-      if (/openclaw/i.test(p)) skippedBinary++;
+      if (/openclaw/i.test(p)) {
+        skippedBinary++;
+      }
       continue;
     }
     const orig = buf.toString("utf8");
-    if (!/openclaw/i.test(orig)) continue;
+    if (!/openclaw/i.test(orig)) {
+      continue;
+    }
     scanned++;
     const next = transform(orig);
     if (next !== orig) {
       edited.push(p);
-      if (MODE_WRITE) writeFileSync(abs, next);
+      if (MODE_WRITE) {
+        writeFileSync(abs, next);
+      }
     }
   }
   return { counters, edited, scanned, skippedBinary };
@@ -410,7 +500,7 @@ function runContentPass(rows, workspaceSuffixes) {
 // AUDIT
 // ----------------------------------------------------------------------------
 function runAudit(rows, workspaceSuffixes) {
-  let grepOut = "";
+  let grepOut;
   try {
     grepOut = git(["grep", "-I", "-i", "-n", "openclaw"]);
   } catch (e) {
@@ -421,57 +511,88 @@ function runAudit(rows, workspaceSuffixes) {
 
   const fileAllowed = (f) => {
     const base = f.split("/").pop();
-    if (f === "scripts/rename-fork.mjs") return true; // the rename tool itself contains openclaw
-    if (f === "src/compat/legacy-names.ts") return true; // dedicated legacy-name compat table
-    if (f === "ui/vite.config.ts") return true; // vite aliases for external @openclaw packages (uirouter)
-    if (base === "LICENSE") return true;
-    if (base === "THIRD_PARTY_NOTICES.md") return true;
-    if (f === "UPSTREAM-CHANGELOG.md") return true;
+    if (f === "scripts/rename-fork.mjs") {
+      return true; // the rename tool itself contains openclaw
+    }
+    if (f === "src/compat/legacy-names.ts") {
+      return true; // dedicated legacy-name compat table
+    }
+    if (f === "ui/vite.config.ts") {
+      return true; // vite aliases for external @openclaw packages (uirouter)
+    }
+    if (base === "LICENSE") {
+      return true;
+    }
+    if (base === "THIRD_PARTY_NOTICES.md") {
+      return true;
+    }
+    if (f === "UPSTREAM-CHANGELOG.md") {
+      return true;
+    }
     // Fork-origin attribution must name the real upstream project; don't flag it.
-    if (f === "CHANGELOG.md") return true;
+    if (f === "CHANGELOG.md") {
+      return true;
+    }
     // Explains that Ansible deployment installs the real upstream engine; must name it.
-    if (f === "docs/install/ansible.md") return true;
+    if (f === "docs/install/ansible.md") {
+      return true;
+    }
     // Mirror isContentExcluded: real external packages' bin names must not be flagged.
-    if (base === "npm-shrinkwrap.json") return true;
-    if (f.startsWith("patches/")) return true;
-    if (f.startsWith("apps/android/THIRD_PARTY_LICENSES/")) return true;
+    if (base === "npm-shrinkwrap.json") {
+      return true;
+    }
+    if (f.startsWith("patches/")) {
+      return true;
+    }
+    if (f.startsWith("apps/android/THIRD_PARTY_LICENSES/")) {
+      return true;
+    }
     return false;
   };
 
   const stripAllowed = (s) => {
     // remove allowlisted token occurrences, then check for residual openclaw
-    s = s.replace(/@openclaw\/([A-Za-z0-9._-]+)/gi, (m, name) =>
+    let result = s.replace(/@openclaw\/([A-Za-z0-9._-]+)/gi, (m, name) =>
       workspaceSuffixes.has(name) ? m : "",
     );
-    s = s.replace(/@openclaw__fs-safe/gi, "");
+    result = result.replace(/@openclaw__fs-safe/gi, "");
     // legacy plugin-manifest filename, accepted as a fallback by the loaders on purpose
-    s = s.replace(/openclaw\.plugin\.json/gi, "");
+    result = result.replace(/openclaw\.plugin\.json/gi, "");
     // any surviving openclaw@<spec> is a kept upstream package ref (emails were renamed)
-    s = s.replace(/openclaw@[A-Za-z0-9*][A-Za-z0-9._*+^~-]*/gi, "");
+    result = result.replace(/openclaw@[A-Za-z0-9*][A-Za-z0-9._*+^~-]*/gi, "");
     // any surviving upstream repo URL (main repo openclaw/openclaw was mapped away)
-    s = s.replace(/(?:github\.com|raw\.githubusercontent\.com)\/openclaw\/[A-Za-z0-9._-]+/gi, "");
-    s = s.replace(/deepwiki\.com\/openclaw(?:\/openclaw)?/gi, "");
+    result = result.replace(
+      /(?:github\.com|raw\.githubusercontent\.com)\/openclaw\/[A-Za-z0-9._-]+/gi,
+      "",
+    );
+    result = result.replace(/deepwiki\.com\/openclaw(?:\/openclaw)?/gi, "");
     // external @openclaw/crabline re-exported identifiers/types + adapter param key
     // (see the matching KEEP protect rules in makeContentTransformer)
-    s = s.replace(/OpenClawCrabline[A-Za-z0-9]*/g, "");
-    s = s.replace(/OPENCLAW_CRABLINE[A-Z0-9_]*/g, "");
-    s = s.replace(/openclawConfig\b/g, "");
+    result = result.replace(/OpenClawCrabline[A-Za-z0-9]*/g, "");
+    result = result.replace(/OPENCLAW_CRABLINE[A-Z0-9_]*/g, "");
+    result = result.replace(/openclawConfig\b/g, "");
     // external tokenjuice "openclaw" host subpath + its exported factory
-    s = s.replace(/tokenjuice\/openclaw/g, "");
-    s = s.replace(/TokenjuiceOpenClaw[A-Za-z0-9]*/g, "");
+    result = result.replace(/tokenjuice\/openclaw/g, "");
+    result = result.replace(/TokenjuiceOpenClaw[A-Za-z0-9]*/g, "");
     // DSSE payload type signed by upstream ClawHub (wire-protocol constant)
-    s = s.replace(/openclaw\.official-external-plugin-catalog-feed\.v1/g, "");
-    return s;
+    result = result.replace(/openclaw\.official-external-plugin-catalog-feed\.v1/g, "");
+    return result;
   };
 
   const offenders = [];
   for (const line of lines) {
     // format file:lineno:content
     const m = /^(.*?):(\d+):(.*)$/.exec(line);
-    if (!m) continue;
+    if (!m) {
+      continue;
+    }
     const file = m[1];
-    if (isNodeModules(file)) continue; // node_modules is out of scope
-    if (fileAllowed(file)) continue;
+    if (isNodeModules(file)) {
+      continue; // node_modules is out of scope
+    }
+    if (fileAllowed(file)) {
+      continue;
+    }
     const residual = stripAllowed(m[3]);
     if (/openclaw/i.test(residual)) {
       offenders.push(`${file}:${m[2]}: ${m[3].trim().slice(0, 160)}`);
@@ -491,8 +612,12 @@ function main() {
     const offenders = runAudit(rows, workspaceSuffixes);
     if (offenders.length) {
       console.error(`AUDIT FAILED: ${offenders.length} non-allowlisted openclaw hit(s):`);
-      for (const o of offenders.slice(0, 200)) console.error("  " + o);
-      if (offenders.length > 200) console.error(`  ...and ${offenders.length - 200} more`);
+      for (const o of offenders.slice(0, 200)) {
+        console.error("  " + o);
+      }
+      if (offenders.length > 200) {
+        console.error(`  ...and ${offenders.length - 200} more`);
+      }
       process.exit(1);
     }
     console.log("AUDIT PASSED: all residual openclaw hits are allowlisted.");
@@ -509,8 +634,12 @@ function main() {
     const renames = runPathPass(rows);
     console.log(`\n=== Pass A (paths) ===`);
     console.log(`files to rename: ${renames.length}`);
-    for (const r of renames.slice(0, 25)) console.log(`  ${r[0]}  ->  ${r[1]}`);
-    if (renames.length > 25) console.log(`  ...and ${renames.length - 25} more`);
+    for (const r of renames.slice(0, 25)) {
+      console.log(`  ${r[0]}  ->  ${r[1]}`);
+    }
+    if (renames.length > 25) {
+      console.log(`  ...and ${renames.length - 25} more`);
+    }
   }
 
   // ---- Pass B ----
@@ -525,13 +654,17 @@ function main() {
     console.log(`files scanned (containing openclaw): ${scanned}`);
     console.log(`files to edit: ${edited.length}`);
     console.log(`binary files skipped (openclaw in path): ${skippedBinary}`);
-    const keys = Object.keys(counters).sort();
+    const keys = Object.keys(counters).toSorted();
     const keepKeys = keys.filter((k) => k.startsWith("KEEP"));
     const ruleKeys = keys.filter((k) => !k.startsWith("KEEP"));
     console.log(`\n-- replacement rule hit counts --`);
-    for (const k of ruleKeys) console.log(`  ${String(counters[k]).padStart(7)}  ${k}`);
+    for (const k of ruleKeys) {
+      console.log(`  ${String(counters[k]).padStart(7)}  ${k}`);
+    }
     console.log(`\n-- KEEP (protected) hit counts --`);
-    for (const k of keepKeys) console.log(`  ${String(counters[k]).padStart(7)}  ${k}`);
+    for (const k of keepKeys) {
+      console.log(`  ${String(counters[k]).padStart(7)}  ${k}`);
+    }
   }
 
   console.log(`\ndone (${MODE_WRITE ? "changes written" : "no changes"}).`);
