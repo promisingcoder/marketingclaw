@@ -151,7 +151,8 @@ permissions:
 jobs:
   quality-shards:
     name: Select Critical Quality shards
-    if: ${{ github.event_name != 'pull_request' || !github.event.pull_request.draft }}
+    # code scanning requires GHAS on private repos; auto-reactivates if the repo goes public
+    if: ${{ !github.event.repository.private && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }}
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     outputs:
@@ -646,7 +647,8 @@ jobs:
 
   ui-control-plane:
     name: Critical Quality (ui-control-plane)
-    if: ${{ github.event_name != 'pull_request' && (github.event_name != 'workflow_dispatch' || inputs.profile == 'all') }}
+    # code scanning requires GHAS on private repos; auto-reactivates if the repo goes public
+    if: ${{ !github.event.repository.private && github.event_name != 'pull_request' && (github.event_name != 'workflow_dispatch' || inputs.profile == 'all') }}
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     steps:
@@ -668,7 +670,8 @@ jobs:
 
   web-media-runtime-boundary:
     name: Critical Quality (web-media-runtime-boundary)
-    if: ${{ github.event_name != 'pull_request' && (github.event_name != 'workflow_dispatch' || inputs.profile == 'all') }}
+    # code scanning requires GHAS on private repos; auto-reactivates if the repo goes public
+    if: ${{ !github.event.repository.private && github.event_name != 'pull_request' && (github.event_name != 'workflow_dispatch' || inputs.profile == 'all') }}
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     steps:

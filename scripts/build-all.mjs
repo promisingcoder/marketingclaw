@@ -172,7 +172,13 @@ export const BUILD_ALL_PROFILE_STEP_ENV = {
   },
   ciArtifacts: {
     tsdown: {
-      MARKETINGCLAW_RUN_NODE_SKIP_DTS_BUILD: "0",
+      // Default to building .d.ts (release path), but let the environment force a
+      // skip. Private-repo CI runners only have ~7GB RAM and the declaration-emit
+      // phase needs ~8GB, so CI sets MARKETINGCLAW_RUN_NODE_SKIP_DTS_BUILD=1 (the
+      // packed dist-runtime artifact is not consumed by any CI job; dts is built at
+      // release time on larger runners).
+      MARKETINGCLAW_RUN_NODE_SKIP_DTS_BUILD:
+        process.env.MARKETINGCLAW_RUN_NODE_SKIP_DTS_BUILD ?? "0",
       MARKETINGCLAW_PRESERVE_CLI_STARTUP_METADATA: "1",
     },
   },
