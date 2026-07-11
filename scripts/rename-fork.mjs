@@ -113,11 +113,10 @@ function isContentExcluded(p) {
   if (p === "CHANGELOG.md") {
     return true;
   }
-  // Fork-origin attribution ("... is a fork of github.com/openclaw/openclaw ...") must
-  // name the real upstream project; same rationale as CHANGELOG.md above.
-  if (p === "README.md" || p === "SECURITY.md" || p === "VISION.md") {
-    return true;
-  }
+  // README.md/SECURITY.md/VISION.md are NOT whole-file excluded: they stay subject to
+  // audit/rewrite for everything except the narrow attribution-URL KEEP rule inside
+  // makeContentTransformer, so future upstream-link creep in these files still gets
+  // caught.
   // Explains that Ansible deployment installs the real upstream engine; must name it.
   if (p === "docs/install/ansible.md") {
     return true;
@@ -245,7 +244,7 @@ function makeContentTransformer(workspaceSuffixes, counters) {
       counters[k] = (counters[k] || 0) + n;
     }
   };
-  return function transformContent(text) {
+  return function transformContent(text, filePath) {
     let result = text;
     const store = [];
     const protect = (s) => {
@@ -345,6 +344,20 @@ function makeContentTransformer(workspaceSuffixes, counters) {
       bump("KEEP openclaw.official-external-plugin-catalog-feed.v1 (DSSE payload type)");
       return protect(m);
     });
+    // Fork-attribution KEEP, scoped to these 3 files only: the exact main-repo URL is
+    // cited as "this project is a fork of X" attribution, not a self-reference, so
+    // protect it from the P4/P5 self-reference rewrite below. Everything else in these
+    // files (and this exact URL in every OTHER file) stays subject to normal rename +
+    // audit, so future upstream-link creep elsewhere still gets caught.
+    if (filePath === "README.md" || filePath === "SECURITY.md" || filePath === "VISION.md") {
+      result = result.replace(
+        /(?:github\.com|raw\.githubusercontent\.com)\/openclaw\/openclaw(?![A-Za-z0-9-])/g,
+        (m) => {
+          bump("KEEP <gh>/openclaw/openclaw (fork-attribution sentence)");
+          return protect(m);
+        },
+      );
+    }
 
     // ---- TARGETED URL map: ONLY the exact main repo openclaw/openclaw maps to
     // the fork. A trailing [A-Za-z0-9-] means a different repo (openclaw-ansible,
@@ -522,7 +535,7 @@ function runContentPass(rows, workspaceSuffixes) {
       continue;
     }
     scanned++;
-    const next = transform(orig);
+    const next = transform(orig, p);
     if (next !== orig) {
       edited.push(p);
       if (MODE_WRITE) {
@@ -570,10 +583,9 @@ function runAudit(rows, workspaceSuffixes) {
     if (f === "CHANGELOG.md") {
       return true;
     }
-    // Fork-origin attribution; mirrors isContentExcluded for these same files.
-    if (f === "README.md" || f === "SECURITY.md" || f === "VISION.md") {
-      return true;
-    }
+    // README.md/SECURITY.md/VISION.md are NOT allowlisted here: the exact attribution
+    // URL is already stripped by the generic upstream-repo-URL rule below, and anything
+    // else in these files should still be flagged.
     // Explains that Ansible deployment installs the real upstream engine; must name it.
     if (f === "docs/install/ansible.md") {
       return true;
