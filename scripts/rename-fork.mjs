@@ -313,6 +313,10 @@ function makeContentTransformer(workspaceSuffixes, counters) {
       bump("KEEP openclaw@${ (upgrade-survivor baseline spec interpolation)");
       return protect(m);
     });
+    result = result.replace(/openclaw@["']/g, (m) => {
+      bump("KEEP openclaw@<quote> (upgrade-survivor baseline spec startsWith literal)");
+      return protect(m);
+    });
     result = result.replace(/\^openclaw@\(/g, (m) => {
       bump("KEEP ^openclaw@( (upgrade-survivor baseline spec regex)");
       return protect(m);
@@ -658,8 +662,9 @@ function runAudit(rows, workspaceSuffixes) {
     result = result.replace(/openclaw@[A-Za-z0-9*][A-Za-z0-9._*+^~-]*/gi, "");
     // literal regex source stripping the "openclaw@" version prefix (upgrade-survivor)
     result = result.replace(/\/\^openclaw@\//gi, "");
-    // upgrade-survivor baseline spec builders (interpolation prefix + regex literals)
+    // upgrade-survivor baseline spec builders (interpolation prefix + regex literals + startsWith literal)
     result = result.replace(/openclaw@\$\{/gi, "");
+    result = result.replace(/openclaw@["']/gi, "");
     result = result.replace(/\^openclaw@\(/gi, "");
     // any surviving upstream repo URL (main repo openclaw/openclaw was mapped away)
     result = result.replace(

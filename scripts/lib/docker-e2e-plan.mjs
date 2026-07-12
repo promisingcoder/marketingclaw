@@ -96,7 +96,7 @@ export function normalizeUpgradeSurvivorBaselineSpec(raw) {
   if (!value) {
     return undefined;
   }
-  const spec = /^openclaw@/u.test(value) ? value : `openclaw@${value}`;
+  const spec = value.startsWith("openclaw@") ? value : `openclaw@${value}`;
   if (
     !/^openclaw@(?:alpha|beta|latest|[0-9]{4}\.[0-9]+\.[0-9]+(?:-(?:[0-9]+|alpha\.[0-9]+|beta\.[0-9]+))?)$/u.test(
       spec,
