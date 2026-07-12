@@ -984,10 +984,10 @@ describe("buildMarketingClawReleaseClawHubPlan", () => {
             owner: {},
           },
         },
-        "@openclaw/demo-two": {
+        "@marketingclaw/demo-two": {
           status: 404,
         },
-        "@openclaw/demo-three": {
+        "@marketingclaw/demo-three": {
           status: 200,
           body: {
             package: {},
@@ -1005,7 +1005,7 @@ describe("buildMarketingClawReleaseClawHubPlan", () => {
             },
           },
         },
-        "@openclaw/demo-three": {
+        "@marketingclaw/demo-three": {
           status: 200,
           body: {
             trustedPublisher: null,
@@ -1014,7 +1014,7 @@ describe("buildMarketingClawReleaseClawHubPlan", () => {
       },
       versions: {
         "@marketingclaw/demo-plugin@2026.4.1": 404,
-        "@openclaw/demo-three@2026.4.1": 404,
+        "@marketingclaw/demo-three@2026.4.1": 404,
       },
     });
 
@@ -1051,9 +1051,9 @@ describe("buildMarketingClawReleaseClawHubPlan", () => {
       workflow: "plugin-clawhub-new.yml",
       ref: "v2026.4.1-beta.1",
       shouldDispatch: true,
-      packages: ["@openclaw/demo-two", "@openclaw/demo-three"],
+      packages: ["@marketingclaw/demo-two", "@marketingclaw/demo-three"],
       inputs: {
-        plugins: "@openclaw/demo-two,@openclaw/demo-three",
+        plugins: "@marketingclaw/demo-two,@marketingclaw/demo-three",
         release_publish_run_id: "12345",
         release_publish_branch: "main",
       },
@@ -1064,8 +1064,8 @@ describe("buildMarketingClawReleaseClawHubPlan", () => {
       bootstrapCount: 2,
       missingTrustedPublisherCount: 1,
       normalPlugins: "@marketingclaw/demo-plugin",
-      bootstrapPlugins: "@openclaw/demo-two,@openclaw/demo-three",
-      missingTrustedPlugins: "@openclaw/demo-three",
+      bootstrapPlugins: "@marketingclaw/demo-two,@marketingclaw/demo-three",
+      missingTrustedPlugins: "@marketingclaw/demo-three",
     });
     expect(plan.verifier).toEqual({
       clawHubWorkflowRef: "v2026.4.1-beta.1",

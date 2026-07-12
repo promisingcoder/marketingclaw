@@ -8,7 +8,7 @@ import { describe, expect, it } from "vitest";
 
 describe("normalizeTranscriptForMatch", () => {
   it("normalizes punctuation and common MarketingClaw live transcription variants", () => {
-    expect(normalizeTranscriptForMatch("Open-Claw integration OK")).toBe(
+    expect(normalizeTranscriptForMatch("Marketing-Claw integration OK")).toBe(
       "marketingclawintegrationok",
     );
     expect(normalizeTranscriptForMatch("Testing OpenFlaw realtime transcription")).toMatch(

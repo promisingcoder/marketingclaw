@@ -65,7 +65,7 @@ describe("buildPublishedInstallScenarios", () => {
     expect(buildPublishedInstallScenarios("2026.3.23")).toEqual([
       {
         name: "fresh-exact",
-        installSpecs: ["openclaw@2026.3.23"],
+        installSpecs: ["marketingclaw@2026.3.23"],
         expectedVersion: "2026.3.23",
       },
     ]);
@@ -75,12 +75,12 @@ describe("buildPublishedInstallScenarios", () => {
     expect(buildPublishedInstallScenarios("2026.3.23-2")).toEqual([
       {
         name: "fresh-exact",
-        installSpecs: ["openclaw@2026.3.23-2"],
+        installSpecs: ["marketingclaw@2026.3.23-2"],
         expectedVersion: "2026.3.23-2",
       },
       {
         name: "upgrade-from-base-stable",
-        installSpecs: ["openclaw@2026.3.23", "openclaw@2026.3.23-2"],
+        installSpecs: ["marketingclaw@2026.3.23", "marketingclaw@2026.3.23-2"],
         expectedVersion: "2026.3.23-2",
       },
     ]);

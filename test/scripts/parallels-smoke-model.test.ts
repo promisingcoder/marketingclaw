@@ -2105,7 +2105,10 @@ setInterval(() => {}, 1000);
   )`,
     );
     expect(readFileSync(TS_PATHS.npmUpdate, "utf8")).toContain(
-      'readPositiveIntEnv("MARKETINGCLAW_PARALLELS_NPM_UPDATE_TIMEOUT_S", 1200)',
+      `readPositiveIntEnv(
+  "MARKETINGCLAW_PARALLELS_NPM_UPDATE_TIMEOUT_S",
+  1200,
+)`,
     );
   });
 

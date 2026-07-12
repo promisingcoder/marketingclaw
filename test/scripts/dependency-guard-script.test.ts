@@ -454,21 +454,21 @@ describe("dependency guard script", () => {
 
     expect(
       canAutoscrubPullRequest({
-        owner: "marketingclaw",
+        owner: "promisingcoder",
         repo: "marketingclaw",
         pullRequest: sameRepoPullRequest,
       }),
     ).toBe(true);
     expect(
       canAutoscrubPullRequest({
-        owner: "marketingclaw",
+        owner: "promisingcoder",
         repo: "marketingclaw",
         pullRequest: forkPullRequest,
       }),
     ).toBe(false);
     expect(
       canAutoscrubPullRequest({
-        owner: "marketingclaw",
+        owner: "promisingcoder",
         repo: "marketingclaw",
         pullRequest: editableForkPullRequest,
       }),
@@ -564,7 +564,7 @@ describe("dependency guard script", () => {
     const commit = await createAutoscrubCommit(
       { baseApi, writeApi },
       {
-        owner: "marketingclaw",
+        owner: "promisingcoder",
         repo: "marketingclaw",
         pullRequest: {
           base: { sha: "base-sha" },
