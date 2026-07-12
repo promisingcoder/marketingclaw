@@ -1160,7 +1160,11 @@ describe("scripts/crabbox-wrapper", () => {
       expect(result.stderr).toContain(
         "provider=blacksmith-testbox supports Linux Testbox proof only",
       );
-      expect(result.stderr).toContain("windows-testbox-probe.yml");
+      // Phase 1 pruned the windows-testbox-probe.yml workflow; the wrapper now points
+      // operators at the live brokered/local Windows providers instead.
+      expect(result.stderr).toContain(
+        "use provider=azure or provider=aws for brokered Crabbox Windows/WSL2 proof",
+      );
     }
   });
 

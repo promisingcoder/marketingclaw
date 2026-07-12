@@ -237,22 +237,23 @@ describe("ci workflow guards", () => {
     const source = readFileSync(".github/workflows/ci.yml", "utf8");
 
     expect(source).toContain("createNodeTestShardBundles");
-    expect(workflow.jobs["build-artifacts"]["runs-on"]).toContain("blacksmith-16vcpu-ubuntu-2404");
-    expect(workflow.jobs["checks-node-core-test-nondist-shard"]["runs-on"]).toContain(
-      "blacksmith-4vcpu-ubuntu-2404",
-    );
+    // This fork runs on standard GitHub-hosted runners (ubuntu-24.04 / windows-2025);
+    // it deliberately replaced upstream's Blacksmith admission policy. The retained
+    // per-row `runner` sizing hints in the shard matrices document intended capacity.
+    expect(workflow.jobs["build-artifacts"]["runs-on"]).toBe("ubuntu-24.04");
+    expect(workflow.jobs["checks-node-core-test-nondist-shard"]["runs-on"]).toBe("ubuntu-24.04");
     expect(workflow.jobs["check-shard"].strategy.matrix.include).toContainEqual({
       check_name: "check-dependencies",
       task: "dependencies",
       runner: "blacksmith-4vcpu-ubuntu-2404",
     });
-    expect(workflow.jobs["check-additional-shard"]["runs-on"]).toContain("matrix.runner");
+    expect(workflow.jobs["check-additional-shard"]["runs-on"]).toBe("ubuntu-24.04");
     expect(workflow.jobs["check-additional-shard"].strategy.matrix.include).toContainEqual({
       check_name: "check-session-accessor-boundary",
       group: "session-accessor-boundary",
       runner: "blacksmith-4vcpu-ubuntu-2404",
     });
-    expect(workflow.jobs["checks-windows"]["runs-on"]).toContain("matrix.runner");
+    expect(workflow.jobs["checks-windows"]["runs-on"]).toBe("windows-2025");
     expect(source).toContain("blacksmith-8vcpu-windows-2025");
   });
 
@@ -657,7 +658,7 @@ describe("ci workflow guards", () => {
     expect(runStep.run).not.toContain("qa-smoke-ci)");
     expect(runStep.run).toContain("contracts-plugins-ci-routing)");
     expect(runStep.run).toContain("ci-routing)");
-    expect(fastCoreJob["runs-on"]).toContain("matrix.runner");
+    expect(fastCoreJob["runs-on"]).toBe("ubuntu-24.04");
     expect(smokeShardJob.name).toBe("QA Smoke CI (${{ matrix.name }})");
     expect(smokeShardJob.strategy["max-parallel"]).toBe(3);
     expect(smokeShardJob.strategy.matrix.include.map((entry) => entry.slug)).toEqual([
@@ -665,7 +666,7 @@ describe("ci workflow guards", () => {
       "telegram-1-of-2",
       "telegram-2-of-2",
     ]);
-    expect(smokeShardJob["runs-on"]).toContain("blacksmith-16vcpu-ubuntu-2404");
+    expect(smokeShardJob["runs-on"]).toBe("ubuntu-24.04");
     expect(smokeRunStep.run).toContain("createQaSmokeCiMatrix");
     expect(smokeRunStep.run).toContain("--qa-profile smoke-ci");
     expect(smokeRunStep.run).toContain("--concurrency 8");
