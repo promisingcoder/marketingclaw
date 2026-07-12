@@ -527,7 +527,11 @@ describe("scripts/lib/docker-e2e-plan", () => {
           script: match[1],
         })),
       )
-      .filter(({ script }) => !scripts[script]);
+      // A `disabled:`-prefixed script is a real, defined lane the fork parks until a
+      // published marketingclaw npm package exists (e.g. published-upgrade-survivor);
+      // it still counts as backing the planned lane. The guard only flags genuinely
+      // missing/typo'd scripts.
+      .filter(({ script }) => !scripts[script] && !scripts[`disabled:${script}`]);
 
     expect(missing).toStrictEqual([]);
   });
