@@ -21,7 +21,7 @@ jobs:
   macos:
     name: Critical Security (macOS)
     # code scanning requires GHAS on private repos; auto-reactivates if the repo goes public
-    if: ${{ !github.event.repository.private }}
+    if: ${{ github.event.repository.private != true }}
     runs-on: macos-15
     timeout-minutes: 45
     steps:
