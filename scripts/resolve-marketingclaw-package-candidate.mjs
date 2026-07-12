@@ -176,7 +176,7 @@ function resolvePackedMarketingClawTarballFilename(value) {
 export function validateMarketingClawPackageSpec(spec) {
   if (!MARKETINGCLAW_PACKAGE_SPEC_RE.test(spec)) {
     throw new Error(
-      `package_spec must be openclaw@alpha, openclaw@beta, openclaw@extended-stable, openclaw@latest, or an exact MarketingClaw release version; got: ${spec}`,
+      `package_spec must be marketingclaw@alpha, marketingclaw@beta, marketingclaw@extended-stable, marketingclaw@latest, or an exact MarketingClaw release version; got: ${spec}`,
     );
   }
 }

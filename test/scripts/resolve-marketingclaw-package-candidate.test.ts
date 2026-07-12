@@ -111,33 +111,33 @@ afterEach(async () => {
 describe("resolve-marketingclaw-package-candidate", () => {
   it("accepts only MarketingClaw release package specs for npm candidates", () => {
     for (const spec of [
-      "openclaw@beta",
-      "openclaw@alpha",
-      "openclaw@extended-stable",
-      "openclaw@latest",
-      "openclaw@2026.4.27",
-      "openclaw@2026.4.27-1",
-      "openclaw@2026.4.27-beta.2",
-      "openclaw@2026.4.27-alpha.2",
+      "marketingclaw@beta",
+      "marketingclaw@alpha",
+      "marketingclaw@extended-stable",
+      "marketingclaw@latest",
+      "marketingclaw@2026.4.27",
+      "marketingclaw@2026.4.27-1",
+      "marketingclaw@2026.4.27-beta.2",
+      "marketingclaw@2026.4.27-alpha.2",
     ]) {
       expect(validateMarketingClawPackageSpec(spec), spec).toBeUndefined();
     }
 
-    expect(() => validateMarketingClawPackageSpec("@evil/openclaw@1.0.0")).toThrow(
-      "package_spec must be openclaw@alpha",
+    expect(() => validateMarketingClawPackageSpec("@evil/marketingclaw@1.0.0")).toThrow(
+      "package_spec must be marketingclaw@alpha",
     );
-    expect(() => validateMarketingClawPackageSpec("openclaw@canary")).toThrow(
-      "package_spec must be openclaw@alpha",
+    expect(() => validateMarketingClawPackageSpec("marketingclaw@canary")).toThrow(
+      "package_spec must be marketingclaw@alpha",
     );
-    expect(() => validateMarketingClawPackageSpec("openclaw@2026.04.27")).toThrow(
-      "package_spec must be openclaw@alpha",
+    expect(() => validateMarketingClawPackageSpec("marketingclaw@2026.04.27")).toThrow(
+      "package_spec must be marketingclaw@alpha",
     );
-    expect(() => validateMarketingClawPackageSpec("openclaw@npm:other-package")).toThrow(
-      "package_spec must be openclaw@alpha",
+    expect(() => validateMarketingClawPackageSpec("marketingclaw@npm:other-package")).toThrow(
+      "package_spec must be marketingclaw@alpha",
     );
-    expect(() => validateMarketingClawPackageSpec("openclaw@file:../other-package.tgz")).toThrow(
-      "package_spec must be openclaw@alpha",
-    );
+    expect(() =>
+      validateMarketingClawPackageSpec("marketingclaw@file:../other-package.tgz"),
+    ).toThrow("package_spec must be marketingclaw@alpha");
   });
 
   it("parses optional empty workflow inputs without rejecting the command line", () => {
@@ -148,7 +148,7 @@ describe("resolve-marketingclaw-package-candidate", () => {
         "--package-ref",
         "release/2026.4.27",
         "--package-spec",
-        "openclaw@beta",
+        "marketingclaw@beta",
         "--package-url",
         "",
         "--package-sha256",
@@ -166,7 +166,7 @@ describe("resolve-marketingclaw-package-candidate", () => {
       outputName: "marketingclaw-current.tgz",
       packageSha256: "",
       packageRef: "release/2026.4.27",
-      packageSpec: "openclaw@beta",
+      packageSpec: "marketingclaw@beta",
       packageUrl: "",
       source: "npm",
       trustedSourceId: "",
@@ -210,7 +210,13 @@ describe("resolve-marketingclaw-package-candidate", () => {
       ["--package-ref", [...requiredArgs, "--package-ref", "one", "--package-ref", "two"]],
       [
         "--package-spec",
-        [...requiredArgs, "--package-spec", "openclaw@beta", "--package-spec", "openclaw@latest"],
+        [
+          ...requiredArgs,
+          "--package-spec",
+          "marketingclaw@beta",
+          "--package-spec",
+          "marketingclaw@latest",
+        ],
       ],
       [
         "--package-url",
@@ -277,7 +283,7 @@ describe("resolve-marketingclaw-package-candidate", () => {
     const npmCmdPath = path.win32.resolve(path.win32.dirname(execPath), "npm.cmd");
 
     const runner = resolveNpmPackageCandidatePackRunner(
-      "openclaw@2026.5.26-beta.1",
+      "marketingclaw@2026.5.26-beta.1",
       "C:\\marketingclaw\\.artifacts\\docker-e2e-package",
       {
         comSpec: "C:\\Windows\\System32\\cmd.exe",
@@ -294,7 +300,7 @@ describe("resolve-marketingclaw-package-candidate", () => {
         "/d",
         "/s",
         "/c",
-        `${npmCmdPath} pack openclaw@2026.5.26-beta.1 --ignore-scripts --json --pack-destination C:\\marketingclaw\\.artifacts\\docker-e2e-package`,
+        `${npmCmdPath} pack marketingclaw@2026.5.26-beta.1 --ignore-scripts --json --pack-destination C:\\marketingclaw\\.artifacts\\docker-e2e-package`,
       ],
       shell: false,
       windowsVerbatimArguments: true,
@@ -1381,7 +1387,7 @@ describe("resolve-marketingclaw-package-candidate", () => {
     tempDirs.push(dir);
     const file = path.join(dir, "marketingclaw.tgz");
     await writeFile(file, "marketingclaw package bytes");
-    const digest = "ae0b98d18c80dbf9447fa48560a139195595db2d337ad33421ca2183b0dd3e99";
+    const digest = "13f904d8926867defbd4ecc84bc4890be4e699feaf1cd9bc4830a046944371f3";
 
     await expect(assertExpectedSha256ForTest(file, digest.toUpperCase())).resolves.toBe(digest);
   });
