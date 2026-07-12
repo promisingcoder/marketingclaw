@@ -306,6 +306,17 @@ function makeContentTransformer(workspaceSuffixes, counters) {
       bump("KEEP /^openclaw@/ (upgrade-survivor prefix-strip regex)");
       return protect(m);
     });
+    // Upgrade-survivor baseline spec builders: the interpolation prefix and the
+    // validation/parse regex literals that construct or match an "openclaw@<version>"
+    // reference to the still-published upstream package the survivor upgrades FROM.
+    result = result.replace(/openclaw@\$\{/g, (m) => {
+      bump("KEEP openclaw@${ (upgrade-survivor baseline spec interpolation)");
+      return protect(m);
+    });
+    result = result.replace(/\^openclaw@\(/g, (m) => {
+      bump("KEEP ^openclaw@( (upgrade-survivor baseline spec regex)");
+      return protect(m);
+    });
 
     // ---- KEEP external-package IDENTIFIERS/SUBPATHS that consuming code imports
     // FROM upstream deps. These live in our source in upstream OpenClaw casing on
@@ -647,6 +658,9 @@ function runAudit(rows, workspaceSuffixes) {
     result = result.replace(/openclaw@[A-Za-z0-9*][A-Za-z0-9._*+^~-]*/gi, "");
     // literal regex source stripping the "openclaw@" version prefix (upgrade-survivor)
     result = result.replace(/\/\^openclaw@\//gi, "");
+    // upgrade-survivor baseline spec builders (interpolation prefix + regex literals)
+    result = result.replace(/openclaw@\$\{/gi, "");
+    result = result.replace(/\^openclaw@\(/gi, "");
     // any surviving upstream repo URL (main repo openclaw/openclaw was mapped away)
     result = result.replace(
       /(?:github\.com|raw\.githubusercontent\.com)\/openclaw\/[A-Za-z0-9._-]+/gi,
