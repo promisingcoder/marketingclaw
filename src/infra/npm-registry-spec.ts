@@ -1,6 +1,6 @@
 // Parses npm registry specs into package, version, and tag references.
 import { normalizeLowercaseStringOrEmpty } from "@marketingclaw/normalization-core/string-coerce";
-import { LEGACY_MANIFEST_KEYS, PROJECT_NAME } from "../compat/legacy-names.js";
+import { PROJECT_NAME } from "../compat/legacy-names.js";
 
 const EXACT_SEMVER_VERSION_RE =
   /^v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-([0-9A-Za-z.-]+))?(?:\+([0-9A-Za-z.-]+))?$/;
@@ -136,12 +136,14 @@ export function isMarketingClawOrgNpmSpec(rawSpec: string | undefined): boolean 
   if (!parsed) {
     return false;
   }
-  // Official scope is the marketingclaw org, plus the legacy upgrade-survivor org the
-  // fork still installs from until a marketingclaw npm release exists (mirrors the
-  // legacy-name fallback in src/compat/legacy-names).
-  return [PROJECT_NAME, ...LEGACY_MANIFEST_KEYS].some((name) =>
-    parsed.name.startsWith(`@${name}/`),
-  );
+  // Official npm scope = the fork's own org (marketingclaw) plus the legacy upstream org,
+  // whose packages the fork is licensed to install under both names and still installs
+  // from until a marketingclaw npm release exists. That upstream org is the explicit
+  // literal in the allowlist below, kept un-imported so the trust set stays visible.
+  // clawdbot is deliberately excluded at this npm TRUST boundary — it was never an
+  // upstream npm-scope owner here, though it stays a legacy MANIFEST KEY elsewhere
+  // (src/compat/legacy-names).
+  return [PROJECT_NAME, "openclaw"].some((name) => parsed.name.startsWith(`@${name}/`));
 }
 
 /** Validates a registry-only npm spec and returns a user-facing error when rejected. */

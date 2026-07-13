@@ -110,6 +110,7 @@ describe("npm registry spec parsing helpers", () => {
     { spec: "@marketingclaw/voice-call", expected: true },
     { spec: "@marketingclaw/voice-call@1.2.3", expected: true },
     { spec: "@openclaw/demo-plugin", expected: true },
+    { spec: "@clawdbot/demo-plugin", expected: false },
     { spec: "@other/voice-call", expected: false },
     { spec: "voice-call", expected: false },
     { spec: "npm:@marketingclaw/voice-call", expected: false },
