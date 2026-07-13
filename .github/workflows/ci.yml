@@ -649,7 +649,10 @@ jobs:
     needs: [preflight]
     if: needs.preflight.outputs.run_build_artifacts == 'true'
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    # A cache-miss build now runs the full tsdown .d.ts emit (~13 min on a 16GB host)
+    # on top of the smoke tests and built-artifact checks, so budget beyond the old
+    # dts-off run time.
+    timeout-minutes: 35
     outputs:
       channels-result: ${{ steps.built_artifact_checks.outputs['channels-result'] }}
       core-support-boundary-result: ${{ steps.built_artifact_checks.outputs['core-support-boundary-result'] }}
@@ -691,12 +694,10 @@ jobs:
       - name: Build dist
         if: steps.dist_build_cache.outputs.cache-hit != 'true'
         env:
-          NODE_OPTIONS: --max-old-space-size=6144
-          # Private-repo runners have ~7GB RAM; the .d.ts declaration-emit phase needs
-          # ~8GB and OOMs. Skip dts in CI (the packed dist-runtime artifact is not
-          # downloaded by any CI job; the type-check jobs build their own dts). dts is
-          # still built at release time on larger runners.
-          MARKETINGCLAW_RUN_NODE_SKIP_DTS_BUILD: "1"
+          # Build the full .d.ts declarations deliberately as release-path coverage
+          # (no CI job consumes them; skip-dts was a private-7GB-runner workaround).
+          # dts emit needs ~8GB heap on the 16GB public runners, so allow Node ~12GB.
+          NODE_OPTIONS: --max-old-space-size=12288
         run: pnpm build:ci-artifacts
 
       - name: Check Control UI i18n
