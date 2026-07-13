@@ -75,8 +75,10 @@ curl -s -u "$LISTMONK_USER:$LISTMONK_TOKEN" -X POST "${LISTMONK_URL%/}/api/subsc
   -H "Content-Type: application/json" \
   -d '{"email": "person@example.com", "name": "Person Name", "lists": [1], "status": "enabled"}' | jq
 
-# Update a subscriber
-curl -s -u "$LISTMONK_USER:$LISTMONK_TOKEN" -X PUT "${LISTMONK_URL%/}/api/subscribers/SUBSCRIBER_ID" \
+# Update a subscriber (partial update — PATCH changes only the fields you send).
+# Caution: use PATCH, not PUT — PUT requires the full subscriber object, and a partial
+# PUT clears every omitted field (silently dropping all list subscriptions).
+curl -s -u "$LISTMONK_USER:$LISTMONK_TOKEN" -X PATCH "${LISTMONK_URL%/}/api/subscribers/SUBSCRIBER_ID" \
   -H "Content-Type: application/json" \
   -d '{"name": "New Name", "lists": [1, 2], "status": "enabled"}' | jq
 
@@ -100,17 +102,31 @@ curl -s -u "$LISTMONK_USER:$LISTMONK_TOKEN" -X POST "${LISTMONK_URL%/}/api/campa
   }' | jq
 # => note the returned "id"
 
-# 2. Send a test to yourself/team BEFORE asking for approval
+# 2. Send a test to yourself/team BEFORE asking for approval.
+#    The test endpoint takes the FULL campaign payload (same fields as create) plus subscribers.
 curl -s -u "$LISTMONK_USER:$LISTMONK_TOKEN" -X POST "${LISTMONK_URL%/}/api/campaigns/CAMPAIGN_ID/test" \
   -H "Content-Type: application/json" \
-  -d '{"subscribers": ["you@example.com"]}' | jq
+  -d '{
+    "name": "July product update",
+    "subject": "Here'\''s what shipped this month",
+    "lists": [1],
+    "type": "regular",
+    "content_type": "richtext",
+    "body": "<p>Hello {{ .Subscriber.Name }}, here is what shipped...</p>",
+    "subscribers": ["you@example.com"]
+  }' | jq
 
 # 3. STOP — show the draft + test result to the human, wait for explicit approval.
 
-# 4a. Once approved, schedule for later:
+# 4a. Once approved, schedule for later. There is no PATCH — PUT /api/campaigns/{id} REPLACES
+#     the whole campaign, so NEVER PUT a partial body (just send_at) or it blanks name/subject/
+#     body/lists. Fetch the full campaign, add send_at, and PUT it all back. GET returns lists
+#     as {id,name} objects but PUT wants list ids, so map them. (Simplest alternative: set
+#     send_at directly in the step-1 create payload.)
+BODY=$(curl -s -u "$LISTMONK_USER:$LISTMONK_TOKEN" "${LISTMONK_URL%/}/api/campaigns/CAMPAIGN_ID" \
+  | jq '.data | (.lists |= map(.id)) + {send_at: "2026-07-15T14:00:00Z"}')
 curl -s -u "$LISTMONK_USER:$LISTMONK_TOKEN" -X PUT "${LISTMONK_URL%/}/api/campaigns/CAMPAIGN_ID" \
-  -H "Content-Type: application/json" \
-  -d '{"send_at": "2026-07-15T14:00:00Z"}' | jq
+  -H "Content-Type: application/json" -d "$BODY" | jq
 curl -s -u "$LISTMONK_USER:$LISTMONK_TOKEN" -X PUT "${LISTMONK_URL%/}/api/campaigns/CAMPAIGN_ID/status" \
   -H "Content-Type: application/json" \
   -d '{"status": "scheduled"}' | jq

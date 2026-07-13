@@ -16,7 +16,10 @@ Options:
   --content TEXT      Post text for the matching --integration (repeatable). If fewer --content
                        than --integration are given, the last --content is reused for the rest.
   --platform TYPE     settings.__type for the matching --integration, e.g. x, linkedin, facebook
-                       (repeatable, optional; omitted if not given for that position).
+                       (repeatable, optional; when omitted, no settings object is sent for that
+                       position). Some platforms need extra settings fields (X who_can_reply_post,
+                       Instagram post_type, Reddit subreddit) — this script only sets __type; use
+                       the raw API for those. See ../SKILL.md.
   --now               type=now (publish immediately).
   --date TIMESTAMP    type=schedule, ISO-8601 UTC timestamp (e.g. 2026-07-15T14:00:00Z). Default
                        mode unless --now is given; --date is required in that case.
@@ -99,8 +102,10 @@ for i in "${!INTEGRATIONS[@]}"; do
     content="${CONTENTS[$last_content_index]}"
   fi
   platform="${PLATFORMS[$i]:-}"
+  # settings is optional in the API; only emit it (with the required __type discriminator)
+  # when a --platform was given for this position, otherwise omit the key entirely.
   if [[ -n "$platform" ]]; then
-    settings=$(jq -cn --arg t "$platform" '{__type: $t}')
+    settings=$(jq -cn --arg t "$platform" '{settings: {__type: $t}}')
   else
     settings="{}"
   fi
@@ -111,9 +116,8 @@ for i in "${!INTEGRATIONS[@]}"; do
     --argjson settings "$settings" \
     '. + [{
       integration: {id: $integration},
-      value: [{content: $content, image: $images}],
-      settings: $settings
-    }]' <<<"$POSTS_JSON")
+      value: [{content: $content, image: $images}]
+    } + $settings]' <<<"$POSTS_JSON")
 done
 
 PAYLOAD=$(jq -n \

@@ -59,7 +59,7 @@ All requests go to `${POSTIZ_BASE_URL}/public/v1/...` with header `Authorization
 
 ```bash
 curl -s "${POSTIZ_BASE_URL%/}/public/v1/integrations" \
-  -H "Authorization: ${POSTIZ_API_KEY}" | jq '.[] | {id, name, providerIdentifier}'
+  -H "Authorization: ${POSTIZ_API_KEY}" | jq '.[] | {id, name, identifier}'
 ```
 
 Copy the `id` values you need — every post targets one or more integration ids.
@@ -130,9 +130,13 @@ before adding advanced settings, and when in doubt omit `settings` beyond `__typ
 
 ## Check the schedule queue
 
+`GET /public/v1/posts` requires `startDate` and `endDate` (ISO-8601 UTC) query params and
+returns `{ "posts": [ ... ] }`; each post's scheduled time is `publishDate`.
+
 ```bash
-curl -s "${POSTIZ_BASE_URL%/}/public/v1/posts" \
-  -H "Authorization: ${POSTIZ_API_KEY}" | jq '.[] | {id, state, integration: .integration.id, date}'
+# startDate & endDate are required — this pulls a one-week window
+curl -s "${POSTIZ_BASE_URL%/}/public/v1/posts?startDate=2026-07-13T00:00:00Z&endDate=2026-07-20T00:00:00Z" \
+  -H "Authorization: ${POSTIZ_API_KEY}" | jq '.posts[] | {id, state, integration: .integration.id, publishDate}'
 ```
 
 ## Notes
