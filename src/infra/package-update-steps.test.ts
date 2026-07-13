@@ -202,7 +202,7 @@ describe("runGlobalPackageUpdateSteps", () => {
 
       const result = await runGlobalPackageUpdateSteps({
         installTarget: createNpmTarget(globalRoot),
-        installSpec: "openclaw@2.0.0",
+        installSpec: "marketingclaw@2.0.0",
         packageName: "marketingclaw",
         packageRoot,
         runCommand: createRootRunner(globalRoot),
@@ -241,7 +241,7 @@ describe("runGlobalPackageUpdateSteps", () => {
 
         const result = await runGlobalPackageUpdateSteps({
           installTarget: createNpmTarget(globalRoot),
-          installSpec: "openclaw@2.0.0",
+          installSpec: "marketingclaw@2.0.0",
           packageName: "marketingclaw",
           packageRoot,
           runCommand: createRootRunner(globalRoot),
@@ -329,7 +329,7 @@ describe("runGlobalPackageUpdateSteps", () => {
           ...createNpmTarget(managedRoot),
           directNodeModulesRoot: true,
         },
-        installSpec: "openclaw@2.0.0",
+        installSpec: "marketingclaw@2.0.0",
         packageName: "marketingclaw",
         packageRoot,
         runCommand: createRootRunner(path.join(base, "shell", "lib", "node_modules")),
@@ -358,7 +358,7 @@ describe("runGlobalPackageUpdateSteps", () => {
         if (name !== "global update") {
           throw new Error(`unexpected step ${name}`);
         }
-        expect(argv).toContain("openclaw@v2.0.0");
+        expect(argv).toContain("marketingclaw@v2.0.0");
         const prefixIndex = argv.indexOf("--prefix");
         const stagePrefix = argv[prefixIndex + 1];
         if (!stagePrefix) {
@@ -384,7 +384,7 @@ describe("runGlobalPackageUpdateSteps", () => {
 
       const result = await runGlobalPackageUpdateSteps({
         installTarget: createNpmTarget(globalRoot),
-        installSpec: "openclaw@v2.0.0",
+        installSpec: "marketingclaw@v2.0.0",
         packageName: "marketingclaw",
         packageRoot,
         runCommand: createRootRunner(globalRoot),
@@ -616,7 +616,7 @@ describe("runGlobalPackageUpdateSteps", () => {
       try {
         const result = await runGlobalPackageUpdateSteps({
           installTarget: createNpmTarget(globalRoot),
-          installSpec: "openclaw@2.0.0",
+          installSpec: "marketingclaw@2.0.0",
           packageName: "marketingclaw",
           packageRoot,
           runCommand: createRootRunner(globalRoot),
@@ -668,7 +668,7 @@ describe("runGlobalPackageUpdateSteps", () => {
         expect(argv).toContain("i");
         expect(argv).toContain("-g");
         expect(argv).toContain("--prefix");
-        expect(argv).toContain("openclaw@2.0.0");
+        expect(argv).toContain("marketingclaw@2.0.0");
         expect(argv).not.toContain("pnpm");
         const prefixIndex = argv.indexOf("--prefix");
         const stagePrefix = argv[prefixIndex + 1];
@@ -690,7 +690,7 @@ describe("runGlobalPackageUpdateSteps", () => {
 
       const result = await runGlobalPackageUpdateSteps({
         installTarget: createPnpmTarget(globalRoot),
-        installSpec: "openclaw@2.0.0",
+        installSpec: "marketingclaw@2.0.0",
         packageName: "marketingclaw",
         packageRoot,
         runCommand: createRootRunner(globalRoot),
@@ -721,7 +721,14 @@ describe("runGlobalPackageUpdateSteps", () => {
           if (name !== "global update") {
             throw new Error(`unexpected step ${name}`);
           }
-          expect(argv).toEqual(["pnpm", "add", "-g", "--global-dir", globalDir, "openclaw@2.0.0"]);
+          expect(argv).toEqual([
+            "pnpm",
+            "add",
+            "-g",
+            "--global-dir",
+            globalDir,
+            "marketingclaw@2.0.0",
+          ]);
           await writePackageRoot(packageRoot, "2.0.0");
           return {
             name,
@@ -734,7 +741,7 @@ describe("runGlobalPackageUpdateSteps", () => {
 
         const result = await runGlobalPackageUpdateSteps({
           installTarget: createPnpmTarget(globalRoot),
-          installSpec: "openclaw@2.0.0",
+          installSpec: "marketingclaw@2.0.0",
           packageName: "marketingclaw",
           packageRoot,
           runCommand: createRootRunner(globalRoot),
@@ -776,7 +783,7 @@ describe("runGlobalPackageUpdateSteps", () => {
       try {
         const result = await runGlobalPackageUpdateSteps({
           installTarget: createNpmTarget(globalRoot),
-          installSpec: "openclaw@2.0.0",
+          installSpec: "marketingclaw@2.0.0",
           packageName: "marketingclaw",
           packageRoot,
           runCommand: createRootRunner(globalRoot),
@@ -826,7 +833,7 @@ describe("runGlobalPackageUpdateSteps", () => {
 
       const result = await runGlobalPackageUpdateSteps({
         installTarget: createNpmTarget(globalRoot),
-        installSpec: "openclaw@2.0.0",
+        installSpec: "marketingclaw@2.0.0",
         packageName: "marketingclaw",
         packageRoot,
         runCommand: createRootRunner(globalRoot),
@@ -897,7 +904,7 @@ describe("runGlobalPackageUpdateSteps", () => {
         try {
           result = await runGlobalPackageUpdateSteps({
             installTarget: createNpmTarget(globalRoot),
-            installSpec: "openclaw@2.0.0",
+            installSpec: "marketingclaw@2.0.0",
             packageName: "marketingclaw",
             packageRoot,
             runCommand: createRootRunner(globalRoot),
@@ -951,7 +958,7 @@ describe("runGlobalPackageUpdateSteps", () => {
       await expect(
         runGlobalPackageUpdateSteps({
           installTarget: createNpmTarget(globalRoot),
-          installSpec: "openclaw@2.0.0",
+          installSpec: "marketingclaw@2.0.0",
           packageName: "marketingclaw",
           packageRoot,
           runCommand: createRootRunner(globalRoot),

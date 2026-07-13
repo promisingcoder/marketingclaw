@@ -307,7 +307,7 @@ describe("respawnGatewayProcessForUpdate", () => {
     process.execArgv = [];
     process.argv = [
       "C:\\Program Files\\node.exe",
-      "C:\\marketingclaw\\node_modules\\.pnpm\\openclaw@2026.6.5\\node_modules\\marketingclaw\\dist\\index.js",
+      "C:\\marketingclaw\\node_modules\\.pnpm\\marketingclaw@2026.6.5\\node_modules\\marketingclaw\\dist\\index.js",
       "gateway",
       "run",
     ];
@@ -334,7 +334,7 @@ describe("respawnGatewayProcessForUpdate", () => {
     process.execArgv = [];
     process.argv = [
       "/usr/local/bin/node",
-      "/app/node_modules/.pnpm/openclaw@2026.6.5/node_modules/marketingclaw/dist/entry.js",
+      "/app/node_modules/.pnpm/marketingclaw@2026.6.5/node_modules/marketingclaw/dist/entry.js",
       "gateway",
       "run",
     ];

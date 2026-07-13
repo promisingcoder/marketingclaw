@@ -365,21 +365,21 @@ describe("update global helpers", () => {
           globalRoot: brewRoot,
           packageRoot: pkgRoot,
         });
-        expect(globalInstallArgs("npm", "openclaw@latest", pkgRoot)).toEqual([
+        expect(globalInstallArgs("npm", "marketingclaw@latest", pkgRoot)).toEqual([
           brewNpm,
           "i",
           "-g",
-          "openclaw@latest",
+          "marketingclaw@latest",
           "--no-fund",
           "--no-audit",
           "--loglevel=error",
           "--min-release-age=0",
         ]);
-        expect(globalInstallFallbackArgs("npm", "openclaw@latest", pkgRoot)).toEqual([
+        expect(globalInstallFallbackArgs("npm", "marketingclaw@latest", pkgRoot)).toEqual([
           brewNpm,
           "i",
           "-g",
-          "openclaw@latest",
+          "marketingclaw@latest",
           "--omit=optional",
           "--no-fund",
           "--no-audit",
@@ -456,29 +456,30 @@ describe("update global helpers", () => {
             manager: "npm",
             command: "npm",
           });
-          expect(globalInstallArgs("npm", "openclaw@latest", pkgRoot), layout.name).toEqual([
+          expect(globalInstallArgs("npm", "marketingclaw@latest", pkgRoot), layout.name).toEqual([
             "npm",
             "i",
             "-g",
-            "openclaw@latest",
+            "marketingclaw@latest",
             "--no-fund",
             "--no-audit",
             "--loglevel=error",
             "--min-release-age=0",
           ]);
-          expect(globalInstallFallbackArgs("npm", "openclaw@latest", pkgRoot), layout.name).toEqual(
-            [
-              "npm",
-              "i",
-              "-g",
-              "openclaw@latest",
-              "--omit=optional",
-              "--no-fund",
-              "--no-audit",
-              "--loglevel=error",
-              "--min-release-age=0",
-            ],
-          );
+          expect(
+            globalInstallFallbackArgs("npm", "marketingclaw@latest", pkgRoot),
+            layout.name,
+          ).toEqual([
+            "npm",
+            "i",
+            "-g",
+            "marketingclaw@latest",
+            "--omit=optional",
+            "--no-fund",
+            "--no-audit",
+            "--loglevel=error",
+            "--min-release-age=0",
+          ]);
         }
       });
     });
@@ -630,11 +631,11 @@ describe("update global helpers", () => {
       await expect(
         detectGlobalInstallManagerForRoot(runCommand, pkgRoot, 1000),
       ).resolves.toBeNull();
-      expect(globalInstallArgs("npm", "openclaw@latest", pkgRoot)).toEqual([
+      expect(globalInstallArgs("npm", "marketingclaw@latest", pkgRoot)).toEqual([
         "npm",
         "i",
         "-g",
-        "openclaw@latest",
+        "marketingclaw@latest",
         "--no-fund",
         "--no-audit",
         "--loglevel=error",
@@ -755,11 +756,11 @@ describe("update global helpers", () => {
           "npm",
         );
         await expect(resolveGlobalRoot("npm", runCommand, 1000, pkgRoot)).resolves.toBe(npmRoot);
-        expect(globalInstallArgs("npm", "openclaw@latest", pkgRoot)).toEqual([
+        expect(globalInstallArgs("npm", "marketingclaw@latest", pkgRoot)).toEqual([
           npmCmd,
           "i",
           "-g",
-          "openclaw@latest",
+          "marketingclaw@latest",
           "--no-fund",
           "--no-audit",
           "--loglevel=error",
@@ -920,21 +921,21 @@ describe("update global helpers", () => {
       manager: "npm",
       command: "npm",
     });
-    expect(globalInstallArgs("npm", "openclaw@latest")).toEqual([
+    expect(globalInstallArgs("npm", "marketingclaw@latest")).toEqual([
       "npm",
       "i",
       "-g",
-      "openclaw@latest",
+      "marketingclaw@latest",
       "--no-fund",
       "--no-audit",
       "--loglevel=error",
       "--min-release-age=0",
     ]);
-    expect(globalInstallArgs("pnpm", "openclaw@latest")).toEqual([
+    expect(globalInstallArgs("pnpm", "marketingclaw@latest")).toEqual([
       "pnpm",
       "add",
       "-g",
-      "openclaw@latest",
+      "marketingclaw@latest",
     ]);
     expect(
       globalInstallArgs("pnpm", "github:promisingcoder/marketingclaw#release/2026.5.12"),
@@ -946,43 +947,49 @@ describe("update global helpers", () => {
       "github:promisingcoder/marketingclaw#release/2026.5.12",
     ]);
     expect(
-      globalInstallArgs("pnpm", "openclaw@git+https://github.com/promisingcoder/marketingclaw.git"),
+      globalInstallArgs(
+        "pnpm",
+        "marketingclaw@git+https://github.com/promisingcoder/marketingclaw.git",
+      ),
     ).toEqual([
       "pnpm",
       "add",
       "-g",
       "--allow-build=marketingclaw",
-      "openclaw@git+https://github.com/promisingcoder/marketingclaw.git",
+      "marketingclaw@git+https://github.com/promisingcoder/marketingclaw.git",
     ]);
-    expect(globalInstallArgs("bun", "openclaw@latest")).toEqual([
+    expect(globalInstallArgs("bun", "marketingclaw@latest")).toEqual([
       "bun",
       "add",
       "-g",
-      "openclaw@latest",
+      "marketingclaw@latest",
     ]);
 
-    expect(globalInstallFallbackArgs("npm", "openclaw@latest")).toEqual([
+    expect(globalInstallFallbackArgs("npm", "marketingclaw@latest")).toEqual([
       "npm",
       "i",
       "-g",
-      "openclaw@latest",
+      "marketingclaw@latest",
       "--omit=optional",
       "--no-fund",
       "--no-audit",
       "--loglevel=error",
       "--min-release-age=0",
     ]);
-    expect(globalInstallFallbackArgs("pnpm", "openclaw@latest")).toBeNull();
+    expect(globalInstallFallbackArgs("pnpm", "marketingclaw@latest")).toBeNull();
     expect(
-      globalInstallArgs({ manager: "pnpm", command: "/opt/homebrew/bin/pnpm" }, "openclaw@latest"),
-    ).toEqual(["/opt/homebrew/bin/pnpm", "add", "-g", "openclaw@latest"]);
-    expect(globalInstallArgs("pnpm", "openclaw@latest", null, "/opt/pnpm-global")).toEqual([
+      globalInstallArgs(
+        { manager: "pnpm", command: "/opt/homebrew/bin/pnpm" },
+        "marketingclaw@latest",
+      ),
+    ).toEqual(["/opt/homebrew/bin/pnpm", "add", "-g", "marketingclaw@latest"]);
+    expect(globalInstallArgs("pnpm", "marketingclaw@latest", null, "/opt/pnpm-global")).toEqual([
       "pnpm",
       "add",
       "-g",
       "--global-dir",
       "/opt/pnpm-global",
-      "openclaw@latest",
+      "marketingclaw@latest",
     ]);
     expect(
       globalInstallArgs(
@@ -1003,25 +1010,25 @@ describe("update global helpers", () => {
   });
 
   it("builds npm staged install argv with an explicit prefix", () => {
-    expect(globalInstallArgs("npm", "openclaw@latest", null, "/tmp/stage")).toEqual([
+    expect(globalInstallArgs("npm", "marketingclaw@latest", null, "/tmp/stage")).toEqual([
       "npm",
       "i",
       "-g",
       "--prefix",
       "/tmp/stage",
-      "openclaw@latest",
+      "marketingclaw@latest",
       "--no-fund",
       "--no-audit",
       "--loglevel=error",
       "--min-release-age=0",
     ]);
-    expect(globalInstallFallbackArgs("npm", "openclaw@latest", null, "/tmp/stage")).toEqual([
+    expect(globalInstallFallbackArgs("npm", "marketingclaw@latest", null, "/tmp/stage")).toEqual([
       "npm",
       "i",
       "-g",
       "--prefix",
       "/tmp/stage",
-      "openclaw@latest",
+      "marketingclaw@latest",
       "--omit=optional",
       "--no-fund",
       "--no-audit",

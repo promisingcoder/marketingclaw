@@ -8,7 +8,7 @@ describe("parseGitUrl", () => {
     expect(parseGitUrl("git:github.com/openclaw/example-plugin")).toMatchObject({
       type: "git",
       host: "github.com",
-      path: "marketingclaw/example-plugin",
+      path: "openclaw/example-plugin",
       repo: "https://github.com/openclaw/example-plugin",
     });
   });
@@ -16,7 +16,7 @@ describe("parseGitUrl", () => {
   it("parses refs from hosted, scp-style, and generic shorthand sources", () => {
     expect(parseGitUrl("git:https://github.com/openclaw/example-plugin.git@v1.2.3")).toMatchObject({
       host: "github.com",
-      path: "marketingclaw/example-plugin",
+      path: "openclaw/example-plugin",
       repo: "https://github.com/openclaw/example-plugin.git",
       ref: "v1.2.3",
       pinned: true,
