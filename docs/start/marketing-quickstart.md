@@ -96,22 +96,35 @@ the team its first tasks.
 
 ## Run the team on Codex (no API key)
 
-Prefer not to manage a model API key? Point an agent at the Codex CLI instead by
-adding a `runtime` block to its entry in `agents.list`:
+Prefer not to manage a model API key? Codex can back an agent two ways.
 
-```json
-"runtime": { "type": "acp", "acp": { "agent": "codex" } }
-```
-
-This works for the CMO and any specialist, and `sessions_spawn` delegation between
-them is fully bridged, so a Codex-backed CMO can still hand off to the rest of the
-team. Requires the Codex CLI installed and logged in.
+**Native Codex app-server (recommended).** Give the agent an `openai/*` model ref
+such as `openai/gpt-5.5`. OpenAI refs resolve to the Codex app-server runtime by
+default and use your ChatGPT/Codex login instead of an API key. The agent still runs
+with its MarketingClaw tools bridged through the Codex adapter; for how a Codex-backed
+CMO delegates to the rest of the team, see [Multi-agent routing](/concepts/multi-agent).
+Needs the Codex CLI installed and logged in. See
+[Agent runtimes](/concepts/agent-runtimes#codex-surfaces).
 
 <Note>
   Windows: if the gateway reports `codex app-server exited: Missing optional
   dependency`, point MarketingClaw at your globally-installed Codex binary with the
   `MARKETINGCLAW_CODEX_APP_SERVER_BIN` environment variable.
 </Note>
+
+**ACP adapter (explicit opt-in).** To run Codex through the external ACP control plane
+instead, install and enable the acpx backend:
+
+```bash
+marketingclaw plugins install @marketingclaw/acpx
+marketingclaw config set plugins.entries.acpx.enabled true
+```
+
+Then add a `runtime` block to the agent's `agents.list` entry:
+`"runtime": { "type": "acp", "acp": { "agent": "codex" } }`. This path also needs the
+Codex CLI installed and logged in. Built-in MarketingClaw tools are **not** exposed to
+ACP harnesses by default, so `sessions_spawn` delegation needs the explicit MCP bridges
+and is subject to ACP dispatch and sandbox gates. See [ACP agents](/tools/acp-agents).
 
 ## First tasks to try
 
