@@ -438,6 +438,7 @@ describe("resolveBuildAllSteps", () => {
     expect(step.cache?.env).toEqual([
       "MARKETINGCLAW_BUILD_PRIVATE_QA",
       "MARKETINGCLAW_PLUGIN_SDK_CANONICAL_DTS",
+      "MARKETINGCLAW_RUN_NODE_SKIP_DTS_BUILD",
     ]);
     expect(step.cache?.inputs).toEqual(
       expect.arrayContaining([
