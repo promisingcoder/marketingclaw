@@ -211,8 +211,8 @@ This is the deterministic model-bound layer stack MarketingClaw can snapshot for
 ```json
 {
   "codexCollaborationModeDeveloperInstructions": {
-    "chars": 1433,
-    "roughTokens": 359
+    "chars": 1458,
+    "roughTokens": 365
   },
   "codexModelInstructions": {
     "chars": 21335,
@@ -227,24 +227,24 @@ This is the deterministic model-bound layer stack MarketingClaw can snapshot for
     "roughTokens": 0
   },
   "dynamicToolsJson": {
-    "chars": 53160,
-    "roughTokens": 13290
+    "chars": 53175,
+    "roughTokens": 13294
   },
   "marketingClawDeveloperInstructions": {
-    "chars": 2136,
-    "roughTokens": 534
+    "chars": 2191,
+    "roughTokens": 548
   },
   "totalTextOnly": {
-    "chars": 26252,
-    "roughTokens": 6563
+    "chars": 26357,
+    "roughTokens": 6590
   },
   "totalWithDynamicToolsJson": {
-    "chars": 79414,
-    "roughTokens": 19854
+    "chars": 79534,
+    "roughTokens": 19884
   },
   "userInputText": {
-    "chars": 1033,
-    "roughTokens": 259
+    "chars": 1058,
+    "roughTokens": 265
   }
 }
 ```
