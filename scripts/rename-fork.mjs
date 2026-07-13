@@ -373,6 +373,42 @@ function makeContentTransformer(workspaceSuffixes, counters) {
         },
       );
     }
+    // Test-echo KEEP, scoped to this file only: this test streams input chunks
+    // ".open"+"claw/" across a token boundary and asserts progressSummary echoes the
+    // reassembled input verbatim; rewriting the expectation would desync it from that.
+    if (filePath === "src/acp/control-plane/manager.test.ts") {
+      result = result.replace(/bykim0119\/\.openclaw\/workspace/g, (m) => {
+        bump("KEEP bykim0119/.openclaw/workspace (streamed chunk-boundary test echo)");
+        return protect(m);
+      });
+    }
+    // Legacy-input-URL KEEP, scoped to this file only: parseGitUrl derives `path` from
+    // the intentionally-legacy input URL "github.com/openclaw/example-plugin", so the
+    // expectation must keep the literal pre-rename owner segment to match its output.
+    // Fork point had 4 such `path: "openclaw/example-plugin"`; only the first two derive
+    // from intentionally-legacy input URLs, so cap the KEEP at 2 — a future 3rd occurrence
+    // falls through to the generic rename instead of being silently masked.
+    if (filePath === "src/agents/utils/git.test.ts") {
+      let kept = 0;
+      result = result.replace(/(?<=path: ")openclaw\/example-plugin(?=")/g, (m) => {
+        if (kept++ >= 2) {
+          return m;
+        }
+        bump('KEEP path: "openclaw/example-plugin" (parseGitUrl output from legacy input URL)');
+        return protect(m);
+      });
+    }
+    // Trust-literal KEEP, scoped to this file only: the npm official-scope allowlist in
+    // isMarketingClawOrgNpmSpec names the legacy upstream org as an explicit "openclaw"
+    // string literal (kept un-imported so the trust set stays visible). Protect the exact
+    // quoted literal so the generic rename can't collapse the two-org allowlist by
+    // rewriting it to "marketingclaw"; any other openclaw form in this file still audits.
+    if (filePath === "src/infra/npm-registry-spec.ts") {
+      result = result.replace(/"openclaw"/g, (m) => {
+        bump('KEEP "openclaw" (npm official-scope trust literal)');
+        return protect(m);
+      });
+    }
 
     // ---- TARGETED URL map: ONLY the exact main repo openclaw/openclaw maps to
     // the fork. A trailing [A-Za-z0-9-] means a different repo (openclaw-ansible,
@@ -650,7 +686,10 @@ function runAudit(rows, workspaceSuffixes) {
     return false;
   };
 
-  const stripAllowed = (s) => {
+  // Counts stripped `path: "openclaw/example-plugin"` hits in git.test.ts across the
+  // per-line strip calls below; capped at the 2 intentional fork-point-legacy occurrences.
+  let gitTestPathKept = 0;
+  const stripAllowed = (s, file) => {
     // remove allowlisted token occurrences, then check for residual openclaw
     let result = s.replace(/@openclaw\/([A-Za-z0-9._-]+)/gi, (m, name) =>
       workspaceSuffixes.has(name) ? m : "",
@@ -684,6 +723,22 @@ function runAudit(rows, workspaceSuffixes) {
     result = result.replace(/TokenjuiceOpenClaw[A-Za-z0-9]*/g, "");
     // DSSE payload type signed by upstream ClawHub (wire-protocol constant)
     result = result.replace(/openclaw\.official-external-plugin-catalog-feed\.v1/g, "");
+    // Streamed chunk-boundary test echo (see matching PROTECT rule in makeContentTransformer).
+    if (file === "src/acp/control-plane/manager.test.ts") {
+      result = result.replace(/bykim0119\/\.openclaw\/workspace/g, "");
+    }
+    // parseGitUrl output derived from a legacy input URL (see matching PROTECT rule).
+    // Cap at the 2 fork-point-legacy occurrences (gitTestPathKept persists across the
+    // per-line strip calls) so a future 3rd occurrence survives and trips the audit.
+    if (file === "src/agents/utils/git.test.ts") {
+      result = result.replace(/(?<=path: ")openclaw\/example-plugin(?=")/g, (m) =>
+        gitTestPathKept++ < 2 ? "" : m,
+      );
+    }
+    // npm official-scope trust literal (see matching PROTECT rule in makeContentTransformer).
+    if (file === "src/infra/npm-registry-spec.ts") {
+      result = result.replace(/"openclaw"/g, "");
+    }
     return result;
   };
 
@@ -701,7 +756,7 @@ function runAudit(rows, workspaceSuffixes) {
     if (fileAllowed(file)) {
       continue;
     }
-    const residual = stripAllowed(m[3]);
+    const residual = stripAllowed(m[3], file);
     if (/openclaw/i.test(residual)) {
       offenders.push(`${file}:${m[2]}: ${m[3].trim().slice(0, 160)}`);
     }
