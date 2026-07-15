@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="MarketingClaw">
+  <defs>
+    <linearGradient id="mcMark" x1="34" y1="168" x2="168" y2="34" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FF7A2F"/>
+      <stop offset=".5" stop-color="#FF2D68"/>
+      <stop offset="1" stop-color="#A93BF5"/>
+    </linearGradient>
+  </defs>
+  <path d="M52 150 128 74" fill="none" stroke="url(#mcMark)" stroke-width="26" stroke-linecap="round"/>
+  <path d="M92 58h52v52" fill="none" stroke="url(#mcMark)" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
